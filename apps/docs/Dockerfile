@@ -27,7 +27,6 @@ RUN yarn install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN yarn turbo build --filter=docs...
 
 FROM base AS runner
 WORKDIR /app
@@ -37,4 +36,5 @@ RUN addgroup --system --gid 1002 astrojs
 RUN adduser --system --uid 1002 astrojs
 USER astrojs
 COPY --from=installer /app .
-CMD ["yarn", "preview"]
+
+CMD ["yarn", "dev"]

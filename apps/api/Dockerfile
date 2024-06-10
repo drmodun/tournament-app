@@ -41,4 +41,4 @@ USER nestjs
 COPY --from=installer /app .
 
 EXPOSE 5500
-CMD node apps/api/dist/main.ts
+CMD node apps/api/dist/main.js

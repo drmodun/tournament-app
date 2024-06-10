@@ -9,8 +9,7 @@ services:
     restart: always
     ports:
       - 3000:3000
-    networks:
-      - app_network
+
   api:
     container_name: api
     build:
@@ -18,12 +17,29 @@ services:
       dockerfile: ./apps/api/Dockerfile
     restart: always
     ports:
+      - 5500:5500
+
+  docs:
+    container_name: docs
+    build:
+      context: .
+      dockerfile: ./apps/docs/Dockerfile
+    restart: always
+    ports:
+      - 4321:4321
+
+  admin:
+    container_name: admin
+    build:
+      context: .
+      dockerfile: ./apps/admin/Dockerfile
+    restart: always
+    ports:
       - 3001:3001
-    networks:
-      - app_network
 
 # Define a network, which allows containers to communicate
 # with each other, by using their container name as a hostname
 networks:
   app_network:
     external: true
+#Possibly use later

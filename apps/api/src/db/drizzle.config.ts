@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { defineConfig } from 'drizzle-kit';
 import { env } from 'process';
 export default defineConfig({
@@ -7,6 +9,6 @@ export default defineConfig({
   dbCredentials: {
     url:
       env.DATABASE_URL ||
-      'postgresql://postgres:postgres@localhost:5432/postgres', //default
+      'postgresql://postgres:postgres@localhost:5432/tournament', //default
   },
 });

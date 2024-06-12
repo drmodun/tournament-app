@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   reactStrictMode: true,
-  transpilePackages: ["@repo/ui"],
+  transpilePackages: ["@tournament-app/types"],
   output: "standalone",
   experimental: {
     outputFileTracingRoot: path.join(__dirname, "../../"),

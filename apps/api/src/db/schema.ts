@@ -413,6 +413,7 @@ export const userToRoster = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
+    pointDifference: integer('point_difference').default(0),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     isSubstitute: boolean('is_substitute').default(false),
   },
@@ -519,7 +520,6 @@ export const categoryCareer = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    points: integer('points').default(0),
     matchmakingPoints: integer('matchmaking_points').default(1000),
     level: integer('level').default(1),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

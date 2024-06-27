@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import Button from "../components/button/button";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -37,6 +38,36 @@ export default function Web() {
   return (
     <div>
       <h1>Web</h1>
+      <Button
+        label="hi guys"
+        variant="dark"
+        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+      />
+      <Button
+        label="hi guys"
+        variant="light"
+        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+      />
+      <Button
+        label="hi guys"
+        variant="primary"
+        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+      />
+      <Button
+        label="hi guys"
+        variant="secondary"
+        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+      />
+      <Button
+        label="hi guys"
+        variant="warning"
+        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+      />
+      <Button
+        label="hi guys"
+        variant="danger"
+        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+      />
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>
         <input

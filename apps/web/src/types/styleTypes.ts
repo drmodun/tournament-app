@@ -9,6 +9,9 @@ export type Variants =
   | "danger"
   | "warning";
 
+/// Type that includes the text variants of the textual app components:
+export type TextVariants = "light" | "dark";
+
 /// Constants for the colors used in the color pallette of the app:
 export const PRIMARY = "#59C3C3";
 export const SECONDARY = "#197BBD";
@@ -66,6 +69,7 @@ export class Variant {
     }
   }
 
+  /// Returns the muted color of the variant.
   mutedColor(): string {
     switch (this.variant) {
       case "light":
@@ -82,6 +86,16 @@ export class Variant {
         return WARNING_MUTED;
       default:
         return PRIMARY_MUTED;
+    }
+  }
+
+  /// Returns the muted text color of the variant.
+  mutedTextColor(): string {
+    switch (this.variant) {
+      case "light":
+        return DARK_MUTED;
+      default:
+        return LIGHT_MUTED;
     }
   }
 }

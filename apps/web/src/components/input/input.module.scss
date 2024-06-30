@@ -1,0 +1,48 @@
+.input {
+  height: 56px;
+  border-radius: 24px;
+  padding: 0 32px;
+  border: none;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input::placeholder {
+  color: #ddd;
+}
+
+.lightPlaceholder::placeholder {
+  color: #666 !important;
+}
+
+.submitButton {
+  height: 56px;
+  border-radius: 0px 24px 24px 0;
+  border: none;
+  padding: 0 32px;
+  font-size: 1rem;
+}
+
+.submitButton:hover {
+  cursor: pointer;
+}
+
+.submitInput {
+  border-radius: 24px 0px 0px 24px !important;
+}
+
+.label {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.labelText-dark {
+  color: #ddd;
+}
+
+.labelText-light {
+  color: #666;
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import Button from "../components/button/button";
+import Input from "../components/input/input";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -67,6 +68,62 @@ export default function Web() {
         label="hi guys"
         variant="danger"
         onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+      />
+
+      <Input
+        placeholder="hi guys"
+        variant="dark"
+        onChange={(e) => console.log(e.target.value)}
+        doesSubmit={true}
+        onSubmit={(val: string) => console.log(val)}
+        submitLabel="Submit"
+        label="RIDE THE LIGHTNINGGGGGGG"
+        labelVariant="dark"
+      />
+      <Input
+        placeholder="hi guys"
+        variant="light"
+        onChange={(e) => console.log(e.target.value)}
+        doesSubmit={true}
+        onSubmit={(val: string) => console.log(val)}
+        submitLabel="Submit"
+        label="RIDE THE LIGHTNINGGGGGGG"
+      />
+      <Input
+        placeholder="hi guys"
+        variant="primary"
+        onChange={(e) => console.log(e.target.value)}
+        doesSubmit={true}
+        onSubmit={(val: string) => console.log(val)}
+        submitLabel="Submit"
+        label="RIDE THE LIGHTNINGGGGGGG"
+      />
+      <Input
+        placeholder="hi guys"
+        variant="secondary"
+        onChange={(e) => console.log(e.target.value)}
+        doesSubmit={true}
+        onSubmit={(val: string) => console.log(val)}
+        submitLabel="Submit"
+        label="RIDE THE LIGHTNINGGGGGGG"
+      />
+      <Input
+        placeholder="hi guys"
+        variant="warning"
+        onChange={(e) => console.log(e.target.value)}
+        doesSubmit={true}
+        onSubmit={(val: string) => console.log(val)}
+        submitLabel="Submit"
+        label="RIDE THE LIGHTNINGGGGGGG"
+      />
+      <Input
+        placeholder="hi guys"
+        variant="danger"
+        onChange={(e) => console.log(e.target.value)}
+        doesSubmit={true}
+        onSubmit={(val: string) => console.log(val)}
+        submitLabel="Submit"
+        label="RIDE THE LIGHTNINGGGGGGG"
       />
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>

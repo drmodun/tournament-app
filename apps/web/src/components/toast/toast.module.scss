@@ -1,0 +1,42 @@
+@use "../../styles/variables" as v;
+
+.toast {
+  min-height: 56px;
+  border-radius: 24px;
+  padding: 0 32px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  animation-iteration-count: 1;
+}
+
+.toast:hover {
+  cursor: pointer;
+}
+
+.message {
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  max-height: 5rem;
+  text-align: left;
+  overflow: hidden;
+}
+
+.check {
+  height: 32px !important;
+  width: 32px !important;
+  margin-right: 16px;
+}
+
+@keyframes toastAnimation {
+  from {
+    //transform: translateX(150%);
+    opacity: 0;
+  }
+  to {
+    //transform: translateX(0);
+    opacity: 1;
+  }
+}

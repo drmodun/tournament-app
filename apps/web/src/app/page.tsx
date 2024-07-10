@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent, useContext } from "react";
 import Button from "../components/button/button";
 import Input from "../components/input/input";
+import Chip from "../components/chip/chip";
+import Toast from "../components/toast/toast";
+import ToastList from "../components/toast_list/toast_list";
+import { ToastContext } from "../context/toastContext";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -11,6 +15,7 @@ export default function Web() {
   const [response, setResponse] = useState<{ message: string } | null>(null);
   const [error, setError] = useState<string | undefined>();
 
+  const toastContext = useContext(ToastContext);
   useEffect(() => {
     setResponse(null);
     setError(undefined);
@@ -42,12 +47,19 @@ export default function Web() {
       <Button
         label="hi guys"
         variant="dark"
-        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+        onClick={() =>
+          toastContext.addToast("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!", "warning")
+        }
       />
       <Button
         label="hi guys"
         variant="light"
-        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+        onClick={() =>
+          toastContext.addToast(
+            "DIRTY DEEDSSSS DONE DIRT CHEAPPPPPPPPPPPPPPPPPPPPPPPPPp!!!!",
+            "success"
+          )
+        }
       />
       <Button
         label="hi guys"
@@ -69,7 +81,6 @@ export default function Web() {
         variant="danger"
         onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
       />
-
       <Input
         placeholder="hi guys"
         variant="dark"
@@ -124,6 +135,25 @@ export default function Web() {
         onSubmit={(val: string) => console.log(val)}
         submitLabel="Submit"
         label="RIDE THE LIGHTNINGGGGGGG"
+      />
+      <Chip label="hi guys" variant="dark" />
+      <Chip label="hi guys" variant="light" />
+      <Chip label="hi guys" variant="primary" />
+      <Chip label="hi guys" variant="secondary" />
+      <Chip label="hi guys" variant="warning" />
+      <Chip label="hi guys" variant="danger" />
+      <Toast message="HOLD MY BREATH AS I WISH FOR DEATHHHH" />
+      <ToastList
+        data={[
+          {
+            message: "AYYYYYY",
+            type: "warning",
+          },
+          {
+            message: "AYYYYYY",
+            type: "warning",
+          },
+        ]}
       />
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>

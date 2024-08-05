@@ -5,25 +5,28 @@ import { ToastProps, ToastVariants } from "../types/toastTypes";
 
 export const ToastContext = createContext({
   toasts: [] as ToastProps[],
-  addToast: (message: string, type: ToastVariants) => {},
-  removeToast: (id: number) => {},
+  addToast: (message: string, type: ToastVariants) => {
+    message;
+    type;
+  },
+  removeToast: (id: number) => {
+    id;
+  },
 });
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
-  const [toasts, setToasts] = useState<ToastProps[]>([
-    { message: "Hi", type: "info", id: 1 },
-  ]);
-  const [autoClose, setAutoClose] = useState<boolean>(true);
-  const [autoCloseDuration, setAutoCloseDuration] = useState<number>(6000);
+  const [toasts, setToasts] = useState<ToastProps[]>([]);
+  const AUTO_CLOSE = true;
+  const AUTO_CLOSE_DURATION = 6000;
 
   const addToast = (message: string, type: ToastVariants, id?: number) => {
     id = id ?? Date.now();
     const newToasts = [...toasts, { message, type, id }];
     setToasts(newToasts);
-    if (autoClose) {
+    if (AUTO_CLOSE) {
       setTimeout(() => {
-        removeToast(id);
-      }, autoCloseDuration);
+        id && removeToast(id);
+      }, AUTO_CLOSE_DURATION);
     }
   };
 
@@ -37,26 +40,3 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     </ToastContext.Provider>
   );
 };
-
-/*
- const [toasts, setToasts] = useState<ToastProps[]>(data);
-  const [autoClose, setAutoClose] = useState<boolean>(true);
-  const [autoCloseDuration, setAutoCloseDuration] = useState<number>(6000);
-
-  const removeToast = (id: number) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-    onRemoveToast && onRemoveToast();
-  };
-
-  const addToast = (message, type) => {
-    const id = Date.now();
-    const newToasts: ToastProps[] = [{ message, type, id }, ...toasts];
-    setToasts(newToasts);
-
-    if (autoClose) {
-      setTimeout(() => {
-        removeToast(id);
-      }, autoCloseDuration);
-    }
-  };
-*/

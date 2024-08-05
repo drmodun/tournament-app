@@ -2,7 +2,7 @@
 
 import React, { useState, MouseEventHandler } from "react";
 import styles from "./chip.module.scss";
-import { Variants, Variant, LIGHT, DARK } from "../../types/styleTypes";
+import { Variants, Variant } from "../../types/styleTypes";
 
 interface ChipProps {
   children?: React.ReactNode;

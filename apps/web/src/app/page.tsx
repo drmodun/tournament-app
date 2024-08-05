@@ -4,9 +4,10 @@ import { useEffect, useState, ChangeEvent, FormEvent, useContext } from "react";
 import Button from "../components/button/button";
 import Input from "../components/input/input";
 import Chip from "../components/chip/chip";
+import Carousel from "../components/carousel/carousel";
 import Toast from "../components/toast/toast";
-import ToastList from "../components/toast_list/toast_list";
 import { ToastContext } from "../context/toastContext";
+import RadioGroup from "../components/radio_group/radio_group";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -143,18 +144,72 @@ export default function Web() {
       <Chip label="hi guys" variant="warning" />
       <Chip label="hi guys" variant="danger" />
       <Toast message="HOLD MY BREATH AS I WISH FOR DEATHHHH" />
-      <ToastList
-        data={[
+      <RadioGroup
+        onSelect={(index) => console.log(index)}
+        radioButtons={[
           {
-            message: "AYYYYYY",
-            type: "warning",
+            label: "test",
+            variant: "dark",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!1");
+            },
           },
           {
-            message: "AYYYYYY",
-            type: "warning",
+            label: "test2",
+            variant: "light",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!2");
+            },
+          },
+          {
+            label: "test2",
+            variant: "primary",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!2");
+            },
+          },
+          {
+            label: "test2",
+            variant: "secondary",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!2");
+            },
+          },
+          {
+            label: "test2",
+            variant: "warning",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!2");
+            },
+          },
+          {
+            label: "test2",
+            variant: "danger",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!2");
+            },
           },
         ]}
       />
+      <Carousel
+        data={[
+          {
+            image:
+              "https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287",
+            description:
+              "The hibiscus flower  is a genus of flowering plants in the mallow family, Malvaceae.",
+            title: "Hibiscus flower 1",
+          },
+          {
+            image:
+              "https://www.dispatch.com/gcdn/-mm-/2887f5d7d58a75a6437c45e987fd994202334aff/c=0-156-3000-1844/local/-/media/Visalia/2014/07/30/vtd0731mastergarderner2.jpg?width=3000&height=1688&fit=crop&format=pjpg&auto=webp",
+            description:
+              "The hibiscus flower  is a genus of flowering plants in the mallow family, Malvaceae.",
+            title: "Hibiscus flower 2",
+          },
+        ]}
+        variant="danger"
+      ></Carousel>
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>
         <input

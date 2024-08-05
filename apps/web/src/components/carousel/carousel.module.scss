@@ -1,0 +1,47 @@
+@use "../../styles/variables" as v;
+
+.image {
+  max-width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 24px;
+  margin-bottom: 8px;
+}
+
+.wrapper {
+  position: relative;
+  background-color: beige;
+  width: auto;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arrowForward {
+  right: 33px;
+  border-radius: 24px 0 0 24px;
+}
+
+.arrowBack {
+  left: 33px;
+  border-radius: 0 24px 24px 0;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #0000003f;
+  border: none;
+  height: 25%;
+  color: v.$primary;
+  padding: 0 8px 0 8px;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 1rem;
+}

@@ -17,6 +17,7 @@ import {
   tournamentPromotionTypeEnum,
   tournamentTypeEnum,
   userRoleEnum,
+  categoryTypeEnum,
 } from '@tournament-app/types';
 import {
   serial,
@@ -102,6 +103,11 @@ export const messageVisibility = pgEnum(
   exportEnumValues(messageVisibilityEnum),
 );
 
+export const categoryType = pgEnum(
+  'category_type',
+  exportEnumValues(categoryTypeEnum),
+);
+
 export const groupRole = pgEnum('group_role', exportEnumValues(groupRoleEnum));
 
 export const user = pgTable('user', {
@@ -118,11 +124,13 @@ export const user = pgTable('user', {
     .$defaultFn(() => Math.random().toString(36).slice(8))
     .unique(),
   isEmailVerified: boolean('is_email_verified').default(false),
+  hasSelectedInterests: boolean('has_selected_interests').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date()), //TODO: see if there is a better alternative
   country: text('country'), //TODO: possibly setup enum
+  location: text('location'),
   bettingPoints: integer('betting_points').default(100),
   level: integer('level').default(1),
 });
@@ -187,6 +195,7 @@ export const tournament = pgTable('tournament', {
       onDelete: 'cascade',
     })
     .notNull(),
+  subcategory: integer('subcategory_id').references(() => subcategory.id),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date()),
@@ -335,7 +344,41 @@ export const category = pgTable('category', {
   name: text('name').notNull(),
   description: text('description'),
   image: text('image'),
+  categoryType: categoryType('category_type').default('other'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const interests = pgTable(
+  'interests',
+  {
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    categoryId: integer('category_id')
+      .references(() => category.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.categoryId] }),
+  }),
+);
+
+export const subcategory = pgTable('subcategory', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description'),
+  image: text('image'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  categoryId: integer('category_id')
+    .references(() => category.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
 });
 
 export const participation = pgTable(

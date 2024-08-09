@@ -24,11 +24,16 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
-    "@tournament-app/types": "*", 
     "@nestjs/core": "^10.0.0",
+    "@nestjs/jwt": "nestjs/jwt",
+    "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.4.0",
+    "@tournament-app/types": "*",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.2",
+    "passport-anonymous": "^1.0.1",
     "postgres": "^3.4.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"

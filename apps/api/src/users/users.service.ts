@@ -1,15 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { db } from 'src/db/db';
+import { user } from 'src/db/schema';
+import { userToMiniUserMappingObject } from './mappers/response.dto';
+import { CreateUserRequest, MiniUserResponse } from '@tournament-app/types';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
+  create(createUserDto: CreateUserRequest) {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const results: MiniUserResponse[] = await db
+      .select(userToMiniUserMappingObject(user))
+      .from(user);
+
+    return results;
   }
 
   findOne(id: number) {

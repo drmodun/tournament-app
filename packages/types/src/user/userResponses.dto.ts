@@ -1,7 +1,7 @@
 import { subscriptionEnum, userRoleEnum } from "src/enums";
 
 export interface MiniUserResponse {
-  id: string;
+  id: number;
   username: string;
 }
 

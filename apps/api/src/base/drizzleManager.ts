@@ -22,4 +22,8 @@ export declare abstract class BaseDrizzleQueryManager<
   abstract getCount(): WithSubquery<string, { value: unknown }>;
 
   abstract getQuery(query: TQueryRequest);
+
+  abstract getSingleQuery(id: number, responseType: string);
+
+  // TODO: possibly rewrite this function to follow a flow of modifyong the query insetad of having one query function with helper functions
 }

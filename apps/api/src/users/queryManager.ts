@@ -97,6 +97,7 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
   };
 
   public sortRecord: Record<UserSortingEnumType, PgColumn | SQL<number>> = {
+    // Maybe make this into a factory function
     [UserSortingEnum.USERNAME]: user.username,
     [UserSortingEnum.LEVEL]: user.level,
     [UserSortingEnum.COUNTRY]: user.country,

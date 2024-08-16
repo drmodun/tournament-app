@@ -7,7 +7,7 @@ import {
   UserResponseEnumType,
   UserResponsesEnum,
 } from '@tournament-app/types';
-import { UserDrizzleQueryManager } from './drizzle';
+import { UserDrizzleQueryManager } from './queryManager';
 import { eq } from 'drizzle-orm';
 import { db } from 'src/db/db';
 import { user } from 'src/db/schema';

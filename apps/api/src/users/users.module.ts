@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { UserDrizzleQueryManager } from './drizzle';
+import { UserDrizzleQueryManager } from './queryManager';
 
 @Module({
   controllers: [UsersController],

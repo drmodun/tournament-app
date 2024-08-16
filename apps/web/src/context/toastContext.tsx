@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useState } from "react";
-import { ToastProps, ToastVariants } from "../types/toastTypes";
+import { ToastProps, ToastVariants } from "types/toastTypes";
 
 export const ToastContext = createContext({
   toasts: [] as ToastProps[],

@@ -1,42 +1,44 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./radio_group.module.scss";
-import RadioButton, { RadioButtonProps } from "../radio_button/radio_button";
+import styles from "./radioGroup.module.scss";
+import RadioButton, {
+  RadioButtonProps,
+} from "components/radioButton/radioButton";
 
 interface RadioGroupProps {
   style?: React.CSSProperties;
   buttonStyle?: React.CSSProperties;
+  labelStyle?: React.CSSProperties;
   radioButtons: RadioButtonProps[];
-  onSelect?: (index: number) => void;
 }
 
 export default function RadioGroup({
   style,
   buttonStyle,
+  labelStyle,
   radioButtons,
-  onSelect = () => {},
 }: RadioGroupProps) {
   const [index, setIndex] = useState<number>(-1);
-  const id = Date.now().toString();
 
   return (
     <div style={style}>
       {radioButtons.map((button, _index) => {
         return (
-          <div className={styles.radio}>
+          <div
+            className={styles.radio}
+            key={_index}
+            onClick={() => setIndex(_index)}
+          >
             <RadioButton
               style={buttonStyle}
               label={button.label}
+              labelStyle={labelStyle}
               variant={button.variant}
               labelVariant={button.labelVariant}
-              onSelect={() => {
-                setIndex(_index);
-                onSelect(_index);
-              }}
+              onSelect={button.onSelect && button.onSelect}
               disabled={button.disabled}
-              id={id}
-              key={_index}
+              key={2 * _index}
               isSelected={index === _index}
             />
           </div>

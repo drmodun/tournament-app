@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState, ChangeEvent, FormEvent, useContext } from "react";
-import Button from "../components/button/button";
-import Input from "../components/input/input";
-import Chip from "../components/chip/chip";
-import Carousel from "../components/carousel/carousel";
-import Toast from "../components/toast/toast";
-import { ToastContext } from "../context/toastContext";
-import RadioGroup from "../components/radio_group/radio_group";
+import Button from "components/button/button";
+import Input from "components/input/input";
+import Chip from "components/chip/chip";
+import Carousel from "components/carousel/carousel";
+import Toast from "components/toast/toast";
+import { ToastContext } from "context/toastContext";
+import RadioGroup from "components/radioGroup/radioGroup";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -145,7 +145,6 @@ export default function Web() {
       <Chip label="hi guys" variant="danger" />
       <Toast message="HOLD MY BREATH AS I WISH FOR DEATHHHH" />
       <RadioGroup
-        onSelect={(index) => console.log(index)}
         radioButtons={[
           {
             label: "test",
@@ -153,6 +152,7 @@ export default function Web() {
             onSelect: () => {
               console.log("HEAVEN YEAHHH!!!1");
             },
+            disabled: true,
           },
           {
             label: "test2",
@@ -165,32 +165,33 @@ export default function Web() {
             label: "test2",
             variant: "primary",
             onSelect: () => {
-              console.log("HEAVEN YEAHHH!!!2");
+              console.log("HEAVEN YEAHHH!!!3");
             },
           },
           {
             label: "test2",
             variant: "secondary",
             onSelect: () => {
-              console.log("HEAVEN YEAHHH!!!2");
+              console.log("HEAVEN YEAHHH!!!4");
             },
           },
           {
             label: "test2",
             variant: "warning",
             onSelect: () => {
-              console.log("HEAVEN YEAHHH!!!2");
+              console.log("HEAVEN YEAHHH!!!5");
             },
           },
           {
             label: "test2",
             variant: "danger",
             onSelect: () => {
-              console.log("HEAVEN YEAHHH!!!2");
+              console.log("HEAVEN YEAHHH!!!6");
             },
           },
         ]}
       />
+
       <Carousel
         data={[
           {

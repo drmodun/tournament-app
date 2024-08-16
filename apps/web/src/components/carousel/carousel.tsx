@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import styles from "./carousel.module.scss";
-import { Variants, Variant, LIGHT } from "../../types/styleTypes";
+import globals from "styles/globals.module.scss";
+import { Variants, textColor } from "types/styleTypes";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIosNew";
+import { clsx } from "clsx";
 
 interface CarouselElement {
   title: string;
@@ -24,7 +26,6 @@ export default function Carousel({
   data = [],
 }: CarouselProps) {
   const [index, setIndex] = useState<number>(0);
-  const carouselVariant: Variant = new Variant(variant);
 
   const forward = () =>
     setIndex((index) => Math.abs((index + 1) % data.length));
@@ -32,33 +33,29 @@ export default function Carousel({
 
   return (
     <div
-      className={styles.wrapper}
-      style={{ backgroundColor: carouselVariant.color(), ...style }}
+      className={clsx(styles.wrapper, globals[`${variant}BackgroundColor`])}
+      style={style}
     >
       <img
-        src={data[index]?.image ?? ""}
-        alt={data[index]?.description ?? ""}
-        className={styles.image}
-        title={data[index]?.description ?? ""}
-        style={{
-          border: `2px solid ${carouselVariant.textColor()}`,
-        }}
+        src={data[index]?.image}
+        alt={data[index]?.description}
+        className={clsx(styles.image, styles[`${variant}Border`])}
+        title={data[index]?.description}
       />
       <p
-        className={styles.title}
-        style={{ color: carouselVariant.textColor() }}
-        title={data[index]?.description ?? ""}
+        className={clsx(styles.title, globals[`${textColor(variant)}Color`])}
+        title={data[index]?.description}
       >
         {data[index]?.title ?? ""}
       </p>
-      <button className={`${styles.arrowBack} ${styles.arrow}`} onClick={back}>
-        <ArrowBackIosIcon style={{ color: LIGHT }} />
+      <button className={clsx(styles.arrowBack, styles.arrow)} onClick={back}>
+        <ArrowBackIosIcon />
       </button>
       <button
-        className={`${styles.arrowForward} ${styles.arrow}`}
+        className={clsx(styles.arrowForward, styles.arrow)}
         onClick={forward}
       >
-        <ArrowForwardIosIcon style={{ color: LIGHT }} />
+        <ArrowForwardIosIcon />
       </button>
     </div>
   );

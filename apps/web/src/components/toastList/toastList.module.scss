@@ -1,0 +1,32 @@
+@import "styles/";
+
+.toastList {
+  position: fixed;
+  width: 100%;
+  max-width: $toastListWidth;
+  max-height: 100vh;
+  height: 100%;
+  overflow: hidden auto;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  scrollbar-width: none;
+  flex-direction: column;
+  padding-right: 16px;
+  @media only screen and (max-width: $tabletBreakpoint) {
+    padding-left: 16px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.toastWrapper {
+  margin-bottom: rem-calc(16);
+  width: 100%;
+}

@@ -2,14 +2,15 @@
 
 import React, { useState, MouseEventHandler } from "react";
 import styles from "./chip.module.scss";
-import { Variants, Variant } from "../../types/styleTypes";
+import globals from "styles/globals.module.scss";
+import { Variants, textColor } from "types/styleTypes";
+import { clsx } from "clsx";
 
 interface ChipProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   label?: string;
   variant?: Variants;
-  /// test
   activeBorderVariant?: Variants;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -22,79 +23,31 @@ export default function Chip({
   activeBorderVariant,
   onClick,
 }: ChipProps) {
-  const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const ChipVariant: Variant = new Variant(variant);
 
-  const hover = () => {
-    setIsHovered(true);
-  };
-
-  const leave = () => {
-    setIsHovered(false);
-  };
-
-  const select = () => {
-    setIsSelected(!isSelected);
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onClick && onClick(e);
+    setIsSelected((prev) => !prev);
   };
 
   return (
     <button
-      className={styles.chip}
-      style={{
-        ...style,
-        backgroundColor: isHovered
-          ? ChipVariant.mutedColor()
-          : ChipVariant.color(),
-        color: ChipVariant.textColor(),
-        boxShadow: isSelected
-          ? `0px 0px 0px 4px ${activeBorderVariant ? new Variant(activeBorderVariant).color() : ChipVariant.textColor()} inset`
-          : "",
-      }}
-      onMouseEnter={hover}
-      onMouseLeave={leave}
-      onClick={
-        onClick
-          ? (e) => {
-              select();
-              onClick(e);
-            }
-          : select
-      }
+      className={clsx(
+        styles.chip,
+        isSelected &&
+          styles[
+            `${activeBorderVariant ? activeBorderVariant : textColor(variant)}SelectedBorder`
+          ],
+        globals[`${textColor(variant)}Color`],
+        isSelected
+          ? globals[`${variant}BackgroundColor`]
+          : globals[`${variant}MutedBackgroundColorDynamic`]
+      )}
+      style={style}
+      onClick={handleClick}
     >
       <p className={styles.label}>{label}</p>
       {children}
     </button>
   );
 }
-
-/*
-backgroundColor: isSelected
-          ? isHovered
-            ? ChipVariant.mutedColor()
-            : ChipVariant.color()
-          : isHovered
-            ? ChipVariant.color()
-            : ChipVariant.mutedColor(),
-*/
-
-/*
-isSelected
-          ? isHovered
-            ? ChipVariant.mutedTextColor()
-            : ChipVariant.color()
-          : isHovered
-            ? ChipVariant.mutedColor()
-            : ChipVariant.textColor(),
-        color: isSelected
-          ? isHovered
-            ? ChipVariant.textColor() == LIGHT
-              ? DARK
-              : LIGHT
-            : ChipVariant.textColor()
-          : isHovered
-            ? ChipVariant.textColor()
-            : ChipVariant.textColor() == LIGHT
-              ? DARK
-              : LIGHT,
-*/

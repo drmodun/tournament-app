@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState, MouseEventHandler } from "react";
+import React, { MouseEventHandler } from "react";
 import styles from "./button.module.scss";
-import { Variants, Variant } from "../../types/styleTypes";
+import globals from "styles/globals.module.scss";
+import { Variants } from "types/styleTypes";
+import { clsx } from "clsx";
 
 interface ButtonProps {
   children?: React.ReactNode;
@@ -19,29 +21,14 @@ export default function Button({
   variant = "light",
   onClick,
 }: ButtonProps) {
-  const [isHovered, setIsHovered] = useState<boolean>(false);
-  const buttonVariant: Variant = new Variant(variant);
-
-  const hover = () => {
-    setIsHovered(true);
-  };
-
-  const leave = () => {
-    setIsHovered(false);
-  };
-
   return (
     <button
-      className={styles.button}
-      style={{
-        ...style,
-        backgroundColor: isHovered
-          ? buttonVariant.mutedColor()
-          : buttonVariant.color(),
-        color: buttonVariant.textColor(),
-      }}
-      onMouseEnter={hover}
-      onMouseLeave={leave}
+      className={clsx(
+        styles.button,
+        globals[`${variant}BackgroundColorDynamic`],
+        globals[`${variant}TextColor`]
+      )}
+      style={style}
       onClick={onClick ? onClick : () => {}}
     >
       <p className={styles.label}>{label}</p>

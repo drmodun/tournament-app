@@ -12,90 +12,12 @@ export type Variants =
 /// Type that includes the text variants of the textual app components:
 export type TextVariants = "light" | "dark";
 
-/// Constants for the colors used in the color pallette of the app:
-export const PRIMARY = "#59C3C3";
-export const SECONDARY = "#197BBD";
-export const LIGHT = "#F2F2F2";
-export const DARK = "#21262C";
-export const DANGER = "#F45B69";
-export const WARNING = "#F2AF29";
-
-export const PRIMARY_MUTED = "#71ADAD";
-export const SECONDARY_MUTED = "#2E77A8";
-export const LIGHT_MUTED = "#DEDEDE";
-export const DARK_MUTED = "#383838";
-export const DANGER_MUTED = "#E26E78";
-export const WARNING_MUTED = "#DBA73D";
-
-/// Helper class that returns the color of the variant.
-export class Variant {
-  variant: Variants;
-
-  constructor(variant: Variants) {
-    this.variant = variant;
+/// Function that returns the text color based on the variant:
+export const textColor = (variant: Variants): string => {
+  switch (variant) {
+    case "light":
+      return "dark";
+    default:
+      return "light";
   }
-
-  getVariant(): string {
-    return this.variant;
-  }
-
-  /// Returns the color of the variant.
-  color(): string {
-    switch (this.variant) {
-      case "light":
-        return LIGHT;
-      case "dark":
-        return DARK;
-      case "primary":
-        return PRIMARY;
-      case "secondary":
-        return SECONDARY;
-      case "danger":
-        return DANGER;
-      case "warning":
-        return WARNING;
-      default:
-        return PRIMARY;
-    }
-  }
-
-  /// Returns the color that should be used for the text above the element with the provided color variant.
-  textColor(): string {
-    switch (this.variant) {
-      case "light":
-        return DARK;
-      default:
-        return LIGHT;
-    }
-  }
-
-  /// Returns the muted color of the variant.
-  mutedColor(): string {
-    switch (this.variant) {
-      case "light":
-        return LIGHT_MUTED;
-      case "dark":
-        return DARK_MUTED;
-      case "primary":
-        return PRIMARY_MUTED;
-      case "secondary":
-        return SECONDARY_MUTED;
-      case "danger":
-        return DANGER_MUTED;
-      case "warning":
-        return WARNING_MUTED;
-      default:
-        return PRIMARY_MUTED;
-    }
-  }
-
-  /// Returns the muted text color of the variant.
-  mutedTextColor(): string {
-    switch (this.variant) {
-      case "light":
-        return DARK_MUTED;
-      default:
-        return LIGHT_MUTED;
-    }
-  }
-}
+};

@@ -1,0 +1,193 @@
+@import "variables";
+
+.primaryColor {
+  color: $primary;
+}
+
+.secondaryColor {
+  color: $secondary;
+}
+
+.lightColor {
+  color: $light;
+}
+
+.darkColor {
+  color: $dark;
+}
+
+.warningColor {
+  color: $warning;
+}
+
+.dangerColor {
+  color: $danger;
+}
+
+.primaryMutedColor {
+  color: $primaryMuted;
+}
+
+.secondaryMutedColor {
+  color: $secondaryMuted;
+}
+
+.lightMutedColor {
+  color: $lightMuted;
+}
+
+.darkMutedColor {
+  color: $darkMuted;
+}
+
+.warningMutedColor {
+  color: $warningMuted;
+}
+
+.dangerMutedColor {
+  color: $dangerMuted;
+}
+
+.primaryBackgroundColor {
+  background-color: $primary;
+}
+
+.secondaryBackgroundColor {
+  background-color: $secondary;
+}
+
+.lightBackgroundColor {
+  background-color: $light;
+}
+
+.darkBackgroundColor {
+  background-color: $dark;
+}
+
+.warningBackgroundColor {
+  background-color: $warning;
+}
+
+.dangerBackgroundColor {
+  background-color: $danger;
+}
+
+.primaryMutedBackgroundColor {
+  background-color: $primaryMuted;
+}
+
+.secondaryMutedBackgroundColor {
+  background-color: $secondaryMuted;
+}
+
+.lightMutedBackgroundColor {
+  background-color: $lightMuted;
+}
+
+.darkMutedBackgroundColor {
+  background-color: $darkMuted;
+}
+
+.warningMutedBackgroundColor {
+  background-color: $warningMuted;
+}
+
+.dangerMutedBackgroundColor {
+  background-color: $dangerMuted;
+}
+
+.primaryBackgroundColorDynamic {
+  background-color: $primary;
+  &:hover {
+    background-color: $primaryMuted;
+  }
+}
+
+.secondaryBackgroundColorDynamic {
+  background-color: $secondary;
+  &:hover {
+    background-color: $secondaryMuted;
+  }
+}
+
+.lightBackgroundColorDynamic {
+  background-color: $light;
+  &:hover {
+    background-color: $lightMuted;
+  }
+}
+
+.darkBackgroundColorDynamic {
+  background-color: $dark;
+  &:hover {
+    background-color: $darkMuted;
+  }
+}
+
+.warningBackgroundColorDynamic {
+  background-color: $warning;
+  &:hover {
+    background-color: $warningMuted;
+  }
+}
+
+.dangerBackgroundColorDynamic {
+  background-color: $danger;
+  &:hover {
+    background-color: $dangerMuted;
+  }
+}
+
+.primaryMutedBackgroundColorDynamic {
+  background-color: $primaryMuted;
+  &:hover {
+    background-color: $primary;
+  }
+}
+
+.secondaryMutedBackgroundColorDynamic {
+  background-color: $secondaryMuted;
+  &:hover {
+    background-color: $secondary;
+  }
+}
+
+.lightMutedBackgroundColorDynamic {
+  background-color: $lightMuted;
+  &:hover {
+    background-color: $light;
+  }
+}
+
+.darkMutedBackgroundColorDynamic {
+  background-color: $darkMuted;
+  &:hover {
+    background-color: $dark;
+  }
+}
+
+.warningMutedBackgroundColorDynamic {
+  background-color: $warningMuted;
+  &:hover {
+    background-color: $warning;
+  }
+}
+
+.dangerMutedBackgroundColorDynamic {
+  background-color: $dangerMuted;
+  &:hover {
+    background-color: $danger;
+  }
+}
+
+.primaryTextColor,
+.secondaryTextColor,
+.darkTextColor,
+.warningTextColor,
+.dangerTextColor {
+  color: $light;
+}
+
+.lightTextColor {
+  color: $dark;
+}

@@ -4,11 +4,11 @@ import React, {
   useState,
   HTMLInputTypeAttribute,
   ChangeEventHandler,
-  useLayoutEffect,
-  useRef,
 } from "react";
 import styles from "./input.module.scss";
-import { Variants, Variant, TextVariants } from "../../types/styleTypes";
+import globals from "styles/globals.module.scss";
+import { Variants, TextVariants, textColor } from "types/styleTypes";
+import { clsx } from "clsx";
 
 interface InputProps {
   style?: React.CSSProperties;
@@ -39,36 +39,19 @@ export default function Input({
   onChange = () => {},
   onSubmit = () => {},
 }: InputProps) {
-  const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [isSelected, setIsSelected] = useState<boolean>(false);
-  const inputVariant: Variant = new Variant(variant);
   const [value, setValue] = useState<string>("");
-  const ref = useRef<HTMLInputElement>(null);
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      ref.current.style.setProperty("--placeholder-color", "red");
-    }
-  }, []);
-
-  const hover = () => setIsHovered(true);
-  const leave = () => setIsHovered(false);
-
-  const select = () => setIsSelected(true);
-  const unselect = () => setIsSelected(false);
 
   return (
     <div>
-      {label ? (
+      {label && (
         <p
-          className={`${styles.label} ${styles["labelText-" + labelVariant]}`}
+          className={clsx(styles.label, styles["labelText-" + labelVariant])}
           style={labelStyle}
         >
           {label}
         </p>
-      ) : null}
+      )}
       <input
-        ref={ref}
         type={type}
         onChange={(e) => {
           if (doesSubmit) setValue(e.target.value);
@@ -76,53 +59,28 @@ export default function Input({
         }}
         value={value}
         placeholder={placeholder}
-        className={`${styles.input} ${isSelected ? styles.selectedInput : ""} ${doesSubmit ? styles.submitInput : ""} ${variant == "light" ? styles.lightPlaceholder : ""}`}
-        style={{
-          backgroundColor:
-            isSelected || isHovered
-              ? inputVariant.mutedColor()
-              : inputVariant.color(),
-          color: inputVariant.textColor(),
-          ...style,
-        }}
-        onMouseEnter={hover}
-        onMouseLeave={leave}
-        onSelect={select}
-        onBlur={unselect}
+        className={clsx(
+          styles.input,
+          doesSubmit && styles.submitInput,
+          variant == "light" && styles.lightPlaceholder,
+          globals[`${variant}BackgroundColorDynamic`],
+          globals[`${textColor(variant)}Color`]
+        )}
+        style={style}
       />
-      {doesSubmit ? (
+      {doesSubmit && (
         <button
           onClick={() => onSubmit(value)}
-          className={styles.submitButton}
-          style={{
-            backgroundColor: inputVariant.mutedColor(),
-            color: inputVariant.textColor(),
-            ...submitStyle,
-          }}
+          className={clsx(
+            styles.submitButton,
+            globals[`${textColor(variant)}Color`],
+            globals[`${variant}MutedBackgroundColor`]
+          )}
+          style={submitStyle}
         >
           {submitLabel}
         </button>
-      ) : null}
+      )}
     </div>
   );
-  /*
-  return (
-    <button
-      className={styles.button}
-      style={{
-        ...style,
-        backgroundColor: isHovered
-          ? buttonVariant.mutedColor()
-          : buttonVariant.color(),
-        color: buttonVariant.textColor(),
-      }}
-      onMouseEnter={hover}
-      onMouseLeave={leave}
-      onClick={onClick ? onClick : () => {}}
-    >
-      <p className={styles.label}>{label}</p>
-      {children}
-    </button>
-  );
-  */
 }

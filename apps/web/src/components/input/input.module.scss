@@ -1,37 +1,37 @@
+@import "styles/";
+
 .input {
-  height: 56px;
-  border-radius: 24px;
+  height: rem-calc(56);
+  border-radius: $borderRadius;
   padding: 0 32px;
   border: none;
-  font-size: 1rem;
-}
+  font-size: rem-calc(16);
+  &:focus {
+    outline: none;
+  }
 
-.input:focus {
-  outline: none;
-}
-
-.input::placeholder {
-  color: #ddd;
+  &::placeholder {
+    color: $lightMuted;
+  }
 }
 
 .lightPlaceholder::placeholder {
-  color: #666 !important;
+  color: $darkMuted;
 }
 
 .submitButton {
-  height: 56px;
-  border-radius: 0px 24px 24px 0;
+  height: rem-calc(56);
+  border-radius: 0px $borderRadius $borderRadius 0;
   border: none;
   padding: 0 32px;
-  font-size: 1rem;
-}
-
-.submitButton:hover {
-  cursor: pointer;
+  font-size: rem-calc(16);
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .submitInput {
-  border-radius: 24px 0px 0px 24px !important;
+  border-radius: $borderRadius 0px 0px $borderRadius;
 }
 
 .label {
@@ -40,9 +40,9 @@
 }
 
 .labelText-dark {
-  color: #ddd;
+  color: $lightMuted;
 }
 
 .labelText-light {
-  color: #666;
+  color: $darkMuted;
 }

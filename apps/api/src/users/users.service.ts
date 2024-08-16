@@ -1,32 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BaseUserResponseType,
+  CreateUserRequest,
+  FullUserQuery,
+  UpdateUserInfo,
+  UserResponseEnumType,
+  UserResponsesEnum,
+} from '@tournament-app/types';
+import { UserDrizzleQueryManager } from './drizzle';
+import { eq } from 'drizzle-orm';
 import { db } from 'src/db/db';
 import { user } from 'src/db/schema';
-import { userToMiniUserMappingObject } from './mappers/response.dto';
-import { CreateUserRequest, MiniUserResponse } from '@tournament-app/types';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserRequest) {
-    return 'This action adds a new user';
+  constructor(private readonly queryManager: UserDrizzleQueryManager) {}
+  async create(createUserDto: CreateUserRequest) {
+    return await db.insert(user).values(createUserDto).returning({
+      id: user.id,
+    });
   }
 
-  async findAll() {
-    const results: MiniUserResponse[] = await db
-      .select(userToMiniUserMappingObject(user))
-      .from(user);
+  async findAll<TResponseType extends BaseUserResponseType>(
+    query: FullUserQuery,
+  ) {
+    const queryFunction = this.queryManager.getQuery(query);
+    const results = await queryFunction;
 
-    return results;
+    return results as TResponseType[];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne<TResponseType extends BaseUserResponseType>(
+    id: number,
+    responseType: UserResponseEnumType = UserResponsesEnum.EXTENDED,
+  ) {
+    const query = this.queryManager.getSingleQuery(id, responseType);
+    const results = await query;
+
+    if (results.length === 0) {
+      throw new NotFoundException('User not found');
+    }
+
+    return results[0] as TResponseType;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserInfo) {
+    return db.update(user).set(updateUserDto).where(eq(user.id, id)).returning({
+      id: user.id,
+    }); // TODO: potentially move these to the query manager as a sort of a repo layer
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    return db.delete(user).where(eq(user.id, id)).returning({
+      id: user.id,
+    });
   }
 }

@@ -389,11 +389,6 @@ export const participation = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    userId: integer('user_id')
-      .references(() => user.id, {
-        onDelete: 'cascade',
-      })
-      .notNull(),
     tournamentId: integer('tournament_id')
       .references(() => tournament.id, {
         onDelete: 'cascade',
@@ -646,7 +641,7 @@ export const categoryToLFG = pgTable(
 
 export const lookingForPlayers = pgTable('looking_for_players', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id')
+  userId: integer('user_id') // TODO: change this go groupId later
     .references(() => user.id, {
       onDelete: 'cascade',
     })

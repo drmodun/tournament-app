@@ -8,4 +8,4 @@ const sql = postgres(
     'postgresql//postgres:postgres@localhost:5432/tournament',
 );
 
-export const db = drizzle(sql);
+export const db = drizzle(sql, { logger: true });

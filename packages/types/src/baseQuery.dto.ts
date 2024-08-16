@@ -1,18 +1,16 @@
 export interface Pagination {
   page: number;
   pageSize: number;
-  total: number;
-  totalPages: number;
+  total?: number;
 }
 
 export interface Links {
   first: string;
-  last: string;
   prev: string;
   next: string;
 }
 
-export type QueryType = Record<string, number | string | Date>;
+export type QueryType = Record<string, number | string | Date | boolean>;
 
 export interface QueryMetadata {
   pagination: Pagination;
@@ -26,7 +24,7 @@ export interface BaseQueryResponse<Entity> {
 }
 
 export interface BaseSortRequest {
-  sort: string;
+  field: string;
   order: "asc" | "desc";
 }
 
@@ -35,9 +33,13 @@ export interface BasePaginationRequest {
   pageSize: number;
 }
 
-export abstract class BaseQuery {
+export abstract class BaseQuery<TResponseType extends string = string> {
   sort: BaseSortRequest;
   pagination: BasePaginationRequest;
+  returnFullCount?: boolean = false;
+  responseType?: TResponseType;
 
   abstract query: QueryType;
 }
+
+// Possibly validate these with class validator later

@@ -5,6 +5,8 @@ export enum userRoleEnum {
 
 export type userRoleEnumType = (typeof userRoleEnum)[keyof typeof userRoleEnum];
 
+export type BaseResponseType = "base" | "extended" | "admin";
+
 export enum subscriptionEnum {
   FREE = "free",
   PRO = "pro",

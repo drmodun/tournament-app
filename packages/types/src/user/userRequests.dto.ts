@@ -8,6 +8,7 @@ import {
   Min,
 } from "class-validator";
 import { BaseQuery, QueryType } from "src/baseQuery.dto";
+import { UserResponseEnumType } from "./userResponses.dto";
 
 export class CreateUserRequest {
   @IsString()
@@ -72,9 +73,16 @@ export class UpdateUserInfo {
   location: string;
 }
 
+export type BaseUserUpdateRequest = UpdateUserInfo | CreateUserRequest;
+
 export class UpdatePasswordRequest {
   @IsStrongPassword()
   password: string;
+} // TODO: possibly move to auth
+
+export class UpdateEmailRequest {
+  @IsEmail()
+  email: string;
 }
 
 export interface UserQuery extends QueryType {
@@ -85,6 +93,10 @@ export interface UserQuery extends QueryType {
   location?: string;
 }
 
-export class FullUserQuery extends BaseQuery {
+export class FullUserQuery extends BaseQuery<UserResponseEnumType> {
+  query: UserQuery;
+}
+
+export class SingleUserQuery extends BaseQuery<UserResponseEnumType> {
   query: UserQuery;
 }

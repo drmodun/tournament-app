@@ -4,14 +4,14 @@
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: $borderRadius;
-  margin-bottom: 8px;
+  margin-bottom: $halfPadding;
 }
 
 .wrapper {
   position: relative;
   width: auto;
   max-width: vw-calc(400);
-  padding: 32px;
+  padding: $doublePadding;
   border-radius: $borderRadius;
   display: flex;
   flex-direction: column;
@@ -23,12 +23,12 @@
 }
 
 .arrowForward {
-  right: 33px;
+  right: $doublePadding + 1px;
   border-radius: $borderRadius 0 0 $borderRadius;
 }
 
 .arrowBack {
-  left: 33px;
+  left: $doublePadding + 1px;
   border-radius: 0 $borderRadius $borderRadius 0;
 }
 
@@ -40,23 +40,23 @@
   border: none;
   height: 25%;
   color: $light;
-  padding: 0 8px 0 8px;
+  padding: 0 $halfPadding 0 $halfPadding;
   cursor: pointer;
   color: $light;
 
   @media screen and (max-width: $tabletBreakpoint) {
-    padding: 0 32px 0 32px;
+    padding: 0 $doublePadding 0 $doublePadding;
     height: 50%;
   }
 }
 
 .title {
-  font-size: rem-calc(16);
+  font-size: $fontSize;
   text-align: center;
 }
 
 .lightBorder {
-  border: 2px solid $dark;
+  border: $baseBorderSize solid $dark;
 }
 
 .primaryBorder,
@@ -64,5 +64,5 @@
 .darkBorder,
 .warningBorder,
 .dangerBorder {
-  border: 2px solid $light;
+  border: $baseBorderSize solid $light;
 }

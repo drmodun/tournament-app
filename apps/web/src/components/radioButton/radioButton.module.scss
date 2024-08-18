@@ -3,18 +3,18 @@
 .label {
   display: grid;
   grid-template-columns: 1rem auto;
-  gap: rem-calc(8);
+  gap: $halfPadding;
 
   align-items: center;
   @media screen and (max-width: $tabletBreakpoint) {
-    gap: rem-calc(12);
+    gap: $padding;
   }
 }
 
 .radioButton {
   appearance: none;
   -webkit-appearance: none;
-  font-size: rem-calc(16);
+  font-size: $fontSize;
   color: currentColor;
   width: rem-calc(20);
   height: rem-calc(20);
@@ -28,56 +28,56 @@
 }
 
 .primarySelectedBorder {
-  border: 6px solid $primary;
+  border: $selectedBorderSize solid $primary;
 }
 
 .secondarySelectedBorder {
-  border: 6px solid $secondary;
+  border: $selectedBorderSize solid $secondary;
 }
 
 .lightSelectedBorder {
-  border: 6px solid $light;
+  border: $selectedBorderSize solid $light;
 }
 
 .darkSelectedBorder {
-  border: 6px solid $dark;
+  border: $selectedBorderSize solid $dark;
 }
 
 .warningSelectedBorder {
-  border: 6px solid $warning;
+  border: $selectedBorderSize solid $warning;
 }
 
 .dangerSelectedBorder {
-  border: 6px solid $danger;
+  border: $selectedBorderSize solid $danger;
 }
 
 .primaryDeselectedBorder {
-  border: 2px solid $primary;
+  border: $baseBorderSize solid $primary;
 }
 
 .secondaryDeselectedBorder {
-  border: 2px solid $secondary;
+  border: $baseBorderSize solid $secondary;
 }
 
 .lightDeselectedBorder {
-  border: 2px solid $light;
+  border: $baseBorderSize solid $light;
 }
 
 .darkDeselectedBorder {
-  border: 2px solid $dark;
+  border: $baseBorderSize solid $dark;
 }
 
 .warningDeselectedBorder {
-  border: 2px solid $warning;
+  border: $baseBorderSize solid $warning;
 }
 
 .dangerDeselectedBorder {
-  border: 2px solid $danger;
+  border: $baseBorderSize solid $danger;
 }
 
 .disabled {
   background-color: $lightMuted;
-  border: 2px solid $disabled;
+  border: $baseBorderSize solid $disabled;
 }
 
 .disabledText {

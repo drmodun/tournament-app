@@ -45,7 +45,10 @@ export default function Input({
     <div>
       {label && (
         <p
-          className={clsx(styles.label, styles["labelText-" + labelVariant])}
+          className={clsx(
+            globals[`${textColor(labelVariant)}MutedColor`],
+            styles.label
+          )}
           style={labelStyle}
         >
           {label}

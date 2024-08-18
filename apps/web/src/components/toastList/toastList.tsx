@@ -2,7 +2,7 @@ import { useContext } from "react";
 import Toast from "../toast/toast";
 import { ToastProps } from "types/toastTypes";
 import styles from "./toastList.module.scss";
-import { ToastContext } from "context/toastContext";
+import { ToastContext } from "utils/context/toastContext";
 
 export default function ToastList({ style }: { style?: React.CSSProperties }) {
   const toastContext = useContext(ToastContext);

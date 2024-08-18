@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState, ChangeEvent, FormEvent, useContext } from "react";
-import Button from "components/button/button";
-import Input from "components/input/input";
-import Chip from "components/chip/chip";
-import Carousel from "components/carousel/carousel";
-import Toast from "components/toast/toast";
-import { ToastContext } from "context/toastContext";
-import RadioGroup from "components/radioGroup/radioGroup";
+import Button from "components/button";
+import Input from "components/input";
+import Chip from "components/chip";
+import Carousel from "components/carousel";
+import Toast from "components/toast";
+import RadioGroup from "components/radioGroup";
+import { ToastContext } from "utils/context/toastContext";
+import ToastList from "components/toastList";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -20,7 +21,8 @@ export default function Web() {
   useEffect(() => {
     setResponse(null);
     setError(undefined);
-  }, [name]);
+    console.log(toastContext);
+  }, [name, toastContext]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     setName(e.target.value);
@@ -211,6 +213,8 @@ export default function Web() {
         ]}
         variant="danger"
       ></Carousel>
+
+      <ToastList />
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>
         <input

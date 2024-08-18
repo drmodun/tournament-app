@@ -22,6 +22,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const addToast = (message: string, type: ToastVariants, id?: number) => {
     id = id ?? Date.now();
     const newToasts = [...toasts, { message, type, id }];
+    console.log(id, newToasts);
     setToasts(newToasts);
     if (AUTO_CLOSE) {
       setTimeout(() => {

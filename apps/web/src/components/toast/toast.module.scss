@@ -1,32 +1,33 @@
 @import "styles/";
 
 .toast {
-  min-height: 56px;
+  min-height: $baseComponentHeight;
   border-radius: $borderRadius;
-  padding: 0 32px;
+  padding: 0 $doublePadding;
   border: none;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
   animation-iteration-count: 1;
+
   &:hover {
     cursor: pointer;
   }
 }
 
 .message {
-  font-size: rem-calc(16);
+  font-size: $fontSize;
   text-overflow: ellipsis;
-  max-height: 5rem;
+  max-height: 5 * $fontSize;
   text-align: left;
   overflow: hidden;
 }
 
 .check {
-  height: 32px;
-  width: 32px;
-  margin-right: 16px;
+  height: 0.5 * $baseComponentHeight;
+  width: auto;
+  margin-right: $padding;
 }
 
 @keyframes toastAnimation {

@@ -1,11 +1,12 @@
 @import "styles/";
 
 .input {
-  height: rem-calc(56);
+  height: $baseComponentHeight;
   border-radius: $borderRadius;
-  padding: 0 32px;
+  padding: 0 $doublePadding;
   border: none;
-  font-size: rem-calc(16);
+  font-size: $fontSize;
+
   &:focus {
     outline: none;
   }
@@ -20,11 +21,12 @@
 }
 
 .submitButton {
-  height: rem-calc(56);
+  height: $baseComponentHeight;
   border-radius: 0px $borderRadius $borderRadius 0;
   border: none;
-  padding: 0 32px;
-  font-size: rem-calc(16);
+  padding: 0 $doublePadding;
+  font-size: $fontSize;
+
   &:hover {
     cursor: pointer;
   }
@@ -35,14 +37,6 @@
 }
 
 .label {
-  font-size: 0.85rem;
-  margin-bottom: 4px;
-}
-
-.labelText-dark {
-  color: $lightMuted;
-}
-
-.labelText-light {
-  color: $darkMuted;
+  font-size: $fontSize * 0.875;
+  margin-bottom: $halfPadding / 2;
 }

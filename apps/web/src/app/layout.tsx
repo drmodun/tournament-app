@@ -1,5 +1,5 @@
 import "./globals.scss";
-import { ToastProvider } from "context/toastContext";
+import { ToastProvider } from "utils/context/toastContext";
 
 export default function RootLayout({
   children,

@@ -1,9 +1,9 @@
 @import "styles/";
 
 .button {
-  height: 56px;
+  height: $baseComponentHeight;
   border-radius: $borderRadius;
-  padding: 0 32px;
+  padding: 0 $doublePadding;
   border: none;
 
   &:hover {
@@ -11,5 +11,5 @@
   }
 }
 .label {
-  font-size: rem-calc(16);
+  font-size: $fontSize;
 }

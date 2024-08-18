@@ -1,3 +1,5 @@
+@use "calc" as *;
+
 $toastSpeed: 350ms;
 $toastListScrollbarWidth: 0.35em;
 $toastListWidth: 500px;
@@ -20,3 +22,10 @@ $darkMuted: #383838;
 $dangerMuted: #e26e78;
 $warningMuted: #dba73d;
 $disabled: #b5b5b3;
+$baseComponentHeight: 56px;
+$padding: 16px;
+$doublePadding: 32px;
+$halfPadding: 8px;
+$fontSize: rem-calc(16);
+$baseBorderSize: 2px;
+$selectedBorderSize: 6px;

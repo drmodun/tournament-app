@@ -1,9 +1,9 @@
 @import "styles/";
 
 .chip {
-  height: 56px;
+  height: $baseComponentHeight;
   border-radius: $borderRadius;
-  padding: 0 32px;
+  padding: 0 $doublePadding;
   border: none;
   &:hover {
     cursor: pointer;
@@ -11,25 +11,25 @@
 }
 
 .chip .label {
-  font-size: rem-calc(16);
+  font-size: $fontSize;
 }
 
 .primarySelectedBorder {
-  box-shadow: 0px 0px 0px 4px $primary inset;
+  box-shadow: 0px 0px 0px $selectedBorderSize $primary inset;
 }
 
 .secondarySelectedBorder {
-  box-shadow: 0px 0px 0px 4px $secondary inset;
+  box-shadow: 0px 0px 0px $selectedBorderSize $secondary inset;
 }
 .lightSelectedBorder {
-  box-shadow: 0px 0px 0px 4px $light inset;
+  box-shadow: 0px 0px 0px $selectedBorderSize $light inset;
 }
 .darkSelectedBorder {
-  box-shadow: 0px 0px 0px 4px $dark inset;
+  box-shadow: 0px 0px 0px $selectedBorderSize $dark inset;
 }
 .warningSelectedBorder {
-  box-shadow: 0px 0px 0px 4px $warning inset;
+  box-shadow: 0px 0px 0px $selectedBorderSize $warning inset;
 }
 .dangerSelectedBorder {
-  box-shadow: 0px 0px 0px 4px $danger inset;
+  box-shadow: 0px 0px 0px $selectedBorderSize $danger inset;
 }

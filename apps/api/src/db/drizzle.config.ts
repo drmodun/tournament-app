@@ -9,6 +9,6 @@ export default defineConfig({
   dbCredentials: {
     url:
       env.DATABASE_URL ||
-      'postgresql://postgres:postgres@localhost:5432/tournament', //default
+      'postgres://postgres:postgres@localhost:5432/tournament', //default
   },
 });

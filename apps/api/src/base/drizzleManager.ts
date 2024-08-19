@@ -2,16 +2,13 @@ import { SelectedFields, SQL, WithSubquery } from 'drizzle-orm';
 import { AnyPgTable, PgColumn, PgSelect, PgTable } from 'drizzle-orm/pg-core';
 import { BaseQuery } from '@tournament-app/types';
 
-export declare abstract class BaseDrizzleQueryManager<
+export abstract class BaseDrizzleQueryManager<
   TTable extends AnyPgTable,
   TQueryRequest extends BaseQuery,
 > {
-  constructor();
+  constructor() {}
   public abstract sortRecord: Record<string, PgColumn | SQL<number>>;
-  public abstract mappingObjectRecord: Record<
-    string,
-    SelectedFields<PgColumn, TTable | PgTable>
-  >;
+  public abstract getMappingObject(responseEnum: string);
   abstract conditionallyJoin<TSelect extends PgSelect>(
     query: TSelect,
     typeEnum: string,

@@ -1,4 +1,4 @@
-import { BaseDrizzleQueryManager } from 'src/base/drizzleManager';
+import { BaseDrizzleQueryManager } from '../base/drizzleManager';
 import {
   FullUserQuery,
   UserQuery,
@@ -13,9 +13,9 @@ import {
   organizer,
   participation,
   user,
-} from 'src/db/schema';
+} from '../db/schema';
 import { alias, PgColumn, PgSelect } from 'drizzle-orm/pg-core';
-import { db } from 'src/db/db';
+import { db } from '../db/db';
 import { and, asc, countDistinct, desc, eq, SQL, sql } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 
@@ -57,44 +57,51 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
     }
   }
 
-  public mappingObjectRecord: Record<
-    UserResponseEnumType,
-    {
-      [key: string]: PgColumn | SQL;
+  public getMappingObject(responseEnum: UserResponseEnumType): {
+    [key: string]: PgColumn | SQL;
+  } {
+    switch (responseEnum) {
+      case UserResponsesEnum.MINI:
+        return {
+          id: user.id,
+          username: user.username,
+        };
+      case UserResponsesEnum.MINI_WITH_PFP:
+        return {
+          ...this.getMappingObject(UserResponsesEnum.MINI),
+          profilePicture: user.profilePicture,
+        };
+      case UserResponsesEnum.MINI_WITH_COUNTRY:
+        return {
+          ...this.getMappingObject(UserResponsesEnum.MINI_WITH_PFP),
+          country: user.country,
+        };
+      case UserResponsesEnum.BASE:
+        return {
+          ...this.getMappingObject(UserResponsesEnum.MINI_WITH_COUNTRY),
+          bio: user.bio,
+          email: user.email,
+          level: user.level,
+          updatedAt: user.updatedAt,
+          followers: countDistinct(follower),
+        };
+      case UserResponsesEnum.EXTENDED:
+        return {
+          ...this.getMappingObject(UserResponsesEnum.BASE),
+          following: countDistinct(alias(follower, 'followingAlias').userId),
+        };
+      case UserResponsesEnum.ADMIN:
+        return {
+          ...this.getMappingObject(UserResponsesEnum.EXTENDED),
+          subscription: user.subscription,
+          password: user.password,
+          role: user.role,
+          code: user.code,
+        };
+      default:
+        return {};
     }
-  > = {
-    [UserResponsesEnum.MINI]: {
-      id: user.id,
-      username: user.username,
-    },
-    [UserResponsesEnum.MINI_WITH_PFP]: {
-      ...this.mappingObjectRecord.mini,
-      profilePicture: user.profilePicture,
-    },
-    [UserResponsesEnum.MINI_WITH_COUNTRY]: {
-      ...this.mappingObjectRecord['mini-with-pfp'],
-      country: user.country,
-    },
-    [UserResponsesEnum.BASE]: {
-      ...this.mappingObjectRecord['mini-with-country'],
-      bio: user.bio,
-      email: user.email,
-      level: user.level,
-      updatedAt: user.updatedAt,
-      followers: countDistinct(follower),
-    },
-    [UserResponsesEnum.EXTENDED]: {
-      ...this.mappingObjectRecord.base,
-      following: countDistinct(alias(follower, 'followingAlias').userId), //TODO: think to implement this by alias later
-    },
-    [UserResponsesEnum.ADMIN]: {
-      ...this.mappingObjectRecord.extended,
-      subscription: user.subscription,
-      password: user.password,
-      role: user.role,
-      code: user.code,
-    },
-  };
+  }
 
   public sortRecord: Record<UserSortingEnumType, PgColumn | SQL<number>> = {
     // Maybe make this into a factory function
@@ -123,22 +130,19 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
       const field = user[key];
       if (!field) return;
 
-      const typeCheck = typeof value === typeof field;
-      if (!typeCheck) return;
-
-      const typedValue = value as typeof field;
+      // TODO: some type fixes
 
       switch (key) {
         case 'name':
-          return eq(user.name, typedValue);
+          return eq(user.name, value as string);
         case 'username':
-          return eq(user.username, typedValue);
+          return eq(user.username, value as string);
         case 'email':
-          return eq(user.email, typedValue);
+          return eq(user.email, value as string);
         case 'country':
-          return eq(user.country, typedValue);
+          return eq(user.country, value as string);
         case 'location':
-          return eq(user.location, typedValue);
+          return eq(user.location, value as string);
         default:
           return;
       }
@@ -146,42 +150,52 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
   }
 
   getQuery(query: FullUserQuery) {
-    const selectedType = this.mappingObjectRecord[query.responseType || 'base'];
+    const selectedType = this.getMappingObject(
+      query.responseType || UserResponsesEnum.BASE,
+    );
 
-    const baseQuery = db
-      .with(query.returnFullCount && this.getCount()) // Should just skip if not asked full count
-      .select(selectedType)
-      .from(user)
-      .$dynamic() as PgSelect<'user', typeof selectedType>;
+    const baseQuery = query.returnFullCount
+      ? (db
+          .with(this.getCount())
+          .select(selectedType)
+          .from(user)
+          .$dynamic() as PgSelect<'user', typeof selectedType>)
+      : (db.select(selectedType).from(user).$dynamic() as PgSelect<
+          'user',
+          typeof selectedType
+        >);
 
-    if (query.query) {
-      const whereClause = this.getValidWhereClause(query.query);
-      if (whereClause.length) {
-        baseQuery.where(and(...whereClause));
-      }
-    }
+    const whereClause = this.getValidWhereClause(query.query);
+    const filterQuery = baseQuery.where(and(...whereClause)).$dynamic();
+    console.log(...whereClause);
 
-    if (query.sort) {
-      baseQuery.orderBy(
-        query.sort.order === 'asc'
-          ? asc(this.sortRecord[query.sort.field])
-          : desc(this.sortRecord[query.sort.field]),
-      );
-    }
+    const sortedQuery = query.sort
+      ? filterQuery
+          .orderBy(
+            query.sort.order === 'asc'
+              ? asc(this.sortRecord[query.sort.field])
+              : desc(this.sortRecord[query.sort.field]),
+          )
+          .$dynamic()
+      : filterQuery;
 
-    if (query.pagination) {
-      baseQuery
-        .limit(query.pagination.pageSize)
-        .offset(query.pagination.page * (query.pagination.pageSize || 12));
-    }
+    const paginatedQuery = query.pagination
+      ? sortedQuery
+          .limit(query.pagination.pageSize)
+          .offset(query.pagination.page * (query.pagination.pageSize || 12))
+          .$dynamic()
+      : sortedQuery;
 
-    const fullQuery = this.conditionallyJoin(baseQuery, query.responseType);
+    const fullQuery = this.conditionallyJoin(
+      paginatedQuery,
+      query.responseType,
+    );
 
     return fullQuery;
   }
 
   getSingleQuery(id: number, responseType: UserResponseEnumType) {
-    const selectedType = this.mappingObjectRecord[responseType];
+    const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(selectedType)
       .from(user)
@@ -192,10 +206,7 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
           eq(user.hasSelectedInterests, true),
         ),
       )
-      .$dynamic() as PgSelect<
-      'user',
-      (typeof this.mappingObjectRecord)[UserResponseEnumType]
-    >;
+      .$dynamic() as PgSelect<'user', typeof selectedType>;
 
     const fullQuery = this.conditionallyJoin(baseQuery, responseType);
 

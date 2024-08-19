@@ -9,8 +9,8 @@ import {
 } from '@tournament-app/types';
 import { UserDrizzleQueryManager } from './queryManager';
 import { eq } from 'drizzle-orm';
-import { db } from 'src/db/db';
-import { user } from 'src/db/schema';
+import { db } from '../db/db';
+import { user } from '../db/schema';
 
 @Injectable()
 export class UsersService {

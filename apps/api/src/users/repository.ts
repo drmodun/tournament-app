@@ -1,5 +1,6 @@
-import { BaseDrizzleQueryManager } from '../base/drizzleManager';
+import { BaseDrizzleRepository } from '../base/drizzleManager';
 import {
+  CreateUserRequest,
   FullUserQuery,
   UserQuery,
   UserResponseEnumType,
@@ -20,9 +21,9 @@ import { and, asc, countDistinct, desc, eq, SQL, sql } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
-  typeof user,
-  FullUserQuery
+export class UserDrizzleRepository extends BaseDrizzleRepository<
+  FullUserQuery,
+  CreateUserRequest
 > {
   getCount() {
     return db
@@ -89,6 +90,8 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
         return {
           ...this.getMappingObject(UserResponsesEnum.BASE),
           following: countDistinct(alias(follower, 'followingAlias').userId),
+          location: user.location,
+          createdAt: user.createdAt,
         };
       case UserResponsesEnum.ADMIN:
         return {
@@ -167,7 +170,6 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
 
     const whereClause = this.getValidWhereClause(query.query);
     const filterQuery = baseQuery.where(and(...whereClause)).$dynamic();
-    console.log(...whereClause);
 
     const sortedQuery = query.sort
       ? filterQuery
@@ -182,7 +184,9 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
     const paginatedQuery = query.pagination
       ? sortedQuery
           .limit(query.pagination.pageSize)
-          .offset(query.pagination.page * (query.pagination.pageSize || 12))
+          .offset(
+            (query.pagination.page - 1) * (query.pagination.pageSize || 12),
+          )
           .$dynamic()
       : sortedQuery;
 
@@ -211,5 +215,23 @@ export class UserDrizzleQueryManager extends BaseDrizzleQueryManager<
     const fullQuery = this.conditionallyJoin(baseQuery, responseType);
 
     return fullQuery;
+  }
+
+  createEntity(createRequest: CreateUserRequest) {
+    return db.insert(user).values(createRequest).returning({ id: user.id });
+  }
+
+  deleteEntity(id: number) {
+    return db.delete(user).where(eq(user.id, id)).returning({ id: user.id });
+  }
+
+  updateEntity(id: number, updateRequest: Partial<CreateUserRequest>) {
+    return db.update(user).set(updateRequest).where(eq(user.id, id)).returning({
+      id: user.id,
+    });
+  }
+
+  entityExists(id: number) {
+    return db.select({ exists: sql`exists(${id})` }).from(user);
   }
 }

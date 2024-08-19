@@ -1,10 +1,10 @@
-import { SelectedFields, SQL, WithSubquery } from 'drizzle-orm';
-import { AnyPgTable, PgColumn, PgSelect, PgTable } from 'drizzle-orm/pg-core';
+import { SQL, WithSubquery } from 'drizzle-orm';
+import { PgColumn, PgSelect } from 'drizzle-orm/pg-core';
 import { BaseQuery } from '@tournament-app/types';
 
-export abstract class BaseDrizzleQueryManager<
-  TTable extends AnyPgTable,
+export abstract class BaseDrizzleRepository<
   TQueryRequest extends BaseQuery,
+  TCreateRequest,
 > {
   constructor() {}
   public abstract sortRecord: Record<string, PgColumn | SQL<number>>;
@@ -21,6 +21,14 @@ export abstract class BaseDrizzleQueryManager<
   abstract getQuery(query: TQueryRequest);
 
   abstract getSingleQuery(id: number, responseType: string);
+
+  abstract createEntity(createRequest: TCreateRequest);
+
+  abstract updateEntity(id: number, updateRequest: Partial<TCreateRequest>);
+
+  abstract deleteEntity(id: number);
+
+  abstract entityExists(id: number);
 
   // TODO: possibly rewrite this function to follow a flow of modifyong the query insetad of having one query function with helper functions
 }

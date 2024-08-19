@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
-import { UserDrizzleQueryManager } from '../queryManager';
+import { UserDrizzleRepository } from '../repository';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -9,7 +9,7 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService, UserDrizzleQueryManager],
+      providers: [UsersService, UserDrizzleRepository],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);

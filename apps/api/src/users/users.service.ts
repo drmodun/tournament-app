@@ -7,14 +7,14 @@ import {
   UserResponseEnumType,
   UserResponsesEnum,
 } from '@tournament-app/types';
-import { UserDrizzleQueryManager } from './queryManager';
+import { UserDrizzleRepository } from './repository';
 import { eq } from 'drizzle-orm';
 import { db } from '../db/db';
 import { user } from '../db/schema';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly queryManager: UserDrizzleQueryManager) {}
+  constructor(private readonly repository: UserDrizzleRepository) {}
   async create(createUserDto: CreateUserRequest) {
     return await db.insert(user).values(createUserDto).returning({
       id: user.id,
@@ -24,7 +24,7 @@ export class UsersService {
   async findAll<TResponseType extends BaseUserResponseType>(
     query: FullUserQuery,
   ) {
-    const queryFunction = this.queryManager.getQuery(query);
+    const queryFunction = this.repository.getQuery(query);
     const results = await queryFunction;
 
     return results as TResponseType[];
@@ -34,7 +34,7 @@ export class UsersService {
     id: number,
     responseType: UserResponseEnumType = UserResponsesEnum.EXTENDED,
   ) {
-    const query = this.queryManager.getSingleQuery(id, responseType);
+    const query = this.repository.getSingleQuery(id, responseType);
     const results = await query;
 
     if (results.length === 0) {

@@ -7,18 +7,14 @@ import {
   UserResponseEnumType,
   UserResponsesEnum,
 } from '@tournament-app/types';
-import { UserDrizzleRepository } from './repository';
-import { eq } from 'drizzle-orm';
-import { db } from '../db/db';
-import { user } from '../db/schema';
+import { UserDrizzleRepository } from './user.repository';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly repository: UserDrizzleRepository) {}
   async create(createUserDto: CreateUserRequest) {
-    return await db.insert(user).values(createUserDto).returning({
-      id: user.id,
-    });
+    const action = await this.repository.createEntity(createUserDto);
+    return action[0];
   }
 
   async findAll<TResponseType extends BaseUserResponseType>(
@@ -34,8 +30,7 @@ export class UsersService {
     id: number,
     responseType: UserResponseEnumType = UserResponsesEnum.EXTENDED,
   ) {
-    const query = this.repository.getSingleQuery(id, responseType);
-    const results = await query;
+    const results = await this.repository.getSingleQuery(id, responseType);
 
     if (results.length === 0) {
       throw new NotFoundException('User not found');
@@ -45,14 +40,14 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserInfo) {
-    return db.update(user).set(updateUserDto).where(eq(user.id, id)).returning({
-      id: user.id,
-    }); // TODO: potentially move these to the query manager as a sort of a repo layer
+    const action = await this.repository.updateEntity(id, updateUserDto);
+
+    return action[0];
   }
 
   async remove(id: number) {
-    return db.delete(user).where(eq(user.id, id)).returning({
-      id: user.id,
-    });
+    const action = await this.repository.deleteEntity(id);
+
+    return action[0];
   }
 }

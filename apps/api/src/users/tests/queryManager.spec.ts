@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserDrizzleRepository } from '../repository';
+import { UserDrizzleRepository } from '../user.repository';
 import {
   CreateUserRequest,
   FullUserQuery,

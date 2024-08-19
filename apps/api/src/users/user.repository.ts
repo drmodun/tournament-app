@@ -132,20 +132,21 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
     return clauses.map(([key, value]) => {
       const field = user[key];
       if (!field) return;
+      const parsed = value as string;
 
       // TODO: some type fixes
 
       switch (key) {
         case 'name':
-          return eq(user.name, value as string);
+          return eq(user.name, parsed);
         case 'username':
-          return eq(user.username, value as string);
+          return eq(user.username, parsed);
         case 'email':
-          return eq(user.email, value as string);
+          return eq(user.email, parsed);
         case 'country':
-          return eq(user.country, value as string);
+          return eq(user.country, parsed);
         case 'location':
-          return eq(user.location, value as string);
+          return eq(user.location, parsed);
         default:
           return;
       }

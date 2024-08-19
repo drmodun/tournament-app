@@ -13,12 +13,11 @@ import { UsersService } from './users.service';
 import {
   CreateUserRequest,
   FullUserQuery,
-  Links,
-  Pagination,
   QueryMetadata,
   UpdateUserInfo,
   UserResponseEnumType,
 } from '@tournament-app/types';
+import { MetadataMaker } from '../base/static/makeMetadata';
 
 @Controller('users')
 export class UsersController {
@@ -33,30 +32,11 @@ export class UsersController {
   async findAll(@Query('query') query: FullUserQuery, @Req() req: Request) {
     const results = await this.usersService.findAll(query);
 
-    const pagination: Pagination = {
-      page: query.pagination.page,
-      pageSize: query.pagination.pageSize,
-      total: Math.ceil(results.length / query.pagination.pageSize),
-      ...(query.returnFullCount && { total: results['value'] || 0 }),
-    };
-
-    const links: Links = {
-      first: req.url.includes('page')
-        ? req.url.replace(/page=\d+/, 'page=1')
-        : `${req.url}?page=1`,
-      prev: req.url.includes('page')
-        ? req.url.replace(/page=\d+/, `page=${query.pagination.page - 1}`)
-        : `${req.url}?page=${(query.pagination.page || 1) - 1}`,
-      next: req.url.includes('page')
-        ? req.url.replace(/page=\d+/, `page=${query.pagination.page + 1}`)
-        : `${req.url}?page=${(query.pagination.page || 1) + 1}`,
-    };
-
-    const metadata: QueryMetadata = {
-      pagination,
-      links,
-      query: query.query,
-    };
+    const metadata: QueryMetadata = MetadataMaker.makeMetadataFromQuery(
+      query,
+      results,
+      req.url,
+    );
 
     return {
       results,

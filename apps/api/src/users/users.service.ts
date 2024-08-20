@@ -13,11 +13,16 @@ import {
   UserResponsesEnum,
 } from '@tournament-app/types';
 import { UserDrizzleRepository } from './user.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly repository: UserDrizzleRepository) {}
   async create(createUserDto: CreateUserRequest) {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+    createUserDto.password = hashedPassword;
+
     const action = await this.repository.createEntity(createUserDto);
 
     if (!action[0]) {

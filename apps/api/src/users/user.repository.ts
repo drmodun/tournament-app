@@ -17,7 +17,16 @@ import {
 } from '../db/schema';
 import { alias, PgColumn, PgSelect } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { and, asc, countDistinct, desc, eq, SQL, sql } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  countDistinct,
+  desc,
+  eq,
+  SQL,
+  sql,
+} from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -37,7 +46,9 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
   ) {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:
-        return query.leftJoin(follower, eq(user.id, follower.userId));
+        return query
+          .leftJoin(follower, eq(user.id, follower.userId))
+          .groupBy(user.id);
 
       case UserResponsesEnum.EXTENDED:
         return query
@@ -84,12 +95,12 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
           email: user.email,
           level: user.level,
           updatedAt: user.updatedAt,
-          followers: countDistinct(follower),
+          followers: sql<number>`cast(count(${follower.followerId}) as int)`,
         };
       case UserResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(UserResponsesEnum.BASE),
-          following: countDistinct(alias(follower, 'followingAlias').userId),
+          following: count(alias(follower, 'followingAlias')),
           location: user.location,
           createdAt: user.createdAt,
         };
@@ -154,7 +165,7 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
     });
   }
 
-  getQuery(query: FullUserQuery) {
+  getQuery(query: FullUserQuery = {}) {
     const selectedType = this.getMappingObject(
       query.responseType || UserResponsesEnum.BASE,
     );
@@ -170,8 +181,11 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
           typeof selectedType
         >);
 
-    const whereClause = this.getValidWhereClause(query.query);
-    const filterQuery = baseQuery.where(and(...whereClause)).$dynamic();
+    const filterQuery = query.query
+      ? baseQuery
+          .where(and(...this.getValidWhereClause(query.query)))
+          .$dynamic()
+      : baseQuery;
 
     const sortedQuery = query.sort
       ? filterQuery
@@ -190,17 +204,20 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
             (query.pagination.page - 1) * (query.pagination.pageSize || 12),
           )
           .$dynamic()
-      : sortedQuery;
+      : sortedQuery.limit(12).offset(0).$dynamic();
 
     const fullQuery = this.conditionallyJoin(
       paginatedQuery,
-      query.responseType,
+      query.responseType || UserResponsesEnum.BASE,
     );
 
     return fullQuery;
   }
 
-  getSingleQuery(id: number, responseType: UserResponseEnumType) {
+  getSingleQuery(
+    id: number,
+    responseType: UserResponseEnumType = UserResponsesEnum.BASE,
+  ) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(selectedType)

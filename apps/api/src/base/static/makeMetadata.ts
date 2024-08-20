@@ -9,7 +9,7 @@ export class MetadataMaker {
     const metadata = {
       pagination: this.makePagination(query, results),
       links: this.makeLinks(url, query),
-      query: query.query,
+      query: query?.query || {},
     };
 
     return metadata;
@@ -21,11 +21,11 @@ export class MetadataMaker {
         ? url.replace(/page=\d+/, 'page=1')
         : `${url}?page=1`,
       prev: url.includes('page')
-        ? url.replace(/page=\d+/, `page=${query.pagination.page - 1}`)
-        : `${url}?page=${(query.pagination.page || 1) - 1}`,
+        ? url.replace(/page=\d+/, `page=${query?.pagination?.page - 1}`)
+        : `${url}?page=${(query?.pagination?.page || 1) - 1}`,
       next: url.includes('page')
-        ? url.replace(/page=\d+/, `page=${query.pagination.page + 1}`)
-        : `${url}?page=${(query.pagination.page || 1) + 1}`,
+        ? url.replace(/page=\d+/, `page=${query?.pagination?.page + 1}`)
+        : `${url}?page=${(query?.pagination?.page || 1) + 1}`,
     }; // TODO: potentially check wether next link exists
 
     return links;
@@ -36,9 +36,9 @@ export class MetadataMaker {
     results: TResult[],
   ) {
     const pagination: Pagination = {
-      page: query.pagination.page,
-      pageSize: query.pagination.pageSize,
-      ...(query.returnFullCount && { total: results['value'] || 0 }),
+      page: query?.pagination?.page || 1,
+      pageSize: query?.pagination?.pageSize || 12,
+      ...(query?.returnFullCount && { total: results['value'] || 0 }),
     };
 
     return pagination;

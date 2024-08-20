@@ -43,7 +43,7 @@ export class CreateUserRequest {
   country: string;
 
   @IsOptional()
-  location: string;
+  location?: string;
 }
 
 export class UpdateUserInfo {
@@ -94,7 +94,7 @@ export interface UserQuery extends QueryType {
 } // TODO: potentially add checks for this as well
 
 export class FullUserQuery extends BaseQuery<UserResponseEnumType> {
-  query: UserQuery;
+  query?: UserQuery;
 }
 
 export class SingleUserQuery extends BaseQuery<UserResponseEnumType> {

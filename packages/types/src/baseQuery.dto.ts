@@ -34,12 +34,12 @@ export interface BasePaginationRequest {
 }
 
 export abstract class BaseQuery<TResponseType extends string = string> {
-  sort: BaseSortRequest;
-  pagination: BasePaginationRequest;
+  sort?: BaseSortRequest;
+  pagination?: BasePaginationRequest;
   returnFullCount?: boolean = false;
   responseType?: TResponseType;
 
-  abstract query: QueryType;
+  abstract query?: QueryType;
 }
 
 // Possibly validate these with class validator later

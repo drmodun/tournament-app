@@ -9,6 +9,7 @@ import Toast from "components/toast";
 import RadioGroup from "components/radioGroup";
 import { ToastContext } from "utils/context/toastContext";
 import ToastList from "components/toastList";
+import CheckboxGroup from "components/checkboxGroup";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -148,6 +149,54 @@ export default function Web() {
       <Toast message="HOLD MY BREATH AS I WISH FOR DEATHHHH" />
       <RadioGroup
         radioButtons={[
+          {
+            label: "test",
+            variant: "dark",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!1");
+            },
+            disabled: true,
+          },
+          {
+            label: "test2",
+            variant: "light",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!2");
+            },
+          },
+          {
+            label: "test2",
+            variant: "primary",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!3");
+            },
+          },
+          {
+            label: "test2",
+            variant: "secondary",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!4");
+            },
+          },
+          {
+            label: "test2",
+            variant: "warning",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!5");
+            },
+          },
+          {
+            label: "test2",
+            variant: "danger",
+            onSelect: () => {
+              console.log("HEAVEN YEAHHH!!!6");
+            },
+          },
+        ]}
+      />
+
+      <CheckboxGroup
+        checkboxes={[
           {
             label: "test",
             variant: "dark",

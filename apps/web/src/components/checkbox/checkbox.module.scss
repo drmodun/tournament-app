@@ -1,0 +1,85 @@
+@import "styles/";
+
+.label {
+  display: grid;
+  grid-template-columns: 1rem auto;
+  gap: $halfPadding;
+
+  align-items: center;
+  @media screen and (max-width: $tabletBreakpoint) {
+    gap: $padding;
+  }
+}
+
+.radioButton {
+  appearance: none;
+  -webkit-appearance: none;
+  font-size: $fontSize;
+  color: currentColor;
+  width: rem-calc(20);
+  height: rem-calc(20);
+  border-radius: 35%;
+  transition: border 0.15s ease-out;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: rem-calc(24);
+    height: rem-calc(24);
+  }
+}
+
+.primarySelectedBorder {
+  border: $selectedBorderSize solid $primary;
+}
+
+.secondarySelectedBorder {
+  border: $selectedBorderSize solid $secondary;
+}
+
+.lightSelectedBorder {
+  border: $selectedBorderSize solid $light;
+}
+
+.darkSelectedBorder {
+  border: $selectedBorderSize solid $dark;
+}
+
+.warningSelectedBorder {
+  border: $selectedBorderSize solid $warning;
+}
+
+.dangerSelectedBorder {
+  border: $selectedBorderSize solid $danger;
+}
+
+.primaryDeselectedBorder {
+  border: $baseBorderSize solid $primary;
+}
+
+.secondaryDeselectedBorder {
+  border: $baseBorderSize solid $secondary;
+}
+
+.lightDeselectedBorder {
+  border: $baseBorderSize solid $light;
+}
+
+.darkDeselectedBorder {
+  border: $baseBorderSize solid $dark;
+}
+
+.warningDeselectedBorder {
+  border: $baseBorderSize solid $warning;
+}
+
+.dangerDeselectedBorder {
+  border: $baseBorderSize solid $danger;
+}
+
+.disabled {
+  background-color: $lightMuted;
+  border: $baseBorderSize solid $disabled;
+}
+
+.disabledText {
+  color: $disabled;
+}

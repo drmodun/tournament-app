@@ -127,6 +127,7 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
   };
 
   getValidWhereClause(query: UserQuery): SQL[] {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {

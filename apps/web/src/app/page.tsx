@@ -10,6 +10,7 @@ import RadioGroup from "components/radioGroup";
 import { ToastContext } from "utils/context/toastContext";
 import ToastList from "components/toastList";
 import CheckboxGroup from "components/checkboxGroup";
+import MultilineInput from "components/multilineInput";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -138,6 +139,12 @@ export default function Web() {
         doesSubmit={true}
         onSubmit={(val: string) => console.log(val)}
         submitLabel="Submit"
+        label="RIDE THE LIGHTNINGGGGGGG"
+      />
+      <MultilineInput
+        placeholder="hi guys"
+        variant="danger"
+        onChange={(e) => console.log(e.target.value)}
         label="RIDE THE LIGHTNINGGGGGGG"
       />
       <Chip label="hi guys" variant="dark" />

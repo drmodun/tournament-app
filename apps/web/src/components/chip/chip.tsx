@@ -41,7 +41,7 @@ export default function Chip({
         globals[`${textColor(variant)}Color`],
         isSelected
           ? globals[`${variant}BackgroundColor`]
-          : globals[`${variant}MutedBackgroundColorDynamic`]
+          : globals[`${variant}MutedBackgroundColorDynamic`],
       )}
       style={style}
       onClick={handleClick}

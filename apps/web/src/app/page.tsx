@@ -61,7 +61,7 @@ export default function Web() {
         onClick={() =>
           toastContext.addToast(
             "DIRTY DEEDSSSS DONE DIRT CHEAPPPPPPPPPPPPPPPPPPPPPPPPPp!!!!",
-            "success"
+            "success",
           )
         }
       />

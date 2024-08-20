@@ -33,7 +33,7 @@ export default function RadioButton({
       <label
         className={clsx(
           styles.label,
-          disabled ? styles.disabledText : globals[`${labelVariant}Color`]
+          disabled ? styles.disabledText : globals[`${labelVariant}Color`],
         )}
         htmlFor="radio"
       >
@@ -43,7 +43,7 @@ export default function RadioButton({
             isSelected && !disabled
               ? styles[`${variant}SelectedBorder`]
               : styles[`${variant}DeselectedBorder`],
-            disabled && styles.disabled
+            disabled && styles.disabled,
           )}
           style={style}
           type="radio"

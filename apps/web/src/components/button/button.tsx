@@ -26,7 +26,7 @@ export default function Button({
       className={clsx(
         styles.button,
         globals[`${variant}BackgroundColorDynamic`],
-        globals[`${variant}TextColor`]
+        globals[`${variant}TextColor`],
       )}
       style={style}
       onClick={onClick ? onClick : () => {}}

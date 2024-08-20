@@ -23,7 +23,7 @@ export default function CheckboxGroup({
   const handleClick = (_index: number) => {
     if (indexes.includes(_index)) {
       setIndexes((prevIndexes) =>
-        prevIndexes.filter((index) => index !== _index)
+        prevIndexes.filter((index) => index !== _index),
       );
       return;
     }

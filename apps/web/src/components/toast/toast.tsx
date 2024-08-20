@@ -18,7 +18,7 @@ export default function Toast({
       className={clsx(
         styles.toast,
         globals[`${TOAST_TYPE_COLOR_MAP[type]}BackgroundColor`],
-        globals.lightColor
+        globals.lightColor,
       )}
       style={style}
       onClick={onClick && onClick}

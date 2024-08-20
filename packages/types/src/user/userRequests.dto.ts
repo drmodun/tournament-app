@@ -5,25 +5,30 @@ import {
   IsStrongPassword,
   IsUrl,
   Max,
+  MaxLength,
+  MinLength,
   Min,
 } from "class-validator";
 import { BaseQuery, QueryType } from "src/baseQuery.dto";
 import { UserResponseEnumType } from "./userResponses.dto";
+import { Exclude } from "class-transformer";
+import { Omit } from "src/baseActionResponse";
 
 export class CreateUserRequest {
   @IsString()
-  @Min(3)
-  @Max(30)
+  @MinLength(3)
+  @MaxLength(30)
   name: string;
 
   @IsString()
-  @Min(3)
-  @Max(30)
+  @MinLength(3)
+  @MaxLength(30)
   username: string;
 
   @IsOptional()
-  @Min(3)
-  @Max(300)
+  @IsString()
+  @MinLength(3)
+  @MaxLength(300)
   bio: string;
 
   @IsEmail()
@@ -43,35 +48,18 @@ export class CreateUserRequest {
   location: string;
 }
 
-export class UpdateUserInfo {
+export class UpdateUserInfo extends Omit(CreateUserRequest, [
+  "password",
+  "email",
+]) {
   @IsOptional()
-  @IsString()
-  @Min(3)
-  @Max(30)
-  name: string;
+  @Exclude()
+  email: string;
 
   @IsOptional()
-  @IsString()
-  @Min(3)
-  @Max(30)
-  username: string;
-
-  @IsOptional()
-  @Min(3)
-  @Max(300)
-  bio: string;
-
-  @IsOptional()
-  @IsUrl()
-  profilePicture: string;
-
-  @IsOptional()
-  @IsString()
-  country: string;
-
-  @IsOptional()
-  location: string;
-}
+  @Exclude()
+  password: string;
+} // TODO: potentially remove this cause it's painful
 
 export type BaseUserUpdateRequest = UpdateUserInfo | CreateUserRequest;
 
@@ -91,7 +79,7 @@ export interface UserQuery extends QueryType {
   email?: string;
   country?: string;
   location?: string;
-}
+} // TODO: potentially add checks for this as well
 
 export class FullUserQuery extends BaseQuery<UserResponseEnumType> {
   query: UserQuery;

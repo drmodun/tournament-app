@@ -61,8 +61,8 @@ describe('UserRequestsDtos', () => {
     const errors = await validate(updateUserRequest);
 
     expect(errors.map((x) => x.property)).toStrictEqual([
-      'name',
       'username',
+      'name',
       'bio',
     ]);
   });

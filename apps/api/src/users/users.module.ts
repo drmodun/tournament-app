@@ -7,6 +7,6 @@ import { TestingModule } from '@nestjs/testing';
 @Module({
   controllers: [UsersController],
   providers: [UsersService, UserDrizzleRepository],
-  imports: [UserDrizzleRepository, TestingModule],
+  imports: [TestingModule],
 })
 export class UsersModule {}

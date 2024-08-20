@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import {
   BaseUserResponseType,
   CreateUserRequest,
@@ -14,6 +19,11 @@ export class UsersService {
   constructor(private readonly repository: UserDrizzleRepository) {}
   async create(createUserDto: CreateUserRequest) {
     const action = await this.repository.createEntity(createUserDto);
+
+    if (!action[0]) {
+      throw new UnprocessableEntityException('User creation failed');
+    }
+
     return action[0];
   }
 
@@ -42,11 +52,19 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserInfo) {
     const action = await this.repository.updateEntity(id, updateUserDto);
 
+    if (!action[0]) {
+      throw new BadRequestException('User update failed or user not found');
+    }
+
     return action[0];
   }
 
   async remove(id: number) {
     const action = await this.repository.deleteEntity(id);
+
+    if (!action[0]) {
+      throw new NotFoundException('User removal failed or user not found');
+    }
 
     return action[0];
   }

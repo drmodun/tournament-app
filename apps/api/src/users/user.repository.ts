@@ -28,9 +28,8 @@ import {
   SQL,
   sql,
 } from 'drizzle-orm';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { NoValuesToSetException } from '../base/exception/custom/noValuesToSetException.exception';
-import { PostgresError } from 'postgres';
 
 @Injectable()
 export class UserDrizzleRepository extends BaseDrizzleRepository<

@@ -13,11 +13,21 @@ export type Variants =
 export type TextVariants = "light" | "dark";
 
 /// Function that returns the text color based on the variant:
-export const textColor = (variant: Variants): string => {
+export const textColor = (variant: Variants): TextVariants => {
   switch (variant) {
     case "light":
       return "dark";
     default:
       return "light";
+  }
+};
+
+/// Function that returns the inverse of the text color based on the variant:
+export const inverseTextColor = (variant: Variants): TextVariants => {
+  switch (variant) {
+    case "light":
+      return "light";
+    default:
+      return "dark";
   }
 };

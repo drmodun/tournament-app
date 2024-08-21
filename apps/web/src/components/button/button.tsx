@@ -6,11 +6,14 @@ import globals from "styles/globals.module.scss";
 import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
 
-interface ButtonProps {
+export interface ButtonProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   label?: string;
+  labelStyle?: React.CSSProperties;
   variant?: Variants;
+  className?: string;
+  labelClassName?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -18,7 +21,10 @@ export default function Button({
   children,
   style,
   label,
+  labelStyle,
   variant = "light",
+  className = "",
+  labelClassName = "",
   onClick,
 }: ButtonProps) {
   return (
@@ -27,11 +33,14 @@ export default function Button({
         styles.button,
         globals[`${variant}BackgroundColorDynamic`],
         globals[`${variant}TextColor`],
+        className,
       )}
       style={style}
       onClick={onClick ? onClick : () => {}}
     >
-      <p className={styles.label}>{label}</p>
+      <p className={clsx(styles.label, labelClassName)} style={labelStyle}>
+        {label}
+      </p>
       {children}
     </button>
   );

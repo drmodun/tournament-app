@@ -1,0 +1,95 @@
+@import "styles/";
+
+.select {
+  align-self: flex-start;
+}
+
+.options {
+  margin-left: $doublePadding;
+  padding: $halfPadding $padding;
+  border-radius: 0 0 $borderRadius $borderRadius;
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    margin-left: 0;
+  }
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.fullWidth,
+.innerWrapper {
+  width: 100%;
+}
+
+.selectButton {
+  border-bottom-right-radius: 0;
+  transition: border-radius $animationDuration ease-in-out;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    border-bottom-left-radius: 0;
+  }
+}
+
+.hiddenAnimation {
+  animation: undrop $animationDuration ease-in-out forwards;
+}
+
+.unhiddenAnimation {
+  animation: drop $animationDuration ease-in-out forwards;
+}
+
+.hidden {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.selectArrowRotated {
+  transform: rotate(90deg);
+}
+
+.selectArrow {
+  transition: transform $animationDuration ease-in-out;
+}
+
+.label {
+  margin-bottom: $halfPadding / 2;
+}
+
+@keyframes undrop {
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  to {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateY(-$padding);
+    pointer-events: none;
+  }
+}
+
+@keyframes drop {
+  from {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateY(-$padding);
+    pointer-events: none;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

@@ -7,7 +7,12 @@ import React, {
 } from "react";
 import styles from "./input.module.scss";
 import globals from "styles/globals.module.scss";
-import { Variants, TextVariants, textColor } from "types/styleTypes";
+import {
+  Variants,
+  TextVariants,
+  textColor,
+  inverseTextColor,
+} from "types/styleTypes";
 import { clsx } from "clsx";
 
 interface InputProps {
@@ -32,7 +37,7 @@ export default function Input({
   label,
   placeholder = "",
   variant = "light",
-  labelVariant = "light",
+  labelVariant,
   doesSubmit = false,
   submitLabel,
   type = "text",
@@ -46,7 +51,9 @@ export default function Input({
       {label && (
         <p
           className={clsx(
-            globals[`${textColor(labelVariant)}MutedColor`],
+            globals[
+              `${labelVariant ? labelVariant : inverseTextColor(variant)}MutedColor`
+            ],
             styles.label,
           )}
           style={labelStyle}
@@ -54,36 +61,38 @@ export default function Input({
           {label}
         </p>
       )}
-      <input
-        type={type}
-        onChange={(e) => {
-          if (doesSubmit) setValue(e.target.value);
-          onChange(e);
-        }}
-        value={value}
-        placeholder={placeholder}
-        className={clsx(
-          styles.input,
-          doesSubmit && styles.submitInput,
-          variant == "light" && styles.lightPlaceholder,
-          globals[`${variant}BackgroundColorDynamic`],
-          globals[`${textColor(variant)}Color`],
-        )}
-        style={style}
-      />
-      {doesSubmit && (
-        <button
-          onClick={() => onSubmit(value)}
+      <div className={styles.inputWrapper}>
+        <input
+          type={type}
+          onChange={(e) => {
+            if (doesSubmit) setValue(e.target.value);
+            onChange(e);
+          }}
+          value={value}
+          placeholder={placeholder}
           className={clsx(
-            styles.submitButton,
+            styles.input,
+            doesSubmit && styles.submitInput,
+            variant == "light" && styles.lightPlaceholder,
+            globals[`${variant}BackgroundColorDynamic`],
             globals[`${textColor(variant)}Color`],
-            globals[`${variant}MutedBackgroundColor`],
           )}
-          style={submitStyle}
-        >
-          {submitLabel}
-        </button>
-      )}
+          style={style}
+        />
+        {doesSubmit && (
+          <button
+            onClick={() => onSubmit(value)}
+            className={clsx(
+              styles.submitButton,
+              globals[`${textColor(variant)}Color`],
+              globals[`${variant}MutedBackgroundColor`],
+            )}
+            style={submitStyle}
+          >
+            {submitLabel}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

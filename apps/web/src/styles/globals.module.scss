@@ -203,3 +203,23 @@
 .lightTextColor {
   color: $dark;
 }
+
+.hidden {
+  display: none !important;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.textAlignLeft {
+  text-align: left;
+}
+
+.textAlignRight {
+  text-align: right;
+}
+
+.textAlignCenter {
+  text-align: left;
+}

@@ -2,8 +2,9 @@
 
 .toast {
   min-height: $baseComponentHeight;
+  width: 100%;
   border-radius: $borderRadius;
-  padding: 0 $doublePadding;
+  padding: $halfPadding $doublePadding;
   border: none;
   display: flex;
   align-items: center;

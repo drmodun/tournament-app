@@ -3,7 +3,12 @@
 import React, { ChangeEventHandler } from "react";
 import styles from "./multilineInput.module.scss";
 import globals from "styles/globals.module.scss";
-import { Variants, TextVariants, textColor } from "types/styleTypes";
+import {
+  Variants,
+  TextVariants,
+  textColor,
+  inverseTextColor,
+} from "types/styleTypes";
 import { clsx } from "clsx";
 
 interface MultilineInputProps {
@@ -22,7 +27,7 @@ export default function Input({
   label,
   placeholder = "",
   variant = "light",
-  labelVariant = "light",
+  labelVariant,
   onChange = () => {},
 }: MultilineInputProps) {
   return (
@@ -30,7 +35,9 @@ export default function Input({
       {label && (
         <p
           className={clsx(
-            globals[`${textColor(labelVariant)}MutedColor`],
+            globals[
+              `${labelVariant ? labelVariant : inverseTextColor(variant)}MutedColor`
+            ],
             styles.label,
           )}
           style={labelStyle}

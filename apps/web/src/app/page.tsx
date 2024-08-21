@@ -11,6 +11,7 @@ import { ToastContext } from "utils/context/toastContext";
 import ToastList from "components/toastList";
 import CheckboxGroup from "components/checkboxGroup";
 import MultilineInput from "components/multilineInput";
+import Dropdown from "components/dropdown";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -249,7 +250,6 @@ export default function Web() {
           },
         ]}
       />
-
       <Carousel
         data={[
           {
@@ -271,6 +271,105 @@ export default function Web() {
       ></Carousel>
 
       <ToastList />
+
+      <div style={{ width: 300 }}>
+        <Dropdown
+          options={[
+            {
+              label: "NO MORE LIESSSSSSSS",
+              variant: "dark",
+              onClick: () => console.log("hi"),
+            },
+            {
+              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+              variant: "primary",
+              onClick: () => console.log("hi2"),
+            },
+          ]}
+          label="hi guys"
+        />
+        <Dropdown
+          options={[
+            {
+              label: "NO MORE LIESSSSSSSS",
+              variant: "dark",
+              onClick: () => console.log("hi"),
+            },
+            {
+              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+              variant: "primary",
+              onClick: () => console.log("hi2"),
+            },
+          ]}
+          label="hi guys"
+          variant="dark"
+        />
+        <Dropdown
+          options={[
+            {
+              label: "NO MORE LIESSSSSSSS",
+              variant: "dark",
+              onClick: () => console.log("hi"),
+            },
+            {
+              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+              variant: "primary",
+              onClick: () => console.log("hi2"),
+            },
+          ]}
+          label="hi guys"
+          variant="primary"
+        />
+        <Dropdown
+          options={[
+            {
+              label: "NO MORE LIESSSSSSSS",
+              variant: "dark",
+              onClick: () => console.log("hi"),
+            },
+            {
+              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+              variant: "primary",
+              onClick: () => console.log("hi2"),
+            },
+          ]}
+          label="hi guys"
+          variant="secondary"
+        />
+        <Dropdown
+          options={[
+            {
+              label: "NO MORE LIESSSSSSSS",
+              variant: "dark",
+              onClick: () => console.log("hi"),
+            },
+            {
+              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+              variant: "primary",
+              onClick: () => console.log("hi2"),
+            },
+          ]}
+          label="hi guys"
+          variant="warning"
+        />
+        <Dropdown
+          options={[
+            {
+              label: "NO MORE LIESSSSSSSS",
+              variant: "dark",
+              onClick: () => console.log("hi"),
+            },
+            {
+              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+              variant: "primary",
+              onClick: () => console.log("hi2"),
+            },
+          ]}
+          label="hi guys"
+          variant="danger"
+        />
+      </div>
+
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>
         <input

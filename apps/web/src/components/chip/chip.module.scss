@@ -10,8 +10,10 @@
   }
 }
 
-.chip .label {
+.label {
   font-size: $fontSize;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .primarySelectedBorder {

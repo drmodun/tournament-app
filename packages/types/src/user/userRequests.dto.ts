@@ -4,10 +4,8 @@ import {
   IsString,
   IsStrongPassword,
   IsUrl,
-  Max,
   MaxLength,
   MinLength,
-  Min,
 } from "class-validator";
 import { BaseQuery, QueryType } from "src/baseQuery.dto";
 import { UserResponseEnumType } from "./userResponses.dto";
@@ -98,5 +96,5 @@ export class FullUserQuery extends BaseQuery<UserResponseEnumType> {
 }
 
 export class SingleUserQuery extends BaseQuery<UserResponseEnumType> {
-  query: UserQuery;
+  query?: QueryType;
 }

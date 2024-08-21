@@ -4,13 +4,9 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PostgresExceptionFilter } from './base/exception/postgresExceptionFilter';
 import { NoValuesToSetExceptionFilter } from './base/exception/noValuesToSetExceptionFilter';
-import { config } from 'dotenv';
 
 async function bootstrap() {
-  if (process.env.MODE != 'test') {
-    config({ path: '../../.env' });
-  }
-
+  console.log(process.env.DATABASE_URL);
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));

@@ -9,15 +9,10 @@ import { AppModule } from './../src/app.module';
 import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
-import { seed } from '../src/db/seedDefinition';
 import { CreateUserRequest, UpdateUserInfo } from '@tournament-app/types';
 
 describe('UserController', () => {
   let app: INestApplication;
-
-  beforeAll(async () => {
-    await seed();
-  });
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({

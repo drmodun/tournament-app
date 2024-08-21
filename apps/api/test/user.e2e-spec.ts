@@ -1,17 +1,39 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from './../src/app.module';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
-import { CreateUserRequest } from '@tournament-app/types';
+import { AppModule } from './../src/app.module';
+import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
+import { Reflector } from '@nestjs/core';
+import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
+import { seed } from '../src/db/seedDefinition';
+import { CreateUserRequest, UpdateUserInfo } from '@tournament-app/types';
 
 describe('UserController', () => {
   let app: INestApplication;
+
+  beforeAll(async () => {
+    await seed();
+  });
+
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+    app.useGlobalInterceptors(
+      new ClassSerializerInterceptor(app.get(Reflector)),
+    );
+    app.useGlobalFilters(
+      new PostgresExceptionFilter(),
+      new NoValuesToSetExceptionFilter(),
+    );
+
     await app.init();
   });
 
@@ -52,6 +74,39 @@ describe('UserController', () => {
   });
 
   describe('PATCH /users/:id', () => {
+    it('should return a 400 when updating a user with an invalid request', async () => {
+      const update: UpdateUserInfo = {
+        bio: '',
+        location: 'Updated location',
+      };
+
+      const results = await request(app.getHttpServer())
+        .patch('/users/1')
+        .send(update)
+        .expect(400);
+
+      const { message, error } = results.body;
+
+      expect(message.length).toEqual(1);
+      expect(error).toBe('Bad Request');
+    });
+
+    it('should return a 422 when no body is sent', async () => {
+      await request(app.getHttpServer()).patch('/users/1').send({}).expect(422);
+    });
+
+    it('should return a 404 when updating a non-existent user', async () => {
+      const update: UpdateUserInfo = {
+        bio: 'Updated bio',
+        location: 'Updated location',
+      };
+
+      await request(app.getHttpServer())
+        .patch('/users/100')
+        .send(update)
+        .expect(404);
+    });
+
     it('should update a user', async () => {
       const updateUserDto = {
         bio: 'Updated bio',
@@ -68,6 +123,10 @@ describe('UserController', () => {
   });
 
   describe('DELETE /users/:id', () => {
+    it('should return a 404 when deleting a non-existent user', async () => {
+      await request(app.getHttpServer()).delete('/users/100').expect(404);
+    });
+
     it('should delete a user', async () => {
       const response = await request(app.getHttpServer())
         .delete('/users/1')
@@ -83,9 +142,9 @@ describe('UserController', () => {
         username: 'john_doe',
         bio: 'I am a user',
         country: 'USA',
-        email: 'john@doe.com',
+        email: 'johssn@doe.com',
         location: 'New York',
-        password: 'password',
+        password: 'Password123!',
         name: 'John Doe',
         profilePicture: 'https://example.com/john_doe.jpg',
       };

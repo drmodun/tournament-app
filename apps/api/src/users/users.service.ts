@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -58,7 +57,7 @@ export class UsersService {
     const action = await this.repository.updateEntity(id, updateUserDto);
 
     if (!action[0]) {
-      throw new BadRequestException('User update failed or user not found');
+      throw new NotFoundException('User update failed or user not found');
     }
 
     return action[0];

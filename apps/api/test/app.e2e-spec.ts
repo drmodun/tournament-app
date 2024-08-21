@@ -12,10 +12,15 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
     await app.init();
   });
 
   afterEach(async () => {
+    await app.close();
+  });
+
+  afterAll(async () => {
     await app.close();
   });
 

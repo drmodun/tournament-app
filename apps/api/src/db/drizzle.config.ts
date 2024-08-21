@@ -22,7 +22,24 @@ if (env.MODE == 'test') {
       );
     }
   }
-} // TODO: untangle this both here and on the other instance of .env loading
+} else {
+  console.log('Not test mode');
+  try {
+    config({ path: '../../../../.env.local' });
+  } catch (err) {
+    console.error(
+      'Error loading environment variables for .env.local, trying .env',
+      err,
+    );
+    try {
+      config({ path: '../../../../.env' });
+    } catch (err) {
+      console.error('Error loading environment variables for .env', err);
+    }
+  }
+}
+
+// TODO: untangle this both here and on the other instance of .env loading
 
 export default defineConfig({
   dialect: 'postgresql',

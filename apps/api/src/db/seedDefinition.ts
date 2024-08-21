@@ -3,6 +3,7 @@ import * as tables from './schema';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { faker } from '@faker-js/faker';
 import { CreateUserRequest } from '@tournament-app/types';
+import { sql } from 'drizzle-orm';
 
 async function teardown() {
   console.log('Teardown database...');
@@ -46,8 +47,8 @@ async function createUsers() {
   }
 
   await db.insert(tables.user).values(randomUsers).execute();
+  await db.execute(sql<string>`ALTER SEQUENCE user_id_seq RESTART WITH 51`);
 }
-
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {

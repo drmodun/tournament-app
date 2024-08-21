@@ -3,7 +3,6 @@ import { UsersService } from '../users.service';
 import { UserDrizzleRepository } from '../user.repository';
 import { CreateUserRequest, UpdateUserInfo } from '@tournament-app/types';
 import {
-  BadRequestException,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -128,9 +127,7 @@ describe('UsersService', () => {
       country: 'USA',
     };
 
-    await expect(service.update(1, request)).rejects.toThrow(
-      BadRequestException,
-    );
+    await expect(service.update(1, request)).rejects.toThrow(NotFoundException);
   });
 
   it('should delete a user', async () => {
@@ -148,7 +145,7 @@ describe('UsersService', () => {
     expect(result).toEqual({ id: 1 });
   });
 
-  it('should throw an error when deleting a user with an existing email', async () => {
+  it('should throw an error when deleting a user with a wrong id', async () => {
     jest
       .spyOn(UserDrizzleRepository.prototype, 'deleteEntity')
       .mockResolvedValue([]);

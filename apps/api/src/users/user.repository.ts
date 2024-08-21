@@ -2,6 +2,7 @@ import { BaseDrizzleRepository } from '../base/drizzleManager';
 import {
   CreateUserRequest,
   FullUserQuery,
+  UpdateUserInfo,
   UserQuery,
   UserResponseEnumType,
   UserResponsesEnum,
@@ -27,7 +28,9 @@ import {
   SQL,
   sql,
 } from 'drizzle-orm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { NoValuesToSetException } from '../base/exception/custom/noValuesToSetException.exception';
+import { PostgresError } from 'postgres';
 
 @Injectable()
 export class UserDrizzleRepository extends BaseDrizzleRepository<
@@ -244,10 +247,20 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
     return db.delete(user).where(eq(user.id, id)).returning({ id: user.id });
   }
 
-  updateEntity(id: number, updateRequest: Partial<CreateUserRequest>) {
-    return db.update(user).set(updateRequest).where(eq(user.id, id)).returning({
-      id: user.id,
-    });
+  updateEntity(id: number, updateRequest: UpdateUserInfo) {
+    try {
+      return db
+        .update(user)
+        .set(updateRequest)
+        .where(eq(user.id, id))
+        .returning({
+          id: user.id,
+        });
+    } catch (e) {
+      if (e.message === 'No values to set') {
+        throw new NoValuesToSetException();
+      }
+    }
   }
 
   entityExists(id: number) {

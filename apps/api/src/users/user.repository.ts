@@ -1,5 +1,6 @@
 import { BaseDrizzleRepository } from '../base/drizzleManager';
 import {
+  BaseUserUpdateRequest,
   CreateUserRequest,
   FullUserQuery,
   UpdateUserInfo,
@@ -29,19 +30,16 @@ import {
   sql,
 } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
-import { NoValuesToSetException } from '../base/exception/custom/noValuesToSetException.exception';
 
 @Injectable()
 export class UserDrizzleRepository extends BaseDrizzleRepository<
+  typeof user,
   FullUserQuery,
-  CreateUserRequest
+  BaseUserUpdateRequest
 > {
-  getCount() {
-    return db
-      .$with('user_count')
-      .as(db.select({ value: sql`count(*)`.as('value') }).from(user));
+  constructor() {
+    super(user);
   }
-
   conditionallyJoin<TSelect extends PgSelect>(
     query: TSelect,
     typeEnum: UserResponseEnumType,
@@ -58,14 +56,17 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
           .leftJoin(
             alias(follower, 'followingAlias'),
             eq(user.id, follower.followerId),
-          );
+          )
+          .groupBy(user.id);
+
       case UserResponsesEnum.ADMIN:
         return query
           .leftJoin(follower, eq(user.id, follower.userId))
           .leftJoin(
             alias(follower, 'followingAlias'),
             eq(user.id, follower.followerId),
-          );
+          )
+          .groupBy(user.id);
       default:
         return query;
     }
@@ -167,55 +168,6 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
     });
   }
 
-  getQuery(query: FullUserQuery = {}) {
-    const selectedType = this.getMappingObject(
-      query.responseType || UserResponsesEnum.BASE,
-    );
-
-    const baseQuery = query.returnFullCount
-      ? (db
-          .with(this.getCount())
-          .select(selectedType)
-          .from(user)
-          .$dynamic() as PgSelect<'user', typeof selectedType>)
-      : (db.select(selectedType).from(user).$dynamic() as PgSelect<
-          'user',
-          typeof selectedType
-        >);
-
-    const filterQuery = query.query
-      ? baseQuery
-          .where(and(...this.getValidWhereClause(query.query)))
-          .$dynamic()
-      : baseQuery;
-
-    const sortedQuery = query.sort
-      ? filterQuery
-          .orderBy(
-            query.sort.order === 'asc'
-              ? asc(this.sortRecord[query.sort.field])
-              : desc(this.sortRecord[query.sort.field]),
-          )
-          .$dynamic()
-      : filterQuery;
-
-    const paginatedQuery = query.pagination
-      ? sortedQuery
-          .limit(query.pagination.pageSize)
-          .offset(
-            (query.pagination.page - 1) * (query.pagination.pageSize || 12),
-          )
-          .$dynamic()
-      : sortedQuery.limit(12).offset(0).$dynamic();
-
-    const fullQuery = this.conditionallyJoin(
-      paginatedQuery,
-      query.responseType || UserResponsesEnum.BASE,
-    );
-
-    return fullQuery;
-  }
-
   getSingleQuery(
     id: number,
     responseType: UserResponseEnumType = UserResponsesEnum.BASE,
@@ -236,33 +188,5 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
     const fullQuery = this.conditionallyJoin(baseQuery, responseType);
 
     return fullQuery;
-  }
-
-  createEntity(createRequest: CreateUserRequest) {
-    return db.insert(user).values(createRequest).returning({ id: user.id });
-  }
-
-  deleteEntity(id: number) {
-    return db.delete(user).where(eq(user.id, id)).returning({ id: user.id });
-  }
-
-  updateEntity(id: number, updateRequest: UpdateUserInfo) {
-    try {
-      return db
-        .update(user)
-        .set(updateRequest)
-        .where(eq(user.id, id))
-        .returning({
-          id: user.id,
-        });
-    } catch (e) {
-      if (e.message === 'No values to set') {
-        throw new NoValuesToSetException();
-      }
-    }
-  }
-
-  entityExists(id: number) {
-    return db.select({ exists: sql`exists(${id})` }).from(user);
   }
 }

@@ -1,9 +1,6 @@
-import { BaseDrizzleRepository } from '../base/drizzleManager';
 import {
   BaseUserUpdateRequest,
-  CreateUserRequest,
   FullUserQuery,
-  UpdateUserInfo,
   UserQuery,
   UserResponseEnumType,
   UserResponsesEnum,
@@ -19,20 +16,12 @@ import {
 } from '../db/schema';
 import { alias, PgColumn, PgSelect } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import {
-  and,
-  asc,
-  count,
-  countDistinct,
-  desc,
-  eq,
-  SQL,
-  sql,
-} from 'drizzle-orm';
+import { and, count, countDistinct, eq, SQL, sql } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
+import { PrimaryRepository } from '../base/repository/primaryRepository';
 
 @Injectable()
-export class UserDrizzleRepository extends BaseDrizzleRepository<
+export class UserDrizzleRepository extends PrimaryRepository<
   typeof user,
   FullUserQuery,
   BaseUserUpdateRequest

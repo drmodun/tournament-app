@@ -1,12 +1,16 @@
-import { eq, InferInsertModel, sql } from 'drizzle-orm';
-import { PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
+import { ColumnBaseConfig, eq, InferInsertModel, sql } from 'drizzle-orm';
+import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
 import { BaseQuery } from '@tournament-app/types';
 import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
 
+export interface TableWithId extends PgTable<TableConfig> {
+  id: PgColumn<ColumnBaseConfig<'number', 'PgSerial'>>;
+}
+
 export abstract class PrimaryRepository<
-  TTable extends PgTable<TableConfig>,
+  TTable extends TableWithId,
   TQueryRequest extends BaseQuery,
   TCreateRequest extends Partial<InferInsertModel<TTable>> = Partial<
     InferInsertModel<TTable>
@@ -21,7 +25,7 @@ export abstract class PrimaryRepository<
     const baseQuery = db
       .select(this.getMappingObject(responseType))
       .from(this.model)
-      .where(eq(this.model['id'], id))
+      .where(eq(this.model.id, id))
       .$dynamic() as PgSelect<string, typeof selectedType>;
 
     const fullQuery = this.conditionallyJoin(baseQuery, responseType);
@@ -33,7 +37,7 @@ export abstract class PrimaryRepository<
     return db
       .insert(this.model)
       .values(createRequest)
-      .returning({ id: this.model['id'] }); // If the id field is not called id then we messed up
+      .returning({ id: this.model.id }); // If the id field is not called id then we messed up
   }
 
   updateEntity(id: number, updateRequest: TCreateRequest) {
@@ -41,8 +45,8 @@ export abstract class PrimaryRepository<
       return db
         .update(this.model)
         .set(updateRequest)
-        .where(eq(this.model['id'], id))
-        .returning({ id: this.model['id'] });
+        .where(eq(this.model.id, id))
+        .returning({ id: this.model.id });
     } catch (e) {
       if (e.message === 'No values to set') {
         throw new NoValuesToSetException();
@@ -53,8 +57,8 @@ export abstract class PrimaryRepository<
   }
 
   deleteEntity(id: number) {
-    return db.delete(this.model).where(eq(this.model['id'], id)).returning({
-      id: this.model['id'],
+    return db.delete(this.model).where(eq(this.model.id, id)).returning({
+      id: this.model.id,
     });
   }
 

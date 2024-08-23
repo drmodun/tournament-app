@@ -5,6 +5,8 @@ import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
 
+// TODO: try to make this nicer
+
 export abstract class CompositeRepository<
   TTable extends PgTable<TableConfig>,
   TQueryRequest extends BaseQuery,

@@ -6,7 +6,6 @@ import { PostgresExceptionFilter } from './base/exception/postgresExceptionFilte
 import { NoValuesToSetExceptionFilter } from './base/exception/noValuesToSetExceptionFilter';
 
 async function bootstrap() {
-  console.log(process.env.DATABASE_URL);
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));

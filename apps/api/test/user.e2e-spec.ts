@@ -36,35 +36,147 @@ describe('UserController', () => {
     await app.close();
   });
 
-  it('should return a valid query', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/users')
-      .expect(200);
+  describe('GET /users', () => {
+    it('should return a valid query with mini return type', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/users?returnType=mini')
+        .expect(200);
 
-    const { results, metadata } = response.body;
+      const { results, metadata } = response.body;
 
-    expect(results.length).toEqual(12);
-    expect(Object.keys(results[0])).toEqual([
-      'id',
-      'username',
-      'profilePicture',
-      'country',
-      'bio',
-      'email',
-      'level',
-      'updatedAt',
-      'followers',
-    ]);
+      expect(results.length).toEqual(12);
+      expect(Object.keys(results[0])).toEqual(['id', 'username']);
 
-    expect(metadata.pagination).toEqual({
-      page: 1,
-      pageSize: 12,
+      expect(metadata.pagination).toEqual({
+        page: 1,
+        pageSize: 12,
+      });
+
+      expect(metadata.links).toEqual({
+        first: '/users?page=1',
+        prev: '/users?page=0',
+        next: '/users?page=2',
+      });
     });
 
-    expect(metadata.links).toEqual({
-      first: '/users?page=1',
-      prev: '/users?page=0',
-      next: '/users?page=2',
+    it('should return a valid query with miniWithProfilePicture return type', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/users?returnType=mini-with-pfp')
+        .expect(200);
+
+      const { results, metadata } = response.body;
+
+      expect(results.length).toEqual(12);
+      expect(Object.keys(results[0])).toEqual([
+        'id',
+        'username',
+        'profilePicture ',
+      ]);
+
+      expect(metadata.pagination).toEqual({
+        page: 1,
+        pageSize: 12,
+      });
+
+      expect(metadata.links).toEqual({
+        first: '/users?page=1',
+        prev: '/users?page=0',
+        next: '/users?page=2',
+      });
+    });
+
+    it('should return a valid query with miniWithCountry return type', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/users?returnType=mini-with-country')
+        .expect(200);
+
+      const { results, metadata } = response.body;
+
+      expect(results.length).toEqual(12);
+      expect(Object.keys(results[0])).toEqual([
+        'id',
+        'username',
+        'profilePicture',
+        'country',
+      ]);
+
+      expect(metadata.pagination).toEqual({
+        page: 1,
+        pageSize: 12,
+      });
+
+      expect(metadata.links).toEqual({
+        first: '/users?page=1',
+        prev: '/users?page=0',
+        next: '/users?page=2',
+      });
+    });
+
+    it('should return a valid query with extended return type', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/users?returnType=extended')
+        .expect(200);
+
+      const { results, metadata } = response.body;
+
+      expect(results.length).toEqual(12);
+      expect(Object.keys(results[0])).toEqual([
+        'id',
+        'username',
+        'profilePicture',
+        'country',
+        'bio',
+        'email',
+        'level',
+        'updatedAt',
+        'followers',
+        'location',
+        'following',
+        'createdAt',
+      ]);
+
+      expect(metadata.pagination).toEqual({
+        page: 1,
+        pageSize: 12,
+      });
+
+      expect(metadata.links).toEqual({
+        first: '/users?page=1',
+        prev: '/users?page=0',
+        next: '/users?page=2',
+      });
+    });
+
+    it('should return a valid query', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/users')
+        .expect(200);
+
+      const { results, metadata } = response.body;
+
+      expect(results.length).toEqual(12);
+      expect(Object.keys(results[0])).toEqual([
+        'id',
+        'username',
+        'profilePicture',
+        'country',
+        'bio',
+        'email',
+        'level',
+        'updatedAt',
+        'followers',
+      ]);
+
+      expect(metadata.pagination).toEqual({
+        page: 1,
+        pageSize: 12,
+      });
+
+      expect(metadata.links).toEqual({
+        first: '/users?page=1',
+        prev: '/users?page=0',
+        next: '/users?page=2',
+      });
     });
   });
 

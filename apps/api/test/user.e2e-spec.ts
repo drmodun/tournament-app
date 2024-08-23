@@ -130,8 +130,8 @@ describe('UserController', () => {
         'level',
         'updatedAt',
         'followers',
-        'location',
         'following',
+        'location',
         'createdAt',
       ]);
 

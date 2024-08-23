@@ -18,7 +18,7 @@ import {
   UserResponseEnumType,
 } from '@tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
-import { FullQuery } from 'src/base/decorators/fullQuery.decorator';
+import { FullQuery } from '../base/decorators/fullQuery.decorator';
 
 @Controller('users')
 export class UsersController {

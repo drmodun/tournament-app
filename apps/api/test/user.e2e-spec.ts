@@ -39,7 +39,7 @@ describe('UserController', () => {
   describe('GET /users', () => {
     it('should return a valid query with mini return type', async () => {
       const response = await request(app.getHttpServer())
-        .get('/users?returnType=mini')
+        .get('/users?responseType=mini')
         .expect(200);
 
       const { results, metadata } = response.body;
@@ -61,7 +61,7 @@ describe('UserController', () => {
 
     it('should return a valid query with miniWithProfilePicture return type', async () => {
       const response = await request(app.getHttpServer())
-        .get('/users?returnType=mini-with-pfp')
+        .get('/users?responseType=mini-with-pfp')
         .expect(200);
 
       const { results, metadata } = response.body;
@@ -87,7 +87,7 @@ describe('UserController', () => {
 
     it('should return a valid query with miniWithCountry return type', async () => {
       const response = await request(app.getHttpServer())
-        .get('/users?returnType=mini-with-country')
+        .get('/users?responseType=mini-with-country')
         .expect(200);
 
       const { results, metadata } = response.body;
@@ -114,7 +114,7 @@ describe('UserController', () => {
 
     it('should return a valid query with extended return type', async () => {
       const response = await request(app.getHttpServer())
-        .get('/users?returnType=extended')
+        .get('/users?responseType=extended')
         .expect(200);
 
       const { results, metadata } = response.body;

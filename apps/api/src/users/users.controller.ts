@@ -18,6 +18,7 @@ import {
   UserResponseEnumType,
 } from '@tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
+import { FullQuery } from 'src/base/decorators/fullQuery.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -29,7 +30,8 @@ export class UsersController {
   }
 
   @Get()
-  async findAll(@Query('query') query: FullUserQuery, @Req() req: Request) {
+  async findAll(@FullQuery() query: FullUserQuery, @Req() req: Request) {
+    console.log(req.url, query);
     const results = await this.usersService.findAll(query);
 
     const metadata: QueryMetadata = MetadataMaker.makeMetadataFromQuery(

@@ -23,14 +23,13 @@
   align-items: flex-start;
 }
 
-.fullWidth,
-.innerWrapper {
+.fullWidth {
   width: 100%;
 }
 
 .selectButton {
   border-bottom-right-radius: 0;
-  transition: border-radius $animationDuration ease-in-out;
+  transition: border-radius $animationDuration $animationEasingFunction;
 
   @media screen and (max-width: $tabletBreakpoint) {
     border-bottom-left-radius: 0;
@@ -38,11 +37,11 @@
 }
 
 .hiddenAnimation {
-  animation: undrop $animationDuration ease-in-out forwards;
+  animation: undrop $animationDuration $animationEasingFunction forwards;
 }
 
 .unhiddenAnimation {
-  animation: drop $animationDuration ease-in-out forwards;
+  animation: drop $animationDuration $animationEasingFunction forwards;
 }
 
 .hidden {
@@ -57,7 +56,7 @@
 }
 
 .selectArrow {
-  transition: transform $animationDuration ease-in-out;
+  transition: transform $animationDuration $animationEasingFunction;
 }
 
 .label {

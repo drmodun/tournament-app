@@ -1,7 +1,12 @@
 "use client";
 
 import { createContext, ReactNode, useState } from "react";
-import { ToastProps, ToastVariants } from "types/toastTypes";
+import {
+  ToastProps,
+  ToastVariants,
+  AUTO_CLOSE,
+  AUTO_CLOSE_DURATION,
+} from "types/toastTypes";
 
 export const ToastContext = createContext({
   toasts: [] as ToastProps[],
@@ -16,13 +21,10 @@ export const ToastContext = createContext({
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<ToastProps[]>([]);
-  const AUTO_CLOSE = true;
-  const AUTO_CLOSE_DURATION = 6000;
 
   const addToast = (message: string, type: ToastVariants, id?: number) => {
     id = id ?? Date.now();
     const newToasts = [...toasts, { message, type, id }];
-    console.log(id, newToasts);
     setToasts(newToasts);
     if (AUTO_CLOSE) {
       setTimeout(() => {

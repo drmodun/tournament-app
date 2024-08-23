@@ -19,7 +19,7 @@
   width: rem-calc(20);
   height: rem-calc(20);
   border-radius: 50%;
-  transition: border 0.15s ease-out;
+  transition: border $animationDuration $animationEasingFunction;
 
   @media screen and (max-width: $tabletBreakpoint) {
     width: rem-calc(24);

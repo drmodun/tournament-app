@@ -12,6 +12,9 @@ import ToastList from "components/toastList";
 import CheckboxGroup from "components/checkboxGroup";
 import MultilineInput from "components/multilineInput";
 import Dropdown from "components/dropdown";
+import ProgressWheel from "components/progressWheel";
+import Tooltip from "components/tooltip";
+import Dialog from "components/dialog";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -19,6 +22,7 @@ export default function Web() {
   const [name, setName] = useState<string>("");
   const [response, setResponse] = useState<{ message: string } | null>(null);
   const [error, setError] = useState<string | undefined>();
+  const [dialogActive, setDialogActive] = useState<boolean>(false);
 
   const toastContext = useContext(ToastContext);
   useEffect(() => {
@@ -70,7 +74,7 @@ export default function Web() {
       <Button
         label="hi guys"
         variant="primary"
-        onClick={() => console.log("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!")}
+        onClick={() => setDialogActive(true)}
       />
       <Button
         label="hi guys"
@@ -271,104 +275,168 @@ export default function Web() {
       ></Carousel>
 
       <ToastList />
+      <Dropdown
+        options={[
+          {
+            label: "NO MORE LIESSSSSSSS",
+            variant: "dark",
+            onClick: () => console.log("hi"),
+          },
+          {
+            label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+            variant: "primary",
+            onClick: () => console.log("hi2"),
+          },
+        ]}
+        label="hi guys"
+      />
+      <Dropdown
+        options={[
+          {
+            label: "NO MORE LIESSSSSSSS",
+            variant: "dark",
+            onClick: () => console.log("hi"),
+          },
+          {
+            label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+            variant: "primary",
+            onClick: () => console.log("hi2"),
+          },
+        ]}
+        label="hi guys"
+        variant="dark"
+      />
+      <Dropdown
+        options={[
+          {
+            label: "NO MORE LIESSSSSSSS",
+            variant: "dark",
+            onClick: () => console.log("hi"),
+          },
+          {
+            label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+            variant: "primary",
+            onClick: () => console.log("hi2"),
+          },
+        ]}
+        label="hi guys"
+        variant="primary"
+      />
+      <Dropdown
+        options={[
+          {
+            label: "NO MORE LIESSSSSSSS",
+            variant: "dark",
+            onClick: () => console.log("hi"),
+          },
+          {
+            label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+            variant: "primary",
+            onClick: () => console.log("hi2"),
+          },
+        ]}
+        label="hi guys"
+        variant="secondary"
+      />
+      <Dropdown
+        options={[
+          {
+            label: "NO MORE LIESSSSSSSS",
+            variant: "dark",
+            onClick: () => console.log("hi"),
+          },
+          {
+            label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+            variant: "primary",
+            onClick: () => console.log("hi2"),
+          },
+        ]}
+        label="hi guys"
+        variant="warning"
+      />
+      <Dropdown
+        options={[
+          {
+            label: "NO MORE LIESSSSSSSS",
+            variant: "dark",
+            onClick: () => console.log("hi"),
+          },
+          {
+            label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
+            variant: "primary",
+            onClick: () => console.log("hi2"),
+          },
+        ]}
+        label="hi guys"
+        variant="danger"
+      />
+      <Tooltip
+        message="the world has turned and left me here"
+        variant="light"
+        direction="right"
+      >
+        <ProgressWheel
+          variant="light"
+          label="LOVERRRRRRRRR YOU SHOULD'VE COME OVER"
+        />
+      </Tooltip>
 
-      <div style={{ width: 300 }}>
-        <Dropdown
-          options={[
-            {
-              label: "NO MORE LIESSSSSSSS",
-              variant: "dark",
-              onClick: () => console.log("hi"),
-            },
-            {
-              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
-              variant: "primary",
-              onClick: () => console.log("hi2"),
-            },
-          ]}
-          label="hi guys"
-        />
-        <Dropdown
-          options={[
-            {
-              label: "NO MORE LIESSSSSSSS",
-              variant: "dark",
-              onClick: () => console.log("hi"),
-            },
-            {
-              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
-              variant: "primary",
-              onClick: () => console.log("hi2"),
-            },
-          ]}
-          label="hi guys"
-          variant="dark"
-        />
-        <Dropdown
-          options={[
-            {
-              label: "NO MORE LIESSSSSSSS",
-              variant: "dark",
-              onClick: () => console.log("hi"),
-            },
-            {
-              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
-              variant: "primary",
-              onClick: () => console.log("hi2"),
-            },
-          ]}
-          label="hi guys"
+      <Tooltip
+        message="the world has turned and left me here"
+        variant="dark"
+        direction="bottom"
+      >
+        <ProgressWheel variant="dark" />
+      </Tooltip>
+
+      <Tooltip
+        message="the world has turned and left me here"
+        variant="primary"
+        direction="left"
+      >
+        <ProgressWheel variant="primary" />
+      </Tooltip>
+      <Tooltip
+        message="the world has turned and left me here"
+        variant="secondary"
+        direction="right"
+      >
+        <ProgressWheel variant="secondary" />
+      </Tooltip>
+      <Tooltip
+        message="the world has turned and left me here"
+        variant="warning"
+      >
+        <ProgressWheel variant="warning" />
+      </Tooltip>
+      <Tooltip message="the world has turned and left me here" variant="danger">
+        <ProgressWheel variant="danger" />
+      </Tooltip>
+
+      <Dialog
+        active={dialogActive}
+        onClose={() => setDialogActive(false)}
+        variant="light"
+      >
+        <h3>Dialog</h3>
+        <p>Are you sure you want to continue?</p>
+        <Button
+          label="Yes"
           variant="primary"
+          onClick={() => {
+            console.log("Yes");
+            setDialogActive(false);
+          }}
         />
-        <Dropdown
-          options={[
-            {
-              label: "NO MORE LIESSSSSSSS",
-              variant: "dark",
-              onClick: () => console.log("hi"),
-            },
-            {
-              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
-              variant: "primary",
-              onClick: () => console.log("hi2"),
-            },
-          ]}
-          label="hi guys"
-          variant="secondary"
-        />
-        <Dropdown
-          options={[
-            {
-              label: "NO MORE LIESSSSSSSS",
-              variant: "dark",
-              onClick: () => console.log("hi"),
-            },
-            {
-              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
-              variant: "primary",
-              onClick: () => console.log("hi2"),
-            },
-          ]}
-          label="hi guys"
-          variant="warning"
-        />
-        <Dropdown
-          options={[
-            {
-              label: "NO MORE LIESSSSSSSS",
-              variant: "dark",
-              onClick: () => console.log("hi"),
-            },
-            {
-              label: "NO MORE LIESSSSSSSSSSSSSSSSSSSSSSSSssS2",
-              variant: "primary",
-              onClick: () => console.log("hi2"),
-            },
-          ]}
-          label="hi guys"
+        <Button
+          label="No"
           variant="danger"
+          onClick={() => {
+            console.log("No");
+            setDialogActive(false);
+          }}
         />
-      </div>
+      </Dialog>
 
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>

@@ -10,7 +10,6 @@
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  animation-iteration-count: 1;
 
   &:hover {
     cursor: pointer;
@@ -29,13 +28,4 @@
   height: 0.5 * $baseComponentHeight;
   width: auto;
   margin-right: $padding;
-}
-
-@keyframes toastAnimation {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }

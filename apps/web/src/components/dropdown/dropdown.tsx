@@ -56,9 +56,7 @@ export default function RadioGroup({
         {label && (
           <p
             className={clsx(
-              globals[
-                `${labelVariant ? labelVariant : inverseTextColor(variant)}MutedColor`
-              ],
+              globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
               styles.label,
             )}
             style={labelStyle}

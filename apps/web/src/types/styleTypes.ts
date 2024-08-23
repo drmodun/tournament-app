@@ -31,3 +31,6 @@ export const inverseTextColor = (variant: Variants): TextVariants => {
       return "dark";
   }
 };
+
+/// Variable that stores the default animation duration:
+export const ANIMATION_DURATION: number = 200;

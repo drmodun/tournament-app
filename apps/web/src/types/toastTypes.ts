@@ -9,6 +9,7 @@ export interface ToastProps {
   type?: ToastVariants;
   id?: number;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 }
 
 /// Map that joins a toast type to its color:
@@ -18,3 +19,5 @@ export const TOAST_TYPE_COLOR_MAP = {
   info: "secondary",
   warning: "warning",
 };
+export const AUTO_CLOSE = true;
+export const AUTO_CLOSE_DURATION = 6000;

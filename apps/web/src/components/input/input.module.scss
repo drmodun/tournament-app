@@ -6,7 +6,6 @@
   padding: 0 $doublePadding;
   border: none;
   font-size: $fontSize;
-  width: 100%;
 
   &:focus {
     outline: none;
@@ -14,6 +13,10 @@
 
   &::placeholder {
     color: $lightMuted;
+  }
+
+  @media only screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
   }
 }
 

@@ -35,9 +35,7 @@ export default function Chip({
       className={clsx(
         styles.chip,
         isSelected &&
-          styles[
-            `${activeBorderVariant ? activeBorderVariant : textColor(variant)}SelectedBorder`
-          ],
+          styles[`${activeBorderVariant ?? textColor(variant)}SelectedBorder`],
         globals[`${textColor(variant)}Color`],
         isSelected
           ? globals[`${variant}BackgroundColor`]

@@ -1,0 +1,67 @@
+@import "styles/";
+
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltipWrapper {
+  padding: $padding $doublePadding;
+  border-radius: $borderRadius;
+  animation: fadeIn $animationDuration $animationEasingFunction;
+  position: absolute;
+
+  line-height: 1;
+  z-index: 98;
+  white-space: nowrap;
+}
+
+.top {
+  top: ($doublePadding + $padding + $halfPadding) * -1;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bottom {
+  bottom: ($doublePadding + $padding + $halfPadding) * -1;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.right {
+  top: 50%;
+  left: calc(100% + $halfPadding);
+  transform: translateY(-50%);
+}
+
+.left {
+  top: 50%;
+  right: calc(100% + $halfPadding);
+  transform: translateY(-50%);
+}
+
+.fadeIn {
+  animation: fadeIn $animationDuration $animationEasingFunction forwards;
+}
+
+.fadeOut {
+  animation: fadeOut $animationDuration $animationEasingFunction forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

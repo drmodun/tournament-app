@@ -15,17 +15,21 @@ export class MetadataMaker {
     return metadata;
   }
 
+  //TODO: fix this to produce valid queries
+
   static makeLinks<TQuery extends BaseQuery>(url: string, query: TQuery) {
+    const defaultSign = url.includes('?') ? '&' : '?';
+
     const links: Links = {
-      first: url.includes('page')
+      first: url.includes('pagination')
         ? url.replace(/page=\d+/, 'page=1')
-        : `${url}?page=1`,
-      prev: url.includes('page')
+        : `${url}${defaultSign}page=1`,
+      prev: url.includes('pagination')
         ? url.replace(/page=\d+/, `page=${query?.pagination?.page - 1}`)
-        : `${url}?page=${(query?.pagination?.page || 1) - 1}`,
-      next: url.includes('page')
+        : `${url}${defaultSign}page=${(query?.pagination?.page || 1) - 1}`,
+      next: url.includes('pagination')
         ? url.replace(/page=\d+/, `page=${query?.pagination?.page + 1}`)
-        : `${url}?page=${(query?.pagination?.page || 1) + 1}`,
+        : `${url}${defaultSign}page=${(query?.pagination?.page || 1) + 1}`,
     }; // TODO: potentially check wether next link exists
 
     return links;

@@ -9,7 +9,17 @@ import { AppModule } from './../src/app.module';
 import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
-import { CreateUserRequest, UpdateUserInfo } from '@tournament-app/types';
+import {
+  CreateUserRequest,
+  Links,
+  UpdateUserInfo,
+} from '@tournament-app/types';
+
+const checkLinksOnDefault = (links: Links, baseLink: string) => {
+  expect(links.first).toEqual(`${baseLink}&page=1`);
+  expect(links.prev).toEqual(`${baseLink}&page=0`);
+  expect(links.next).toEqual(`${baseLink}&page=2`);
+};
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -52,11 +62,7 @@ describe('UserController', () => {
         pageSize: 12,
       });
 
-      expect(metadata.links).toEqual({
-        first: '/users?page=1',
-        prev: '/users?page=0',
-        next: '/users?page=2',
-      });
+      checkLinksOnDefault(metadata.links, '/users?responseType=mini');
     });
 
     it('should return a valid query with miniWithProfilePicture return type', async () => {
@@ -70,7 +76,7 @@ describe('UserController', () => {
       expect(Object.keys(results[0])).toEqual([
         'id',
         'username',
-        'profilePicture ',
+        'profilePicture',
       ]);
 
       expect(metadata.pagination).toEqual({
@@ -78,11 +84,7 @@ describe('UserController', () => {
         pageSize: 12,
       });
 
-      expect(metadata.links).toEqual({
-        first: '/users?page=1',
-        prev: '/users?page=0',
-        next: '/users?page=2',
-      });
+      checkLinksOnDefault(metadata.links, '/users?responseType=mini-with-pfp');
     });
 
     it('should return a valid query with miniWithCountry return type', async () => {
@@ -105,11 +107,10 @@ describe('UserController', () => {
         pageSize: 12,
       });
 
-      expect(metadata.links).toEqual({
-        first: '/users?page=1',
-        prev: '/users?page=0',
-        next: '/users?page=2',
-      });
+      checkLinksOnDefault(
+        metadata.links,
+        '/users?responseType=mini-with-country',
+      );
     });
 
     it('should return a valid query with extended return type', async () => {
@@ -140,11 +141,7 @@ describe('UserController', () => {
         pageSize: 12,
       });
 
-      expect(metadata.links).toEqual({
-        first: '/users?page=1',
-        prev: '/users?page=0',
-        next: '/users?page=2',
-      });
+      checkLinksOnDefault(metadata.links, '/users?responseType=extended');
     });
 
     it('should return a valid query', async () => {

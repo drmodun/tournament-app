@@ -19,7 +19,9 @@ import {
 } from '@tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
 import { FullQuery } from '../base/decorators/fullQuery.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

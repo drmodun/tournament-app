@@ -16,7 +16,7 @@ interface ProgressWheelProps {
   variant?: Variants;
   wheelVariant?: TextVariants;
   label?: string;
-  labelVariant?: Variants;
+  labelVariant?: TextVariants;
   labelStyle?: React.CSSProperties;
   labelClassName?: string;
   className?: string;

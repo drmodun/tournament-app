@@ -63,7 +63,7 @@ export default function Input({
         <input
           type={type}
           onChange={(e) => {
-            if (doesSubmit) setValue(e.target.value);
+            setValue(e.target.value);
             onChange(e);
           }}
           value={value}

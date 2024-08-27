@@ -6,7 +6,12 @@ import { ButtonProps } from "components/button/button";
 import clsx from "clsx";
 import globals from "styles/globals.module.scss";
 import Button from "components/button";
-import { inverseTextColor, textColor, Variants } from "types/styleTypes";
+import {
+  inverseTextColor,
+  textColor,
+  TextVariants,
+  Variants,
+} from "types/styleTypes";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 interface RadioGroupProps {
@@ -16,7 +21,7 @@ interface RadioGroupProps {
   variant?: Variants;
   placeholder?: string;
   label?: string;
-  labelVariant?: Variants;
+  labelVariant?: TextVariants;
   labelStyle?: React.CSSProperties;
   options: ButtonProps[];
   onSelect?: (index: number) => void;

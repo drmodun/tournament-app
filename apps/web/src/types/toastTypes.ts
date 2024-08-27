@@ -10,6 +10,7 @@ export interface ToastProps {
   id?: number;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  autoClose?: boolean;
 }
 
 /// Map that joins a toast type to its color:

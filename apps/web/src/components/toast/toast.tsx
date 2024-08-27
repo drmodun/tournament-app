@@ -19,9 +19,11 @@ export default function Toast({
   type = "success",
   onClick,
   className,
+  autoClose = true,
 }: ToastProps) {
   const [animation, setAnimation] = useState<string>(globals.fadeInAnimation);
-  AUTO_CLOSE &&
+  autoClose &&
+    AUTO_CLOSE &&
     useEffect(() => {
       setAnimation(globals.fadeInAnimation);
       const timeout = setTimeout(() => {

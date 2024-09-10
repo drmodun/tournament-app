@@ -5,12 +5,12 @@
 }
 
 .options {
-  margin-left: $doublePadding;
   padding: $halfPadding $padding;
-  border-radius: 0 0 $borderRadius $borderRadius;
+  border-radius: 0 $borderRadius $borderRadius $borderRadius;
   display: flex;
   flex-direction: column;
-  gap: $halfPadding;
+  position: absolute;
+  z-index: 97;
 
   @media screen and (max-width: $tabletBreakpoint) {
     margin-left: 0;
@@ -21,6 +21,8 @@
   flex-direction: column;
   align-self: flex-start;
   align-items: flex-start;
+  width: 0;
+  position: relative;
 }
 
 .fullWidth {
@@ -28,7 +30,7 @@
 }
 
 .selectButton {
-  border-bottom-right-radius: 0;
+  border-radius: $borderRadius $borderRadius 0 0;
   transition: border-radius $animationDuration $animationEasingFunction;
 
   @media screen and (max-width: $tabletBreakpoint) {
@@ -57,6 +59,7 @@
 
 .selectArrow {
   transition: transform $animationDuration $animationEasingFunction;
+  margin-left: $padding;
 }
 
 .label {

@@ -26,6 +26,7 @@ interface InputProps {
   doesSubmit?: boolean;
   submitLabel?: string;
   type?: HTMLInputTypeAttribute;
+  className?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onSubmit?: Function;
 }
@@ -41,13 +42,14 @@ export default function Input({
   doesSubmit = false,
   submitLabel,
   type = "text",
+  className,
   onChange = () => {},
   onSubmit = () => {},
 }: InputProps) {
   const [value, setValue] = useState<string>("");
 
   return (
-    <div>
+    <div className={className}>
       {label && (
         <p
           className={clsx(

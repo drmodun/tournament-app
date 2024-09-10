@@ -15,6 +15,7 @@ import Dropdown from "components/dropdown";
 import ProgressWheel from "components/progressWheel";
 import Tooltip from "components/tooltip";
 import Dialog from "components/dialog";
+import Navbar from "components/navbar";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -53,6 +54,7 @@ export default function Web() {
 
   return (
     <div>
+      <Navbar variant="dark" />
       <h1>Web</h1>
       <Button
         label="hi guys"
@@ -289,6 +291,7 @@ export default function Web() {
           },
         ]}
         label="hi guys"
+        placeholder="search..."
       />
       <Dropdown
         options={[
@@ -305,6 +308,7 @@ export default function Web() {
         ]}
         label="hi guys"
         variant="dark"
+        placeholder="search..."
       />
       <Dropdown
         options={[
@@ -321,6 +325,7 @@ export default function Web() {
         ]}
         label="hi guys"
         variant="primary"
+        placeholder="search..."
       />
       <Dropdown
         options={[
@@ -337,6 +342,7 @@ export default function Web() {
         ]}
         label="hi guys"
         variant="secondary"
+        placeholder="search..."
       />
       <Dropdown
         options={[
@@ -353,6 +359,7 @@ export default function Web() {
         ]}
         label="hi guys"
         variant="warning"
+        placeholder="search..."
       />
       <Dropdown
         options={[
@@ -369,6 +376,7 @@ export default function Web() {
         ]}
         label="hi guys"
         variant="danger"
+        placeholder="search..."
       />
       <Tooltip
         message="the world has turned and left me here"

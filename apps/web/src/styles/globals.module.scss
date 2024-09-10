@@ -224,6 +224,42 @@
   text-align: left;
 }
 
+.padding {
+  padding: $padding;
+}
+
+.paddingVertical {
+  padding: $padding 0;
+}
+
+.paddingHorizontal {
+  padding: 0 $padding;
+}
+
+.doublePadding {
+  padding: $doublePadding;
+}
+
+.doublePaddingVertical {
+  padding: $doublePadding 0;
+}
+
+.doublePaddingHorizontal {
+  padding: 0 $doublePadding;
+}
+
+.halfPadding {
+  padding: $halfPadding;
+}
+
+.halfPaddingVertical {
+  padding: $halfPadding 0;
+}
+
+.halfPaddingHorizontal {
+  padding: 0 $halfPadding;
+}
+
 .fadeInAnimation {
   animation: fadeIn $animationDuration $animationEasingFunction forwards;
 }

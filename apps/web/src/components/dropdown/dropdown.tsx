@@ -14,31 +14,43 @@ import {
 } from "types/styleTypes";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
-interface RadioGroupProps {
+interface DropdownProps {
   style?: React.CSSProperties;
   optionStyle?: React.CSSProperties;
+  optionWrapperStyle?: React.CSSProperties;
+  optionClassName?: string;
+  optionWrapperClassName?: string;
   selectButtonStyle?: React.CSSProperties;
   variant?: Variants;
   placeholder?: string;
   label?: string;
   labelVariant?: TextVariants;
   labelStyle?: React.CSSProperties;
-  options: ButtonProps[];
+  options?: ButtonProps[];
   onSelect?: (index: number) => void;
+  children?: React.ReactNode;
+  arrowed?: boolean;
+  selectionBased?: boolean;
 }
 
-export default function RadioGroup({
+export default function Dropdown({
   style,
   optionStyle,
+  optionWrapperStyle,
+  optionClassName,
+  optionWrapperClassName,
   selectButtonStyle,
   variant = "light",
-  placeholder = "select",
+  placeholder = "",
   label,
   labelVariant,
   labelStyle,
-  options,
+  options = [],
   onSelect,
-}: RadioGroupProps) {
+  children,
+  arrowed = true,
+  selectionBased = true,
+}: DropdownProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [isDropped, setIsDropped] = useState<boolean>(false);
   const [animate, setAnimate] = useState<boolean>(false);
@@ -72,21 +84,29 @@ export default function RadioGroup({
         <div className={styles.select}>
           <Button
             variant={variant}
-            label={selected !== null ? options[selected].label : placeholder}
+            label={
+              selected !== null && selectionBased
+                ? options[selected].label
+                : placeholder
+            }
             onClick={changeDrop}
-            style={{ ...selectButtonStyle }}
+            style={selectButtonStyle}
             className={clsx(styles.fullWidth, isDropped && styles.selectButton)}
             labelClassName={globals.textAlignLeft}
           >
-            <ArrowRightIcon
-              className={clsx(
-                isDropped && styles.selectArrowRotated,
-                styles.selectArrow,
-              )}
-            />
+            {arrowed && (
+              <ArrowRightIcon
+                className={clsx(
+                  isDropped && styles.selectArrowRotated,
+                  styles.selectArrow,
+                )}
+              />
+            )}
+            {children}
           </Button>
         </div>
         <div
+          style={optionWrapperStyle}
           className={clsx(
             animate
               ? isDropped
@@ -95,6 +115,7 @@ export default function RadioGroup({
               : styles.hidden,
             styles.options,
             globals[`${variant}MutedBackgroundColor`],
+            optionWrapperClassName,
           )}
         >
           {options.map((option, index) => (
@@ -106,6 +127,7 @@ export default function RadioGroup({
                     : styles.hiddenAnimation
                   : styles.hidden,
                 styles.option,
+                optionClassName,
               )}
             >
               <Button

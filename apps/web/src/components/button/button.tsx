@@ -34,13 +34,16 @@ export default function Button({
         globals[`${variant}BackgroundColorDynamic`],
         globals[`${variant}TextColor`],
         className,
+        label && globals.doublePaddingHorizontal,
       )}
       style={style}
       onClick={onClick ? onClick : () => {}}
     >
-      <p className={clsx(styles.label, labelClassName)} style={labelStyle}>
-        {label}
-      </p>
+      {label && (
+        <p className={clsx(styles.label, labelClassName)} style={labelStyle}>
+          {label}
+        </p>
+      )}
       {children}
     </button>
   );

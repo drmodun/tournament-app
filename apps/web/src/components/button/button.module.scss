@@ -2,8 +2,8 @@
 
 .button {
   height: $baseComponentHeight;
+  max-width: 100%;
   border-radius: $borderRadius;
-  padding: 0 $doublePadding;
   border: none;
 
   &:hover {

@@ -1,0 +1,5 @@
+@import "../../styles/";
+
+.radio + .radio {
+  margin-top: $halfPadding;
+}

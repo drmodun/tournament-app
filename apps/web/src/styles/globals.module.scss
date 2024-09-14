@@ -1,0 +1,364 @@
+@import "variables";
+
+.primaryColor {
+  color: $primary;
+}
+
+.secondaryColor {
+  color: $secondary;
+}
+
+.lightColor {
+  color: $light;
+}
+
+.darkColor {
+  color: $dark;
+}
+
+.warningColor {
+  color: $warning;
+}
+
+.dangerColor {
+  color: $danger;
+}
+
+.primaryMutedColor {
+  color: $primaryMuted;
+}
+
+.secondaryMutedColor {
+  color: $secondaryMuted;
+}
+
+.lightMutedColor {
+  color: $lightMuted;
+}
+
+.darkMutedColor {
+  color: $darkMuted;
+}
+
+.warningMutedColor {
+  color: $warningMuted;
+}
+
+.dangerMutedColor {
+  color: $dangerMuted;
+}
+
+.primaryBackgroundColor {
+  background-color: $primary;
+}
+
+.secondaryBackgroundColor {
+  background-color: $secondary;
+}
+
+.lightBackgroundColor {
+  background-color: $light;
+}
+
+.darkBackgroundColor {
+  background-color: $dark;
+}
+
+.warningBackgroundColor {
+  background-color: $warning;
+}
+
+.dangerBackgroundColor {
+  background-color: $danger;
+}
+
+.primaryMutedBackgroundColor {
+  background-color: $primaryMuted;
+}
+
+.secondaryMutedBackgroundColor {
+  background-color: $secondaryMuted;
+}
+
+.lightMutedBackgroundColor {
+  background-color: $lightMuted;
+}
+
+.darkMutedBackgroundColor {
+  background-color: $darkMuted;
+}
+
+.warningMutedBackgroundColor {
+  background-color: $warningMuted;
+}
+
+.dangerMutedBackgroundColor {
+  background-color: $dangerMuted;
+}
+
+.primaryBackgroundColorDynamic {
+  background-color: $primary;
+
+  &:hover {
+    background-color: $primaryMuted;
+  }
+}
+
+.secondaryBackgroundColorDynamic {
+  background-color: $secondary;
+
+  &:hover {
+    background-color: $secondaryMuted;
+  }
+}
+
+.lightBackgroundColorDynamic {
+  background-color: $light;
+
+  &:hover {
+    background-color: $lightMuted;
+  }
+}
+
+.darkBackgroundColorDynamic {
+  background-color: $dark;
+
+  &:hover {
+    background-color: $darkMuted;
+  }
+}
+
+.warningBackgroundColorDynamic {
+  background-color: $warning;
+
+  &:hover {
+    background-color: $warningMuted;
+  }
+}
+
+.dangerBackgroundColorDynamic {
+  background-color: $danger;
+
+  &:hover {
+    background-color: $dangerMuted;
+  }
+}
+
+.primaryMutedBackgroundColorDynamic {
+  background-color: $primaryMuted;
+
+  &:hover {
+    background-color: $primary;
+  }
+}
+
+.secondaryMutedBackgroundColorDynamic {
+  background-color: $secondaryMuted;
+
+  &:hover {
+    background-color: $secondary;
+  }
+}
+
+.lightMutedBackgroundColorDynamic {
+  background-color: $lightMuted;
+
+  &:hover {
+    background-color: $light;
+  }
+}
+
+.darkMutedBackgroundColorDynamic {
+  background-color: $darkMuted;
+
+  &:hover {
+    background-color: $dark;
+  }
+}
+
+.warningMutedBackgroundColorDynamic {
+  background-color: $warningMuted;
+
+  &:hover {
+    background-color: $warning;
+  }
+}
+
+.dangerMutedBackgroundColorDynamic {
+  background-color: $dangerMuted;
+
+  &:hover {
+    background-color: $danger;
+  }
+}
+
+.primaryTextColor,
+.secondaryTextColor,
+.darkTextColor,
+.warningTextColor,
+.dangerTextColor {
+  color: $light;
+}
+
+.lightTextColor {
+  color: $dark;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.textAlignLeft {
+  text-align: left;
+}
+
+.textAlignRight {
+  text-align: right;
+}
+
+.textAlignCenter {
+  text-align: left;
+}
+
+.padding {
+  padding: $padding;
+}
+
+.paddingVertical {
+  padding: $padding 0;
+}
+
+.paddingHorizontal {
+  padding: 0 $padding;
+}
+
+.doublePadding {
+  padding: $doublePadding;
+}
+
+.doublePaddingVertical {
+  padding: $doublePadding 0;
+}
+
+.doublePaddingHorizontal {
+  padding: 0 $doublePadding;
+}
+
+.halfPadding {
+  padding: $halfPadding;
+}
+
+.halfPaddingVertical {
+  padding: $halfPadding 0;
+}
+
+.halfPaddingHorizontal {
+  padding: 0 $halfPadding;
+}
+
+.fadeInAnimation {
+  animation: fadeIn $animationDuration $animationEasingFunction forwards;
+}
+
+.fadeOutAnimation {
+  animation: fadeOut $animationDuration $animationEasingFunction forwards;
+}
+
+.headerText {
+  font-size: $headerFontSize;
+  font-weight: 700;
+}
+
+.largeText {
+  font-size: $largeFontSize;
+}
+
+.primaryBorder {
+  border: $baseBorderSize solid $primary;
+}
+
+.secondaryBorder {
+  border: $baseBorderSize solid $secondary;
+}
+
+.lightBorder {
+  border: $baseBorderSize solid $light;
+}
+
+.darkBorder {
+  border: $baseBorderSize solid $dark;
+}
+
+.warningBorder {
+  border: $baseBorderSize solid $warning;
+}
+
+.dangerBorder {
+  border: $baseBorderSize solid $danger;
+}
+
+.primarySelectedBorder {
+  border: $selectedBorderSize solid $primary;
+}
+
+.secondarySelectedBorder {
+  border: $selectedBorderSize solid $secondary;
+}
+
+.lightSelectedBorder {
+  border: $selectedBorderSize solid $light;
+}
+
+.darkSelectedBorder {
+  border: $selectedBorderSize solid $dark;
+}
+
+.warningSelectedBorder {
+  border: $selectedBorderSize solid $warning;
+}
+
+.dangerSelectedBorder {
+  border: $selectedBorderSize solid $danger;
+}
+
+.textRegular {
+  font-weight: 400;
+}
+
+.textBold {
+  font-weight: 700;
+}
+
+.textLight {
+  font-weight: 300;
+}
+
+.textItalic {
+  font-style: italic;
+}
+
+.textUnderline {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

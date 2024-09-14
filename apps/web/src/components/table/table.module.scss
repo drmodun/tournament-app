@@ -1,0 +1,22 @@
+@import "../../styles/";
+
+.table {
+  display: table;
+  border-spacing: $halfPadding / 2;
+}
+
+.table > *:last-child > *:last-child {
+  border-bottom-right-radius: $borderRadius;
+}
+
+.table > *:first-child > *:last-child {
+  border-top-right-radius: $borderRadius;
+}
+
+.table > *:first-child > *:first-child {
+  border-top-left-radius: $borderRadius;
+}
+
+.table > *:last-child > *:first-child {
+  border-bottom-left-radius: $borderRadius;
+}

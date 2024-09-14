@@ -1,0 +1,54 @@
+@import "../../styles/";
+
+.wrapper {
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: $doublePadding;
+  background-image: url("../../assets/images/background.png");
+}
+
+.content {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  opacity: 0.3;
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image2 {
+  left: 50%;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: $doublePadding;
+  padding: $doublePadding;
+  width: 100%;
+  height: 50%;
+  align-items: center;
+}
+
+.button {
+  width: 100%;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}

@@ -268,6 +268,83 @@
   animation: fadeOut $animationDuration $animationEasingFunction forwards;
 }
 
+.headerText {
+  font-size: $headerFontSize;
+  font-weight: 700;
+}
+
+.largeText {
+  font-size: $largeFontSize;
+}
+
+.primaryBorder {
+  border: $baseBorderSize solid $primary;
+}
+
+.secondaryBorder {
+  border: $baseBorderSize solid $secondary;
+}
+
+.lightBorder {
+  border: $baseBorderSize solid $light;
+}
+
+.darkBorder {
+  border: $baseBorderSize solid $dark;
+}
+
+.warningBorder {
+  border: $baseBorderSize solid $warning;
+}
+
+.dangerBorder {
+  border: $baseBorderSize solid $danger;
+}
+
+.primarySelectedBorder {
+  border: $selectedBorderSize solid $primary;
+}
+
+.secondarySelectedBorder {
+  border: $selectedBorderSize solid $secondary;
+}
+
+.lightSelectedBorder {
+  border: $selectedBorderSize solid $light;
+}
+
+.darkSelectedBorder {
+  border: $selectedBorderSize solid $dark;
+}
+
+.warningSelectedBorder {
+  border: $selectedBorderSize solid $warning;
+}
+
+.dangerSelectedBorder {
+  border: $selectedBorderSize solid $danger;
+}
+
+.textRegular {
+  font-weight: 400;
+}
+
+.textBold {
+  font-weight: 700;
+}
+
+.textLight {
+  font-weight: 300;
+}
+
+.textItalic {
+  font-style: italic;
+}
+
+.textUnderline {
+  text-decoration: underline;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -54,15 +54,3 @@
   font-size: $fontSize;
   text-align: center;
 }
-
-.lightBorder {
-  border: $baseBorderSize solid $dark;
-}
-
-.primaryBorder,
-.secondaryBorder,
-.darkBorder,
-.warningBorder,
-.dangerBorder {
-  border: $baseBorderSize solid $light;
-}

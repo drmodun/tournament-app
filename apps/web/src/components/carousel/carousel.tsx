@@ -39,7 +39,10 @@ export default function Carousel({
       <img
         src={data[index]?.image}
         alt={data[index]?.description}
-        className={clsx(styles.image, styles[`${variant}Border`])}
+        className={clsx(
+          styles.image,
+          globals[`${variant == "light" ? "dark" : "light"}Border`],
+        )}
         title={data[index]?.description}
       />
       <p

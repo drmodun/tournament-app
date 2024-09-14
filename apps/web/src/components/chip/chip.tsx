@@ -36,7 +36,7 @@ export default function Chip({
         styles.chip,
         isSelected &&
           styles[`${activeBorderVariant ?? textColor(variant)}SelectedBorder`],
-        globals[`${textColor(variant)}Color`],
+
         isSelected
           ? globals[`${variant}BackgroundColor`]
           : globals[`${variant}MutedBackgroundColorDynamic`],
@@ -44,7 +44,9 @@ export default function Chip({
       style={style}
       onClick={handleClick}
     >
-      <p className={styles.label}>{label}</p>
+      <p className={clsx(styles.label, globals[`${textColor(variant)}Color`])}>
+        {label}
+      </p>
       {children}
     </button>
   );

@@ -16,6 +16,9 @@ import ProgressWheel from "components/progressWheel";
 import Tooltip from "components/tooltip";
 import Dialog from "components/dialog";
 import Navbar from "components/navbar";
+import TableData from "components/tableData";
+import TableRow from "components/tableRow";
+import Table from "components/table";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -445,6 +448,167 @@ export default function Web() {
           }}
         />
       </Dialog>
+      <Table variant="light" isNumbered={true}>
+        <TableRow>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>testdsadsadasdsa</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+      </Table>
+
+      <Table variant="dark" isNumbered={true}>
+        <TableRow>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>testdsadsadasdsa</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+      </Table>
+
+      <Table variant="primary" isNumbered={true}>
+        <TableRow>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>testdsadsadasdsa</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+      </Table>
+
+      <Table variant="secondary" isNumbered={true}>
+        <TableRow>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>testdsadsadasdsa</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+      </Table>
+
+      <Table variant="warning" isNumbered={true}>
+        <TableRow>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>testdsadsadasdsa</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+      </Table>
+
+      <Table variant="danger" isNumbered={true}>
+        <TableRow>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+          <TableData isHeader={true}>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>testdsadsadasdsa</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+          <TableData>test</TableData>
+        </TableRow>
+      </Table>
 
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>

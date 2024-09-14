@@ -41,8 +41,8 @@ export default function Checkbox({
           className={clsx(
             styles.radioButton,
             isSelected && !disabled
-              ? styles[`${variant}SelectedBorder`]
-              : styles[`${variant}DeselectedBorder`],
+              ? globals[`${variant}SelectedBorder`]
+              : globals[`${variant}Border`],
             disabled && styles.disabled,
           )}
           style={style}

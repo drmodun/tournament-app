@@ -27,54 +27,6 @@
   }
 }
 
-.primarySelectedBorder {
-  border: $selectedBorderSize solid $primary;
-}
-
-.secondarySelectedBorder {
-  border: $selectedBorderSize solid $secondary;
-}
-
-.lightSelectedBorder {
-  border: $selectedBorderSize solid $light;
-}
-
-.darkSelectedBorder {
-  border: $selectedBorderSize solid $dark;
-}
-
-.warningSelectedBorder {
-  border: $selectedBorderSize solid $warning;
-}
-
-.dangerSelectedBorder {
-  border: $selectedBorderSize solid $danger;
-}
-
-.primaryDeselectedBorder {
-  border: $baseBorderSize solid $primary;
-}
-
-.secondaryDeselectedBorder {
-  border: $baseBorderSize solid $secondary;
-}
-
-.lightDeselectedBorder {
-  border: $baseBorderSize solid $light;
-}
-
-.darkDeselectedBorder {
-  border: $baseBorderSize solid $dark;
-}
-
-.warningDeselectedBorder {
-  border: $baseBorderSize solid $warning;
-}
-
-.dangerDeselectedBorder {
-  border: $baseBorderSize solid $danger;
-}
-
 .disabled {
   background-color: $lightMuted;
   border: $baseBorderSize solid $disabled;

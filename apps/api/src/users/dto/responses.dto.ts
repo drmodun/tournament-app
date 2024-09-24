@@ -1,4 +1,4 @@
-import { ApiExtraModels, ApiResponseProperty } from '@nestjs/swagger';
+import { ApiResponseProperty } from '@nestjs/swagger';
 import {
   IMiniUserResponse,
   IMiniUserResponseWithProfilePicture,

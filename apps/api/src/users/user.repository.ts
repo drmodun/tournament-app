@@ -1,6 +1,5 @@
 import {
   BaseUserUpdateRequest,
-  UserQueryType,
   UserResponseEnumType,
   UserResponsesEnum,
   UserSortingEnum,

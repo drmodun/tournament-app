@@ -2,7 +2,6 @@ import { and, asc, desc, sql, SQL, WithSubquery } from 'drizzle-orm';
 import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
 import { db } from '../../db/db';
 import { BaseQuery } from '../query/baseQuery';
-import { UserQuery } from 'src/users/dto/requests.dto';
 
 export abstract class BaseDrizzleRepository<
   TTable extends PgTable<TableConfig>,

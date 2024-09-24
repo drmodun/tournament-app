@@ -3,7 +3,6 @@ import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
 import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
-import { BaseQueryType } from '@tournament-app/types';
 import { BaseQuery } from '../query/baseQuery';
 
 export interface TableWithId extends PgTable<TableConfig> {

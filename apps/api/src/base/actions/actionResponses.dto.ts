@@ -1,4 +1,4 @@
-import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
+import { ApiResponseProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
 
 export class ActionResponsePrimary {
@@ -8,5 +8,5 @@ export class ActionResponsePrimary {
 }
 
 export abstract class ActionResponseComposite {
-  [x: string]: Number;
+  [x: string]: number;
 }

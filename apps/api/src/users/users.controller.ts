@@ -13,12 +13,9 @@ import { UsersService } from './users.service';
 import { QueryMetadata, UserResponseEnumType } from '@tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
 import {
-  ApiAcceptedResponse,
-  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiExtraModels,
   ApiOkResponse,
-  ApiResponse,
   ApiTags,
   refs,
 } from '@nestjs/swagger';
@@ -37,7 +34,6 @@ import {
   MiniUserResponseWithProfilePicture,
   UserResponse,
 } from './dto/responses.dto';
-import { profile } from 'console';
 
 @ApiTags('users')
 @Controller('users')

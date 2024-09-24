@@ -1,7 +1,8 @@
 import { and, asc, desc, sql, SQL, WithSubquery } from 'drizzle-orm';
 import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
-import { BaseQuery } from '@tournament-app/types';
 import { db } from '../../db/db';
+import { BaseQuery } from '../query/baseQuery';
+import { UserQuery } from 'src/users/dto/requests.dto';
 
 export abstract class BaseDrizzleRepository<
   TTable extends PgTable<TableConfig>,
@@ -15,7 +16,7 @@ export abstract class BaseDrizzleRepository<
     typeEnum: string,
   );
 
-  abstract getValidWhereClause(query: Record<string, unknown>): SQL[];
+  abstract getValidWhereClause(query: BaseQuery): SQL[];
 
   getCount(): WithSubquery<'count', { value: unknown }> {
     return db.$with('count').as(
@@ -41,37 +42,35 @@ export abstract class BaseDrizzleRepository<
           typeof selectedType
         >);
 
-    const filterQuery = query.query
-      ? baseQuery
-          .where(and(...this.getValidWhereClause(query.query)))
-          .$dynamic()
-      : baseQuery;
+    const filterQuery = baseQuery
+      .where(and(...this.getValidWhereClause(query)))
+      .$dynamic();
 
-    const sortedQuery = query.sort
-      ? filterQuery
-          .orderBy(
-            query.sort.order === 'asc'
-              ? asc(this.sortRecord[query.sort.field])
-              : desc(this.sortRecord[query.sort.field]),
-          )
-          .$dynamic()
-      : filterQuery;
+    const sortedQuery =
+      query.field && query.order
+        ? filterQuery
+            .orderBy(
+              query.order === 'asc'
+                ? asc(this.sortRecord[query.field])
+                : desc(this.sortRecord[query.field]),
+            )
+            .$dynamic()
+        : filterQuery;
 
-    const paginatedQuery = query.pagination
-      ? sortedQuery
-          .limit(query.pagination.pageSize)
-          .offset(
-            (query.pagination.page - 1) * (query.pagination.pageSize || 12),
-          )
-          .$dynamic()
-      : sortedQuery.limit(12).offset(0).$dynamic();
+    const paginatedQuery =
+      query.page && query.pageSize
+        ? sortedQuery
+            .limit(query.pageSize)
+            .offset((query.page - 1) * (query.pageSize || 12))
+            .$dynamic()
+        : sortedQuery.limit(12).offset(0).$dynamic();
 
-    const fullQuery = this.conditionallyJoin(
+    const Query = this.conditionallyJoin(
       paginatedQuery,
       query.responseType || 'base',
     );
 
-    return fullQuery;
+    return Query;
   }
 
   // TODO: think about making a child class or refactoring for composite keys, maybe just make those repositories override this one

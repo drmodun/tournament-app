@@ -1,9 +1,10 @@
 import { ColumnBaseConfig, eq, InferInsertModel, sql } from 'drizzle-orm';
 import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
-import { BaseQuery } from '@tournament-app/types';
 import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
+import { BaseQueryType } from '@tournament-app/types';
+import { BaseQuery } from '../query/baseQuery';
 
 export interface TableWithId extends PgTable<TableConfig> {
   id: PgColumn<ColumnBaseConfig<'number', 'PgSerial'>>;
@@ -28,9 +29,9 @@ export abstract class PrimaryRepository<
       .where(eq(this.model.id, id))
       .$dynamic() as PgSelect<string, typeof selectedType>;
 
-    const fullQuery = this.conditionallyJoin(baseQuery, responseType);
+    const Query = this.conditionallyJoin(baseQuery, responseType);
 
-    return fullQuery;
+    return Query;
   }
 
   createEntity(createRequest: TCreateRequest) {

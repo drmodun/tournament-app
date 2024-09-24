@@ -1,7 +1,6 @@
 import {
   BaseUserUpdateRequest,
-  FullUserQuery,
-  UserQuery,
+  UserQueryType,
   UserResponseEnumType,
   UserResponsesEnum,
   UserSortingEnum,
@@ -19,11 +18,12 @@ import { db } from '../db/db';
 import { and, count, countDistinct, eq, SQL, sql } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
+import { UserQuery } from './dto/requests.dto';
 
 @Injectable()
 export class UserDrizzleRepository extends PrimaryRepository<
   typeof user,
-  FullUserQuery,
+  UserQuery,
   BaseUserUpdateRequest
 > {
   constructor() {
@@ -174,8 +174,8 @@ export class UserDrizzleRepository extends PrimaryRepository<
       )
       .$dynamic() as PgSelect<'user', typeof selectedType>;
 
-    const fullQuery = this.conditionallyJoin(baseQuery, responseType);
+    const Query = this.conditionallyJoin(baseQuery, responseType);
 
-    return fullQuery;
+    return Query;
   }
 }

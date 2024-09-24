@@ -9,11 +9,8 @@ import { AppModule } from './../src/app.module';
 import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
-import {
-  CreateUserRequest,
-  Links,
-  UpdateUserInfo,
-} from '@tournament-app/types';
+import { Links } from '@tournament-app/types';
+import { CreateUserRequest, UpdateUserInfo } from 'src/users/dto/requests.dto';
 
 const checkLinksOnDefault = (links: Links, baseLink: string) => {
   expect(links.first).toEqual(`${baseLink}&page=1`);

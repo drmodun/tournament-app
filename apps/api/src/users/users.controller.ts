@@ -10,16 +10,20 @@ import {
   Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { QueryMetadata, UserResponseEnumType } from '@tournament-app/types';
+import { MetadataMaker } from '../base/static/makeMetadata';
+import {
+  ApiAcceptedResponse,
+  ApiCreatedResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CreateUserRequest,
-  FullUserQuery,
-  QueryMetadata,
   UpdateUserInfo,
-  UserResponseEnumType,
-} from '@tournament-app/types';
-import { MetadataMaker } from '../base/static/makeMetadata';
-import { FullQuery } from '../base/decorators/fullQuery.decorator';
-import { ApiTags } from '@nestjs/swagger';
+  UserQuery,
+} from './dto/requests.dto';
+import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -27,12 +31,13 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiCreatedResponse({ type: ActionResponsePrimary })
   async create(@Body() createUserDto: CreateUserRequest) {
     return await this.usersService.create(createUserDto);
   }
 
   @Get()
-  async findAll(@FullQuery() query: FullUserQuery, @Req() req: Request) {
+  async findAll(@Query() query: UserQuery, @Req() req: Request) {
     console.log(req.url, query);
     const results = await this.usersService.findAll(query);
 

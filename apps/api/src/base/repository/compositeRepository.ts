@@ -1,9 +1,9 @@
 import { and, eq, InferInsertModel } from 'drizzle-orm';
 import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
-import { BaseQuery } from '@tournament-app/types';
 import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
+import { BaseQuery } from '../query/baseQuery';
 
 // TODO: try to make this nicer
 
@@ -37,9 +37,9 @@ export abstract class CompositeRepository<
       )
       .$dynamic() as PgSelect<string, typeof selectedType>;
 
-    const fullQuery = this.conditionallyJoin(baseQuery, responseType);
+    const Query = this.conditionallyJoin(baseQuery, responseType);
 
-    return fullQuery;
+    return Query;
   }
 
   createEntity(createRequest: TCreateRequest) {

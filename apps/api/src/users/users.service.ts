@@ -5,14 +5,16 @@ import {
 } from '@nestjs/common';
 import {
   BaseUserResponseType,
-  CreateUserRequest,
-  FullUserQuery,
-  UpdateUserInfo,
   UserResponseEnumType,
   UserResponsesEnum,
 } from '@tournament-app/types';
 import { UserDrizzleRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
+import {
+  CreateUserRequest,
+  UpdateUserInfo,
+  UserQuery,
+} from './dto/requests.dto';
 
 @Injectable()
 export class UsersService {
@@ -31,9 +33,7 @@ export class UsersService {
     return action[0];
   }
 
-  async findAll<TResponseType extends BaseUserResponseType>(
-    query: FullUserQuery,
-  ) {
+  async findAll<TResponseType extends BaseUserResponseType>(query: UserQuery) {
     const queryFunction = this.repository.getQuery(query);
     const results = await queryFunction;
 

@@ -1,22 +1,14 @@
+import { BaseQuery } from 'src/base/query/baseQuery';
 import { MetadataMaker } from '../makeMetadata';
-import { BaseQuery } from '@tournament-app/types';
 
 describe('MetadataMaker', () => {
   describe('makeMetadataFromQuery', () => {
     it('should return the correct metadata', () => {
       const query: BaseQuery = {
-        query: {
-          username: 'john_doe',
-          country: 'USA',
-        },
-        sort: {
-          field: 'username',
-          order: 'asc',
-        },
-        pagination: {
-          page: 1,
-          pageSize: 10,
-        },
+        field: 'username',
+        order: 'asc',
+        page: 1,
+        pageSize: 10,
       };
 
       const results = [
@@ -28,7 +20,7 @@ describe('MetadataMaker', () => {
 
       const metadata = MetadataMaker.makeMetadataFromQuery(query, results, url);
 
-      expect(metadata).toEqual({
+      expect(metadata).toStrictEqual({
         pagination: {
           page: 1,
           pageSize: 10,
@@ -39,8 +31,10 @@ describe('MetadataMaker', () => {
           next: 'https://example.com/api/users?page=2',
         },
         query: {
-          username: 'john_doe',
-          country: 'USA',
+          field: 'username',
+          order: 'asc',
+          page: 1,
+          pageSize: 10,
         },
       });
     });
@@ -50,18 +44,10 @@ describe('MetadataMaker', () => {
     it('should return the correct links', () => {
       const url = 'https://example.com/api/users';
       const query: BaseQuery = {
-        query: {
-          username: 'john_doe',
-          country: 'USA',
-        },
-        sort: {
-          field: 'username',
-          order: 'asc',
-        },
-        pagination: {
-          page: 1,
-          pageSize: 10,
-        },
+        field: 'username',
+        order: 'asc',
+        page: 1,
+        pageSize: 10,
       };
 
       const links = MetadataMaker.makeLinks(url, query);
@@ -76,18 +62,10 @@ describe('MetadataMaker', () => {
     it('should handle URLs without page query parameter', () => {
       const url = 'https://example.com/api/users';
       const query: BaseQuery = {
-        query: {
-          username: 'john_doe',
-          country: 'USA',
-        },
-        sort: {
-          field: 'username',
-          order: 'asc',
-        },
-        pagination: {
-          page: undefined,
-          pageSize: 10,
-        },
+        field: 'username',
+        order: 'asc',
+        page: undefined,
+        pageSize: 10,
       };
 
       const links = MetadataMaker.makeLinks(url, query);
@@ -103,18 +81,10 @@ describe('MetadataMaker', () => {
   describe('makePagination', () => {
     it('should return the correct pagination', () => {
       const query: BaseQuery = {
-        pagination: {
-          page: 1,
-          pageSize: 10,
-        },
-        query: {
-          username: 'john_doe',
-          country: 'USA',
-        },
-        sort: {
-          field: 'username',
-          order: 'asc',
-        },
+        page: 1,
+        pageSize: 10,
+        field: 'username',
+        order: 'asc',
         returnFullCount: true,
       };
 
@@ -136,18 +106,10 @@ describe('MetadataMaker', () => {
 
     it('should return the correct pagination when returnFullCount is false', () => {
       const query: BaseQuery = {
-        pagination: {
-          page: 1,
-          pageSize: 10,
-        },
-        query: {
-          username: 'john_doe',
-          country: 'USA',
-        },
-        sort: {
-          field: 'username',
-          order: 'asc',
-        },
+        page: 1,
+        pageSize: 10,
+        field: 'username',
+        order: 'asc',
         returnFullCount: false,
       };
 

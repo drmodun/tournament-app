@@ -2,8 +2,8 @@ import { db } from './db';
 import * as tables from './schema';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { faker } from '@faker-js/faker';
-import { CreateUserRequest } from '@tournament-app/types';
 import { sql } from 'drizzle-orm';
+import { CreateUserRequest } from 'src/users/dto/requests.dto';
 
 async function teardown() {
   console.log('Teardown database...');

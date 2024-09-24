@@ -1,4 +1,5 @@
-import { BaseQuery, Links, Pagination } from '@tournament-app/types';
+import { Links, Pagination } from '@tournament-app/types';
+import { BaseQuery } from '../query/baseQuery';
 
 export class MetadataMaker {
   static makeMetadataFromQuery<TResults, TQuery extends BaseQuery>(
@@ -9,7 +10,7 @@ export class MetadataMaker {
     const metadata = {
       pagination: this.makePagination(query, results),
       links: this.makeLinks(url, query),
-      query: query?.query || {},
+      query,
     };
 
     return metadata;
@@ -25,11 +26,11 @@ export class MetadataMaker {
         ? url.replace(/page=\d+/, 'page=1')
         : `${url}${defaultSign}page=1`,
       prev: url.includes('pagination')
-        ? url.replace(/page=\d+/, `page=${query?.pagination?.page - 1}`)
-        : `${url}${defaultSign}page=${(query?.pagination?.page || 1) - 1}`,
+        ? url.replace(/page=\d+/, `page=${query?.page - 1}`)
+        : `${url}${defaultSign}page=${(query?.page || 1) - 1}`,
       next: url.includes('pagination')
-        ? url.replace(/page=\d+/, `page=${query?.pagination?.page + 1}`)
-        : `${url}${defaultSign}page=${(query?.pagination?.page || 1) + 1}`,
+        ? url.replace(/page=\d+/, `page=${query?.page + 1}`)
+        : `${url}${defaultSign}page=${(query?.page || 1) + 1}`,
     }; // TODO: potentially check wether next link exists
 
     return links;
@@ -40,8 +41,8 @@ export class MetadataMaker {
     results: TResult[],
   ) {
     const pagination: Pagination = {
-      page: query?.pagination?.page || 1,
-      pageSize: query?.pagination?.pageSize || 12,
+      page: query?.page || 1,
+      pageSize: query?.pageSize || 12,
       ...(query?.returnFullCount && { total: results['value'] || 0 }),
     };
 

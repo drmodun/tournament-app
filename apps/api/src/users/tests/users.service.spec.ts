@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
 import { UserDrizzleRepository } from '../user.repository';
-import { CreateUserRequest, UpdateUserInfo } from '@tournament-app/types';
 import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { PostgresError } from 'postgres';
+import { CreateUserRequest, UpdateUserInfo } from '../dto/requests.dto';
 
 describe('UsersService', () => {
   let service: UsersService;

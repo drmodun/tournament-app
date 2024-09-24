@@ -14,9 +14,13 @@ import { QueryMetadata, UserResponseEnumType } from '@tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
 import {
   ApiAcceptedResponse,
+  ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiExtraModels,
+  ApiOkResponse,
   ApiResponse,
   ApiTags,
+  refs,
 } from '@nestjs/swagger';
 import {
   CreateUserRequest,
@@ -24,12 +28,30 @@ import {
   UserQuery,
 } from './dto/requests.dto';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
+import {
+  AdminUserResponse,
+  defaultExample,
+  ExtendedUserResponse,
+  MiniUserResponse,
+  MiniUserResponseWithCountry,
+  MiniUserResponseWithProfilePicture,
+  UserResponse,
+} from './dto/responses.dto';
+import { profile } from 'console';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiExtraModels(
+    MiniUserResponse,
+    MiniUserResponseWithProfilePicture,
+    MiniUserResponseWithCountry,
+    UserResponse,
+    ExtendedUserResponse,
+    AdminUserResponse,
+  )
   @Post()
   @ApiCreatedResponse({ type: ActionResponsePrimary })
   async create(@Body() createUserDto: CreateUserRequest) {
@@ -54,6 +76,19 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiOkResponse({
+    schema: {
+      anyOf: refs(
+        MiniUserResponse,
+        UserResponse,
+        ExtendedUserResponse,
+        AdminUserResponse,
+        MiniUserResponseWithCountry,
+        MiniUserResponseWithProfilePicture,
+      ),
+    },
+    example: defaultExample,
+  })
   async findOne(
     @Param('id') id: number,
     @Query('responseType') responseType: UserResponseEnumType,

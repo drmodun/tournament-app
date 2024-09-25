@@ -1,6 +1,10 @@
-import { CreateUserRequest, UpdateUserInfo } from '@tournament-app/types';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
+import {
+  CreateUserRequest,
+  UpdateUserInfo,
+  UserQuery,
+} from '../dto/requests.dto';
 
 describe('UserRequestsDtos', () => {
   it('should fail validation of empty CreateUserRequest object', async () => {
@@ -77,6 +81,48 @@ describe('UserRequestsDtos', () => {
 
     const updateUserRequest = plainToInstance(UpdateUserInfo, body);
     const errors = await validate(updateUserRequest);
+    expect(errors).toStrictEqual([]);
+  });
+
+  it('should pass validation of empty UserQuery object', async () => {
+    const body = {};
+    const userQueryRequest = plainToInstance(UserQuery, body);
+    const errors = await validate(userQueryRequest);
+    expect(errors).toStrictEqual([]);
+  });
+
+  it('should fail validation of invalid UserQuery object', async () => {
+    const body = {
+      username: 1,
+      country: 2,
+      email: '',
+      location: 3,
+      name: 4,
+    };
+
+    const userQueryRequest = plainToInstance(UserQuery, body);
+    const errors = await validate(userQueryRequest);
+
+    expect(errors.map((x) => x.property)).toStrictEqual([
+      'name',
+      'username',
+      'email',
+      'country',
+      'location',
+    ]);
+  });
+
+  it('should pass validation of valid UserQuery object', async () => {
+    const body = {
+      username: 'john_doe',
+      country: 'USA',
+      email: 'john.doe@gmail.com',
+      location: 'New York',
+      name: 'John Doe',
+    };
+
+    const userQueryRequest = plainToInstance(UserQuery, body);
+    const errors = await validate(userQueryRequest);
     expect(errors).toStrictEqual([]);
   });
 });

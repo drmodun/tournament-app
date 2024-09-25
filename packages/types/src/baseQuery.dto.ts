@@ -12,15 +12,15 @@ export interface Links {
 
 export type QueryType = Record<string, number | string | Date | boolean>;
 
-export interface QueryMetadata {
+export interface IQueryMetadata {
   pagination: Pagination;
   links?: Links;
-  query?: QueryType;
+  query?: Partial<BaseQueryType>;
 }
 
-export interface BaseQueryResponse<Entity> {
+export interface IBaseQueryResponse<Entity> {
   results: Entity[];
-  metadata: QueryMetadata;
+  metadata: IQueryMetadata;
 }
 
 export interface BaseSortRequest {
@@ -33,13 +33,18 @@ export interface BasePaginationRequest {
   pageSize: number;
 }
 
-export abstract class BaseQuery<TResponseType extends string = string> {
-  sort: BaseSortRequest;
-  pagination: BasePaginationRequest;
-  returnFullCount?: boolean = false;
-  responseType?: TResponseType;
-
-  abstract query: QueryType;
+export interface FullCountRequest {
+  returnFullCount: boolean;
 }
+
+export interface ResponseTypeRequest<TResponseType extends string> {
+  responseType: TResponseType;
+}
+
+export type BaseQueryType<TResponseType extends string = string> =
+  BaseSortRequest &
+    FullCountRequest &
+    ResponseTypeRequest<TResponseType> &
+    BasePaginationRequest;
 
 // Possibly validate these with class validator later

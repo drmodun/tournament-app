@@ -1,11 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserDrizzleRepository } from '../user.repository';
-import {
-  CreateUserRequest,
-  FullUserQuery,
-  UserResponsesEnum,
-  UserSortingEnum,
-} from '@tournament-app/types';
+import { UserResponsesEnum, UserSortingEnum } from '@tournament-app/types';
+import { CreateUserRequest, UserQuery } from '../dto/requests.dto';
 
 describe('UserDrizzleRepository', () => {
   let repository: UserDrizzleRepository;
@@ -24,20 +20,14 @@ describe('UserDrizzleRepository', () => {
 
   describe('getQuery', () => {
     it('should return a valid query with base response type', () => {
-      const query: FullUserQuery = {
+      const query: UserQuery = {
         responseType: UserResponsesEnum.BASE,
-        query: {
-          username: 'john_doe',
-          country: 'USA',
-        },
-        sort: {
-          field: UserSortingEnum.USERNAME,
-          order: 'asc',
-        },
-        pagination: {
-          page: 1,
-          pageSize: 10,
-        },
+        username: 'john_doe',
+        country: 'USA',
+        field: UserSortingEnum.USERNAME,
+        order: 'asc',
+        page: 1,
+        pageSize: 10,
       };
 
       const result = repository.getQuery(query);
@@ -66,20 +56,14 @@ describe('UserDrizzleRepository', () => {
     });
 
     it('should return a valid query with extended response type', () => {
-      const query: FullUserQuery = {
+      const query: UserQuery = {
         responseType: UserResponsesEnum.EXTENDED,
-        query: {
-          name: 'John Doe',
-          location: 'New York',
-        },
-        sort: {
-          field: UserSortingEnum.LEVEL,
-          order: 'desc',
-        },
-        pagination: {
-          page: 2,
-          pageSize: 20,
-        },
+        name: 'John Doe',
+        location: 'New York',
+        field: UserSortingEnum.LEVEL,
+        order: 'desc',
+        page: 2,
+        pageSize: 20,
       };
 
       const result = repository.getQuery(query);

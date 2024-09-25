@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { PostgresError } from 'postgres';
 
-interface TranslatedError {
+export interface TranslatedError {
   message: string;
   statusCode: number;
 }

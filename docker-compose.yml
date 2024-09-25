@@ -19,6 +19,17 @@ services:
     ports:
       - 5500:5500
 
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=tournament,tournament-test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   docs:
     container_name: docs
     build:
@@ -43,3 +54,6 @@ networks:
   app_network:
     external: true
 #Possibly use later
+
+volumes:
+  db_data:

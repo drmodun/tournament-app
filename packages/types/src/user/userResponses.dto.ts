@@ -1,20 +1,20 @@
 import { subscriptionEnum, userRoleEnum } from "src/enums";
 
-export interface MiniUserResponse {
+export interface IMiniUserResponse {
   id: number;
   username: string;
 }
 
-export interface MiniUserResponseWithProfilePicture extends MiniUserResponse {
+export interface IMiniUserResponseWithProfilePicture extends IMiniUserResponse {
   profilePicture: string;
 }
 
-export interface MiniUserResponseWithCountry
-  extends MiniUserResponseWithProfilePicture {
+export interface IMiniUserResponseWithCountry
+  extends IMiniUserResponseWithProfilePicture {
   country: string;
 }
 
-export interface UserResponse extends MiniUserResponseWithCountry {
+export interface IUserResponse extends IMiniUserResponseWithCountry {
   email: string;
   bio: string;
   level: number;
@@ -23,13 +23,13 @@ export interface UserResponse extends MiniUserResponseWithCountry {
   followers: number;
 }
 
-export interface ExtendedUserResponse extends UserResponse {
+export interface IExtendedUserResponse extends IUserResponse {
   location: string;
   following: number;
   createdAt: Date;
 }
 
-export interface AdminUserResponse extends ExtendedUserResponse {
+export interface IAdminUserResponse extends IExtendedUserResponse {
   subscription: subscriptionEnum;
   password: string;
   role: userRoleEnum;
@@ -37,12 +37,12 @@ export interface AdminUserResponse extends ExtendedUserResponse {
 }
 
 export type BaseUserResponseType =
-  | MiniUserResponse
-  | MiniUserResponseWithProfilePicture
-  | MiniUserResponseWithCountry
-  | UserResponse
-  | ExtendedUserResponse
-  | AdminUserResponse;
+  | IMiniUserResponse
+  | IMiniUserResponseWithProfilePicture
+  | IMiniUserResponseWithCountry
+  | IUserResponse
+  | IExtendedUserResponse
+  | IAdminUserResponse;
 
 export enum UserResponsesEnum {
   MINI = "mini",

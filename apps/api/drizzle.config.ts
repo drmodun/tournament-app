@@ -1,14 +1,14 @@
-import 'dotenv/config';
-
 import { defineConfig } from 'drizzle-kit';
-import { env } from 'process';
+
+console.log(process.env.DATABASE_URL);
+
 export default defineConfig({
   dialect: 'postgresql',
-  schema: './schema.ts',
-  out: './drizzle',
+  schema: './src/db/schema.ts',
+  out: './src/db/drizzle',
   dbCredentials: {
     url:
-      env.DATABASE_URL ||
+      process.env.DATABASE_URL ||
       'postgres://postgres:postgres@localhost:5432/tournament', //default
   },
 });

@@ -6,21 +6,24 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "npx dotenv-cli -e ../../.env -c -- nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start": "npx dotenv-cli -c nest start",
+    "dev": "npx dotenv-cli -e ../../.env -c -- nest start --watch",
+    "start:debug": "npx dotenv-cli -c nest start --debug --watch",
+    "start:prod": "npx dotenv-cli -c node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "generate": "cd ./src/db && drizzle-kit generate && cd ../..",
-    "migrate": "cd ./src/db && drizzle-kit migrate && cd ../..",
-    "studio": "cd ./src/db && drizzle-kit studio && cd ../..",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test": "dotenv -e ../../.env.test -c -- jest",
+    "generate": "dotenv -e ../../.env -c -- drizzle-kit generate && cd ../..",
+    "migrate": "dotenv -c -e ../../.env -- drizzle-kit migrate ",
+    "migrate:test": "dotenv -c -e ../../.env.test -- drizzle-kit migrate",
+    "studio": "drizzle-kit studio",
+    "test:watch": "dotenv -e ../../.env.test -c -- jest --watch",
+    "test:cov": "dotenv -e ../../.env.test -c -- jest --coverage",
+    "test:debug": "dotenv -e ../../.env.test -c -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "seed": "dotenv -e ../../.env -c -- ts-node ./src/db/seed.ts",
+    "seed:test": "dotenv -e ../../.env.test -c -- ts-node ./src/db/seed.ts",
+    "test:e2e": "yarn migrate:test && yarn seed:test && dotenv -e ../../.env.test -c -- jest --config ./test/jest-e2e.json --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -30,10 +33,10 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.4.0",
     "@tournament-app/types": "*",
-    "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
     "drizzle-orm": "^0.31.2",
     "passport-anonymous": "^1.0.1",
     "postgres": "^3.4.4",
@@ -41,6 +44,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -50,6 +54,7 @@
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "bcrypt": "^5.1.1",
     "drizzle-kit": "^0.22.7",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
@@ -75,6 +80,7 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "moduleDirectories": ["<rootDir>/../", "node_modules"],
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],

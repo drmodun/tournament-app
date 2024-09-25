@@ -2,11 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { UserDrizzleRepository } from '../user.repository';
-import {
-  CreateUserRequest,
-  FullUserQuery,
-  UserResponsesEnum,
-} from '@tournament-app/types';
+import { UserResponsesEnum } from '@tournament-app/types';
+import { CreateUserRequest, UserQuery } from '../dto/requests.dto';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -36,19 +33,13 @@ describe('UsersController', () => {
         ];
       });
 
-    const request: FullUserQuery = {
-      pagination: {
-        page: 1,
-        pageSize: 10,
-      },
-      query: {
-        username: 'john_doe',
-        country: 'USA',
-      },
-      sort: {
-        field: 'username',
-        order: 'asc',
-      },
+    const request: UserQuery = {
+      page: 1,
+      pageSize: 10,
+      username: 'john_doe',
+      country: 'USA',
+      field: 'username',
+      order: 'asc',
       responseType: UserResponsesEnum.MINI,
     };
 
@@ -71,10 +62,7 @@ describe('UsersController', () => {
         prev: 'https://example.com/api/users?page=0',
         next: 'https://example.com/api/users?page=2',
       },
-      query: {
-        username: 'john_doe',
-        country: 'USA',
-      },
+      query: request,
     });
   });
 

@@ -195,11 +195,13 @@ export const tournament = pgTable('tournament', {
       onDelete: 'cascade',
     })
     .notNull(),
-  subcategory: integer('subcategory_id').references(() => subcategory.id),
+  subcategory: integer('subcategory_id').references(() => subcategory.id), // Maybe change this to one-to-many
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
+
+//TODO: add rewards
 
 export const organizer = pgTable(
   'organizer',

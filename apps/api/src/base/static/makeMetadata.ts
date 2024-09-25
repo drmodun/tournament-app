@@ -1,4 +1,5 @@
-import { BaseQuery, Links, Pagination } from '@tournament-app/types';
+import { Links, Pagination } from '@tournament-app/types';
+import { BaseQuery } from '../query/baseQuery';
 
 export class MetadataMaker {
   static makeMetadataFromQuery<TResults, TQuery extends BaseQuery>(
@@ -9,23 +10,27 @@ export class MetadataMaker {
     const metadata = {
       pagination: this.makePagination(query, results),
       links: this.makeLinks(url, query),
-      query: query.query,
+      query,
     };
 
     return metadata;
   }
 
+  //TODO: fix this to produce valid queries
+
   static makeLinks<TQuery extends BaseQuery>(url: string, query: TQuery) {
+    const defaultSign = url.includes('?') ? '&' : '?';
+
     const links: Links = {
-      first: url.includes('page')
+      first: url.includes('pagination')
         ? url.replace(/page=\d+/, 'page=1')
-        : `${url}?page=1`,
-      prev: url.includes('page')
-        ? url.replace(/page=\d+/, `page=${query.pagination.page - 1}`)
-        : `${url}?page=${(query.pagination.page || 1) - 1}`,
-      next: url.includes('page')
-        ? url.replace(/page=\d+/, `page=${query.pagination.page + 1}`)
-        : `${url}?page=${(query.pagination.page || 1) + 1}`,
+        : `${url}${defaultSign}page=1`,
+      prev: url.includes('pagination')
+        ? url.replace(/page=\d+/, `page=${query?.page - 1}`)
+        : `${url}${defaultSign}page=${(query?.page || 1) - 1}`,
+      next: url.includes('pagination')
+        ? url.replace(/page=\d+/, `page=${query?.page + 1}`)
+        : `${url}${defaultSign}page=${(query?.page || 1) + 1}`,
     }; // TODO: potentially check wether next link exists
 
     return links;
@@ -36,9 +41,9 @@ export class MetadataMaker {
     results: TResult[],
   ) {
     const pagination: Pagination = {
-      page: query.pagination.page,
-      pageSize: query.pagination.pageSize,
-      ...(query.returnFullCount && { total: results['value'] || 0 }),
+      page: query?.page || 1,
+      pageSize: query?.pageSize || 12,
+      ...(query?.returnFullCount && { total: results['value'] || 0 }),
     };
 
     return pagination;

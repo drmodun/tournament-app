@@ -1,8 +1,5 @@
-import { BaseDrizzleRepository } from '../base/drizzleManager';
 import {
-  CreateUserRequest,
-  FullUserQuery,
-  UserQuery,
+  BaseUserUpdateRequest,
   UserResponseEnumType,
   UserResponsesEnum,
   UserSortingEnum,
@@ -17,27 +14,29 @@ import {
 } from '../db/schema';
 import { alias, PgColumn, PgSelect } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { and, asc, countDistinct, desc, eq, SQL, sql } from 'drizzle-orm';
+import { and, count, countDistinct, eq, SQL, sql } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
+import { PrimaryRepository } from '../base/repository/primaryRepository';
+import { UserQuery } from './dto/requests.dto';
 
 @Injectable()
-export class UserDrizzleRepository extends BaseDrizzleRepository<
-  FullUserQuery,
-  CreateUserRequest
+export class UserDrizzleRepository extends PrimaryRepository<
+  typeof user,
+  UserQuery,
+  BaseUserUpdateRequest
 > {
-  getCount() {
-    return db
-      .$with('user_count')
-      .as(db.select({ value: sql`count(*)`.as('value') }).from(user));
+  constructor() {
+    super(user);
   }
-
   conditionallyJoin<TSelect extends PgSelect>(
     query: TSelect,
     typeEnum: UserResponseEnumType,
   ) {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:
-        return query.leftJoin(follower, eq(user.id, follower.userId));
+        return query
+          .leftJoin(follower, eq(user.id, follower.userId))
+          .groupBy(user.id);
 
       case UserResponsesEnum.EXTENDED:
         return query
@@ -45,14 +44,17 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
           .leftJoin(
             alias(follower, 'followingAlias'),
             eq(user.id, follower.followerId),
-          );
+          )
+          .groupBy(user.id);
+
       case UserResponsesEnum.ADMIN:
         return query
           .leftJoin(follower, eq(user.id, follower.userId))
           .leftJoin(
             alias(follower, 'followingAlias'),
             eq(user.id, follower.followerId),
-          );
+          )
+          .groupBy(user.id);
       default:
         return query;
     }
@@ -84,12 +86,12 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
           email: user.email,
           level: user.level,
           updatedAt: user.updatedAt,
-          followers: countDistinct(follower),
+          followers: sql<number>`cast(count(${follower.followerId}) as int)`,
         };
       case UserResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(UserResponsesEnum.BASE),
-          following: countDistinct(alias(follower, 'followingAlias').userId),
+          following: count(alias(follower, 'followingAlias')),
           location: user.location,
           createdAt: user.createdAt,
         };
@@ -154,53 +156,10 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
     });
   }
 
-  getQuery(query: FullUserQuery) {
-    const selectedType = this.getMappingObject(
-      query.responseType || UserResponsesEnum.BASE,
-    );
-
-    const baseQuery = query.returnFullCount
-      ? (db
-          .with(this.getCount())
-          .select(selectedType)
-          .from(user)
-          .$dynamic() as PgSelect<'user', typeof selectedType>)
-      : (db.select(selectedType).from(user).$dynamic() as PgSelect<
-          'user',
-          typeof selectedType
-        >);
-
-    const whereClause = this.getValidWhereClause(query.query);
-    const filterQuery = baseQuery.where(and(...whereClause)).$dynamic();
-
-    const sortedQuery = query.sort
-      ? filterQuery
-          .orderBy(
-            query.sort.order === 'asc'
-              ? asc(this.sortRecord[query.sort.field])
-              : desc(this.sortRecord[query.sort.field]),
-          )
-          .$dynamic()
-      : filterQuery;
-
-    const paginatedQuery = query.pagination
-      ? sortedQuery
-          .limit(query.pagination.pageSize)
-          .offset(
-            (query.pagination.page - 1) * (query.pagination.pageSize || 12),
-          )
-          .$dynamic()
-      : sortedQuery;
-
-    const fullQuery = this.conditionallyJoin(
-      paginatedQuery,
-      query.responseType,
-    );
-
-    return fullQuery;
-  }
-
-  getSingleQuery(id: number, responseType: UserResponseEnumType) {
+  getSingleQuery(
+    id: number,
+    responseType: UserResponseEnumType = UserResponsesEnum.BASE,
+  ) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(selectedType)
@@ -214,26 +173,8 @@ export class UserDrizzleRepository extends BaseDrizzleRepository<
       )
       .$dynamic() as PgSelect<'user', typeof selectedType>;
 
-    const fullQuery = this.conditionallyJoin(baseQuery, responseType);
+    const Query = this.conditionallyJoin(baseQuery, responseType);
 
-    return fullQuery;
-  }
-
-  createEntity(createRequest: CreateUserRequest) {
-    return db.insert(user).values(createRequest).returning({ id: user.id });
-  }
-
-  deleteEntity(id: number) {
-    return db.delete(user).where(eq(user.id, id)).returning({ id: user.id });
-  }
-
-  updateEntity(id: number, updateRequest: Partial<CreateUserRequest>) {
-    return db.update(user).set(updateRequest).where(eq(user.id, id)).returning({
-      id: user.id,
-    });
-  }
-
-  entityExists(id: number) {
-    return db.select({ exists: sql`exists(${id})` }).from(user);
+    return Query;
   }
 }

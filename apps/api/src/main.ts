@@ -4,6 +4,8 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PostgresExceptionFilter } from './base/exception/postgresExceptionFilter';
 import { NoValuesToSetExceptionFilter } from './base/exception/noValuesToSetExceptionFilter';
+import * as fs from 'fs';
+import * as yaml from 'yaml';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,7 +26,11 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
+  const yamlString: string = yaml.stringify(document, {});
+
   SwaggerModule.setup('swagger', app, document);
+
+  fs.writeFileSync('./openapi.yml', yamlString);
 
   await app.listen(process.env.API_PORT || 5500);
 }

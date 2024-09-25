@@ -1,4 +1,3 @@
-import { Reflector } from '@nestjs/core';
 import {
   ApiProperty,
   ApiPropertyOptional,
@@ -11,9 +10,7 @@ import {
   Links,
   Pagination,
 } from '@tournament-app/types';
-import { Type } from 'class-transformer';
 import { IsOptional } from 'class-validator';
-import { UserResponse } from 'src/users/dto/responses.dto';
 
 export class PaginationInstance implements Pagination {
   @ApiResponseProperty()

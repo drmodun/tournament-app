@@ -10,11 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import {
-  BaseUserResponseType,
-  IQueryMetadata,
-  UserResponseEnumType,
-} from '@tournament-app/types';
+import { IQueryMetadata, UserResponseEnumType } from '@tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
 import {
   ApiCreatedResponse,

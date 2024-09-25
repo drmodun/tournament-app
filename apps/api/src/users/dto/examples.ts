@@ -1,16 +1,9 @@
+import { refs } from '@nestjs/swagger';
 import {
-  ApiExtraModels,
-  ApiProperty,
-  ApiResponseProperty,
-  refs,
-} from '@nestjs/swagger';
-import {
-  AdminUserResponse,
   ExtendedUserResponse,
   MiniUserResponse,
   MiniUserResponseWithCountry,
   MiniUserResponseWithProfilePicture,
-  responseClasses,
   UserResponse,
 } from './responses.dto';
 import { BaseQueryResponse } from 'src/base/query/baseResponse';
@@ -88,14 +81,6 @@ export class UserQueryResponseExample extends BaseQueryResponse<
 export const userQueryResponses = {};
 export const userQuerySchemaList = [];
 export const actualClassList = [];
-
-const createClassFromObject = (obj: any, className: string) => {
-  return class {
-    constructor() {
-      Object.assign(this, obj);
-    }
-  };
-};
 
 for (const responseType in userResponseExamples) {
   const response: UserQueryResponseExample = {

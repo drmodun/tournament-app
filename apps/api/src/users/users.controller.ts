@@ -10,14 +10,17 @@ import {
   Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { QueryMetadata, UserResponseEnumType } from '@tournament-app/types';
+import {
+  BaseUserResponseType,
+  IQueryMetadata,
+  UserResponseEnumType,
+} from '@tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
 import {
   ApiCreatedResponse,
   ApiExtraModels,
   ApiOkResponse,
   ApiTags,
-  refs,
 } from '@nestjs/swagger';
 import {
   CreateUserRequest,
@@ -27,16 +30,25 @@ import {
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import {
   AdminUserResponse,
-  defaultExample,
   ExtendedUserResponse,
   MiniUserResponse,
   MiniUserResponseWithCountry,
   MiniUserResponseWithProfilePicture,
   UserResponse,
 } from './dto/responses.dto';
+import {
+  actualClassList,
+  userQueryResponses,
+  userResponseExamples,
+  userResponseSchema,
+} from './dto/examples';
+import { BaseQueryResponse } from 'src/base/query/baseResponse';
 
 @ApiTags('users')
 @Controller('users')
+/**
+ * Controller class for managing user-related operations.
+ */
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -47,6 +59,8 @@ export class UsersController {
     UserResponse,
     ExtendedUserResponse,
     AdminUserResponse,
+    BaseQueryResponse,
+    ...actualClassList,
   )
   @Post()
   @ApiCreatedResponse({ type: ActionResponsePrimary })
@@ -55,11 +69,18 @@ export class UsersController {
   }
 
   @Get()
+  @ApiOkResponse({
+    content: {
+      'application/json': {
+        examples: userQueryResponses,
+      },
+    },
+  })
   async findAll(@Query() query: UserQuery, @Req() req: Request) {
     console.log(req.url, query);
     const results = await this.usersService.findAll(query);
 
-    const metadata: QueryMetadata = MetadataMaker.makeMetadataFromQuery(
+    const metadata: IQueryMetadata = MetadataMaker.makeMetadataFromQuery(
       query,
       results,
       req.url,
@@ -68,22 +89,17 @@ export class UsersController {
     return {
       results,
       metadata,
-    }; // TODO: Absolutely later make a static metadata making class
+    };
   }
 
   @Get(':id')
   @ApiOkResponse({
-    schema: {
-      anyOf: refs(
-        MiniUserResponse,
-        UserResponse,
-        ExtendedUserResponse,
-        AdminUserResponse,
-        MiniUserResponseWithCountry,
-        MiniUserResponseWithProfilePicture,
-      ),
+    content: {
+      'application/json': {
+        schema: userResponseSchema,
+        examples: userResponseExamples,
+      },
     },
-    example: defaultExample,
   })
   async findOne(
     @Param('id') id: number,
@@ -95,11 +111,13 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @ApiCreatedResponse({ type: ActionResponsePrimary })
   async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserInfo) {
     return await this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
+  @ApiCreatedResponse({ type: ActionResponsePrimary })
   async remove(@Param('id') id: number) {
     return await this.usersService.remove(id);
   }

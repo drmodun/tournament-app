@@ -257,5 +257,54 @@ describe('UserController', () => {
 
       expect(response.body).toEqual({ id: expect.any(Number) });
     });
+
+    it('should return a 400 when creating a user with an invalid request', async () => {
+      const createRequest: Partial<CreateUserRequest> = {
+        username: 'john_doe',
+        name: 'John Doe',
+        bio: 'I am a user',
+        country: 'USA',
+        email: 'ad',
+        location: 'New York',
+        password: 'Password',
+      };
+
+      const results = await request(app.getHttpServer())
+        .post('/users')
+        .send(createRequest)
+        .expect(400);
+
+      const { message, error } = results.body;
+
+      expect(message.length).toEqual(2);
+      expect(error).toBe('Bad Request');
+    });
+
+    it('should return a 400 when no body is sent', async () => {
+      await request(app.getHttpServer()).post('/users').send({}).expect(400);
+    });
+
+    it('should return a 422 when creating a user with an existing username', async () => {
+      const userList = await request(app.getHttpServer()).get('/users');
+      const { email } = userList.body.results[0];
+      const createRequest: CreateUserRequest = {
+        username: 'john_doe',
+        bio: 'I am a user',
+        name: 'John Doe',
+        country: 'USA',
+        email,
+        location: 'New York',
+        password: 'Password123!',
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/users')
+        .send(createRequest)
+        .expect(409);
+
+      expect(response.body.message).toBe(
+        'Unproccessable Entity: Unique Entity Violation',
+      );
+    });
   });
 });

@@ -12,15 +12,15 @@ export interface Links {
 
 export type QueryType = Record<string, number | string | Date | boolean>;
 
-export interface QueryMetadata {
+export interface IQueryMetadata {
   pagination: Pagination;
   links?: Links;
   query?: Partial<BaseQueryType>;
 }
 
-export interface BaseQueryResponse<Entity> {
+export interface IBaseQueryResponse<Entity> {
   results: Entity[];
-  metadata: QueryMetadata;
+  metadata: IQueryMetadata;
 }
 
 export interface BaseSortRequest {

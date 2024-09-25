@@ -90,15 +90,11 @@ export class AdminUserResponse
   code: string;
 }
 
-export const defaultExample = {
-  bio: 'I am a cool person',
-  country: 'USA',
-  email: 'john.doe@example.com',
-  followers: 0,
-  id: 1,
-  level: 0,
-  name: 'John Doe',
-  profilePicture: 'https://example.com/image.jpg',
-  updatedAt: new Date(),
-  username: 'john_doe',
-} satisfies UserResponse;
+export const responseClasses = [
+  MiniUserResponse,
+  MiniUserResponseWithProfilePicture,
+  MiniUserResponseWithCountry,
+  UserResponse,
+  ExtendedUserResponse,
+  AdminUserResponse,
+];

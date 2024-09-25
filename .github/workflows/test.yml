@@ -12,4 +12,11 @@ jobs:
           node-version: "20"
       - run: yarn install --immutable
       - run: yarn build
-      - run: yarn test
+      - run: yarn test --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          fail_ci_if_error: true

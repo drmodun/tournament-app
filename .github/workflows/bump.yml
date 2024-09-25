@@ -7,7 +7,6 @@ on:
     branches:
       - main
       - master
-      - more-actions
       - drmodun/more-actions
   pull_request:
     branches:
@@ -26,7 +25,7 @@ jobs:
         with:
           doc: drmodun
           token: ${{ secrets.BUMP_TOKEN }}
-          file: doc/api-documentation.yml
+          file: apps/api/openapi.json
   api-diff:
     if: ${{ github.event_name == 'pull_request' }}
     name: Check API diff on Bump.sh
@@ -39,7 +38,7 @@ jobs:
         with:
           doc: drmodun
           token: ${{ secrets.BUMP_TOKEN }}
-          file: doc/api-documentation.yml
+          file: apps/api/openapi.json
           command: diff
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

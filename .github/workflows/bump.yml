@@ -23,9 +23,9 @@ jobs:
       - name: Deploy API documentation
         uses: bump-sh/github-action@v1
         with:
-          doc: drmodun
+          doc: winning.sh API
           token: ${{ secrets.BUMP_TOKEN }}
-          file: ./apps/api/openapi.yml
+          file: apps/api/openapi.yml
   api-diff:
     if: ${{ github.event_name == 'pull_request' }}
     name: Check API diff on Bump.sh
@@ -36,9 +36,9 @@ jobs:
       - name: Comment pull request with API diff
         uses: bump-sh/github-action@v1
         with:
-          doc: drmodun
+          doc: winning.sh API
           token: ${{ secrets.BUMP_TOKEN }}
-          file: ./apps/api/openapi.yml
+          file: apps/api/openapi.yml
           command: diff
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

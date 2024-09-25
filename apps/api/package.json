@@ -23,7 +23,7 @@
     "test:debug": "dotenv -e ../../.env.test -c -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "seed": "dotenv -e ../../.env -c -- ts-node ./src/db/seed.ts",
     "seed:test": "dotenv -e ../../.env.test -c -- ts-node ./src/db/seed.ts",
-    "test:e2e": "yarn migrate:test && yarn seed:test && dotenv -e ../../.env.test -c -- jest --config ./test/jest-e2e.json --coverage--runInBand --detectOpenHandles --forceExit"
+    "test:e2e": "yarn migrate:test && yarn seed:test && dotenv -e ../../.env.test -c -- jest --config ./test/jest-e2e.json --coverage --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -77,6 +77,7 @@
       "json",
       "ts"
     ],
+    "collectCoverage": true,
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {

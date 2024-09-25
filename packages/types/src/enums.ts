@@ -5,6 +5,8 @@ export enum userRoleEnum {
 
 export type userRoleEnumType = (typeof userRoleEnum)[keyof typeof userRoleEnum];
 
+export type BaseResponseType = "base" | "extended" | "admin";
+
 export enum subscriptionEnum {
   FREE = "free",
   PRO = "pro",
@@ -133,6 +135,16 @@ export enum eventStatusEnum {
 
 export type eventStatusEnumType =
   (typeof eventStatusEnum)[keyof typeof eventStatusEnum];
+
+export enum categoryTypeEnum {
+  PROGRAMMING = "programming",
+  GAMING = "gaming",
+  SPORTS = "sports",
+  OTHER = "other",
+}
+
+export type categoryTypeEnumType =
+  (typeof categoryTypeEnum)[keyof typeof categoryTypeEnum];
 
 export enum tournamentTeamTypeEnum {
   SOLO = "solo",

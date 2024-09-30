@@ -1,5 +1,5 @@
 import { and, eq, InferInsertModel } from 'drizzle-orm';
-import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
+import { PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
 import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
@@ -13,14 +13,13 @@ export abstract class CompositeRepository<
   TCreateRequest extends Partial<InferInsertModel<TTable>> = Partial<
     InferInsertModel<TTable>
   >,
-  TCompositeKey extends PgColumn = PgColumn,
+  TCompositeKey extends Record<string, any> = Record<string, any>,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
   constructor(
     model: TTable,
     private readonly keys: string[],
   ) {
     super(model);
-    this.keys = keys;
   }
 
   getSingleQuery(id: TCompositeKey, responseType: string) {

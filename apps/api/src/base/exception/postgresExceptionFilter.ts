@@ -6,6 +6,16 @@ export interface TranslatedError {
   statusCode: number;
 }
 
+enum PostgresErrorCode {
+  UniqueViolation = '23505',
+  ForeignKeyViolation = '23503',
+  UndefinedTable = '42P01',
+  UndefinedColumn = '42703',
+  DatabaseConnectionError = '08006',
+  TooManyConnections = '53300',
+  DatabaseTimeout = '57014',
+}
+
 @Catch(PostgresError)
 export class PostgresExceptionFilter implements ExceptionFilter {
   catch(exception: PostgresError, host: ArgumentsHost) {
@@ -15,7 +25,10 @@ export class PostgresExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
     const request = ctx.getRequest();
 
-    const translatedError = this.postgresErrorCodeTranslator(exception.code);
+    const translatedError = this.errorTranslations.get(exception.code) || {
+      message: 'Internal Server Error',
+      statusCode: 500,
+    };
 
     response.status(translatedError.statusCode).json({
       message: translatedError.message,
@@ -24,51 +37,46 @@ export class PostgresExceptionFilter implements ExceptionFilter {
     });
   }
 
-  private postgresErrorCodeTranslator(code: string): TranslatedError {
-    switch (code) {
-      case '23505':
-        return {
-          message: 'Unproccessable Entity: Unique Entity Violation',
-          statusCode: 409,
-        };
-      case '23503':
-        return {
-          message: 'Unprocessable Entity: Foreign Key Constraint',
-          statusCode: 422,
-        };
-      case '42P01':
-        return {
-          message: 'Bad Request: Undefined Table',
-          statusCode: 400,
-        };
-      case '42703':
-        return {
-          message: 'Unprocessable Entity: Undefined column mentioned',
-          statusCode: 422,
-        };
-      case '08006':
-        return {
-          message: 'Service Unavailable: Database Connection Error',
-          statusCode: 503,
-        };
-      case '53300':
-        return {
-          message: 'Service Unavailable: Too many connections',
-          statusCode: 503,
-        };
-      case '57014':
-        return {
-          message: 'Service Unavailable: Database Timeout',
-          statusCode: 503,
-        };
-
-      // TODO: add more error translations
-
-      default:
-        return {
-          message: 'Internal Server Error',
-          statusCode: 500,
-        };
-    }
-  }
+  private readonly errorTranslations = new Map<string, TranslatedError>([
+    [
+      PostgresErrorCode.UniqueViolation,
+      {
+        message: 'Unproccessable Entity: Unique Entity Violation',
+        statusCode: 409,
+      },
+    ],
+    [
+      PostgresErrorCode.ForeignKeyViolation,
+      {
+        message: 'Unprocessable Entity: Foreign Key Constraint',
+        statusCode: 422,
+      },
+    ],
+    [
+      PostgresErrorCode.UndefinedTable,
+      { message: 'Bad Request: Undefined Table', statusCode: 400 },
+    ],
+    [
+      PostgresErrorCode.UndefinedColumn,
+      {
+        message: 'Unprocessable Entity: Undefined column mentioned',
+        statusCode: 422,
+      },
+    ],
+    [
+      PostgresErrorCode.DatabaseConnectionError,
+      {
+        message: 'Service Unavailable: Database Connection Error',
+        statusCode: 503,
+      },
+    ],
+    [
+      PostgresErrorCode.TooManyConnections,
+      { message: 'Service Unavailable: Too many connections', statusCode: 503 },
+    ],
+    [
+      PostgresErrorCode.DatabaseTimeout,
+      { message: 'Service Unavailable: Database Timeout', statusCode: 503 },
+    ],
+  ]);
 }

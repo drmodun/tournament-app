@@ -16,10 +16,6 @@ export abstract class PrimaryRepository<
     InferInsertModel<TTable>
   >,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
-  constructor(model: TTable) {
-    super(model);
-  }
-
   SingleQuery(id: number, responseType: string) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
@@ -63,7 +59,14 @@ export abstract class PrimaryRepository<
   }
 
   entityExists(id: number) {
-    return db.select({ exists: sql`exists(${id})` }).from(this.model);
+    return db
+      .select({
+        exists: sql`exists(
+        select 1 from ${this.model}
+        where ${this.model.id} = ${id}
+      )`,
+      })
+      .from(sql`dual`);
   }
 
   // TODO: think about making a child class or refactoring for composite keys, maybe just make those repositories override this one

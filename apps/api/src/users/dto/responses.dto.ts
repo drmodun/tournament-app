@@ -80,21 +80,6 @@ export class AdminUserResponse
   @ApiResponseProperty({ enum: Object.values(subscriptionEnum) })
   subscription: subscriptionEnumType;
 
-  @ApiResponseProperty()
-  password: string;
-
   @ApiResponseProperty({ enum: Object.values(userRoleEnum) })
   role: userRoleEnumType;
-
-  @ApiResponseProperty()
-  code: string;
 }
-
-export const responseClasses = [
-  MiniUserResponse,
-  MiniUserResponseWithProfilePicture,
-  MiniUserResponseWithCountry,
-  UserResponse,
-  ExtendedUserResponse,
-  AdminUserResponse,
-];

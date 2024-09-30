@@ -8,7 +8,7 @@ export class NoValuesToSetExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
-    const translatedError = this.otherErrorsTranslator(exception.message);
+    const translatedError = this.noValuesToSetTranslator(exception.message);
 
     response.status(translatedError.statusCode).json({
       message: translatedError.message,
@@ -16,7 +16,7 @@ export class NoValuesToSetExceptionFilter implements ExceptionFilter {
     });
   }
 
-  private otherErrorsTranslator(message: string): TranslatedError {
+  private noValuesToSetTranslator(message: string): TranslatedError {
     switch (message) {
       case 'No values to set':
         return {
@@ -25,7 +25,7 @@ export class NoValuesToSetExceptionFilter implements ExceptionFilter {
         };
       default:
         return {
-          message: 'Internal Server Error',
+          message: `Internal Server Error: ${message}`,
           statusCode: 500,
         };
     }

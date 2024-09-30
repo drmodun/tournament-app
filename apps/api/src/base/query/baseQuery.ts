@@ -1,6 +1,14 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseQueryType } from '@tournament-app/types';
-import { IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Max,
+} from 'class-validator';
 
 export abstract class BaseQuery<TResponseType extends string = string>
   implements Partial<BaseQueryType<TResponseType>>
@@ -12,12 +20,12 @@ export abstract class BaseQuery<TResponseType extends string = string>
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
+  @IsEnum(['asc', 'desc'])
   order?: 'asc' | 'desc';
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
+  @IsBoolean()
   returnFullCount?: boolean;
 
   @ApiPropertyOptional()
@@ -27,11 +35,14 @@ export abstract class BaseQuery<TResponseType extends string = string>
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
+  @IsNumber()
+  @IsPositive()
   page?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
+  @IsNumber()
+  @IsPositive()
+  @Max(100)
   pageSize?: number;
 }

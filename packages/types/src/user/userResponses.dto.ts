@@ -31,9 +31,7 @@ export interface IExtendedUserResponse extends IUserResponse {
 
 export interface IAdminUserResponse extends IExtendedUserResponse {
   subscription: subscriptionEnum;
-  password: string;
   role: userRoleEnum;
-  code: string;
 }
 
 export type BaseUserResponseType =

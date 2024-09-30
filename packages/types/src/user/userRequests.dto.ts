@@ -1,6 +1,3 @@
-import { QueryType } from "src/baseQuery.dto";
-import { UserResponseEnumType } from "./userResponses.dto";
-
 export interface ICreateUserRequest {
   name: string;
   username: string;
@@ -23,10 +20,16 @@ export interface IUpdateUserInfo {
 export type BaseUserUpdateRequest = IUpdateUserInfo | ICreateUserRequest;
 
 export interface IUpdatePasswordRequest {
+  currentPassword: string;
   password: string;
 }
 
+export interface IResetPasswordRequest {
+  newPassword: string;
+}
+
 export interface IUpdateEmailRequest {
+  currentPassword: string;
   email: string;
 }
 

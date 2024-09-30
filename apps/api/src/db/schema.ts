@@ -117,7 +117,7 @@ export const user = pgTable('user', {
   profilePicture: text('profile_picture'),
   bio: text('bio').default('A user on the tournament app platform'),
   email: text('email').notNull().unique(),
-  password: text('password'),
+  password: text('password'), //hashed password
   role: userRole('role').default('user'),
   subscription: userSubscription('subscription').default('free'),
   code: text('code')
@@ -386,7 +386,7 @@ export const subcategory = pgTable('subcategory', {
 export const participation = pgTable(
   'participation',
   {
-    groupId: integer('group')
+    groupId: integer('group_id')
       .references(() => group.id, {
         onDelete: 'cascade',
       })
@@ -419,7 +419,7 @@ export const event = pgTable('event', {
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  minPlyersPerTeam: integer('min_players_per_team').default(1),
+  minPlayersPerTeam: integer('min_players_per_team').default(1),
   maxPlayersPerTeam: integer('max_players_per_team'),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
@@ -698,14 +698,12 @@ export const like = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    tournamentPostId: integer('tournament_post_id'),
-    resultPostId: integer('result_post_id'),
+    postId: integer('post_id').notNull(),
+    likeType: likeType('like_type').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
   (t) => ({
-    pk: primaryKey({
-      columns: [t.userId, t.tournamentPostId || t.resultPostId],
-    }),
+    pk: primaryKey({ columns: [t.userId, t.postId, t.likeType] }),
   }),
 );
 

@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { IQueryMetadata, UserResponseEnumType } from '@tournament-app/types';
@@ -73,7 +74,6 @@ export class UsersController {
     },
   })
   async findAll(@Query() query: UserQuery, @Req() req: Request) {
-    console.log(req.url, query);
     const results = await this.usersService.findAll(query);
 
     const metadata: IQueryMetadata = MetadataMaker.makeMetadataFromQuery(
@@ -98,7 +98,7 @@ export class UsersController {
     },
   })
   async findOne(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Query('responseType') responseType: UserResponseEnumType,
   ) {
     // TODO: implement guards for admin access stuff
@@ -108,13 +108,16 @@ export class UsersController {
 
   @Patch(':id')
   @ApiCreatedResponse({ type: ActionResponsePrimary })
-  async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserInfo) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserInfo,
+  ) {
     return await this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: ActionResponsePrimary })
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.remove(id);
   }
 }

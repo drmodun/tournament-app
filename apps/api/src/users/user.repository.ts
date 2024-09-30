@@ -60,9 +60,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     }
   }
 
-  public getMappingObject(responseEnum: UserResponseEnumType): {
-    [key: string]: PgColumn | SQL;
-  } {
+  public getMappingObject(responseEnum: UserResponseEnumType) {
     switch (responseEnum) {
       case UserResponsesEnum.MINI:
         return {

@@ -62,46 +62,52 @@ export class CreateUserRequest implements ICreateUserRequest {
 }
 
 export class UpdateUserInfo implements IUpdateUserInfo {
+  @ApiPropertyOptional()
   @IsOptional()
   @IsUrl()
-  @ApiPropertyOptional()
   profilePicture?: string;
 
-  @IsOptional()
   @ApiPropertyOptional()
+  @IsOptional()
   country?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @MinLength(3)
   @MaxLength(30)
-  @ApiPropertyOptional()
   username?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @MinLength(3)
   @MaxLength(30)
-  @ApiPropertyOptional()
   name?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @MinLength(3)
   @MaxLength(300)
-  @ApiPropertyOptional()
   bio?: string;
 
-  @IsOptional()
   @ApiPropertyOptional()
+  @IsOptional()
   location?: string;
 }
 
 export class UpdatePasswordRequest implements IUpdatePasswordRequest {
   @IsStrongPassword()
   password: string;
+
+  @IsString()
+  currentPassword: string;
 } // TODO: possibly move to auth
 
 export class UpdateEmailRequest implements IUpdateEmailRequest {
   @IsEmail()
   email: string;
+
+  @IsString()
+  currentPassword: string;
 }
 
 export class UserQuery

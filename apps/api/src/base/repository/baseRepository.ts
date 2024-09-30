@@ -9,11 +9,11 @@ export abstract class BaseDrizzleRepository<
 > {
   constructor(protected readonly model: TTable) {}
   public abstract sortRecord: Record<string, PgColumn | SQL<number>>;
-  public abstract getMappingObject(responseEnum: string);
+  public abstract getMappingObject(responseEnum: string): Record<string, SQL>;
   abstract conditionallyJoin<TSelect extends PgSelect>(
     query: TSelect,
     typeEnum: string,
-  );
+  ); // TODO: figure out types later
 
   abstract getValidWhereClause(query: BaseQuery): SQL[];
 
@@ -46,7 +46,7 @@ export abstract class BaseDrizzleRepository<
       .$dynamic();
 
     const sortedQuery =
-      query.field && query.order
+      query.field && query.order && this.sortRecord.hasOwnProperty(query.field)
         ? filterQuery
             .orderBy(
               query.order === 'asc'

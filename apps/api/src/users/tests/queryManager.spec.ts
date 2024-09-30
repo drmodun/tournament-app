@@ -227,7 +227,9 @@ describe('UserDrizzleRepository', () => {
     const params = result.toSQL().params;
 
     expect(params).toContain(123);
-    expect(sql).toContain('select exists($1)');
-    expect(sql).toContain('from "user"');
+    expect(sql).toBe(`select exists(
+        select 1 from \"user\"
+        where \"id\" = $1
+      ) from dual`);
   });
 });

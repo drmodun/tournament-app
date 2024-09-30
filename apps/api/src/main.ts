@@ -6,6 +6,7 @@ import { PostgresExceptionFilter } from './base/exception/postgresExceptionFilte
 import { NoValuesToSetExceptionFilter } from './base/exception/noValuesToSetExceptionFilter';
 import * as fs from 'fs';
 import * as yaml from 'yaml';
+import { env } from 'process';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,7 +31,12 @@ async function bootstrap() {
 
   SwaggerModule.setup('swagger', app, document);
 
-  fs.writeFileSync('./openapi.yml', yamlString);
+  try {
+    if (env.MODE !== 'production')
+      fs.writeFileSync('./openapi.yml', yamlString);
+  } catch (err) {
+    console.error(err);
+  }
 
   await app.listen(process.env.API_PORT || 5500);
 }

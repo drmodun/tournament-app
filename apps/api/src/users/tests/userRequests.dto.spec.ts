@@ -115,7 +115,7 @@ describe('UserRequestsDtos', () => {
   it('should pass validation of valid UserQuery object', async () => {
     const body = {
       username: 'john_doe',
-      country: 'USA',
+      country: 'en',
       email: 'john.doe@gmail.com',
       location: 'New York',
       name: 'John Doe',
@@ -124,5 +124,24 @@ describe('UserRequestsDtos', () => {
     const userQueryRequest = plainToInstance(UserQuery, body);
     const errors = await validate(userQueryRequest);
     expect(errors).toStrictEqual([]);
+  });
+
+  it('should fail validation of invalid CreateUserRequest object', async () => {
+    const body = {
+      name: 'J',
+      username: 'jo',
+      email: 'jan',
+      password: 'password!',
+      country: 'invalid',
+    };
+    const createUserRequest = plainToInstance(CreateUserRequest, body);
+    const errors = await validate(createUserRequest);
+
+    expect(errors.map((x) => x.property)).toStrictEqual([
+      'name',
+      'username',
+      'email',
+      'password',
+    ]);
   });
 });

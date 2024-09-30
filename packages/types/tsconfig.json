@@ -21,7 +21,7 @@
       "lib": ["ES2021"],
       "typeRoots": ["./node_modules/@types", "./@types"]
     },
-    "include": ["."],
+    "include": [".", "../../apps/api/src/base/decorators/decorators", "../../apps/api/src/base/decorators/isDateGreaterThan.ts", "../../apps/api/src/base/decorators/isNumberGreaterThan.ts"],
     "exclude": ["dist", "build", "node_modules"],
     "strictPropertyInitialization": false,
     "composite": false,

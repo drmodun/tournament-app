@@ -8,15 +8,15 @@ export class MetadataMaker {
     url: string,
   ) {
     const metadata = {
-      pagination: this.makePagination(query, results),
-      links: this.makeLinks(url, query),
+      pagination: MetadataMaker.makePagination(query, results),
+      links: MetadataMaker.makeLinks(url, query),
       query,
     };
 
     return metadata;
   }
 
-  //TODO: fix this to produce valid queries
+  //TODO: fix MetadataMaker to produce valid queries
 
   static makeLinks<TQuery extends BaseQuery>(url: string, query: TQuery) {
     const defaultSign = url.includes('?') ? '&' : '?';

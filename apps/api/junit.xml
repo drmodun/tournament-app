@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="54" failures="0" errors="0" time="4.786">
-  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="3.177" tests="5">
-    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.006">
+<testsuites name="jest tests" tests="54" failures="0" errors="0" time="5.11">
+  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.337" tests="5">
+    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.005">
     </testcase>
-    <testcase classname="MetadataMaker makeLinks should return the correct links" name="MetadataMaker makeLinks should return the correct links" time="0.001">
+    <testcase classname="MetadataMaker makeLinks should return the correct links" name="MetadataMaker makeLinks should return the correct links" time="0">
     </testcase>
-    <testcase classname="MetadataMaker makeLinks should handle URLs without page query parameter" name="MetadataMaker makeLinks should handle URLs without page query parameter" time="0">
+    <testcase classname="MetadataMaker makeLinks should handle URLs without page query parameter" name="MetadataMaker makeLinks should handle URLs without page query parameter" time="0.001">
     </testcase>
-    <testcase classname="MetadataMaker makePagination should return the correct pagination" name="MetadataMaker makePagination should return the correct pagination" time="0.001">
+    <testcase classname="MetadataMaker makePagination should return the correct pagination" name="MetadataMaker makePagination should return the correct pagination" time="0">
     </testcase>
     <testcase classname="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" name="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="3.306" tests="8">
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23505" name="PostgresExceptionFilter should handle PostgresError with code 23505" time="0.018">
+  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.481" tests="2">
+    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.007">
+    </testcase>
+    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.502" tests="8">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23505" name="PostgresExceptionFilter should handle PostgresError with code 23505" time="0.017">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23503" name="PostgresExceptionFilter should handle PostgresError with code 23503" time="0.002">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42P01" name="PostgresExceptionFilter should handle PostgresError with code 42P01" time="0.001">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42P01" name="PostgresExceptionFilter should handle PostgresError with code 42P01" time="0.002">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42703" name="PostgresExceptionFilter should handle PostgresError with code 42703" time="0.002">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42703" name="PostgresExceptionFilter should handle PostgresError with code 42703" time="0.001">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 08006" name="PostgresExceptionFilter should handle PostgresError with code 08006" time="0.001">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 08006" name="PostgresExceptionFilter should handle PostgresError with code 08006" time="0.002">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 53300" name="PostgresExceptionFilter should handle PostgresError with code 53300" time="0.001">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 57014" name="PostgresExceptionFilter should handle PostgresError with code 57014" time="0.001">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle unknown PostgresError code" name="PostgresExceptionFilter should handle unknown PostgresError code" time="0.002">
+    <testcase classname="PostgresExceptionFilter should handle unknown PostgresError code" name="PostgresExceptionFilter should handle unknown PostgresError code" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="3.345" tests="1">
-    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.016">
+  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.568" tests="1">
+    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.011">
     </testcase>
   </testsuite>
-  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="3.605" tests="2">
-    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.008">
-    </testcase>
-    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="3.646" tests="5">
-    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.007">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0.001">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0.001">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0.001">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0">
-    </testcase>
-  </testsuite>
-  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="3.654" tests="3">
-    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.007">
+  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.731" tests="3">
+    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.005">
     </testcase>
     <testcase classname="MyNumber should fail validation when maximum is less than minimum" name="MyNumber should fail validation when maximum is less than minimum" time="0.001">
     </testcase>
-    <testcase classname="MyNumber should fail validation when maximum is equal to minimum" name="MyNumber should fail validation when maximum is equal to minimum" time="0.001">
+    <testcase classname="MyNumber should fail validation when maximum is equal to minimum" name="MyNumber should fail validation when maximum is equal to minimum" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="3.894" tests="9">
-    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.006">
+  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.823" tests="5">
+    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.005">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0.001">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0.002">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.824" tests="9">
+    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.007">
     </testcase>
     <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.002">
     </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.002">
+    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.001">
     </testcase>
     <testcase classname="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" name="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" time="0.001">
     </testcase>
@@ -73,41 +73,41 @@
     </testcase>
     <testcase classname="UserRequestsDtos should pass validation of empty UserQuery object" name="UserRequestsDtos should pass validation of empty UserQuery object" time="0">
     </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid UserQuery object" name="UserRequestsDtos should fail validation of invalid UserQuery object" time="0.002">
+    <testcase classname="UserRequestsDtos should fail validation of invalid UserQuery object" name="UserRequestsDtos should fail validation of invalid UserQuery object" time="0.001">
     </testcase>
     <testcase classname="UserRequestsDtos should pass validation of valid UserQuery object" name="UserRequestsDtos should pass validation of valid UserQuery object" time="0.001">
     </testcase>
     <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="4.372" tests="9">
-    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.01">
+  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.652" tests="9">
+    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.018">
     </testcase>
     <testcase classname="UserDrizzleRepository getQuery should return a valid query with base response type" name="UserDrizzleRepository getQuery should return a valid query with base response type" time="0.007">
     </testcase>
-    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.003">
+    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.004">
     </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.002">
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.004">
     </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.003">
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.005">
     </testcase>
-    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.002">
+    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.003">
     </testcase>
-    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.003">
+    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.004">
     </testcase>
-    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.001">
+    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.003">
     </testcase>
     <testcase classname="UserDrizzleRepository should check if an entity exists given a valid id" name="UserDrizzleRepository should check if an entity exists given a valid id" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="4.558" tests="8">
-    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.015">
+  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.812" tests="8">
+    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.012">
     </testcase>
-    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.051">
+    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.046">
     </testcase>
     <testcase classname="UsersService should throw an unprocessable entity exception when creating a user fails" name="UsersService should throw an unprocessable entity exception when creating a user fails" time="0.048">
     </testcase>
-    <testcase classname="UsersService should throw an error when creating a user with an existing email" name="UsersService should throw an error when creating a user with an existing email" time="0.045">
+    <testcase classname="UsersService should throw an error when creating a user with an existing email" name="UsersService should throw an error when creating a user with an existing email" time="0.044">
     </testcase>
     <testcase classname="UsersService should update a user" name="UsersService should update a user" time="0.001">
     </testcase>
@@ -118,14 +118,14 @@
     <testcase classname="UsersService should throw an error when deleting a user with a wrong id" name="UsersService should throw an error when deleting a user with a wrong id" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T22:34:55" time="4.566" tests="4">
-    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.011">
+  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.834" tests="4">
+    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.01">
     </testcase>
     <testcase classname="UsersController should return a valid query" name="UsersController should return a valid query" time="0.004">
     </testcase>
     <testcase classname="UsersController should return a user" name="UsersController should return a user" time="0.001">
     </testcase>
-    <testcase classname="UsersController should create a user" name="UsersController should create a user" time="0.002">
+    <testcase classname="UsersController should create a user" name="UsersController should create a user" time="0.001">
     </testcase>
   </testsuite>
 </testsuites>

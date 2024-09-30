@@ -43,10 +43,10 @@ export function IsNumberGreaterThan(
 
 export class MyNumber {
   @IsNumber()
-  minimum: Date;
+  minimum: number;
 
   @IsNumberGreaterThan('minimum', {
     message: 'Maximum must be greater than minimum',
   })
-  maximum: Date;
+  maximum: number;
 }

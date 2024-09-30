@@ -21,7 +21,7 @@ export abstract class BaseDrizzleRepository<
     return db.$with('count').as(
       db
         .select({
-          value: sql`cast(count(*) as int`.as('value'),
+          value: sql`cast(count(*) as int)`.as('value'),
         })
         .from(this.model),
     );

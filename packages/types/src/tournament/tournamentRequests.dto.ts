@@ -13,6 +13,6 @@ export interface ICreateTournament {
   minimumMMR?: number;
   maximumMMR?: number;
   location?: string;
-  maxParticipants?: string;
+  maxParticipants?: number;
   categoryId: string;
 }

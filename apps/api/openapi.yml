@@ -117,7 +117,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a1 2024-09-30T22:14:48.751Z
+                        updatedAt: &a1 2024-09-30T23:43:35.967Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -213,7 +213,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a1
-                        createdAt: 2024-09-30T22:14:48.751Z
+                        createdAt: 2024-09-30T23:43:35.967Z
                         following: 0
                         location: New York
           description: ""
@@ -255,7 +255,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-09-30T22:14:48.751Z
+                    updatedAt: &a3 2024-09-30T23:43:35.967Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -283,7 +283,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-09-30T22:14:48.751Z
+                    createdAt: 2024-09-30T23:43:35.967Z
                     following: 0
                     location: New York
           description: ""

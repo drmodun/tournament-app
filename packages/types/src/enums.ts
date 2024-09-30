@@ -138,7 +138,6 @@ export type eventStatusEnumType =
 
 export enum categoryTypeEnum {
   PROGRAMMING = "programming",
-  GAMING = "gaming",
   SPORTS = "sports",
   OTHER = "other",
 }

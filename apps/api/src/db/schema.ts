@@ -743,20 +743,26 @@ export const sponsorPromotion = pgTable('sponsor_promotion', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 }); //separate tables for separate payment models later
 
-export const review = pgTable('review', {
-  userId: integer('user_id')
-    .references(() => user.id, {
+export const review = pgTable(
+  'review',
+  {
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    eventId: integer('event_id').references(() => event.id, {
       onDelete: 'cascade',
-    })
-    .notNull(),
-  eventId: integer('event_id').references(() => event.id, {
-    onDelete: 'cascade',
+    }),
+    review: text('review').notNull(),
+    isHidden: boolean('is_hidden').default(false),
+    rating: integer('rating').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.eventId] }),
   }),
-  review: text('review').notNull(),
-  isHidden: boolean('is_hidden').default(false),
-  rating: integer('rating').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-});
+);
 
 export const quiz = pgTable('quiz', {
   id: serial('id').primaryKey(),
@@ -890,6 +896,10 @@ export const submission = pgTable('submission', {
     })
     .notNull(),
   code: text('code').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const submissionTestcase = pgTable(

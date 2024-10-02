@@ -18,6 +18,7 @@ import {
   tournamentTypeEnum,
   userRoleEnum,
   categoryTypeEnum,
+  tournamentTeamTypeEnum,
 } from '@tournament-app/types';
 import {
   serial,
@@ -28,6 +29,7 @@ import {
   boolean,
   integer,
   primaryKey,
+  numeric,
 } from 'drizzle-orm/pg-core';
 
 export const userRole = pgEnum('user_role', exportEnumValues(userRoleEnum));
@@ -56,7 +58,7 @@ export const submissionStatus = pgEnum(
 
 export const tournamentTeamType = pgEnum(
   'tournament_team_type',
-  exportEnumValues(tournamentTypeEnum),
+  exportEnumValues(tournamentTeamTypeEnum),
 );
 
 export const betType = pgEnum('bet_type', exportEnumValues(betTypeEnum));
@@ -264,7 +266,7 @@ export const chatRoomMessage = pgTable('chatRoomMessage', {
       onDelete: 'cascade',
     })
     .notNull(),
-  chatRoomMessage: text('chatRoomMessage').notNull(),
+  message: text('message').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   visibility: messageVisibility('visibility').default('public'),
 });
@@ -333,7 +335,7 @@ export const groupToUser = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    role: text('role').default('member'),
+    role: groupRole('role').default('member'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
   (t) => ({
@@ -543,7 +545,7 @@ export const bets = pgTable('bets', {
   betType: betType('bet_type').default('winner'),
   bettingNumber: integer('betting_number').default(1),
   amount: integer('amount').notNull(),
-  odd: integer('odd').notNull(),
+  odd: numeric('odd', { precision: 10, scale: 2 }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -605,8 +607,18 @@ export const tournamentPost = pgTable('tournament_post', {
     })
     .notNull(),
   title: text('title').notNull(),
-  images: text('images'), //csv of images
   message: text('message').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const tournamentPostImage = pgTable('tournament_post_image', {
+  id: serial('id').primaryKey(),
+  postId: integer('post_id')
+    .references(() => tournamentPost.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  imageUrl: text('image_url').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -685,8 +697,18 @@ export const resultPost = pgTable('result_post', {
     })
     .notNull(),
   title: text('title').notNull(),
-  images: text('images'), //csv of images
   message: text('message').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const resultPostImage = pgTable('result_post_image', {
+  id: serial('id').primaryKey(),
+  postId: integer('post_id')
+    .references(() => resultPost.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  imageUrl: text('image_url').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -698,7 +720,12 @@ export const like = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    postId: integer('post_id').notNull(),
+    postId: integer('post_id').references(
+      () => tournamentPost.id || resultPost.id,
+      {
+        onDelete: 'cascade',
+      },
+    ),
     likeType: likeType('like_type').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
@@ -817,6 +844,23 @@ export const competitiveProgrammingContest = pgTable(
     endDate: timestamp('end_date', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
+);
+
+export const contestAllowedLanguage = pgTable(
+  'contest_allowed_language',
+  {
+    contestId: integer('contest_id')
+      .references(() => competitiveProgrammingContest.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    language: text('language').notNull(), // TODO: make this into an enum
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    // Primary key
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.contestId, t.language] }),
+  }),
 );
 
 export const problem = pgTable('problem', {

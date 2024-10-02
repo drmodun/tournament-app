@@ -35,6 +35,6 @@ WORKDIR /app
 RUN addgroup --system --gid 1002 astrojs
 RUN adduser --system --uid 1002 astrojs
 USER astrojs
-COPY --from=installer /app .
+COPY --from=installer /app ./dist
 
 CMD ["yarn", "dev"]

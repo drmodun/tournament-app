@@ -43,3 +43,6 @@ networks:
   app_network:
     external: true
 #Possibly use later
+
+volumes:
+  db_data:

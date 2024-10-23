@@ -15,7 +15,6 @@ import {
   subscriptionEnum,
   tournamentLocationEnum,
   tournamentPromotionTypeEnum,
-  tournamentTypeEnum,
   userRoleEnum,
   categoryTypeEnum,
 } from '@tournament-app/types';
@@ -32,11 +31,6 @@ import {
 
 export const userRole = pgEnum('user_role', exportEnumValues(userRoleEnum));
 
-export const tournamentType = pgEnum(
-  'tournament_type',
-  exportEnumValues(tournamentTypeEnum),
-);
-
 export const betStatus = pgEnum('bet_status', exportEnumValues(betStatusEnum));
 
 export const userSubscription = pgEnum(
@@ -52,11 +46,6 @@ export const notificationType = pgEnum(
 export const submissionStatus = pgEnum(
   'submission_status',
   exportEnumValues(submissionStatusEnum),
-);
-
-export const tournamentTeamType = pgEnum(
-  'tournament_team_type',
-  exportEnumValues(tournamentTypeEnum),
 );
 
 export const betType = pgEnum('bet_type', exportEnumValues(betTypeEnum));
@@ -78,8 +67,8 @@ export const matchupType = pgEnum(
 
 export const likeType = pgEnum('like_type', exportEnumValues(likeTypeEnum));
 
-export const tournamentLocation = pgEnum(
-  'tournament_location',
+export const tournamentLocationType = pgEnum(
+  'tournament_location_t',
   exportEnumValues(tournamentLocationEnum),
 );
 
@@ -128,7 +117,7 @@ export const user = pgTable('user', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
-    .$onUpdate(() => new Date()), //TODO: see if there is a better alternative
+    .$onUpdate(() => new Date()), //TODO: see if there is a better alternative // Usefulness?
   country: text('country'), //TODO: possibly setup enum
   location: text('location'),
   bettingPoints: integer('betting_points').default(100),
@@ -174,21 +163,21 @@ export const tournament = pgTable('tournament', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
-  tournamentLocation: tournamentLocation('tournament_location').default(
+  locationType: tournamentLocationType('tournament_location_t').default(
     'online',
   ),
   country: text('country'),
-  minimumLevel: integer('minimum_level').default(1),
+  minimumLevel: integer('minimum_level').default(1), // Usefulness?
   logo: text('logo'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   isPublic: boolean('is_public').default(true),
   links: text('links'), //csv of links
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  tournamentType: tournamentType('tournament_type').default('league'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(), // Usefulness?
   minimumMMR: integer('minimum_mmr').default(0),
-  maximumMMR: integer('maximum_mmr').default(3000),
+  maximumMMR: integer('maximum_mmr').default(3000), // Usefulness?
   location: text('location'),
+  closed: boolean('is_closed').default(false), // Requires permission from organiser to access the tournament
   maxParticipants: integer('max_participants').default(32),
   category: integer('category_id')
     .references(() => category.id, {
@@ -196,9 +185,13 @@ export const tournament = pgTable('tournament', {
     })
     .notNull(),
   subcategory: integer('subcategory_id').references(() => subcategory.id), // Maybe change this to one-to-many
+  events: integer('tournament_events').array().notNull(),
+  organiser: integer('org_id'), // Organising user
+  moderators: integer('mod_id'), // Users moderating the tournament 
+  teams: integer('team_id'), // For closed contests, applying their members
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
-    .$onUpdate(() => new Date()),
+    .$onUpdate(() => new Date()), // Usefulness?
 });
 
 //TODO: add rewards
@@ -412,7 +405,7 @@ export const event = pgTable('event', {
   eventStatus: eventStatus('event_status').default('upcoming'), //TODO: maybe run a cron job to update this
   eventType: text('event_type').default('group'),
   name: text('name').notNull(),
-  eventLocation: tournamentLocation('event_location').default('online'),
+  eventLocation: tournamentLocationType('event_location').default('online'),
   description: text('description'),
   logo: text('logo'),
   chatRoomId: integer('chat_room_id').references(() => chatRoom.id),

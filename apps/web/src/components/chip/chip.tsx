@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, MouseEventHandler } from "react";
+import { useState, MouseEventHandler } from "react";
 import styles from "./chip.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";

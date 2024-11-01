@@ -1,6 +1,6 @@
 "use client";
 
-import React, { MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import styles from "./button.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants } from "types/styleTypes";
@@ -14,6 +14,7 @@ export interface ButtonProps {
   variant?: Variants;
   className?: string;
   labelClassName?: string;
+  submit?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -25,6 +26,7 @@ export default function Button({
   variant = "light",
   className = "",
   labelClassName = "",
+  submit = false,
   onClick,
 }: ButtonProps) {
   return (
@@ -37,6 +39,7 @@ export default function Button({
       )}
       style={style}
       onClick={onClick ? onClick : () => {}}
+      type={submit ? "submit" : "button"}
     >
       {label && (
         <p

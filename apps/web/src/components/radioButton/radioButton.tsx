@@ -1,6 +1,6 @@
 "use client";
 
-import React, { MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import styles from "./radioButton.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, TextVariants } from "types/styleTypes";

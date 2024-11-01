@@ -1,0 +1,65 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  padding-left: $horizontalMargin;
+  padding-right: $horizontalMargin;
+  padding-top: $padding;
+  justify-content: space-between;
+}
+
+.navRight {
+  display: flex;
+  gap: $padding;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    display: none;
+  }
+}
+
+.logo,
+.mobileNavMenu {
+  height: $baseComponentHeight;
+  width: auto;
+}
+
+.userPageLinks {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.pageLinks {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+}
+
+.pageLinks > * {
+  text-decoration: none;
+}
+
+.lightLinks > * {
+  color: $light;
+}
+
+.darkLinks > * {
+  color: $dark;
+}
+
+.mobileNav {
+  display: none;
+  @media screen and (max-width: $desktopBreakpoint) {
+    display: block;
+  }
+}
+
+.mobileNavMenu:hover {
+  cursor: pointer;
+}
+
+.mobileNavButton {
+  background: none;
+  border: none;
+}

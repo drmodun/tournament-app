@@ -204,6 +204,54 @@
   color: $dark;
 }
 
+.primaryFill {
+  fill: $primary;
+}
+
+.secondaryFill {
+  fill: $secondary;
+}
+
+.lightFill {
+  fill: $light;
+}
+
+.darkFill {
+  fill: $dark;
+}
+
+.warningFill {
+  fill: $warning;
+}
+
+.dangerFill {
+  fill: $danger;
+}
+
+.primaryMutedFill {
+  fill: $primaryMuted;
+}
+
+.secondaryMutedFill {
+  fill: $secondaryMuted;
+}
+
+.lightMutedFill {
+  fill: $lightMuted;
+}
+
+.darkMutedFill {
+  fill: $darkMuted;
+}
+
+.warningMutedFill {
+  fill: $warningMuted;
+}
+
+.dangerMutedFill {
+  fill: $dangerMuted;
+}
+
 .hidden {
   display: none !important;
 }
@@ -275,6 +323,11 @@
 
 .largeText {
   font-size: $largeFontSize;
+}
+
+.titleText {
+  font-size: $titleFontSize;
+  font-weight: 700;
 }
 
 .primaryBorder {

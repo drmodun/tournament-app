@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./dropdown.module.scss";
 import { ButtonProps } from "components/button/button";
 import clsx from "clsx";
@@ -27,6 +27,7 @@ interface DropdownProps {
   labelVariant?: TextVariants;
   labelStyle?: React.CSSProperties;
   options?: ButtonProps[];
+  // eslint-disable-next-line no-unused-vars
   onSelect?: (index: number) => void;
   children?: React.ReactNode;
   arrowed?: boolean;

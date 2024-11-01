@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, MouseEventHandler, useEffect } from "react";
+import { MouseEventHandler, useEffect } from "react";
 import styles from "./dialog.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";

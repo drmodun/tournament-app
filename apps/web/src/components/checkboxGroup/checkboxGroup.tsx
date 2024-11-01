@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./checkboxGroup.module.scss";
 import Checkbox from "components/checkbox";
 import { CheckboxProps } from "components/checkbox/checkbox";

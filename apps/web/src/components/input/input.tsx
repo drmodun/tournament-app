@@ -1,10 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  HTMLInputTypeAttribute,
-  ChangeEventHandler,
-} from "react";
+import { useState, HTMLInputTypeAttribute, ChangeEventHandler } from "react";
 import styles from "./input.module.scss";
 import globals from "styles/globals.module.scss";
 import {
@@ -14,6 +10,7 @@ import {
   inverseTextColor,
 } from "types/styleTypes";
 import { clsx } from "clsx";
+import { useFormContext } from "react-hook-form";
 
 interface InputProps {
   style?: React.CSSProperties;
@@ -26,6 +23,9 @@ interface InputProps {
   doesSubmit?: boolean;
   submitLabel?: string;
   type?: HTMLInputTypeAttribute;
+  name?: string;
+  isReactFormHook?: boolean;
+  required?: boolean;
   className?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onSubmit?: Function;
@@ -42,14 +42,23 @@ export default function Input({
   doesSubmit = false,
   submitLabel,
   type = "text",
+  name = "",
+  isReactFormHook = false,
+  required = false,
   className,
   onChange = () => {},
   onSubmit = () => {},
 }: InputProps) {
   const [value, setValue] = useState<string>("");
+  const methods = useFormContext();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    onChange(e);
+  };
 
   return (
-    <div className={className}>
+    <div>
       {label && (
         <p
           className={clsx(
@@ -64,20 +73,21 @@ export default function Input({
       <div className={styles.inputWrapper}>
         <input
           type={type}
-          onChange={(e) => {
-            setValue(e.target.value);
-            onChange(e);
-          }}
           value={value}
           placeholder={placeholder}
           className={clsx(
             styles.input,
+            className,
             doesSubmit && styles.submitInput,
             variant == "light" && styles.lightPlaceholder,
             globals[`${variant}BackgroundColorDynamic`],
             globals[`${textColor(variant)}Color`],
           )}
           style={style}
+          {...methods.register(name, { required: required })}
+          onChange={
+            isReactFormHook ? methods.register(name).onChange : handleChange
+          }
         />
         {doesSubmit && (
           <button

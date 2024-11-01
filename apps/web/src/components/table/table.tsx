@@ -1,12 +1,9 @@
 "use client";
 
-import React, { useState, MouseEventHandler } from "react";
+import React from "react";
 import styles from "./table.module.scss";
-import globals from "styles/globals.module.scss";
-import { Variants, textColor } from "types/styleTypes";
+import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
-import { isNumber } from "util";
-import { TableRow } from "@mui/material";
 
 interface TableProps {
   children?: React.ReactNode;

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, MouseEventHandler } from "react";
+import React from "react";
 import styles from "./tableRow.module.scss";
-import globals from "styles/globals.module.scss";
-import { Variants, textColor } from "types/styleTypes";
+import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
 import TableData from "components/tableData";
 

@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState, ChangeEvent, FormEvent, useContext } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import Button from "components/button";
 import Input from "components/input";
 import Chip from "components/chip";
 import Carousel from "components/carousel";
 import Toast from "components/toast";
 import RadioGroup from "components/radioGroup";
-import { ToastContext } from "utils/context/toastContext";
 import ToastList from "components/toastList";
 import CheckboxGroup from "components/checkboxGroup";
 import MultilineInput from "components/multilineInput";
@@ -19,6 +18,7 @@ import Navbar from "components/navbar";
 import TableData from "components/tableData";
 import TableRow from "components/tableRow";
 import Table from "components/table";
+import { useToastContext } from "utils/hooks/useToastContext";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -28,11 +28,10 @@ export default function Web() {
   const [error, setError] = useState<string | undefined>();
   const [dialogActive, setDialogActive] = useState<boolean>(false);
 
-  const toastContext = useContext(ToastContext);
+  const toastContext = useToastContext();
   useEffect(() => {
     setResponse(null);
     setError(undefined);
-    console.log(toastContext);
   }, [name, toastContext]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>

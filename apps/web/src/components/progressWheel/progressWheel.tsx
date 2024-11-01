@@ -3,7 +3,6 @@
 import styles from "./progressWheel.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import React from "react";
 import {
   inverseTextColor,
   textColor,

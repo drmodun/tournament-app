@@ -22,6 +22,7 @@
     "next": "^15.0.0-rc.0",
     "react": "^19.0.0-rc-34d0c5e357-20240607",
     "react-dom": "^19.0.0-rc-34d0c5e357-20240607",
+    "react-hook-form": "^7.53.1",
     "react-material-symbols": "^4.4.0"
   },
   "devDependencies": {

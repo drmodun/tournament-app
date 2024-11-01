@@ -1,0 +1,85 @@
+@use "../../styles/" as *;
+
+.header {
+  -webkit-text-fill-color: $dark;
+  margin-bottom: $doublePadding;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: #ffffff,
+    $num-steps: 32
+  );
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    font-size: $headerFontSize !important;
+  }
+}
+
+.imageAligner {
+  background-image: url("/fadingBracket.svg");
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: clamp($doublePadding * 2, 100%, $tabletBreakpoint/4);
+    margin-top: $padding;
+  }
+
+  @media screen and (max-width: $phoneBreakpoint) {
+    background-image: url("/fadingBracketMobile.svg");
+    height: 100%;
+  }
+}
+
+.subheaderTextWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+  }
+}
+
+.wrapper {
+  width: clamp(0px, 100%, $desktopBreakpoint);
+  display: flex;
+  flex-direction: column;
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
+    justify-content: center;
+  }
+}
+
+.subheaderText {
+  @media screen and (max-width: $desktopBreakpoint) {
+    font-size: $largeFontSize !important;
+  }
+}
+
+.input {
+  width: 75%;
+  margin-bottom: $padding;
+}
+
+.submitButton {
+  width: 75%;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.error {
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  margin-left: $padding;
+  margin-top: $halfPadding / 2;
+  transform: translateY(-50%);
+  color: $dark;
+  background: $light;
+  height: $baseComponentHeight;
+  text-align: center;
+}

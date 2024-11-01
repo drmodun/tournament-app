@@ -1,5 +1,7 @@
 import "./globals.scss";
 import { ToastProvider } from "utils/context/toastContext";
+import { DrawerProvider } from "utils/context/drawerContext";
+import Drawer from "views/drawer";
 
 export default function RootLayout({
   children,
@@ -9,7 +11,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ToastProvider>{children}</ToastProvider>
+        <ToastProvider>
+          <DrawerProvider>
+            {children}
+            <Drawer />
+          </DrawerProvider>
+        </ToastProvider>
       </body>
     </html>
   );

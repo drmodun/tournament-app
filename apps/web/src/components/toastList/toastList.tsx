@@ -1,20 +1,11 @@
-import {
-  MouseEventHandler,
-  MouseEvent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { MouseEventHandler, MouseEvent } from "react";
 import Toast from "../toast/toast";
-import { AUTO_CLOSE_DURATION, ToastProps } from "types/toastTypes";
+import { ToastProps } from "types/toastTypes";
 import styles from "./toastList.module.scss";
-import globals from "styles/globals.module.scss";
-import { ToastContext } from "utils/context/toastContext";
-import clsx from "clsx";
-import { ANIMATION_DURATION } from "types/styleTypes";
+import { useToastContext } from "utils/hooks/useToastContext";
 
 export default function ToastList({ style }: { style?: React.CSSProperties }) {
-  const toastContext = useContext(ToastContext);
+  const toastContext = useToastContext();
 
   const handleClick = (
     e: MouseEvent<HTMLButtonElement>,

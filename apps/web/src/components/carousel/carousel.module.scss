@@ -1,0 +1,56 @@
+@import "../../styles/";
+.image {
+  max-width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: $borderRadius;
+  margin-bottom: $halfPadding;
+}
+
+.wrapper {
+  position: relative;
+  width: auto;
+  max-width: vw-calc(400);
+  padding: $doublePadding;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    max-width: 100%;
+  }
+}
+
+.arrowForward {
+  right: $doublePadding + 1px;
+  border-radius: $borderRadius 0 0 $borderRadius;
+}
+
+.arrowBack {
+  left: $doublePadding + 1px;
+  border-radius: 0 $borderRadius $borderRadius 0;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #0000003f;
+  border: none;
+  height: 25%;
+  color: $light;
+  padding: 0 $halfPadding 0 $halfPadding;
+  cursor: pointer;
+  color: $light;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    padding: 0 $doublePadding 0 $doublePadding;
+    height: 50%;
+  }
+}
+
+.title {
+  font-size: $fontSize;
+  text-align: center;
+}

@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1718145674285,
-      "tag": "0000_old_vision",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1718199512264,
-      "tag": "0001_fast_roughhouse",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1723225295473,
-      "tag": "0002_loving_nightcrawler",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1727738729208,
-      "tag": "0003_flowery_dagger",
+      "when": 1730313009622,
+      "tag": "0000_hot_viper",
       "breakpoints": true
     }
   ]

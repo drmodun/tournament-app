@@ -1,0 +1,37 @@
+@import "../../styles/";
+
+.label {
+  display: grid;
+  grid-template-columns: 1rem auto;
+  gap: $halfPadding;
+
+  align-items: center;
+  @media screen and (max-width: $tabletBreakpoint) {
+    gap: $padding;
+  }
+}
+
+.radioButton {
+  appearance: none;
+  -webkit-appearance: none;
+  font-size: $fontSize;
+  color: currentColor;
+  width: rem-calc(20);
+  height: rem-calc(20);
+  border-radius: 35%;
+  transition: border $animationDuration $animationEasingFunction;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: rem-calc(24);
+    height: rem-calc(24);
+  }
+}
+
+.disabled {
+  background-color: $lightMuted;
+  border: $baseBorderSize solid $disabled;
+}
+
+.disabledText {
+  color: $disabled;
+}

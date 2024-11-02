@@ -1,5 +1,5 @@
 {
-  "id": "1b8548a5-03f7-48a6-a136-f2cec8c47e26",
+  "id": "439f258e-dd17-4b15-ba94-10ddac69919e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -202,7 +202,7 @@
         },
         "odd": {
           "name": "odd",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
@@ -287,6 +287,14 @@
           "primaryKey": false,
           "notNull": false
         },
+        "category_type": {
+          "name": "category_type",
+          "type": "category_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'other'"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -315,13 +323,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
-        },
-        "points": {
-          "name": "points",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 0
         },
         "matchmaking_points": {
           "name": "matchmaking_points",
@@ -579,8 +580,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "chatRoomMessage": {
-          "name": "chatRoomMessage",
+        "message": {
+          "name": "message",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -754,6 +755,57 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.contest_allowed_language": {
+      "name": "contest_allowed_language",
+      "schema": "",
+      "columns": {
+        "contest_id": {
+          "name": "contest_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "language": {
+          "name": "language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "contest_allowed_language_contest_id_competitive_programming_contest_id_fk": {
+          "name": "contest_allowed_language_contest_id_competitive_programming_contest_id_fk",
+          "tableFrom": "contest_allowed_language",
+          "tableTo": "competitive_programming_contest",
+          "columnsFrom": [
+            "contest_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "contest_allowed_language_contest_id_language_pk": {
+          "name": "contest_allowed_language_contest_id_language_pk",
+          "columns": [
+            "contest_id",
+            "language"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.direct_message": {
@@ -1110,7 +1162,8 @@
         },
         "role": {
           "name": "role",
-          "type": "text",
+          "type": "group_role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
           "default": "'member'"
@@ -1163,6 +1216,70 @@
       },
       "uniqueConstraints": {}
     },
+    "public.interests": {
+      "name": "interests",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "interests_user_id_user_id_fk": {
+          "name": "interests_user_id_user_id_fk",
+          "tableFrom": "interests",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "interests_category_id_category_id_fk": {
+          "name": "interests_category_id_category_id_fk",
+          "tableFrom": "interests",
+          "tableTo": "category",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "interests_user_id_category_id_pk": {
+          "name": "interests_user_id_category_id_pk",
+          "columns": [
+            "user_id",
+            "category_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "public.like": {
       "name": "like",
       "schema": "",
@@ -1173,17 +1290,18 @@
           "primaryKey": false,
           "notNull": true
         },
-        "tournament_post_id": {
-          "name": "tournament_post_id",
+        "post_id": {
+          "name": "post_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "result_post_id": {
-          "name": "result_post_id",
-          "type": "integer",
+        "like_type": {
+          "name": "like_type",
+          "type": "like_type",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -1207,14 +1325,28 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
+        },
+        "like_post_id_tournament_post_id_fk": {
+          "name": "like_post_id_tournament_post_id_fk",
+          "tableFrom": "like",
+          "tableTo": "tournament_post",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "like_user_id_tournament_post_id_pk": {
-          "name": "like_user_id_tournament_post_id_pk",
+        "like_user_id_post_id_like_type_pk": {
+          "name": "like_user_id_post_id_like_type_pk",
           "columns": [
             "user_id",
-            "tournament_post_id"
+            "post_id",
+            "like_type"
           ]
         }
       },
@@ -1528,14 +1660,8 @@
       "name": "participation",
       "schema": "",
       "columns": {
-        "group": {
-          "name": "group",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
+        "group_id": {
+          "name": "group_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -1563,25 +1689,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "participation_group_group_id_fk": {
-          "name": "participation_group_group_id_fk",
+        "participation_group_id_group_id_fk": {
+          "name": "participation_group_id_group_id_fk",
           "tableFrom": "participation",
           "tableTo": "group",
           "columnsFrom": [
-            "group"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "participation_user_id_user_id_fk": {
-          "name": "participation_user_id_user_id_fk",
-          "tableFrom": "participation",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
+            "group_id"
           ],
           "columnsTo": [
             "id"
@@ -1604,10 +1717,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "participation_group_tournament_id_pk": {
-          "name": "participation_group_tournament_id_pk",
+        "participation_group_id_tournament_id_pk": {
+          "name": "participation_group_id_tournament_id_pk",
           "columns": [
-            "group",
+            "group_id",
             "tournament_id"
           ]
         }
@@ -2040,12 +2153,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "images": {
-          "name": "images",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "message": {
           "name": "message",
           "type": "text",
@@ -2081,6 +2188,55 @@
           "tableTo": "event",
           "columnsFrom": [
             "event_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.result_post_image": {
+      "name": "result_post_image",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "post_id": {
+          "name": "post_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "result_post_image_post_id_result_post_id_fk": {
+          "name": "result_post_image_post_id_result_post_id_fk",
+          "tableFrom": "result_post_image",
+          "tableTo": "result_post",
+          "columnsFrom": [
+            "post_id"
           ],
           "columnsTo": [
             "id"
@@ -2164,7 +2320,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "review_user_id_event_id_pk": {
+          "name": "review_user_id_event_id_pk",
+          "columns": [
+            "user_id",
+            "event_id"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.roster": {
@@ -2485,6 +2649,67 @@
       },
       "uniqueConstraints": {}
     },
+    "public.subcategory": {
+      "name": "subcategory",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "subcategory_category_id_category_id_fk": {
+          "name": "subcategory_category_id_category_id_fk",
+          "tableFrom": "subcategory",
+          "tableTo": "category",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.submission": {
       "name": "submission",
       "schema": "",
@@ -2512,6 +2737,20 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -2613,6 +2852,191 @@
           "columns": [
             "submission_id",
             "test_case_cluster_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.subscription": {
+      "name": "subscription",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enum": {
+          "name": "enum",
+          "type": "user_subscription",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "benefits": {
+          "name": "benefits",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stripe_product_id": {
+          "name": "stripe_product_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price": {
+          "name": "price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.subscription_benefits": {
+      "name": "subscription_benefits",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "subscription_id": {
+          "name": "subscription_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "benefit": {
+          "name": "benefit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "subscription_benefits_subscription_id_subscription_id_fk": {
+          "name": "subscription_benefits_subscription_id_subscription_id_fk",
+          "tableFrom": "subscription_benefits",
+          "tableTo": "subscription",
+          "columnsFrom": [
+            "subscription_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.subscription_user": {
+      "name": "subscription_user",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subscription_id": {
+          "name": "subscription_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "subscription_user_user_id_user_id_fk": {
+          "name": "subscription_user_user_id_user_id_fk",
+          "tableFrom": "subscription_user",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "subscription_user_subscription_id_subscription_id_fk": {
+          "name": "subscription_user_subscription_id_subscription_id_fk",
+          "tableFrom": "subscription_user",
+          "tableTo": "subscription",
+          "columnsFrom": [
+            "subscription_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "subscription_user_user_id_subscription_id_pk": {
+          "name": "subscription_user_user_id_subscription_id_pk",
+          "columns": [
+            "user_id",
+            "subscription_id"
           ]
         }
       },
@@ -2921,6 +3345,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "subcategory_id": {
+          "name": "subcategory_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp with time zone",
@@ -2942,6 +3372,19 @@
             "id"
           ],
           "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "tournament_subcategory_id_subcategory_id_fk": {
+          "name": "tournament_subcategory_id_subcategory_id_fk",
+          "tableFrom": "tournament",
+          "tableTo": "subcategory",
+          "columnsFrom": [
+            "subcategory_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -2970,12 +3413,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "images": {
-          "name": "images",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "message": {
           "name": "message",
           "type": "text",
@@ -2998,6 +3435,55 @@
           "tableTo": "tournament",
           "columnsFrom": [
             "tournament_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.tournament_post_image": {
+      "name": "tournament_post_image",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "post_id": {
+          "name": "post_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tournament_post_image_post_id_tournament_post_id_fk": {
+          "name": "tournament_post_image_post_id_tournament_post_id_fk",
+          "tableFrom": "tournament_post_image",
+          "tableTo": "tournament_post",
+          "columnsFrom": [
+            "post_id"
           ],
           "columnsTo": [
             "id"
@@ -3133,14 +3619,6 @@
           "notNull": false,
           "default": "'user'"
         },
-        "subscription": {
-          "name": "subscription",
-          "type": "user_subscription",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'free'"
-        },
         "code": {
           "name": "code",
           "type": "text",
@@ -3149,6 +3627,13 @@
         },
         "is_email_verified": {
           "name": "is_email_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "has_selected_interests": {
+          "name": "has_selected_interests",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
@@ -3170,6 +3655,18 @@
         },
         "country": {
           "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stripe_customer_id": {
+          "name": "stripe_customer_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -3231,6 +3728,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "point_difference": {
+          "name": "point_difference",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
         },
         "created_at": {
           "name": "created_at",
@@ -3307,6 +3811,15 @@
         "winner",
         "points",
         "placement"
+      ]
+    },
+    "public.category_type": {
+      "name": "category_type",
+      "schema": "public",
+      "values": [
+        "programming",
+        "sports",
+        "other"
       ]
     },
     "public.chat_room_type": {
@@ -3422,11 +3935,9 @@
       "name": "tournament_team_type",
       "schema": "public",
       "values": [
-        "league",
-        "competition",
-        "seasonal",
-        "contest",
-        "event"
+        "solo",
+        "team",
+        "mixed"
       ]
     },
     "public.tournament_type": {

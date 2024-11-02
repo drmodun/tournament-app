@@ -11,6 +11,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ CREATE TYPE "public"."category_type" AS ENUM('programming', 'sports', 'other');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "public"."chat_room_type" AS ENUM('tournament', 'direct', 'group');
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -83,7 +89,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "public"."tournament_team_type" AS ENUM('league', 'competition', 'seasonal', 'contest', 'event');
+ CREATE TYPE "public"."tournament_team_type" AS ENUM('solo', 'team', 'mixed');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -135,7 +141,7 @@ CREATE TABLE IF NOT EXISTS "bets" (
 	"bet_type" "bet_type" DEFAULT 'winner',
 	"betting_number" integer DEFAULT 1,
 	"amount" integer NOT NULL,
-	"odd" integer NOT NULL,
+	"odd" numeric(10, 2) NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
@@ -144,13 +150,13 @@ CREATE TABLE IF NOT EXISTS "category" (
 	"name" text NOT NULL,
 	"description" text,
 	"image" text,
+	"category_type" "category_type" DEFAULT 'other',
 	"created_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "category_career" (
 	"category_id" integer NOT NULL,
 	"user_id" integer NOT NULL,
-	"points" integer DEFAULT 0,
 	"matchmaking_points" integer DEFAULT 1000,
 	"level" integer DEFAULT 1,
 	"created_at" timestamp with time zone DEFAULT now(),
@@ -183,7 +189,7 @@ CREATE TABLE IF NOT EXISTS "chatRoomMessage" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"chat_room_id" integer NOT NULL,
 	"user_id" integer NOT NULL,
-	"chatRoomMessage" text NOT NULL,
+	"message" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"visibility" "message_visibility" DEFAULT 'public'
 );
@@ -204,6 +210,13 @@ CREATE TABLE IF NOT EXISTS "competitive_programming_contest" (
 	"start_date" timestamp with time zone NOT NULL,
 	"end_date" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "contest_allowed_language" (
+	"contest_id" integer NOT NULL,
+	"language" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now(),
+	CONSTRAINT "contest_allowed_language_contest_id_language_pk" PRIMARY KEY("contest_id","language")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "direct_message" (
@@ -252,17 +265,24 @@ CREATE TABLE IF NOT EXISTS "group" (
 CREATE TABLE IF NOT EXISTS "group_user" (
 	"user_id" integer NOT NULL,
 	"group_id" integer NOT NULL,
-	"role" text DEFAULT 'member',
+	"role" "group_role" DEFAULT 'member',
 	"created_at" timestamp with time zone DEFAULT now(),
 	CONSTRAINT "group_user_user_id_group_id_pk" PRIMARY KEY("user_id","group_id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "interests" (
+	"user_id" integer NOT NULL,
+	"category_id" integer NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now(),
+	CONSTRAINT "interests_user_id_category_id_pk" PRIMARY KEY("user_id","category_id")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "like" (
 	"user_id" integer NOT NULL,
-	"tournament_post_id" integer,
-	"result_post_id" integer,
+	"post_id" integer,
+	"like_type" "like_type" NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
-	CONSTRAINT "like_user_id_tournament_post_id_pk" PRIMARY KEY("user_id","tournament_post_id")
+	CONSTRAINT "like_user_id_post_id_like_type_pk" PRIMARY KEY("user_id","post_id","like_type")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "looking_for_group" (
@@ -307,12 +327,11 @@ CREATE TABLE IF NOT EXISTS "organizer" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "participation" (
-	"group" integer NOT NULL,
-	"user_id" integer NOT NULL,
+	"group_id" integer NOT NULL,
 	"tournament_id" integer NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"points" integer DEFAULT 0,
-	CONSTRAINT "participation_group_tournament_id_pk" PRIMARY KEY("group","tournament_id")
+	CONSTRAINT "participation_group_id_tournament_id_pk" PRIMARY KEY("group_id","tournament_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "problem" (
@@ -373,8 +392,14 @@ CREATE TABLE IF NOT EXISTS "result_post" (
 	"user_id" integer NOT NULL,
 	"event_id" integer NOT NULL,
 	"title" text NOT NULL,
-	"images" text,
 	"message" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "result_post_image" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"post_id" integer NOT NULL,
+	"image_url" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
@@ -384,7 +409,8 @@ CREATE TABLE IF NOT EXISTS "review" (
 	"review" text NOT NULL,
 	"is_hidden" boolean DEFAULT false,
 	"rating" integer NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now()
+	"created_at" timestamp with time zone DEFAULT now(),
+	CONSTRAINT "review_user_id_event_id_pk" PRIMARY KEY("user_id","event_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "roster" (
@@ -429,11 +455,22 @@ CREATE TABLE IF NOT EXISTS "sponsor_tournament" (
 	CONSTRAINT "sponsor_tournament_sponsor_id_tournament_id_pk" PRIMARY KEY("sponsor_id","tournament_id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "subcategory" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"description" text,
+	"image" text,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"category_id" integer NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "submission" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer NOT NULL,
 	"problem_id" integer NOT NULL,
-	"code" text NOT NULL
+	"code" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "submission_testcase" (
@@ -442,6 +479,33 @@ CREATE TABLE IF NOT EXISTS "submission_testcase" (
 	"status" "submission_status" DEFAULT 'pending',
 	"points" integer DEFAULT 0,
 	CONSTRAINT "submission_testcase_submission_id_test_case_cluster_id_pk" PRIMARY KEY("submission_id","test_case_cluster_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "subscription" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"enum" "user_subscription",
+	"description" text,
+	"benefits" text,
+	"stripe_product_id" text,
+	"price" integer NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "subscription_benefits" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"subscription_id" integer NOT NULL,
+	"benefit" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "subscription_user" (
+	"user_id" integer NOT NULL,
+	"subscription_id" integer NOT NULL,
+	"start_date" timestamp with time zone NOT NULL,
+	"end_date" timestamp with time zone,
+	"created_at" timestamp with time zone DEFAULT now(),
+	CONSTRAINT "subscription_user_user_id_subscription_id_pk" PRIMARY KEY("user_id","subscription_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "test_cluster" (
@@ -487,6 +551,7 @@ CREATE TABLE IF NOT EXISTS "tournament" (
 	"location" text,
 	"max_participants" integer DEFAULT 32,
 	"category_id" integer NOT NULL,
+	"subcategory_id" integer,
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
@@ -494,8 +559,14 @@ CREATE TABLE IF NOT EXISTS "tournament_post" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"tournament_id" integer NOT NULL,
 	"title" text NOT NULL,
-	"images" text,
 	"message" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "tournament_post_image" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"post_id" integer NOT NULL,
+	"image_url" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
@@ -518,12 +589,14 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"email" text NOT NULL,
 	"password" text,
 	"role" "user_role" DEFAULT 'user',
-	"subscription" "user_subscription" DEFAULT 'free',
 	"code" text,
 	"is_email_verified" boolean DEFAULT false,
+	"has_selected_interests" boolean DEFAULT false,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now(),
 	"country" text,
+	"location" text,
+	"stripe_customer_id" text,
 	"betting_points" integer DEFAULT 100,
 	"level" integer DEFAULT 1,
 	CONSTRAINT "user_id_unique" UNIQUE("id"),
@@ -534,6 +607,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 CREATE TABLE IF NOT EXISTS "user_roster" (
 	"user_id" integer NOT NULL,
 	"roster_id" integer NOT NULL,
+	"point_difference" integer DEFAULT 0,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"is_substitute" boolean DEFAULT false,
 	CONSTRAINT "user_roster_user_id_roster_id_pk" PRIMARY KEY("user_id","roster_id")
@@ -630,6 +704,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "contest_allowed_language" ADD CONSTRAINT "contest_allowed_language_contest_id_competitive_programming_contest_id_fk" FOREIGN KEY ("contest_id") REFERENCES "public"."competitive_programming_contest"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "direct_message" ADD CONSTRAINT "direct_message_sender_id_user_id_fk" FOREIGN KEY ("sender_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -684,7 +764,25 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "interests" ADD CONSTRAINT "interests_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "interests" ADD CONSTRAINT "interests_category_id_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."category"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "like" ADD CONSTRAINT "like_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "like" ADD CONSTRAINT "like_post_id_tournament_post_id_fk" FOREIGN KEY ("post_id") REFERENCES "public"."tournament_post"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -726,13 +824,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "participation" ADD CONSTRAINT "participation_group_group_id_fk" FOREIGN KEY ("group") REFERENCES "public"."group"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "participation" ADD CONSTRAINT "participation_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "participation" ADD CONSTRAINT "participation_group_id_group_id_fk" FOREIGN KEY ("group_id") REFERENCES "public"."group"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -804,6 +896,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "result_post_image" ADD CONSTRAINT "result_post_image_post_id_result_post_id_fk" FOREIGN KEY ("post_id") REFERENCES "public"."result_post"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "review" ADD CONSTRAINT "review_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -858,6 +956,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "subcategory" ADD CONSTRAINT "subcategory_category_id_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."category"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "submission" ADD CONSTRAINT "submission_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -877,6 +981,24 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "submission_testcase" ADD CONSTRAINT "submission_testcase_test_case_cluster_id_test_cluster_id_fk" FOREIGN KEY ("test_case_cluster_id") REFERENCES "public"."test_cluster"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "subscription_benefits" ADD CONSTRAINT "subscription_benefits_subscription_id_subscription_id_fk" FOREIGN KEY ("subscription_id") REFERENCES "public"."subscription"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "subscription_user" ADD CONSTRAINT "subscription_user_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "subscription_user" ADD CONSTRAINT "subscription_user_subscription_id_subscription_id_fk" FOREIGN KEY ("subscription_id") REFERENCES "public"."subscription"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -912,7 +1034,19 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "tournament" ADD CONSTRAINT "tournament_subcategory_id_subcategory_id_fk" FOREIGN KEY ("subcategory_id") REFERENCES "public"."subcategory"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "tournament_post" ADD CONSTRAINT "tournament_post_tournament_id_tournament_id_fk" FOREIGN KEY ("tournament_id") REFERENCES "public"."tournament"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "tournament_post_image" ADD CONSTRAINT "tournament_post_image_post_id_tournament_post_id_fk" FOREIGN KEY ("post_id") REFERENCES "public"."tournament_post"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

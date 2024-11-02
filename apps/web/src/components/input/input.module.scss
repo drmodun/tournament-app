@@ -1,0 +1,51 @@
+@import "../../styles/";
+
+.input {
+  height: $baseComponentHeight;
+  border-radius: $borderRadius;
+  padding: 0 $doublePadding;
+  border: none;
+  font-size: $fontSize;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $lightMuted;
+  }
+
+  @media only screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}
+
+.lightPlaceholder::placeholder {
+  color: $darkMuted;
+}
+
+.submitButton {
+  height: $baseComponentHeight;
+  border-radius: 0px $borderRadius $borderRadius 0;
+  border: none;
+  padding: 0 $doublePadding;
+  font-size: $fontSize;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.submitInput {
+  border-radius: $borderRadius 0px 0px $borderRadius;
+}
+
+.label {
+  font-size: $fontSize * 0.875;
+  margin-bottom: $halfPadding / 2;
+}
+
+.inputWrapper {
+  width: 100%;
+  display: flex;
+}

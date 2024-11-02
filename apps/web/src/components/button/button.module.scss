@@ -1,0 +1,24 @@
+@import "../../styles/";
+
+.button {
+  height: $baseComponentHeight;
+  max-width: 100%;
+  border-radius: $borderRadius;
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.label {
+  font-size: $fontSize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 100%;
+}

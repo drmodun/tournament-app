@@ -121,7 +121,6 @@ export const user = pgTable('user', {
   email: text('email').notNull().unique(),
   password: text('password'), //hashed password
   role: userRole('role').default('user'),
-  subscription: userSubscription('subscription').default('free'),
   code: text('code')
     .$defaultFn(() => Math.random().toString(36).slice(8))
     .unique(),
@@ -133,9 +132,54 @@ export const user = pgTable('user', {
     .$onUpdate(() => new Date()), //TODO: see if there is a better alternative
   country: text('country'), //TODO: possibly setup enum
   location: text('location'),
+  stripeCustomerId: text('stripe_customer_id'),
   bettingPoints: integer('betting_points').default(100),
   level: integer('level').default(1),
 });
+
+export const subscription = pgTable('subscription', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  enum: userSubscription('enum'), //TODO: potentially remove
+  description: text('description'),
+  benefits: text('benefits'),
+  stripeProductId: text('stripe_product_id'),
+  price: integer('price').notNull(), //price in cents euro
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const subscriptionBenefit = pgTable('subscription_benefits', {
+  id: serial('id').primaryKey(),
+  subscriptionId: integer('subscription_id')
+    .references(() => subscription.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  benefit: text('benefit').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const subscriptionToUser = pgTable(
+  'subscription_user',
+  {
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    subscriptionId: integer('subscription_id')
+      .references(() => subscription.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    startDate: timestamp('start_date', { withTimezone: true }).notNull(),
+    endDate: timestamp('end_date', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.subscriptionId] }),
+  }),
+);
 
 export const achievement = pgTable('achievement', {
   id: serial('id').primaryKey(),

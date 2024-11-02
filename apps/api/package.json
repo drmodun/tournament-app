@@ -26,6 +26,7 @@
     "test:e2e": "yarn migrate:test && yarn seed:test && dotenv -e ../../.env.test -c -- jest --config ./test/jest-e2e.json --coverage --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.685.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.2.0",

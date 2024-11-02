@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="54" failures="0" errors="0" time="5.11">
-  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.337" tests="5">
-    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.005">
+<testsuites name="jest tests" tests="61" failures="3" errors="0" time="4.426">
+  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.496" tests="5">
+    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.007">
     </testcase>
-    <testcase classname="MetadataMaker makeLinks should return the correct links" name="MetadataMaker makeLinks should return the correct links" time="0">
+    <testcase classname="MetadataMaker makeLinks should return the correct links" name="MetadataMaker makeLinks should return the correct links" time="0.001">
     </testcase>
-    <testcase classname="MetadataMaker makeLinks should handle URLs without page query parameter" name="MetadataMaker makeLinks should handle URLs without page query parameter" time="0.001">
+    <testcase classname="MetadataMaker makeLinks should handle URLs without page query parameter" name="MetadataMaker makeLinks should handle URLs without page query parameter" time="0">
     </testcase>
-    <testcase classname="MetadataMaker makePagination should return the correct pagination" name="MetadataMaker makePagination should return the correct pagination" time="0">
+    <testcase classname="MetadataMaker makePagination should return the correct pagination" name="MetadataMaker makePagination should return the correct pagination" time="0.001">
     </testcase>
     <testcase classname="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" name="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.481" tests="2">
-    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.007">
-    </testcase>
-    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.002">
-    </testcase>
-  </testsuite>
-  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.502" tests="8">
+  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.597" tests="8">
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23505" name="PostgresExceptionFilter should handle PostgresError with code 23505" time="0.017">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23503" name="PostgresExceptionFilter should handle PostgresError with code 23503" time="0.002">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23503" name="PostgresExceptionFilter should handle PostgresError with code 23503" time="0.001">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42P01" name="PostgresExceptionFilter should handle PostgresError with code 42P01" time="0.002">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42P01" name="PostgresExceptionFilter should handle PostgresError with code 42P01" time="0.001">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42703" name="PostgresExceptionFilter should handle PostgresError with code 42703" time="0.001">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 08006" name="PostgresExceptionFilter should handle PostgresError with code 08006" time="0.002">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 08006" name="PostgresExceptionFilter should handle PostgresError with code 08006" time="0.001">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 53300" name="PostgresExceptionFilter should handle PostgresError with code 53300" time="0.001">
     </testcase>
@@ -36,36 +30,62 @@
     <testcase classname="PostgresExceptionFilter should handle unknown PostgresError code" name="PostgresExceptionFilter should handle unknown PostgresError code" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.568" tests="1">
-    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.011">
+  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.645" tests="2">
+    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.006">
+    </testcase>
+    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.731" tests="3">
-    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.005">
+  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.753" tests="3">
+    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.008">
     </testcase>
-    <testcase classname="MyNumber should fail validation when maximum is less than minimum" name="MyNumber should fail validation when maximum is less than minimum" time="0.001">
+    <testcase classname="MyNumber should fail validation when maximum is less than minimum" name="MyNumber should fail validation when maximum is less than minimum" time="0.002">
     </testcase>
     <testcase classname="MyNumber should fail validation when maximum is equal to minimum" name="MyNumber should fail validation when maximum is equal to minimum" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.823" tests="5">
-    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.005">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0.001">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0.002">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0.001">
+  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.773" tests="1">
+    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.018">
     </testcase>
   </testsuite>
-  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.824" tests="9">
-    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.007">
+  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.838" tests="9">
+    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.012">
     </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.002">
+    <testcase classname="UserDrizzleRepository getQuery should return a valid query with base response type" name="UserDrizzleRepository getQuery should return a valid query with base response type" time="0.006">
     </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.001">
+    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.004">
+    </testcase>
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.004">
+    </testcase>
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.003">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.002">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.006">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.003">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should check if an entity exists given a valid id" name="UserDrizzleRepository should check if an entity exists given a valid id" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.861" tests="5">
+    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.006">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0.001">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0.001">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="3.887" tests="9">
+    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.009">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.003">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.002">
     </testcase>
     <testcase classname="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" name="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" time="0.001">
     </testcase>
@@ -80,52 +100,142 @@
     <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.652" tests="9">
-    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.018">
+  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="4.071" tests="8">
+    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.011">
     </testcase>
-    <testcase classname="UserDrizzleRepository getQuery should return a valid query with base response type" name="UserDrizzleRepository getQuery should return a valid query with base response type" time="0.007">
+    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.05">
     </testcase>
-    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.004">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.004">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.005">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.003">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.004">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.003">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should check if an entity exists given a valid id" name="UserDrizzleRepository should check if an entity exists given a valid id" time="0.002">
-    </testcase>
-  </testsuite>
-  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.812" tests="8">
-    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.012">
-    </testcase>
-    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.046">
-    </testcase>
-    <testcase classname="UsersService should throw an unprocessable entity exception when creating a user fails" name="UsersService should throw an unprocessable entity exception when creating a user fails" time="0.048">
+    <testcase classname="UsersService should throw an unprocessable entity exception when creating a user fails" name="UsersService should throw an unprocessable entity exception when creating a user fails" time="0.049">
     </testcase>
     <testcase classname="UsersService should throw an error when creating a user with an existing email" name="UsersService should throw an error when creating a user with an existing email" time="0.044">
     </testcase>
     <testcase classname="UsersService should update a user" name="UsersService should update a user" time="0.001">
     </testcase>
-    <testcase classname="UsersService should throw an error when updating a user with an existing email" name="UsersService should throw an error when updating a user with an existing email" time="0.002">
+    <testcase classname="UsersService should throw an error when updating a user with an existing email" name="UsersService should throw an error when updating a user with an existing email" time="0.001">
     </testcase>
     <testcase classname="UsersService should delete a user" name="UsersService should delete a user" time="0.001">
     </testcase>
-    <testcase classname="UsersService should throw an error when deleting a user with a wrong id" name="UsersService should throw an error when deleting a user with a wrong id" time="0.001">
+    <testcase classname="UsersService should throw an error when deleting a user with a wrong id" name="UsersService should throw an error when deleting a user with a wrong id" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.834" tests="4">
-    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.01">
+  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2024-11-02T02:27:11" time="4.134" tests="4">
+    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.012">
     </testcase>
     <testcase classname="UsersController should return a valid query" name="UsersController should return a valid query" time="0.004">
     </testcase>
-    <testcase classname="UsersController should return a user" name="UsersController should return a user" time="0.001">
+    <testcase classname="UsersController should return a user" name="UsersController should return a user" time="0.002">
     </testcase>
-    <testcase classname="UsersController should create a user" name="UsersController should create a user" time="0.001">
+    <testcase classname="UsersController should create a user" name="UsersController should create a user" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="EmailService" errors="0" failures="3" skipped="0" timestamp="2024-11-02T02:27:11" time="4.149" tests="7">
+    <testcase classname="EmailService should be defined" name="EmailService should be defined" time="0.012">
+    </testcase>
+    <testcase classname="EmailService checkForCredentials should return false if credentials are not set" name="EmailService checkForCredentials should return false if credentials are not set" time="0.002">
+    </testcase>
+    <testcase classname="EmailService checkForCredentials should return true if credentials are set" name="EmailService checkForCredentials should return true if credentials are set" time="0.001">
+    </testcase>
+    <testcase classname="EmailService generateMailgunMessageData should generate MailgunMessageData" name="EmailService generateMailgunMessageData should generate MailgunMessageData" time="0.001">
+    </testcase>
+    <testcase classname="EmailService sendMail should throw an error if credentials are not set" name="EmailService sendMail should throw an error if credentials are not set" time="0.055">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected constructor: InternalServerErrorException
+Received constructor: Error
+
+Received message: &quot;Parameter \&quot;key\&quot; is required&quot;
+
+      35 |       throw new InternalServerErrorException(&apos;Email credentials are not set&apos;);
+      36 |
+    &gt; 37 |     const client = new Mailgun(FormData).client({
+         |                                          ^
+      38 |       key: process.env.EMAIL_KEY,
+      39 |       username: &apos;api&apos;,
+      40 |     });
+
+      at new e (../../node_modules/mailgun.js/webpack:/mailgun/lib/Classes/MailgunClient.ts:67:13)
+      at e.client (../../node_modules/mailgun.js/webpack:/mailgun/lib/index.ts:18:12)
+      at EmailService.client [as sendMail] (src/infrastructure/email/email.service.ts:37:42)
+      at Object.&lt;anonymous&gt; (src/infrastructure/email/tests/email.service.spec.ts:71:17)
+    at Object.toThrow (/media/drmodun/data/repos/tournament-app/node_modules/expect/build/index.js:218:22)
+    at Object.&lt;anonymous&gt; (/media/drmodun/data/repos/tournament-app/apps/api/src/infrastructure/email/tests/email.service.spec.ts:76:17)
+    at Promise.then.completed (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:121:9)
+    at run (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="EmailService sendMail should throw an error if email could not be sent" name="EmailService sendMail should throw an error if email could not be sent" time="0.003">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected constructor: InternalServerErrorException
+Received constructor: TypeError
+
+Received message: &quot;this.FormDataConstructor is not a constructor&quot;
+
+      40 |     });
+      41 |
+    &gt; 42 |     const action = await client.messages.create(process.env.EMAIL_DOMAIN, data);
+         |                                          ^
+      43 |
+      44 |     if (action.status !== 200) {
+      45 |       throw new InternalServerErrorException(&apos;Email could not be sent&apos;);
+
+      at e.createFormData (../../node_modules/mailgun.js/webpack:/mailgun/lib/Classes/common/FormDataBuilder.ts:60:10)
+      at e.createFormData [as postWithFD] (../../node_modules/mailgun.js/webpack:/mailgun/lib/Classes/common/Request.ts:209:43)
+      at e.postWithFD [as create] (../../node_modules/mailgun.js/webpack:/mailgun/lib/Classes/Messages.ts:56:25)
+      at EmailService.create [as sendMail] (src/infrastructure/email/email.service.ts:42:42)
+      at Object.&lt;anonymous&gt; (src/infrastructure/email/tests/email.service.spec.ts:88:17)
+    at Object.toThrow (/media/drmodun/data/repos/tournament-app/node_modules/expect/build/index.js:218:22)
+    at Object.&lt;anonymous&gt; (/media/drmodun/data/repos/tournament-app/apps/api/src/infrastructure/email/tests/email.service.spec.ts:93:17)
+    at Promise.then.completed (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:121:9)
+    at run (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="EmailService sendMail should send email successfully" name="EmailService sendMail should send email successfully" time="0.001">
+      <failure>Error: expect(received).resolves.not.toThrow()
+
+Received promise rejected instead of resolved
+Rejected to value: [TypeError: this.FormDataConstructor is not a constructor]
+    at expect (/media/drmodun/data/repos/tournament-app/node_modules/expect/build/index.js:113:15)
+    at Object.&lt;anonymous&gt; (/media/drmodun/data/repos/tournament-app/apps/api/src/infrastructure/email/tests/email.service.spec.ts:100:13)
+    at Promise.then.completed (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:121:9)
+    at run (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
     </testcase>
   </testsuite>
 </testsuites>

@@ -96,7 +96,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
       case UserResponsesEnum.ADMIN:
         return {
           ...this.getMappingObject(UserResponsesEnum.EXTENDED),
-          subscription: user.subscription,
           password: user.password,
           role: user.role,
           code: user.code,

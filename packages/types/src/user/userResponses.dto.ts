@@ -30,7 +30,6 @@ export interface IExtendedUserResponse extends IUserResponse {
 }
 
 export interface IAdminUserResponse extends IExtendedUserResponse {
-  subscription: subscriptionEnum;
   role: userRoleEnum;
 }
 

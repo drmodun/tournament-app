@@ -137,6 +137,28 @@ export const user = pgTable('user', {
   level: integer('level').default(1),
 });
 
+export const userNotificationSettings = pgTable('user_notification_settings', {
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .unique(),
+  emailNotifications: boolean('email_notifications').default(true),
+  pushNotifications: boolean('push_notifications').default(true),
+  inAppNotifications: boolean('in_app_notifications').default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const userToNotificationTokens = pgTable('user_to_notification_tokens', {
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  token: text('token').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
 export const subscription = pgTable('subscription', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),

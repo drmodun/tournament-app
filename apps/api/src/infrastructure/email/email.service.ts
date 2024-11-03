@@ -9,7 +9,7 @@ import {
   EmailGenerationData,
   emailTemplateBodies,
   TemplatesEnum,
-} from './types';
+} from '../types';
 import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { cwd } from 'process';

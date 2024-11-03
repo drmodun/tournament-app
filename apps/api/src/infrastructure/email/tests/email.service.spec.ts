@@ -5,7 +5,7 @@ import { EmailService } from '../email.service';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import Mailgun from 'mailgun.js';
 import FormData from 'form-data';
-import { EmailGenerationData, TemplatesEnum } from '../types';
+import { EmailGenerationData, TemplatesEnum } from '../../types';
 import Handlebars from 'handlebars';
 import * as fs from 'fs/promises';
 
@@ -68,9 +68,7 @@ describe('EmailService', () => {
   });
 
   it('should return the correct template', async () => {
-    jest
-      .spyOn(fs, 'readFile')
-      .mockResolvedValueOnce('Test Template');
+    jest.spyOn(fs, 'readFile').mockResolvedValueOnce('Test Template');
 
     const result = await service.getTemplate(TemplatesEnum.TEST_TEMPLATE);
 

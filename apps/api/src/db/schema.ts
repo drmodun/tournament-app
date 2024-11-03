@@ -134,6 +134,7 @@ export const user = pgTable('user', {
   location: text('location'),
   stripeCustomerId: text('stripe_customer_id'),
   bettingPoints: integer('betting_points').default(100),
+  customerId: text('customer_id'),
   level: integer('level').default(1),
 });
 
@@ -167,6 +168,8 @@ export const subscription = pgTable('subscription', {
   benefits: text('benefits'),
   stripeProductId: text('stripe_product_id'),
   price: integer('price').notNull(), //price in cents euro
+  autoRenewal: boolean('auto_renewal').default(true),
+  nextPaymentDate: timestamp('next_payment_date', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 

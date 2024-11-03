@@ -3,8 +3,6 @@ import { NotificationsService } from '../notifications.service';
 import { NotificationTemplatesFiller } from '../templates';
 import * as admin from 'firebase-admin';
 import { db } from 'src/db/db';
-import { userToNotificationTokens } from 'src/db/schema';
-import { eq } from 'drizzle-orm';
 import { InternalServerErrorException } from '@nestjs/common';
 import { FirebaseAdminFactory } from '../firebase-admin.factory';
 

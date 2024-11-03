@@ -15,6 +15,13 @@
       "when": 1730670834078,
       "tag": "0001_even_iron_lad",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1730675953617,
+      "tag": "0002_slim_gladiator",
+      "breakpoints": true
     }
   ]
 }

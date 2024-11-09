@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, MouseEventHandler, useEffect } from "react";
+import React, { MouseEventHandler, useEffect } from "react";
 import styles from "./dialog.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
@@ -49,7 +49,7 @@ export default function Dialog({
             styles.dialog,
             globals[`${variant}BackgroundColor`],
             globals[`${textColor(variant)}Color`],
-            className,
+            className
           )}
           style={style}
           onClick={(e) => e.stopPropagation()}

@@ -1,13 +1,8 @@
 "use client";
 
-import React, {
-  useState,
-  MouseEventHandler,
-  ReactElement,
-  JSXElementConstructor,
-} from "react";
+import React, { ReactElement } from "react";
 import styles from "./table.module.scss";
-import { Variants, textColor } from "types/styleTypes";
+import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
 
 interface TableProps {

@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import styles from "./index.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";

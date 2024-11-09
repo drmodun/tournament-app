@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, MouseEventHandler } from "react";
+import React, { useState, MouseEventHandler, ReactElement } from "react";
 import styles from "./tableRow.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
@@ -26,7 +26,7 @@ export default function TableRow({
 }: TableRowProps) {
   const renderChildren = () => {
     return React.Children.map(children, (child) => {
-      return React.cloneElement(child, {
+      return React.cloneElement(child as ReactElement, {
         variant: variant,
       });
     });

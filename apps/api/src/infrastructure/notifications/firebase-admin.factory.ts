@@ -10,7 +10,7 @@ export class FirebaseAdminFactory {
   constructor() {}
 
   public getInstance(): Messaging {
-    if (this.instance) {
+    if (this.instance || process.env.MODE === 'test') {
       return this.instance;
     }
 

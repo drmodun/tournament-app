@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState, MouseEventHandler } from "react";
+import React, {
+  useState,
+  MouseEventHandler,
+  ReactElement,
+  JSXElementConstructor,
+} from "react";
 import styles from "./table.module.scss";
-import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
 import { clsx } from "clsx";
-import { isNumber } from "util";
-import { TableRow } from "@mui/material";
 
 interface TableProps {
   children?: React.ReactNode;
@@ -25,7 +27,7 @@ export default function Table({
 }: TableProps) {
   const renderChildren = () => {
     return React.Children.map(children, (child, index) => {
-      return React.cloneElement(child, {
+      return React.cloneElement(child as ReactElement, {
         variant: variant,
         isNumbered: isNumbered,
         index: index == 0 ? -1 : index,

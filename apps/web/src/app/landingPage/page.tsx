@@ -2,7 +2,7 @@ import React, { MouseEventHandler } from "react";
 import styles from "./index.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import Button from "components/button";
+import Button from "../../components/button";
 
 export default function LandingPage() {
   return (

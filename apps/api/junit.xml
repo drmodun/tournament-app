@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="86" failures="0" errors="0" time="17.455">
-  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="5.898" tests="5">
-    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.037">
+<testsuites name="jest tests" tests="86" failures="0" errors="0" time="6.555">
+  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.569" tests="5">
+    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.011">
     </testcase>
     <testcase classname="MetadataMaker makeLinks should return the correct links" name="MetadataMaker makeLinks should return the correct links" time="0">
     </testcase>
@@ -9,191 +9,191 @@
     </testcase>
     <testcase classname="MetadataMaker makePagination should return the correct pagination" name="MetadataMaker makePagination should return the correct pagination" time="0">
     </testcase>
-    <testcase classname="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" name="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" time="0">
+    <testcase classname="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" name="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="6.162" tests="3">
-    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.01">
+  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.603" tests="8">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23505" name="PostgresExceptionFilter should handle PostgresError with code 23505" time="0.025">
     </testcase>
-    <testcase classname="MyNumber should fail validation when maximum is less than minimum" name="MyNumber should fail validation when maximum is less than minimum" time="0.001">
-    </testcase>
-    <testcase classname="MyNumber should fail validation when maximum is equal to minimum" name="MyNumber should fail validation when maximum is equal to minimum" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="6.156" tests="2">
-    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.011">
-    </testcase>
-    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="NotificationTemplatesFiller" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="6.258" tests="5">
-    <testcase classname="NotificationTemplatesFiller compileTemplates should compile all templates" name="NotificationTemplatesFiller compileTemplates should compile all templates" time="0.007">
-    </testcase>
-    <testcase classname="NotificationTemplatesFiller getTemplate should return the compiled template" name="NotificationTemplatesFiller getTemplate should return the compiled template" time="0">
-    </testcase>
-    <testcase classname="NotificationTemplatesFiller getTemplate should throw an error if template not found" name="NotificationTemplatesFiller getTemplate should throw an error if template not found" time="0.026">
-    </testcase>
-    <testcase classname="NotificationTemplatesFiller fill should fill the template with provided data" name="NotificationTemplatesFiller fill should fill the template with provided data" time="0">
-    </testcase>
-    <testcase classname="NotificationTemplatesFiller fill should throw an error if required keys are missing" name="NotificationTemplatesFiller fill should throw an error if required keys are missing" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="6.28" tests="8">
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23505" name="PostgresExceptionFilter should handle PostgresError with code 23505" time="0.027">
-    </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23503" name="PostgresExceptionFilter should handle PostgresError with code 23503" time="0.002">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23503" name="PostgresExceptionFilter should handle PostgresError with code 23503" time="0.001">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42P01" name="PostgresExceptionFilter should handle PostgresError with code 42P01" time="0.001">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42703" name="PostgresExceptionFilter should handle PostgresError with code 42703" time="0.001">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42703" name="PostgresExceptionFilter should handle PostgresError with code 42703" time="0.002">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 08006" name="PostgresExceptionFilter should handle PostgresError with code 08006" time="0.001">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle PostgresError with code 53300" name="PostgresExceptionFilter should handle PostgresError with code 53300" time="0.001">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 57014" name="PostgresExceptionFilter should handle PostgresError with code 57014" time="0.001">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 57014" name="PostgresExceptionFilter should handle PostgresError with code 57014" time="0.002">
     </testcase>
     <testcase classname="PostgresExceptionFilter should handle unknown PostgresError code" name="PostgresExceptionFilter should handle unknown PostgresError code" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="12.215" tests="1">
-    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.108">
+  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.742" tests="3">
+    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.006">
+    </testcase>
+    <testcase classname="MyNumber should fail validation when maximum is less than minimum" name="MyNumber should fail validation when maximum is less than minimum" time="0.001">
+    </testcase>
+    <testcase classname="MyNumber should fail validation when maximum is equal to minimum" name="MyNumber should fail validation when maximum is equal to minimum" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="12.903" tests="9">
-    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.08">
+  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.794" tests="2">
+    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.008">
     </testcase>
-    <testcase classname="UserDrizzleRepository getQuery should return a valid query with base response type" name="UserDrizzleRepository getQuery should return a valid query with base response type" time="0.01">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.006">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.007">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.005">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.008">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.106">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.001">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should check if an entity exists given a valid id" name="UserDrizzleRepository should check if an entity exists given a valid id" time="0.002">
+    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="NotificationsService" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="12.951" tests="8">
-    <testcase classname="NotificationsService should throw an error if Firebase credentials are not set" name="NotificationsService should throw an error if Firebase credentials are not set" time="0.145">
+  <testsuite name="BlobService" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.82" tests="10">
+    <testcase classname="BlobService should throw an error if AWS credentials are not set" name="BlobService should throw an error if AWS credentials are not set" time="0.035">
     </testcase>
-    <testcase classname="NotificationsService should be defined" name="NotificationsService should be defined" time="0.002">
+    <testcase classname="BlobService should be defined" name="BlobService should be defined" time="0.003">
     </testcase>
-    <testcase classname="NotificationsService sendNotificationToUser should send notification to user" name="NotificationsService sendNotificationToUser should send notification to user" time="0.002">
+    <testcase classname="BlobService generateKey should generate a key with the correct format" name="BlobService generateKey should generate a key with the correct format" time="0.003">
     </testcase>
-    <testcase classname="NotificationsService sendNotificationToUser should throw InternalServerErrorException if sending notification fails" name="NotificationsService sendNotificationToUser should throw InternalServerErrorException if sending notification fails" time="0.009">
+    <testcase classname="BlobService generateKey should default to txt extension if mime type is not provided" name="BlobService generateKey should default to txt extension if mime type is not provided" time="0.003">
     </testcase>
-    <testcase classname="NotificationsService sendNotification should send notification" name="NotificationsService sendNotification should send notification" time="0.002">
+    <testcase classname="BlobService uploadFile should upload a file successfully" name="BlobService uploadFile should upload a file successfully" time="0.006">
     </testcase>
-    <testcase classname="NotificationsService sendNotification should throw InternalServerErrorException if sending notification fails" name="NotificationsService sendNotification should throw InternalServerErrorException if sending notification fails" time="0.046">
+    <testcase classname="BlobService uploadFile should throw an error if upload fails" name="BlobService uploadFile should throw an error if upload fails" time="0.007">
     </testcase>
-    <testcase classname="NotificationsService sendMulticastNotification should send multicast notification" name="NotificationsService sendMulticastNotification should send multicast notification" time="0.002">
+    <testcase classname="BlobService deleteFile should delete a file successfully" name="BlobService deleteFile should delete a file successfully" time="0.003">
     </testcase>
-    <testcase classname="NotificationsService sendMulticastNotification should throw InternalServerErrorException if sending multicast notification fails" name="NotificationsService sendMulticastNotification should throw InternalServerErrorException if sending multicast notification fails" time="0.006">
+    <testcase classname="BlobService deleteFile should throw an error if delete fails" name="BlobService deleteFile should throw an error if delete fails" time="0.002">
+    </testcase>
+    <testcase classname="BlobService getFile should retrieve a file successfully" name="BlobService getFile should retrieve a file successfully" time="0.003">
+    </testcase>
+    <testcase classname="BlobService getFile should throw an error if retrieval fails" name="BlobService getFile should throw an error if retrieval fails" time="0.003">
     </testcase>
   </testsuite>
-  <testsuite name="EmailService" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="12.979" tests="9">
-    <testcase classname="EmailService should throw an error if email credentials are not set" name="EmailService should throw an error if email credentials are not set" time="0.076">
+  <testsuite name="NotificationTemplatesFiller" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.831" tests="5">
+    <testcase classname="NotificationTemplatesFiller compileTemplates should compile all templates" name="NotificationTemplatesFiller compileTemplates should compile all templates" time="0.006">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller getTemplate should return the compiled template" name="NotificationTemplatesFiller getTemplate should return the compiled template" time="0.001">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller getTemplate should throw an error if template not found" name="NotificationTemplatesFiller getTemplate should throw an error if template not found" time="0.011">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller fill should fill the template with provided data" name="NotificationTemplatesFiller fill should fill the template with provided data" time="0.001">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller fill should throw an error if required keys are missing" name="NotificationTemplatesFiller fill should throw an error if required keys are missing" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.873" tests="1">
+    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.017">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.907" tests="5">
+    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.006">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0.001">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.936" tests="9">
+    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.006">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" name="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of valid UpdateUserInfo object" name="UserRequestsDtos should pass validation of valid UpdateUserInfo object" time="0">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of empty UserQuery object" name="UserRequestsDtos should pass validation of empty UserQuery object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid UserQuery object" name="UserRequestsDtos should fail validation of invalid UserQuery object" time="0">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of valid UserQuery object" name="UserRequestsDtos should pass validation of valid UserQuery object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="EmailService" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="5.986" tests="9">
+    <testcase classname="EmailService should throw an error if email credentials are not set" name="EmailService should throw an error if email credentials are not set" time="0.02">
     </testcase>
     <testcase classname="EmailService should generate Mailgun message data" name="EmailService should generate Mailgun message data" time="0.003">
     </testcase>
-    <testcase classname="EmailService should return the correct template" name="EmailService should return the correct template" time="0.012">
+    <testcase classname="EmailService should return the correct template" name="EmailService should return the correct template" time="0.005">
     </testcase>
-    <testcase classname="EmailService should throw an error if the template is not found" name="EmailService should throw an error if the template is not found" time="0.081">
+    <testcase classname="EmailService should throw an error if the template is not found" name="EmailService should throw an error if the template is not found" time="0.004">
     </testcase>
-    <testcase classname="EmailService should validate the data correctly" name="EmailService should validate the data correctly" time="0.001">
+    <testcase classname="EmailService should validate the data correctly" name="EmailService should validate the data correctly" time="0.002">
     </testcase>
     <testcase classname="EmailService should render the template correctly" name="EmailService should render the template correctly" time="0.001">
     </testcase>
     <testcase classname="EmailService should return the rendered email" name="EmailService should return the rendered email" time="0.001">
     </testcase>
-    <testcase classname="EmailService should send the email correctly" name="EmailService should send the email correctly" time="0.001">
+    <testcase classname="EmailService should send the email correctly" name="EmailService should send the email correctly" time="0.002">
     </testcase>
-    <testcase classname="EmailService should throw an error if the email could not be sent" name="EmailService should throw an error if the email could not be sent" time="0.007">
-    </testcase>
-  </testsuite>
-  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="13.352" tests="5">
-    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.059">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0.001">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0.001">
-    </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0">
+    <testcase classname="EmailService should throw an error if the email could not be sent" name="EmailService should throw an error if the email could not be sent" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="13.352" tests="9">
-    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.034">
+  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="6.017" tests="9">
+    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.014">
     </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.002">
+    <testcase classname="UserDrizzleRepository getQuery should return a valid query with base response type" name="UserDrizzleRepository getQuery should return a valid query with base response type" time="0.009">
     </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.005">
+    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.005">
     </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" name="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" time="0">
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.006">
     </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid UpdateUserInfo object" name="UserRequestsDtos should pass validation of valid UpdateUserInfo object" time="0.001">
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.003">
     </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of empty UserQuery object" name="UserRequestsDtos should pass validation of empty UserQuery object" time="0">
+    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.003">
     </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid UserQuery object" name="UserRequestsDtos should fail validation of invalid UserQuery object" time="0.001">
+    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.002">
     </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid UserQuery object" name="UserRequestsDtos should pass validation of valid UserQuery object" time="0.001">
+    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.002">
     </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0">
+    <testcase classname="UserDrizzleRepository should check if an entity exists given a valid id" name="UserDrizzleRepository should check if an entity exists given a valid id" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="13.761" tests="8">
-    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.022">
+  <testsuite name="NotificationsService" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="6.037" tests="8">
+    <testcase classname="NotificationsService should throw an error if Firebase credentials are not set" name="NotificationsService should throw an error if Firebase credentials are not set" time="0.021">
     </testcase>
-    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.222">
+    <testcase classname="NotificationsService should be defined" name="NotificationsService should be defined" time="0.001">
     </testcase>
-    <testcase classname="UsersService should throw an unprocessable entity exception when creating a user fails" name="UsersService should throw an unprocessable entity exception when creating a user fails" time="0.056">
+    <testcase classname="NotificationsService sendNotificationToUser should send notification to user" name="NotificationsService sendNotificationToUser should send notification to user" time="0.003">
     </testcase>
-    <testcase classname="UsersService should throw an error when creating a user with an existing email" name="UsersService should throw an error when creating a user with an existing email" time="0.047">
+    <testcase classname="NotificationsService sendNotificationToUser should throw InternalServerErrorException if sending notification fails" name="NotificationsService sendNotificationToUser should throw InternalServerErrorException if sending notification fails" time="0.002">
+    </testcase>
+    <testcase classname="NotificationsService sendNotification should send notification" name="NotificationsService sendNotification should send notification" time="0.002">
+    </testcase>
+    <testcase classname="NotificationsService sendNotification should throw InternalServerErrorException if sending notification fails" name="NotificationsService sendNotification should throw InternalServerErrorException if sending notification fails" time="0.008">
+    </testcase>
+    <testcase classname="NotificationsService sendMulticastNotification should send multicast notification" name="NotificationsService sendMulticastNotification should send multicast notification" time="0.002">
+    </testcase>
+    <testcase classname="NotificationsService sendMulticastNotification should throw InternalServerErrorException if sending multicast notification fails" name="NotificationsService sendMulticastNotification should throw InternalServerErrorException if sending multicast notification fails" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="6.235" tests="8">
+    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.01">
+    </testcase>
+    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.049">
+    </testcase>
+    <testcase classname="UsersService should throw an unprocessable entity exception when creating a user fails" name="UsersService should throw an unprocessable entity exception when creating a user fails" time="0.047">
+    </testcase>
+    <testcase classname="UsersService should throw an error when creating a user with an existing email" name="UsersService should throw an error when creating a user with an existing email" time="0.044">
     </testcase>
     <testcase classname="UsersService should update a user" name="UsersService should update a user" time="0.002">
     </testcase>
-    <testcase classname="UsersService should throw an error when updating a user with an existing email" name="UsersService should throw an error when updating a user with an existing email" time="0.002">
+    <testcase classname="UsersService should throw an error when updating a user with an existing email" name="UsersService should throw an error when updating a user with an existing email" time="0.001">
     </testcase>
-    <testcase classname="UsersService should delete a user" name="UsersService should delete a user" time="0.001">
+    <testcase classname="UsersService should delete a user" name="UsersService should delete a user" time="0.002">
     </testcase>
     <testcase classname="UsersService should throw an error when deleting a user with a wrong id" name="UsersService should throw an error when deleting a user with a wrong id" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="BlobService" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="13.842" tests="10">
-    <testcase classname="BlobService should throw an error if AWS credentials are not set" name="BlobService should throw an error if AWS credentials are not set" time="0.104">
+  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2024-11-09T19:02:16" time="6.277" tests="4">
+    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.011">
     </testcase>
-    <testcase classname="BlobService should be defined" name="BlobService should be defined" time="0.002">
-    </testcase>
-    <testcase classname="BlobService generateKey should generate a key with the correct format" name="BlobService generateKey should generate a key with the correct format" time="0.002">
-    </testcase>
-    <testcase classname="BlobService generateKey should default to txt extension if mime type is not provided" name="BlobService generateKey should default to txt extension if mime type is not provided" time="0.002">
-    </testcase>
-    <testcase classname="BlobService uploadFile should upload a file successfully" name="BlobService uploadFile should upload a file successfully" time="0.033">
-    </testcase>
-    <testcase classname="BlobService uploadFile should throw an error if upload fails" name="BlobService uploadFile should throw an error if upload fails" time="0.055">
-    </testcase>
-    <testcase classname="BlobService deleteFile should delete a file successfully" name="BlobService deleteFile should delete a file successfully" time="0.002">
-    </testcase>
-    <testcase classname="BlobService deleteFile should throw an error if delete fails" name="BlobService deleteFile should throw an error if delete fails" time="0.001">
-    </testcase>
-    <testcase classname="BlobService getFile should retrieve a file successfully" name="BlobService getFile should retrieve a file successfully" time="0.002">
-    </testcase>
-    <testcase classname="BlobService getFile should throw an error if retrieval fails" name="BlobService getFile should throw an error if retrieval fails" time="0.002">
-    </testcase>
-  </testsuite>
-  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2024-11-03T23:00:16" time="16.904" tests="4">
-    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.34">
-    </testcase>
-    <testcase classname="UsersController should return a valid query" name="UsersController should return a valid query" time="0.079">
+    <testcase classname="UsersController should return a valid query" name="UsersController should return a valid query" time="0.006">
     </testcase>
     <testcase classname="UsersController should return a user" name="UsersController should return a user" time="0.002">
     </testcase>

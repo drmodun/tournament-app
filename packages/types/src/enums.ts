@@ -34,7 +34,22 @@ export enum OrganizerRoleEnum {
 }
 
 export enum notificationTypeEnum {
-  INFO = "info",
+  WELCOME = "welcome",
+  RESET_PASSWORD = "reset-password",
+  VERIFY_EMAIL = "verify-email",
+  NOTIFICATION_OF_BAN = "notification-of-ban",
+  BET_OUTCOME = "bet-outcome",
+  TOURNAMENT_REMINDER = "tournament-reminder",
+  TOURNAMENT_START = "tournament-start",
+  TOURNAMENT_END = "tournament-end",
+  GROUP_INVITATION = "group-invitation",
+  GROUP_JOIN_REQUEST = "group-join-request",
+  GROUP_JOIN_APPROVAL = "group-join-approval",
+  GROUP_JOIN_REJECTION = "group-join-rejection",
+  GROUP_REMOVAL = "group-removal",
+  GROUP_ADMIN_PROMOTION = "group-admin-promotion",
+  GROUP_ADMIN_DEMOTION = "group-admin-demotion",
+  TEST = "test-template",
 }
 //TODO: add more types
 

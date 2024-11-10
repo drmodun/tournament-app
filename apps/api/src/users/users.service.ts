@@ -63,6 +63,21 @@ export class UsersService {
     return action[0];
   }
 
+  async findOneByEmail(email: string) {
+    const query = this.repository.getQuery({
+      email,
+      responseType: UserResponsesEnum.BASE,
+    });
+
+    const results = await query;
+
+    if (results.length === 0) {
+      throw new NotFoundException('User not found');
+    }
+
+    return results[0];
+  }
+
   async remove(id: number) {
     const action = await this.repository.deleteEntity(id);
 

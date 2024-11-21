@@ -24,6 +24,7 @@ import { and, count, countDistinct, eq, SQL, sql } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { UserQuery } from './dto/requests.dto';
+import { UserDtosEnum, UserReturnTypesEnumType } from './types';
 
 @Injectable()
 export class UserDrizzleRepository extends PrimaryRepository<
@@ -36,7 +37,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
   }
   conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
-    typeEnum: UserResponseEnumType | 'auth',
+    typeEnum: UserReturnTypesEnumType,
   ): PgJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'> | TSelect {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:
@@ -67,7 +68,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
   }
 
   public getMappingObject(
-    responseEnum: UserResponseEnumType | 'auth' = 'auth', //TODO: add dtos as seperate mapping types
+    responseEnum: UserReturnTypesEnumType, //TODO: add dtos as seperate mapping types
   ) {
     switch (responseEnum) {
       case UserResponsesEnum.MINI:
@@ -108,11 +109,18 @@ export class UserDrizzleRepository extends PrimaryRepository<
           role: user.role,
           code: user.code,
         };
-      case 'auth':
+      case UserDtosEnum.VALIDATED:
         return {
           id: user.id,
           email: user.email,
           role: user.role,
+        };
+      case UserDtosEnum.CREDENTIALS:
+        return {
+          id: user.id,
+          role: user.role,
+          email: user.email,
+          password: user.password,
         };
       default:
         return {};
@@ -169,7 +177,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
 
   getSingleQuery(
     id: number,
-    responseType: UserResponseEnumType | 'auth' = UserResponsesEnum.BASE,
+    responseType: UserReturnTypesEnumType = UserResponsesEnum.BASE,
   ) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db

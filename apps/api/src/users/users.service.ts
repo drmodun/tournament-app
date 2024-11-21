@@ -3,7 +3,11 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { UserResponseEnumType, UserResponsesEnum } from '@tournament-app/types';
+import {
+  BaseUserResponseType,
+  UserResponseEnumType,
+  UserResponsesEnum,
+} from '@tournament-app/types';
 import { UserDrizzleRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
 import {
@@ -12,7 +16,7 @@ import {
   UserQuery,
 } from './dto/requests.dto';
 import { ExtendedUserResponse } from './dto/responses.dto';
-import { AnyUserReturnType, UserReturnTypesEnum } from './types';
+import { AnyUserReturnType, UserReturnTypesEnumType } from './types';
 
 @Injectable()
 export class UsersService {
@@ -41,7 +45,7 @@ export class UsersService {
 
   async findOne<TResponseType extends AnyUserReturnType = ExtendedUserResponse>(
     id: number,
-    responseType: UserReturnTypesEnum = UserResponsesEnum.EXTENDED,
+    responseType: UserReturnTypesEnumType = UserResponsesEnum.EXTENDED,
   ) {
     const results = await this.repository.getSingleQuery(id, responseType);
 
@@ -62,7 +66,9 @@ export class UsersService {
     return action[0];
   }
 
-  async findOneByEmail(email: string) {
+  async findOneByEmail<
+    TResponseType extends AnyUserReturnType = BaseUserResponseType,
+  >(email: string) {
     const query = this.repository.getQuery({
       email,
       responseType: UserResponsesEnum.BASE,
@@ -74,7 +80,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return results[0];
+    return results[0] satisfies TResponseType;
   }
 
   async remove(id: number) {

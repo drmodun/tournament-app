@@ -3,11 +3,16 @@ import { PassportStrategy } from '@nestjs/passport';
 import { UsersService } from 'src/users/users.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ValidatedUserDto } from '../dto/validatedUser.dto';
-import { UserResponsesEnum } from '@tournament-app/types';
-import { AdminUserResponse } from 'src/users/dto/responses.dto';
 import { UserDtosEnum } from 'src/users/types';
+import { Request } from 'express';
 
-export class JwtStrategy extends PassportStrategy(Strategy) {
+type JwtPayload = {
+  id: number;
+  email: string;
+  role: string;
+};
+
+export class AccessTokenStrategy extends PassportStrategy(Strategy) {
   constructor(private userService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -16,20 +21,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any): Promise<ValidatedUserDto | null> {
+  async validate(payload: JwtPayload): Promise<ValidatedUserDto | null> {
     const authUser = (await this.userService.findOne<ValidatedUserDto>(
       payload.id,
-      UserDtosEnum.ValidatedUserDto,
+      UserDtosEnum.VALIDATED,
     )) satisfies ValidatedUserDto;
 
     if (!authUser) {
       throw new UnauthorizedException();
     }
 
-    return {
-      id: authUser.id,
-      email: authUser.email,
-      role: authUser.role,
-    };
+    return authUser;
   }
 }

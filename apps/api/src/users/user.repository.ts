@@ -12,7 +12,13 @@ import {
   participation,
   user,
 } from '../db/schema';
-import { alias, PgColumn, PgSelect } from 'drizzle-orm/pg-core';
+import {
+  alias,
+  AnyPgSelectQueryBuilder,
+  PgColumn,
+  PgJoinFn,
+  PgSelect,
+} from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
 import { and, count, countDistinct, eq, SQL, sql } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
@@ -28,10 +34,10 @@ export class UserDrizzleRepository extends PrimaryRepository<
   constructor() {
     super(user);
   }
-  conditionallyJoin<TSelect extends PgSelect>(
+  conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
-    typeEnum: UserResponseEnumType,
-  ) {
+    typeEnum: UserResponseEnumType | 'auth',
+  ): PgJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'> | TSelect {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:
         return query
@@ -60,7 +66,9 @@ export class UserDrizzleRepository extends PrimaryRepository<
     }
   }
 
-  public getMappingObject(responseEnum: UserResponseEnumType) {
+  public getMappingObject(
+    responseEnum: UserResponseEnumType | 'auth' = 'auth', //TODO: add dtos as seperate mapping types
+  ) {
     switch (responseEnum) {
       case UserResponsesEnum.MINI:
         return {
@@ -99,6 +107,12 @@ export class UserDrizzleRepository extends PrimaryRepository<
           password: user.password,
           role: user.role,
           code: user.code,
+        };
+      case 'auth':
+        return {
+          id: user.id,
+          email: user.email,
+          role: user.role,
         };
       default:
         return {};
@@ -155,7 +169,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
 
   getSingleQuery(
     id: number,
-    responseType: UserResponseEnumType = UserResponsesEnum.BASE,
+    responseType: UserResponseEnumType | 'auth' = UserResponsesEnum.BASE,
   ) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db

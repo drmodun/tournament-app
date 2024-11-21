@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Messaging } from 'firebase-admin/lib/messaging';
 
 @Injectable()
@@ -14,12 +14,16 @@ export class FirebaseAdminFactory {
       return this.instance;
     }
 
+    const { privateKey } = JSON.parse(
+      process.env.FIREBASE_PRIVATE_KEY || '{ privateKey: null }',
+    );
+
     this.instance = admin
       .initializeApp({
         credential: admin.credential.cert({
-          projectId: process.env.FIREBASE_PROJECT_ID,
-          privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
           clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          privateKey: privateKey.replace(/\\n/g, '\n'),
+          projectId: process.env.FIREBASE_PROJECT_ID,
         }),
       })
       .messaging();

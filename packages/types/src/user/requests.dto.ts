@@ -19,20 +19,6 @@ export interface IUpdateUserInfo {
 
 export type BaseUserUpdateRequest = IUpdateUserInfo | ICreateUserRequest;
 
-export interface IUpdatePasswordRequest {
-  currentPassword: string;
-  password: string;
-}
-
-export interface IResetPasswordRequest {
-  newPassword: string;
-}
-
-export interface IUpdateEmailRequest {
-  currentPassword: string;
-  email: string;
-}
-
 export interface UserQueryType {
   name?: string;
   username?: string;

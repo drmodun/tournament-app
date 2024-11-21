@@ -1,7 +1,25 @@
-import { and, asc, desc, sql, SQL, WithSubquery } from 'drizzle-orm';
-import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
+import {
+  and,
+  asc,
+  desc,
+  sql,
+  SQL,
+  SQLWrapper,
+  WithSubquery,
+} from 'drizzle-orm';
+import {
+  AnyPgSelectQueryBuilder,
+  AnyPgTable,
+  PgColumn,
+  PgJoin,
+  PgJoinFn,
+  PgSelect,
+  PgTable,
+  TableConfig,
+} from 'drizzle-orm/pg-core';
 import { db } from '../../db/db';
 import { BaseQuery } from '../query/baseQuery';
+import { JoinType } from 'drizzle-orm/query-builders/select.types';
 
 export abstract class BaseDrizzleRepository<
   TTable extends PgTable<TableConfig>,
@@ -10,10 +28,10 @@ export abstract class BaseDrizzleRepository<
   constructor(protected readonly model: TTable) {}
   public abstract sortRecord: Record<string, PgColumn | SQL<number>>;
   public abstract getMappingObject(responseEnum: string): Record<string, SQL>;
-  abstract conditionallyJoin<TSelect extends PgSelect>(
+  abstract conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
     typeEnum: string,
-  ); // TODO: figure out types later
+  ): PgJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'> | TSelect;
 
   abstract getValidWhereClause(query: BaseQuery): SQL[];
 

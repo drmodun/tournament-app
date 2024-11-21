@@ -1,4 +1,4 @@
-import { subscriptionEnum, userRoleEnum } from "src/enums";
+import { userRoleEnum } from "src/enums";
 
 export interface IMiniUserResponse {
   id: number;

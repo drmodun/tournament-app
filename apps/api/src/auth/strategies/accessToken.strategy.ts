@@ -4,7 +4,6 @@ import { UsersService } from 'src/users/users.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ValidatedUserDto } from '../dto/validatedUser.dto';
 import { UserDtosEnum } from 'src/users/types';
-import { Request } from 'express';
 
 type JwtPayload = {
   id: number;

@@ -2,10 +2,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ICreateUserRequest,
   IUpdateEmailRequest,
-  IUpdatePasswordRequest,
   IUpdateUserInfo,
   UserQueryType,
-  UserResponseEnumType,
 } from '@tournament-app/types';
 import {
   IsString,
@@ -17,6 +15,7 @@ import {
   IsUrl,
 } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
+import { UserReturnTypesEnumType } from '../types';
 
 export class CreateUserRequest implements ICreateUserRequest {
   @IsString()
@@ -94,7 +93,7 @@ export class UpdateUserInfo implements IUpdateUserInfo {
   location?: string;
 }
 
-export class UpdatePasswordRequest implements IUpdatePasswordRequest {
+export class UpdatePasswordRequest {
   @IsStrongPassword()
   password: string;
 
@@ -111,7 +110,7 @@ export class UpdateEmailRequest implements IUpdateEmailRequest {
 }
 
 export class UserQuery
-  extends BaseQuery<UserResponseEnumType>
+  extends BaseQuery<UserReturnTypesEnumType>
   implements UserQueryType
 {
   @ApiPropertyOptional()

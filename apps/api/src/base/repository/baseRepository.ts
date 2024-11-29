@@ -19,7 +19,6 @@ import {
 } from 'drizzle-orm/pg-core';
 import { db } from '../../db/db';
 import { BaseQuery } from '../query/baseQuery';
-import { JoinType } from 'drizzle-orm/query-builders/select.types';
 
 export abstract class BaseDrizzleRepository<
   TTable extends PgTable<TableConfig>,

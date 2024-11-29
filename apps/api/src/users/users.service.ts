@@ -3,11 +3,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import {
-  BaseUserResponseType,
-  UserResponseEnumType,
-  UserResponsesEnum,
-} from '@tournament-app/types';
+import { BaseUserResponseType, UserResponsesEnum } from '@tournament-app/types';
 import { UserDrizzleRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
 import {
@@ -16,7 +12,12 @@ import {
   UserQuery,
 } from './dto/requests.dto';
 import { ExtendedUserResponse } from './dto/responses.dto';
-import { AnyUserReturnType, UserReturnTypesEnumType } from './types';
+import {
+  AnyUserReturnType,
+  UserDtosEnum,
+  UserDtosEnumType,
+  UserReturnTypesEnumType,
+} from './types';
 
 @Injectable()
 export class UsersService {
@@ -68,10 +69,10 @@ export class UsersService {
 
   async findOneByEmail<
     TResponseType extends AnyUserReturnType = BaseUserResponseType,
-  >(email: string) {
+  >(email: string, responseType?: UserReturnTypesEnumType) {
     const query = this.repository.getQuery({
       email,
-      responseType: UserResponsesEnum.BASE,
+      responseType: responseType || UserResponsesEnum.BASE,
     });
 
     const results = await query;

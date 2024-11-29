@@ -1,6 +1,5 @@
 import {
   BaseUserUpdateRequest,
-  UserResponseEnumType,
   UserResponsesEnum,
   UserSortingEnum,
   UserSortingEnumType,
@@ -183,13 +182,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     const baseQuery = db
       .select(selectedType)
       .from(user)
-      .where(
-        and(
-          eq(user.id, id),
-          eq(user.isEmailVerified, true),
-          eq(user.hasSelectedInterests, true),
-        ),
-      )
+      .where(and(eq(user.id, id), eq(user.isEmailVerified, true)))
       .$dynamic() as PgSelect<'user', typeof selectedType>;
 
     const Query = this.conditionallyJoin(baseQuery, responseType);

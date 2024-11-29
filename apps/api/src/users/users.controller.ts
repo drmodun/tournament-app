@@ -59,7 +59,6 @@ export class UsersController {
     BaseQueryResponse,
     ...actualClassList,
   )
-  
   @Post()
   @ApiCreatedResponse({ type: ActionResponsePrimary })
   async create(@Body() createUserDto: CreateUserRequest) {

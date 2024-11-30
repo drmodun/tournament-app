@@ -1,57 +1,53 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy } from '../accessToken.strategy';
 import { UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-import { userRole } from 'src/db/schema';
 import { userRoleEnum } from '@tournament-app/types';
+import { AccessTokenStrategy } from '../accessToken.strategy';
+import { UserDrizzleRepository } from 'src/users/user.repository';
 
-describe('JwtStrategy', () => {
-  let jwtStrategy: JwtStrategy;
-  let userService: UsersService;
+describe('AccessTokenStrategy', () => {
+  let jwtStrategy: AccessTokenStrategy;
+
+  jest.mock('@nestjs/passport', () => ({
+    PassportStrategy: jest.fn(),
+  }));
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        JwtStrategy,
-        {
-          provide: UsersService,
-          useValue: {
-            findOne: jest.fn(),
-          },
-        },
-      ],
+      providers: [UsersService, AccessTokenStrategy, UserDrizzleRepository],
     }).compile();
 
-    jwtStrategy = module.get<JwtStrategy>(JwtStrategy);
-    userService = module.get<UsersService>(UsersService);
+    jwtStrategy = module.get<AccessTokenStrategy>(AccessTokenStrategy);
+
+    jest.clearAllMocks();
   });
 
   describe('validate', () => {
     it('should return validated user when user exists', async () => {
-      const payload = { id: 1 };
+      const payload = { id: 1, email: 'test@example.com', role: 'USER' };
       const authUser = {
         id: 1,
         email: 'test@example.com',
         role: userRoleEnum.USER,
       } satisfies ValidatedUserDto;
 
-      jest.spyOn(userService, 'findOne').mockResolvedValue(authUser);
+      jest.spyOn(UsersService.prototype, 'findOne').mockResolvedValue(authUser);
 
       const result = await jwtStrategy.validate(payload);
 
-      expect(userService.findOne).toHaveBeenCalledWith(1, 'ValidatedUserDto');
+      expect(UsersService.prototype.findOne).toHaveBeenCalledWith(1, 'auth');
       expect(result).toEqual(authUser);
     });
 
     it('should throw UnauthorizedException when user does not exist', async () => {
-      const payload = { id: 1 };
-      jest.spyOn(userService, 'findOne').mockResolvedValue(null);
+      const payload = { id: 1, email: 'test@example.com', role: 'USER' };
+      jest.spyOn(UsersService.prototype, 'findOne').mockResolvedValue(null);
 
       await expect(jwtStrategy.validate(payload)).rejects.toThrow(
         UnauthorizedException,
       );
-      expect(userService.findOne).toHaveBeenCalledWith(1, 'ValidatedUserDto');
+      expect(UsersService.prototype.findOne).toHaveBeenCalledWith(1, 'auth');
     });
   });
 });

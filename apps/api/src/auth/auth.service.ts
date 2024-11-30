@@ -7,7 +7,12 @@ import { UsersService } from 'src/users/users.service';
 import { UserCredentialsDto } from './dto/userCredentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { IUserLoginResponse } from '@tournament-app/types';
+import {
+  IUserLoginResponse,
+  userRoleEnum,
+  userRoleEnumType,
+} from '@tournament-app/types';
+import { UserDtosEnum } from 'src/users/types';
 @Injectable()
 export class AuthService {
   constructor(
@@ -21,6 +26,7 @@ export class AuthService {
   ): Promise<IUserLoginResponse> {
     const user = (await this.userService.findOneByEmail<UserCredentialsDto>(
       email,
+      UserDtosEnum.CREDENTIALS,
     )) satisfies UserCredentialsDto;
 
     if (!user) throw new NotFoundException();
@@ -29,15 +35,24 @@ export class AuthService {
 
     if (!passwordMatch) throw new UnauthorizedException('Invalid password');
 
-    return await this.getTokens(user.id, user.username);
+    return await this.getTokens(
+      user.id,
+      user.email,
+      user.role as userRoleEnumType,
+    );
   }
 
-  async getTokens(userId: string, username: string) {
+  async getTokens(
+    userId: number,
+    email: string,
+    role: userRoleEnumType = userRoleEnum.USER,
+  ) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
           sub: userId,
-          username,
+          email,
+          role,
         },
         {
           secret: process.env.JWT_SECRET,
@@ -47,7 +62,8 @@ export class AuthService {
       this.jwtService.signAsync(
         {
           sub: userId,
-          username,
+          email,
+          role,
         },
         {
           secret: process.env.JWT_REFRESH_SECRET,
@@ -67,7 +83,7 @@ export class AuthService {
       secret: process.env.JWT_REFRESH_SECRET,
     });
 
-    return this.getTokens(payload.sub, payload.username);
+    return this.getTokens(payload.sub, payload.email);
   }
 
   async validateUser(payload: any) {

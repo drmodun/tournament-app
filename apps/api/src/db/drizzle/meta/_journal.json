@@ -29,6 +29,13 @@
       "when": 1732899843513,
       "tag": "0003_cold_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1732972233186,
+      "tag": "0004_greedy_the_hood",
+      "breakpoints": true
     }
   ]
 }

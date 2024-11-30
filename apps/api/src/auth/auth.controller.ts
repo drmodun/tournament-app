@@ -1,21 +1,21 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginRequest } from './dto/requests.dto';
-import { ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { TokensResponse } from './dto/tokens.dto';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
-import { RefreshTokenRequest } from './dto';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { RefreshToken } from 'src/base/decorators/refreshToken.decorator';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { ValidatedUserDto } from './dto/validatedUser.dto';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -23,8 +23,8 @@ export class AuthController {
   @ApiOkResponse({
     type: TokensResponse,
   })
-  login(@Body() loginRequest: LoginRequest) {
-    return this.authService.verifyWithCredentials(
+  async login(@Body() loginRequest: LoginRequest) {
+    return await this.authService.verifyWithCredentials(
       loginRequest.email,
       loginRequest.password,
     );
@@ -32,12 +32,13 @@ export class AuthController {
 
   @Get('refresh')
   @ApiUnauthorizedResponse()
+  @UseGuards(RefreshTokenGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: TokensResponse,
   })
-  @UseGuards(RefreshTokenGuard)
-  refresh(@Req() { user: { refreshToken } }: RefreshTokenRequest) {
-    return this.authService.refreshTokens(refreshToken);
+  async refresh(@RefreshToken() refreshToken: string) {
+    return await this.authService.refreshTokens(refreshToken);
   }
 
   @Get('google')
@@ -45,9 +46,13 @@ export class AuthController {
   auth() {}
 
   @Get('google/callback')
+  @ApiOkResponse({
+    type: TokensResponse,
+  })
   @UseGuards(GoogleStrategy)
-  authCallback(@Req() { user }: any) {
-    const tokens = this.authService.getTokens(user.id, user.username);
+  @ApiBearerAuth()
+  async authCallback(@CurrentUser() user: ValidatedUserDto) {
+    const tokens = await this.authService.getTokens(user.id, user.email);
 
     return tokens;
   }

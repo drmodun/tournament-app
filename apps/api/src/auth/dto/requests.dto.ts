@@ -3,7 +3,7 @@ import {
   IChangePasswordRequest,
   IEmailPasswordLoginRequest,
 } from '@tournament-app/types';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
 
 export class LoginRequest implements IEmailPasswordLoginRequest {
   @IsString()
@@ -12,6 +12,7 @@ export class LoginRequest implements IEmailPasswordLoginRequest {
   email: string;
 
   @IsString()
+  @IsStrongPassword()
   @ApiProperty()
   password: string;
 }
@@ -23,6 +24,7 @@ export class ChangePasswordRequest implements IChangePasswordRequest {
 
   @IsString()
   @ApiProperty()
+  @IsStrongPassword()
   newPassword: string;
 }
 
@@ -36,6 +38,7 @@ export class SendResetPasswordEmailRequest {
 export class ResetPasswordRequest {
   @IsString()
   @ApiProperty()
+  @IsStrongPassword()
   newPassword: string;
 }
 

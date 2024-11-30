@@ -12,12 +12,7 @@ import {
   UserQuery,
 } from './dto/requests.dto';
 import { ExtendedUserResponse } from './dto/responses.dto';
-import {
-  AnyUserReturnType,
-  UserDtosEnum,
-  UserDtosEnumType,
-  UserReturnTypesEnumType,
-} from './types';
+import { AnyUserReturnType, UserReturnTypesEnumType } from './types';
 
 @Injectable()
 export class UsersService {
@@ -69,7 +64,10 @@ export class UsersService {
 
   async findOneByEmail<
     TResponseType extends AnyUserReturnType = BaseUserResponseType,
-  >(email: string, responseType?: UserReturnTypesEnumType) {
+  >(
+    email: string,
+    responseType?: UserReturnTypesEnumType,
+  ): Promise<TResponseType> {
     const query = this.repository.getQuery({
       email,
       responseType: responseType || UserResponsesEnum.BASE,

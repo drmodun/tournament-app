@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserDrizzleRepository } from '../user.repository';
 import { UserResponsesEnum, UserSortingEnum } from '@tournament-app/types';
 import { CreateUserRequest, UserQuery } from '../dto/requests.dto';
+import { PgSelect } from 'drizzle-orm/pg-core';
 
 describe('UserDrizzleRepository', () => {
   let repository: UserDrizzleRepository;
@@ -30,7 +31,7 @@ describe('UserDrizzleRepository', () => {
         pageSize: 10,
       };
 
-      const result = repository.getQuery(query);
+      const result = repository.getQuery(query) as PgSelect;
 
       const sql = result.toSQL().sql;
       const params = result.toSQL().params;
@@ -66,7 +67,7 @@ describe('UserDrizzleRepository', () => {
         pageSize: 20,
       };
 
-      const result = repository.getQuery(query);
+      const result = repository.getQuery(query) as PgSelect;
 
       const sql = result.toSQL().sql;
       const params = result.toSQL().params;
@@ -101,12 +102,12 @@ describe('UserDrizzleRepository', () => {
       const id = 123;
       const responseType = UserResponsesEnum.BASE;
 
-      const result = repository.getSingleQuery(id, responseType);
+      const result = repository.getSingleQuery(id, responseType) as PgSelect;
 
       const sql = result.toSQL().sql;
       const params = result.toSQL().params;
 
-      expect(params).toEqual([123, true, true]);
+      expect(params).toEqual([123, true]);
 
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
@@ -123,19 +124,18 @@ describe('UserDrizzleRepository', () => {
       expect(sql).toContain('from "user"');
       expect(sql).toContain('where ("user"."id" = ');
       expect(sql).toContain('and "user"."is_email_verified" = $2');
-      expect(sql).toContain('and "user"."has_selected_interests" = $3');
     });
 
     it('should return a valid single query with extended response type', () => {
       const id = 456;
       const responseType = UserResponsesEnum.EXTENDED;
 
-      const result = repository.getSingleQuery(id, responseType);
+      const result = repository.getSingleQuery(id, responseType) as PgSelect;
 
       const sql = result.toSQL().sql;
       const params = result.toSQL().params;
 
-      expect(params).toEqual([456, true, true]);
+      expect(params).toEqual([456, true]);
 
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
@@ -155,7 +155,6 @@ describe('UserDrizzleRepository', () => {
       expect(sql).toContain('from "user"');
       expect(sql).toContain('where ("user"."id" = ');
       expect(sql).toContain('and "user"."is_email_verified" = $2');
-      expect(sql).toContain('and "user"."has_selected_interests" = $3');
     });
   });
 

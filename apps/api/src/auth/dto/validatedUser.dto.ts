@@ -1,4 +1,4 @@
-import { userRoleEnum, userRoleEnumType } from '@tournament-app/types';
+import { userRoleEnumType } from '@tournament-app/types';
 
 export interface ValidatedUserDto {
   id: number;

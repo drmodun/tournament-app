@@ -11,7 +11,7 @@ describe('DTO Validation Tests', () => {
   it('should validate LoginRequest', async () => {
     const validLoginRequest = new LoginRequest();
     validLoginRequest.email = 'test@example.com';
-    validLoginRequest.password = 'password123';
+    validLoginRequest.password = 'Password123#';
 
     const invalidLoginRequest = new LoginRequest();
     invalidLoginRequest.email = 'invalid-email';
@@ -27,7 +27,7 @@ describe('DTO Validation Tests', () => {
   it('should validate ChangePasswordRequest', async () => {
     const validChangePasswordRequest = new ChangePasswordRequest();
     validChangePasswordRequest.currentPassword = 'currentPassword123';
-    validChangePasswordRequest.newPassword = 'newPassword123';
+    validChangePasswordRequest.newPassword = 'NewPassword123#';
 
     const invalidChangePasswordRequest = new ChangePasswordRequest();
     invalidChangePasswordRequest.currentPassword = '';
@@ -58,7 +58,7 @@ describe('DTO Validation Tests', () => {
 
   it('should validate ResetPasswordRequest', async () => {
     const validResetPasswordRequest = new ResetPasswordRequest();
-    validResetPasswordRequest.newPassword = 'newPassword123';
+    validResetPasswordRequest.newPassword = 'NewPassword123#';
 
     const invalidResetPasswordRequest = new ResetPasswordRequest();
     invalidResetPasswordRequest.newPassword = '';

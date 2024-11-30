@@ -117,7 +117,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a1 2024-11-20T11:20:16.035Z
+                        updatedAt: &a1 2024-11-30T20:26:09.546Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -213,7 +213,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a1
-                        createdAt: 2024-11-20T11:20:16.035Z
+                        createdAt: 2024-11-30T20:26:09.546Z
                         following: 0
                         location: New York
           description: ""
@@ -255,7 +255,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-11-20T11:20:16.035Z
+                    updatedAt: &a3 2024-11-30T20:26:09.546Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -283,7 +283,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-11-20T11:20:16.035Z
+                    createdAt: 2024-11-30T20:26:09.546Z
                     following: 0
                     location: New York
           description: ""
@@ -326,6 +326,63 @@ paths:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a2
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokensResponse"
+      tags: &a4
+        - auth
+  /auth/refresh:
+    get:
+      operationId: AuthController_refresh
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokensResponse"
+        "401":
+          description: ""
+      tags: *a4
+      security:
+        - bearer: []
+  /auth/google:
+    get:
+      operationId: AuthController_auth
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a4
+  /auth/google/callback:
+    get:
+      operationId: AuthController_authCallback
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokensResponse"
+      tags: *a4
+      security:
+        - bearer: []
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -669,3 +726,25 @@ components:
           type: string
         location:
           type: string
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    TokensResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          readOnly: true
+        refreshToken:
+          type: string
+          readOnly: true
+      required:
+        - accessToken
+        - refreshToken

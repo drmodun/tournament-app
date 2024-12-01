@@ -211,6 +211,26 @@ export enum submissionStatusEnum {
   MEMORY_LIMIT_EXCEEDED = "memory_limit_exceeded",
 }
 
+export enum groupTypeEnum {
+  PRIVATE = "private",
+  PUBLIC = "public",
+}
+
+export type groupTypeEnumType =
+  (typeof groupTypeEnum)[keyof typeof groupTypeEnum];
+
+export type tournamentPromotionTypeEnumType =
+  (typeof tournamentPromotionTypeEnum)[keyof typeof tournamentPromotionTypeEnum];
+
+export enum groupFocusEnum {
+  PARTICIPATION = "participation",
+  ORGANIZATION = "organization",
+  HYBRID = "hybrid",
+}
+
+export type groupFocusEnumType =
+  (typeof groupFocusEnum)[keyof typeof groupFocusEnum];
+
 export const exportEnumValues = (
   enumToExport: object
 ): [string, ...string[]] => {

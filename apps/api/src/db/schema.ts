@@ -19,6 +19,8 @@ import {
   userRoleEnum,
   categoryTypeEnum,
   tournamentTeamTypeEnum,
+  groupFocusEnum,
+  groupTypeEnum,
 } from '@tournament-app/types';
 import {
   serial,
@@ -111,6 +113,13 @@ export const categoryType = pgEnum(
 );
 
 export const groupRole = pgEnum('group_role', exportEnumValues(groupRoleEnum));
+
+export const groupFocus = pgEnum(
+  'group_focus',
+  exportEnumValues(groupFocusEnum),
+);
+
+export const groupType = pgEnum('group_type', exportEnumValues(groupTypeEnum));
 
 export const user = pgTable('user', {
   id: serial('id').unique().primaryKey(),
@@ -387,9 +396,32 @@ export const group = pgTable('group', {
   abbreviation: text('abbreviation').notNull(),
   description: text('description'),
   logo: text('logo'),
+  country: text('country'),
+  location: text('location'),
+  type: groupType('group_type').default('public'),
+  focus: groupFocus('group_focus').default('hybrid'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   chatRoomId: integer('chat_room_id').references(() => chatRoom.id),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  //TODO: if needed create a separate settings entity
 });
+
+export const groupInterests = pgTable(
+  'group_interests',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id)
+      .notNull(),
+    categoryId: integer('category_id')
+      .references(() => category.id)
+      .notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.categoryId] }),
+  }),
+);
 
 export const groupToUser = pgTable(
   'group_user',
@@ -417,8 +449,11 @@ export const category = pgTable('category', {
   name: text('name').notNull(),
   description: text('description'),
   image: text('image'),
-  categoryType: categoryType('category_type').default('other'),
+  type: categoryType('category_type').default('other'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const interests = pgTable(

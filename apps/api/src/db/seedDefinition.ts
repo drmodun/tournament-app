@@ -4,6 +4,7 @@ import { PgTable } from 'drizzle-orm/pg-core';
 import { faker } from '@faker-js/faker';
 import { sql } from 'drizzle-orm';
 import { CreateUserRequest } from 'src/users/dto/requests.dto';
+import { userRoleEnum } from '@tournament-app/types';
 
 async function teardown() {
   console.log('Teardown database...');
@@ -49,7 +50,9 @@ async function createUsers() {
       username: faker.internet.userName(),
       bio: faker.lorem.paragraph(),
       profilePicture: faker.image.avatar(),
-    } as CreateUserRequest);
+      isEmailVerified: true,
+      role: i <= 5 ? userRoleEnum.ADMIN : userRoleEnum.USER,
+    } as CreateUserRequest & { isEmailVerified: boolean; role: string });
   }
 
   await db.insert(tables.user).values(randomUsers).execute();

@@ -21,7 +21,7 @@ describe('NotificationsService', () => {
   let service: NotificationsService;
   let templatesFiller: NotificationTemplatesFiller;
   let firebaseAdminFactory: FirebaseAdminFactory;
-  let messaging: Partial<admin.messaging.Messaging> = {
+  const messaging: Partial<admin.messaging.Messaging> = {
     send: jest.fn(),
     sendEachForMulticast: jest.fn(),
   };

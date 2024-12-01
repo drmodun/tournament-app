@@ -24,8 +24,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: &a2
+      tags: &a1
         - users
+    patch:
+      operationId: UsersController_updateMe
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserInfo"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a1
+      security:
+        - bearer: []
+    delete:
+      operationId: UsersController_deleteMe
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MiniUserResponse"
+      tags: *a1
+      security:
+        - bearer: []
     get:
       operationId: UsersController_findAll
       parameters:
@@ -117,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a1 2024-11-30T20:26:09.546Z
+                        updatedAt: &a2 2024-12-01T17:13:08.744Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -212,12 +244,26 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: *a1
-                        createdAt: 2024-11-30T20:26:09.546Z
+                        updatedAt: *a2
+                        createdAt: 2024-12-01T17:13:08.744Z
                         following: 0
                         location: New York
           description: ""
-      tags: *a2
+      tags: *a1
+  /users/me:
+    get:
+      operationId: UsersController_findMe
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtendedUserResponse"
+      tags: *a1
+      security:
+        - bearer: []
   /users/{id}:
     get:
       operationId: UsersController_findOne
@@ -255,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-11-30T20:26:09.546Z
+                    updatedAt: &a3 2024-12-01T17:13:08.744Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -283,11 +329,11 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-11-30T20:26:09.546Z
+                    createdAt: 2024-12-01T17:13:08.744Z
                     following: 0
                     location: New York
           description: ""
-      tags: *a2
+      tags: *a1
     patch:
       operationId: UsersController_update
       parameters:
@@ -309,7 +355,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a2
+      tags: *a1
+      security:
+        - bearer: []
     delete:
       operationId: UsersController_remove
       parameters:
@@ -325,7 +373,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a2
+      tags: *a1
+      security:
+        - bearer: []
   /auth/login:
     post:
       operationId: AuthController_login

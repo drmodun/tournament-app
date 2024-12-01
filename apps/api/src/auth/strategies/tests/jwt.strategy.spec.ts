@@ -25,7 +25,7 @@ describe('AccessTokenStrategy', () => {
 
   describe('validate', () => {
     it('should return validated user when user exists', async () => {
-      const payload = { id: 1, email: 'test@example.com', role: 'USER' };
+      const payload = { sub: 1, email: 'test@example.com', role: 'USER' };
       const authUser = {
         id: 1,
         email: 'test@example.com',
@@ -41,7 +41,7 @@ describe('AccessTokenStrategy', () => {
     });
 
     it('should throw UnauthorizedException when user does not exist', async () => {
-      const payload = { id: 1, email: 'test@example.com', role: 'USER' };
+      const payload = { sub: 1, email: 'test@example.com', role: 'USER' };
       jest.spyOn(UsersService.prototype, 'findOne').mockResolvedValue(null);
 
       await expect(jwtStrategy.validate(payload)).rejects.toThrow(

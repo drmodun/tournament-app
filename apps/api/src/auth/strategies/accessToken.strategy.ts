@@ -6,7 +6,7 @@ import { ValidatedUserDto } from '../dto/validatedUser.dto';
 import { UserDtosEnum } from 'src/users/types';
 
 type JwtPayload = {
-  id: number;
+  sub: number;
   email: string;
   role: string;
 };
@@ -25,7 +25,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: JwtPayload): Promise<ValidatedUserDto | null> {
     const authUser = (await this.userService.findOne<ValidatedUserDto>(
-      payload.id,
+      payload.sub,
       UserDtosEnum.VALIDATED,
     )) satisfies ValidatedUserDto;
 

@@ -7,6 +7,7 @@ import { BlobModule } from './infrastructure/blob/blob.module';
 import { NotificationsModule } from './infrastructure/notifications/notifications.module';
 import { AuthModule } from './auth/auth.module';
 import { GroupModule } from './group/group.module';
+import { GroupMembershipModule } from './group-membership/group-membership.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { GroupModule } from './group/group.module';
     NotificationsModule,
     AuthModule,
     GroupModule,
+    GroupMembershipModule,
   ],
   controllers: [AppController],
   providers: [AppService],

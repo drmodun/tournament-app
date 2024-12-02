@@ -16,7 +16,7 @@ export abstract class PrimaryRepository<
     InferInsertModel<TTable>
   >,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
-  SingleQuery(id: number, responseType: string) {
+  getSingleQuery(id: number, responseType: string) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(this.getMappingObject(responseType))
@@ -29,14 +29,14 @@ export abstract class PrimaryRepository<
     return Query;
   }
 
-  createEntity(createRequest: TCreateRequest) {
+  async createEntity(createRequest: TCreateRequest) {
     return db
       .insert(this.model)
       .values(createRequest)
       .returning({ id: this.model.id }); // If the id field is not called id then we messed up
   }
 
-  updateEntity(id: number, updateRequest: TCreateRequest) {
+  async updateEntity(id: number, updateRequest: TCreateRequest) {
     try {
       return db
         .update(this.model)

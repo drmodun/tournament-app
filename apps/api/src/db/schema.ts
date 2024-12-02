@@ -349,6 +349,26 @@ export const chatRoomMessage = pgTable('chatRoomMessage', {
   visibility: messageVisibility('visibility').default('public'),
 });
 
+export const groupFollower = pgTable(
+  'group_follower',
+  {
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.groupId] }),
+  }),
+);
+
 export const follower = pgTable(
   'follower',
   {
@@ -441,6 +461,54 @@ export const groupToUser = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.groupId] }),
+  }),
+);
+
+export const groupInvite = pgTable(
+  'group_invite',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    message: text('message'), // TO add more fields and stuff if needed
+    relatedLFGId: integer('related_lfg_id').references(
+      () => lookingForGroup.id,
+    ), // If it is related to any LFG
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.userId] }),
+  }),
+);
+
+export const groupJoinRequest = pgTable(
+  'group_join_request',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    message: text('message'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    relatedLFPId: integer('related_lfp_id').references(
+      () => lookingForPlayers.id,
+    ),
+  }, // TODO: the response to this is literally creating another group membership or just straight up deleting the join request
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.userId] }),
   }),
 );
 

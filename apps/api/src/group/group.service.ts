@@ -1,26 +1,76 @@
-import { Injectable } from '@nestjs/common';
-import { CreateGroupDto } from './dto/create-group.dto';
-import { UpdateGroupDto } from './dto/update-group.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { GroupResponsesEnum } from '@tournament-app/types';
+import { GroupDrizzleRepository } from './group.repository';
+import {
+  CreateGroupRequest,
+  UpdateGroupRequest,
+  GroupQuery,
+} from './dto/requests.dto';
+import { IGroupResponse } from '@tournament-app/types';
+import { AnyGroupReturnType, GroupReturnTypesEnumType } from './types';
 
 @Injectable()
 export class GroupService {
-  create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
+  constructor(private readonly repository: GroupDrizzleRepository) {}
+
+  async create(createGroupDto: CreateGroupRequest, userId: number) {
+    const action = await this.repository.createEntity({
+      ...createGroupDto,
+      userId,
+    });
+
+    if (!action[0]) {
+      throw new UnprocessableEntityException('Group creation failed');
+    }
+
+    return action[0];
   }
 
-  findAll() {
-    return `This action returns all group`;
+  async findAll<TResponseType extends AnyGroupReturnType>(query: GroupQuery) {
+    const queryFunction = this.repository.getQuery(query);
+    const results = await queryFunction;
+
+    return results as TResponseType[];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  async findOne<TResponseType extends AnyGroupReturnType = IGroupResponse>(
+    id: number,
+    responseType: GroupReturnTypesEnumType = GroupResponsesEnum.BASE,
+  ) {
+    const results = await this.repository.getSingleQuery(id, responseType);
+
+    if (results.length === 0) {
+      throw new NotFoundException('Group not found');
+    }
+
+    return results[0] as TResponseType;
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+  async update(id: number, updateGroupDto: UpdateGroupRequest) {
+    const action = await this.repository.updateEntity(id, updateGroupDto);
+
+    if (!action[0]) {
+      throw new NotFoundException(
+        'Group update failed or user is not an admin',
+      );
+    }
+
+    return action[0];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async remove(id: number) {
+    const action = await this.repository.deleteEntity(id);
+
+    if (!action[0]) {
+      throw new NotFoundException(
+        'Group removal failed or user is not an admin',
+      );
+    }
+
+    return action[0];
   }
 }

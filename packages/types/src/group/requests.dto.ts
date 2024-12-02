@@ -9,6 +9,7 @@ export interface ICreateGroupRequest {
   logo: string; // Dunno if this will work immediately
   location?: string;
   country?: string;
+  userId?: number; // Only set by api
 }
 
 export interface IUpdateGroupRequest {

@@ -1,12 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GroupController } from './group.controller';
-import { GroupService } from './group.service';
-import { CreateGroupRequest, UpdateGroupRequest } from './dto/requests.dto';
-import { GroupResponsesEnum } from '@tournament-app/types';
+import { GroupMembershipController } from './group-membership.controller';
+import { GroupMembershipService } from './group-membership.service';
+import {
+  CreateGroupMembershipRequest,
+  UpdateGroupMembershipRequest,
+} from './dto/requests.dto';
+import {
+  GroupMembershipResponsesEnum,
+  GroupMembershipRoleEnum,
+} from '@tournament-app/types';
 
-describe('GroupController', () => {
-  let controller: GroupController;
-  let service: GroupService;
+describe('GroupMembershipController', () => {
+  let controller: GroupMembershipController;
+  let service: GroupMembershipService;
 
   const mockService = {
     create: jest.fn(),
@@ -18,17 +24,19 @@ describe('GroupController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [GroupController],
+      controllers: [GroupMembershipController],
       providers: [
         {
-          provide: GroupService,
+          provide: GroupMembershipService,
           useValue: mockService,
         },
       ],
     }).compile();
 
-    controller = module.get<GroupController>(GroupController);
-    service = module.get<GroupService>(GroupService);
+    controller = module.get<GroupMembershipController>(
+      GroupMembershipController,
+    );
+    service = module.get<GroupMembershipService>(GroupMembershipService);
   });
 
   it('should be defined', () => {
@@ -36,35 +44,33 @@ describe('GroupController', () => {
   });
 
   describe('create', () => {
-    const createDto: CreateGroupRequest = {
-      name: 'Test Group',
-      abbreviation: 'TG',
-      description: 'Test Description',
-      type: 'public',
-      focus: 'hybrid',
-      logo: 'logo.png',
-      location: 'Test Location',
-      country: 'Test Country',
+    const createDto: CreateGroupMembershipRequest = {
+      userId: 1,
+      groupId: 1,
+      role: GroupMembershipRoleEnum.MEMBER,
     };
     const userId = 1;
 
-    it('should create a group', async () => {
+    it('should create a group membership', async () => {
       const expectedResult = { id: 1, ...createDto };
       mockService.create.mockResolvedValue(expectedResult);
 
       const result = await controller.create(createDto, {
         user: { id: userId },
+        
       });
       expect(result).toEqual(expectedResult);
-      expect(service.create).toHaveBeenCalledWith(createDto, userId);
+      expect(service.create).toHaveBeenCalledWith(createDto);
     });
   });
 
   describe('findAll', () => {
-    const query = { type: 'public' };
+    const query = { groupId: 1, role: GroupMembershipRoleEnum.MEMBER };
 
-    it('should return array of groups', async () => {
-      const expectedResult = [{ id: 1, name: 'Test Group' }];
+    it('should return array of group memberships', async () => {
+      const expectedResult = [
+        { id: 1, userId: 1, groupId: 1, role: GroupMembershipRoleEnum.MEMBER },
+      ];
       mockService.findAll.mockResolvedValue(expectedResult);
 
       const result = await controller.findAll(query);
@@ -75,10 +81,15 @@ describe('GroupController', () => {
 
   describe('findOne', () => {
     const id = 1;
-    const responseType = GroupResponsesEnum.BASE;
+    const responseType = GroupMembershipResponsesEnum.BASE;
 
-    it('should return a group', async () => {
-      const expectedResult = { id: 1, name: 'Test Group' };
+    it('should return a group membership', async () => {
+      const expectedResult = {
+        id: 1,
+        userId: 1,
+        groupId: 1,
+        role: GroupMembershipRoleEnum.MEMBER,
+      };
       mockService.findOne.mockResolvedValue(expectedResult);
 
       const result = await controller.findOne(id, responseType);
@@ -90,9 +101,11 @@ describe('GroupController', () => {
   describe('update', () => {
     const id = 1;
     const userId = 1;
-    const updateDto: UpdateGroupRequest = { name: 'Updated Group Name' };
+    const updateDto: UpdateGroupMembershipRequest = {
+      role: GroupMembershipRoleEnum.ADMIN,
+    };
 
-    it('should update a group', async () => {
+    it('should update a group membership', async () => {
       const expectedResult = { id, ...updateDto };
       mockService.update.mockResolvedValue(expectedResult);
 
@@ -100,7 +113,7 @@ describe('GroupController', () => {
         user: { id: userId },
       });
       expect(result).toEqual(expectedResult);
-      expect(service.update).toHaveBeenCalledWith(id, updateDto, userId);
+      expect(service.update).toHaveBeenCalledWith(id, updateDto);
     });
   });
 
@@ -108,13 +121,18 @@ describe('GroupController', () => {
     const id = 1;
     const userId = 1;
 
-    it('should remove a group', async () => {
-      const expectedResult = { id, name: 'Test Group' };
+    it('should remove a group membership', async () => {
+      const expectedResult = {
+        id,
+        userId: 1,
+        groupId: 1,
+        role: GroupMembershipRoleEnum.MEMBER,
+      };
       mockService.remove.mockResolvedValue(expectedResult);
 
       const result = await controller.remove(id, { user: { id: userId } });
       expect(result).toEqual(expectedResult);
-      expect(service.remove).toHaveBeenCalledWith(id, userId);
+      expect(service.remove).toHaveBeenCalledWith(id);
     });
   });
 });

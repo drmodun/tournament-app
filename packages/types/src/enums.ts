@@ -107,6 +107,7 @@ export type groupRoleEnumType =
 export enum groupRoleEnum {
   OWNER = "owner",
   MEMBER = "member",
+  ADMIN = "admin",
 }
 
 export type betStatusEnumType =

@@ -1,0 +1,1 @@
+ALTER TYPE "group_role" ADD VALUE 'admin';

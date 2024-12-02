@@ -1,4 +1,5 @@
 export interface IMiniGroupResponse {
+  id: string;
   name: string;
   abbreviation: string;
 }
@@ -18,20 +19,27 @@ export interface IGroupResponse extends IMiniGroupResponseWithCountry {
   logo: string;
   location: string;
   updatedAt: string;
+  memberCount: number;
 }
 
 export interface IGroupResponseExtended extends IGroupResponse {
   createdAt: string;
+  tournamentCount: number;
+  subscriberCount: number;
+
+  //TODO: add whatever else aggregated is needed here
 }
 
 export type BaseGroupResponse =
   | IMiniGroupResponse
   | IMiniGroupResponseWithLogo
+  | IMiniGroupResponseWithCountry
   | IGroupResponse;
 
 export enum GroupResponsesEnum {
   MINI = "mini",
   MINI_WITH_LOGO = "mini-with-logo",
+  MINI_WITH_COUNTRY = "mini-with-country",
   BASE = "base",
   EXTENDED = "extended",
 }

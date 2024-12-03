@@ -8,7 +8,8 @@ export interface IMiniGroupResponseWithLogo extends IMiniGroupResponse {
   logo: string;
 }
 
-export interface IMiniGroupResponseWithCountry extends IMiniGroupResponse {
+export interface IMiniGroupResponseWithCountry
+  extends IMiniGroupResponseWithLogo {
   country: string;
 }
 

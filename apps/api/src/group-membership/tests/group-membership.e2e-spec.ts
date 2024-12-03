@@ -1,9 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { AppModule } from '../app.module';
+import { AppModule } from '../../app.module';
 import { GroupMembershipResponsesEnum, GroupMembershipRoleEnum } from '@tournament-app/types';
-import { CreateGroupMembershipRequest, UpdateGroupMembershipRequest } from './dto/requests.dto';
+import { CreateGroupMembershipRequest, UpdateGroupMembershipRequest } from '../dto/requests.dto';
 import { generateToken } from '../utils/jwt';
 
 describe('GroupMembershipController (e2e)', () => {

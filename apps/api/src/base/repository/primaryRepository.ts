@@ -29,14 +29,14 @@ export abstract class PrimaryRepository<
     return Query;
   }
 
-  async createEntity(createRequest: TCreateRequest) {
+  createEntity(createRequest: TCreateRequest) {
     return db
       .insert(this.model)
       .values(createRequest)
       .returning({ id: this.model.id }); // If the id field is not called id then we messed up
   }
 
-  async updateEntity(id: number, updateRequest: TCreateRequest) {
+  updateEntity(id: number, updateRequest: TCreateRequest) {
     try {
       return db
         .update(this.model)

@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGroupMembershipDto } from './dto/create-group-membership.dto';
-import { UpdateGroupMembershipDto } from './dto/update-group-membership.dto';
+import { GroupMembershipDrizzleRepository } from './group-membership.repository';
 
 @Injectable()
 export class GroupMembershipService {
-  create(createGroupMembershipDto: CreateGroupMembershipDto) {
-    return 'This action adds a new groupMembership';
+  constructor(
+    private readonly groupMembershipRepository: GroupMembershipDrizzleRepository,
+  ) {}
+
+  async create(groupId: number, userId: number) {
+    const action = this.groupMembershipRepository.createEntity({
+      groupId,
+      userId,
+    });
+
+    return await action satisfies 
   }
 
   findAll() {

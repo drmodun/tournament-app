@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GroupMembershipController } from './group-membership.controller';
-import { GroupMembershipService } from './group-membership.service';
+import { GroupMembershipController } from '../group-membership.controller';
+import { GroupMembershipService } from '../group-membership.service';
 import {
   CreateGroupMembershipRequest,
   UpdateGroupMembershipRequest,
-} from './dto/requests.dto';
+} from '../dto/requests.dto';
 import {
   GroupMembershipResponsesEnum,
   GroupMembershipRoleEnum,

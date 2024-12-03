@@ -92,7 +92,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
     }
   }
 
-  override async createEntity(
+  async createEntityWithUser(
     createGroupDto: ICreateGroupRequest & { userId?: number },
   ) {
     const userId = createGroupDto.userId;
@@ -121,7 +121,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       return [{ id: createdGroup.id }];
     });
 
-    return newGroup as Promise<{ id: unknown }[]>;
+    return newGroup;
   }
 
   sortRecord: Record<GroupSortingEnumType, PgColumn | SQL<number>> = {

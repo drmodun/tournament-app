@@ -1,8 +1,13 @@
-import { userRoleEnumType } from "src/enums";
+import {
+  groupFocusEnumType,
+  groupRoleEnumType,
+  userRoleEnumType,
+} from "src/enums";
 import {
   IGroupResponse,
   IMiniGroupResponse,
   IMiniGroupResponseWithCountry,
+  IMiniGroupResponseWithLogo,
 } from "src/group/responses.dto";
 import {
   IMiniUserResponseWithCountry,
@@ -12,27 +17,30 @@ import {
 export interface IMinimalMembershipResponse {
   groupId: number;
   userId: number;
-  role: userRoleEnumType;
+  role: groupRoleEnumType;
 }
 
-export interface IGroupMembershipResponse {
-  groupId: number;
-  userId: number;
-  role: userRoleEnumType;
+export interface IGroupMembershipResponse extends IMinimalMembershipResponse {
+  user: IMiniUserResponseWithProfilePicture;
+  group: IMiniGroupResponseWithLogo;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface IUserMembershipResponseWithDates
-  extends IMiniGroupResponseWithCountry {
+  extends IMiniUserResponseWithCountry {
   createdAt: Date;
-  updatedAt: Date;
+  role: groupRoleEnumType;
 }
 
 export interface IGroupMembershipResponseWithDates
   extends IMiniGroupResponseWithCountry {
   createdAt: Date;
-  updatedAt: Date;
+  role: groupRoleEnumType;
+}
+
+export interface IGroupMembershipActionResponse {
+  userId: number;
+  groupId: number;
 }
 
 export type BaseGroupMembershipResponseType =
@@ -57,7 +65,6 @@ export enum GroupMembershipResponsesEnum {
 
 export enum GroupMembershipSortingEnum {
   CREATED_AT = "createdAt",
-  UPDATED_AT = "updatedAt",
   ROLE = "role",
 }
 

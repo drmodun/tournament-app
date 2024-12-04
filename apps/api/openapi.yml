@@ -149,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2024-12-01T17:15:43.047Z
+                        updatedAt: &a2 2024-12-04T12:35:15.589Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -245,7 +245,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a2
-                        createdAt: 2024-12-01T17:15:43.047Z
+                        createdAt: 2024-12-04T12:35:15.589Z
                         following: 0
                         location: New York
           description: ""
@@ -301,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-12-01T17:15:43.047Z
+                    updatedAt: &a3 2024-12-04T12:35:15.589Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -329,7 +329,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-12-01T17:15:43.047Z
+                    createdAt: 2024-12-04T12:35:15.589Z
                     following: 0
                     location: New York
           description: ""
@@ -433,6 +433,741 @@ paths:
       tags: *a4
       security:
         - bearer: []
+  /groups:
+    get:
+      operationId: GroupController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: abbreviation
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: focus
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: location
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: country
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                mini-with-logo:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI-WITH-LOGO
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        logo: https://example.com/chess-club-logo.jpg
+                mini-with-country:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI-WITH-COUNTRY
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                        description: A community of chess enthusiasts
+                        type: Sports Club
+                        focus: Chess
+                        location: Split
+                        updatedAt: 2024-12-04T12:35:15.738Z
+                        memberCount: 50
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                        description: A community of chess enthusiasts
+                        type: Sports Club
+                        focus: Chess
+                        location: Split
+                        updatedAt: 2024-12-04T12:35:15.738Z
+                        memberCount: 50
+                        createdAt: 2024-12-04T12:35:15.738Z
+                        tournamentCount: 10
+                        subscriberCount: 100
+          description: ""
+      tags: &a5
+        - groups
+    post:
+      operationId: GroupController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Chess Club
+                abbreviation: CC
+                country: Croatia
+                logo: https://example.com/chess-club-logo.jpg
+                description: A community of chess enthusiasts
+                type: Sports Club
+                focus: Chess
+                location: Split
+                updatedAt: 2024-12-04T12:35:15.738Z
+                memberCount: 50
+          description: ""
+      tags: *a5
+  /groups/{groupId}:
+    get:
+      operationId: GroupController_findOne
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                mini-with-logo:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    logo: https://example.com/chess-club-logo.jpg
+                mini-with-country:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                base:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                    description: A community of chess enthusiasts
+                    type: Sports Club
+                    focus: Chess
+                    location: Split
+                    updatedAt: 2024-12-04T12:35:15.738Z
+                    memberCount: 50
+                extended:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                    description: A community of chess enthusiasts
+                    type: Sports Club
+                    focus: Chess
+                    location: Split
+                    updatedAt: 2024-12-04T12:35:15.738Z
+                    memberCount: 50
+                    createdAt: 2024-12-04T12:35:15.738Z
+                    tournamentCount: 10
+                    subscriberCount: 100
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/MiniGroupResponse"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithCountry"
+                  - $ref: "#/components/schemas/GroupResponse"
+                  - $ref: "#/components/schemas/GroupResponseExtended"
+          description: ""
+      tags: *a5
+    patch:
+      operationId: GroupController_update
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Chess Club
+                abbreviation: CC
+                country: Croatia
+                logo: https://example.com/chess-club-logo.jpg
+                description: A community of chess enthusiasts
+                type: Sports Club
+                focus: Chess
+                location: Split
+                updatedAt: 2024-12-04T12:35:15.738Z
+                memberCount: 50
+          description: ""
+      tags: *a5
+    delete:
+      operationId: GroupController_remove
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+  /groups/{groupId}/members:
+    get:
+      operationId: GroupController_getGroupMembers
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                group:
+                  id: 1
+                  name: Chess Club
+                  abbreviation: CC
+                  country: Croatia
+                  logo: https://example.com/chess-club-logo.jpg
+                  description: A community of chess enthusiasts
+                  type: Sports Club
+                  focus: Chess
+                  location: Split
+                  updatedAt: 2024-12-04T12:35:15.738Z
+                  memberCount: 50
+                members: []
+          description: ""
+      tags: *a5
+  /groups/{groupId}/tournaments:
+    get:
+      operationId: GroupController_getGroupTournaments
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                group:
+                  id: 1
+                  name: Chess Club
+                  abbreviation: CC
+                  country: Croatia
+                  logo: https://example.com/chess-club-logo.jpg
+                  description: A community of chess enthusiasts
+                  type: Sports Club
+                  focus: Chess
+                  location: Split
+                  updatedAt: 2024-12-04T12:35:15.738Z
+                  memberCount: 50
+                tournaments: []
+          description: ""
+      tags: *a5
+  /groups/{groupId}/followers:
+    get:
+      operationId: GroupController_getGroupFollowers
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                group:
+                  id: 1
+                  name: Chess Club
+                  abbreviation: CC
+                  country: Croatia
+                  logo: https://example.com/chess-club-logo.jpg
+                  description: A community of chess enthusiasts
+                  type: Sports Club
+                  focus: Chess
+                  location: Split
+                  updatedAt: 2024-12-04T12:35:15.738Z
+                  memberCount: 50
+                followers: []
+          description: ""
+      tags: *a5
+  /group-membership:
+    get:
+      operationId: GroupMembershipController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: role
+          required: false
+          in: query
+          schema:
+            enum:
+              - owner
+              - member
+              - admin
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                MinimalMembershipResponse:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: MINIMALMEMBERSHIPRESPONSE
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                GroupMembershipResponse:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: GROUPMEMBERSHIPRESPONSE
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                        user: &a6
+                          id: 1
+                          username: john_doe
+                          profilePicture: https://example.com/image.jpg
+                        group: &a7
+                          id: 1
+                          name: Cool Group
+                          logo: https://example.com/logo.jpg
+                          abbreviation: CG
+                        createdAt: 2024-12-04T12:35:15.742Z
+                UserMembershipResponseWithDates:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: USERMEMBERSHIPRESPONSEWITHDATES
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                        user: *a6
+                        group: *a7
+                        createdAt: 2024-12-04T12:35:15.742Z
+                        country: country
+                        id: 1
+                        username: username
+                        profilePicture: profilePicture
+                GroupMembershipResponseWithDates:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: GROUPMEMBERSHIPRESPONSEWITHDATES
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                        user: *a6
+                        group: *a7
+                        createdAt: 2024-12-04T12:35:15.742Z
+                        country: country
+                        name: name
+                        logo: logo
+                        id: 1
+                        abbreviation: abbreviation
+                GroupMembershipKey:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: GROUPMEMBERSHIPKEY
+                    results:
+                      - userId: 1
+                        groupId: 1
+          description: ""
+      tags: &a10
+        - group-membership
+  /group-membership/{groupId}/{userId}:
+    get:
+      operationId: GroupMembershipController_findOne
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                MinimalMembershipResponse:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                GroupMembershipResponse:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                    user: &a8
+                      id: 1
+                      username: john_doe
+                      profilePicture: https://example.com/image.jpg
+                    group: &a9
+                      id: 1
+                      name: Cool Group
+                      logo: https://example.com/logo.jpg
+                      abbreviation: CG
+                    createdAt: 2024-12-04T12:35:15.742Z
+                UserMembershipResponseWithDates:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                    user: *a8
+                    group: *a9
+                    createdAt: 2024-12-04T12:35:15.742Z
+                    country: country
+                    id: 1
+                    username: username
+                    profilePicture: profilePicture
+                GroupMembershipResponseWithDates:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                    user: *a8
+                    group: *a9
+                    createdAt: 2024-12-04T12:35:15.742Z
+                    country: country
+                    name: name
+                    logo: logo
+                    id: 1
+                    abbreviation: abbreviation
+                GroupMembershipKey:
+                  value:
+                    userId: 1
+                    groupId: 1
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/MinimalMembershipResponse"
+                  - $ref: "#/components/schemas/GroupMembershipResponse"
+                  - $ref: "#/components/schemas/UserMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipKey"
+          description: ""
+      tags: *a10
+    post:
+      operationId: GroupMembershipController_update
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupMembershipUpdateRequest"
+      responses:
+        "201":
+          description: ""
+      tags: *a10
+  /group-membership/{groupId}:
+    delete:
+      operationId: GroupMembershipController_removeMyself
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a10
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -798,3 +1533,371 @@ components:
       required:
         - accessToken
         - refreshToken
+    MiniGroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+    MiniGroupResponseWithLogo:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+    MiniGroupResponseWithCountry:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+    GroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+    GroupResponseExtended:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+        createdAt:
+          type: string
+          readOnly: true
+        tournamentCount:
+          type: number
+          readOnly: true
+        subscriberCount:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+        - createdAt
+        - tournamentCount
+        - subscriberCount
+    CreateGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        abbreviation:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - private
+            - public
+        focus:
+          type: string
+          enum:
+            - participation
+            - organization
+            - hybrid
+        logo:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+      required:
+        - name
+        - abbreviation
+        - description
+        - type
+        - focus
+        - logo
+    UpdateGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        abbreviation:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - private
+            - public
+        focus:
+          type: string
+          enum:
+            - participation
+            - organization
+            - hybrid
+        logo:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+    MinimalMembershipResponse:
+      type: object
+      properties:
+        groupId:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+      required:
+        - groupId
+        - userId
+        - role
+    GroupMembershipResponse:
+      type: object
+      properties:
+        groupId:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+        user:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
+        group:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+        createdAt:
+          type: string
+          readOnly: true
+      required:
+        - groupId
+        - userId
+        - role
+        - user
+        - group
+        - createdAt
+    UserMembershipResponseWithDates:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+      required:
+        - id
+        - username
+        - profilePicture
+        - country
+        - createdAt
+        - role
+    GroupMembershipResponseWithDates:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - createdAt
+        - role
+    GroupMembershipKey:
+      type: object
+      properties:
+        userId:
+          type: number
+          readOnly: true
+        groupId:
+          type: number
+          readOnly: true
+      required:
+        - userId
+        - groupId
+    GroupMembershipUpdateRequest:
+      type: object
+      properties:
+        role:
+          type: string

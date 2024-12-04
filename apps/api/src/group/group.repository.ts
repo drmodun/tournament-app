@@ -164,4 +164,28 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       }
     });
   }
+
+  async getGroupTournaments(groupId: number) {
+    const query = db
+      .select({
+        tournamentId: participation.tournamentId,
+        joinedAt: participation.createdAt,
+      })
+      .from(participation)
+      .where(eq(participation.groupId, groupId));
+
+    return query;
+  }
+
+  async getGroupFollowers(groupId: number) {
+    const query = db
+      .select({
+        userId: groupFollower.userId,
+        followedAt: groupFollower.createdAt,
+      })
+      .from(groupFollower)
+      .where(eq(groupFollower.groupId, groupId));
+
+    return query;
+  }
 }

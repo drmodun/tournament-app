@@ -1,5 +1,5 @@
 export interface IMiniGroupResponse {
-  id: string;
+  id: number;
   name: string;
   abbreviation: string;
 }
@@ -35,7 +35,8 @@ export type BaseGroupResponse =
   | IMiniGroupResponse
   | IMiniGroupResponseWithLogo
   | IMiniGroupResponseWithCountry
-  | IGroupResponse;
+  | IGroupResponse
+  | IGroupResponseExtended;
 
 export enum GroupResponsesEnum {
   MINI = "mini",

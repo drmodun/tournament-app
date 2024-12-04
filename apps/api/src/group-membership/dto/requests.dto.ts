@@ -5,7 +5,14 @@ import {
   groupRoleEnumType,
   IGroupMembershipQueryRequest,
 } from '@tournament-app/types';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
 
 export class GroupMembershipQuery
@@ -14,17 +21,31 @@ export class GroupMembershipQuery
 {
   @ApiPropertyOptional()
   @IsOptional()
-  @IsNumber()
-  userId?: string;
+  @Transform(({ value }) => parseInt(value))
+  @IsInt()
+  @IsPositive()
+  userId?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsNumber()
-  groupId?: string;
+  @Transform(({ value }) => parseInt(value))
+  @IsInt()
+  @IsPositive()
+  groupId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    enum: groupRoleEnum,
+  })
   @IsOptional()
   @IsEnum(groupRoleEnum)
   @IsString()
   role?: groupRoleEnumType;
+}
+
+export class GroupMembershipUpdateRequest {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsEnum(groupRoleEnum)
+  @IsString()
+  role: groupRoleEnumType;
 }

@@ -9,11 +9,11 @@ import {
 import { PgSelect } from 'drizzle-orm/pg-core';
 import { eq } from 'drizzle-orm';
 import { GroupMembershipQuery } from '../dto/requests.dto';
-import { GroupDrizzleRepository } from 'src/group/group.repository';
+import { GroupDrizzleRepository } from '../../group/group.repository';
 import { groupToUser } from 'src/db/schema';
 
-jest.mock('../../users/user.repository');
-jest.mock('../../groups/group.repository');
+jest.mock('src/users/user.repository');
+jest.mock('src/group/group.repository');
 
 describe('GroupMembershipDrizzleRepository', () => {
   let repository: GroupMembershipDrizzleRepository;
@@ -171,7 +171,7 @@ describe('GroupMembershipDrizzleRepository', () => {
   describe('getValidWhereClause', () => {
     it('should generate where clauses for groupId', () => {
       const query: GroupMembershipQuery = {
-        groupId: '1',
+        groupId: 1,
       };
 
       const clauses = repository.getValidWhereClause(query);
@@ -181,7 +181,7 @@ describe('GroupMembershipDrizzleRepository', () => {
 
     it('should generate where clauses for userId', () => {
       const query: GroupMembershipQuery = {
-        userId: '2',
+        userId: 2,
       };
 
       const clauses = repository.getValidWhereClause(query);
@@ -201,8 +201,8 @@ describe('GroupMembershipDrizzleRepository', () => {
 
     it('should generate multiple where clauses', () => {
       const query: GroupMembershipQuery = {
-        groupId: '1',
-        userId: '2',
+        groupId: 1,
+        userId: 2,
         role: groupRoleEnum.ADMIN,
       };
 

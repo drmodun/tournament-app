@@ -1,12 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GroupMembershipService } from './group-membership.service';
-import { GroupMembershipDrizzleRepository } from './group-membership.repository';
-import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { GroupMembershipResponsesEnum, GroupMembershipRoleEnum } from '@tournament-app/types';
+import { GroupMembershipService } from '../group-membership.service';
+import { GroupMembershipDrizzleRepository } from '../group-membership.repository';
+import {
+  GroupMembershipResponsesEnum,
+  groupRoleEnum,
+} from '@tournament-app/types';
+import {
+  GroupMembershipUpdateRequest,
+  GroupMembershipQuery,
+} from '../dto/requests.dto';
+import {
+  GroupMembershipResponse,
+  MinimalMembershipResponse,
+} from '../dto/responses.dto';
 
 describe('GroupMembershipService', () => {
   let service: GroupMembershipService;
-  let repository: GroupMembershipDrizzleRepository;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -28,7 +37,7 @@ describe('GroupMembershipService', () => {
     }).compile();
 
     service = module.get<GroupMembershipService>(GroupMembershipService);
-    repository = module.get<GroupMembershipDrizzleRepository>(GroupMembershipDrizzleRepository);
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -36,105 +45,206 @@ describe('GroupMembershipService', () => {
   });
 
   describe('create', () => {
-    const createDto = {
-      userId: 1,
-      groupId: 1,
-      role: GroupMembershipRoleEnum.MEMBER,
-    };
+    it('should create a group membership', async () => {
+      mockRepository.createEntity.mockResolvedValue(undefined);
 
-    it('should create a group membership successfully', async () => {
-      const expectedResult = { id: 1, ...createDto };
-      mockRepository.createEntity.mockResolvedValue([expectedResult]);
+      await service.create(1, 1);
 
-      const result = await service.create(createDto);
-      expect(result).toEqual(expectedResult);
-      expect(mockRepository.createEntity).toHaveBeenCalledWith(createDto);
-    });
-
-    it('should throw UnprocessableEntityException when creation fails', async () => {
-      mockRepository.createEntity.mockResolvedValue([]);
-
-      await expect(service.create(createDto)).rejects.toThrow(
-        UnprocessableEntityException,
-      );
+      expect(mockRepository.createEntity).toHaveBeenCalledWith({
+        groupId: 1,
+        userId: 1,
+      });
     });
   });
 
   describe('findAll', () => {
-    const query = { groupId: 1, role: GroupMembershipRoleEnum.MEMBER };
+    const query: GroupMembershipQuery = {
+      userId: 1,
+      groupId: 1,
+      role: groupRoleEnum.MEMBER,
+    };
 
-    it('should return array of group memberships', async () => {
-      const expectedResult = [{ id: 1, userId: 1, groupId: 1, role: GroupMembershipRoleEnum.MEMBER }];
-      mockRepository.getQuery.mockResolvedValue(expectedResult);
+    const mockResponse: GroupMembershipResponse[] = [
+      {
+        groupId: 1,
+        userId: 1,
+        role: groupRoleEnum.MEMBER,
+        user: {
+          id: 1,
+          username: 'test',
+          profilePicture: 'test.jpg',
+        },
+        group: {
+          id: 1,
+          name: 'test',
+          abbreviation: 'TST',
+          logo: 'test.jpg',
+        },
+        createdAt: new Date().toISOString(),
+      },
+    ];
+
+    it('should return all group memberships', async () => {
+      mockRepository.getQuery.mockResolvedValue(mockResponse);
 
       const result = await service.findAll(query);
-      expect(result).toEqual(expectedResult);
+
+      expect(result).toEqual(mockResponse);
       expect(mockRepository.getQuery).toHaveBeenCalledWith(query);
     });
   });
 
   describe('findOne', () => {
-    const id = 1;
-    const responseType = GroupMembershipResponsesEnum.BASE;
+    const mockResponse: GroupMembershipResponse[] = [
+      {
+        groupId: 1,
+        userId: 1,
+        role: groupRoleEnum.MEMBER,
+        user: {
+          id: 1,
+          username: 'test',
+          profilePicture: 'test.jpg',
+        },
+        group: {
+          id: 1,
+          name: 'test',
+          abbreviation: 'TST',
+          logo: 'test.jpg',
+        },
+        createdAt: new Date().toISOString(),
+      },
+    ];
 
-    it('should return a group membership', async () => {
-      const expectedResult = { id: 1, userId: 1, groupId: 1, role: GroupMembershipRoleEnum.MEMBER };
-      mockRepository.getSingleQuery.mockResolvedValue([expectedResult]);
+    it('should return a single group membership', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue(mockResponse);
 
-      const result = await service.findOne(id, responseType);
-      expect(result).toEqual(expectedResult);
-      expect(mockRepository.getSingleQuery).toHaveBeenCalledWith(id, responseType);
+      const result = await service.findOne(1, 1);
+
+      expect(result).toEqual(mockResponse[0]);
+      expect(mockRepository.getSingleQuery).toHaveBeenCalledWith(
+        { groupId: 1, userId: 1 },
+        GroupMembershipResponsesEnum.BASE,
+      );
     });
 
-    it('should throw NotFoundException when group membership not found', async () => {
-      mockRepository.getSingleQuery.mockResolvedValue([]);
+    it('should return a single group membership with custom response type', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue(mockResponse);
 
-      await expect(service.findOne(id, responseType)).rejects.toThrow(
-        NotFoundException,
+      const result = await service.findOne(
+        1,
+        1,
+        GroupMembershipResponsesEnum.MINI,
+      );
+
+      expect(result).toEqual(mockResponse[0]);
+      expect(mockRepository.getSingleQuery).toHaveBeenCalledWith(
+        { groupId: 1, userId: 1 },
+        GroupMembershipResponsesEnum.MINI,
       );
     });
   });
 
   describe('update', () => {
-    const id = 1;
-    const updateDto = { role: GroupMembershipRoleEnum.ADMIN };
+    const updateDto: GroupMembershipUpdateRequest = {
+      role: groupRoleEnum.ADMIN,
+    };
 
-    it('should update a group membership successfully', async () => {
-      const expectedResult = { id, userId: 1, groupId: 1, ...updateDto };
-      mockRepository.updateEntity.mockResolvedValue([expectedResult]);
+    it('should update a group membership', async () => {
+      mockRepository.updateEntity.mockResolvedValue(undefined);
 
-      const result = await service.update(id, updateDto);
-      expect(result).toEqual(expectedResult);
-      expect(mockRepository.updateEntity).toHaveBeenCalledWith(id, updateDto);
-    });
+      await service.update(1, 1, updateDto);
 
-    it('should throw NotFoundException when update fails', async () => {
-      mockRepository.updateEntity.mockResolvedValue([]);
-
-      await expect(service.update(id, updateDto)).rejects.toThrow(
-        NotFoundException,
+      expect(mockRepository.updateEntity).toHaveBeenCalledWith(
+        { groupId: 1, userId: 1 },
+        updateDto,
       );
     });
   });
 
   describe('remove', () => {
-    const id = 1;
+    it('should remove a group membership', async () => {
+      mockRepository.deleteEntity.mockResolvedValue(undefined);
 
-    it('should remove a group membership successfully', async () => {
-      const expectedResult = { id, userId: 1, groupId: 1, role: GroupMembershipRoleEnum.MEMBER };
-      mockRepository.deleteEntity.mockResolvedValue([expectedResult]);
+      await service.remove(1, 1);
 
-      const result = await service.remove(id);
-      expect(result).toEqual(expectedResult);
-      expect(mockRepository.deleteEntity).toHaveBeenCalledWith(id);
+      expect(mockRepository.deleteEntity).toHaveBeenCalledWith({
+        groupId: 1,
+        userId: 1,
+      });
+    });
+  });
+
+  describe('role checks', () => {
+    const mockMemberResponse: MinimalMembershipResponse[] = [
+      {
+        groupId: 1,
+        userId: 1,
+        role: groupRoleEnum.MEMBER,
+      },
+    ];
+
+    const mockAdminResponse: MinimalMembershipResponse[] = [
+      {
+        groupId: 1,
+        userId: 1,
+        role: groupRoleEnum.ADMIN,
+      },
+    ];
+
+    const mockOwnerResponse: MinimalMembershipResponse[] = [
+      {
+        groupId: 1,
+        userId: 1,
+        role: groupRoleEnum.OWNER,
+      },
+    ];
+
+    describe('isAdmin', () => {
+      it('should return true for admin role', async () => {
+        mockRepository.getSingleQuery.mockResolvedValue(mockAdminResponse);
+        const result = await service.isAdmin(1, 1);
+        expect(result).toBe(true);
+      });
+
+      it('should return true for owner role', async () => {
+        mockRepository.getSingleQuery.mockResolvedValue(mockOwnerResponse);
+        const result = await service.isAdmin(1, 1);
+        expect(result).toBe(true);
+      });
+
+      it('should return false for member role', async () => {
+        mockRepository.getSingleQuery.mockResolvedValue(mockMemberResponse);
+        const result = await service.isAdmin(1, 1);
+        expect(result).toBe(false);
+      });
     });
 
-    it('should throw NotFoundException when removal fails', async () => {
-      mockRepository.deleteEntity.mockResolvedValue([]);
+    describe('isMember', () => {
+      it('should return true when membership exists', async () => {
+        mockRepository.getSingleQuery.mockResolvedValue(mockMemberResponse);
+        const result = await service.isMember(1, 1);
+        expect(result).toBe(true);
+      });
 
-      await expect(service.remove(id)).rejects.toThrow(
-        NotFoundException,
-      );
+      it('should return false when membership does not exist', async () => {
+        mockRepository.getSingleQuery.mockResolvedValue([]);
+        const result = await service.isMember(1, 1);
+        expect(result).toBe(false);
+      });
+    });
+
+    describe('isOwner', () => {
+      it('should return true for owner role', async () => {
+        mockRepository.getSingleQuery.mockResolvedValue(mockOwnerResponse);
+        const result = await service.isOwner(1, 1);
+        expect(result).toBe(true);
+      });
+
+      it('should return false for non-owner roles', async () => {
+        mockRepository.getSingleQuery.mockResolvedValue(mockAdminResponse);
+        const result = await service.isOwner(1, 1);
+        expect(result).toBe(false);
+      });
     });
   });
 });

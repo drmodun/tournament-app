@@ -14,6 +14,6 @@ import { GroupDrizzleRepository } from 'src/group/group.repository';
     UserDrizzleRepository,
     GroupDrizzleRepository,
   ],
-  exports: [GroupMembershipService],
+  exports: [GroupMembershipService, GroupMembershipDrizzleRepository],
 })
 export class GroupMembershipModule {}

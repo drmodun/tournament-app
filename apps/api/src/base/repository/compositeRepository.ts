@@ -17,7 +17,7 @@ export abstract class CompositeRepository<
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
   constructor(
     model: TTable,
-    private readonly keys: string[],
+    private readonly keys: string[], // TODO: think if this is needed, if not remove keys from composites completely
   ) {
     super(model);
   }
@@ -42,12 +42,7 @@ export abstract class CompositeRepository<
   }
 
   createEntity(createRequest: TCreateRequest) {
-    return db
-      .insert(this.model)
-      .values(createRequest)
-      .returning(
-        Object.fromEntries(this.keys.map((key) => [key, this.model[key]])),
-      );
+    return db.insert(this.model).values(createRequest).execute();
   }
 
   updateEntity(id: TCompositeKey, updateRequest: TCreateRequest) {
@@ -62,9 +57,7 @@ export abstract class CompositeRepository<
             ),
           ),
         )
-        .returning(
-          Object.fromEntries(this.keys.map((key) => [key, this.model[key]])),
-        );
+        .execute();
     } catch (e) {
       if (e.message === 'No values to set') {
         throw new NoValuesToSetException();
@@ -83,9 +76,7 @@ export abstract class CompositeRepository<
           ),
         ),
       )
-      .returning(
-        Object.fromEntries(this.keys.map((key) => [key, this.model[key]])),
-      );
+      .execute();
   }
 
   entityExists(id: TCompositeKey) {

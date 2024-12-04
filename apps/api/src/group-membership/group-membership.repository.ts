@@ -17,12 +17,14 @@ import {
   PgJoinFn,
 } from 'drizzle-orm/pg-core';
 import { eq, SQL } from 'drizzle-orm';
+import { IGroupMembershipKey } from './dto/responses.dto';
 
 @Injectable()
 export class GroupMembershipDrizzleRepository extends CompositeRepository<
   typeof groupToUser,
   BaseQuery,
-  { groupId: number; userId: number } | { role: string }
+  { groupId: number; userId: number } | { role: string },
+  IGroupMembershipKey
 > {
   constructor(
     private readonly userDrizzleRepository: UserDrizzleRepository,
@@ -101,30 +103,19 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
       case GroupMembershipResponsesEnum.BASE:
         return query
           .leftJoin(user, eq(groupToUser.userId, user.id))
-          .leftJoin(group, eq(groupToUser.groupId, group.id))
-          .groupBy(group.id);
+          .leftJoin(group, eq(groupToUser.groupId, group.id));
       case GroupMembershipResponsesEnum.MINI:
         return query;
       case GroupMembershipResponsesEnum.USER_MINI_WITH_COUNTRY:
-        return query
-          .leftJoin(user, eq(user.id, groupToUser.userId))
-          .groupBy(group.id);
+        return query.leftJoin(user, eq(user.id, groupToUser.userId));
       case GroupMembershipResponsesEnum.USER_WITH_DATES:
-        return query
-          .leftJoin(user, eq(user.id, groupToUser.userId))
-          .groupBy(group.id);
+        return query.leftJoin(user, eq(user.id, groupToUser.userId));
       case GroupMembershipResponsesEnum.GROUP_MINI:
-        return query
-          .leftJoin(group, eq(group.id, groupToUser.groupId))
-          .groupBy(group.id);
+        return query.leftJoin(group, eq(group.id, groupToUser.groupId));
       case GroupMembershipResponsesEnum.GROUP_MINI_WITH_COUNTRY:
-        return query
-          .leftJoin(group, eq(group.id, groupToUser.groupId))
-          .groupBy(group.id);
+        return query.leftJoin(group, eq(group.id, groupToUser.groupId));
       case GroupMembershipResponsesEnum.GROUP_WITH_DATES:
-        return query
-          .leftJoin(group, eq(group.id, groupToUser.groupId))
-          .groupBy(group.id);
+        return query.leftJoin(group, eq(group.id, groupToUser.groupId));
       default:
         return query;
     }

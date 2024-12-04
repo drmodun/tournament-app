@@ -1,36 +1,86 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import {
-  groupRoleEnumType,
   IMinimalMembershipResponse,
-  userRoleEnumType,
+  IGroupMembershipResponse,
+  IUserMembershipResponseWithDates,
+  IGroupMembershipResponseWithDates,
+  IGroupMembershipActionResponse,
+  groupRoleEnumType,
+  groupRoleEnum,
 } from '@tournament-app/types';
-import { MiniUserResponseWithProfilePicture } from 'src/users/dto/responses.dto';
+import {
+  MiniGroupResponseWithLogo,
+  MiniGroupResponseWithCountry,
+} from '../../group/dto/responses.dto';
+import {
+  MiniUserResponseWithProfilePicture,
+  MiniUserResponseWithCountry,
+} from '../../users/dto/responses.dto';
 
-export class MinimalMemberResponse implements IMinimalMembershipResponse {
+export class MinimalMembershipResponse implements IMinimalMembershipResponse {
   @ApiResponseProperty()
   groupId: number;
 
   @ApiResponseProperty()
   userId: number;
 
-  @ApiResponseProperty()
+  @ApiResponseProperty({ enum: groupRoleEnum })
   role: groupRoleEnumType;
 }
 
-export class GroupMembershipResponse {
+export class GroupMembershipResponse implements IGroupMembershipResponse {
   @ApiResponseProperty()
   groupId: number;
 
   @ApiResponseProperty()
   userId: number;
 
-  @ApiResponseProperty({
-    type: MiniUserResponseWithProfilePicture,
-  })
+  @ApiResponseProperty({ enum: groupRoleEnum })
+  role: groupRoleEnumType;
+
+  @ApiResponseProperty({ type: () => MiniUserResponseWithProfilePicture })
   user: MiniUserResponseWithProfilePicture;
 
-  @ApiResponseProperty({
-  }) // TODO: add resposne for group stuff now
+  @ApiResponseProperty({ type: () => MiniGroupResponseWithLogo })
+  group: MiniGroupResponseWithLogo;
+
+  @ApiResponseProperty()
+  createdAt: string;
 }
 
-export
+export class UserMembershipResponseWithDates
+  extends MiniUserResponseWithCountry
+  implements IUserMembershipResponseWithDates
+{
+  @ApiResponseProperty()
+  createdAt: Date;
+
+  @ApiResponseProperty({ enum: groupRoleEnum })
+  role: groupRoleEnumType;
+}
+
+export class GroupMembershipResponseWithDates
+  extends MiniGroupResponseWithCountry
+  implements IGroupMembershipResponseWithDates
+{
+  @ApiResponseProperty()
+  createdAt: Date;
+
+  @ApiResponseProperty({ enum: groupRoleEnum })
+  role: groupRoleEnumType;
+}
+
+export class GroupMembershipKey implements IGroupMembershipKey {
+  @ApiResponseProperty()
+  userId: number;
+
+  @ApiResponseProperty()
+  groupId: number;
+
+  [key: string]: number;
+}
+
+export interface IGroupMembershipKey extends Record<string, number> {
+  userId: number;
+  groupId: number;
+}

@@ -1,34 +1,152 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseGuards,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { GroupMembershipService } from './group-membership.service';
-import { CreateGroupMembershipDto } from './dto/create-group-membership.dto';
-import { UpdateGroupMembershipDto } from './dto/update-group-membership.dto';
+import { GroupAdminGuard } from 'src/group/guards/group-admin.guard';
+import {
+  GroupMembershipQuery,
+  GroupMembershipUpdateRequest,
+} from './dto/requests.dto';
+import { GroupMemberGuard } from 'src/group/guards/group-member.guard';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { ApiExtraModels, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  GroupMembershipKey,
+  GroupMembershipResponse,
+  GroupMembershipResponseWithDates,
+  MinimalMembershipResponse,
+  UserMembershipResponseWithDates,
+} from './dto/responses.dto';
+import {
+  MiniUserResponseWithCountry,
+  MiniUserResponseWithProfilePicture,
+} from 'src/users/dto/responses.dto';
+import {
+  MiniGroupResponseWithCountry,
+  MiniGroupResponseWithLogo,
+} from 'src/group/dto/responses.dto';
+import {
+  groupMembershipExamples,
+  groupMembershipQueryResponses,
+  groupMembershipResponseSchema,
+} from './dto/examples';
+import {
+  GroupMembershipResponsesEnum,
+  IQueryMetadata,
+} from '@tournament-app/types';
+import { MetadataMaker } from 'src/base/static/makeMetadata';
 
+@ApiTags('group-membership')
+@ApiExtraModels(
+  MinimalMembershipResponse,
+  GroupMembershipResponse,
+  UserMembershipResponseWithDates,
+  GroupMembershipResponseWithDates,
+  GroupMembershipKey,
+  MiniUserResponseWithCountry,
+  MiniUserResponseWithProfilePicture,
+  MiniGroupResponseWithCountry,
+  MiniGroupResponseWithLogo,
+)
 @Controller('group-membership')
 export class GroupMembershipController {
-  constructor(private readonly groupMembershipService: GroupMembershipService) {}
-
-  @Post()
-  create(@Body() createGroupMembershipDto: CreateGroupMembershipDto) {
-    return this.groupMembershipService.create(createGroupMembershipDto);
-  }
+  constructor(
+    private readonly groupMembershipService: GroupMembershipService,
+  ) {}
 
   @Get()
-  findAll() {
-    return this.groupMembershipService.findAll();
+  @ApiOkResponse({
+    content: {
+      'application/json': {
+        examples: groupMembershipQueryResponses,
+      },
+    },
+  })
+  async findAll(@Query() query: GroupMembershipQuery, @Req() req: Request) {
+    const results = await this.groupMembershipService.findAll(query);
+
+    const metadata: IQueryMetadata = MetadataMaker.makeMetadataFromQuery(
+      query,
+      results,
+      req.url, //TODO: maybe make a url extractor
+    );
+
+    return {
+      results,
+      metadata,
+    };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupMembershipService.findOne(+id);
+  @Get(':groupId/:userId')
+  @ApiOkResponse({
+    content: {
+      'application/json': {
+        examples: groupMembershipExamples,
+        schema: groupMembershipResponseSchema,
+      },
+    },
+  })
+  async findOne(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query('responseType')
+    responseType?: GroupMembershipResponsesEnum,
+  ) {
+    return await this.groupMembershipService.findOne(
+      groupId,
+      userId,
+      responseType,
+    );
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGroupMembershipDto: UpdateGroupMembershipDto) {
-    return this.groupMembershipService.update(+id, updateGroupMembershipDto);
+  @UseGuards(GroupAdminGuard)
+  @Post(':groupId/:userId') // No return types
+  async create(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return await this.groupMembershipService.create(groupId, userId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.groupMembershipService.remove(+id);
+  @UseGuards(GroupAdminGuard)
+  @Post(':groupId/:userId')
+  async remove(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return await this.groupMembershipService.remove(groupId, userId);
+  }
+
+  @UseGuards(GroupAdminGuard)
+  @Post(':groupId/:userId')
+  async update(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() updateGroupMembershipDto: GroupMembershipUpdateRequest,
+  ) {
+    return await this.groupMembershipService.update(
+      groupId,
+      userId,
+      updateGroupMembershipDto,
+    );
+  }
+
+  @UseGuards(GroupMemberGuard)
+  @Delete(':groupId')
+  async removeMyself(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupMembershipService.remove(groupId, user.id);
   }
 }

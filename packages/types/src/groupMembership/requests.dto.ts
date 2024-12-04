@@ -3,8 +3,8 @@ export interface IUpdateMembershipRequest {
 }
 
 export interface IGroupMembershipQueryRequest {
-  userId?: string;
-  groupId?: string;
+  userId?: number;
+  groupId?: number;
   role?: string;
 }
 

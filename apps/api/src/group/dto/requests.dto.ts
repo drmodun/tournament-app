@@ -4,7 +4,6 @@ import {
   IUpdateGroupRequest,
   IGroupQuery,
   groupFocusEnumType,
-  groupTypeEnumType,
   groupTypeEnum,
   groupFocusEnum,
 } from '@tournament-app/types';
@@ -83,8 +82,8 @@ export class UpdateGroupRequest implements IUpdateGroupRequest {
   description?: string;
 
   @IsOptional()
-  @IsEnum(groupFocusEnum)
-  @ApiPropertyOptional({ enum: groupFocusEnum })
+  @IsEnum(groupTypeEnum)
+  @ApiPropertyOptional({ enum: groupTypeEnum })
   type?: groupTypeEnum;
 
   @IsOptional()

@@ -1,9 +1,16 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { AppModule } from '../app.module';
-import { GroupResponsesEnum } from '@tournament-app/types';
-import { CreateGroupRequest, UpdateGroupRequest } from './dto/requests.dto';
+import { AppModule } from '../src/app.module';
+import {
+  groupFocusEnum,
+  GroupResponsesEnum,
+  groupTypeEnum,
+} from '@tournament-app/types';
+import {
+  CreateGroupRequest,
+  UpdateGroupRequest,
+} from '../src/group/dto/requests.dto';
 
 describe('GroupController (e2e)', () => {
   let app: INestApplication;
@@ -19,11 +26,11 @@ describe('GroupController (e2e)', () => {
     await app.init();
 
     // Generate auth token for testing
-    const tokens = await request(app.getHttpServer())
+    const loginResponse = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ email: 'admin@example.com', password: 'Password123!' });
 
-    authToken = await tokens.body.accessToken;
+    authToken = loginResponse.body.accessToken;
   });
 
   afterAll(async () => {
@@ -35,8 +42,8 @@ describe('GroupController (e2e)', () => {
       name: 'Test Group',
       abbreviation: 'TG',
       description: 'Test Description',
-      type: 'public',
-      focus: 'hybrid',
+      type: groupTypeEnum.PRIVATE,
+      focus: groupFocusEnum.HYBRID,
       logo: 'logo.png',
       location: 'Test Location',
       country: 'Test Country',
@@ -64,13 +71,126 @@ describe('GroupController (e2e)', () => {
   });
 
   describe('GET /groups', () => {
-    it('should return an array of groups', () => {
+    it('should return an array of groups with metadata and MINI response type', () => {
+      return request(app.getHttpServer())
+        .get('/groups?responseType=mini')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('results');
+          expect(res.body).toHaveProperty('metadata');
+          expect(Array.isArray(res.body.results)).toBe(true);
+          expect(Object.keys(res.body.results[0])).toEqual(['id', 'name']);
+          expect(res.body.metadata.pagination).toEqual({
+            page: 1,
+            pageSize: 12,
+          });
+        });
+    });
+
+    it('should return an array of groups with metadata and MINI_WITH_LOGO response type', () => {
+      return request(app.getHttpServer())
+        .get('/groups?responseType=mini-with-logo')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('results');
+          expect(res.body).toHaveProperty('metadata');
+          expect(Array.isArray(res.body.results)).toBe(true);
+          expect(Object.keys(res.body.results[0])).toEqual([
+            'id',
+            'name',
+            'logo',
+          ]);
+          expect(res.body.metadata.pagination).toEqual({
+            page: 1,
+            pageSize: 12,
+          });
+        });
+    });
+
+    it('should return an array of groups with metadata and MINI_WITH_COUNTRY response type', () => {
+      return request(app.getHttpServer())
+        .get('/groups?responseType=mini-with-country')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('results');
+          expect(res.body).toHaveProperty('metadata');
+          expect(Array.isArray(res.body.results)).toBe(true);
+          expect(Object.keys(res.body.results[0])).toEqual([
+            'id',
+            'name',
+            'country',
+          ]);
+          expect(res.body.metadata.pagination).toEqual({
+            page: 1,
+            pageSize: 12,
+          });
+        });
+    });
+
+    it('should return an array of groups with metadata and BASE response type', () => {
+      return request(app.getHttpServer())
+        .get('/groups?responseType=base')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('results');
+          expect(res.body).toHaveProperty('metadata');
+          expect(Array.isArray(res.body.results)).toBe(true);
+          expect(Object.keys(res.body.results[0])).toEqual([
+            'id',
+            'name',
+            'logo',
+            'type',
+            'focus',
+            'abbreviation',
+            'country',
+          ]);
+          expect(res.body.metadata.pagination).toEqual({
+            page: 1,
+            pageSize: 12,
+          });
+        });
+    });
+
+    it('should return an array of groups with metadata and EXTENDED response type', () => {
+      return request(app.getHttpServer())
+        .get('/groups?responseType=extended')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('results');
+          expect(res.body).toHaveProperty('metadata');
+          expect(Array.isArray(res.body.results)).toBe(true);
+          expect(Object.keys(res.body.results[0])).toEqual([
+            'id',
+            'name',
+            'logo',
+            'type',
+            'focus',
+            'abbreviation',
+            'country',
+            'description',
+            'location',
+            'createdAt',
+            'updatedAt',
+            'members',
+            'tournaments',
+            'followers',
+          ]);
+          expect(res.body.metadata.pagination).toEqual({
+            page: 1,
+            pageSize: 12,
+          });
+        });
+    });
+
+    it('should return an array of groups with metadata', () => {
       return request(app.getHttpServer())
         .get('/groups')
         .expect(200)
         .expect((res) => {
-          expect(Array.isArray(res.body)).toBe(true);
-          expect(res.body.length).toBeGreaterThan(0);
+          expect(res.body).toHaveProperty('results');
+          expect(res.body).toHaveProperty('metadata');
+          expect(Array.isArray(res.body.results)).toBe(true);
+          expect(res.body.results.length).toBeGreaterThan(0);
         });
     });
 
@@ -80,8 +200,8 @@ describe('GroupController (e2e)', () => {
         .query({ type: 'public' })
         .expect(200)
         .expect((res) => {
-          expect(Array.isArray(res.body)).toBe(true);
-          res.body.forEach((group) => {
+          expect(Array.isArray(res.body.results)).toBe(true);
+          res.body.results.forEach((group) => {
             expect(group.type).toBe('public');
           });
         });
@@ -89,6 +209,74 @@ describe('GroupController (e2e)', () => {
   });
 
   describe('GET /groups/:id', () => {
+    it('should return a group with MINI response type', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}?responseType=mini`)
+        .expect(200)
+        .expect((res) => {
+          expect(Object.keys(res.body)).toEqual(['id', 'name']);
+        });
+    });
+
+    it('should return a group with MINI_WITH_LOGO response type', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}?responseType=mini-with-logo`)
+        .expect(200)
+        .expect((res) => {
+          expect(Object.keys(res.body)).toEqual(['id', 'name', 'logo']);
+        });
+    });
+
+    it('should return a group with MINI_WITH_COUNTRY response type', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}?responseType=mini-with-country`)
+        .expect(200)
+        .expect((res) => {
+          expect(Object.keys(res.body)).toEqual(['id', 'name', 'country']);
+        });
+    });
+
+    it('should return a group with BASE response type', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}?responseType=base`)
+        .expect(200)
+        .expect((res) => {
+          expect(Object.keys(res.body)).toEqual([
+            'id',
+            'name',
+            'logo',
+            'type',
+            'focus',
+            'abbreviation',
+            'country',
+          ]);
+        });
+    });
+
+    it('should return a group with EXTENDED response type', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}?responseType=extended`)
+        .expect(200)
+        .expect((res) => {
+          expect(Object.keys(res.body)).toEqual([
+            'id',
+            'name',
+            'logo',
+            'type',
+            'focus',
+            'abbreviation',
+            'country',
+            'description',
+            'location',
+            'createdAt',
+            'updatedAt',
+            'members',
+            'tournaments',
+            'followers',
+          ]);
+        });
+    });
+
     it('should return a group by id', () => {
       return request(app.getHttpServer())
         .get(`/groups/${createdGroupId}`)
@@ -101,6 +289,63 @@ describe('GroupController (e2e)', () => {
 
     it('should return 404 for non-existent group', () => {
       return request(app.getHttpServer()).get('/groups/999999').expect(404);
+    });
+  });
+
+  describe('GET /groups/:id/members', () => {
+    it('should return group members', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}/members`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('group');
+          expect(res.body).toHaveProperty('members');
+          expect(Array.isArray(res.body.members)).toBe(true);
+        });
+    });
+
+    it('should return 404 for non-existent group', () => {
+      return request(app.getHttpServer())
+        .get('/groups/999999/members')
+        .expect(404);
+    });
+  });
+
+  describe('GET /groups/:id/tournaments', () => {
+    it('should return group tournaments', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}/tournaments`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('group');
+          expect(res.body).toHaveProperty('tournaments');
+          expect(Array.isArray(res.body.tournaments)).toBe(true);
+        });
+    });
+
+    it('should return 404 for non-existent group', () => {
+      return request(app.getHttpServer())
+        .get('/groups/999999/tournaments')
+        .expect(404);
+    });
+  });
+
+  describe('GET /groups/:id/followers', () => {
+    it('should return group followers', () => {
+      return request(app.getHttpServer())
+        .get(`/groups/${createdGroupId}/followers`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toHaveProperty('group');
+          expect(res.body).toHaveProperty('followers');
+          expect(Array.isArray(res.body.followers)).toBe(true);
+        });
+    });
+
+    it('should return 404 for non-existent group', () => {
+      return request(app.getHttpServer())
+        .get('/groups/999999/followers')
+        .expect(404);
     });
   });
 

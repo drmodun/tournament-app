@@ -50,6 +50,7 @@ export type BaseGroupMembershipResponseType =
   | IUserMembershipResponseWithDates
   | IMiniUserResponseWithProfilePicture
   | IMiniGroupResponse
+  | IGroupMembershipActionResponse
   | IMiniGroupResponseWithCountry
   | IGroupResponse; //TODO: consider if all of these are needed
 

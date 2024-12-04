@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseQueryType } from '@tournament-app/types';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
@@ -25,6 +26,7 @@ export abstract class BaseQuery<TResponseType extends string = string>
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Transform(({ value }) => Boolean(value))
   @IsBoolean()
   returnFullCount?: boolean;
 
@@ -35,12 +37,14 @@ export abstract class BaseQuery<TResponseType extends string = string>
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsPositive()
   page?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsPositive()
   @Max(100)

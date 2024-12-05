@@ -16,7 +16,7 @@ export abstract class PrimaryRepository<
     InferInsertModel<TTable>
   >,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
-  SingleQuery(id: number, responseType: string) {
+  getSingleQuery(id: number, responseType: string) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(this.getMappingObject(responseType))
@@ -70,4 +70,5 @@ export abstract class PrimaryRepository<
   }
 
   // TODO: think about making a child class or refactoring for composite keys, maybe just make those repositories override this one
+  // TODO: fix return full count operation
 }

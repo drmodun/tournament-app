@@ -107,6 +107,7 @@ export type groupRoleEnumType =
 export enum groupRoleEnum {
   OWNER = "owner",
   MEMBER = "member",
+  ADMIN = "admin",
 }
 
 export type betStatusEnumType =
@@ -210,6 +211,26 @@ export enum submissionStatusEnum {
   TIME_LIMIT_EXCEEDED = "time_limit_exceeded",
   MEMORY_LIMIT_EXCEEDED = "memory_limit_exceeded",
 }
+
+export enum groupTypeEnum {
+  PRIVATE = "private",
+  PUBLIC = "public",
+}
+
+export type groupTypeEnumType =
+  (typeof groupTypeEnum)[keyof typeof groupTypeEnum];
+
+export type tournamentPromotionTypeEnumType =
+  (typeof tournamentPromotionTypeEnum)[keyof typeof tournamentPromotionTypeEnum];
+
+export enum groupFocusEnum {
+  PARTICIPATION = "participation",
+  ORGANIZATION = "organization",
+  HYBRID = "hybrid",
+}
+
+export type groupFocusEnumType =
+  (typeof groupFocusEnum)[keyof typeof groupFocusEnum];
 
 export const exportEnumValues = (
   enumToExport: object

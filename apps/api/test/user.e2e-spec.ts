@@ -329,11 +329,11 @@ describe('UserController', () => {
 
     it('should delete a user', async () => {
       const response = await request(app.getHttpServer())
-        .delete('/users/1')
+        .delete('/users/32')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(200);
 
-      expect(response.body).toEqual({ id: 1 });
+      expect(response.body).toEqual({ id: 32 });
     });
   });
 

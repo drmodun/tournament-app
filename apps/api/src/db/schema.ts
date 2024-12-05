@@ -19,6 +19,8 @@ import {
   userRoleEnum,
   categoryTypeEnum,
   tournamentTeamTypeEnum,
+  groupFocusEnum,
+  groupTypeEnum,
 } from '@tournament-app/types';
 import {
   serial,
@@ -111,6 +113,13 @@ export const categoryType = pgEnum(
 );
 
 export const groupRole = pgEnum('group_role', exportEnumValues(groupRoleEnum));
+
+export const groupFocus = pgEnum(
+  'group_focus',
+  exportEnumValues(groupFocusEnum),
+);
+
+export const groupType = pgEnum('group_type', exportEnumValues(groupTypeEnum));
 
 export const user = pgTable('user', {
   id: serial('id').unique().primaryKey(),
@@ -340,6 +349,26 @@ export const chatRoomMessage = pgTable('chatRoomMessage', {
   visibility: messageVisibility('visibility').default('public'),
 });
 
+export const groupFollower = pgTable(
+  'group_follower',
+  {
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.groupId] }),
+  }),
+);
+
 export const follower = pgTable(
   'follower',
   {
@@ -387,9 +416,32 @@ export const group = pgTable('group', {
   abbreviation: text('abbreviation').notNull(),
   description: text('description'),
   logo: text('logo'),
+  country: text('country'),
+  location: text('location'),
+  type: groupType('group_type').default('public'),
+  focus: groupFocus('group_focus').default('hybrid'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   chatRoomId: integer('chat_room_id').references(() => chatRoom.id),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  //TODO: if needed create a separate settings entity
 });
+
+export const groupInterests = pgTable(
+  'group_interests',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id)
+      .notNull(),
+    categoryId: integer('category_id')
+      .references(() => category.id)
+      .notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.categoryId] }),
+  }),
+);
 
 export const groupToUser = pgTable(
   'group_user',
@@ -412,13 +464,64 @@ export const groupToUser = pgTable(
   }),
 );
 
+export const groupInvite = pgTable(
+  'group_invite',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    message: text('message'), // TO add more fields and stuff if needed
+    relatedLFGId: integer('related_lfg_id').references(
+      () => lookingForGroup.id,
+    ), // If it is related to any LFG
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.userId] }),
+  }),
+);
+
+export const groupJoinRequest = pgTable(
+  'group_join_request',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    message: text('message'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    relatedLFPId: integer('related_lfp_id').references(
+      () => lookingForPlayers.id,
+    ),
+  }, // TODO: the response to this is literally creating another group membership or just straight up deleting the join request
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.userId] }),
+  }),
+);
+
 export const category = pgTable('category', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
   image: text('image'),
-  categoryType: categoryType('category_type').default('other'),
+  type: categoryType('category_type').default('other'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const interests = pgTable(

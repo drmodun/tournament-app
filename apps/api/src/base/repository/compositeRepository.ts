@@ -15,14 +15,11 @@ export abstract class CompositeRepository<
   >,
   TCompositeKey extends Record<string, any> = Record<string, any>,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
-  constructor(
-    model: TTable,
-    private readonly keys: string[],
-  ) {
+  constructor(model: TTable) {
     super(model);
   }
 
-  getSingleQuery(id: TCompositeKey, responseType: string) {
+  getSingleQuery(id: TCompositeKey, responseType: string = 'base') {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(this.getMappingObject(responseType))
@@ -42,12 +39,7 @@ export abstract class CompositeRepository<
   }
 
   createEntity(createRequest: TCreateRequest) {
-    return db
-      .insert(this.model)
-      .values(createRequest)
-      .returning(
-        Object.fromEntries(this.keys.map((key) => [key, this.model[key]])),
-      );
+    return db.insert(this.model).values(createRequest).execute();
   }
 
   updateEntity(id: TCompositeKey, updateRequest: TCreateRequest) {
@@ -62,9 +54,7 @@ export abstract class CompositeRepository<
             ),
           ),
         )
-        .returning(
-          Object.fromEntries(this.keys.map((key) => [key, this.model[key]])),
-        );
+        .execute();
     } catch (e) {
       if (e.message === 'No values to set') {
         throw new NoValuesToSetException();
@@ -83,13 +73,11 @@ export abstract class CompositeRepository<
           ),
         ),
       )
-      .returning(
-        Object.fromEntries(this.keys.map((key) => [key, this.model[key]])),
-      );
+      .execute();
   }
 
-  entityExists(id: TCompositeKey) {
-    return db
+  async entityExists(id: TCompositeKey) {
+    return await db
       .select({})
       .from(this.model)
       .where(

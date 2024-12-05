@@ -43,7 +43,7 @@ export class MetadataMaker {
     const pagination: Pagination = {
       page: query?.page || 1,
       pageSize: query?.pageSize || 12,
-      ...(query?.returnFullCount && { total: results['value'] || 0 }),
+      ...(query?.returnFullCount && { total: results['count'] || 0 }),
     };
 
     return pagination;

@@ -4,7 +4,6 @@ import {
   IGroupMembershipResponse,
   IUserMembershipResponseWithDates,
   IGroupMembershipResponseWithDates,
-  IGroupMembershipActionResponse,
   groupRoleEnumType,
   groupRoleEnum,
 } from '@tournament-app/types';

@@ -9,6 +9,7 @@ import {
   UseGuards,
   Query,
   Req,
+  Patch,
 } from '@nestjs/common';
 import { GroupMembershipService } from './group-membership.service';
 import { GroupAdminGuard } from 'src/group/guards/group-admin.guard';
@@ -19,7 +20,12 @@ import {
 import { GroupMemberGuard } from 'src/group/guards/group-member.guard';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-import { ApiExtraModels, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   GroupMembershipKey,
   GroupMembershipResponse,
@@ -45,6 +51,7 @@ import {
   IQueryMetadata,
 } from '@tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
+import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 
 @ApiTags('group-membership')
 @ApiExtraModels(
@@ -87,6 +94,16 @@ export class GroupMembershipController {
     };
   }
 
+  @UseGuards(GroupMemberGuard)
+  @ApiBearerAuth()
+  @Delete(':groupId/leave')
+  async removeMyself(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupMembershipService.remove(groupId, user.id);
+  }
+
   @Get(':groupId/:userId')
   @ApiOkResponse({
     content: {
@@ -109,7 +126,8 @@ export class GroupMembershipController {
     );
   }
 
-  @UseGuards(GroupAdminGuard)
+  @UseGuards(AdminAuthGuard)
+  @ApiBearerAuth()
   @Post(':groupId/:userId') // No return types
   async create(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -119,7 +137,8 @@ export class GroupMembershipController {
   }
 
   @UseGuards(GroupAdminGuard)
-  @Post(':groupId/:userId')
+  @ApiBearerAuth()
+  @Delete(':groupId/:userId')
   async remove(
     @Param('groupId', ParseIntPipe) groupId: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -128,7 +147,8 @@ export class GroupMembershipController {
   }
 
   @UseGuards(GroupAdminGuard)
-  @Post(':groupId/:userId')
+  @ApiBearerAuth()
+  @Patch(':groupId/:userId')
   async update(
     @Param('groupId', ParseIntPipe) groupId: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -139,14 +159,5 @@ export class GroupMembershipController {
       userId,
       updateGroupMembershipDto,
     );
-  }
-
-  @UseGuards(GroupMemberGuard)
-  @Delete(':groupId')
-  async removeMyself(
-    @Param('groupId', ParseIntPipe) groupId: number,
-    @CurrentUser() user: ValidatedUserDto,
-  ) {
-    return await this.groupMembershipService.remove(groupId, user.id);
   }
 }

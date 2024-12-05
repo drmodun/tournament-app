@@ -95,7 +95,7 @@ async function createUsers() {
     .execute();
 
   await db.execute(
-    sql<string>`ALTER SEQUENCE user_id_seq RESTART WITH ${sql.raw(String(NUM_USERS_TO_CREATE + 1))}`,
+    sql<string>`ALTER SEQUENCE user_id_seq RESTART WITH ${sql.raw(String(NUM_USERS_TO_CREATE + 3))}`,
   );
 }
 

@@ -15,14 +15,11 @@ export abstract class CompositeRepository<
   >,
   TCompositeKey extends Record<string, any> = Record<string, any>,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
-  constructor(
-    model: TTable,
-    private readonly keys: string[], // TODO: think if this is needed, if not remove keys from composites completely
-  ) {
+  constructor(model: TTable) {
     super(model);
   }
 
-  getSingleQuery(id: TCompositeKey, responseType: string) {
+  getSingleQuery(id: TCompositeKey, responseType: string = 'base') {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(this.getMappingObject(responseType))
@@ -79,8 +76,8 @@ export abstract class CompositeRepository<
       .execute();
   }
 
-  entityExists(id: TCompositeKey) {
-    return db
+  async entityExists(id: TCompositeKey) {
+    return await db
       .select({})
       .from(this.model)
       .where(

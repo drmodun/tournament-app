@@ -149,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2024-12-04T12:35:15.589Z
+                        updatedAt: &a2 2024-12-05T10:28:50.087Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -245,7 +245,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a2
-                        createdAt: 2024-12-04T12:35:15.589Z
+                        createdAt: 2024-12-05T10:28:50.087Z
                         following: 0
                         location: New York
           description: ""
@@ -301,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-12-04T12:35:15.589Z
+                    updatedAt: &a3 2024-12-05T10:28:50.087Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -329,7 +329,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-12-04T12:35:15.589Z
+                    createdAt: 2024-12-05T10:28:50.087Z
                     following: 0
                     location: New York
           description: ""
@@ -583,7 +583,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2024-12-04T12:35:15.738Z
+                        updatedAt: 2024-12-05T10:28:50.281Z
                         memberCount: 50
                 extended:
                   value:
@@ -609,9 +609,9 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2024-12-04T12:35:15.738Z
+                        updatedAt: 2024-12-05T10:28:50.281Z
                         memberCount: 50
-                        createdAt: 2024-12-04T12:35:15.738Z
+                        createdAt: 2024-12-05T10:28:50.281Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -640,10 +640,12 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2024-12-04T12:35:15.738Z
+                updatedAt: 2024-12-05T10:28:50.281Z
                 memberCount: 50
           description: ""
       tags: *a5
+      security:
+        - bearer: []
   /groups/{groupId}:
     get:
       operationId: GroupController_findOne
@@ -692,7 +694,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2024-12-04T12:35:15.738Z
+                    updatedAt: 2024-12-05T10:28:50.281Z
                     memberCount: 50
                 extended:
                   value:
@@ -705,9 +707,9 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2024-12-04T12:35:15.738Z
+                    updatedAt: 2024-12-05T10:28:50.281Z
                     memberCount: 50
-                    createdAt: 2024-12-04T12:35:15.738Z
+                    createdAt: 2024-12-05T10:28:50.281Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -747,10 +749,12 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2024-12-04T12:35:15.738Z
+                updatedAt: 2024-12-05T10:28:50.281Z
                 memberCount: 50
           description: ""
       tags: *a5
+      security:
+        - bearer: []
     delete:
       operationId: GroupController_remove
       parameters:
@@ -763,6 +767,8 @@ paths:
         "200":
           description: ""
       tags: *a5
+      security:
+        - bearer: []
   /groups/{groupId}/members:
     get:
       operationId: GroupController_getGroupMembers
@@ -787,7 +793,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-04T12:35:15.738Z
+                  updatedAt: 2024-12-05T10:28:50.281Z
                   memberCount: 50
                 members: []
           description: ""
@@ -816,7 +822,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-04T12:35:15.738Z
+                  updatedAt: 2024-12-05T10:28:50.281Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -845,7 +851,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-04T12:35:15.738Z
+                  updatedAt: 2024-12-05T10:28:50.281Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -963,7 +969,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2024-12-04T12:35:15.742Z
+                        createdAt: 2024-12-05T10:28:50.286Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -989,7 +995,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2024-12-04T12:35:15.742Z
+                        createdAt: 2024-12-05T10:28:50.286Z
                         country: country
                         id: 1
                         username: username
@@ -1019,7 +1025,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2024-12-04T12:35:15.742Z
+                        createdAt: 2024-12-05T10:28:50.286Z
                         country: country
                         name: name
                         logo: logo
@@ -1048,8 +1054,23 @@ paths:
                       - userId: 1
                         groupId: 1
           description: ""
-      tags: &a10
+      tags: &a8
         - group-membership
+  /group-membership/{groupId}/leave:
+    delete:
+      operationId: GroupMembershipController_removeMyself
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a8
+      security:
+        - bearer: []
   /group-membership/{groupId}/{userId}:
     get:
       operationId: GroupMembershipController_findOne
@@ -1084,24 +1105,24 @@ paths:
                     userId: 1
                     groupId: 1
                     role: member
-                    user: &a8
+                    user: &a9
                       id: 1
                       username: john_doe
                       profilePicture: https://example.com/image.jpg
-                    group: &a9
+                    group: &a10
                       id: 1
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2024-12-04T12:35:15.742Z
+                    createdAt: 2024-12-05T10:28:50.286Z
                 UserMembershipResponseWithDates:
                   value:
                     userId: 1
                     groupId: 1
                     role: member
-                    user: *a8
-                    group: *a9
-                    createdAt: 2024-12-04T12:35:15.742Z
+                    user: *a9
+                    group: *a10
+                    createdAt: 2024-12-05T10:28:50.286Z
                     country: country
                     id: 1
                     username: username
@@ -1111,9 +1132,9 @@ paths:
                     userId: 1
                     groupId: 1
                     role: member
-                    user: *a8
-                    group: *a9
-                    createdAt: 2024-12-04T12:35:15.742Z
+                    user: *a9
+                    group: *a10
+                    createdAt: 2024-12-05T10:28:50.286Z
                     country: country
                     name: name
                     logo: logo
@@ -1131,8 +1152,46 @@ paths:
                   - $ref: "#/components/schemas/GroupMembershipResponseWithDates"
                   - $ref: "#/components/schemas/GroupMembershipKey"
           description: ""
-      tags: *a10
+      tags: *a8
     post:
+      operationId: GroupMembershipController_create
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a8
+      security:
+        - bearer: []
+    delete:
+      operationId: GroupMembershipController_remove
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a8
+      security:
+        - bearer: []
+    patch:
       operationId: GroupMembershipController_update
       parameters:
         - name: groupId
@@ -1152,22 +1211,11 @@ paths:
             schema:
               $ref: "#/components/schemas/GroupMembershipUpdateRequest"
       responses:
-        "201":
-          description: ""
-      tags: *a10
-  /group-membership/{groupId}:
-    delete:
-      operationId: GroupMembershipController_removeMyself
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
         "200":
           description: ""
-      tags: *a10
+      tags: *a8
+      security:
+        - bearer: []
 info:
   title: winning.sh API
   description: The Winning.sh API description

@@ -46,7 +46,6 @@ describe('UsersService', () => {
     };
 
     const result = await service.create(request);
-    console.log(result);
 
     expect(result).toEqual({ id: 1 });
   });
@@ -109,7 +108,6 @@ describe('UsersService', () => {
     };
 
     const result = await service.update(1, request);
-    console.log(result);
 
     expect(result).toEqual({ id: 1 });
   });
@@ -140,7 +138,6 @@ describe('UsersService', () => {
       ]);
 
     const result = await service.remove(1);
-    console.log(result);
 
     expect(result).toEqual({ id: 1 });
   });

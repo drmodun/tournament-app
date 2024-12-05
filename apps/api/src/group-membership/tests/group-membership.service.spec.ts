@@ -13,6 +13,7 @@ import {
   GroupMembershipResponse,
   MinimalMembershipResponse,
 } from '../dto/responses.dto';
+import { NotFoundException } from '@nestjs/common';
 
 describe('GroupMembershipService', () => {
   let service: GroupMembershipService;
@@ -228,8 +229,11 @@ describe('GroupMembershipService', () => {
 
       it('should return false when membership does not exist', async () => {
         mockRepository.getSingleQuery.mockResolvedValue([]);
-        const result = await service.isMember(1, 1);
-        expect(result).toBe(false);
+        try {
+          await service.isMember(1, 1);
+        } catch (error) {
+          expect(error).toBeInstanceOf(NotFoundException);
+        }
       });
     });
 

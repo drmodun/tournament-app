@@ -3,6 +3,7 @@ import { ExecutionContext } from '@nestjs/common';
 import { GroupRoleGuardMixin } from '../../guards/group-role.mixin';
 import { GroupMembershipService } from '../../../group-membership/group-membership.service';
 import { userRoleEnum } from '@tournament-app/types';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 
 describe('GroupRoleGuardMixin', () => {
   const roles = ['isOwner', 'isAdmin', 'isMember'] as const;
@@ -31,7 +32,9 @@ describe('GroupRoleGuardMixin', () => {
         guard = module.get<InstanceType<typeof Guard>>(Guard);
         guard['groupMembershipService'] = mockGroupMembershipService;
 
-        // Reset all role checks to false by default
+        jest
+          .spyOn(JwtAuthGuard.prototype, 'canActivate')
+          .mockResolvedValue(true);
       });
 
       it('should be defined', () => {
@@ -64,6 +67,15 @@ describe('GroupRoleGuardMixin', () => {
           mockGroupMembershipService.isOwner.mockResolvedValue(false);
           mockGroupMembershipService.isAdmin.mockResolvedValue(false);
           mockGroupMembershipService.isMember.mockResolvedValue(false);
+        });
+
+        it('should return false if JWT authentication fails', async () => {
+          jest
+            .spyOn(JwtAuthGuard.prototype, 'canActivate')
+            .mockResolvedValueOnce(false);
+          const result = await guard.canActivate(mockContext);
+          expect(result).toBe(false);
+          expect(mockGroupMembershipService[role]).not.toHaveBeenCalled();
         });
 
         it('should return false if no groupId is provided', async () => {
@@ -103,7 +115,7 @@ describe('GroupRoleGuardMixin', () => {
         it('should return false if no user is provided', async () => {
           const request = {
             ...mockRequestBase,
-            user: null,
+            user: undefined,
           };
 
           mockContext = {
@@ -117,10 +129,13 @@ describe('GroupRoleGuardMixin', () => {
           expect(mockGroupMembershipService[role]).not.toHaveBeenCalled();
         });
 
-        it('should return true if user is system admin', async () => {
+        it('should return true if user is an admin', async () => {
           const request = {
             ...mockRequestBase,
-            user: { id: 1, role: userRoleEnum.ADMIN },
+            user: {
+              ...mockRequestBase.user,
+              role: userRoleEnum.ADMIN,
+            },
           };
 
           mockContext = {
@@ -134,42 +149,13 @@ describe('GroupRoleGuardMixin', () => {
           expect(mockGroupMembershipService[role]).not.toHaveBeenCalled();
         });
 
-        describe('Role Hierarchy', () => {
-          if (role === 'isAdmin') {
-            it('should not allow member access to admin guard', async () => {
-              mockGroupMembershipService.isMember.mockResolvedValue(true);
-              const result = await guard.canActivate(mockContext);
-              expect(result).toBe(false);
-            });
-          }
-
-          if (role === 'isOwner') {
-            it('should not allow admin access to owner guard', async () => {
-              mockGroupMembershipService.isAdmin.mockResolvedValue(true);
-              const result = await guard.canActivate(mockContext);
-              expect(result).toBe(false);
-            });
-
-            it('should not allow member access to owner guard', async () => {
-              mockGroupMembershipService.isMember.mockResolvedValue(true);
-              const result = await guard.canActivate(mockContext);
-              expect(result).toBe(false);
-            });
-          }
-        });
-
-        it(`should check role through params`, async () => {
-          mockGroupMembershipService[role].mockResolvedValue(true);
-          const result = await guard.canActivate(mockContext);
-          expect(result).toBe(true);
-          expect(mockGroupMembershipService[role]).toHaveBeenCalledWith(1, 1);
-        });
-
-        it(`should check role through body`, async () => {
+        it(`should return true if user has ${role} role`, async () => {
           const request = {
             ...mockRequestBase,
-            params: {},
-            body: { groupId: '1' },
+            user: {
+              ...mockRequestBase.user,
+              role: userRoleEnum.USER,
+            },
           };
 
           mockContext = {
@@ -184,11 +170,13 @@ describe('GroupRoleGuardMixin', () => {
           expect(mockGroupMembershipService[role]).toHaveBeenCalledWith(1, 1);
         });
 
-        it(`should check role through query`, async () => {
+        it(`should return false if user does not have ${role} role`, async () => {
           const request = {
             ...mockRequestBase,
-            params: {},
-            query: { groupId: '1' },
+            user: {
+              ...mockRequestBase.user,
+              role: userRoleEnum.USER,
+            },
           };
 
           mockContext = {

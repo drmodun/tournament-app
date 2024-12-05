@@ -27,7 +27,6 @@ export interface IGroupResponseExtended extends IGroupResponse {
   createdAt: string;
   tournamentCount: number;
   subscriberCount: number;
-
   //TODO: add whatever else aggregated is needed here
 }
 

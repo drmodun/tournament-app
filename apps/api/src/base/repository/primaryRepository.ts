@@ -70,4 +70,5 @@ export abstract class PrimaryRepository<
   }
 
   // TODO: think about making a child class or refactoring for composite keys, maybe just make those repositories override this one
+  // TODO: fix return full count operation
 }

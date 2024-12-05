@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GroupMembershipDrizzleRepository } from './group-membership.repository';
 import {
   GroupMembershipQuery,
@@ -32,7 +32,7 @@ export class GroupMembershipService {
   async findAll<
     TResponseType extends
       BaseGroupMembershipResponseType = GroupMembershipResponse,
-  >(query: GroupMembershipQuery) {
+  >(query: GroupMembershipQuery): Promise<TResponseType[]> {
     const results = await this.groupMembershipRepository.getQuery(query);
 
     return results as TResponseType[];
@@ -45,7 +45,7 @@ export class GroupMembershipService {
     groupId: number,
     userId: number,
     responseType: GroupMembershipResponsesEnum = GroupMembershipResponsesEnum.BASE,
-  ) {
+  ): Promise<TResponseType> {
     const results = await this.groupMembershipRepository.getSingleQuery(
       {
         userId,
@@ -53,6 +53,10 @@ export class GroupMembershipService {
       },
       responseType,
     );
+
+    if (results.length === 0) {
+      throw new NotFoundException('Group membership not found');
+    }
 
     return results[0] as TResponseType;
   }
@@ -64,7 +68,11 @@ export class GroupMembershipService {
     groupId: number,
     userId: number,
     updateGroupMembershipDto: GroupMembershipUpdateRequest,
-  ) {
+  ): Promise<void> {
+    if (!(await this.entityExists(groupId, userId))) {
+      throw new NotFoundException('Group membership not found');
+    }
+
     const action = this.groupMembershipRepository.updateEntity(
       {
         groupId,
@@ -76,16 +84,27 @@ export class GroupMembershipService {
     await action;
   }
 
-  async remove(groupId: number, userId: number) {
-    const action = this.groupMembershipRepository.deleteEntity({
+  async entityExists(groupId: number, userId: number): Promise<boolean> {
+    const results = await this.groupMembershipRepository.getSingleQuery({
       groupId,
       userId,
     });
 
-    await action;
+    return results.length > 0;
   }
 
-  async isAdmin(groupId: number, userId: number) {
+  async remove(groupId: number, userId: number): Promise<void> {
+    if (!(await this.entityExists(groupId, userId))) {
+      throw new NotFoundException('Group membership not found');
+    }
+
+    await this.groupMembershipRepository.deleteEntity({
+      groupId,
+      userId,
+    });
+  }
+
+  async isAdmin(groupId: number, userId: number): Promise<boolean> {
     const results = await this.findOne<MinimalMembershipResponse>(
       groupId,
       userId,
@@ -97,7 +116,7 @@ export class GroupMembershipService {
     );
   }
 
-  async isMember(groupId: number, userId: number) {
+  async isMember(groupId: number, userId: number): Promise<boolean> {
     const results = await this.findOne<MinimalMembershipResponse>(
       groupId,
       userId,

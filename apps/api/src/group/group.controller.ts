@@ -20,7 +20,12 @@ import {
 } from './dto/requests.dto';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-import { ApiExtraModels, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   GroupResponse,
   GroupResponseExtended,
@@ -91,6 +96,7 @@ export class GroupController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     content: {
       'application/json': {
@@ -107,6 +113,7 @@ export class GroupController {
 
   @Patch(':groupId')
   @UseGuards(GroupAdminGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     content: {
       'application/json': {
@@ -123,6 +130,7 @@ export class GroupController {
 
   @Delete(':groupId')
   @UseGuards(GroupOwnerGuard)
+  @ApiBearerAuth()
   async remove(@Param('groupId', ParseIntPipe) id: number) {
     return await this.groupService.remove(id);
   }

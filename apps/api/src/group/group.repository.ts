@@ -85,7 +85,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           ...this.getMappingObject(GroupResponsesEnum.BASE),
           createdAt: group.createdAt,
           tournamentCount: sql<number>`cast(count(${participation.tournamentId}) as int)`,
-          subscriberCOunt: countDistinct(groupFollower.userId), // FOr testing purposes
+          subscriberCount: countDistinct(groupFollower.userId), // FOr testing purposes
         };
       default:
         return this.getMappingObject(GroupResponsesEnum.BASE);

@@ -28,7 +28,7 @@ describe('GroupController (e2e)', () => {
     // Generate auth token for testing
     const loginResponse = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email: 'admin@example.com', password: 'Password123!' });
+      .send({ email: 'admin@example', password: 'Password123!' });
 
     authToken = loginResponse.body.accessToken;
   });
@@ -79,7 +79,11 @@ describe('GroupController (e2e)', () => {
           expect(res.body).toHaveProperty('results');
           expect(res.body).toHaveProperty('metadata');
           expect(Array.isArray(res.body.results)).toBe(true);
-          expect(Object.keys(res.body.results[0])).toEqual(['id', 'name']);
+          expect(Object.keys(res.body.results[0])).toEqual([
+            'id',
+            'name',
+            'abbreviation',
+          ]);
           expect(res.body.metadata.pagination).toEqual({
             page: 1,
             pageSize: 12,
@@ -98,6 +102,7 @@ describe('GroupController (e2e)', () => {
           expect(Object.keys(res.body.results[0])).toEqual([
             'id',
             'name',
+            'abbreviation',
             'logo',
           ]);
           expect(res.body.metadata.pagination).toEqual({
@@ -118,6 +123,7 @@ describe('GroupController (e2e)', () => {
           expect(Object.keys(res.body.results[0])).toEqual([
             'id',
             'name',
+            'abbreviation',
             'country',
           ]);
           expect(res.body.metadata.pagination).toEqual({
@@ -138,11 +144,15 @@ describe('GroupController (e2e)', () => {
           expect(Object.keys(res.body.results[0])).toEqual([
             'id',
             'name',
-            'logo',
-            'type',
-            'focus',
             'abbreviation',
             'country',
+            'description',
+            'type',
+            'focus',
+            'logo',
+            'location',
+            'updatedAt',
+            'memberCount',
           ]);
           expect(res.body.metadata.pagination).toEqual({
             page: 1,
@@ -162,18 +172,18 @@ describe('GroupController (e2e)', () => {
           expect(Object.keys(res.body.results[0])).toEqual([
             'id',
             'name',
-            'logo',
-            'type',
-            'focus',
             'abbreviation',
             'country',
             'description',
+            'type',
+            'focus',
+            'logo',
             'location',
-            'createdAt',
             'updatedAt',
-            'members',
-            'tournaments',
-            'followers',
+            'memberCount',
+            'createdAt',
+            'tournamentCount',
+            'subscriberCount',
           ]);
           expect(res.body.metadata.pagination).toEqual({
             page: 1,
@@ -214,7 +224,7 @@ describe('GroupController (e2e)', () => {
         .get(`/groups/${createdGroupId}?responseType=mini`)
         .expect(200)
         .expect((res) => {
-          expect(Object.keys(res.body)).toEqual(['id', 'name']);
+          expect(Object.keys(res.body)).toEqual(['id', 'name', 'abbreviation']);
         });
     });
 
@@ -223,7 +233,12 @@ describe('GroupController (e2e)', () => {
         .get(`/groups/${createdGroupId}?responseType=mini-with-logo`)
         .expect(200)
         .expect((res) => {
-          expect(Object.keys(res.body)).toEqual(['id', 'name', 'logo']);
+          expect(Object.keys(res.body)).toEqual([
+            'id',
+            'name',
+            'abbreviation',
+            'logo',
+          ]);
         });
     });
 
@@ -232,7 +247,12 @@ describe('GroupController (e2e)', () => {
         .get(`/groups/${createdGroupId}?responseType=mini-with-country`)
         .expect(200)
         .expect((res) => {
-          expect(Object.keys(res.body)).toEqual(['id', 'name', 'country']);
+          expect(Object.keys(res.body)).toEqual([
+            'id',
+            'name',
+            'abbreviation',
+            'country',
+          ]);
         });
     });
 
@@ -244,11 +264,15 @@ describe('GroupController (e2e)', () => {
           expect(Object.keys(res.body)).toEqual([
             'id',
             'name',
-            'logo',
-            'type',
-            'focus',
             'abbreviation',
             'country',
+            'description',
+            'type',
+            'focus',
+            'logo',
+            'location',
+            'updatedAt',
+            'memberCount',
           ]);
         });
     });
@@ -261,18 +285,18 @@ describe('GroupController (e2e)', () => {
           expect(Object.keys(res.body)).toEqual([
             'id',
             'name',
-            'logo',
-            'type',
-            'focus',
             'abbreviation',
             'country',
             'description',
+            'type',
+            'focus',
+            'logo',
             'location',
-            'createdAt',
             'updatedAt',
-            'members',
-            'tournaments',
-            'followers',
+            'memberCount',
+            'createdAt',
+            'tournamentCount',
+            'subscriberCount',
           ]);
         });
     });

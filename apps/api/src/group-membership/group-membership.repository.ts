@@ -30,7 +30,7 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
     private readonly userDrizzleRepository: UserDrizzleRepository,
     private readonly groupDrizzleRepository: GroupDrizzleRepository,
   ) {
-    super(groupToUser, ['groupId', 'userId']);
+    super(groupToUser);
   }
 
   getMappingObject(responseType: string) {

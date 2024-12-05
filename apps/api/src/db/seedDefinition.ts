@@ -99,6 +99,55 @@ async function createUsers() {
   );
 }
 
+async function createFollowers() {
+  const NUM_OF_USERS = process.env.SEED_USERS_COUNT
+    ? parseInt(process.env.SEED_USERS_COUNT, 10)
+    : 50;
+
+  const followers = new Set<string>();
+  const userIds = Array.from({ length: NUM_OF_USERS }, (_, i) => i + 1);
+
+  // Each user follows ~20% of other users randomly, without duplicates
+  for (const userId of userIds) {
+    const numberOfFollowings = Math.floor(NUM_OF_USERS * 0.2);
+    const potentialFollowees = userIds.filter((id) => id !== userId);
+
+    // Shuffle the potential followees array
+    for (let i = potentialFollowees.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [potentialFollowees[i], potentialFollowees[j]] = [
+        potentialFollowees[j],
+        potentialFollowees[i],
+      ];
+    }
+
+    // Take the first numberOfFollowings users from the shuffled array
+    const followees = potentialFollowees.slice(0, numberOfFollowings);
+
+    for (const followeeId of followees) {
+      // Create a unique key for this relationship to prevent duplicates
+      const relationshipKey = `${followeeId}-${userId}`;
+      if (!followers.has(relationshipKey)) {
+        followers.add(relationshipKey);
+      }
+    }
+  }
+
+  // Convert the Set of relationship keys into actual follower objects
+  const followerObjects = Array.from(followers).map((key) => {
+    const [userId, followerId] = key.split('-').map(Number);
+    return {
+      userId,
+      followerId,
+    } satisfies {
+      userId: number;
+      followerId: number;
+    };
+  });
+
+  await db.insert(tables.follower).values(followerObjects).execute();
+}
+
 async function createGroups() {
   const NUM_GROUPS_TO_CREATE = process.env.SEED_GROUPS_COUNT
     ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
@@ -171,5 +220,6 @@ export async function seed() {
   await teardown();
 
   await Promise.all([createUsers(), createGroups()]);
+  await createFollowers();
   await createGroupMemberships();
 }

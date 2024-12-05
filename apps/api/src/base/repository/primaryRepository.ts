@@ -1,10 +1,15 @@
-import { ColumnBaseConfig, eq, InferInsertModel, sql } from 'drizzle-orm';
+import {
+  ColumnBaseConfig,
+  eq,
+  InferInsertModel,
+  sql,
+  SQLWrapper,
+} from 'drizzle-orm';
 import { PgColumn, PgSelect, PgTable, TableConfig } from 'drizzle-orm/pg-core';
 import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
 import { BaseQuery } from '../query/baseQuery';
-
 export interface TableWithId extends PgTable<TableConfig> {
   id: PgColumn<ColumnBaseConfig<'number', 'PgSerial'>>;
 }
@@ -32,11 +37,14 @@ export abstract class PrimaryRepository<
   createEntity(createRequest: TCreateRequest) {
     return db
       .insert(this.model)
-      .values(createRequest)
+      .values(createRequest as InferInsertModel<TTable>)
       .returning({ id: this.model.id }); // If the id field is not called id then we messed up
   }
 
-  updateEntity(id: number, updateRequest: TCreateRequest) {
+  updateEntity(
+    id: number,
+    updateRequest: TCreateRequest,
+  ): Promise<{ id: unknown }[]> | SQLWrapper {
     try {
       return db
         .update(this.model)

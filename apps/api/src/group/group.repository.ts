@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { eq, SQL, sql, countDistinct } from 'drizzle-orm';
+import { eq, SQL, sql, countDistinct, InferInsertModel } from 'drizzle-orm';
 import { group, groupFollower, groupToUser, participation } from '../db/schema';
 import {
   ICreateGroupRequest,
@@ -7,6 +7,7 @@ import {
   GroupResponsesEnum,
   GroupSortingEnum,
   GroupSortingEnumType,
+  groupRoleEnum,
 } from '@tournament-app/types';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { GroupQuery } from './dto/requests.dto';
@@ -14,7 +15,7 @@ import { GroupReturnTypesEnumType } from './types';
 import {
   AnyPgSelectQueryBuilder,
   PgColumn,
-  PgJoinFn,
+  PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from 'src/db/db';
 import { BaseQuery } from 'src/base/query/baseQuery';
@@ -32,7 +33,9 @@ export class GroupDrizzleRepository extends PrimaryRepository<
   conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
     typeEnum: GroupReturnTypesEnumType,
-  ): PgJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'> | TSelect {
+  ):
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | TSelect {
     switch (typeEnum) {
       case GroupResponsesEnum.BASE:
         return query
@@ -109,14 +112,14 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           logo: createGroupDto.logo,
           location: createGroupDto.location,
           country: createGroupDto.country,
-        })
+        } as InferInsertModel<typeof group>)
         .returning();
 
       await tx.insert(groupToUser).values({
         userId,
         groupId: createdGroup.id,
-        role: 'admin',
-      });
+        role: groupRoleEnum.ADMIN,
+      } as InferInsertModel<typeof groupToUser>);
 
       return [{ id: createdGroup.id }];
     });

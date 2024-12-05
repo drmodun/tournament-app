@@ -44,6 +44,7 @@ describe('UserDrizzleRepository', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
       ]);
@@ -81,6 +82,7 @@ describe('UserDrizzleRepository', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
         'following',
@@ -117,6 +119,7 @@ describe('UserDrizzleRepository', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
       ]);
@@ -145,6 +148,7 @@ describe('UserDrizzleRepository', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
         'following',
@@ -193,7 +197,7 @@ describe('UserDrizzleRepository', () => {
       profilePicture: 'https://www.google.com',
     };
 
-    const result = repository.updateEntity(123, request);
+    const result = repository.updateEntity(123, request) as PgSelect;
 
     const sql = result.toSQL().sql;
     const params = result.toSQL().params;

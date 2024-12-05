@@ -14,16 +14,16 @@ import { GroupDrizzleRepository } from 'src/group/group.repository';
 import {
   AnyPgSelectQueryBuilder,
   PgColumn,
-  PgJoinFn,
+  PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
-import { eq, SQL } from 'drizzle-orm';
+import { eq, InferSelectModel, SQL } from 'drizzle-orm';
 import { IGroupMembershipKey } from './dto/responses.dto';
 
 @Injectable()
 export class GroupMembershipDrizzleRepository extends CompositeRepository<
   typeof groupToUser,
   BaseQuery,
-  { groupId: number; userId: number } | { role: string },
+  Partial<InferSelectModel<typeof groupToUser>>,
   IGroupMembershipKey
 > {
   constructor(
@@ -98,7 +98,9 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
   conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
     typeEnum: string = GroupMembershipResponsesEnum.BASE,
-  ): PgJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'> | TSelect {
+  ):
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | TSelect {
     switch (typeEnum) {
       case GroupMembershipResponsesEnum.BASE:
         return query

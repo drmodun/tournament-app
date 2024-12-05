@@ -2,8 +2,8 @@ import { and, asc, desc, sql, SQL, WithSubquery } from 'drizzle-orm';
 import {
   AnyPgSelectQueryBuilder,
   PgColumn,
-  PgJoinFn,
   PgSelect,
+  PgSelectJoinFn,
   PgTable,
   TableConfig,
 } from 'drizzle-orm/pg-core';
@@ -20,7 +20,9 @@ export abstract class BaseDrizzleRepository<
   abstract conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
     typeEnum: string,
-  ): PgJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'> | TSelect;
+  ):
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | TSelect;
 
   abstract getValidWhereClause(query: BaseQuery): SQL[];
 

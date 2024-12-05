@@ -6,3 +6,4 @@ export * from "./user";
 export * from "./group";
 export * from "./category";
 export * from "./groupMembership";
+export * from "./followers";

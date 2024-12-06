@@ -41,6 +41,5 @@ export enum GroupJoinRequestResponsesEnum {
 }
 
 export enum GroupJoinRequestSortingEnum {
-  CREATED_AT_ASC = "created_at_asc",
-  CREATED_AT_DESC = "created_at_desc",
+  CREATED_AT_ASC = "created_at",
 }

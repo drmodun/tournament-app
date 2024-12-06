@@ -149,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2024-12-05T17:06:03.740Z
+                        updatedAt: &a2 2024-12-06T19:09:09.935Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -245,7 +245,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a2
-                        createdAt: 2024-12-05T17:06:03.740Z
+                        createdAt: 2024-12-06T19:09:09.935Z
                         following: 0
                         location: New York
           description: ""
@@ -301,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-12-05T17:06:03.740Z
+                    updatedAt: &a3 2024-12-06T19:09:09.935Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -329,7 +329,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-12-05T17:06:03.740Z
+                    createdAt: 2024-12-06T19:09:09.935Z
                     following: 0
                     location: New York
           description: ""
@@ -583,7 +583,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2024-12-05T17:06:03.933Z
+                        updatedAt: 2024-12-06T19:09:10.103Z
                         memberCount: 50
                 extended:
                   value:
@@ -609,9 +609,9 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2024-12-05T17:06:03.933Z
+                        updatedAt: 2024-12-06T19:09:10.103Z
                         memberCount: 50
-                        createdAt: 2024-12-05T17:06:03.933Z
+                        createdAt: 2024-12-06T19:09:10.103Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -640,7 +640,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2024-12-05T17:06:03.933Z
+                updatedAt: 2024-12-06T19:09:10.103Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -694,7 +694,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2024-12-05T17:06:03.933Z
+                    updatedAt: 2024-12-06T19:09:10.103Z
                     memberCount: 50
                 extended:
                   value:
@@ -707,9 +707,9 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2024-12-05T17:06:03.933Z
+                    updatedAt: 2024-12-06T19:09:10.103Z
                     memberCount: 50
-                    createdAt: 2024-12-05T17:06:03.933Z
+                    createdAt: 2024-12-06T19:09:10.103Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -749,7 +749,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2024-12-05T17:06:03.933Z
+                updatedAt: 2024-12-06T19:09:10.103Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -793,7 +793,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-05T17:06:03.933Z
+                  updatedAt: 2024-12-06T19:09:10.103Z
                   memberCount: 50
                 members: []
           description: ""
@@ -822,7 +822,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-05T17:06:03.933Z
+                  updatedAt: 2024-12-06T19:09:10.103Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -851,7 +851,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-05T17:06:03.933Z
+                  updatedAt: 2024-12-06T19:09:10.103Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -969,7 +969,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2024-12-05T17:06:03.937Z
+                        createdAt: 2024-12-06T19:09:10.107Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -995,7 +995,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2024-12-05T17:06:03.937Z
+                        createdAt: 2024-12-06T19:09:10.107Z
                         country: country
                         id: 1
                         username: username
@@ -1025,7 +1025,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2024-12-05T17:06:03.937Z
+                        createdAt: 2024-12-06T19:09:10.107Z
                         country: country
                         name: name
                         logo: logo
@@ -1114,7 +1114,7 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2024-12-05T17:06:03.937Z
+                    createdAt: 2024-12-06T19:09:10.107Z
                 UserMembershipResponseWithDates:
                   value:
                     userId: 1
@@ -1122,7 +1122,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2024-12-05T17:06:03.937Z
+                    createdAt: 2024-12-06T19:09:10.107Z
                     country: country
                     id: 1
                     username: username
@@ -1134,7 +1134,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2024-12-05T17:06:03.937Z
+                    createdAt: 2024-12-06T19:09:10.107Z
                     country: country
                     name: name
                     logo: logo
@@ -1269,7 +1269,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2024-12-05T17:06:03.941Z
+                    createdAt: 2024-12-06T19:09:10.111Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1277,10 +1277,10 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2024-12-05T17:06:03.941Z
+                    updatedAt: 2024-12-06T19:09:10.111Z
                 mini:
                   value:
-                    createdAt: 2024-12-05T17:06:03.941Z
+                    createdAt: 2024-12-06T19:09:10.111Z
                     id: 1
                     username: john_doe
           description: ""
@@ -1337,6 +1337,324 @@ paths:
       tags: *a11
       security:
         - bearer: []
+  /group-join-requests:
+    get:
+      operationId: GroupJoinRequestsController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: relatedLFPId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                with-user:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-USER
+                    results:
+                      - id: 1
+                        username: john_doe
+                        profilePicture: https://example.com/image.jpg
+                        country: USA
+                        bio: I am a cool person
+                        email: john.doe@example.com
+                        followers: 0
+                        level: 0
+                        name: John Doe
+                        updatedAt: 2024-12-06T19:09:09.935Z
+                        groupId: 1
+                        message: I would like to join this group
+                with-mini-user:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-MINI-USER
+                    results:
+                      - id: 1
+                        username: john_doe
+                        profilePicture: https://example.com/image.jpg
+                        createdAt: 2024-12-06T19:09:10.115Z
+                with-group:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-GROUP
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                        description: A community of chess enthusiasts
+                        type: Sports Club
+                        focus: Chess
+                        location: Split
+                        updatedAt: 2024-12-06T19:09:10.103Z
+                        memberCount: 50
+                        userId: 1
+                        message: I would like to join this group
+                with-mini-group:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-MINI-GROUP
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        logo: https://example.com/chess-club-logo.jpg
+                        createdAt: 2024-12-06T19:09:10.115Z
+          description: ""
+      tags: &a12
+        - group-join-requests
+      security: &a13
+        - bearer: []
+  /group-join-requests/{groupId}:
+    post:
+      operationId: GroupJoinRequestsController_create
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupJoinRequestDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a12
+      security: *a13
+    patch:
+      operationId: GroupJoinRequestsController_update
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupJoinRequestDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a12
+      security: *a13
+    delete:
+      operationId: GroupJoinRequestsController_remove
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a12
+      security: *a13
+  /group-join-requests/{groupId}/{userId}:
+    get:
+      operationId: GroupJoinRequestsController_findOne
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a specific group join request
+          content:
+            application/json:
+              examples:
+                with-user:
+                  value:
+                    id: 1
+                    username: john_doe
+                    profilePicture: https://example.com/image.jpg
+                    country: USA
+                    bio: I am a cool person
+                    email: john.doe@example.com
+                    followers: 0
+                    level: 0
+                    name: John Doe
+                    updatedAt: 2024-12-06T19:09:09.935Z
+                    groupId: 1
+                    message: I would like to join this group
+                with-mini-user:
+                  value:
+                    id: 1
+                    username: john_doe
+                    profilePicture: https://example.com/image.jpg
+                    createdAt: 2024-12-06T19:09:10.115Z
+                with-group:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                    description: A community of chess enthusiasts
+                    type: Sports Club
+                    focus: Chess
+                    location: Split
+                    updatedAt: 2024-12-06T19:09:10.103Z
+                    memberCount: 50
+                    userId: 1
+                    message: I would like to join this group
+                with-mini-group:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    logo: https://example.com/chess-club-logo.jpg
+                    createdAt: 2024-12-06T19:09:10.115Z
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithGroupResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniGroupResponse"
+      tags: *a12
+      security: *a13
+  /group-join-requests/{groupId}/{userId}/accept:
+    post:
+      operationId: GroupJoinRequestsController_accept
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a12
+      security: *a13
+  /group-join-requests/{groupId}/{userId}/reject:
+    post:
+      operationId: GroupJoinRequestsController_reject
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a12
+      security: *a13
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -2135,3 +2453,168 @@ components:
         - id
         - username
         - createdAt
+    GroupJoinRequestWithUserResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        bio:
+          type: string
+          readOnly: true
+        level:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        followers:
+          type: number
+          readOnly: true
+        groupId:
+          type: number
+        message:
+          type: string
+      required:
+        - id
+        - username
+        - profilePicture
+        - country
+        - email
+        - bio
+        - level
+        - name
+        - updatedAt
+        - followers
+        - groupId
+        - message
+    GroupJoinRequestWithMiniUserResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - username
+        - profilePicture
+        - createdAt
+    GroupJoinRequestWithGroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+        message:
+          type: string
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+        - userId
+        - message
+    GroupJoinRequestWithMiniGroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - createdAt
+    CreateGroupJoinRequestDto:
+      type: object
+      properties:
+        message:
+          type: string
+        relatedLFPId:
+          type: number
+      required:
+        - message
+    UpdateGroupJoinRequestDto:
+      type: object
+      properties:
+        message:
+          type: string
+        relatedLFPId:
+          type: number

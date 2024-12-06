@@ -57,6 +57,13 @@
       "when": 1733100455821,
       "tag": "0007_flowery_jean_grey",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1733504517670,
+      "tag": "0008_public_gambit",
+      "breakpoints": true
     }
   ]
 }

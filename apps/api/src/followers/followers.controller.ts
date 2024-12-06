@@ -19,10 +19,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ParseIntPipe } from '@nestjs/common';
 import { FollowerQuery } from './dto/request.dto';
 import { FollowerMiniResponse, FollowerResponse } from './dto/responses.dto';
-import {
-  followerQueryResponses,
-  followerResponseExample,
-} from './dto/examples';
+import { followerQueryResponses } from './dto/examples';
 import { Request } from 'express';
 import { IQueryMetadata } from '@tournament-app/types';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';

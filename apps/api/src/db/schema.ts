@@ -827,8 +827,8 @@ export const categoryToLFG = pgTable(
 
 export const lookingForPlayers = pgTable('looking_for_players', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id') // TODO: change this go groupId later
-    .references(() => user.id, {
+  groupId: integer('group_id')
+    .references(() => group.id, {
       onDelete: 'cascade',
     })
     .notNull(),

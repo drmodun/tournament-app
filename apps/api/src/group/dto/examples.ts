@@ -19,7 +19,7 @@ const baseExample: MiniGroupResponse = {
   abbreviation: 'CC',
 };
 
-const withLogoExample: MiniGroupResponseWithLogo = {
+export const withLogoExample: MiniGroupResponseWithLogo = {
   ...baseExample,
   logo: 'https://example.com/chess-club-logo.jpg',
 };
@@ -33,7 +33,7 @@ const withCountryExample: MiniGroupResponseWithCountry = {
   name: 'Chess Club',
 };
 
-const baseResponseExample: GroupResponse = {
+export const baseResponseExample: GroupResponse = {
   ...withCountryExample,
   logo: 'https://example.com/chess-club-logo.jpg',
   description: 'A community of chess enthusiasts',

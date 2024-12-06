@@ -81,7 +81,10 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           logo: group.logo,
           location: group.location,
           updatedAt: group.updatedAt,
-          memberCount: sql<number>`cast(count(${groupToUser.userId}) as int)`,
+          memberCount: db.$count(
+            groupToUser,
+            eq(groupToUser.groupId, group.id),
+          ),
         };
       case GroupResponsesEnum.EXTENDED:
         return {

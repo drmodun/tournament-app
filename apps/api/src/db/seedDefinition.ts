@@ -148,6 +148,66 @@ async function createFollowers() {
   await db.insert(tables.follower).values(followerObjects).execute();
 }
 
+async function createGroupJoinRequests() {
+  const NUM_OF_USERS = process.env.SEED_USERS_COUNT
+    ? parseInt(process.env.SEED_USERS_COUNT, 10)
+    : 50;
+  const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
+    ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
+    : 20;
+
+  const groupJoinRequests = new Set<string>();
+  const userIds = Array.from({ length: NUM_OF_USERS }, (_, i) => i + 1);
+  const groupIds = Array.from({ length: NUM_OF_GROUPS }, (_, i) => i + 1);
+
+  // Each user requests to join ~10% of groups randomly
+  for (const userId of userIds) {
+    const numberOfRequests = Math.floor(NUM_OF_GROUPS * 0.1);
+    const potentialGroups = groupIds.slice();
+
+    // Shuffle the potential groups array
+    for (let i = potentialGroups.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [potentialGroups[i], potentialGroups[j]] = [
+        potentialGroups[j],
+        potentialGroups[i],
+      ];
+    }
+
+    // Take the first numberOfRequests groups from the shuffled array
+    const requestedGroups = potentialGroups.slice(0, numberOfRequests);
+
+    for (const groupId of requestedGroups) {
+      // Create a unique key for this relationship to prevent duplicates
+      const relationshipKey = `${groupId}-${userId}`;
+      if (!groupJoinRequests.has(relationshipKey)) {
+        groupJoinRequests.add(relationshipKey);
+      }
+    }
+  }
+
+  // Convert the Set of relationship keys into actual group join request objects
+  const groupJoinRequestObjects = Array.from(groupJoinRequests).map((key) => {
+    const [groupId, userId] = key.split('-').map(Number);
+    return {
+      groupId,
+      userId,
+      message: faker.lorem.sentence(),
+      createdAt: faker.date.past(),
+    } satisfies {
+      groupId: number;
+      userId: number;
+      message: string;
+      createdAt: Date;
+    };
+  });
+
+  await db
+    .insert(tables.groupJoinRequest)
+    .values(groupJoinRequestObjects)
+    .execute();
+}
+
 async function createGroups() {
   const NUM_GROUPS_TO_CREATE = process.env.SEED_GROUPS_COUNT
     ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
@@ -221,5 +281,6 @@ export async function seed() {
 
   await Promise.all([createUsers(), createGroups()]);
   await createFollowers();
+  await createGroupJoinRequests();
   await createGroupMemberships();
 }

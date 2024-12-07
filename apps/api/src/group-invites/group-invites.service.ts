@@ -102,22 +102,14 @@ export class GroupInvitesService {
   }
 
   async accept(groupId: number, userId: number) {
-    const invite = await this.findOne(groupId, userId);
-
-    if (!invite) {
-      throw new NotFoundException('Invite not found');
-    }
+    await this.findOne(groupId, userId);
 
     await this.groupMembershipService.create(groupId, userId);
-
     await this.remove(groupId, userId);
   }
 
   async reject(groupId: number, userId: number) {
-    const invite = await this.findOne(groupId, userId);
-    if (!invite) {
-      throw new NotFoundException('Invite not found');
-    }
+    await this.findOne(groupId, userId);
 
     await this.repository.deleteEntity({ groupId, userId });
   }

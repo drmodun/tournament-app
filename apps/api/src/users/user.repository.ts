@@ -15,11 +15,11 @@ import {
   alias,
   AnyPgSelectQueryBuilder,
   PgColumn,
-  PgJoinFn,
   PgSelect,
+  PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { and, count, countDistinct, eq, SQL, sql } from 'drizzle-orm';
+import { and, countDistinct, eq, SQL } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { UserQuery } from './dto/requests.dto';
@@ -37,20 +37,13 @@ export class UserDrizzleRepository extends PrimaryRepository<
   conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
     typeEnum: UserReturnTypesEnumType,
-  ): PgJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'> | TSelect {
+  ):
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | TSelect {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:
         return query
           .leftJoin(follower, eq(user.id, follower.userId))
-          .groupBy(user.id);
-
-      case UserResponsesEnum.EXTENDED:
-        return query
-          .leftJoin(follower, eq(user.id, follower.userId))
-          .leftJoin(
-            alias(follower, 'followingAlias'),
-            eq(user.id, follower.followerId),
-          )
           .groupBy(user.id);
 
       case UserResponsesEnum.ADMIN:
@@ -91,13 +84,14 @@ export class UserDrizzleRepository extends PrimaryRepository<
           bio: user.bio,
           email: user.email,
           level: user.level,
+          name: user.name,
           updatedAt: user.updatedAt,
-          followers: sql<number>`cast(count(${follower.followerId}) as int)`,
+          followers: db.$count(follower, eq(follower.userId, user.id)),
         };
       case UserResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(UserResponsesEnum.BASE),
-          following: count(alias(follower, 'followingAlias')),
+          following: db.$count(follower, eq(follower.followerId, user.id)),
           location: user.location,
           createdAt: user.createdAt,
         };

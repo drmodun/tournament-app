@@ -127,6 +127,7 @@ describe('UserController', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
         'following',
@@ -158,6 +159,7 @@ describe('UserController', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
       ]);
@@ -435,6 +437,7 @@ describe('UserController', () => {
         id: 4,
         username: expect.any(String),
         email: expect.any(String),
+        name: expect.any(String),
         bio: expect.any(String),
         location: expect.any(String),
         profilePicture: expect.any(String),

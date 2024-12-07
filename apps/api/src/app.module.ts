@@ -8,6 +8,8 @@ import { NotificationsModule } from './infrastructure/notifications/notification
 import { AuthModule } from './auth/auth.module';
 import { GroupModule } from './group/group.module';
 import { GroupMembershipModule } from './group-membership/group-membership.module';
+import { FollowersModule } from './followers/followers.module';
+import { GroupJoinRequestsModule } from './group-join-requests/group-join-requests.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { GroupMembershipModule } from './group-membership/group-membership.modul
     AuthModule,
     GroupModule,
     GroupMembershipModule,
+    FollowersModule,
+    GroupJoinRequestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

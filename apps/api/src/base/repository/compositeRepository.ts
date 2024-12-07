@@ -45,23 +45,6 @@ export abstract class CompositeRepository<
       .execute();
   }
 
-/**
- * This TypeScript function updates an entity in a database based on the provided ID and update
- * request, handling exceptions such as 'No values to set'.
- * @param {TCompositeKey} id - The `id` parameter in the `updateEntity` function is of type
- * `TCompositeKey`, which is used to uniquely identify the entity that needs to be updated. It is
- * typically a composite key consisting of multiple key-value pairs that uniquely identify the entity
- * in the database.
- * @param {TCreateRequest} updateRequest - The `updateRequest` parameter in the `updateEntity` function
- * is of type `TCreateRequest`. This parameter is used to provide the new values that will be updated
- * in the entity with the specified `id`. The function updates the entity in the database by setting
- * the values provided in the `update
- * @returns The `updateEntity` function is returning the result of executing an update operation on the
- * database. It sets the values provided in the `updateRequest` object for the entity with the
- * specified `id` (composite key) in the database table represented by `this.model`. The function uses
- * the `id` to construct the WHERE clause for the update operation. If the update operation is
- * successful, it returns
- */
   updateEntity(id: TCompositeKey, updateRequest: TCreateRequest) {
     try {
       return db

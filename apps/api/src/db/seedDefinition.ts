@@ -247,14 +247,11 @@ async function createGroupMemberships() {
 
   const groupMemberships = [];
 
-  const groupIds = Array.from({ length: NUM_OF_GROUPS }, (_, i) => i + 1);
-  const userIds = Array.from({ length: NUM_OF_USERS }, (_, i) => i + 1);
-
   for (let i = 0; i < NUM_OF_GROUPS; i++) {
     for (let j = 0; j < Math.floor(NUM_OF_USERS / 2); j++) {
       groupMemberships.push({
-        groupId: groupIds[i],
-        userId: userIds[j],
+        groupId: i + 1,
+        userId: j + 1,
         role:
           i <= 5
             ? i === 0
@@ -272,6 +269,63 @@ async function createGroupMemberships() {
   await db.insert(tables.groupToUser).values(groupMemberships).execute();
 }
 
+async function createGroupInvites() {
+  const NUM_OF_USERS = process.env.SEED_USERS_COUNT
+    ? parseInt(process.env.SEED_USERS_COUNT, 10)
+    : 50;
+  const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
+    ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
+    : 20;
+
+  const groupInvites = new Set<string>();
+  const userIds = Array.from({ length: NUM_OF_USERS }, (_, i) => i + 1);
+  const groupIds = Array.from({ length: NUM_OF_GROUPS }, (_, i) => i + 1);
+
+  // Each group invites ~10% of users randomly
+  for (const groupId of groupIds) {
+    const numberOfInvites = Math.floor(NUM_OF_USERS * 0.1);
+    const potentialUsers = userIds.slice();
+
+    // Shuffle the potential users array
+    for (let i = potentialUsers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [potentialUsers[i], potentialUsers[j]] = [
+        potentialUsers[j],
+        potentialUsers[i],
+      ];
+    }
+
+    // Take the first numberOfInvites users from the shuffled array
+    const invitedUsers = potentialUsers.slice(0, numberOfInvites);
+
+    for (const userId of invitedUsers) {
+      // Create a unique key for this relationship to prevent duplicates
+      const relationshipKey = `${groupId}-${userId}`;
+      if (!groupInvites.has(relationshipKey)) {
+        groupInvites.add(relationshipKey);
+      }
+    }
+  }
+
+  // Convert the Set of relationship keys into actual group invite objects
+  const groupInviteObjects = Array.from(groupInvites).map((key) => {
+    const [groupId, userId] = key.split('-').map(Number);
+    return {
+      groupId,
+      userId,
+      message: faker.lorem.sentence(),
+      createdAt: faker.date.past(),
+    } satisfies {
+      groupId: number;
+      userId: number;
+      message: string;
+      createdAt: Date;
+    };
+  });
+
+  await db.insert(tables.groupInvite).values(groupInviteObjects).execute();
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -279,8 +333,10 @@ export async function seed() {
 
   await teardown();
 
-  await Promise.all([createUsers(), createGroups()]);
+  await createUsers();
+  await createGroups();
   await createFollowers();
-  await createGroupJoinRequests();
   await createGroupMemberships();
+  await createGroupJoinRequests();
+  await createGroupInvites();
 }

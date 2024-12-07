@@ -150,7 +150,7 @@ export class GroupJoinRequestsController {
     return await this.groupJoinRequestsService.accept(groupId, userId);
   }
 
-  @Post(':groupId/:userId/reject')
+  @Delete(':groupId/:userId/reject')
   @UseGuards(GroupAdminGuard)
   async reject(
     @Param('groupId', ParseIntPipe) groupId: number,

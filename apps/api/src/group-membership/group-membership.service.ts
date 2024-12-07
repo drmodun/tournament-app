@@ -9,10 +9,7 @@ import {
   GroupMembershipResponsesEnum,
   groupRoleEnum,
 } from '@tournament-app/types';
-import {
-  GroupMembershipResponse,
-  MinimalMembershipResponse,
-} from './dto/responses.dto';
+import { GroupMembershipResponse } from './dto/responses.dto';
 
 @Injectable()
 export class GroupMembershipService {
@@ -61,6 +58,22 @@ export class GroupMembershipService {
     return results[0] as TResponseType;
   }
 
+  async findOneWithoutThrow(
+    groupId: number,
+    userId: number,
+    responseType: GroupMembershipResponsesEnum = GroupMembershipResponsesEnum.BASE,
+  ): Promise<GroupMembershipResponse | null> {
+    const results = await this.groupMembershipRepository.getSingleQuery(
+      {
+        userId,
+        groupId,
+      },
+      responseType,
+    );
+
+    return results[0] || null;
+  }
+
   //TODO: maybe in future composite queries make the composite objesct paramaters intead of using each
   //one as a function a argument
 
@@ -105,19 +118,20 @@ export class GroupMembershipService {
   }
 
   async isAdmin(groupId: number, userId: number): Promise<boolean> {
-    const results = await this.findOne<MinimalMembershipResponse>(
+    const results = await this.findOneWithoutThrow(
       groupId,
       userId,
       GroupMembershipResponsesEnum.MINI,
     );
 
     return (
-      results.role == groupRoleEnum.ADMIN || results.role == groupRoleEnum.OWNER
+      results?.role == groupRoleEnum.ADMIN ||
+      results?.role == groupRoleEnum.OWNER
     );
   }
 
   async isMember(groupId: number, userId: number): Promise<boolean> {
-    const results = await this.findOne<MinimalMembershipResponse>(
+    const results = await this.findOneWithoutThrow(
       groupId,
       userId,
       GroupMembershipResponsesEnum.MINI,
@@ -126,13 +140,13 @@ export class GroupMembershipService {
     return !!results;
   }
 
-  async isOwner(groupId: number, userId: number) {
-    const results = await this.findOne<MinimalMembershipResponse>(
+  async isOwner(groupId: number, userId: number): Promise<boolean> {
+    const results = await this.findOneWithoutThrow(
       groupId,
       userId,
       GroupMembershipResponsesEnum.MINI,
     );
 
-    return results.role == groupRoleEnum.OWNER;
+    return results?.role == groupRoleEnum.OWNER;
   }
 }

@@ -75,6 +75,26 @@ export class GroupInvitesController {
     };
   }
 
+  @UseGuards(GroupNonMemberGuard)
+  @Post(':groupId/accept')
+  @ApiBearerAuth()
+  async accept(
+    @Param('groupId', ParseIntPipe) id: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupInvitesService.accept(id, user.id);
+  }
+
+  @UseGuards(GroupNonMemberGuard)
+  @Delete(':groupId/reject')
+  @ApiBearerAuth()
+  async reject(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupInvitesService.reject(groupId, user.id);
+  }
+
   @UseGuards(GroupAdminGuard)
   @ApiBearerAuth()
   @Post(':groupId/:userId')
@@ -132,25 +152,5 @@ export class GroupInvitesController {
     @Param('groupId', ParseIntPipe) groupId: number,
   ) {
     return await this.groupInvitesService.remove(groupId, userId);
-  }
-
-  @Post(':groupId/accept')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
-  async accept(
-    @Param('groupId', ParseIntPipe) id: number,
-    @CurrentUser() user: ValidatedUserDto,
-  ) {
-    return await this.groupInvitesService.accept(id, user.id);
-  }
-
-  @Delete(':groupId/reject')
-  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
-  @ApiBearerAuth()
-  async reject(
-    @Param('groupId', ParseIntPipe) groupId: number,
-    @CurrentUser() user: ValidatedUserDto,
-  ) {
-    return await this.groupInvitesService.reject(groupId, user.id);
   }
 }

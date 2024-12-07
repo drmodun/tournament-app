@@ -82,7 +82,7 @@ export class GroupJoinRequestsController {
     };
   }
 
-  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @UseGuards(GroupNonMemberGuard)
   @Post(':groupId')
   async create(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -118,7 +118,7 @@ export class GroupJoinRequestsController {
     );
   }
 
-  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @UseGuards(GroupNonMemberGuard)
   @Patch(':groupId')
   async update(
     @Param('groupId', ParseIntPipe) groupId: number,

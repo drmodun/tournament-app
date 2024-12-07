@@ -484,4 +484,173 @@ describe('GroupInvitesController (e2e)', () => {
         .expect(403);
     });
   });
+
+  describe('/group-invites/:groupId/accept (POST)', () => {
+    let groupId: number;
+
+    beforeAll(async () => {
+      const group = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Test Accept Invite Group',
+          abbreviation: 'TAIG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      groupId = group.body.id;
+
+      await request(app.getHttpServer())
+        .post(`/group-invites/${groupId}/40`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          message: 'You are invited to join this group',
+        })
+        .expect(201);
+    });
+
+    it('should not allow accepting invite if already a member', async () => {
+      // First accept the invite
+      await request(app.getHttpServer())
+        .post(`/group-invites/${groupId}/accept`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(201);
+
+      // Try to accept again
+      await request(app.getHttpServer())
+        .post(`/group-invites/${groupId}/accept`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(403);
+    });
+
+    it('should accept a group invite', async () => {
+      const createGroup = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Another Test Accept Group',
+          abbreviation: 'ATAG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      await request(app.getHttpServer())
+        .post(`/group-invites/${createGroup.body.id}/40`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          message: 'You are invited to join this group',
+        })
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .post(`/group-invites/${createGroup.body.id}/accept`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(201);
+
+      // Verify membership was created
+      await request(app.getHttpServer())
+        .get(`/group-membership/${createGroup.body.id}/40`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .expect(200);
+    });
+
+    it('should return 404 when accepting non-existing invite', async () => {
+      await request(app.getHttpServer())
+        .post('/group-invites/999/accept')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(404);
+    });
+  });
+
+  describe('/group-invites/:groupId/reject (DELETE)', () => {
+    let groupId: number;
+
+    beforeAll(async () => {
+      const group = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Test Reject Invite Group',
+          abbreviation: 'TRIG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      groupId = group.body.id;
+
+      await request(app.getHttpServer())
+        .post(`/group-invites/${groupId}/40`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          message: 'You are invited to join this group',
+        })
+        .expect(201);
+    });
+
+    it('should reject a group invite', async () => {
+      const createGroup = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Another Test Reject Group',
+          abbreviation: 'ATRG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      await request(app.getHttpServer())
+        .post(`/group-invites/${createGroup.body.id}/40`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          message: 'You are invited to join this group',
+        })
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .delete(`/group-invites/${createGroup.body.id}/reject`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      // Verify invite was deleted
+      await request(app.getHttpServer())
+        .get(`/group-invites/${createGroup.body.id}/40`)
+        .expect(404);
+    });
+
+    it('should return 404 when rejecting non-existing invite', async () => {
+      await request(app.getHttpServer())
+        .delete('/group-invites/999/reject')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(404);
+    });
+
+    it('should not allow rejecting invite after accepting it', async () => {
+      await request(app.getHttpServer())
+        .post(`/group-invites/${groupId}/accept`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .delete(`/group-invites/${groupId}/reject`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(403);
+    });
+  });
 });

@@ -15,6 +15,7 @@ export class GroupNonMemberGuard extends GroupMemberGuard {
       if (error instanceof NotFoundException) {
         return true;
       }
+
       throw error;
     }
   }

@@ -2,14 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GroupJoinRequestsService } from '../group-join-requests.service';
 import { GroupJoinRequestDrizzleRepository } from '../group-join-requests.repository';
 import { GroupMembershipService } from '../../group-membership/group-membership.service';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { GroupJoinRequestResponsesEnum } from '@tournament-app/types';
 import { GroupService } from 'src/group/group.service';
 
 describe('GroupJoinRequestsService', () => {
   let service: GroupJoinRequestsService;
   let repository: GroupJoinRequestDrizzleRepository;
-  let groupMembershipService: GroupMembershipService;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -50,9 +49,6 @@ describe('GroupJoinRequestsService', () => {
     service = module.get<GroupJoinRequestsService>(GroupJoinRequestsService);
     repository = module.get<GroupJoinRequestDrizzleRepository>(
       GroupJoinRequestDrizzleRepository,
-    );
-    groupMembershipService = module.get<GroupMembershipService>(
-      GroupMembershipService,
     );
   });
 
@@ -145,11 +141,23 @@ describe('GroupJoinRequestsService', () => {
   });
 
   describe('accept', () => {
+    it('should throw NotFoundException when request does not exist', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([]);
+
+      await expect(service.accept(1, 1)).rejects.toThrow(BadRequestException);
+      expect(mockRepository.getSingleQuery).toHaveBeenCalledWith({
+        userId: 1,
+        groupId: 1,
+      });
+    });
+
     it('should accept a group join request', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([{ id: 1 }]);
+
       await service.accept(1, 1);
 
-      expect(groupMembershipService.create).toHaveBeenCalledWith(1, 1);
-      expect(repository.deleteEntity).toHaveBeenCalledWith({
+      expect(mockGroupMembershipService.create).toHaveBeenCalledWith(1, 1);
+      expect(mockRepository.deleteEntity).toHaveBeenCalledWith({
         userId: 1,
         groupId: 1,
       });
@@ -157,10 +165,22 @@ describe('GroupJoinRequestsService', () => {
   });
 
   describe('reject', () => {
+    it('should throw NotFoundException when request does not exist', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([]);
+
+      await expect(service.reject(1, 1)).rejects.toThrow(NotFoundException);
+      expect(mockRepository.getSingleQuery).toHaveBeenCalledWith({
+        userId: 1,
+        groupId: 1,
+      });
+    });
+
     it('should reject a group join request', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([{ id: 1 }]);
+
       await service.reject(1, 1);
 
-      expect(repository.deleteEntity).toHaveBeenCalledWith({
+      expect(mockRepository.deleteEntity).toHaveBeenCalledWith({
         userId: 1,
         groupId: 1,
       });

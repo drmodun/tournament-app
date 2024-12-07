@@ -6,7 +6,6 @@ import {
   userRoleEnum,
 } from '@tournament-app/types';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-import { BadRequestException } from '@nestjs/common';
 import { GroupService } from 'src/group/group.service';
 
 describe('GroupJoinRequestsController', () => {

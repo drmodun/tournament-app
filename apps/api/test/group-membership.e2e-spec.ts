@@ -249,7 +249,7 @@ describe('GroupMembershipController (e2e)', () => {
       await request(app.getHttpServer())
         .delete('/group-membership/999/leave')
         .set('Authorization', `Bearer ${authToken}`)
-        .expect(404);
+        .expect(403);
     });
   });
 });

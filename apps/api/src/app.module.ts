@@ -10,6 +10,7 @@ import { GroupModule } from './group/group.module';
 import { GroupMembershipModule } from './group-membership/group-membership.module';
 import { FollowersModule } from './followers/followers.module';
 import { GroupJoinRequestsModule } from './group-join-requests/group-join-requests.module';
+import { GroupInvitesModule } from './group-invites/group-invites.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { GroupJoinRequestsModule } from './group-join-requests/group-join-reques
     GroupMembershipModule,
     FollowersModule,
     GroupJoinRequestsModule,
+    GroupInvitesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

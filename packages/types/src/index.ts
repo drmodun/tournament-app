@@ -8,3 +8,4 @@ export * from "./category";
 export * from "./groupMembership";
 export * from "./followers";
 export * from './groupJoinRequests';
+export * from './groupInvites';

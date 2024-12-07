@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { GroupJoinRequestDrizzleRepository } from './group-join-requests.repository';
@@ -18,7 +17,6 @@ import {
 import { GroupJoinRequestWithUserResponse } from './dto/responses.dto';
 import { GroupMembershipService } from '../group-membership/group-membership.service';
 import { GroupService } from 'src/group/group.service';
-import { groupType } from 'src/db/schema';
 
 @Injectable()
 export class GroupJoinRequestsService {
@@ -121,13 +119,34 @@ export class GroupJoinRequestsService {
     await action;
   }
 
+  async exists(groupId: number, userId: number): Promise<boolean> {
+    const results = await this.groupJoinRequestRepository.getSingleQuery({
+      groupId,
+      userId,
+    });
+
+    return results?.length > 0;
+  }
+
   async accept(groupId: number, userId: number) {
+    const exists = await this.exists(groupId, userId);
+
+    if (!exists) {
+      throw new BadRequestException('Group join request not found');
+    }
+
     await this.groupMembershipService.create(groupId, userId);
 
     await this.remove(groupId, userId);
   }
 
   async reject(groupId: number, userId: number) {
+    const exists = await this.exists(groupId, userId);
+
+    if (!exists) {
+      throw new NotFoundException('Group join request not found');
+    }
+
     await this.remove(groupId, userId);
   } // TODO: add notifications later
 }

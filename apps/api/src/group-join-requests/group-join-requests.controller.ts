@@ -82,7 +82,7 @@ export class GroupJoinRequestsController {
     };
   }
 
-  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @UseGuards(GroupNonMemberGuard)
   @Post(':groupId')
   async create(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -118,7 +118,7 @@ export class GroupJoinRequestsController {
     );
   }
 
-  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @UseGuards(GroupNonMemberGuard)
   @Patch(':groupId')
   async update(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -150,7 +150,7 @@ export class GroupJoinRequestsController {
     return await this.groupJoinRequestsService.accept(groupId, userId);
   }
 
-  @Post(':groupId/:userId/reject')
+  @Delete(':groupId/:userId/reject')
   @UseGuards(GroupAdminGuard)
   async reject(
     @Param('groupId', ParseIntPipe) groupId: number,

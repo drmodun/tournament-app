@@ -301,34 +301,166 @@ describe('GroupJoinRequestsController (e2e)', () => {
   });
 
   describe('/group-join-requests/:groupId/:userId/accept (POST)', () => {
-    it('should allow group admin to accept a join request', async () => {
-      await request(app.getHttpServer())
-        .post('/group-join-requests/1/40/accept')
+    let groupId: number;
+
+    beforeAll(async () => {
+      const group = await request(app.getHttpServer())
+        .post('/groups')
         .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Test Accept Group',
+          abbreviation: 'TAG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      groupId = group.body.id;
+
+      await request(app.getHttpServer())
+        .post(`/group-join-requests/${groupId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          message: 'I would like to join this group',
+        })
         .expect(201);
     });
 
     it('should not allow non-admin to accept requests', async () => {
       await request(app.getHttpServer())
-        .post('/group-join-requests/1/3/accept')
+        .post(`/group-join-requests/${groupId}/40/accept`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(403);
     });
+
+    it('should accept a group join request', async () => {
+      const createDto = {
+        message: 'I would like to join this group',
+      };
+
+      const createGroup = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Test Accept Group',
+          abbreviation: 'TAG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      await request(app.getHttpServer())
+        .post(`/group-join-requests/${createGroup.body.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(createDto)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .post(`/group-join-requests/${createGroup.body.id}/40/accept`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .expect(201);
+    });
+
+    it('should allow group admin to accept a join request', async () => {
+      await request(app.getHttpServer())
+        .post(`/group-join-requests/${groupId}/40/accept`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .expect(201);
+    });
+
+    it('should return 404 when accepting non-existing request', async () => {
+      await request(app.getHttpServer())
+        .post('/group-join-requests/999/999/accept')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .expect(400);
+    });
   });
 
-  describe('/group-join-requests/:groupId/:userId/reject (POST)', () => {
-    it('should allow group admin to reject a join request', async () => {
-      await request(app.getHttpServer())
-        .post('/group-join-requests/1/3/reject')
+  describe('/group-join-requests/:groupId/:userId/reject (DELETE)', () => {
+    let groupId: number;
+
+    beforeAll(async () => {
+      const group = await request(app.getHttpServer())
+        .post('/groups')
         .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Test Accept Group',
+          abbreviation: 'TAG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      groupId = group.body.id;
+
+      await request(app.getHttpServer())
+        .post(`/group-join-requests/${groupId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          message: 'I would like to join this group',
+        })
         .expect(201);
     });
 
     it('should not allow non-admin to reject requests', async () => {
       await request(app.getHttpServer())
-        .post('/group-join-requests/1/4/reject')
+        .delete(`/group-join-requests/${groupId}/40/reject`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(403);
+    });
+
+    it('should reject a group join request', async () => {
+      const createDto = {
+        message: 'I would like to join this group',
+      };
+
+      const createGroup = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({
+          name: 'Test Reject Group',
+          abbreviation: 'TRG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          location: 'Test Location',
+          country: 'Test Country',
+        } satisfies CreateGroupRequest);
+
+      await request(app.getHttpServer())
+        .post(`/group-join-requests/${createGroup.body.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(createDto)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .delete(`/group-join-requests/${createGroup.body.id}/40/reject`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .expect(200);
+    });
+
+    it('should allow group admin to reject a join request', async () => {
+      await request(app.getHttpServer())
+        .delete(`/group-join-requests/${groupId}/40/reject`)
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .expect(200);
+    });
+
+    it('should return 404 when rejecting non-existing request', async () => {
+      await request(app.getHttpServer())
+        .delete('/group-join-requests/999/999/reject')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .expect(404);
     });
   });
 });

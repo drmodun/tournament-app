@@ -51,7 +51,14 @@ export default function Checkbox({
           type="checkbox"
           disabled={disabled}
         />
-        {label && <p style={labelStyle}>{label}</p>}
+        {label && (
+          <p
+            style={labelStyle}
+            className={globals[`${labelVariant ?? textColor(variant)}Color`]}
+          >
+            {label}
+          </p>
+        )}
       </label>
     </div>
   );

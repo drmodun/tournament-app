@@ -18,7 +18,10 @@ import Navbar from "components/navbar";
 import TableData from "components/tableData";
 import TableRow from "components/tableRow";
 import Table from "components/table";
+import Card from "components/card";
 import { useToastContext } from "utils/hooks/useToastContext";
+import CardExpanded from "components/cardExpanded";
+import RichEditor from "components/richEditor/richEditor";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -57,7 +60,9 @@ export default function Web() {
   return (
     <div>
       <Navbar variant="dark" />
-      <h1>Web</h1>
+      <h1 style={{ marginBottom: 64 }}>Web</h1>
+      <RichEditor />
+      <RichEditor variant="light" />
       <Button
         label="hi guys"
         variant="dark"
@@ -608,6 +613,43 @@ export default function Web() {
           <TableData>test</TableData>
         </TableRow>
       </Table>
+
+      <Card
+        variant="light"
+        image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
+        label="HI GUYSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
+        participants={32189312}
+      />
+      <Card
+        variant="dark"
+        image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
+        label="HI "
+        participants={32189321}
+      />
+      <CardExpanded
+        variant="dark"
+        image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
+        label="HI "
+        participants={32189321}
+        registrationTillDate={Date.now()}
+        startDate={Date.now()}
+        endDate={Date.now()}
+        organizerName={"Queens of the Stone Age"}
+        tags={["beginner friendly", "databases", "machine learning/ai"]}
+        category={"programming"}
+      />
+      <CardExpanded
+        variant="light"
+        image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
+        label="HI "
+        participants={32189321}
+        registrationTillDate={Date.now()}
+        startDate={Date.now()}
+        endDate={Date.now()}
+        organizerName={"Queens of the Stone Age"}
+        tags={["beginner friendly", "databases", "machine learning/ai"]}
+        category={"programming"}
+      />
 
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name </label>

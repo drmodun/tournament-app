@@ -1,0 +1,42 @@
+@use "../../styles/" as *;
+
+.header {
+  -webkit-text-fill-color: $dark;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: #ffffff,
+    $num-steps: 32
+  );
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    font-size: $headerFontSize !important;
+  }
+  margin-bottom: $doublePadding;
+}
+
+.events {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  grid-auto-flow: dense;
+  grid-column-gap: $padding;
+  grid-row-gap: $halfPadding;
+
+  @media screen and (max-width: $desktopLargeBreakpoint) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  overflow-y: auto;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

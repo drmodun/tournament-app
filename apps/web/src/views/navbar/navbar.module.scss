@@ -7,6 +7,11 @@
   padding-right: $horizontalMargin;
   padding-top: $padding;
   justify-content: space-between;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+  }
 }
 
 .navRight {
@@ -20,8 +25,8 @@
 
 .logo,
 .mobileNavMenu {
-  height: $baseComponentHeight;
-  width: auto;
+  height: $baseComponentHeight !important;
+  width: $baseComponentHeight !important;
 }
 
 .userPageLinks {
@@ -62,4 +67,11 @@
 .mobileNavButton {
   background: none;
   border: none;
+}
+
+.userImage {
+  height: $baseComponentHeight;
+  width: $baseComponentHeight;
+  border-radius: 50%;
+  object-fit: cover;
 }

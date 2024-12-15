@@ -15,8 +15,8 @@
   }
 
   @media screen and (max-width: $phoneBreakpoint) {
-    padding-left: $doublePadding * 2;
-    padding-right: $doublePadding * 2;
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
   }
 
   padding-bottom: $doublePadding * 2;

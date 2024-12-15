@@ -25,8 +25,7 @@ export default function Promote() {
           <ArrowRightIcon />
         </Link>
       </div>
-      <div className={styles.divider}></div>
-      <div className={styles.rightContent}>
+      <div className={styles.imageWrapper}>
         <img
           className={clsx(styles.image)}
           src="https://images.unsplash.com/photo-1593489464397-8a9784e5d2de?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -36,3 +35,11 @@ export default function Promote() {
     </div>
   );
 }
+/*
+
+<img
+        className={clsx(styles.image)}
+        src="https://images.unsplash.com/photo-1552127966-d24b805b9be7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="People winning a sports competition."
+      />
+*/

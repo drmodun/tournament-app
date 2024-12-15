@@ -24,7 +24,6 @@ export default function Chip({
   onClick,
 }: ChipProps) {
   const [isSelected, setIsSelected] = useState<boolean>(false);
-
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onClick && onClick(e);
     setIsSelected((prev) => !prev);
@@ -32,22 +31,14 @@ export default function Chip({
 
   return (
     <button
-      className={clsx(
-        styles.chip,
-        isSelected &&
-          styles[`${activeBorderVariant ?? textColor(variant)}SelectedBorder`],
-
-        isSelected
-          ? globals[`${variant}BackgroundColor`]
-          : globals[`${variant}MutedBackgroundColorDynamic`],
-      )}
+      className={clsx(styles.chip, globals[`${variant}BackgroundColorDynamic`])}
       style={style}
       onClick={handleClick}
     >
+      {children}
       <p className={clsx(styles.label, globals[`${textColor(variant)}Color`])}>
         {label}
       </p>
-      {children}
     </button>
   );
 }

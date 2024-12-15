@@ -19,13 +19,15 @@
 
 .animate {
   animation: unslide 1s forwards !important;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    animation: unslideMobile 1s forwards;
+  }
 }
 
 .drawer {
   height: 100%;
   width: 100%;
-
-  background-color: $dark;
   position: fixed;
   top: 0;
   left: 0;
@@ -36,6 +38,11 @@
   padding: $padding;
   padding-right: $horizontalMargin + $padding;
   animation: slide 1s forwards;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    padding-right: $doublePadding + $padding;
+    animation: slideMobile 1s forwards;
+  }
 }
 
 @keyframes slide {
@@ -50,6 +57,25 @@
 @keyframes unslide {
   from {
     transform: translateX($horizontalMargin);
+  }
+  to {
+    transform: translateX(100%);
+    display: none;
+  }
+}
+
+@keyframes slideMobile {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX($doublePadding);
+  }
+}
+
+@keyframes unslideMobile {
+  from {
+    transform: translateX($doublePadding);
   }
   to {
     transform: translateX(100%);

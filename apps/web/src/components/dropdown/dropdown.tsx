@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import styles from "./dropdown.module.scss";
 import { ButtonProps } from "components/button/button";
 import clsx from "clsx";
@@ -13,6 +13,8 @@ import {
   Variants,
 } from "types/styleTypes";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import Input from "components/input";
+import { useFormContext } from "react-hook-form";
 
 interface DropdownProps {
   style?: React.CSSProperties;
@@ -32,6 +34,13 @@ interface DropdownProps {
   children?: React.ReactNode;
   arrowed?: boolean;
   selectionBased?: boolean;
+  doesSearch?: boolean;
+  searchPlaceholder?: string;
+  searchClassName?: string;
+  name?: string;
+  isReactHookForm?: boolean;
+  reactFormHookProps?: Object;
+  required?: boolean;
 }
 
 export default function Dropdown({
@@ -51,10 +60,27 @@ export default function Dropdown({
   children,
   arrowed = true,
   selectionBased = true,
+  doesSearch = false,
+  searchPlaceholder,
+  searchClassName,
+  name,
+  isReactHookForm = false,
+  reactFormHookProps,
+  required = false,
 }: DropdownProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [isDropped, setIsDropped] = useState<boolean>(false);
   const [animate, setAnimate] = useState<boolean>(false);
+  const [optionsActive, setOptionsActive] = useState<boolean[]>(
+    new Array(options.length).fill(true),
+  );
+  const methods = useFormContext();
+
+  if (isReactHookForm && name) {
+    methods.register(name, {
+      required: required,
+    });
+  }
 
   const changeDrop = () => {
     setAnimate(true);
@@ -62,10 +88,45 @@ export default function Dropdown({
   };
 
   const handleSelect = (index: number) => {
-    if (index == selected) setSelected(null);
-    else setSelected(index);
+    if (index == selected) {
+      setSelected(null);
+      isReactHookForm &&
+        name &&
+        methods.setValue(name, null, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+    } else {
+      setSelected(index);
+      isReactHookForm &&
+        name &&
+        methods.setValue(name, options[index].label, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+    }
     setIsDropped(false);
     onSelect && onSelect(index);
+  };
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const search: string = event.target.value.toLowerCase();
+    for (let option of options) {
+      const optionLabel = option.label?.toLowerCase();
+      if (optionLabel?.includes(search)) {
+        setOptionsActive((prev) => {
+          const newOptionsActive = [...prev];
+          newOptionsActive[options.indexOf(option)] = true;
+          return newOptionsActive;
+        });
+      } else {
+        setOptionsActive((prev) => {
+          const newOptionsActive = [...prev];
+          newOptionsActive[options.indexOf(option)] = false;
+          return newOptionsActive;
+        });
+      }
+    }
   };
 
   return (
@@ -92,7 +153,11 @@ export default function Dropdown({
             }
             onClick={changeDrop}
             style={selectButtonStyle}
-            className={clsx(styles.fullWidth, isDropped && styles.selectButton)}
+            className={clsx(
+              styles.fullWidth,
+              isDropped && styles.selectButtonActive,
+              styles.selectButton,
+            )}
             labelClassName={globals.textAlignLeft}
           >
             {arrowed && (
@@ -100,6 +165,7 @@ export default function Dropdown({
                 className={clsx(
                   isDropped && styles.selectArrowRotated,
                   styles.selectArrow,
+                  styles[`${textColor(variant)}Fill`],
                 )}
               />
             )}
@@ -107,48 +173,63 @@ export default function Dropdown({
           </Button>
         </div>
         <div
-          style={optionWrapperStyle}
-          className={clsx(
-            animate
-              ? isDropped
-                ? styles.unhiddenAnimation
-                : styles.hiddenAnimation
-              : styles.hidden,
-            styles.options,
-            globals[`${variant}MutedBackgroundColor`],
-            optionWrapperClassName,
-          )}
+          className={clsx(styles.optionsWrapper, isDropped && styles.zIndex)}
         >
-          {options.map((option, index) => (
-            <div
-              className={clsx(
-                animate
-                  ? isDropped
-                    ? styles.unhiddenAnimation
-                    : styles.hiddenAnimation
-                  : styles.hidden,
-                styles.option,
-                optionClassName,
-              )}
-            >
-              <Button
-                key={index}
-                label={option.label}
-                variant={selected === index ? textColor(variant) : variant}
-                style={optionStyle}
-                onClick={() => handleSelect(index)}
+          <div
+            style={optionWrapperStyle}
+            className={clsx(
+              animate
+                ? isDropped
+                  ? styles.unhiddenAnimation
+                  : styles.hiddenAnimation
+                : styles.hidden,
+              styles.options,
+
+              globals[`${variant}MutedBackgroundColor`],
+              optionWrapperClassName,
+            )}
+          >
+            {doesSearch && (
+              <Input
+                placeholder={searchPlaceholder}
+                variant={textColor(variant)}
+                className={clsx(searchClassName, styles.search)}
+                onChange={handleSearch}
+              />
+            )}
+
+            {options.map((option, index) => (
+              <div
                 className={clsx(
-                  styles.fullWidth,
+                  !optionsActive[index] && globals.hidden,
                   animate
                     ? isDropped
                       ? styles.unhiddenAnimation
                       : styles.hiddenAnimation
                     : styles.hidden,
+                  styles.option,
+                  optionClassName,
                 )}
-                labelClassName={globals.textAlignLeft}
-              />
-            </div>
-          ))}
+              >
+                <Button
+                  key={index}
+                  label={option.label}
+                  variant={selected === index ? textColor(variant) : variant}
+                  style={{ ...optionStyle }}
+                  onClick={() => handleSelect(index)}
+                  className={clsx(
+                    styles.fullWidth,
+                    animate
+                      ? isDropped
+                        ? styles.unhiddenAnimation
+                        : styles.hiddenAnimation
+                      : styles.hidden,
+                  )}
+                  labelClassName={globals.textAlignLeft}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -25,6 +25,7 @@ interface InputProps {
   type?: HTMLInputTypeAttribute;
   name?: string;
   isReactFormHook?: boolean;
+  reactFormHookProps?: Object;
   required?: boolean;
   className?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
@@ -44,6 +45,7 @@ export default function Input({
   type = "text",
   name = "",
   isReactFormHook = false,
+  reactFormHookProps = {},
   required = false,
   className,
   onChange = () => {},
@@ -71,24 +73,44 @@ export default function Input({
         </p>
       )}
       <div className={styles.inputWrapper}>
-        <input
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          className={clsx(
-            styles.input,
-            className,
-            doesSubmit && styles.submitInput,
-            variant == "light" && styles.lightPlaceholder,
-            globals[`${variant}BackgroundColorDynamic`],
-            globals[`${textColor(variant)}Color`],
-          )}
-          style={style}
-          {...methods.register(name, { required: required })}
-          onChange={
-            isReactFormHook ? methods.register(name).onChange : handleChange
-          }
-        />
+        {isReactFormHook ? (
+          <input
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            className={clsx(
+              styles.input,
+              className,
+              doesSubmit && styles.submitInput,
+              variant == "light" && styles.lightPlaceholder,
+              globals[`${variant}BackgroundColorDynamic`],
+              globals[`${textColor(variant)}Color`],
+            )}
+            style={style}
+            {...methods.register(name, {
+              required: required,
+              ...reactFormHookProps,
+            })}
+            onChange={handleChange}
+          />
+        ) : (
+          <input
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            className={clsx(
+              styles.input,
+              className,
+              doesSubmit && styles.submitInput,
+              variant == "light" && styles.lightPlaceholder,
+              globals[`${variant}BackgroundColorDynamic`],
+              globals[`${textColor(variant)}Color`],
+            )}
+            style={style}
+            onChange={handleChange}
+          />
+        )}
+
         {doesSubmit && (
           <button
             onClick={() => onSubmit(value)}

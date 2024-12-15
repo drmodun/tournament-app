@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import styles from "./drawerElement.module.scss";
+import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import { TextVariants } from "types/styleTypes";
+import { textColor, TextVariants, Variants } from "types/styleTypes";
 import { useDrawerContext } from "utils/hooks/useDrawerContext";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { SvgIconTypeMap } from "@mui/material";
@@ -30,6 +31,9 @@ export default function DrawerElement({
 
   const handleClick = () => drawerContext.setDrawerOpen(false);
 
+  const colorTheme: Variants = variant ?? theme;
+  const textColorTheme = textColor(colorTheme);
+
   return (
     <Link
       href={href}
@@ -38,7 +42,9 @@ export default function DrawerElement({
       onClick={handleClick}
     >
       <div className={clsx(styles.wrapper, className)} style={style}>
-        <p className={styles.label}>{label}</p>
+        <p className={clsx(styles.label, globals[`${textColorTheme}Color`])}>
+          {label}
+        </p>
         {icon &&
           React.createElement(icon, {
             className: clsx(styles.icon, styles[`${variant}Icon`]),

@@ -1,37 +1,20 @@
 @import "../../styles/";
 
 .chip {
-  height: $baseComponentHeight;
   border-radius: $borderRadius;
-  padding: 0 $doublePadding;
+  padding: $halfPadding / 2 $padding;
   border: none;
   &:hover {
     cursor: pointer;
   }
+
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
 }
 
 .label {
   font-size: $fontSize;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.primarySelectedBorder {
-  box-shadow: 0px 0px 0px $selectedBorderSize $primary inset;
-}
-
-.secondarySelectedBorder {
-  box-shadow: 0px 0px 0px $selectedBorderSize $secondary inset;
-}
-.lightSelectedBorder {
-  box-shadow: 0px 0px 0px $selectedBorderSize $light inset;
-}
-.darkSelectedBorder {
-  box-shadow: 0px 0px 0px $selectedBorderSize $dark inset;
-}
-.warningSelectedBorder {
-  box-shadow: 0px 0px 0px $selectedBorderSize $warning inset;
-}
-.dangerSelectedBorder {
-  box-shadow: 0px 0px 0px $selectedBorderSize $danger inset;
 }

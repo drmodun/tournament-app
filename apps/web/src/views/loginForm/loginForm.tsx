@@ -5,7 +5,7 @@ import styles from "./loginForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Input from "components/input";
-import { TextVariants } from "types/styleTypes";
+import { textColor, TextVariants } from "types/styleTypes";
 import {
   FormProvider,
   SubmitHandler,
@@ -41,28 +41,58 @@ export default function LoginForm({
             >
               <div className={styles.inputWrapper}>
                 <Input
-                  variant={variant}
+                  labelVariant={variant}
+                  variant={methods.formState.errors.email ? "danger" : variant}
                   label="email"
                   placeholder="enter your email address"
                   name="email"
                   required={true}
                   className={styles.input}
+                  isReactFormHook={true}
+                  reactFormHookProps={{
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "invalid email address",
+                    },
+                  }}
                 />
-                {methods.formState.errors.email && (
+                {methods.formState.errors.email?.type === "required" && (
                   <p className={styles.error}>this field is required!</p>
+                )}
+                {methods.formState.errors.email?.type === "pattern" && (
+                  <p className={styles.error}>
+                    {methods.formState.errors.email.message}
+                  </p>
                 )}
               </div>
               <div className={styles.inputWrapper}>
                 <Input
-                  variant={variant}
+                  labelVariant={variant}
+                  variant={
+                    methods.formState.errors.password ? "danger" : variant
+                  }
                   label="password"
                   placeholder="enter your password"
                   name="password"
                   required={true}
                   className={styles.input}
+                  type="password"
+                  isReactFormHook={true}
+                  reactFormHookProps={{
+                    pattern: {
+                      value: /^(\S){4,32}$/gm,
+                      message:
+                        "password must be between 8 and 32 characters long",
+                    },
+                  }}
                 />
-                {methods.formState.errors.password && (
+                {methods.formState.errors.password?.type === "required" && (
                   <p className={styles.error}>this field is required!</p>
+                )}
+                {methods.formState.errors.password?.type === "pattern" && (
+                  <p className={styles.error}>
+                    {methods.formState.errors.password.message}
+                  </p>
                 )}
               </div>
               <Button

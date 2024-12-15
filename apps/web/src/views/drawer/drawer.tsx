@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import styles from "./drawer.module.scss";
+import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import { TextVariants } from "types/styleTypes";
+import { textColor, TextVariants, Variants } from "types/styleTypes";
 import { useDrawerContext } from "utils/hooks/useDrawerContext";
 import DrawerElement from "views/drawerElement";
 import LoginIcon from "@mui/icons-material/Login";
@@ -12,6 +13,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import HelpIcon from "@mui/icons-material/Help";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 export interface DrawerProps {
   style?: React.CSSProperties;
   variant?: TextVariants;
@@ -25,6 +27,11 @@ export default function Drawer({
 }: DrawerProps) {
   const [animate, setAnimate] = useState<boolean>(false);
   const drawerContext = useDrawerContext();
+  const { theme } = useThemeContext();
+
+  const colorTheme: Variants = variant ?? theme;
+  const textColorTheme = textColor(colorTheme);
+
   return (
     <div
       className={clsx(
@@ -43,21 +50,30 @@ export default function Drawer({
       <div
         className={clsx(
           styles.drawer,
+          globals[`${colorTheme}BackgroundColor`],
           animate && !drawerContext.drawerOpen && styles.animate,
         )}
       >
         <DrawerElement
           icon={FormatListBulletedIcon}
-          label="features"
-          href="#features"
+          label="what is winning.sh?"
+          href="/landingPage2#aboutWinning"
         />
-        <DrawerElement icon={HelpIcon} label="why us?" href="#whyUs" />
+        <DrawerElement
+          icon={HelpIcon}
+          label="promote"
+          href="/landingPage2#promote"
+        />
         <DrawerElement
           icon={ContactSupportIcon}
           label="contact"
-          href="#contact"
+          href="/landingPage2#contact"
         />
-        <DrawerElement icon={InfoIcon} label="about us" href="#aboutUs" />
+        <DrawerElement
+          icon={InfoIcon}
+          label="achievements"
+          href="/landingPage2#profileAchievements"
+        />
         <DrawerElement icon={LoginIcon} label="login" href="/login" />
         <DrawerElement icon={PersonAddIcon} label="register" href="/register" />
       </div>

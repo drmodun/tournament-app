@@ -1,0 +1,89 @@
+@import "../../styles/";
+
+.editor {
+  border-radius: $borderRadius;
+  padding: $padding;
+  min-height: 2 * $baseComponentHeight;
+
+  color: black;
+}
+
+.lightEditorColor > * {
+  color: $light;
+}
+
+.darkEditorColor > * {
+  color: $dark;
+}
+
+.menuButton {
+  padding: $halfPadding;
+  padding-left: $padding;
+  padding-right: $padding;
+  border: none;
+  border-radius: $borderRadius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}
+
+.menuButtonIconLight > * {
+  fill: $dark;
+}
+.menuButtonIconDark > * {
+  fill: $light;
+}
+
+.menuButtonLight:hover {
+  background-color: $dark;
+
+  .menuButtonIconLight > *,
+  .menuButtonIconDark > * {
+    fill: $light;
+  }
+}
+
+.menuButtonDark:hover {
+  background-color: $light;
+
+  .menuButtonIconLight > *,
+  .menuButtonIconDark > * {
+    fill: $dark;
+  }
+}
+
+.menuBar {
+  width: 100%;
+  border-radius: $borderRadius;
+  display: flex;
+  margin-bottom: $halfPadding / 2;
+  gap: $halfPadding / 2;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+}
+
+.menuBarPart {
+  display: flex;
+  margin-bottom: $halfPadding / 2;
+  gap: $halfPadding / 2;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}

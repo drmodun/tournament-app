@@ -277,11 +277,13 @@
 }
 
 .paddingVertical {
-  padding: $padding 0;
+  padding-top: $padding;
+  padding-bottom: $padding;
 }
 
 .paddingHorizontal {
-  padding: 0 $padding;
+  padding-right: $padding;
+  padding-left: $padding;
 }
 
 .doublePadding {
@@ -289,11 +291,13 @@
 }
 
 .doublePaddingVertical {
-  padding: $doublePadding 0;
+  padding-top: $doublePadding;
+  padding-bottom: $doublePadding;
 }
 
 .doublePaddingHorizontal {
-  padding: 0 $doublePadding;
+  padding-right: $doublePadding;
+  padding-left: $doublePadding;
 }
 
 .halfPadding {
@@ -301,11 +305,13 @@
 }
 
 .halfPaddingVertical {
-  padding: $halfPadding 0;
+  padding-top: $halfPadding;
+  padding-bottom: $halfPadding;
 }
 
 .halfPaddingHorizontal {
-  padding: 0 $halfPadding;
+  padding-right: $halfPadding;
+  padding-left: $halfPadding;
 }
 
 .fadeInAnimation {

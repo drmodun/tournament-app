@@ -17,7 +17,7 @@ interface DialogProps {
   className?: string;
   variant?: Variants;
   active?: boolean;
-  onClose?: MouseEventHandler;
+  onClose?: () => void;
 }
 
 export default function Dialog({
@@ -36,12 +36,18 @@ export default function Dialog({
       clearAllBodyScrollLocks();
     }
   }, [active]);
+
+  document.onkeydown = (evt) => {
+    if (evt.key === "Escape") {
+      onClose && onClose();
+    }
+  };
   return (
     active && (
       <div
         className={styles.dialogWrapper}
         onClick={(e) => {
-          onClose && onClose(e);
+          onClose && onClose();
         }}
       >
         <div

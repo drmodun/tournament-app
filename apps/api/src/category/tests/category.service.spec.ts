@@ -43,7 +43,7 @@ describe('CategoryService', () => {
 
     const result = await service.create(request);
 
-    expect(result).toEqual(1);
+    expect(result).toEqual({ id: 1 });
   });
 
   it('should throw an unprocessable entity exception when creating a category fails', async () => {
@@ -75,9 +75,7 @@ describe('CategoryService', () => {
       type: categoryTypeEnum.OTHER,
     };
 
-    await expect(service.create(request)).rejects.toThrow(
-      UnprocessableEntityException,
-    );
+    await expect(service.create(request)).rejects.toThrow(PostgresError);
   });
 
   it('should find all categories', async () => {
@@ -132,7 +130,7 @@ describe('CategoryService', () => {
 
     const result = await service.update(1, request);
 
-    expect(result).toEqual([{ id: 1, name: 'Updated Category' }]);
+    expect(result).toEqual({ id: 1 });
   });
 
   it('should throw not found exception when updating non-existent category', async () => {

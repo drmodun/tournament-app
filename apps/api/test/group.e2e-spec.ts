@@ -28,7 +28,7 @@ describe('GroupController (e2e)', () => {
     // Generate auth token for testing
     const loginResponse = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email: 'admin@example', password: 'Password123!' });
+      .send({ email: 'admin@example.com', password: 'Password123!' });
 
     authToken = loginResponse.body.accessToken;
   });

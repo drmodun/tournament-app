@@ -44,6 +44,10 @@ describe('CategoryController', () => {
             id: 1,
             name: 'Category 1',
           },
+          {
+            id: 2,
+            name: 'Category 2',
+          },
         ] satisfies ICategoryMiniResponse[];
       });
 
@@ -61,8 +65,8 @@ describe('CategoryController', () => {
     const result = await controller.findAll(request, req);
 
     expect(result.results).toEqual([
-      { id: 1, name: 'Category 1', description: 'Description 1' },
-      { id: 2, name: 'Category 2', description: 'Description 2' },
+      { id: 1, name: 'Category 1' },
+      { id: 2, name: 'Category 2' },
     ]);
 
     expect(result.metadata).toEqual({
@@ -91,7 +95,6 @@ describe('CategoryController', () => {
     expect(result).toEqual({
       id: 1,
       name: 'Category 1',
-      description: 'Description 1',
     });
   });
 
@@ -99,7 +102,7 @@ describe('CategoryController', () => {
     jest
       .spyOn(CategoryService.prototype, 'create')
       .mockImplementation(async () => {
-        return 1;
+        return { id: 1 };
       });
 
     const request: CreateCategoryRequest = {
@@ -111,7 +114,7 @@ describe('CategoryController', () => {
 
     const result = await controller.create(request);
 
-    expect(result).toEqual(1);
+    expect(result).toEqual({ id: 1 });
   });
 
   it('should update a category', async () => {
@@ -124,13 +127,12 @@ describe('CategoryController', () => {
     const request: UpdateCategoryRequest = {
       name: 'Updated Category',
       description: 'Updated Description',
-      logo: 'https://example.com/new-logo.jpg',
       type: categoryTypeEnum.OTHER,
     };
 
     const result = await controller.update(1, request);
 
-    expect(result).toEqual({ id: 1, name: 'Updated Category' });
+    expect(result).toEqual({ id: 1 });
   });
 
   it('should remove a category', async () => {

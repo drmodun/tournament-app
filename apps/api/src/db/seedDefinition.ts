@@ -11,6 +11,7 @@ import {
   userRoleEnum,
 } from '@tournament-app/types';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
+import { categoryTypeEnum } from '@tournament-app/types';
 
 async function teardown() {
   console.log('Teardown database...');
@@ -47,7 +48,7 @@ async function createUsers() {
   const adminUser = {
     id: NUM_USERS_TO_CREATE + 1,
     name: 'Admin User',
-    email: 'admin@example',
+    email: 'admin@example.com',
     password: DEFAULT_PASSWORD,
     country: 'United States',
     location: 'San Francisco',
@@ -326,16 +327,62 @@ async function createGroupInvites() {
   await db.insert(tables.groupInvite).values(groupInviteObjects).execute();
 }
 
+async function createCategories() {
+  const categories = [
+    {
+      id: 1,
+      name: 'Programming Competitions',
+      description: 'Competitive programming tournaments and hackathons',
+      logo: 'https://example.com/programming.jpg',
+      type: categoryTypeEnum.PROGRAMMING,
+    },
+    {
+      id: 2,
+      name: 'Chess Tournaments',
+      description: 'Classical and speed chess competitions',
+      logo: 'https://example.com/chess.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
+    {
+      id: 3,
+      name: 'Esports - League of Legends',
+      description: 'Professional and amateur LoL tournaments',
+      logo: 'https://example.com/lol.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
+    {
+      id: 4,
+      name: 'Basketball Leagues',
+      description: '3v3 and 5v5 basketball tournaments',
+      logo: 'https://example.com/basketball.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
+    {
+      id: 5,
+      name: 'Quiz Competitions',
+      description: 'General knowledge and specialized quiz tournaments',
+      logo: 'https://example.com/quiz.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
+  ];
+
+  await db.insert(tables.category).values(categories).execute();
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE category_id_seq RESTART WITH ${sql.raw('6')}`,
+  );
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
   console.log('Seeding database...');
 
   await teardown();
-
   await createUsers();
-  await createGroups();
   await createFollowers();
+  await createCategories();
+  await createGroups();
   await createGroupMemberships();
   await createGroupJoinRequests();
   await createGroupInvites();

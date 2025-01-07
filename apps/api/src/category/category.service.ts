@@ -22,11 +22,11 @@ export class CategoryService {
       ...createCategoryDto,
     });
 
-    if (!category) {
+    if (!category[0]) {
       throw new UnprocessableEntityException('Category creation failed');
     }
 
-    return category[0].id;
+    return category[0];
   }
 
   async findAll<TResponseType extends BaseCategoryResponseType>(
@@ -48,7 +48,7 @@ export class CategoryService {
   ): Promise<TResponseType> {
     const results = await this.repository.getSingleQuery(id, responseType);
 
-    if (!results) {
+    if (!results[0]) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
 
@@ -62,7 +62,7 @@ export class CategoryService {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
 
-    return category[0].id;
+    return category[0];
   }
 
   async remove(id: number) {

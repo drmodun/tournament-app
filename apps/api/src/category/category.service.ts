@@ -8,6 +8,7 @@ import {
   IUpdateCategoryRequest,
   CategoryResponsesEnum,
   CategoryReturnTypesEnumType,
+  BaseCategoryResponseType,
 } from '@tournament-app/types';
 import { CategoryDrizzleRepository } from './category.repository';
 import { CategoryQuery } from './dto/requests.dto';
@@ -28,7 +29,7 @@ export class CategoryService {
     return category[0].id;
   }
 
-  async findAll<TResponseType extends CategoryReturnTypesEnumType>(
+  async findAll<TResponseType extends BaseCategoryResponseType>(
     query: CategoryQuery,
   ): Promise<TResponseType[]> {
     const { responseType = CategoryResponsesEnum.BASE, ...queryParams } = query;
@@ -41,7 +42,7 @@ export class CategoryService {
     return results as TResponseType[];
   }
 
-  async findOne<TResponseType extends CategoryReturnTypesEnumType>(
+  async findOne<TResponseType extends BaseCategoryResponseType>(
     id: number,
     responseType: CategoryReturnTypesEnumType = CategoryResponsesEnum.BASE,
   ): Promise<TResponseType> {
@@ -61,7 +62,7 @@ export class CategoryService {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
 
-    return category;
+    return category[0].id;
   }
 
   async remove(id: number) {

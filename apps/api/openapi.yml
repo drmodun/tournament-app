@@ -149,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2024-12-07T00:42:18.973Z
+                        updatedAt: &a2 2025-01-07T16:34:10.927Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -245,7 +245,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a2
-                        createdAt: 2024-12-07T00:42:18.973Z
+                        createdAt: 2025-01-07T16:34:10.927Z
                         following: 0
                         location: New York
           description: ""
@@ -301,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-12-07T00:42:18.973Z
+                    updatedAt: &a3 2025-01-07T16:34:10.927Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -329,7 +329,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-12-07T00:42:18.973Z
+                    createdAt: 2025-01-07T16:34:10.927Z
                     following: 0
                     location: New York
           description: ""
@@ -583,7 +583,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2024-12-07T00:42:19.161Z
+                        updatedAt: 2025-01-07T16:34:11.097Z
                         memberCount: 50
                 extended:
                   value:
@@ -609,9 +609,9 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2024-12-07T00:42:19.161Z
+                        updatedAt: 2025-01-07T16:34:11.097Z
                         memberCount: 50
-                        createdAt: 2024-12-07T00:42:19.162Z
+                        createdAt: 2025-01-07T16:34:11.097Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -640,7 +640,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2024-12-07T00:42:19.161Z
+                updatedAt: 2025-01-07T16:34:11.097Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -694,7 +694,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2024-12-07T00:42:19.161Z
+                    updatedAt: 2025-01-07T16:34:11.097Z
                     memberCount: 50
                 extended:
                   value:
@@ -707,9 +707,9 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2024-12-07T00:42:19.161Z
+                    updatedAt: 2025-01-07T16:34:11.097Z
                     memberCount: 50
-                    createdAt: 2024-12-07T00:42:19.162Z
+                    createdAt: 2025-01-07T16:34:11.097Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -749,7 +749,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2024-12-07T00:42:19.161Z
+                updatedAt: 2025-01-07T16:34:11.097Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -793,7 +793,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-07T00:42:19.161Z
+                  updatedAt: 2025-01-07T16:34:11.097Z
                   memberCount: 50
                 members: []
           description: ""
@@ -822,7 +822,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-07T00:42:19.161Z
+                  updatedAt: 2025-01-07T16:34:11.097Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -851,7 +851,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2024-12-07T00:42:19.161Z
+                  updatedAt: 2025-01-07T16:34:11.097Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -969,7 +969,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2024-12-07T00:42:19.167Z
+                        createdAt: 2025-01-07T16:34:11.103Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -995,7 +995,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2024-12-07T00:42:19.167Z
+                        createdAt: 2025-01-07T16:34:11.103Z
                         country: country
                         id: 1
                         username: username
@@ -1025,7 +1025,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2024-12-07T00:42:19.167Z
+                        createdAt: 2025-01-07T16:34:11.103Z
                         country: country
                         name: name
                         logo: logo
@@ -1114,7 +1114,7 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2024-12-07T00:42:19.167Z
+                    createdAt: 2025-01-07T16:34:11.103Z
                 UserMembershipResponseWithDates:
                   value:
                     userId: 1
@@ -1122,7 +1122,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2024-12-07T00:42:19.167Z
+                    createdAt: 2025-01-07T16:34:11.103Z
                     country: country
                     id: 1
                     username: username
@@ -1134,7 +1134,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2024-12-07T00:42:19.167Z
+                    createdAt: 2025-01-07T16:34:11.103Z
                     country: country
                     name: name
                     logo: logo
@@ -1269,7 +1269,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2024-12-07T00:42:19.171Z
+                    createdAt: 2025-01-07T16:34:11.108Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1277,10 +1277,10 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2024-12-07T00:42:19.171Z
+                    updatedAt: 2025-01-07T16:34:11.108Z
                 mini:
                   value:
-                    createdAt: 2024-12-07T00:42:19.171Z
+                    createdAt: 2025-01-07T16:34:11.108Z
                     id: 1
                     username: john_doe
           description: ""
@@ -1415,7 +1415,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: 2024-12-07T00:42:18.973Z
+                        updatedAt: 2025-01-07T16:34:10.927Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1436,7 +1436,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2024-12-07T00:42:19.175Z
+                        createdAt: 2025-01-07T16:34:11.112Z
                 with-group:
                   value:
                     metadata:
@@ -1461,7 +1461,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2024-12-07T00:42:19.161Z
+                        updatedAt: 2025-01-07T16:34:11.097Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1484,7 +1484,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2024-12-07T00:42:19.175Z
+                        createdAt: 2025-01-07T16:34:11.112Z
           description: ""
       tags: &a12
         - group-join-requests
@@ -1578,7 +1578,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: 2024-12-07T00:42:18.973Z
+                    updatedAt: 2025-01-07T16:34:10.927Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -1586,7 +1586,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2024-12-07T00:42:19.175Z
+                    createdAt: 2025-01-07T16:34:11.112Z
                 with-group:
                   value:
                     id: 1
@@ -1598,7 +1598,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2024-12-07T00:42:19.161Z
+                    updatedAt: 2025-01-07T16:34:11.097Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -1608,7 +1608,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2024-12-07T00:42:19.175Z
+                    createdAt: 2025-01-07T16:34:11.112Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -1735,7 +1735,7 @@ paths:
                         email: john@doe.com
                         followers: 0
                         level: 0
-                        updatedAt: 2024-12-07T00:42:19.181Z
+                        updatedAt: 2025-01-07T16:34:11.118Z
                         message: Would you like to join our group?
                         groupId: 1
                 with-mini-user:
@@ -1758,7 +1758,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2024-12-07T00:42:19.181Z
+                        createdAt: 2025-01-07T16:34:11.118Z
                 with-group:
                   value:
                     metadata:
@@ -1788,7 +1788,7 @@ paths:
                         focus: Hybrid
                         location: New York
                         type: Public
-                        updatedAt: 12/7/2024
+                        updatedAt: 1/7/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -1810,10 +1810,40 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2024-12-07T00:42:19.181Z
+                        createdAt: 2025-01-07T16:34:11.118Z
           description: ""
       tags: &a14
         - group-invites
+  /group-invites/{groupId}/accept:
+    post:
+      operationId: GroupInvitesController_accept
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a14
+      security:
+        - bearer: []
+  /group-invites/{groupId}/reject:
+    delete:
+      operationId: GroupInvitesController_reject
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a14
+      security:
+        - bearer: []
   /group-invites/{groupId}/{userId}:
     post:
       operationId: GroupInvitesController_create
@@ -1874,7 +1904,7 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2024-12-07T00:42:19.181Z
+                    updatedAt: 2025-01-07T16:34:11.118Z
                     message: Would you like to join our group?
                     groupId: 1
                 with-mini-user:
@@ -1882,7 +1912,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2024-12-07T00:42:19.181Z
+                    createdAt: 2025-01-07T16:34:11.118Z
                 with-group:
                   value:
                     id: 1
@@ -1897,14 +1927,14 @@ paths:
                     focus: Hybrid
                     location: New York
                     type: Public
-                    updatedAt: 12/7/2024
+                    updatedAt: 1/7/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2024-12-07T00:42:19.181Z
+                    createdAt: 2025-01-07T16:34:11.118Z
           description: ""
       tags: *a14
     patch:
@@ -1951,34 +1981,249 @@ paths:
       tags: *a14
       security:
         - bearer: []
-  /group-invites/{groupId}/accept:
-    post:
-      operationId: GroupInvitesController_accept
+  /categories:
+    get:
+      operationId: CategoryController_findAll
       parameters:
-        - name: groupId
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        name: Chess
+                mini-with-logo:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI-WITH-LOGO
+                    results:
+                      - id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                        description: Chess tournaments and competitions
+                        type: programming
+                        tournamentCount: 5
+                        activeTournamentCount: 3
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                        description: Chess tournaments and competitions
+                        type: programming
+                        tournamentCount: 5
+                        activeTournamentCount: 3
+                        createdAt: 2024-01-07T14:00:00.000Z
+                        updatedAt: 2024-01-07T14:00:00.000Z
+          description: ""
+      tags: &a15
+        - categories
+    post:
+      operationId: CategoryController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCategoryRequest"
+      responses:
+        "200":
+          description: Creates a new category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a15
+      security:
+        - bearer: []
+  /categories/{categoryId}:
+    get:
+      operationId: CategoryController_findOne
+      parameters:
+        - name: categoryId
           required: true
           in: path
           schema:
             type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
       responses:
-        "201":
-          description: ""
-      tags: *a14
+        "200":
+          description: Returns a single category
+          content:
+            application/json:
+              schema:
+                examples:
+                  mini:
+                    value:
+                      id: 1
+                      name: Chess
+                  mini-with-logo:
+                    value:
+                      id: 1
+                      name: Chess
+                      logo: https://example.com/chess-category-logo.jpg
+                  base:
+                    value:
+                      id: 1
+                      name: Chess
+                      logo: https://example.com/chess-category-logo.jpg
+                      description: Chess tournaments and competitions
+                      type: programming
+                      tournamentCount: 5
+                      activeTournamentCount: 3
+                  extended:
+                    value:
+                      id: 1
+                      name: Chess
+                      logo: https://example.com/chess-category-logo.jpg
+                      description: Chess tournaments and competitions
+                      type: programming
+                      tournamentCount: 5
+                      activeTournamentCount: 3
+                      createdAt: 2024-01-07T14:00:00.000Z
+                      updatedAt: 2024-01-07T14:00:00.000Z
+      tags: *a15
+    patch:
+      operationId: CategoryController_update
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCategoryRequest"
+      responses:
+        "200":
+          description: Updates a category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a15
       security:
         - bearer: []
-  /group-invites/{groupId}/reject:
     delete:
-      operationId: GroupInvitesController_reject
+      operationId: CategoryController_remove
       parameters:
-        - name: groupId
+        - name: categoryId
           required: true
           in: path
           schema:
             type: number
       responses:
         "200":
-          description: ""
-      tags: *a14
+          description: Deletes a category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a15
       security:
         - bearer: []
 info:
@@ -3137,3 +3382,130 @@ components:
           type: string
         relatedLFPId:
           type: number
+    CategoryMiniResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+    CategoryMiniResponseWithLogo:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - logo
+    CategoryResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        tournamentCount:
+          type: number
+          readOnly: true
+        activeTournamentCount:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - logo
+        - description
+        - type
+        - tournamentCount
+        - activeTournamentCount
+    CategoryResponseExtended:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        tournamentCount:
+          type: number
+          readOnly: true
+        activeTournamentCount:
+          type: number
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - logo
+        - description
+        - type
+        - tournamentCount
+        - activeTournamentCount
+        - createdAt
+        - updatedAt
+    CreateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        logo:
+          type: string
+        type:
+          type: string
+      required:
+        - name
+        - description
+        - logo
+        - type
+    UpdateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string

@@ -11,6 +11,7 @@ import {
 import {
   BaseCategoryResponseType,
   CategoryResponsesEnum,
+  categoryTypeEnum,
 } from '@tournament-app/types';
 import {
   CategoryQuery,
@@ -20,7 +21,7 @@ import {
 
 // Response Examples
 const baseExample: CategoryMiniResponse = {
-  id: '1',
+  id: 1,
   name: 'Chess',
 };
 
@@ -32,10 +33,10 @@ export const withLogoExample: CategoryMiniResponseWithLogo = {
 export const categoryExample: CategoryResponse = {
   ...withLogoExample,
   description: 'Chess tournaments and competitions',
-  type: 'Board Games',
+  type: categoryTypeEnum.PROGRAMMING,
   tournamentCount: 5,
   activeTournamentCount: 3,
-  id: '1',
+  id: 1,
   logo: 'https://example.com/chess-category-logo.jpg',
 };
 
@@ -56,13 +57,13 @@ export const createCategoryExample: CreateCategoryRequest = {
   name: 'Chess',
   description: 'Chess tournaments and competitions',
   logo: 'https://example.com/chess-category-logo.jpg',
-  type: 'Board Games',
+  type: categoryTypeEnum.PROGRAMMING,
 };
 
 export const updateCategoryExample: UpdateCategoryRequest = {
   name: 'Chess Updated',
   description: 'Updated chess tournaments and competitions',
-  type: 'Strategy Games',
+  type: categoryTypeEnum.OTHER,
 };
 
 export const uploadLogoExample = {

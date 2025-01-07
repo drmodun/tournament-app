@@ -1,5 +1,6 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import {
+  categoryTypeEnumType,
   ICategoryMiniResponse,
   ICategoryMiniResponseWithLogo,
   ICategoryResponse,
@@ -8,7 +9,7 @@ import {
 
 export class CategoryMiniResponse implements ICategoryMiniResponse {
   @ApiResponseProperty()
-  id: string;
+  id: number;
 
   @ApiResponseProperty()
   name: string;
@@ -30,7 +31,7 @@ export class CategoryResponse
   description: string;
 
   @ApiResponseProperty()
-  type: string;
+  type: categoryTypeEnumType;
 
   @ApiResponseProperty()
   tournamentCount: number;

@@ -3,6 +3,7 @@ import {
   ICreateCategoryRequest,
   IUpdateCategoryRequest,
   ICategoryQuery,
+  categoryTypeEnum,
 } from '@tournament-app/types';
 import {
   IsString,
@@ -10,6 +11,7 @@ import {
   MaxLength,
   IsOptional,
   IsUrl,
+  IsEnum,
 } from 'class-validator';
 import { BaseQuery } from '../../base/query/baseQuery';
 
@@ -30,34 +32,32 @@ export class CreateCategoryRequest implements ICreateCategoryRequest {
   @ApiProperty()
   logo: string;
 
-  @IsString()
-  @MinLength(3)
-  @MaxLength(30)
+  @IsEnum(categoryTypeEnum)
   @ApiProperty()
-  type: string;
+  type: categoryTypeEnum;
 }
 
-export class UpdateCategoryRequest implements IUpdateCategoryRequest {
+export class UpdateCategoryRequest implements Partial<IUpdateCategoryRequest> {
   @IsOptional()
   @IsString()
   @MinLength(3)
   @MaxLength(30)
   @ApiPropertyOptional()
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsString()
   @MinLength(3)
   @MaxLength(300)
   @ApiPropertyOptional()
-  description: string;
+  description?: string;
 
   @IsOptional()
-  @IsString()
+  @IsEnum(categoryTypeEnum)
   @MinLength(3)
   @MaxLength(30)
   @ApiPropertyOptional()
-  type: string;
+  type?: categoryTypeEnum;
 }
 
 export class CategoryQuery extends BaseQuery implements ICategoryQuery {

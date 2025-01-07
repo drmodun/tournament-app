@@ -1,5 +1,7 @@
+import { categoryTypeEnum } from "../enums";
+
 export interface ICategoryMiniResponse {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -9,7 +11,7 @@ export interface ICategoryMiniResponseWithLogo extends ICategoryMiniResponse {
 
 export interface ICategoryResponse extends ICategoryMiniResponseWithLogo {
   description: string;
-  type: string;
+  type: categoryTypeEnum;
   tournamentCount: number;
   activeTournamentCount: number;
 }

@@ -10,6 +10,8 @@ export interface ICategoryMiniResponseWithLogo extends ICategoryMiniResponse {
 export interface ICategoryResponse extends ICategoryMiniResponseWithLogo {
   description: string;
   type: string;
+  tournamentCount: number;
+  activeTournamentCount: number;
 }
 
 export interface IExtendedCategoryResponse extends ICategoryResponse {

@@ -109,7 +109,7 @@ export class GroupController {
     @CurrentUser() user: ValidatedUserDto,
   ) {
     return await this.groupService.create(createGroupDto, user.id);
-  }
+  } // TODO: check if it is necessary to return full body here
 
   @Patch(':groupId')
   @UseGuards(GroupAdminGuard)

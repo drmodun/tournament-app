@@ -91,7 +91,10 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           ...this.getMappingObject(GroupResponsesEnum.BASE),
           createdAt: group.createdAt,
           tournamentCount: sql<number>`cast(count(${participation.tournamentId}) as int)`,
-          subscriberCount: countDistinct(groupFollower.userId), // FOr testing purposes
+          subscriberCount: db.$count(
+            groupFollower,
+            eq(groupFollower.groupId, group.id),
+          ),
         };
       default:
         return this.getMappingObject(GroupResponsesEnum.BASE);
@@ -149,6 +152,8 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       const field = group[key];
       if (!field) return;
       const parsed = value as string;
+
+      // TODO: implement full text search for title fields (and potentially vector search)
 
       switch (key) {
         case 'name':

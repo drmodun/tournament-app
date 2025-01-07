@@ -11,6 +11,7 @@ import { GroupMembershipModule } from './group-membership/group-membership.modul
 import { FollowersModule } from './followers/followers.module';
 import { GroupJoinRequestsModule } from './group-join-requests/group-join-requests.module';
 import { GroupInvitesModule } from './group-invites/group-invites.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { GroupInvitesModule } from './group-invites/group-invites.module';
     FollowersModule,
     GroupJoinRequestsModule,
     GroupInvitesModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

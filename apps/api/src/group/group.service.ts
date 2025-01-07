@@ -64,7 +64,6 @@ export class GroupService {
   }
 
   async update(id: number, updateGroupDto: UpdateGroupRequest) {
-    // First check if group exists
     await this.findOne(id);
 
     const action = await this.repository.updateEntity(id, updateGroupDto);
@@ -79,7 +78,6 @@ export class GroupService {
   }
 
   async remove(id: number) {
-    // First check if group exists
     await this.findOne(id);
 
     const action = await this.repository.deleteEntity(id);

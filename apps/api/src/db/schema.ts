@@ -270,7 +270,7 @@ export const tournament = pgTable('tournament', {
   maximumMMR: integer('maximum_mmr').default(3000),
   location: text('location'),
   maxParticipants: integer('max_participants').default(32),
-  category: integer('category_id')
+  categoryId: integer('category_id')
     .references(() => category.id, {
       onDelete: 'cascade',
     })

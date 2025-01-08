@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./checkboxGroup.module.scss";
 import Checkbox from "components/checkbox";
 import { CheckboxProps } from "components/checkbox/checkbox";
@@ -14,6 +14,7 @@ interface CheckboxGroupProps {
   name?: string;
   isReactHookForm?: boolean;
   reactFormHookProps?: Object;
+  defaultValues?: boolean[];
 }
 
 export default function CheckboxGroup({
@@ -24,20 +25,25 @@ export default function CheckboxGroup({
   name,
   isReactHookForm = false,
   reactFormHookProps,
+  defaultValues,
 }: CheckboxGroupProps) {
   const [indexes, setIndexes] = useState<number[]>([]);
   const methods = useFormContext();
+
+  const reactFormHookValidation = (elements: number[]) => {
+    name &&
+      isReactHookForm &&
+      methods.setValue(name, elements, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+  };
 
   const handleClick = (_index: number) => {
     if (indexes.includes(_index)) {
       setIndexes((prevIndexes) => {
         const elements = prevIndexes.filter((index) => index !== _index);
-        name &&
-          isReactHookForm &&
-          methods.setValue(name, elements, {
-            shouldValidate: true,
-            shouldDirty: true,
-          });
+        reactFormHookValidation(elements);
         return elements;
       });
 
@@ -46,15 +52,23 @@ export default function CheckboxGroup({
 
     setIndexes((_indexes) => {
       const elements = [..._indexes, _index];
-      name &&
-        isReactHookForm &&
-        methods.setValue(name, elements, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
+      reactFormHookValidation(elements);
       return elements;
     });
   };
+
+  useEffect(() => {
+    if (defaultValues == undefined) return;
+
+    for (let i = 0; i < defaultValues.length; i++) {
+      if (!defaultValues[i]) continue;
+      setIndexes((prevIndexes) => {
+        const elements = [...prevIndexes, i];
+        reactFormHookValidation(elements);
+        return elements;
+      });
+    }
+  }, []);
 
   return (
     <div style={style}>
@@ -73,7 +87,7 @@ export default function CheckboxGroup({
               labelVariant={button.labelVariant}
               onSelect={button.onSelect && button.onSelect}
               disabled={button.disabled}
-              key={button.label || ""}
+              key={button.label || _index}
               isSelected={indexes.includes(_index)}
             />
           </div>

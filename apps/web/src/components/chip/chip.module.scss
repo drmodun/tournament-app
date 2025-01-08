@@ -11,10 +11,14 @@
   display: flex;
   gap: $halfPadding;
   align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .label {
   font-size: $fontSize;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }

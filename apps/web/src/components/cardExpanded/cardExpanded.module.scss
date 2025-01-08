@@ -110,3 +110,9 @@
   gap: $halfPadding / 2;
   flex-wrap: wrap;
 }
+
+.locationDetails {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}

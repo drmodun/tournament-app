@@ -2,14 +2,16 @@
 
 .screen {
   margin-top: $doublePadding * 2;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  width: 60%;
+
+  gap: $doublePadding;
   padding-left: $horizontalMargin;
-  padding-right: $horizontalMargin;
+  padding-right: $padding;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    width: 100%;
+    padding-right: $horizontalMargin;
+  }
 
   @media screen and (max-width: $tabletBreakpoint) {
     padding-left: $doublePadding;
@@ -18,11 +20,39 @@
 
   padding-bottom: $doublePadding * 2;
   padding-top: $doublePadding * 2;
+  overflow-x: visible;
+}
+
+.sidebar {
+  height: 100vh;
+  width: 40%;
+  padding-right: $horizontalMargin;
+  padding-top: 4 * $doublePadding;
+  position: fixed;
+  left: 60%;
+  top: 0;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    display: none;
+  }
 }
 
 .navbar {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 0;
   transform: translate(-50%, 0);
+  z-index: 96;
+  background-color: $dark;
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.promotedEvents {
+  height: calc(100vh - 4 * $doublePadding);
+  overflow-x: visible;
 }

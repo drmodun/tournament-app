@@ -7,6 +7,7 @@ import { DrawerProvider } from "utils/context/drawerContext";
 import Drawer from "views/drawer";
 import { ThemeProvider } from "utils/context/themeContext";
 import { useThemeContext } from "utils/hooks/useThemeContext";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 export default function RootLayout({
   children,
@@ -16,14 +17,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThemeProvider>
-        <body className={globals[`${useThemeContext().theme}BackgroundColor`]}>
-          <ToastProvider>
-            <DrawerProvider>
-              {children}
-              <Drawer />
-            </DrawerProvider>
-          </ToastProvider>
-        </body>
+        <APIProvider apiKey={""}>
+          <body
+            className={globals[`${useThemeContext().theme}BackgroundColor`]}
+          >
+            <ToastProvider>
+              <DrawerProvider>
+                {children}
+                <Drawer />
+              </DrawerProvider>
+            </ToastProvider>
+          </body>
+        </APIProvider>
       </ThemeProvider>
     </html>
   );

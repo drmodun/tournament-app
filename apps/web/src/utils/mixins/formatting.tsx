@@ -61,7 +61,7 @@ export const calculateBestFutureDateFormat = (date: Date) => {
 };
 
 export const formatDate = (date: Date) => {
-  return dateFormat(date, "mmm dS, 'yy");
+  return dateFormat(date, "mmm dS, 'yy").toLowerCase();
 };
 
 export const calculateBestValueFormat = (targetValue: number) => {

@@ -81,6 +81,8 @@ export default function PromotedEvents() {
           organizerName={"Queens of the Stone Age"}
           tags={["beginner friendly", "databases", "machine learning/ai"]}
           category={"programming"}
+          location="online"
+          locationDetails="Split, Croatia"
         />
         <CardExpanded
           variant="dark"

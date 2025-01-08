@@ -16,6 +16,7 @@ export interface ButtonProps {
   labelClassName?: string;
   submit?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -28,25 +29,31 @@ export default function Button({
   labelClassName = "",
   submit = false,
   onClick,
+  disabled = false,
 }: ButtonProps) {
   return (
     <button
       className={clsx(
         styles.button,
-        globals[`${variant}BackgroundColorDynamic`],
+        disabled && styles.disabled,
+        disabled
+          ? globals.disabledBackgroundColor
+          : globals[`${variant}BackgroundColorDynamic`],
+
         className,
         label && globals.doublePaddingHorizontal,
       )}
       style={style}
-      onClick={onClick ? onClick : () => {}}
+      onClick={onClick && !disabled ? onClick : () => {}}
       type={submit ? "submit" : "button"}
+      disabled={disabled}
     >
       {label && (
         <p
           className={clsx(
             styles.label,
             labelClassName,
-            globals[`${variant}TextColor`],
+            disabled ? globals.lightColor : globals[`${variant}TextColor`],
           )}
           style={labelStyle}
         >

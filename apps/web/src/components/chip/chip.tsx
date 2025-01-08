@@ -9,6 +9,7 @@ import { clsx } from "clsx";
 interface ChipProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
+  className?: string;
   label?: string;
   variant?: Variants;
   activeBorderVariant?: Variants;
@@ -18,6 +19,7 @@ interface ChipProps {
 export default function Chip({
   children,
   style,
+  className,
   label,
   variant = "light",
   activeBorderVariant,
@@ -31,7 +33,11 @@ export default function Chip({
 
   return (
     <button
-      className={clsx(styles.chip, globals[`${variant}BackgroundColorDynamic`])}
+      className={clsx(
+        className,
+        styles.chip,
+        globals[`${variant}BackgroundColorDynamic`],
+      )}
       style={style}
       onClick={handleClick}
     >

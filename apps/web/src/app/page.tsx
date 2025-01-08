@@ -22,6 +22,7 @@ import Card from "components/card";
 import { useToastContext } from "utils/hooks/useToastContext";
 import CardExpanded from "components/cardExpanded";
 import RichEditor from "components/richEditor/richEditor";
+import SlideButton from "components/slideButton";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -63,6 +64,9 @@ export default function Web() {
       <h1 style={{ marginBottom: 64 }}>Web</h1>
       <RichEditor />
       <RichEditor variant="light" />
+      <SlideButton
+        options={["HIIII", "hiIII GUYSSSS", "I HOLD THE WHEELLLLLLL"]}
+      />
       <Button
         label="hi guys"
         variant="dark"

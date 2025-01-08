@@ -38,7 +38,7 @@ export default function Input({
         <p
           className={clsx(
             globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-            styles.label,
+            globals.label,
           )}
           style={labelStyle}
         >

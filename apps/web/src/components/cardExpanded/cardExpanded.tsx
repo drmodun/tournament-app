@@ -15,6 +15,8 @@ import {
 } from "utils/mixins/formatting";
 import Chip from "components/chip";
 import FlagIcon from "@mui/icons-material/Flag";
+import PublicIcon from "@mui/icons-material/Public";
+import PlaceIcon from "@mui/icons-material/Place";
 
 export interface CardExpandedProps {
   children?: React.ReactNode;
@@ -34,6 +36,8 @@ export interface CardExpandedProps {
   category?: string;
   image?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  location?: "offline" | "online" | "hybrid";
+  locationDetails?: string;
 }
 
 export default function Card({
@@ -53,6 +57,8 @@ export default function Card({
   category,
   image,
   onClick,
+  location,
+  locationDetails,
 }: CardExpandedProps) {
   return (
     <button
@@ -92,9 +98,46 @@ export default function Card({
             >{`${formatDate(new Date(startDate))} - ${formatDate(new Date(endDate))}`}</p>
           )}
         </div>
-        <Chip label={organizerName} variant="secondary">
-          <FlagIcon className={clsx(globals.lightFill, styles.flagIcon)} />
-        </Chip>
+        <div className={styles.dates}>
+          {organizerName && (
+            <Chip label={organizerName} variant="secondary">
+              <FlagIcon className={clsx(globals.lightFill, styles.flagIcon)} />
+            </Chip>
+          )}
+          {location &&
+            (location == "offline" ? (
+              <div className={styles.locationDetails}>
+                <p className={globals[`${textColor(variant)}Color`]}>
+                  {locationDetails?.toLowerCase()}
+                </p>
+                <PlaceIcon
+                  className={clsx(globals.lightFill, styles.flagIcon)}
+                />
+              </div>
+            ) : location == "online" ? (
+              <div className={styles.locationDetails}>
+                <p className={globals[`${textColor(variant)}Color`]}>online</p>
+                <PublicIcon
+                  className={clsx(globals.lightFill, styles.flagIcon)}
+                />
+              </div>
+            ) : (
+              <div className={styles.locationDetails}>
+                <p className={globals[`${textColor(variant)}Color`]}>
+                  {locationDetails?.toLowerCase()}
+                </p>
+                <PlaceIcon
+                  className={clsx(globals.lightFill, styles.flagIcon)}
+                />
+                <p className={globals[`${textColor(variant)}Color`]}>
+                  or online
+                </p>
+                <PublicIcon
+                  className={clsx(globals.lightFill, styles.flagIcon)}
+                />
+              </div>
+            ))}
+        </div>
       </div>
       <div className={styles.bottomWrapper}>
         <div className={styles.tags}>

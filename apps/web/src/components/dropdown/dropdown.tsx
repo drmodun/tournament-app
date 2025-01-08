@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import styles from "./dropdown.module.scss";
 import { ButtonProps } from "components/button/button";
 import clsx from "clsx";
@@ -41,6 +41,10 @@ interface DropdownProps {
   isReactHookForm?: boolean;
   reactFormHookProps?: Object;
   required?: boolean;
+  optionsClassName?: string;
+  innerWrapperClassName?: string;
+  className?: string;
+  defaultValue?: string;
 }
 
 export default function Dropdown({
@@ -67,6 +71,10 @@ export default function Dropdown({
   isReactHookForm = false,
   reactFormHookProps,
   required = false,
+  optionsClassName,
+  innerWrapperClassName,
+  className,
+  defaultValue,
 }: DropdownProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [isDropped, setIsDropped] = useState<boolean>(false);
@@ -109,6 +117,20 @@ export default function Dropdown({
     onSelect && onSelect(index);
   };
 
+  useEffect(() => {
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].label === defaultValue) {
+        setSelected(i);
+        isReactHookForm &&
+          name &&
+          methods.setValue(name, options[i].label, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+      }
+    }
+  }, []);
+
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const search: string = event.target.value.toLowerCase();
     for (let option of options) {
@@ -130,13 +152,13 @@ export default function Dropdown({
   };
 
   return (
-    <div style={style} className={styles.wrapper}>
-      <div className={styles.innerWrapper}>
+    <div style={style} className={clsx(styles.wrapper, className)}>
+      <div className={clsx(styles.innerWrapper, innerWrapperClassName)}>
         {label && (
           <p
             className={clsx(
               globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-              styles.label,
+              globals.label,
             )}
             style={labelStyle}
           >
@@ -173,10 +195,14 @@ export default function Dropdown({
           </Button>
         </div>
         <div
-          className={clsx(styles.optionsWrapper, isDropped && styles.zIndex)}
+          className={clsx(
+            styles.optionsWrapper,
+            isDropped && styles.zIndex,
+            optionsClassName,
+          )}
         >
           <div
-            style={optionWrapperStyle}
+            style={{ ...optionWrapperStyle, width: "100%" }}
             className={clsx(
               animate
                 ? isDropped

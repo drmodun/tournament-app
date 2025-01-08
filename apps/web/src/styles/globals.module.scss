@@ -404,6 +404,12 @@
   text-decoration: underline;
 }
 
+.label {
+  font-size: $fontSize * 0.875;
+  margin-bottom: $halfPadding / 2;
+  white-space: nowrap;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

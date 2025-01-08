@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, HTMLInputTypeAttribute, ChangeEventHandler } from "react";
+import {
+  useState,
+  HTMLInputTypeAttribute,
+  ChangeEventHandler,
+  useEffect,
+  useRef,
+  MutableRefObject,
+} from "react";
 import styles from "./input.module.scss";
 import globals from "styles/globals.module.scss";
 import {
@@ -10,7 +17,11 @@ import {
   inverseTextColor,
 } from "types/styleTypes";
 import { clsx } from "clsx";
-import { useFormContext } from "react-hook-form";
+import {
+  Controller,
+  useFormContext,
+  UseFormRegisterReturn,
+} from "react-hook-form";
 
 interface InputProps {
   style?: React.CSSProperties;
@@ -30,6 +41,10 @@ interface InputProps {
   className?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onSubmit?: Function;
+  min?: string;
+  max?: string;
+  defaultValue?: string;
+  fullClassName?: string;
 }
 
 export default function Input({
@@ -50,6 +65,10 @@ export default function Input({
   className,
   onChange = () => {},
   onSubmit = () => {},
+  min,
+  max,
+  defaultValue,
+  fullClassName,
 }: InputProps) {
   const [value, setValue] = useState<string>("");
   const methods = useFormContext();
@@ -60,12 +79,12 @@ export default function Input({
   };
 
   return (
-    <div>
+    <div className={fullClassName}>
       {label && (
         <p
           className={clsx(
             globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-            styles.label,
+            globals.label,
           )}
           style={labelStyle}
         >
@@ -74,31 +93,40 @@ export default function Input({
       )}
       <div className={styles.inputWrapper}>
         {isReactFormHook ? (
-          <input
-            type={type}
-            value={value}
-            placeholder={placeholder}
-            className={clsx(
-              styles.input,
-              className,
-              doesSubmit && styles.submitInput,
-              variant == "light" && styles.lightPlaceholder,
-              globals[`${variant}BackgroundColorDynamic`],
-              globals[`${textColor(variant)}Color`],
+          <Controller
+            name={name}
+            defaultValue={defaultValue}
+            render={() => (
+              <input
+                type={type}
+                placeholder={placeholder}
+                className={clsx(
+                  type == "range" && styles.slider,
+                  styles.input,
+                  className,
+                  doesSubmit && styles.submitInput,
+                  variant == "light" && styles.lightPlaceholder,
+                  globals[`${variant}BackgroundColorDynamic`],
+                  globals[`${textColor(variant)}Color`],
+                )}
+                min={min}
+                max={max}
+                style={style}
+                {...methods.register(name, {
+                  required: required,
+                  onChange: handleChange,
+                  ...reactFormHookProps,
+                })}
+              />
             )}
-            style={style}
-            {...methods.register(name, {
-              required: required,
-              ...reactFormHookProps,
-            })}
-            onChange={handleChange}
           />
         ) : (
           <input
             type={type}
-            value={value}
+            value={value == "" ? defaultValue : value}
             placeholder={placeholder}
             className={clsx(
+              type == "range" && styles.slider,
               styles.input,
               className,
               doesSubmit && styles.submitInput,
@@ -106,6 +134,8 @@ export default function Input({
               globals[`${variant}BackgroundColorDynamic`],
               globals[`${textColor(variant)}Color`],
             )}
+            min={min}
+            max={max}
             style={style}
             onChange={handleChange}
           />

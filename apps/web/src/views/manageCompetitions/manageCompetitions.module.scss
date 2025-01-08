@@ -33,6 +33,7 @@
   display: grid;
   width: 100%;
   gap: $padding;
+  grid-template-columns: repeat(auto-fill, minmax($phoneBreakpoint, 1fr));
 }
 
 .dialog {
@@ -48,7 +49,7 @@
 .dialogOption {
   display: flex;
   gap: $halfPadding;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .optionName {

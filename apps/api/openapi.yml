@@ -149,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2025-01-07T16:34:10.927Z
+                        updatedAt: &a2 2025-01-09T02:25:21.494Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -245,7 +245,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a2
-                        createdAt: 2025-01-07T16:34:10.927Z
+                        createdAt: 2025-01-09T02:25:21.494Z
                         following: 0
                         location: New York
           description: ""
@@ -301,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2025-01-07T16:34:10.927Z
+                    updatedAt: &a3 2025-01-09T02:25:21.494Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -329,7 +329,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2025-01-07T16:34:10.927Z
+                    createdAt: 2025-01-09T02:25:21.494Z
                     following: 0
                     location: New York
           description: ""
@@ -583,7 +583,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-07T16:34:11.097Z
+                        updatedAt: 2025-01-09T02:25:21.694Z
                         memberCount: 50
                 extended:
                   value:
@@ -609,9 +609,9 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-07T16:34:11.097Z
+                        updatedAt: 2025-01-09T02:25:21.694Z
                         memberCount: 50
-                        createdAt: 2025-01-07T16:34:11.097Z
+                        createdAt: 2025-01-09T02:25:21.694Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -640,7 +640,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2025-01-07T16:34:11.097Z
+                updatedAt: 2025-01-09T02:25:21.694Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -694,7 +694,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-07T16:34:11.097Z
+                    updatedAt: 2025-01-09T02:25:21.694Z
                     memberCount: 50
                 extended:
                   value:
@@ -707,9 +707,9 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-07T16:34:11.097Z
+                    updatedAt: 2025-01-09T02:25:21.694Z
                     memberCount: 50
-                    createdAt: 2025-01-07T16:34:11.097Z
+                    createdAt: 2025-01-09T02:25:21.694Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -749,7 +749,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2025-01-07T16:34:11.097Z
+                updatedAt: 2025-01-09T02:25:21.694Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -793,7 +793,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-07T16:34:11.097Z
+                  updatedAt: 2025-01-09T02:25:21.694Z
                   memberCount: 50
                 members: []
           description: ""
@@ -822,7 +822,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-07T16:34:11.097Z
+                  updatedAt: 2025-01-09T02:25:21.694Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -851,7 +851,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-07T16:34:11.097Z
+                  updatedAt: 2025-01-09T02:25:21.694Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -969,7 +969,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-01-07T16:34:11.103Z
+                        createdAt: 2025-01-09T02:25:21.700Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -995,7 +995,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2025-01-07T16:34:11.103Z
+                        createdAt: 2025-01-09T02:25:21.700Z
                         country: country
                         id: 1
                         username: username
@@ -1025,7 +1025,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2025-01-07T16:34:11.103Z
+                        createdAt: 2025-01-09T02:25:21.700Z
                         country: country
                         name: name
                         logo: logo
@@ -1114,7 +1114,7 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-01-07T16:34:11.103Z
+                    createdAt: 2025-01-09T02:25:21.700Z
                 UserMembershipResponseWithDates:
                   value:
                     userId: 1
@@ -1122,7 +1122,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-01-07T16:34:11.103Z
+                    createdAt: 2025-01-09T02:25:21.700Z
                     country: country
                     id: 1
                     username: username
@@ -1134,7 +1134,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-01-07T16:34:11.103Z
+                    createdAt: 2025-01-09T02:25:21.700Z
                     country: country
                     name: name
                     logo: logo
@@ -1269,7 +1269,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-01-07T16:34:11.108Z
+                    createdAt: 2025-01-09T02:25:21.704Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1277,10 +1277,10 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2025-01-07T16:34:11.108Z
+                    updatedAt: 2025-01-09T02:25:21.704Z
                 mini:
                   value:
-                    createdAt: 2025-01-07T16:34:11.108Z
+                    createdAt: 2025-01-09T02:25:21.704Z
                     id: 1
                     username: john_doe
           description: ""
@@ -1415,7 +1415,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: 2025-01-07T16:34:10.927Z
+                        updatedAt: 2025-01-09T02:25:21.494Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1436,7 +1436,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-01-07T16:34:11.112Z
+                        createdAt: 2025-01-09T02:25:21.712Z
                 with-group:
                   value:
                     metadata:
@@ -1461,7 +1461,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-07T16:34:11.097Z
+                        updatedAt: 2025-01-09T02:25:21.694Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1484,7 +1484,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-01-07T16:34:11.112Z
+                        createdAt: 2025-01-09T02:25:21.712Z
           description: ""
       tags: &a12
         - group-join-requests
@@ -1578,7 +1578,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: 2025-01-07T16:34:10.927Z
+                    updatedAt: 2025-01-09T02:25:21.494Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -1586,7 +1586,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-01-07T16:34:11.112Z
+                    createdAt: 2025-01-09T02:25:21.712Z
                 with-group:
                   value:
                     id: 1
@@ -1598,7 +1598,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-07T16:34:11.097Z
+                    updatedAt: 2025-01-09T02:25:21.694Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -1608,7 +1608,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-01-07T16:34:11.112Z
+                    createdAt: 2025-01-09T02:25:21.712Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -1735,7 +1735,7 @@ paths:
                         email: john@doe.com
                         followers: 0
                         level: 0
-                        updatedAt: 2025-01-07T16:34:11.118Z
+                        updatedAt: 2025-01-09T02:25:21.717Z
                         message: Would you like to join our group?
                         groupId: 1
                 with-mini-user:
@@ -1758,7 +1758,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-01-07T16:34:11.118Z
+                        createdAt: 2025-01-09T02:25:21.717Z
                 with-group:
                   value:
                     metadata:
@@ -1788,7 +1788,7 @@ paths:
                         focus: Hybrid
                         location: New York
                         type: Public
-                        updatedAt: 1/7/2025
+                        updatedAt: 1/9/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -1810,7 +1810,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-01-07T16:34:11.118Z
+                        createdAt: 2025-01-09T02:25:21.718Z
           description: ""
       tags: &a14
         - group-invites
@@ -1904,7 +1904,7 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2025-01-07T16:34:11.118Z
+                    updatedAt: 2025-01-09T02:25:21.717Z
                     message: Would you like to join our group?
                     groupId: 1
                 with-mini-user:
@@ -1912,7 +1912,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-01-07T16:34:11.118Z
+                    createdAt: 2025-01-09T02:25:21.717Z
                 with-group:
                   value:
                     id: 1
@@ -1927,14 +1927,14 @@ paths:
                     focus: Hybrid
                     location: New York
                     type: Public
-                    updatedAt: 1/7/2025
+                    updatedAt: 1/9/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-01-07T16:34:11.118Z
+                    createdAt: 2025-01-09T02:25:21.718Z
           description: ""
       tags: *a14
     patch:

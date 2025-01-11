@@ -4,13 +4,9 @@ import styles from "./manageUser.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Link from "next/link";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import Card from "components/card";
-import CardExpanded from "components/cardExpanded";
 import { useRef, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import Dialog from "components/dialog";
-import Button from "components/button";
 import Input from "components/input";
 import Chip from "components/chip";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -28,8 +24,8 @@ type Interest = {
 };
 
 export default function ManageUser() {
-  const [profilePicture, setProfilePicture] = useState<string>(
-    "https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZmVuY2luZ3xlbnwwfHwwfHx8MA%3D%3D",
+  const [profilePicture] = useState<string>(
+    "https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZmVuY2luZ3xlbnwwfHwwfHx8MA%3D%3D"
   );
   const [username, setUsername] = useState<string>("test username");
   const [dialogActive, setDialogActive] = useState<boolean>(false);
@@ -148,6 +144,7 @@ export default function ManageUser() {
       </Dialog>
       <div className={styles.profileEdit}>
         <button
+          title="edit profile button"
           className={styles.editButton}
           onClick={() => setDialogActive(true)}
         >
@@ -166,7 +163,7 @@ export default function ManageUser() {
               className={clsx(
                 styles.username,
                 globals.largeText,
-                globals[`${textColorTheme}Color`],
+                globals[`${textColorTheme}Color`]
               )}
             >
               {username}
@@ -176,7 +173,7 @@ export default function ManageUser() {
             <b
               className={clsx(
                 styles.interest,
-                globals[`${textColorTheme}Color`],
+                globals[`${textColorTheme}Color`]
               )}
             >
               interests

@@ -3,17 +3,12 @@
 import styles from "./manageSettings.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import Link from "next/link";
-import EditIcon from "@mui/icons-material/Edit";
-import Dialog from "components/dialog";
 import Button from "components/button";
-import Input from "components/input";
-import Chip from "components/chip";
 import { useState } from "react";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CheckboxGroup from "components/checkboxGroup";
 import { CheckboxProps } from "components/checkbox/checkbox";
-import { textColor, TextVariants } from "types/styleTypes";
+import { textColor } from "types/styleTypes";
 
 export default function ManageSettings() {
   const { theme, setTheme } = useThemeContext();
@@ -55,7 +50,7 @@ export default function ManageSettings() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <div className={styles.setting}>

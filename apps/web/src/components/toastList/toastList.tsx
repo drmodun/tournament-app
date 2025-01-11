@@ -10,7 +10,7 @@ export default function ToastList({ style }: { style?: React.CSSProperties }) {
   const handleClick = (
     e: MouseEvent<HTMLButtonElement>,
     onClick: MouseEventHandler<HTMLButtonElement> | undefined,
-    id: number | undefined,
+    id: number | undefined
   ) => {
     onClick && onClick(e);
     id && toastContext.removeToast(id);
@@ -18,7 +18,10 @@ export default function ToastList({ style }: { style?: React.CSSProperties }) {
   return (
     <div className={styles.toastList} style={style}>
       {toastContext.toasts.map((toast: ToastProps, i: number) => (
-        <div className={styles.toastWrapper}>
+        <div
+          className={styles.toastWrapper}
+          key={toast.message + "wrapper" + i}
+        >
           <Toast
             key={i}
             message={toast.message}

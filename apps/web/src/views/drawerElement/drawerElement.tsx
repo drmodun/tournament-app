@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import styles from "./drawerElement.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
@@ -9,6 +9,7 @@ import { useDrawerContext } from "utils/hooks/useDrawerContext";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { SvgIconTypeMap } from "@mui/material";
 import Link from "next/link";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 
 export interface DrawerElementProps {
   style?: React.CSSProperties;
@@ -28,6 +29,7 @@ export default function DrawerElement({
   href = "/",
 }: DrawerElementProps) {
   const drawerContext = useDrawerContext();
+  const { theme } = useThemeContext();
 
   const handleClick = () => drawerContext.setDrawerOpen(false);
 

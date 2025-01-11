@@ -5,8 +5,7 @@ import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor, TextVariants } from "types/styleTypes";
-import Map from "components/map";
+import { textColor } from "types/styleTypes";
 import { MarkerLocation, Poi } from "utils/mixins/maps";
 import PlaceIcon from "@mui/icons-material/Place";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -175,7 +174,7 @@ export default function ManageCompetitions() {
     <div className={clsx(styles.wrapper)}>
       <div className={clsx(styles.innerWrapper)}>
         <div className={styles.mapWrapper}>
-          {/*
+          {/*  TODO: enable in prod, saving credits for now
           <Map
             locations={dummyLocations}
             onMarkerClick={handleClick}
@@ -186,7 +185,7 @@ export default function ManageCompetitions() {
         <div className={styles.locationInfos} ref={sidebarRef}>
           {selectedLocation &&
             selectedLocation.pois.map((poi) => (
-              <div className={styles.locationInfoWrapper}>
+              <div className={styles.locationInfoWrapper} key={poi.id}>
                 <LocationInfo poi={poi} />
               </div>
             ))}
@@ -203,7 +202,7 @@ const LocationInfo = ({ poi }: { poi: Poi }) => {
     <div
       className={clsx(
         globals[`${textColorTheme}BackgroundColorDynamic`],
-        styles.locationInfo,
+        styles.locationInfo
       )}
     >
       <div className={styles.top}>
@@ -212,7 +211,7 @@ const LocationInfo = ({ poi }: { poi: Poi }) => {
             className={clsx(
               globals.largeText,
               globals[`${theme}Color`],
-              styles.poiTitle,
+              styles.poiTitle
             )}
             title={poi.name}
           >

@@ -5,13 +5,8 @@ import styles from "./registerForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Input from "components/input";
-import { textColor, TextVariants } from "types/styleTypes";
-import {
-  FormProvider,
-  SubmitHandler,
-  useForm,
-  UseFormReturn,
-} from "react-hook-form";
+import { TextVariants } from "types/styleTypes";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "components/button";
 
 type RegisterInputs = {
@@ -20,7 +15,7 @@ type RegisterInputs = {
   password: "string";
 };
 
-export default function LoginForm({
+export default function RegisterForm({
   variant = "light",
 }: {
   variant?: TextVariants;

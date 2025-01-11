@@ -5,10 +5,10 @@ import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Dialog from "components/dialog";
 import Input from "components/input";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CheckboxGroup from "components/checkboxGroup";
-import { textColor, TextVariants } from "types/styleTypes";
+import { textColor } from "types/styleTypes";
 import AddIcon from "@mui/icons-material/Add";
 import Dropdown from "components/dropdown";
 import { CardExpandedProps } from "components/cardExpanded/cardExpanded";
@@ -16,7 +16,6 @@ import CardExpanded from "components/cardExpanded";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "components/button";
 import SlideButton from "components/slideButton";
-import { isEqual, difference } from "lodash";
 
 type CompetitionInputs = {
   name: string;
@@ -65,14 +64,13 @@ export default function ManageCompetitions() {
   const hasChanged = () => {
     const curr = editMethods.getValues();
     const prev = exampleCards[editIndex];
-    if (
-      curr.category !== prev.category ||
-      curr.location !== prev.location ||
-      curr.eloConstraint !== (prev.eloConstraint ?? false) ||
-      curr.name !== prev?.label ||
-      curr.public !== (prev.public ?? false) ||
-      curr.leagueFormat !== (prev.leagueFormat ?? false)
-    )
+    if (!prev) return;
+    if (curr.category !== prev.category || curr.location !== prev.location)
+      /* curr.eloConstraint !== (prev.eloConstraint ?? false) || TODO: enable this when global types are imported
+     curr.name !== prev?.label ||
+     curr.public !== (prev.public ?? false) ||
+     curr.leagueFormat !== (prev.leagueFormat ?? false)
+     */
       return setCanSubmitEditForm(true);
     return setCanSubmitEditForm(false);
   };
@@ -167,7 +165,7 @@ export default function ManageCompetitions() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <Dialog
@@ -467,7 +465,11 @@ export default function ManageCompetitions() {
       </Dialog>
       <div className={styles.competitionsTitle}>
         <b className={clsx(globals[`${theme}Color`])}>your competitions</b>
-        <button className={styles.addButton} onClick={handleAddCompetition}>
+        <button
+          title="add competition"
+          className={styles.addButton}
+          onClick={handleAddCompetition}
+        >
           <AddIcon className={styles[`${theme}Fill`]} />
         </button>
       </div>

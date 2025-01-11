@@ -1,17 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import styles from "./registerDetailsForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Input from "components/input";
 import { textColor, TextVariants } from "types/styleTypes";
-import {
-  FormProvider,
-  SubmitHandler,
-  useForm,
-  UseFormReturn,
-} from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "components/button";
 import { countries } from "country-flag-icons";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
@@ -49,7 +44,7 @@ export default function RegisterDetailsForm({
   const [placeId, setPlaceId] = useState<string>();
 
   const handleAutocomplete = (
-    autocomplete: google.maps.places.Autocomplete,
+    autocomplete: google.maps.places.Autocomplete
   ) => {
     listener && google.maps.event.removeListener(listener);
     setPlaceId(autocomplete.getPlace().place_id);
@@ -134,7 +129,7 @@ export default function RegisterDetailsForm({
                     fetchAutocomplete(e.target).then((autocomplete) => {
                       const tempListener = autocomplete.addListener(
                         "place_changed",
-                        () => handleAutocomplete(autocomplete),
+                        () => handleAutocomplete(autocomplete)
                       );
                       setListener(tempListener);
                     });

@@ -77,6 +77,7 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
       </div>
       <div className={styles.mobileNav}>
         <button
+          title="open menu"
           className={styles.mobileNavButton}
           onClick={() => {
             drawerContext.setDrawerOpen(!drawerContext.drawerOpen);

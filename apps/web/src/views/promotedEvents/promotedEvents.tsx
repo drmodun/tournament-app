@@ -1,10 +1,7 @@
 import styles from "./promotedEvents.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import Link from "next/link";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import Card from "components/card";
-import CardExpanded from "components/cardExpanded";
+import Card from "components/cardExpanded/cardExpanded";
 
 export default function PromotedEvents() {
   const propEvents = [
@@ -70,113 +67,16 @@ export default function PromotedEvents() {
         promoted events
       </h1>
       <div className={clsx(styles.events)}>
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-          location="online"
-          locationDetails="Split, Croatia"
-        />
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-        />
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-        />
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-        />
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-        />
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-        />
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-        />
-        <CardExpanded
-          variant="dark"
-          image="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
-          label="HI "
-          participants={32189321}
-          registrationTillDate={Date.now()}
-          startDate={Date.now()}
-          endDate={Date.now()}
-          organizerName={"Queens of the Stone Age"}
-          tags={["beginner friendly", "databases", "machine learning/ai"]}
-          category={"programming"}
-        />
-        {/*propEvents.map((event, index) => (
+        {propEvents.map((event, index) => (
           <Card
+            key={index}
             participants={event.participants}
             label={event.title}
             image={event.image}
             viewers={event.viewers}
             variant="dark"
           />
-        ))*/}
+        ))}
       </div>
     </div>
   );

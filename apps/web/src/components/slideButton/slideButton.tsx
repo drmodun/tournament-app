@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./slideButton.module.scss";
 import globals from "styles/globals.module.scss";
 import { textColor, Variants } from "types/styleTypes";
@@ -39,7 +39,7 @@ export default function SlideButton({
   const [selected, setSelected] = useState<number>(0);
   const methods = useFormContext();
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     setSelected((prev) => {
       const index = (prev + 1) % options.length;
@@ -80,7 +80,7 @@ export default function SlideButton({
           : globals[`${variant}BackgroundColor`],
 
         className,
-        label && globals.doublePaddingHorizontal,
+        label && globals.doublePaddingHorizontal
       )}
       style={style}
       onClick={handleClick}
@@ -88,18 +88,19 @@ export default function SlideButton({
     >
       {options.map((option, i) => (
         <div
+          key={i}
           className={clsx(
             styles.option,
             globals[
               `${variant + (selected == i ? "Muted" : "")}BackgroundColor`
-            ],
+            ]
           )}
         >
           <p
             className={clsx(
               labelClassName,
               styles.optionText,
-              globals[`${textColor(variant)}Color`],
+              globals[`${textColor(variant)}Color`]
             )}
             style={labelStyle}
           >

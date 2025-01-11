@@ -1,10 +1,7 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import styles from "./profileAchievements.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import Button from "components/button";
-import trophies from "/public/trophies.png";
-import Image from "next/image";
 
 export default function ProfileAchievements() {
   return (

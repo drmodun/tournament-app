@@ -30,7 +30,6 @@ export default function Drawer({
   const { theme } = useThemeContext();
 
   const colorTheme: Variants = variant ?? theme;
-  const textColorTheme = textColor(colorTheme);
 
   return (
     <div
@@ -38,7 +37,7 @@ export default function Drawer({
         styles.wrapper,
         className,
         !drawerContext.drawerOpen && !animate && styles.hidden,
-        !drawerContext.drawerOpen && animate && styles.hiddenAnimate,
+        !drawerContext.drawerOpen && animate && styles.hiddenAnimate
       )}
       style={style}
       onClick={(e) => {
@@ -51,7 +50,7 @@ export default function Drawer({
         className={clsx(
           styles.drawer,
           globals[`${colorTheme}BackgroundColor`],
-          animate && !drawerContext.drawerOpen && styles.animate,
+          animate && !drawerContext.drawerOpen && styles.animate
         )}
       >
         <DrawerElement

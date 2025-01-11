@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEventHandler, useEffect } from "react";
+import { useEffect } from "react";
 import styles from "./dialog.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
@@ -33,36 +33,49 @@ export default function Dialog({
       disableBodyScroll(document.body);
     } else {
       enableBodyScroll(document.body);
-      clearAllBodyScrollLocks();
     }
+
+    return () => {
+      clearAllBodyScrollLocks();
+    };
   }, [active]);
 
-  document.onkeydown = (evt) => {
-    if (evt.key === "Escape") {
-      onClose && onClose();
-    }
-  };
+  useEffect(() => {
+    if (!active) return;
+
+    const handleEscape = (evt: KeyboardEvent) => {
+      if (evt.key === "Escape" && onClose) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [active, onClose]);
+
+  if (!active) return null;
+
   return (
-    active && (
+    <div
+      className={styles.dialogWrapper}
+      onClick={(e) => {
+        onClose && onClose();
+      }}
+    >
       <div
-        className={styles.dialogWrapper}
-        onClick={(e) => {
-          onClose && onClose();
-        }}
+        className={clsx(
+          styles.dialog,
+          globals[`${variant}BackgroundColor`],
+          globals[`${textColor(variant)}TextColor`],
+          className
+        )}
+        style={style}
+        onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className={clsx(
-            styles.dialog,
-            globals[`${variant}BackgroundColor`],
-            globals[`${textColor(variant)}Color`],
-            className,
-          )}
-          style={style}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {children}
-        </div>
+        {children}
       </div>
-    )
+    </div>
   );
 }

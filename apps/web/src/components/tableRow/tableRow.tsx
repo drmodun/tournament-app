@@ -25,7 +25,8 @@ export default function TableRow({
 }: TableRowProps) {
   const renderChildren = () => {
     return React.Children.map(children, (child) => {
-      return React.cloneElement(child, {
+      if (!child) return null;
+      return React.cloneElement(child as React.ReactElement, {
         variant: variant,
       });
     });

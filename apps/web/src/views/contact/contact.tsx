@@ -5,8 +5,6 @@ import styles from "./contact.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Button from "components/button";
-import trophies from "/public/trophies.png";
-import Image from "next/image";
 import MultilineInput from "components/multilineInput";
 
 export default function Contact() {

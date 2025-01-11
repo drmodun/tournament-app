@@ -1,31 +1,47 @@
 "use client";
 
-import { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useState, useEffect } from "react";
 import { TextVariants } from "types/styleTypes";
+import globals from "styles/globals.module.scss";
 
-export const ThemeContext = createContext<{
+export const ThemeContext = React.createContext<{
   theme: TextVariants;
   setTheme: (val: TextVariants) => void;
 }>({
-  theme: localStorage.getItem("theme") ?? "dark",
-  setTheme: (val: TextVariants) => {
-    localStorage.setItem("theme", val);
-  },
+  theme: "light",
+  setTheme: () => {},
 });
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const storedTheme: TextVariants | undefined = localStorage.getItem("theme");
-  const [theme, _setTheme] = useState<TextVariants>(
-    storedTheme != "light" && storedTheme != "dark" ? "light" : storedTheme,
-  );
+  const [mounted, setMounted] = useState(false);
+  const [theme, _setTheme] = useState<TextVariants>("light");
+
+  useEffect(() => {
+    setMounted(true);
+    const storedTheme = window?.localStorage?.getItem("theme") as TextVariants;
+    if (storedTheme === "light" || storedTheme === "dark") {
+      _setTheme(storedTheme);
+    }
+  }, []);
 
   const setTheme = (val: TextVariants) => {
-    localStorage.setItem("theme", val);
-    _setTheme(val);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("theme", val);
+      _setTheme(val);
+    }
   };
+
+  if (!mounted) {
+    return (
+      <div className={globals[`lightBackgroundColor`]}>
+        {children}
+      </div>
+    );
+  }
+
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      {children}
+      <div className={globals[`${theme}BackgroundColor`]}>{children}</div>
     </ThemeContext.Provider>
   );
 };

@@ -22,7 +22,8 @@ export default function Table({
 }: TableProps) {
   const renderChildren = () => {
     return React.Children.map(children, (child, index) => {
-      return React.cloneElement(child, {
+      if (!child) return null;
+      return React.cloneElement(child as React.ReactElement, {
         variant: variant,
         isNumbered: isNumbered,
         index: index == 0 ? -1 : index,

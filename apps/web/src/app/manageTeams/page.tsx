@@ -14,8 +14,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ManageTeams from "views/manageTeams";
 
-const POSTS_PER_PAGE = 3;
-
 export default function Teams() {
   const [activeTab, setActiveTab] = useState<number>(0);
   const { theme } = useThemeContext();
@@ -35,10 +33,10 @@ export default function Teams() {
           <div
             className={clsx(
               styles.tabs,
-              globals[`${textColor(theme)}BackgroundColor`],
+              globals[`${textColor(theme)}BackgroundColor`]
             )}
           >
-            <button className={clsx(styles.arrowButton)}>
+            <button className={clsx(styles.arrowButton)} title="back">
               <ArrowBackIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
             <div className={styles.teamsWrapper}>
@@ -48,7 +46,7 @@ export default function Teams() {
                   className={clsx(
                     styles.tab,
                     activeTab === index && styles.active,
-                    activeTab === index && globals.primaryBackgroundColor,
+                    activeTab === index && globals.primaryBackgroundColor
                   )}
                   onClick={() => setActiveTab(index)}
                   label={tab.name}
@@ -56,7 +54,7 @@ export default function Teams() {
                 />
               ))}
             </div>
-            <button className={clsx(styles.arrowButton)}>
+            <button className={clsx(styles.arrowButton)} title="forward">
               <ArrowForwardIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
           </div>

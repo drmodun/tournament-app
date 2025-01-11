@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+
 import styles from "./richEditor.module.scss";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
@@ -6,17 +7,13 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { clsx } from "clsx";
-import CodeBlock from "@tiptap/extension-code-block";
 import Heading from "@tiptap/extension-heading";
 import FormatBoldIcon from "@mui/icons-material/FormatBold";
 import FormatItalicIcon from "@mui/icons-material/FormatItalic";
 import FormatStrikethroughIcon from "@mui/icons-material/FormatStrikethrough";
 import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import TitleIcon from "@mui/icons-material/Title";
-import CodeIcon from "@mui/icons-material/Code";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 
@@ -48,7 +45,7 @@ export default function RichEditor({
         class: clsx(
           styles[`${textColor(variant)}EditorColor`],
           globals[`${variant}BackgroundColor`],
-          styles.editor,
+          styles.editor
         ),
       },
     },
@@ -102,6 +99,7 @@ export default function RichEditor({
       <div className={clsx(styles.menuBar)}>
         <div className={clsx(styles.menuBarPart)}>
           <button
+            title="menu button"
             onClick={toggleBold}
             disabled={isBoldDisabled}
             className={clsx(
@@ -113,7 +111,7 @@ export default function RichEditor({
                       ? styles.menuButtonLight
                       : styles.menuButtonDark,
                   ],
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <FormatBoldIcon
@@ -122,12 +120,13 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>
 
           <button
+            title="menu button"
             onClick={toggleItalics}
             disabled={isItalicsDisabled}
             className={clsx(
@@ -140,7 +139,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <FormatItalicIcon
@@ -149,11 +148,12 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>
           <button
+            title="menu button"
             onClick={toggleStrike}
             disabled={isStrikeDisabled}
             className={clsx(
@@ -166,7 +166,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <FormatStrikethroughIcon
@@ -175,11 +175,12 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>
           <button
+            title="menu button"
             onClick={toggleUnderline}
             disabled={isUnderlineDisabled}
             className={clsx(
@@ -192,7 +193,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <FormatUnderlinedIcon
@@ -201,13 +202,14 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>
         </div>
         <div className={clsx(styles.menuBarPart)}>
           <button
+            title="menu button"
             onClick={toggleBulletList}
             disabled={isBulletListDisabled}
             className={clsx(
@@ -220,7 +222,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <FormatListBulletedIcon
@@ -229,11 +231,12 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>
           <button
+            title="menu button"
             onClick={toggleHeading}
             disabled={isHeadingDisabled}
             className={clsx(
@@ -246,7 +249,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <TitleIcon
@@ -255,11 +258,12 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>
           <button
+            title="menu button"
             onClick={undo}
             disabled={isUndoDisabled}
             className={clsx(
@@ -272,7 +276,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <UndoIcon
@@ -281,11 +285,12 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>
           <button
+            title="menu button"
             onClick={redo}
             disabled={isRedoDisabled}
             className={clsx(
@@ -298,7 +303,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton,
+              styles.menuButton
             )}
           >
             <RedoIcon
@@ -307,7 +312,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark,
+                    : styles.menuButtonIconDark
               )}
             />
           </button>

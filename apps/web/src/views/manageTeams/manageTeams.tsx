@@ -3,7 +3,6 @@
 import styles from "./manageTeams.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import Dialog from "components/dialog";
 import Button from "components/button";
@@ -12,8 +11,7 @@ import Chip from "components/chip";
 import { useRef, useState } from "react";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CheckboxGroup from "components/checkboxGroup";
-import { CheckboxProps } from "components/checkbox/checkbox";
-import { textColor, TextVariants } from "types/styleTypes";
+import { textColor } from "types/styleTypes";
 import GroupsIcon from "@mui/icons-material/Groups";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
@@ -266,7 +264,7 @@ export default function ManageTeams() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <Dialog
@@ -351,7 +349,7 @@ export default function ManageTeams() {
             <p>
               {lfpEntries[selectedLfpEntry][selectedLfpEntryList].authorName} |{" "}
               {getUnicodeFlagIcon(
-                lfpEntries[selectedLfpEntry][selectedLfpEntryList].country,
+                lfpEntries[selectedLfpEntry][selectedLfpEntryList].country
               )}{" "}
               | {lfpEntries[selectedLfpEntry][selectedLfpEntryList].age + "y "}{" "}
               |{" "}
@@ -382,7 +380,7 @@ export default function ManageTeams() {
             <ArrowBackIcon
               className={clsx(
                 styles.lfpActionArrowLeft,
-                styles[`${textColorTheme}Fill`],
+                styles[`${textColorTheme}Fill`]
               )}
             />
           </button>
@@ -403,7 +401,7 @@ export default function ManageTeams() {
             <ArrowForwardIcon
               className={clsx(
                 styles.lfpActionArrowRight,
-                styles[`${textColorTheme}Fill`],
+                styles[`${textColorTheme}Fill`]
               )}
             />
           </button>
@@ -477,7 +475,7 @@ export default function ManageTeams() {
                     styles.campaign,
                     globals[`${theme}BackgroundColor`],
                     globals.paddingHorizontal,
-                    globals.doublePaddingVertical,
+                    globals.doublePaddingVertical
                   )}
                 >
                   <p className={styles.campaignTitle}>{campaign.name}</p>

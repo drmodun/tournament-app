@@ -33,6 +33,11 @@ export const PoiMarkers = (props: {
     <>
       {props.locations.map((location: MarkerLocation) => (
         <AdvancedMarker
+          key={
+            location.location.lat +
+            location.location.lng +
+            location.pois.map((poi) => poi.id).join("")
+          } // TODO: make this unique or fix later
           position={location.location}
           clickable={true}
           onClick={() => {

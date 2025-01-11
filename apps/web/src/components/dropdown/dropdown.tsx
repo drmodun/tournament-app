@@ -74,7 +74,7 @@ export default function Dropdown({
           <p
             className={clsx(
               globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-              styles.label
+              styles.label,
             )}
             style={labelStyle}
           >
@@ -98,7 +98,7 @@ export default function Dropdown({
               <ArrowRightIcon
                 className={clsx(
                   isDropped && styles.selectArrowRotated,
-                  styles.selectArrow
+                  styles.selectArrow,
                 )}
               />
             )}
@@ -115,7 +115,7 @@ export default function Dropdown({
               : styles.hidden,
             styles.options,
             globals[`${variant}MutedBackgroundColor`],
-            optionWrapperClassName
+            optionWrapperClassName,
           )}
         >
           {options.map((option, index) => (
@@ -127,7 +127,7 @@ export default function Dropdown({
                     : styles.hiddenAnimation
                   : styles.hidden,
                 styles.option,
-                optionClassName
+                optionClassName,
               )}
             >
               <Button
@@ -142,7 +142,7 @@ export default function Dropdown({
                     ? isDropped
                       ? styles.unhiddenAnimation
                       : styles.hiddenAnimation
-                    : styles.hidden
+                    : styles.hidden,
                 )}
                 labelClassName={globals.textAlignLeft}
               />

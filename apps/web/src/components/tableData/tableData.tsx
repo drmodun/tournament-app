@@ -30,7 +30,7 @@ export default function TableData({
           : globals[`${variant}BackgroundColorDynamic`],
         isHeader && globals.textBold,
         globals[`${textColor(variant)}Color`],
-        className
+        className,
       )}
       style={style}
     >

@@ -10,7 +10,7 @@ export default function ToastList({ style }: { style?: React.CSSProperties }) {
   const handleClick = (
     e: MouseEvent<HTMLButtonElement>,
     onClick: MouseEventHandler<HTMLButtonElement> | undefined,
-    id: number | undefined
+    id: number | undefined,
   ) => {
     onClick && onClick(e);
     id && toastContext.removeToast(id);

@@ -45,7 +45,7 @@ export default function RichEditor({
         class: clsx(
           styles[`${textColor(variant)}EditorColor`],
           globals[`${variant}BackgroundColor`],
-          styles.editor
+          styles.editor,
         ),
       },
     },
@@ -111,7 +111,7 @@ export default function RichEditor({
                       ? styles.menuButtonLight
                       : styles.menuButtonDark,
                   ],
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <FormatBoldIcon
@@ -120,7 +120,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>
@@ -139,7 +139,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <FormatItalicIcon
@@ -148,7 +148,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>
@@ -166,7 +166,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <FormatStrikethroughIcon
@@ -175,7 +175,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>
@@ -193,7 +193,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <FormatUnderlinedIcon
@@ -202,7 +202,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>
@@ -222,7 +222,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <FormatListBulletedIcon
@@ -231,7 +231,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>
@@ -249,7 +249,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <TitleIcon
@@ -258,7 +258,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>
@@ -276,7 +276,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <UndoIcon
@@ -285,7 +285,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>
@@ -303,7 +303,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
 
-              styles.menuButton
+              styles.menuButton,
             )}
           >
             <RedoIcon
@@ -312,7 +312,7 @@ export default function RichEditor({
                   ? styles[`${variant}Fill`]
                   : variant === "light"
                     ? styles.menuButtonIconLight
-                    : styles.menuButtonIconDark
+                    : styles.menuButtonIconDark,
               )}
             />
           </button>

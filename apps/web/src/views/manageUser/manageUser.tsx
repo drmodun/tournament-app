@@ -25,7 +25,7 @@ type Interest = {
 
 export default function ManageUser() {
   const [profilePicture] = useState<string>(
-    "https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZmVuY2luZ3xlbnwwfHwwfHx8MA%3D%3D"
+    "https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZmVuY2luZ3xlbnwwfHwwfHx8MA%3D%3D",
   );
   const [username, setUsername] = useState<string>("test username");
   const [dialogActive, setDialogActive] = useState<boolean>(false);
@@ -163,7 +163,7 @@ export default function ManageUser() {
               className={clsx(
                 styles.username,
                 globals.largeText,
-                globals[`${textColorTheme}Color`]
+                globals[`${textColorTheme}Color`],
               )}
             >
               {username}
@@ -173,7 +173,7 @@ export default function ManageUser() {
             <b
               className={clsx(
                 styles.interest,
-                globals[`${textColorTheme}Color`]
+                globals[`${textColorTheme}Color`],
               )}
             >
               interests

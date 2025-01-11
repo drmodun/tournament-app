@@ -233,6 +233,7 @@ export default function Dropdown({
                       ? styles.unhiddenAnimation
                       : styles.hiddenAnimation
                     : styles.hidden,
+
                   styles.option,
                   optionClassName,
                 )}

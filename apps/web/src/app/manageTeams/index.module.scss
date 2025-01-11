@@ -1,0 +1,77 @@
+@import "../../styles/";
+
+.screen {
+  margin-top: $doublePadding * 2;
+  padding-bottom: $doublePadding * 2;
+  width: 100%;
+  height: calc(100vh - $doublePadding * 2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-left: $horizontalMargin;
+  padding-right: $horizontalMargin;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+  }
+
+  padding-bottom: $doublePadding * 2;
+  padding-top: $doublePadding * 2;
+}
+
+.navbar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+.tabs {
+  width: 100%;
+  display: flex;
+  margin-bottom: $doublePadding;
+  gap: $halfPadding;
+  padding-left: $padding;
+  padding-right: $padding;
+  border-radius: $borderRadius;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    height: $baseComponentHeight * 3 + $padding * 3;
+  }
+}
+
+.tab {
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.arrowButton {
+  border: 0;
+  background-color: transparent;
+  width: $baseComponentHeight;
+  cursor: pointer;
+}
+
+.teamsWrapper {
+  width: 100%;
+  display: flex;
+  margin-bottom: $doublePadding;
+  gap: $halfPadding;
+  padding-top: $padding;
+  padding-bottom: $padding;
+  height: $baseComponentHeight;
+  @media screen and (max-width: $desktopBreakpoint) {
+    flex-wrap: wrap;
+  }
+}

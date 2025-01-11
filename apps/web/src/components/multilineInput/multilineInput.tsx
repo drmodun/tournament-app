@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEventHandler } from "react";
+import { ChangeEventHandler } from "react";
 import styles from "./multilineInput.module.scss";
 import globals from "styles/globals.module.scss";
 import {
@@ -13,6 +13,7 @@ import { clsx } from "clsx";
 
 interface MultilineInputProps {
   style?: React.CSSProperties;
+  className?: string;
   labelStyle?: React.CSSProperties;
   label?: string;
   placeholder?: string;
@@ -23,6 +24,7 @@ interface MultilineInputProps {
 
 export default function Input({
   style,
+  className,
   labelStyle,
   label,
   placeholder = "",
@@ -36,7 +38,7 @@ export default function Input({
         <p
           className={clsx(
             globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-            styles.label,
+            globals.label
           )}
           style={labelStyle}
         >
@@ -47,10 +49,11 @@ export default function Input({
         onChange={onChange}
         placeholder={placeholder}
         className={clsx(
+          className,
           styles.input,
           variant == "light" && styles.lightPlaceholder,
           globals[`${variant}BackgroundColorDynamic`],
-          globals[`${textColor(variant)}Color`],
+          globals[`${textColor(variant)}Color`]
         )}
         style={style}
       />

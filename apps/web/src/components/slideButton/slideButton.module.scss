@@ -1,0 +1,45 @@
+@import "../../styles/";
+
+.slideButton {
+  height: $baseComponentHeight;
+  max-width: 100%;
+  border-radius: $borderRadius;
+  border: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: $padding;
+  padding: 0 $padding;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.disabled:hover {
+  cursor: not-allowed !important;
+}
+
+.label {
+  font-size: $fontSize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 100%;
+}
+
+.option {
+  flex: 1 1 0;
+  flex-basis: 100%;
+  width: 100%;
+  white-space: nowrap;
+  border-radius: $borderRadius;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.optionText {
+  padding: $halfPadding;
+}

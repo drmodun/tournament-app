@@ -3,7 +3,6 @@
 import styles from "./progressWheel.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import React from "react";
 import {
   inverseTextColor,
   textColor,
@@ -43,7 +42,7 @@ export default function ProgressWheel({
         <circle
           className={clsx(
             styles.bg,
-            styles[`${wheelVariant ?? inverseTextColor(variant)}Stroke`],
+            styles[`${wheelVariant ?? inverseTextColor(variant)}Stroke`]
           )}
           cx="32"
           cy="32"
@@ -66,7 +65,7 @@ export default function ProgressWheel({
           className={clsx(
             globals[`${labelVariant ?? textColor(variant)}MutedColor`],
             styles.label,
-            labelClassName,
+            labelClassName
           )}
           style={labelStyle}
         >
@@ -76,3 +75,4 @@ export default function ProgressWheel({
     </div>
   );
 }
+

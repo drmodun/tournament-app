@@ -1,6 +1,6 @@
 "use client";
 
-import React, { MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import styles from "./button.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants } from "types/styleTypes";
@@ -14,7 +14,9 @@ export interface ButtonProps {
   variant?: Variants;
   className?: string;
   labelClassName?: string;
+  submit?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -25,25 +27,33 @@ export default function Button({
   variant = "light",
   className = "",
   labelClassName = "",
+  submit = false,
   onClick,
+  disabled = false,
 }: ButtonProps) {
   return (
     <button
       className={clsx(
         styles.button,
-        globals[`${variant}BackgroundColorDynamic`],
+        disabled && styles.disabled,
+        disabled
+          ? globals.disabledBackgroundColor
+          : globals[`${variant}BackgroundColorDynamic`],
+
         className,
         label && globals.doublePaddingHorizontal,
       )}
       style={style}
-      onClick={onClick ? onClick : () => {}}
+      onClick={onClick && !disabled ? onClick : () => {}}
+      type={submit ? "submit" : "button"}
+      disabled={disabled}
     >
       {label && (
         <p
           className={clsx(
             styles.label,
             labelClassName,
-            globals[`${variant}TextColor`],
+            disabled ? globals.lightColor : globals[`${variant}TextColor`],
           )}
           style={labelStyle}
         >

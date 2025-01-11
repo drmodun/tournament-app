@@ -1,9 +1,9 @@
 "use client";
 
-import React, { MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import styles from "./checkbox.module.scss";
 import globals from "styles/globals.module.scss";
-import { Variants, TextVariants } from "types/styleTypes";
+import { Variants, TextVariants, textColor } from "types/styleTypes";
 import { clsx } from "clsx";
 
 export interface CheckboxProps {
@@ -23,7 +23,7 @@ export default function Checkbox({
   labelStyle,
   label = "",
   variant = "light",
-  labelVariant = "dark",
+  labelVariant,
   onSelect = () => {},
   disabled = false,
   isSelected = false,
@@ -33,7 +33,9 @@ export default function Checkbox({
       <label
         className={clsx(
           styles.label,
-          disabled ? styles.disabledText : globals[`${labelVariant}Color`],
+          disabled
+            ? styles.disabledText
+            : globals[`${labelVariant ?? textColor(variant)}Color`],
         )}
         htmlFor="radio"
       >
@@ -49,7 +51,14 @@ export default function Checkbox({
           type="checkbox"
           disabled={disabled}
         />
-        <p style={labelStyle}>{label}</p>
+        {label && (
+          <p
+            style={labelStyle}
+            className={globals[`${labelVariant ?? textColor(variant)}Color`]}
+          >
+            {label}
+          </p>
+        )}
       </label>
     </div>
   );

@@ -1,17 +1,22 @@
 @import "../../styles/";
 
 .select {
-  align-self: flex-start;
+}
+
+.optionsWrapper {
+  position: absolute;
+  overflow: auto;
+  z-index: -1;
+}
+
+.zIndex {
+  z-index: 97;
 }
 
 .options {
   padding: $halfPadding $padding;
   border-radius: 0 $borderRadius $borderRadius $borderRadius;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  z-index: 97;
-
+  height: 100%;
   @media screen and (max-width: $tabletBreakpoint) {
     margin-left: 0;
   }
@@ -29,7 +34,7 @@
   width: 100%;
 }
 
-.selectButton {
+.selectButtonActive {
   border-radius: $borderRadius $borderRadius 0 0;
   transition: border-radius $animationDuration $animationEasingFunction;
 
@@ -52,6 +57,7 @@
   padding-bottom: 0;
   opacity: 0;
   pointer-events: none;
+  z-index: -99;
 }
 .selectArrowRotated {
   transform: rotate(90deg);
@@ -62,8 +68,21 @@
   margin-left: $padding;
 }
 
-.label {
-  margin-bottom: $halfPadding / 2;
+.selectButton {
+  white-space: nowrap;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.search {
+  margin-bottom: $padding;
+  margin-top: $halfPadding;
 }
 
 @keyframes undrop {
@@ -94,4 +113,10 @@
     opacity: 1;
     transform: translateY(0px);
   }
+}
+
+.option {
+  height: $baseComponentHeight;
+  white-space: nowrap;
+  margin-bottom: $halfPadding;
 }

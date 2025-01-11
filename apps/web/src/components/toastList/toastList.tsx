@@ -1,11 +1,11 @@
-import { MouseEventHandler, MouseEvent, useContext } from "react";
+import { MouseEventHandler, MouseEvent } from "react";
 import Toast from "../toast/toast";
 import { ToastProps } from "types/toastTypes";
 import styles from "./toastList.module.scss";
-import { ToastContext } from "utils/context/toastContext";
+import { useToastContext } from "utils/hooks/useToastContext";
 
 export default function ToastList({ style }: { style?: React.CSSProperties }) {
-  const toastContext = useContext(ToastContext);
+  const toastContext = useToastContext();
 
   const handleClick = (
     e: MouseEvent<HTMLButtonElement>,
@@ -18,7 +18,10 @@ export default function ToastList({ style }: { style?: React.CSSProperties }) {
   return (
     <div className={styles.toastList} style={style}>
       {toastContext.toasts.map((toast: ToastProps, i: number) => (
-        <div className={styles.toastWrapper}>
+        <div
+          className={styles.toastWrapper}
+          key={toast.message + "wrapper" + i}
+        >
           <Toast
             key={i}
             message={toast.message}

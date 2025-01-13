@@ -69,7 +69,7 @@ export default function Dialog({
           styles.dialog,
           globals[`${variant}BackgroundColor`],
           globals[`${textColor(variant)}TextColor`],
-          className
+          className,
         )}
         style={style}
         onClick={(e) => e.stopPropagation()}

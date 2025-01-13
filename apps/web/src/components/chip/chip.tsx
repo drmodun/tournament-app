@@ -36,7 +36,7 @@ export default function Chip({
       className={clsx(
         className,
         styles.chip,
-        globals[`${variant}BackgroundColorDynamic`]
+        globals[`${variant}BackgroundColorDynamic`],
       )}
       style={style}
       onClick={handleClick}
@@ -48,6 +48,3 @@ export default function Chip({
     </button>
   );
 }
-
-
-

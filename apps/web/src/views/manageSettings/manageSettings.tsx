@@ -50,7 +50,7 @@ export default function ManageSettings() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <div className={styles.setting}>

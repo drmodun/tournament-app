@@ -73,7 +73,7 @@ export default function Input({
         <p
           className={clsx(
             globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-            globals.label
+            globals.label,
           )}
           style={labelStyle}
         >
@@ -96,7 +96,7 @@ export default function Input({
                   doesSubmit && styles.submitInput,
                   variant == "light" && styles.lightPlaceholder,
                   globals[`${variant}BackgroundColorDynamic`],
-                  globals[`${textColor(variant)}Color`]
+                  globals[`${textColor(variant)}Color`],
                 )}
                 min={min}
                 max={max}
@@ -121,7 +121,7 @@ export default function Input({
               doesSubmit && styles.submitInput,
               variant == "light" && styles.lightPlaceholder,
               globals[`${variant}BackgroundColorDynamic`],
-              globals[`${textColor(variant)}Color`]
+              globals[`${textColor(variant)}Color`],
             )}
             min={min}
             max={max}
@@ -136,7 +136,7 @@ export default function Input({
             className={clsx(
               styles.submitButton,
               globals[`${textColor(variant)}Color`],
-              globals[`${variant}MutedBackgroundColor`]
+              globals[`${variant}MutedBackgroundColor`],
             )}
             style={submitStyle}
           >

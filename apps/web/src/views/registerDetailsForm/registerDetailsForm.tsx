@@ -44,7 +44,7 @@ export default function RegisterDetailsForm({
   const [placeId, setPlaceId] = useState<string>();
 
   const handleAutocomplete = (
-    autocomplete: google.maps.places.Autocomplete
+    autocomplete: google.maps.places.Autocomplete,
   ) => {
     listener && google.maps.event.removeListener(listener);
     setPlaceId(autocomplete.getPlace().place_id);
@@ -129,7 +129,7 @@ export default function RegisterDetailsForm({
                     fetchAutocomplete(e.target).then((autocomplete) => {
                       const tempListener = autocomplete.addListener(
                         "place_changed",
-                        () => handleAutocomplete(autocomplete)
+                        () => handleAutocomplete(autocomplete),
                       );
                       setListener(tempListener);
                     });

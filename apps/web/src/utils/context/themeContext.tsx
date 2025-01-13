@@ -32,11 +32,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   if (!mounted) {
-    return (
-      <div className={globals[`lightBackgroundColor`]}>
-        {children}
-      </div>
-    );
+    return <div className={globals[`lightBackgroundColor`]}>{children}</div>;
   }
 
   return (

@@ -21,7 +21,11 @@ import {
   groupFocusEnum,
   groupTypeEnum,
 } from '@tournament-app/types';
-import { pointConversionStrategyEnum, pointConversionTypeEnum, stageTypeEnum } from '@tournament-app/types/src/enums';
+import {
+  pointConversionStrategyEnum,
+  pointConversionTypeEnum,
+  stageTypeEnum,
+} from '@tournament-app/types/src/enums';
 import {
   serial,
   text,
@@ -284,12 +288,12 @@ export const tournament = pgTable('tournament', {
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   isPublic: boolean('is_public').default(true),
-  links: text('links'), //csv of links
+  links: text('links'), //TODO: potentially remove or replace with a fully fledged entity
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   tournamentType: tournamentType('tournament_type').default('league'),
   minimumMMR: integer('minimum_mmr').default(0),
   maximumMMR: integer('maximum_mmr').default(3000),
-  location: text('location'),
+  location: text('location'), // TODO: consider making a seperate rules entity if this has too many properties
   isMultipleTeamsPerGroupAllowed: boolean(
     'is_multiple_teams_per_group_allowed',
   ).default(false),
@@ -301,7 +305,14 @@ export const tournament = pgTable('tournament', {
       onDelete: 'cascade',
     })
     .notNull(),
-  subcategory: integer('subcategory_id').references(() => subcategory.id), // Maybe change this to one-to-many
+  creatorId: integer('creator_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  affiliatedGroupId: integer('affiliated_group_id').references(() => group.id, {
+    onDelete: 'cascade',
+  }), // TODO:  consider if there can be multiple groups
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date()),

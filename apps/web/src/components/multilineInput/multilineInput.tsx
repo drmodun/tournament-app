@@ -38,7 +38,7 @@ export default function Input({
         <p
           className={clsx(
             globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-            globals.label
+            globals.label,
           )}
           style={labelStyle}
         >
@@ -53,7 +53,7 @@ export default function Input({
           styles.input,
           variant == "light" && styles.lightPlaceholder,
           globals[`${variant}BackgroundColorDynamic`],
-          globals[`${textColor(variant)}Color`]
+          globals[`${textColor(variant)}Color`],
         )}
         style={style}
       />

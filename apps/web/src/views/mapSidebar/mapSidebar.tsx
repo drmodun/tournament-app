@@ -202,7 +202,7 @@ const LocationInfo = ({ poi }: { poi: Poi }) => {
     <div
       className={clsx(
         globals[`${textColorTheme}BackgroundColorDynamic`],
-        styles.locationInfo
+        styles.locationInfo,
       )}
     >
       <div className={styles.top}>
@@ -211,7 +211,7 @@ const LocationInfo = ({ poi }: { poi: Poi }) => {
             className={clsx(
               globals.largeText,
               globals[`${theme}Color`],
-              styles.poiTitle
+              styles.poiTitle,
             )}
             title={poi.name}
           >

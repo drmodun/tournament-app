@@ -264,7 +264,7 @@ export default function ManageTeams() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <Dialog
@@ -349,7 +349,7 @@ export default function ManageTeams() {
             <p>
               {lfpEntries[selectedLfpEntry][selectedLfpEntryList].authorName} |{" "}
               {getUnicodeFlagIcon(
-                lfpEntries[selectedLfpEntry][selectedLfpEntryList].country
+                lfpEntries[selectedLfpEntry][selectedLfpEntryList].country,
               )}{" "}
               | {lfpEntries[selectedLfpEntry][selectedLfpEntryList].age + "y "}{" "}
               |{" "}
@@ -380,7 +380,7 @@ export default function ManageTeams() {
             <ArrowBackIcon
               className={clsx(
                 styles.lfpActionArrowLeft,
-                styles[`${textColorTheme}Fill`]
+                styles[`${textColorTheme}Fill`],
               )}
             />
           </button>
@@ -401,7 +401,7 @@ export default function ManageTeams() {
             <ArrowForwardIcon
               className={clsx(
                 styles.lfpActionArrowRight,
-                styles[`${textColorTheme}Fill`]
+                styles[`${textColorTheme}Fill`],
               )}
             />
           </button>
@@ -475,7 +475,7 @@ export default function ManageTeams() {
                     styles.campaign,
                     globals[`${theme}BackgroundColor`],
                     globals.paddingHorizontal,
-                    globals.doublePaddingVertical
+                    globals.doublePaddingVertical,
                   )}
                 >
                   <p className={styles.campaignTitle}>{campaign.name}</p>

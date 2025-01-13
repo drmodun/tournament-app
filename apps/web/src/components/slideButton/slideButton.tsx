@@ -80,7 +80,7 @@ export default function SlideButton({
           : globals[`${variant}BackgroundColor`],
 
         className,
-        label && globals.doublePaddingHorizontal
+        label && globals.doublePaddingHorizontal,
       )}
       style={style}
       onClick={handleClick}
@@ -93,14 +93,14 @@ export default function SlideButton({
             styles.option,
             globals[
               `${variant + (selected == i ? "Muted" : "")}BackgroundColor`
-            ]
+            ],
           )}
         >
           <p
             className={clsx(
               labelClassName,
               styles.optionText,
-              globals[`${textColor(variant)}Color`]
+              globals[`${textColor(variant)}Color`],
             )}
             style={labelStyle}
           >

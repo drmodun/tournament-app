@@ -33,7 +33,7 @@ export default function Teams() {
           <div
             className={clsx(
               styles.tabs,
-              globals[`${textColor(theme)}BackgroundColor`]
+              globals[`${textColor(theme)}BackgroundColor`],
             )}
           >
             <button className={clsx(styles.arrowButton)} title="back">
@@ -46,7 +46,7 @@ export default function Teams() {
                   className={clsx(
                     styles.tab,
                     activeTab === index && styles.active,
-                    activeTab === index && globals.primaryBackgroundColor
+                    activeTab === index && globals.primaryBackgroundColor,
                   )}
                   onClick={() => setActiveTab(index)}
                   label={tab.name}

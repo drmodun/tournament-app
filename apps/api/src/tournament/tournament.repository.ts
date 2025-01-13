@@ -13,7 +13,6 @@ import {
   tournamentTypeEnum,
 } from '@tournament-app/types';
 import {
-  alias,
   AnyPgSelectQueryBuilder,
   PgColumn,
   PgSelectJoinFn,

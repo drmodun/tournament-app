@@ -1,7 +1,4 @@
-import {
-  ICategoryMiniResponse,
-  ICategoryMiniResponseWithLogo,
-} from "src/category";
+import { ICategoryMiniResponseWithLogo } from "src/category";
 import {
   tournamentTypeEnum,
   tournamentLocationEnum,

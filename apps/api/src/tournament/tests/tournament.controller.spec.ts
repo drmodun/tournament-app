@@ -8,7 +8,6 @@ import {
   CreateTournamentRequest,
   UpdateTournamentRequest,
 } from '../dto/requests.dto';
-import { MetadataMaker } from 'src/base/static/makeMetadata';
 import {
   ITournamentResponse,
   tournamentLocationEnum,
@@ -139,7 +138,7 @@ describe('TournamentController', () => {
     it('should create a tournament', async () => {
       service.create.mockResolvedValue(mockTournament);
 
-      const result = await controller.create(createDto);
+      const result = await controller.create(createDto, { id: 1 } as any);
 
       expect(result).toEqual(mockTournament);
       expect(service.create).toHaveBeenCalledWith(createDto);
@@ -226,7 +225,7 @@ describe('TournamentController', () => {
           TournamentController.prototype.update,
         );
         expect(guards).toBeDefined();
-        expect(guards.length).toBe(2);
+        expect(guards.length).toBe(3);
       });
     });
 

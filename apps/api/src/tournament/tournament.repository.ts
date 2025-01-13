@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { category, participation, tournament, user } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { and, eq, gte, lte, SQL } from 'drizzle-orm';
+import { eq, gte, lte, SQL } from 'drizzle-orm';
 import {
   IUpdateTournamentRequest,
   tournamentLocationEnum,
@@ -18,6 +18,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from 'src/db/db';
+import { TournamentDtosEnum, TournamentReturnTypesEnumType } from './types';
 
 @Injectable()
 export class TournamentDrizzleRepository extends PrimaryRepository<
@@ -129,7 +130,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
     [TournamentSortingEnum.COUNTRY]: tournament.country,
   };
 
-  getMappingObject(responseEnum: TournamentResponsesEnum) {
+  getMappingObject(responseEnum: TournamentReturnTypesEnumType) {
     switch (responseEnum) {
       case TournamentResponsesEnum.MINI:
         return {
@@ -173,6 +174,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           },
           links: tournament.links,
         };
+
       case TournamentResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(TournamentResponsesEnum.BASE),
@@ -195,8 +197,17 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           maximumMMR: tournament.maximumMMR,
           minimumMMR: tournament.minimumMMR,
         };
+      case TournamentDtosEnum.WITH_RELATIONS:
+        return {
+          id: tournament.id,
+          name: tournament.name,
+          categoryId: tournament.categoryId,
+          affiliatedGroupId: tournament.affiliatedGroupId,
+          creatorId: tournament.creatorId,
+          parentTournamentId: tournament.parentTournamentId,
+        };
       default:
-        return {};
+        return {}; // TODO: if this messes up the return type remove it and replace it with null
     }
   }
 }

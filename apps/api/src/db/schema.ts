@@ -20,12 +20,10 @@ import {
   tournamentTeamTypeEnum,
   groupFocusEnum,
   groupTypeEnum,
-} from '@tournament-app/types';
-import {
-  pointConversionStrategyEnum,
   pointConversionTypeEnum,
+  pointConversionStrategyEnum,
   stageTypeEnum,
-} from '@tournament-app/types/src/enums';
+} from '@tournament-app/types';
 import {
   serial,
   text,

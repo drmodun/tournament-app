@@ -149,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2025-01-09T02:25:21.494Z
+                        updatedAt: &a2 2025-01-13T02:53:07.304Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -245,7 +245,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a2
-                        createdAt: 2025-01-09T02:25:21.494Z
+                        createdAt: 2025-01-13T02:53:07.304Z
                         following: 0
                         location: New York
           description: ""
@@ -301,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2025-01-09T02:25:21.494Z
+                    updatedAt: &a3 2025-01-13T02:53:07.304Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -329,7 +329,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2025-01-09T02:25:21.494Z
+                    createdAt: 2025-01-13T02:53:07.304Z
                     following: 0
                     location: New York
           description: ""
@@ -583,7 +583,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-09T02:25:21.694Z
+                        updatedAt: 2025-01-13T02:53:07.464Z
                         memberCount: 50
                 extended:
                   value:
@@ -609,9 +609,9 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-09T02:25:21.694Z
+                        updatedAt: 2025-01-13T02:53:07.464Z
                         memberCount: 50
-                        createdAt: 2025-01-09T02:25:21.694Z
+                        createdAt: 2025-01-13T02:53:07.464Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -640,7 +640,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2025-01-09T02:25:21.694Z
+                updatedAt: 2025-01-13T02:53:07.464Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -694,7 +694,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-09T02:25:21.694Z
+                    updatedAt: 2025-01-13T02:53:07.464Z
                     memberCount: 50
                 extended:
                   value:
@@ -707,9 +707,9 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-09T02:25:21.694Z
+                    updatedAt: 2025-01-13T02:53:07.464Z
                     memberCount: 50
-                    createdAt: 2025-01-09T02:25:21.694Z
+                    createdAt: 2025-01-13T02:53:07.464Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -749,7 +749,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2025-01-09T02:25:21.694Z
+                updatedAt: 2025-01-13T02:53:07.464Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -793,7 +793,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-09T02:25:21.694Z
+                  updatedAt: 2025-01-13T02:53:07.464Z
                   memberCount: 50
                 members: []
           description: ""
@@ -822,7 +822,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-09T02:25:21.694Z
+                  updatedAt: 2025-01-13T02:53:07.464Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -851,7 +851,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-09T02:25:21.694Z
+                  updatedAt: 2025-01-13T02:53:07.464Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -969,7 +969,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-01-09T02:25:21.700Z
+                        createdAt: 2025-01-13T02:53:07.468Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -995,7 +995,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2025-01-09T02:25:21.700Z
+                        createdAt: 2025-01-13T02:53:07.468Z
                         country: country
                         id: 1
                         username: username
@@ -1025,7 +1025,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2025-01-09T02:25:21.700Z
+                        createdAt: 2025-01-13T02:53:07.468Z
                         country: country
                         name: name
                         logo: logo
@@ -1114,7 +1114,7 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-01-09T02:25:21.700Z
+                    createdAt: 2025-01-13T02:53:07.468Z
                 UserMembershipResponseWithDates:
                   value:
                     userId: 1
@@ -1122,7 +1122,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-01-09T02:25:21.700Z
+                    createdAt: 2025-01-13T02:53:07.468Z
                     country: country
                     id: 1
                     username: username
@@ -1134,7 +1134,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-01-09T02:25:21.700Z
+                    createdAt: 2025-01-13T02:53:07.468Z
                     country: country
                     name: name
                     logo: logo
@@ -1269,7 +1269,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-01-09T02:25:21.704Z
+                    createdAt: 2025-01-13T02:53:07.472Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1277,10 +1277,10 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2025-01-09T02:25:21.704Z
+                    updatedAt: 2025-01-13T02:53:07.472Z
                 mini:
                   value:
-                    createdAt: 2025-01-09T02:25:21.704Z
+                    createdAt: 2025-01-13T02:53:07.472Z
                     id: 1
                     username: john_doe
           description: ""
@@ -1415,7 +1415,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: 2025-01-09T02:25:21.494Z
+                        updatedAt: 2025-01-13T02:53:07.304Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1436,7 +1436,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-01-09T02:25:21.712Z
+                        createdAt: 2025-01-13T02:53:07.476Z
                 with-group:
                   value:
                     metadata:
@@ -1461,7 +1461,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-09T02:25:21.694Z
+                        updatedAt: 2025-01-13T02:53:07.464Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1484,7 +1484,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-01-09T02:25:21.712Z
+                        createdAt: 2025-01-13T02:53:07.476Z
           description: ""
       tags: &a12
         - group-join-requests
@@ -1578,7 +1578,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: 2025-01-09T02:25:21.494Z
+                    updatedAt: 2025-01-13T02:53:07.304Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -1586,7 +1586,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-01-09T02:25:21.712Z
+                    createdAt: 2025-01-13T02:53:07.476Z
                 with-group:
                   value:
                     id: 1
@@ -1598,7 +1598,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-09T02:25:21.694Z
+                    updatedAt: 2025-01-13T02:53:07.464Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -1608,7 +1608,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-01-09T02:25:21.712Z
+                    createdAt: 2025-01-13T02:53:07.476Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -1735,7 +1735,7 @@ paths:
                         email: john@doe.com
                         followers: 0
                         level: 0
-                        updatedAt: 2025-01-09T02:25:21.717Z
+                        updatedAt: 2025-01-13T02:53:07.482Z
                         message: Would you like to join our group?
                         groupId: 1
                 with-mini-user:
@@ -1758,7 +1758,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-01-09T02:25:21.717Z
+                        createdAt: 2025-01-13T02:53:07.482Z
                 with-group:
                   value:
                     metadata:
@@ -1788,7 +1788,7 @@ paths:
                         focus: Hybrid
                         location: New York
                         type: Public
-                        updatedAt: 1/9/2025
+                        updatedAt: 1/13/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -1810,7 +1810,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-01-09T02:25:21.718Z
+                        createdAt: 2025-01-13T02:53:07.482Z
           description: ""
       tags: &a14
         - group-invites
@@ -1904,7 +1904,7 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2025-01-09T02:25:21.717Z
+                    updatedAt: 2025-01-13T02:53:07.482Z
                     message: Would you like to join our group?
                     groupId: 1
                 with-mini-user:
@@ -1912,7 +1912,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-01-09T02:25:21.717Z
+                    createdAt: 2025-01-13T02:53:07.482Z
                 with-group:
                   value:
                     id: 1
@@ -1927,14 +1927,14 @@ paths:
                     focus: Hybrid
                     location: New York
                     type: Public
-                    updatedAt: 1/9/2025
+                    updatedAt: 1/13/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-01-09T02:25:21.718Z
+                    createdAt: 2025-01-13T02:53:07.482Z
           description: ""
       tags: *a14
     patch:
@@ -2224,6 +2224,450 @@ paths:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a15
+      security:
+        - bearer: []
+  /tournaments:
+    get:
+      operationId: TournamentController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: location
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: teamType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: isRanked
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: minimumMMR
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: maximumMMR
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isMultipleTeamsPerGroupAllowed
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: categoryId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: affiliatedGroupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: creatorId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: minParticipants
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: maxParticipants
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isPublic
+          required: false
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: &a16 2025-02-01T10:00:00.000Z
+                        endDate: &a17 2025-03-01T18:00:00.000Z
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: &a18 2025-02-01T10:00:00.000Z
+                mini-with-logo:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a16
+                        endDate: *a17
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: MINI-WITH-LOGO
+                    results:
+                      - &a23
+                        id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a18
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a16
+                        endDate: *a17
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a18
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                        description: International Chess Championship 2025
+                        teamType: solo
+                        creator: &a19
+                          id: 1
+                          username: chessmaster
+                        affiliatedGroup: &a20
+                          id: 1
+                          name: Chess Club
+                          abbreviation: CC
+                        endDate: &a21 2025-03-01T18:00:00.000Z
+                        maxParticipants: 64
+                        currentParticipants: 32
+                        isPublic: true
+                        category: &a22
+                          id: 1
+                          name: Chess
+                          logo: https://example.com/chess-category-logo.jpg
+                        links: https://chess.com/tournament/123
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a16
+                        endDate: *a17
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a18
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                        description: International Chess Championship 2025
+                        teamType: solo
+                        creator: *a19
+                        affiliatedGroup: *a20
+                        endDate: *a21
+                        maxParticipants: 64
+                        currentParticipants: 32
+                        isPublic: true
+                        category: *a22
+                        links: https://chess.com/tournament/123
+                        createdAt: 2025-01-01T00:00:00.000Z
+                        updatedAt: 2025-01-07T14:00:00.000Z
+                        isMultipleTeamsPerGroupAllowed: false
+                        isFakePlayersAllowed: false
+                        parentTournament: *a23
+                        conversionRuleId: 1
+                        isRanked: true
+                        maximumMMR: 2500
+                        minimumMMR: 1500
+          description: ""
+      tags: &a24
+        - tournaments
+    post:
+      operationId: TournamentController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTournamentRequest"
+      responses:
+        "200":
+          description: Creates a new tournament
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a24
+      security:
+        - bearer: []
+  /tournaments/{tournamentId}:
+    get:
+      operationId: TournamentController_findOne
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a single tournament
+          content:
+            application/json:
+              schema:
+                examples:
+                  mini:
+                    value:
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: &a25 2025-02-01T10:00:00.000Z
+                  mini-with-logo:
+                    value: &a30
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: *a25
+                      location: online
+                      logo: https://example.com/chess-tournament-logo.jpg
+                      country: DE
+                  base:
+                    value:
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: *a25
+                      location: online
+                      logo: https://example.com/chess-tournament-logo.jpg
+                      country: DE
+                      description: International Chess Championship 2025
+                      teamType: solo
+                      creator: &a26
+                        id: 1
+                        username: chessmaster
+                      affiliatedGroup: &a27
+                        id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                      endDate: &a28 2025-03-01T18:00:00.000Z
+                      maxParticipants: 64
+                      currentParticipants: 32
+                      isPublic: true
+                      category: &a29
+                        id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                      links: https://chess.com/tournament/123
+                  extended:
+                    value:
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: *a25
+                      location: online
+                      logo: https://example.com/chess-tournament-logo.jpg
+                      country: DE
+                      description: International Chess Championship 2025
+                      teamType: solo
+                      creator: *a26
+                      affiliatedGroup: *a27
+                      endDate: *a28
+                      maxParticipants: 64
+                      currentParticipants: 32
+                      isPublic: true
+                      category: *a29
+                      links: https://chess.com/tournament/123
+                      createdAt: 2025-01-01T00:00:00.000Z
+                      updatedAt: 2025-01-07T14:00:00.000Z
+                      isMultipleTeamsPerGroupAllowed: false
+                      isFakePlayersAllowed: false
+                      parentTournament: *a30
+                      conversionRuleId: 1
+                      isRanked: true
+                      maximumMMR: 2500
+                      minimumMMR: 1500
+      tags: *a24
+    patch:
+      operationId: TournamentController_update
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTournamentRequest"
+      responses:
+        "200":
+          description: Updates a tournament
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a24
+      security:
+        - bearer: []
+    delete:
+      operationId: TournamentController_remove
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Deletes a tournament
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a24
       security:
         - bearer: []
 info:
@@ -3508,4 +3952,387 @@ components:
         description:
           type: string
         type:
+          type: string
+    MiniTournamentResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+    MiniTournamentResponseWithLogo:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+        - location
+        - logo
+        - country
+    TournamentResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        teamType:
+          type: string
+          readOnly: true
+        creator:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponse"
+        affiliatedGroup:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponse"
+        endDate:
+          format: date-time
+          type: string
+          readOnly: true
+        maxParticipants:
+          type: number
+          readOnly: true
+        currentParticipants:
+          type: number
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        category:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
+        links:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+        - location
+        - logo
+        - country
+        - description
+        - teamType
+        - creator
+        - affiliatedGroup
+        - endDate
+        - maxParticipants
+        - currentParticipants
+        - isPublic
+        - category
+        - links
+    ExtendedTournamentResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        teamType:
+          type: string
+          readOnly: true
+        creator:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponse"
+        affiliatedGroup:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponse"
+        endDate:
+          format: date-time
+          type: string
+          readOnly: true
+        maxParticipants:
+          type: number
+          readOnly: true
+        currentParticipants:
+          type: number
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        category:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
+        links:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        isMultipleTeamsPerGroupAllowed:
+          type: boolean
+          readOnly: true
+        isFakePlayersAllowed:
+          type: boolean
+          readOnly: true
+        parentTournament:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
+        conversionRuleId:
+          type: number
+          readOnly: true
+        isRanked:
+          type: boolean
+          readOnly: true
+        maximumMMR:
+          type: number
+          readOnly: true
+        minimumMMR:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+        - location
+        - logo
+        - country
+        - description
+        - teamType
+        - creator
+        - affiliatedGroup
+        - endDate
+        - maxParticipants
+        - currentParticipants
+        - isPublic
+        - category
+        - links
+        - createdAt
+        - updatedAt
+        - isMultipleTeamsPerGroupAllowed
+        - isFakePlayersAllowed
+        - parentTournament
+        - conversionRuleId
+        - isRanked
+        - maximumMMR
+        - minimumMMR
+    CreateTournamentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        country:
+          type: string
+        tournamentType:
+          type: string
+          enum:
+            - league
+            - competition
+            - seasonal
+            - contest
+            - event
+        location:
+          type: string
+          enum:
+            - online
+            - offline
+            - hybrid
+        teamType:
+          type: string
+          enum:
+            - solo
+            - team
+            - mixed
+        isMultipleTeamsPerGroupAllowed:
+          type: boolean
+        isFakePlayersAllowed:
+          type: boolean
+        parentTournamentId:
+          type: number
+        conversionRuleId:
+          type: number
+        maxParticipants:
+          type: number
+        startDate:
+          format: date-time
+          type: string
+        endDate:
+          format: date-time
+          type: string
+        isPublic:
+          type: boolean
+        isRanked:
+          type: boolean
+        categoryId:
+          type: number
+        maximumMMR:
+          type: number
+        minimumMMR:
+          type: number
+        creatorId:
+          type: number
+        affiliatedGroupId:
+          type: number
+        links:
+          type: string
+      required:
+        - name
+        - description
+        - country
+        - tournamentType
+        - location
+        - teamType
+        - maxParticipants
+        - startDate
+        - endDate
+        - isPublic
+        - isRanked
+        - categoryId
+        - creatorId
+    UpdateTournamentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        country:
+          type: string
+        tournamentType:
+          type: string
+          enum:
+            - league
+            - competition
+            - seasonal
+            - contest
+            - event
+        location:
+          type: string
+          enum:
+            - online
+            - offline
+            - hybrid
+        teamType:
+          type: string
+          enum:
+            - solo
+            - team
+            - mixed
+        isMultipleTeamsPerGroupAllowed:
+          type: boolean
+        isFakePlayersAllowed:
+          type: boolean
+        parentTournamentId:
+          type: number
+        conversionRuleId:
+          type: number
+        startDate:
+          format: date-time
+          type: string
+        endDate:
+          format: date-time
+          type: string
+        maxParticipants:
+          type: number
+        isPublic:
+          type: boolean
+        isRanked:
+          type: boolean
+        categoryId:
+          type: number
+        maximumMMR:
+          type: number
+        minimumMMR:
+          type: number
+        creatorId:
+          type: number
+        affiliatedGroupId:
+          type: number
+        links:
           type: string

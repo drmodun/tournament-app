@@ -6,38 +6,115 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
+import {
+  CreateTournamentRequest,
+  UpdateTournamentRequest,
+  TournamentQuery,
+} from './dto/requests.dto';
+import {
+  TournamentResponse,
+  ExtendedTournamentResponse,
+  MiniTournamentResponse,
+  MiniTournamentResponseWithLogo,
+} from './dto/responses.dto';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { tournamentQueryExamples, tournamentResponses } from './dto/examples';
+import { TournamentResponsesEnum, IQueryMetadata } from '@tournament-app/types';
+import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
+import { MetadataMaker } from 'src/base/static/makeMetadata';
+import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@Controller('tournament')
+@ApiTags('tournaments')
+@ApiExtraModels(
+  MiniTournamentResponse,
+  MiniTournamentResponseWithLogo,
+  TournamentResponse,
+  ExtendedTournamentResponse,
+)
+@Controller('tournaments')
 export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}
 
-  @Post()
-  create(@Body() createTournamentDto: CreateTournamentDto) {
-    return this.tournamentService.create(createTournamentDto);
-  }
-
   @Get()
-  findAll() {
-    return this.tournamentService.findAll();
+  @ApiOkResponse({
+    content: {
+      'application/json': {
+        examples: tournamentQueryExamples.responses,
+      },
+    },
+  })
+  async findAll(@Query() query: TournamentQuery, @Req() req: Request) {
+    const results = await this.tournamentService.findAll(query);
+
+    const metadata: IQueryMetadata = MetadataMaker.makeMetadataFromQuery(
+      query,
+      results,
+      req.url,
+    );
+
+    return {
+      results,
+      metadata,
+    };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tournamentService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTournamentDto: UpdateTournamentDto,
+  @Get(':tournamentId')
+  @ApiOkResponse({
+    description: 'Returns a single tournament',
+    schema: { examples: tournamentResponses },
+  })
+  async findOne(
+    @Param('tournamentId', ParseIntPipe) id: number,
+    @Query('responseType') responseType?: TournamentResponsesEnum,
   ) {
-    return this.tournamentService.update(+id, updateTournamentDto);
+    return await this.tournamentService.findOne(id, responseType);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tournamentService.remove(+id);
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Creates a new tournament',
+    type: ActionResponsePrimary,
+  })
+  async create(@Body() createTournamentDto: CreateTournamentRequest) {
+    return await this.tournamentService.create(createTournamentDto);
+  }
+
+  @Patch(':tournamentId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Updates a tournament',
+    type: ActionResponsePrimary,
+  })
+  async update(
+    @Param('tournamentId', ParseIntPipe) id: number,
+    @Body() updateTournamentDto: UpdateTournamentRequest,
+  ) {
+    return await this.tournamentService.update(id, updateTournamentDto);
+  }
+
+  @Delete(':tournamentId')
+  @UseGuards(AdminAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Deletes a tournament',
+    type: ActionResponsePrimary,
+  })
+  async remove(@Param('tournamentId', ParseIntPipe) id: number) {
+    return await this.tournamentService.remove(id);
   }
 }

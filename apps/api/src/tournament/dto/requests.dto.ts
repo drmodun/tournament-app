@@ -22,6 +22,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { BaseQuery } from '../../base/query/baseQuery';
+import { TournamentReturnTypesEnumType } from '../types';
 
 export class CreateTournamentRequest implements ICreateTournamentRequest {
   @IsString()
@@ -252,7 +253,10 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
   links?: string;
 }
 
-export class TournamentQuery extends BaseQuery implements TournamentQueryType {
+export class TournamentQuery
+  extends BaseQuery<TournamentReturnTypesEnumType>
+  implements TournamentQueryType
+{
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()

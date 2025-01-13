@@ -36,6 +36,9 @@ import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { ConditionalAdminGuard } from './guards/conditional-admin.guard';
 import { TournamentAdminGuard } from './guards/tournament-admin.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 
 @ApiTags('tournaments')
 @ApiExtraModels(
@@ -84,18 +87,24 @@ export class TournamentController {
   }
 
   @Post()
-  @UseGuards(ConditionalAdminGuard)
+  @UseGuards(JwtAuthGuard, ConditionalAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new tournament',
     type: ActionResponsePrimary,
   })
-  async create(@Body() createTournamentDto: CreateTournamentRequest) {
-    return await this.tournamentService.create(createTournamentDto);
+  async create(
+    @Body() createTournamentDto: CreateTournamentRequest,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.tournamentService.create({
+      ...createTournamentDto,
+      creatorId: user.id,
+    });
   }
 
   @Patch(':tournamentId')
-  @UseGuards(ConditionalAdminGuard, TournamentAdminGuard)
+  @UseGuards(JwtAuthGuard, ConditionalAdminGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates a tournament',

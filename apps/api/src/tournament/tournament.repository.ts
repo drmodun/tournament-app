@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { category, participation, tournament, user } from '../db/schema';
+import { category, group, participation, tournament, user } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { eq, gte, lte, SQL } from 'drizzle-orm';
+import { aliasedTable, eq, gte, lte, SQL } from 'drizzle-orm';
 import {
   IUpdateTournamentRequest,
   tournamentLocationEnum,
@@ -13,6 +13,7 @@ import {
   tournamentTypeEnum,
 } from '@tournament-app/types';
 import {
+  alias,
   AnyPgSelectQueryBuilder,
   PgColumn,
   PgSelectJoinFn,
@@ -40,18 +41,16 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
       case TournamentResponsesEnum.BASE:
         return query
           .leftJoin(user, eq(tournament.creatorId, user.id))
-          .leftJoin(user, eq(tournament.affiliatedGroupId, user.id))
+          .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
           .leftJoin(category, eq(tournament.categoryId, category.id));
 
       case TournamentResponsesEnum.EXTENDED:
+        const parent = aliasedTable(tournament, 'parent');
         return query
           .leftJoin(user, eq(tournament.creatorId, user.id))
-          .leftJoin(user, eq(tournament.affiliatedGroupId, user.id))
+          .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
           .leftJoin(category, eq(tournament.categoryId, category.id))
-          .innerJoin(
-            tournament,
-            eq(tournament.parentTournamentId, tournament.id),
-          );
+          .leftJoin(parent, eq(tournament.id, parent.id));
       default:
         return query;
     }

@@ -52,7 +52,7 @@ export class TournamentService {
   ): Promise<TResponseType> {
     const results = await this.repository.getSingleQuery(id, responseType);
 
-    if (!results[0]) {
+    if (!results.length) {
       throw new NotFoundException(`Tournament with ID ${id} not found`);
     }
 
@@ -65,7 +65,7 @@ export class TournamentService {
       updateTournamentDto,
     );
 
-    if (!tournament) {
+    if (!tournament[0]) {
       throw new NotFoundException(`Tournament with ID ${id} not found`);
     }
 

@@ -38,6 +38,10 @@ export class TournamentAdminGuard extends JwtAuthGuard implements CanActivate {
         tournamentId,
       );
 
+    if (!tournament) {
+      return false;
+    }
+
     if (tournament.creatorId === user.id) {
       return true;
     }

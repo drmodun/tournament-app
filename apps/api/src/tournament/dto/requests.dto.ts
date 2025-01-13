@@ -23,6 +23,7 @@ import {
 import { Type } from 'class-transformer';
 import { BaseQuery } from '../../base/query/baseQuery';
 import { TournamentReturnTypesEnumType } from '../types';
+import { tournamentLocation, tournamentTeamType } from 'src/db/schema';
 
 export class CreateTournamentRequest implements ICreateTournamentRequest {
   @IsString()
@@ -269,11 +270,13 @@ export class TournamentQuery
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => tournamentLocation)
   @IsEnum(tournamentLocationEnum)
   location?: tournamentLocationEnum;
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => tournamentTeamType)
   @IsEnum(tournamentTeamTypeEnum)
   teamType?: tournamentTeamTypeEnum;
 
@@ -340,6 +343,7 @@ export class TournamentQuery
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => Boolean)
   @IsBoolean()
   isPublic?: boolean;
 }

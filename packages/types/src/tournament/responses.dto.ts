@@ -1,4 +1,7 @@
-import { ICategoryMiniResponse } from "src/category";
+import {
+  ICategoryMiniResponse,
+  ICategoryMiniResponseWithLogo,
+} from "src/category";
 import {
   tournamentTypeEnum,
   tournamentLocationEnum,
@@ -30,23 +33,20 @@ export interface ITournamentResponse extends IMiniTournamentResponseWithLogo {
   maxParticipants: number;
   currentParticipants: number;
   isPublic: boolean;
-  category: ICategoryMiniResponse;
+  category: ICategoryMiniResponseWithLogo;
   links: string;
 }
 
 export interface IExtendedTournamentResponse extends ITournamentResponse {
   createdAt: Date;
   updatedAt: Date;
-  links: string;
   isMultipleTeamsPerGroupAllowed: boolean;
   isFakePlayersAllowed: boolean;
   parentTournament: IMiniTournamentResponseWithLogo;
   conversionRuleId: number; // TODO: replace with a conversion rule entity later
-  prize: number;
   isRanked: boolean;
   maximumMMR: number;
   minimumMMR: number;
-  rules: string;
 }
 
 export type BaseTournamentResponseType =
@@ -62,7 +62,24 @@ export enum TournamentResponsesEnum {
   EXTENDED = "extended",
 }
 
-export type TournamentResponseEnumType = keyof typeof TournamentResponsesEnum;
+export type TournamentResponseEnumType =
+  (typeof TournamentResponsesEnum)[keyof typeof TournamentResponsesEnum];
+
+export enum TournamentSortingEnum {
+  NAME = "name",
+  CREATED_AT = "createdAt",
+  UPDATED_AT = "updatedAt",
+  PARTICIPANT_COUNT = "participant-count",
+  CATEGORY = "category",
+  MINIMUM_MMR = "minimumMMR",
+  MAXIMUM_MMR = "maximumMMR",
+  MAXIMUM_PARTICIPANTS = "maximumParticipants",
+  TOURNAMENT_TYPE = "tournamentType",
+  TOURNAMENT_LOCATION = "tournamentLocation",
+  COUNTRY = "country",
+
+  // TODO: think of more stuff later
+}
 
 export interface TournamentQueryType {
   name?: string;

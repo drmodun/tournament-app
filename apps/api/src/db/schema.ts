@@ -300,6 +300,9 @@ export const tournament = pgTable('tournament', {
   isFakePlayersAllowed: boolean('is_fake_players_allowed').default(false),
   isRanked: boolean('is_ranked').default(false),
   maxParticipants: integer('max_participants').default(32),
+  tournamentTeamType: tournamentTeamType('tournament_team_type').default(
+    'team',
+  ),
   categoryId: integer('category_id')
     .references(() => category.id, {
       onDelete: 'cascade',

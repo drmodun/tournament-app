@@ -1,14 +1,14 @@
-import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
+import { ApiResponseProperty } from '@nestjs/swagger';
 import {
   IMiniTournamentResponse,
   IMiniTournamentResponseWithLogo,
   ITournamentResponse,
   IExtendedTournamentResponse,
-  TournamentResponsesEnum,
   tournamentTypeEnum,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
 } from '@tournament-app/types';
+import { CategoryMiniResponseWithLogo } from 'src/category/dto/responses.dto';
 import { MiniGroupResponse } from 'src/group/dto/responses.dto';
 import { MiniUserResponse } from 'src/users/dto/responses.dto';
 
@@ -50,10 +50,10 @@ export class TournamentResponse
   @ApiResponseProperty()
   teamType: tournamentTeamTypeEnum;
 
-  @ApiResponseProperty({ type: () => MiniUserResponse })
+  @ApiResponseProperty({ type: MiniUserResponse })
   creator: MiniUserResponse;
 
-  @ApiResponseProperty({ type: () => MiniGroupResponse })
+  @ApiResponseProperty({ type: MiniGroupResponse })
   affiliatedGroup?: MiniGroupResponse;
 
   @ApiResponseProperty()
@@ -68,8 +68,8 @@ export class TournamentResponse
   @ApiResponseProperty()
   isPublic: boolean;
 
-  @ApiResponseProperty()
-  category: any; // ICategoryMiniResponse
+  @ApiResponseProperty({ type: CategoryMiniResponseWithLogo })
+  category: CategoryMiniResponseWithLogo;
 
   @ApiResponseProperty()
   links: string;
@@ -94,14 +94,11 @@ export class ExtendedTournamentResponse
   @ApiResponseProperty()
   isFakePlayersAllowed: boolean;
 
-  @ApiResponseProperty()
+  @ApiResponseProperty({ type: MiniTournamentResponseWithLogo })
   parentTournament: MiniTournamentResponseWithLogo;
 
   @ApiResponseProperty()
   conversionRuleId: number;
-
-  @ApiResponseProperty()
-  prize: number;
 
   @ApiResponseProperty()
   isRanked: boolean;
@@ -111,13 +108,4 @@ export class ExtendedTournamentResponse
 
   @ApiResponseProperty()
   minimumMMR: number;
-
-  @ApiResponseProperty()
-  rules: string;
-}
-
-export class TournamentResponseEnumType {
-  @ApiResponseProperty()
-  @ApiProperty({ enum: TournamentResponsesEnum })
-  type: TournamentResponsesEnum;
 }

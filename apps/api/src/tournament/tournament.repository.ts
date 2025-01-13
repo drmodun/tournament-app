@@ -1,0 +1,202 @@
+import { Injectable } from '@nestjs/common';
+import { category, participation, tournament, user } from '../db/schema';
+import { PrimaryRepository } from '../base/repository/primaryRepository';
+import { BaseQuery } from 'src/base/query/baseQuery';
+import { and, eq, gte, lte, SQL } from 'drizzle-orm';
+import {
+  IUpdateTournamentRequest,
+  tournamentLocationEnum,
+  TournamentResponseEnumType,
+  TournamentResponsesEnum,
+  TournamentSortingEnum,
+  tournamentTeamTypeEnum,
+  tournamentTypeEnum,
+} from '@tournament-app/types';
+import {
+  AnyPgSelectQueryBuilder,
+  PgColumn,
+  PgSelectJoinFn,
+} from 'drizzle-orm/pg-core';
+import { db } from 'src/db/db';
+
+@Injectable()
+export class TournamentDrizzleRepository extends PrimaryRepository<
+  typeof tournament,
+  BaseQuery,
+  IUpdateTournamentRequest
+> {
+  constructor() {
+    super(tournament);
+  }
+
+  conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
+    query: TSelect,
+    typeEnum: TournamentResponseEnumType,
+  ):
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | TSelect {
+    switch (typeEnum) {
+      case TournamentResponsesEnum.BASE:
+        return query
+          .leftJoin(user, eq(tournament.creatorId, user.id))
+          .leftJoin(user, eq(tournament.affiliatedGroupId, user.id))
+          .leftJoin(category, eq(tournament.categoryId, category.id));
+
+      case TournamentResponsesEnum.EXTENDED:
+        return query
+          .leftJoin(user, eq(tournament.creatorId, user.id))
+          .leftJoin(user, eq(tournament.affiliatedGroupId, user.id))
+          .leftJoin(category, eq(tournament.categoryId, category.id))
+          .innerJoin(
+            tournament,
+            eq(tournament.parentTournamentId, tournament.id),
+          );
+      default:
+        return query;
+    }
+  }
+
+  getValidWhereClause(query: BaseQuery): SQL[] {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const clauses = Object.entries(query).filter(([_, value]) => value);
+
+    return clauses.map(([key, value]) => {
+      switch (key) {
+        case 'name':
+          return eq(tournament.name, value as string);
+        case 'type':
+          return eq(tournament.tournamentType, value as tournamentTypeEnum);
+        case 'location':
+          return eq(tournament.location, value as tournamentLocationEnum);
+        case 'teamType':
+          return eq(
+            tournament.tournamentTeamType,
+            value as tournamentTeamTypeEnum,
+          );
+        case 'startDate':
+          return gte(tournament.startDate, value as Date);
+        case 'endDate':
+          return lte(tournament.endDate, value as Date);
+        case 'isRanked':
+          return eq(tournament.isRanked, value as boolean);
+        case 'minimumMMR':
+          return gte(tournament.minimumMMR, value as number);
+        case 'maximumMMR':
+          return lte(tournament.maximumMMR, value as number);
+        case 'isMultipleTeamsPerGroupAllowed':
+          return eq(
+            tournament.isMultipleTeamsPerGroupAllowed,
+            value as boolean,
+          );
+        case 'categoryId':
+          return eq(tournament, value as number);
+        case 'affiliatedGroupId':
+          return eq(tournament.affiliatedGroupId, value as number);
+        case 'creatorId':
+          return eq(tournament.creatorId, value as number);
+        case 'minParticipants':
+          return gte(
+            db.$count(
+              participation,
+              eq(participation.tournamentId, tournament.id),
+            ),
+            value as number,
+          );
+        case 'maxParticipants':
+          return lte(tournament.maxParticipants, value as number);
+        case 'isPublic':
+          return eq(tournament.isPublic, value as boolean);
+        default:
+          return;
+      }
+    });
+  }
+
+  sortRecord: Record<TournamentSortingEnum, PgColumn | SQL<number>> = {
+    [TournamentSortingEnum.NAME]: tournament.name,
+    [TournamentSortingEnum.CREATED_AT]: tournament.createdAt,
+    [TournamentSortingEnum.UPDATED_AT]: tournament.updatedAt,
+    [TournamentSortingEnum.CATEGORY]: tournament.categoryId,
+    [TournamentSortingEnum.MINIMUM_MMR]: tournament.minimumMMR,
+    [TournamentSortingEnum.MAXIMUM_MMR]: tournament.maximumMMR,
+    [TournamentSortingEnum.PARTICIPANT_COUNT]: db.$count(
+      participation,
+      eq(participation.tournamentId, tournament.id),
+    ),
+    [TournamentSortingEnum.MAXIMUM_PARTICIPANTS]: tournament.maxParticipants,
+    [TournamentSortingEnum.TOURNAMENT_TYPE]: tournament.tournamentType,
+    [TournamentSortingEnum.TOURNAMENT_LOCATION]: tournament.location,
+    [TournamentSortingEnum.COUNTRY]: tournament.country,
+  };
+
+  getMappingObject(responseEnum: TournamentResponsesEnum) {
+    switch (responseEnum) {
+      case TournamentResponsesEnum.MINI:
+        return {
+          id: tournament.id,
+          name: tournament.name,
+          type: tournament.tournamentType,
+          startDate: tournament.startDate,
+        };
+      case TournamentResponsesEnum.MINI_WITH_LOGO:
+        return {
+          ...this.getMappingObject(TournamentResponsesEnum.MINI),
+          location: tournament.location,
+          logo: tournament.logo,
+          country: tournament.country,
+        };
+      case TournamentResponsesEnum.BASE:
+        return {
+          ...this.getMappingObject(TournamentResponsesEnum.MINI_WITH_LOGO),
+          description: tournament.description,
+          teamType: tournament.tournamentTeamType,
+          creator: {
+            id: user.id,
+            username: user.username,
+          },
+          affiliatedGroup: {
+            id: user.id,
+            name: user.username,
+            abbreviation: user.username,
+          },
+          endDate: tournament.endDate,
+          maxParticipants: tournament.maxParticipants,
+          currentParticipants: db.$count(
+            participation,
+            eq(participation.tournamentId, tournament.id),
+          ),
+          isPublic: tournament.isPublic,
+          category: {
+            id: category.id,
+            name: category.name,
+            logo: category.image,
+          },
+          links: tournament.links,
+        };
+      case TournamentResponsesEnum.EXTENDED:
+        return {
+          ...this.getMappingObject(TournamentResponsesEnum.BASE),
+          createdAt: tournament.createdAt,
+          updatedAt: tournament.updatedAt,
+          isMultipleTeamsPerGroupAllowed:
+            tournament.isMultipleTeamsPerGroupAllowed,
+          isFakePlayersAllowed: tournament.isFakePlayersAllowed,
+          parentTournament: {
+            id: tournament.id,
+            name: tournament.name,
+            type: tournament.tournamentType,
+            startDate: tournament.startDate,
+            location: tournament.location,
+            logo: tournament.logo,
+            country: tournament.country,
+          },
+          conversionRuleId: tournament.conversionRuleId,
+          isRanked: tournament.isRanked,
+          maximumMMR: tournament.maximumMMR,
+          minimumMMR: tournament.minimumMMR,
+        };
+      default:
+        return {};
+    }
+  }
+}

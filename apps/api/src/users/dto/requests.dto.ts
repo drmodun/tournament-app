@@ -139,3 +139,5 @@ export class UserQuery
   @IsString()
   location?: string;
 }
+
+//TODO: test query params more carefully and see if more transformations have to be done

@@ -12,6 +12,11 @@ import {
 } from '@tournament-app/types';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
 import { categoryTypeEnum } from '@tournament-app/types';
+import {
+  tournamentLocationEnum,
+  tournamentTypeEnum,
+  tournamentTeamTypeEnum,
+} from '@tournament-app/types';
 
 async function teardown() {
   console.log('Teardown database...');
@@ -373,6 +378,63 @@ async function createCategories() {
   );
 }
 
+async function createTournaments() {
+  const NUM_TOURNAMENTS_TO_CREATE = process.env.SEED_TOURNAMENTS_COUNT
+    ? parseInt(process.env.SEED_TOURNAMENTS_COUNT, 10)
+    : 20;
+
+  const tournaments = [];
+  const categories = await db.select().from(tables.category);
+  const users = await db.select().from(tables.user);
+  const groups = await db.select().from(tables.group);
+
+  for (let i = 0; i < NUM_TOURNAMENTS_TO_CREATE; i++) {
+    const startDate = faker.date.future();
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + faker.number.int({ min: 1, max: 30 }));
+
+    tournaments.push({
+      id: i + 1,
+      name: faker.company.name() + ' Tournament',
+      description: faker.lorem.paragraph(),
+      tournamentLocation: faker.helpers.arrayElement(
+        Object.values(tournamentLocationEnum),
+      ),
+      country: faker.location.countryCode(),
+      startDate,
+      endDate,
+      isPublic: faker.datatype.boolean(),
+      links: faker.internet.url(),
+      tournamentType: faker.helpers.arrayElement(
+        Object.values(tournamentTypeEnum),
+      ),
+      minimumMMR: faker.number.int({ min: 0, max: 2000 }),
+      maximumMMR: faker.number.int({ min: 2001, max: 5000 }),
+      location: faker.location.city(),
+      isMultipleTeamsPerGroupAllowed: faker.datatype.boolean(),
+      isFakePlayersAllowed: faker.datatype.boolean(),
+      isRanked: faker.datatype.boolean(),
+      maxParticipants: faker.helpers.arrayElement([8, 16, 32, 64, 128]),
+      tournamentTeamType: faker.helpers.arrayElement(
+        Object.values(tournamentTeamTypeEnum),
+      ),
+      categoryId: faker.helpers.arrayElement(categories).id,
+      creatorId: faker.helpers.arrayElement(users).id,
+      affiliatedGroupId: faker.datatype.boolean()
+        ? faker.helpers.arrayElement(groups).id
+        : null,
+    });
+  }
+
+  await db.insert(tables.tournament).values(tournaments);
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE tournament_id_seq RESTART WITH ${sql.raw(
+      String(NUM_TOURNAMENTS_TO_CREATE + 1),
+    )}`,
+  );
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -381,9 +443,10 @@ export async function seed() {
   await teardown();
   await createUsers();
   await createFollowers();
-  await createCategories();
   await createGroups();
   await createGroupMemberships();
-  await createGroupJoinRequests();
   await createGroupInvites();
+  await createGroupJoinRequests();
+  await createCategories();
+  await createTournaments();
 }

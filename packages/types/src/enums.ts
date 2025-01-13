@@ -120,7 +120,7 @@ export enum betTypeEnum {
 
 export type betTypeEnumType = (typeof betTypeEnum)[keyof typeof betTypeEnum];
 
-export enum typeOfEvent {
+export enum stageTypeEnum {
   GROUP = "group",
   KNOCKOUT = "knockout",
   SWISS = "swiss",
@@ -131,7 +131,8 @@ export enum typeOfEvent {
   EVALUATED_COMPETITION = "evaluated_competition",
 }
 
-export type typeOfEventType = (typeof typeOfEvent)[keyof typeof typeOfEvent];
+export type stageTypeEnumType =
+  (typeof stageTypeEnum)[keyof typeof stageTypeEnum];
 
 export enum tournamentLocationEnum {
   ONLINE = "online",
@@ -142,15 +143,15 @@ export enum tournamentLocationEnum {
 export type tournamentLocationEnumType =
   (typeof tournamentLocationEnum)[keyof typeof tournamentLocationEnum];
 
-export enum eventStatusEnum {
+export enum stageStatusEnum {
   UPCOMING = "upcoming",
   ONGOING = "ongoing",
   FINISHED = "finished",
   CANCELLED = "cancelled",
 }
 
-export type eventStatusEnumType =
-  (typeof eventStatusEnum)[keyof typeof eventStatusEnum];
+export type stageStatusEnumType =
+  (typeof stageStatusEnum)[keyof typeof stageStatusEnum];
 
 export enum categoryTypeEnum {
   PROGRAMMING = "programming",
@@ -231,6 +232,30 @@ export enum groupFocusEnum {
 
 export type groupFocusEnumType =
   (typeof groupFocusEnum)[keyof typeof groupFocusEnum];
+
+export enum pointConversionTypeEnum {
+  STAGE_TO_STAGE = "stage_to_stage",
+  STAGE_TO_TOURNAMENT = "stage_to_tournament",
+  TOURNAMENT_TO_TOURNAMENT = "tournament_to_tournament",
+}
+
+export type pointConversionTypeEnumType =
+  (typeof pointConversionTypeEnum)[keyof typeof pointConversionTypeEnum];
+
+export enum pointConversionStrategyEnum {
+  QUALIFICATION = "qualification",
+  RANKING = "ranking",
+  ELIMINATION = "elimination", // eliminate teams under certain point threshold
+  HYBRID = "hybrid",
+  SEED = "seed",
+  TIE_BREAKER = "tie_breaker",
+  QUALIFICATION_WITH_LCQ = "qualification_with_lcq",
+
+  // TODO: add more if needed
+}
+
+export type pointConversionStrategyEnumType =
+  (typeof pointConversionStrategyEnum)[keyof typeof pointConversionStrategyEnum];
 
 export const exportEnumValues = (
   enumToExport: object

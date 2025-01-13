@@ -34,6 +34,7 @@ export function GroupRoleGuardMixin(
         request.params.groupId ||
         request.body.groupId ||
         request.query.groupId ||
+        request.body.affiliatedGroupId ||
         null;
 
       const parsedGroupId = parseInt(groupId);

@@ -47,8 +47,6 @@ describe('CategoryController (e2e)', () => {
       .post('/auth/login')
       .send({ email: 'admin@example.com', password: 'Password123!' });
 
-    console.log(loginResponse.body);
-
     authToken = loginResponse.body.accessToken;
   });
 

@@ -29,7 +29,6 @@ export interface ITournamentResponse extends IMiniTournamentResponseWithLogo {
   endDate: Date;
   maxParticipants: number;
   currentParticipants: number;
-  organizer: IMiniUserResponse;
   isPublic: boolean;
   category: ICategoryMiniResponse;
   links: string;

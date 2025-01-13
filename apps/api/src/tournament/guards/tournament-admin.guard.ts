@@ -6,7 +6,7 @@ import { ITournamentWithRelations } from '../types';
 import { GroupMembershipService } from 'src/group-membership/group-membership.service';
 
 @Injectable()
-export class TorunamentAdminGuard extends JwtAuthGuard implements CanActivate {
+export class TournamentAdminGuard extends JwtAuthGuard implements CanActivate {
   constructor(
     private readonly tournamentService: TournamentService,
     private readonly groupMembershipService: GroupMembershipService,

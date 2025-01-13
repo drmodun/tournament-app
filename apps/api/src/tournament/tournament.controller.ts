@@ -34,7 +34,8 @@ import { TournamentResponsesEnum, IQueryMetadata } from '@tournament-app/types';
 import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ConditionalAdminGuard } from './guards/conditional-admin.guard';
+import { TournamentAdminGuard } from './guards/tournament-admin.guard';
 
 @ApiTags('tournaments')
 @ApiExtraModels(
@@ -83,7 +84,7 @@ export class TournamentController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(ConditionalAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new tournament',
@@ -94,7 +95,7 @@ export class TournamentController {
   }
 
   @Patch(':tournamentId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(ConditionalAdminGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates a tournament',
@@ -108,7 +109,7 @@ export class TournamentController {
   }
 
   @Delete(':tournamentId')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(AdminAuthGuard, ConditionalAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Deletes a tournament',

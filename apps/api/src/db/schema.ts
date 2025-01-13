@@ -20,10 +20,8 @@ import {
   tournamentTeamTypeEnum,
   groupFocusEnum,
   groupTypeEnum,
-  pointConversionTypeEnum,
-  stageTypeEnum,
-  pointConversionStrategyEnum,
 } from '@tournament-app/types';
+import { pointConversionStrategyEnum, pointConversionTypeEnum, stageTypeEnum } from '@tournament-app/types/src/enums';
 import {
   serial,
   text,
@@ -292,6 +290,11 @@ export const tournament = pgTable('tournament', {
   minimumMMR: integer('minimum_mmr').default(0),
   maximumMMR: integer('maximum_mmr').default(3000),
   location: text('location'),
+  isMultipleTeamsPerGroupAllowed: boolean(
+    'is_multiple_teams_per_group_allowed',
+  ).default(false),
+  isFakePlayersAllowed: boolean('is_fake_players_allowed').default(false),
+  isRanked: boolean('is_ranked').default(false),
   maxParticipants: integer('max_participants').default(32),
   categoryId: integer('category_id')
     .references(() => category.id, {
@@ -599,7 +602,7 @@ export const pointConversionRule = pgTable('conversion_rule', {
 });
 
 export const participation = pgTable('participation', {
-  participationId: serial('participation_id').primaryKey(),
+  id: serial('id').primaryKey(),
   groupId: integer('group_id').references(() => group.id, {
     onDelete: 'cascade',
   }),
@@ -611,6 +614,9 @@ export const participation = pgTable('participation', {
       onDelete: 'cascade',
     })
     .notNull(),
+  isFake: boolean('is_fake').default(false),
+  temporaryGroupName: text('temporary_group_name'),
+  temporaryGroupProfilePicture: text('temporary_group_profile_picture'), // TODO: if deemed ineffective, remove these and create a separate entity
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   points: integer('points').default(0),
 });
@@ -642,9 +648,11 @@ export const stage = pgTable('stage', {
 
 export const roster = pgTable('roster', {
   id: serial('id').primaryKey(), //Multiple teams per group allowed
-  groupId: integer('group_id').references(() => group.id, {
-    onDelete: 'cascade',
-  }),
+  participationId: integer('participation_id')
+    .references(() => participation.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
   stageId: integer('stage_id')
     .references(() => stage.id, {
       onDelete: 'cascade',
@@ -662,6 +670,9 @@ export const userToRoster = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
+    isTemporary: boolean('is_temporary').default(false),
+    temporaryUserProfilePicture: text('temporary_user_profile_picture'),
+    temporaryUsername: text('temporary_username'),
     rosterId: integer('roster_id')
       .references(() => roster.id, {
         onDelete: 'cascade',

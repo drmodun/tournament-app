@@ -224,6 +224,18 @@ export type groupTypeEnumType =
 export type tournamentPromotionTypeEnumType =
   (typeof tournamentPromotionTypeEnum)[keyof typeof tournamentPromotionTypeEnum];
 
+export enum participationStatusEnum {
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+  WITHDRAWN = "withdrawn",
+  DISQUALIFIED = "disqualified",
+  COMPLETED = "completed"
+}
+
+export type participationStatusEnumType = 
+  (typeof participationStatusEnum)[keyof typeof participationStatusEnum];
+
 export enum groupFocusEnum {
   PARTICIPATION = "participation",
   ORGANIZATION = "organization",

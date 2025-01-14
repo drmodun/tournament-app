@@ -13,10 +13,10 @@ export class IsNumberGreaterThanConstraint
 {
   validate(value: any, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;
-    const relatedValue = (args.object as any)[relatedPropertyName];
-    const valueDate = new Date(value);
-    const relatedValueDate = new Date(relatedValue);
-    return valueDate > relatedValueDate; // for greater than comparison
+    const relatedValue: number = (args.object as any)[
+      relatedPropertyName
+    ] satisfies number;
+    return value > relatedValue; // for greater than comparison
   }
 
   defaultMessage(args: ValidationArguments) {

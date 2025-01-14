@@ -46,7 +46,6 @@ describe('UsersService', () => {
     };
 
     const result = await service.create(request);
-    console.log(result);
 
     expect(result).toEqual({ id: 1 });
   });
@@ -109,7 +108,6 @@ describe('UsersService', () => {
     };
 
     const result = await service.update(1, request);
-    console.log(result);
 
     expect(result).toEqual({ id: 1 });
   });
@@ -140,7 +138,6 @@ describe('UsersService', () => {
       ]);
 
     const result = await service.remove(1);
-    console.log(result);
 
     expect(result).toEqual({ id: 1 });
   });
@@ -151,5 +148,27 @@ describe('UsersService', () => {
       .mockResolvedValue([]);
 
     await expect(service.remove(1)).rejects.toThrow(NotFoundException);
+  });
+
+  it('should find a user', async () => {
+    jest
+      .spyOn(UserDrizzleRepository.prototype, 'getSingleQuery')
+      .mockResolvedValue([
+        {
+          id: 1,
+        },
+      ]);
+
+    const result = await service.findOne(1);
+
+    expect(result).toEqual({ id: 1 });
+  });
+
+  it('should throw an error when finding a user with a wrong id', async () => {
+    jest
+      .spyOn(UserDrizzleRepository.prototype, 'getSingleQuery')
+      .mockResolvedValue([]);
+
+    await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
   });
 });

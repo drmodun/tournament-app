@@ -11,6 +11,7 @@ import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
 import { Links } from '@tournament-app/types';
 import { CreateUserRequest, UpdateUserInfo } from 'src/users/dto/requests.dto';
+import { AuthModule } from 'src/auth/auth.module';
 
 const checkLinksOnDefault = (links: Links, baseLink: string) => {
   expect(links.first).toEqual(`${baseLink}&page=1`);
@@ -23,7 +24,7 @@ describe('UserController', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, AuthModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -126,6 +127,7 @@ describe('UserController', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
         'following',
@@ -157,6 +159,7 @@ describe('UserController', () => {
         'bio',
         'email',
         'level',
+        'name',
         'updatedAt',
         'followers',
       ]);
@@ -175,6 +178,22 @@ describe('UserController', () => {
   });
 
   describe('PATCH /users/:id', () => {
+    let adminAccessToken: string;
+
+    beforeAll(async () => {
+      const { body } = await request(app.getHttpServer()).get('/users/4');
+
+      const tokens = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: body.email,
+          password: 'Password123!',
+        })
+        .expect(201);
+
+      adminAccessToken = tokens.body.accessToken;
+    });
+
     it('should return a 400 when updating a user with an invalid request', async () => {
       const update: UpdateUserInfo = {
         bio: '',
@@ -183,6 +202,7 @@ describe('UserController', () => {
 
       const results = await request(app.getHttpServer())
         .patch('/users/1')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(update)
         .expect(400);
 
@@ -193,7 +213,11 @@ describe('UserController', () => {
     });
 
     it('should return a 422 when no body is sent', async () => {
-      await request(app.getHttpServer()).patch('/users/1').send({}).expect(422);
+      await request(app.getHttpServer())
+        .patch('/users/1')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send({})
+        .expect(422);
     });
 
     it('should return a 404 when updating a non-existent user', async () => {
@@ -204,8 +228,44 @@ describe('UserController', () => {
 
       await request(app.getHttpServer())
         .patch('/users/100')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(update)
         .expect(404);
+    });
+
+    it('should return a 401 when updating a user without authentication', async () => {
+      const update: UpdateUserInfo = {
+        bio: 'Updated bio',
+        location: 'Updated location',
+      };
+
+      await request(app.getHttpServer())
+        .patch('/users/2')
+        .send(update)
+        .expect(401);
+    });
+
+    it('should return a 403 when updating a user without authorization', async () => {
+      const update: UpdateUserInfo = {
+        bio: 'Updated bio',
+        location: 'Updated location',
+      };
+
+      const { body } = await request(app.getHttpServer()).get('/users/7');
+
+      const tokens = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: body.email,
+          password: 'Password123!',
+        })
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .patch('/users/2')
+        .set('Authorization', `Bearer ${tokens.body.accessToken}`)
+        .send(update)
+        .expect(403);
     });
 
     it('should update a user', async () => {
@@ -216,6 +276,7 @@ describe('UserController', () => {
 
       const response = await request(app.getHttpServer())
         .patch('/users/1')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateUserDto)
         .expect(200);
 
@@ -224,16 +285,57 @@ describe('UserController', () => {
   });
 
   describe('DELETE /users/:id', () => {
+    let adminAccessToken: string;
+
+    beforeAll(async () => {
+      const { body } = await request(app.getHttpServer()).get('/users/4');
+
+      const tokens = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: body.email,
+          password: 'Password123!',
+        })
+        .expect(201);
+
+      adminAccessToken = tokens.body.accessToken;
+    });
+
     it('should return a 404 when deleting a non-existent user', async () => {
-      await request(app.getHttpServer()).delete('/users/100').expect(404);
+      await request(app.getHttpServer())
+        .delete('/users/100')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .expect(404);
+    });
+
+    it('should return a 401 when deleting a user without authentication', async () => {
+      await request(app.getHttpServer()).delete('/users/1').expect(401);
+    });
+
+    it('should return a 403 when deleting a user without authorization', async () => {
+      const { body } = await request(app.getHttpServer()).get('/users/7');
+
+      const tokens = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: body.email,
+          password: 'Password123!',
+        })
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .delete('/users/1')
+        .set('Authorization', `Bearer ${tokens.body.accessToken}`)
+        .expect(403);
     });
 
     it('should delete a user', async () => {
       const response = await request(app.getHttpServer())
-        .delete('/users/1')
+        .delete('/users/32')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(200);
 
-      expect(response.body).toEqual({ id: 1 });
+      expect(response.body).toEqual({ id: 32 });
     });
   });
 
@@ -305,6 +407,131 @@ describe('UserController', () => {
       expect(response.body.message).toBe(
         'Unproccessable Entity: Unique Entity Violation',
       );
+    });
+  });
+
+  describe('GET /users/me', () => {
+    let userAccessToken: string;
+
+    beforeAll(async () => {
+      const { body } = await request(app.getHttpServer()).get('/users/4');
+
+      const tokens = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: body.email,
+          password: 'Password123!',
+        })
+        .expect(201);
+
+      userAccessToken = tokens.body.accessToken;
+    });
+
+    it('should return the authenticated user', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/users/me')
+        .set('Authorization', `Bearer ${userAccessToken}`)
+        .expect(200);
+
+      expect(response.body).toEqual({
+        id: 4,
+        username: expect.any(String),
+        email: expect.any(String),
+        name: expect.any(String),
+        bio: expect.any(String),
+        location: expect.any(String),
+        profilePicture: expect.any(String),
+        country: expect.any(String),
+        followers: expect.any(Number),
+        following: expect.any(Number),
+        level: expect.any(Number),
+        updatedAt: expect.any(String),
+        createdAt: expect.any(String),
+      });
+    });
+
+    it('should return 401 if no access token is provided', async () => {
+      await request(app.getHttpServer()).get('/users/me').expect(401);
+    });
+  });
+
+  describe('PATCH /users', () => {
+    let accessToken;
+
+    beforeAll(async () => {
+      const { body } = await request(app.getHttpServer()).get('/users/4');
+
+      const tokens = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: body.email,
+          password: 'Password123!',
+        })
+        .expect(201);
+
+      accessToken = tokens.body.accessToken;
+    });
+
+    it('should update the authenticated user', async () => {
+      const response = await request(app.getHttpServer())
+        .patch('/users')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          bio: 'Updated bio',
+          location: 'Updated location',
+        })
+        .expect(200);
+
+      expect(response.body).toEqual({ id: 4 });
+    });
+
+    it('should return 401 if no access token is provided', async () => {
+      await request(app.getHttpServer())
+        .patch('/users')
+        .send({
+          bio: 'Updated bio',
+          location: 'Updated location',
+        })
+        .expect(401);
+    });
+
+    it('should return 400 if no info is provided', async () => {
+      await request(app.getHttpServer())
+        .patch('/users')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({})
+        .expect(422);
+    });
+  });
+
+  describe('DELETE /users', () => {
+    let accessToken;
+
+    beforeAll(async () => {
+      const { body } = await request(app.getHttpServer()).get('/users/4');
+
+      const tokens = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: body.email,
+          password: 'Password123!',
+        })
+        .expect(201);
+
+      accessToken = tokens.body.accessToken;
+    });
+
+    it('should return 401 if no access token is provided', async () => {
+      await request(app.getHttpServer()).delete('/users').expect(401);
+    });
+
+    it('should delete the authenticated user', async () => {
+      const response = await request(app.getHttpServer())
+        .delete('/users')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toEqual({ id: 4 });
     });
   });
 });

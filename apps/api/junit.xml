@@ -1,131 +1,876 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="54" failures="0" errors="0" time="5.11">
-  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.337" tests="5">
-    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.005">
+<testsuites name="jest tests" tests="374" failures="1" errors="0" time="11.2">
+  <testsuite name="TournamentService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.447" tests="10">
+    <testcase classname="TournamentService create should successfully create a tournament" name="TournamentService create should successfully create a tournament" time="0.018">
     </testcase>
-    <testcase classname="MetadataMaker makeLinks should return the correct links" name="MetadataMaker makeLinks should return the correct links" time="0">
+    <testcase classname="TournamentService create should throw UnprocessableEntityException when creation fails" name="TournamentService create should throw UnprocessableEntityException when creation fails" time="0.022">
     </testcase>
-    <testcase classname="MetadataMaker makeLinks should handle URLs without page query parameter" name="MetadataMaker makeLinks should handle URLs without page query parameter" time="0.001">
+    <testcase classname="TournamentService findAll should return an array of tournaments" name="TournamentService findAll should return an array of tournaments" time="0.003">
     </testcase>
-    <testcase classname="MetadataMaker makePagination should return the correct pagination" name="MetadataMaker makePagination should return the correct pagination" time="0">
+    <testcase classname="TournamentService findAll should return empty array when no tournaments found" name="TournamentService findAll should return empty array when no tournaments found" time="0.003">
     </testcase>
-    <testcase classname="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" name="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" time="0">
+    <testcase classname="TournamentService findOne should return a single tournament" name="TournamentService findOne should return a single tournament" time="0.006">
     </testcase>
-  </testsuite>
-  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.481" tests="2">
-    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.007">
+    <testcase classname="TournamentService findOne should throw NotFoundException when tournament not found" name="TournamentService findOne should throw NotFoundException when tournament not found" time="0.003">
     </testcase>
-    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.002">
+    <testcase classname="TournamentService update should successfully update a tournament" name="TournamentService update should successfully update a tournament" time="0.003">
     </testcase>
-  </testsuite>
-  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.502" tests="8">
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23505" name="PostgresExceptionFilter should handle PostgresError with code 23505" time="0.017">
+    <testcase classname="TournamentService update should throw NotFoundException when tournament not found" name="TournamentService update should throw NotFoundException when tournament not found" time="0.002">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23503" name="PostgresExceptionFilter should handle PostgresError with code 23503" time="0.002">
+    <testcase classname="TournamentService remove should successfully remove a tournament" name="TournamentService remove should successfully remove a tournament" time="0.002">
     </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42P01" name="PostgresExceptionFilter should handle PostgresError with code 42P01" time="0.002">
-    </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42703" name="PostgresExceptionFilter should handle PostgresError with code 42703" time="0.001">
-    </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 08006" name="PostgresExceptionFilter should handle PostgresError with code 08006" time="0.002">
-    </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 53300" name="PostgresExceptionFilter should handle PostgresError with code 53300" time="0.001">
-    </testcase>
-    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 57014" name="PostgresExceptionFilter should handle PostgresError with code 57014" time="0.001">
-    </testcase>
-    <testcase classname="PostgresExceptionFilter should handle unknown PostgresError code" name="PostgresExceptionFilter should handle unknown PostgresError code" time="0.001">
+    <testcase classname="TournamentService remove should throw NotFoundException when tournament not found" name="TournamentService remove should throw NotFoundException when tournament not found" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.568" tests="1">
-    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.011">
+  <testsuite name="GroupRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.623" tests="9">
+    <testcase classname="GroupRequestsDtos CreateGroupRequest should fail validation of empty CreateGroupRequest object" name="GroupRequestsDtos CreateGroupRequest should fail validation of empty CreateGroupRequest object" time="0.033">
+    </testcase>
+    <testcase classname="GroupRequestsDtos CreateGroupRequest should fail validation of invalid CreateGroupRequest object" name="GroupRequestsDtos CreateGroupRequest should fail validation of invalid CreateGroupRequest object" time="0.003">
+    </testcase>
+    <testcase classname="GroupRequestsDtos CreateGroupRequest should pass validation of valid CreateGroupRequest object" name="GroupRequestsDtos CreateGroupRequest should pass validation of valid CreateGroupRequest object" time="0.003">
+    </testcase>
+    <testcase classname="GroupRequestsDtos UpdateGroupRequest should pass validation of empty UpdateGroupRequest object" name="GroupRequestsDtos UpdateGroupRequest should pass validation of empty UpdateGroupRequest object" time="0.001">
+    </testcase>
+    <testcase classname="GroupRequestsDtos UpdateGroupRequest should fail validation of invalid UpdateGroupRequest object" name="GroupRequestsDtos UpdateGroupRequest should fail validation of invalid UpdateGroupRequest object" time="0.001">
+    </testcase>
+    <testcase classname="GroupRequestsDtos UpdateGroupRequest should pass validation of valid UpdateGroupRequest object" name="GroupRequestsDtos UpdateGroupRequest should pass validation of valid UpdateGroupRequest object" time="0.001">
+    </testcase>
+    <testcase classname="GroupRequestsDtos GroupQuery should pass validation of empty GroupQuery object" name="GroupRequestsDtos GroupQuery should pass validation of empty GroupQuery object" time="0.021">
+    </testcase>
+    <testcase classname="GroupRequestsDtos GroupQuery should fail validation of invalid GroupQuery object" name="GroupRequestsDtos GroupQuery should fail validation of invalid GroupQuery object" time="0.001">
+    </testcase>
+    <testcase classname="GroupRequestsDtos GroupQuery should pass validation of valid GroupQuery object" name="GroupRequestsDtos GroupQuery should pass validation of valid GroupQuery object" time="0.001">
     </testcase>
   </testsuite>
-  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.731" tests="3">
-    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.005">
+  <testsuite name="TournamentAdminGuard" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.615" tests="10">
+    <testcase classname="TournamentAdminGuard JWT Authentication should deny access when JWT authentication fails" name="TournamentAdminGuard JWT Authentication should deny access when JWT authentication fails" time="0.017">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Admin Role Access should allow access for users with ADMIN role" name="TournamentAdminGuard Admin Role Access should allow access for users with ADMIN role" time="0.004">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Tournament Creator Access should allow access for tournament creator" name="TournamentAdminGuard Tournament Creator Access should allow access for tournament creator" time="0.004">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Tournament Creator Access should get tournamentId from request body if not in params" name="TournamentAdminGuard Tournament Creator Access should get tournamentId from request body if not in params" time="0.006">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Tournament Creator Access should get tournamentId from query if not in params or body" name="TournamentAdminGuard Tournament Creator Access should get tournamentId from query if not in params or body" time="0.003">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Group Admin Access should allow access for group admin" name="TournamentAdminGuard Group Admin Access should allow access for group admin" time="0.003">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Group Admin Access should deny access if tournament has no affiliated group" name="TournamentAdminGuard Group Admin Access should deny access if tournament has no affiliated group" time="0.002">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Group Admin Access should deny access if user is not group admin" name="TournamentAdminGuard Group Admin Access should deny access if user is not group admin" time="0.003">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Failed Access Scenarios should deny access when tournamentId is not provided" name="TournamentAdminGuard Failed Access Scenarios should deny access when tournamentId is not provided" time="0.003">
+    </testcase>
+    <testcase classname="TournamentAdminGuard Failed Access Scenarios should deny access when user is not creator and not group admin" name="TournamentAdminGuard Failed Access Scenarios should deny access when user is not creator and not group admin" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.648" tests="9">
+    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.016">
+    </testcase>
+    <testcase classname="UserDrizzleRepository getQuery should return a valid query with base response type" name="UserDrizzleRepository getQuery should return a valid query with base response type" time="0.012">
+    </testcase>
+    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.006">
+    </testcase>
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.01">
+    </testcase>
+    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.01">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.004">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.005">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.004">
+    </testcase>
+    <testcase classname="UserDrizzleRepository should check if an entity exists given a valid id" name="UserDrizzleRepository should check if an entity exists given a valid id" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupMembershipController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.69" tests="7">
+    <testcase classname="GroupMembershipController should be defined" name="GroupMembershipController should be defined" time="0.017">
+    </testcase>
+    <testcase classname="GroupMembershipController findAll should return paginated group memberships with metadata" name="GroupMembershipController findAll should return paginated group memberships with metadata" time="0.007">
+    </testcase>
+    <testcase classname="GroupMembershipController findOne should return a specific group membership" name="GroupMembershipController findOne should return a specific group membership" time="0.023">
+    </testcase>
+    <testcase classname="GroupMembershipController findOne should handle missing responseType" name="GroupMembershipController findOne should handle missing responseType" time="0.003">
+    </testcase>
+    <testcase classname="GroupMembershipController create should create a group membership" name="GroupMembershipController create should create a group membership" time="0.003">
+    </testcase>
+    <testcase classname="GroupMembershipController update should update a group membership" name="GroupMembershipController update should update a group membership" time="0.003">
+    </testcase>
+    <testcase classname="GroupMembershipController remove should remove a group membership" name="GroupMembershipController remove should remove a group membership" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="TournamentRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.744" tests="12">
+    <testcase classname="TournamentRequestsDtos CreateTournamentRequest should fail validation with empty object" name="TournamentRequestsDtos CreateTournamentRequest should fail validation with empty object" time="0.009">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos CreateTournamentRequest should fail validation with invalid data types" name="TournamentRequestsDtos CreateTournamentRequest should fail validation with invalid data types" time="0.002">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos CreateTournamentRequest should fail validation with invalid string lengths" name="TournamentRequestsDtos CreateTournamentRequest should fail validation with invalid string lengths" time="0.002">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos CreateTournamentRequest should fail validation with invalid number ranges" name="TournamentRequestsDtos CreateTournamentRequest should fail validation with invalid number ranges" time="0.001">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos CreateTournamentRequest should pass validation with valid data" name="TournamentRequestsDtos CreateTournamentRequest should pass validation with valid data" time="0.001">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos UpdateTournamentRequest should pass validation with empty object" name="TournamentRequestsDtos UpdateTournamentRequest should pass validation with empty object" time="0.001">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos UpdateTournamentRequest should fail validation with invalid data types" name="TournamentRequestsDtos UpdateTournamentRequest should fail validation with invalid data types" time="0.001">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos UpdateTournamentRequest should pass validation with valid partial data" name="TournamentRequestsDtos UpdateTournamentRequest should pass validation with valid partial data" time="0.001">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos TournamentQuery should pass validation with empty object" name="TournamentRequestsDtos TournamentQuery should pass validation with empty object" time="0.001">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos TournamentQuery should fail validation with invalid data types" name="TournamentRequestsDtos TournamentQuery should fail validation with invalid data types" time="0.001">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos TournamentQuery should pass validation with valid data" name="TournamentRequestsDtos TournamentQuery should pass validation with valid data" time="0.008">
+    </testcase>
+    <testcase classname="TournamentRequestsDtos TournamentQuery should pass validation with valid ranges" name="TournamentRequestsDtos TournamentQuery should pass validation with valid ranges" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.81" tests="8">
+    <testcase classname="AuthService verifyWithCredentials should throw NotFoundException when user not found" name="AuthService verifyWithCredentials should throw NotFoundException when user not found" time="0.038">
+    </testcase>
+    <testcase classname="AuthService verifyWithCredentials should throw UnauthorizedException when password is invalid" name="AuthService verifyWithCredentials should throw UnauthorizedException when password is invalid" time="0.004">
+    </testcase>
+    <testcase classname="AuthService verifyWithCredentials should return tokens when credentials are valid" name="AuthService verifyWithCredentials should return tokens when credentials are valid" time="0.003">
+    </testcase>
+    <testcase classname="AuthService getTokens should generate access and refresh tokens" name="AuthService getTokens should generate access and refresh tokens" time="0.003">
+    </testcase>
+    <testcase classname="AuthService refreshTokens should return new tokens when refresh token is valid" name="AuthService refreshTokens should return new tokens when refresh token is valid" time="0.007">
+    </testcase>
+    <testcase classname="AuthService refreshTokens should throw error when refresh token is invalid" name="AuthService refreshTokens should throw error when refresh token is invalid" time="0.004">
+    </testcase>
+    <testcase classname="AuthService validateUser should return user when found" name="AuthService validateUser should return user when found" time="0.003">
+    </testcase>
+    <testcase classname="AuthService validateUser should throw UnauthorizedException when user not found" name="AuthService validateUser should throw UnauthorizedException when user not found" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="Category DTOs" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.845" tests="15">
+    <testcase classname="Category DTOs CreateCategoryRequest should validate a valid create request" name="Category DTOs CreateCategoryRequest should validate a valid create request" time="0.009">
+    </testcase>
+    <testcase classname="Category DTOs CreateCategoryRequest should fail with short name" name="Category DTOs CreateCategoryRequest should fail with short name" time="0.003">
+    </testcase>
+    <testcase classname="Category DTOs CreateCategoryRequest should fail with long name" name="Category DTOs CreateCategoryRequest should fail with long name" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs CreateCategoryRequest should fail with invalid logo URL" name="Category DTOs CreateCategoryRequest should fail with invalid logo URL" time="0">
+    </testcase>
+    <testcase classname="Category DTOs CreateCategoryRequest should fail with missing required fields" name="Category DTOs CreateCategoryRequest should fail with missing required fields" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs UpdateCategoryRequest should validate a valid update request with all fields" name="Category DTOs UpdateCategoryRequest should validate a valid update request with all fields" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs UpdateCategoryRequest should validate a valid update request with partial fields" name="Category DTOs UpdateCategoryRequest should validate a valid update request with partial fields" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs UpdateCategoryRequest should fail with invalid name length" name="Category DTOs UpdateCategoryRequest should fail with invalid name length" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs UpdateCategoryRequest should validate an empty update request" name="Category DTOs UpdateCategoryRequest should validate an empty update request" time="0">
+    </testcase>
+    <testcase classname="Category DTOs CategoryQuery should validate a valid query with all optional fields" name="Category DTOs CategoryQuery should validate a valid query with all optional fields" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs CategoryQuery should validate a query with no fields" name="Category DTOs CategoryQuery should validate a query with no fields" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs CategoryQuery should validate a query with some fields" name="Category DTOs CategoryQuery should validate a query with some fields" time="0">
+    </testcase>
+    <testcase classname="Category DTOs UploadCategoryLogoRequest should validate a valid logo upload request" name="Category DTOs UploadCategoryLogoRequest should validate a valid logo upload request" time="0">
+    </testcase>
+    <testcase classname="Category DTOs UploadCategoryLogoRequest should fail with invalid logo URL" name="Category DTOs UploadCategoryLogoRequest should fail with invalid logo URL" time="0.001">
+    </testcase>
+    <testcase classname="Category DTOs UploadCategoryLogoRequest should fail with missing logo" name="Category DTOs UploadCategoryLogoRequest should fail with missing logo" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupRoleGuardMixin" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.79" tests="24">
+    <testcase classname="GroupRoleGuardMixin isOwner Guard should be defined" name="GroupRoleGuardMixin isOwner Guard should be defined" time="0.023">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isOwner Guard canActivate should return false if JWT authentication fails" name="GroupRoleGuardMixin isOwner Guard canActivate should return false if JWT authentication fails" time="0.003">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isOwner Guard canActivate should return false if no groupId is provided" name="GroupRoleGuardMixin isOwner Guard canActivate should return false if no groupId is provided" time="0.003">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isOwner Guard canActivate should return false if groupId is not a number" name="GroupRoleGuardMixin isOwner Guard canActivate should return false if groupId is not a number" time="0.006">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isOwner Guard canActivate should return false if no user is provided" name="GroupRoleGuardMixin isOwner Guard canActivate should return false if no user is provided" time="0.003">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isOwner Guard canActivate should return true if user is an admin" name="GroupRoleGuardMixin isOwner Guard canActivate should return true if user is an admin" time="0.003">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isOwner Guard canActivate should return true if user has isOwner role" name="GroupRoleGuardMixin isOwner Guard canActivate should return true if user has isOwner role" time="0.003">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isOwner Guard canActivate should return false if user does not have isOwner role" name="GroupRoleGuardMixin isOwner Guard canActivate should return false if user does not have isOwner role" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard should be defined" name="GroupRoleGuardMixin isAdmin Guard should be defined" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard canActivate should return false if JWT authentication fails" name="GroupRoleGuardMixin isAdmin Guard canActivate should return false if JWT authentication fails" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard canActivate should return false if no groupId is provided" name="GroupRoleGuardMixin isAdmin Guard canActivate should return false if no groupId is provided" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard canActivate should return false if groupId is not a number" name="GroupRoleGuardMixin isAdmin Guard canActivate should return false if groupId is not a number" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard canActivate should return false if no user is provided" name="GroupRoleGuardMixin isAdmin Guard canActivate should return false if no user is provided" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard canActivate should return true if user is an admin" name="GroupRoleGuardMixin isAdmin Guard canActivate should return true if user is an admin" time="0.007">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard canActivate should return true if user has isAdmin role" name="GroupRoleGuardMixin isAdmin Guard canActivate should return true if user has isAdmin role" time="0.01">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isAdmin Guard canActivate should return false if user does not have isAdmin role" name="GroupRoleGuardMixin isAdmin Guard canActivate should return false if user does not have isAdmin role" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard should be defined" name="GroupRoleGuardMixin isMember Guard should be defined" time="0.003">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard canActivate should return false if JWT authentication fails" name="GroupRoleGuardMixin isMember Guard canActivate should return false if JWT authentication fails" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard canActivate should return false if no groupId is provided" name="GroupRoleGuardMixin isMember Guard canActivate should return false if no groupId is provided" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard canActivate should return false if groupId is not a number" name="GroupRoleGuardMixin isMember Guard canActivate should return false if groupId is not a number" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard canActivate should return false if no user is provided" name="GroupRoleGuardMixin isMember Guard canActivate should return false if no user is provided" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard canActivate should return true if user is an admin" name="GroupRoleGuardMixin isMember Guard canActivate should return true if user is an admin" time="0.002">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard canActivate should return true if user has isMember role" name="GroupRoleGuardMixin isMember Guard canActivate should return true if user has isMember role" time="0.003">
+    </testcase>
+    <testcase classname="GroupRoleGuardMixin isMember Guard canActivate should return false if user does not have isMember role" name="GroupRoleGuardMixin isMember Guard canActivate should return false if user does not have isMember role" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupJoinRequestsService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.902" tests="11">
+    <testcase classname="GroupJoinRequestsService should be defined" name="GroupJoinRequestsService should be defined" time="0.029">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService create should create a group join request" name="GroupJoinRequestsService create should create a group join request" time="0.004">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService findAll should return an array of group join requests" name="GroupJoinRequestsService findAll should return an array of group join requests" time="0.003">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService findOne should return a group join request" name="GroupJoinRequestsService findOne should return a group join request" time="0.006">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService findOne should throw NotFoundException when group join request not found" name="GroupJoinRequestsService findOne should throw NotFoundException when group join request not found" time="0.028">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService update should update a group join request" name="GroupJoinRequestsService update should update a group join request" time="0.002">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService remove should remove a group join request" name="GroupJoinRequestsService remove should remove a group join request" time="0.002">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService accept should throw NotFoundException when request does not exist" name="GroupJoinRequestsService accept should throw NotFoundException when request does not exist" time="0.008">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService accept should accept a group join request" name="GroupJoinRequestsService accept should accept a group join request" time="0.002">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService reject should throw NotFoundException when request does not exist" name="GroupJoinRequestsService reject should throw NotFoundException when request does not exist" time="0.003">
+    </testcase>
+    <testcase classname="GroupJoinRequestsService reject should reject a group join request" name="GroupJoinRequestsService reject should reject a group join request" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupInvitesService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.933" tests="11">
+    <testcase classname="GroupInvitesService should be defined" name="GroupInvitesService should be defined" time="0.016">
+    </testcase>
+    <testcase classname="GroupInvitesService create should create a group invite" name="GroupInvitesService create should create a group invite" time="0.004">
+    </testcase>
+    <testcase classname="GroupInvitesService create should throw BadRequestException if user is already a member" name="GroupInvitesService create should throw BadRequestException if user is already a member" time="0.02">
+    </testcase>
+    <testcase classname="GroupInvitesService findAll should return an array of group invites" name="GroupInvitesService findAll should return an array of group invites" time="0.006">
+    </testcase>
+    <testcase classname="GroupInvitesService findOne should return a group invite" name="GroupInvitesService findOne should return a group invite" time="0.003">
+    </testcase>
+    <testcase classname="GroupInvitesService update should update a group invite" name="GroupInvitesService update should update a group invite" time="0.002">
+    </testcase>
+    <testcase classname="GroupInvitesService remove should remove a group invite" name="GroupInvitesService remove should remove a group invite" time="0.003">
+    </testcase>
+    <testcase classname="GroupInvitesService checkIfUserIsAlreadyMember should throw BadRequestException if user is already a member" name="GroupInvitesService checkIfUserIsAlreadyMember should throw BadRequestException if user is already a member" time="0.011">
+    </testcase>
+    <testcase classname="GroupInvitesService checkIfUserIsAlreadyMember should not throw if user is not a member" name="GroupInvitesService checkIfUserIsAlreadyMember should not throw if user is not a member" time="0.002">
+    </testcase>
+    <testcase classname="GroupInvitesService checkIfInviteExists should throw BadRequestException if invite already exists" name="GroupInvitesService checkIfInviteExists should throw BadRequestException if invite already exists" time="0.002">
+    </testcase>
+    <testcase classname="GroupInvitesService checkIfInviteExists should not throw if invite does not exist" name="GroupInvitesService checkIfInviteExists should not throw if invite does not exist" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="9.956" tests="18">
+    <testcase classname="GroupService should be defined" name="GroupService should be defined" time="0.017">
+    </testcase>
+    <testcase classname="GroupService create should create a group successfully" name="GroupService create should create a group successfully" time="0.005">
+    </testcase>
+    <testcase classname="GroupService create should throw UnprocessableEntityException when creation fails" name="GroupService create should throw UnprocessableEntityException when creation fails" time="0.028">
+    </testcase>
+    <testcase classname="GroupService findAll should return array of groups" name="GroupService findAll should return array of groups" time="0.008">
+    </testcase>
+    <testcase classname="GroupService findOne should return a group" name="GroupService findOne should return a group" time="0.02">
+    </testcase>
+    <testcase classname="GroupService findOne should throw NotFoundException when group not found" name="GroupService findOne should throw NotFoundException when group not found" time="0.003">
+    </testcase>
+    <testcase classname="GroupService update should update a group successfully" name="GroupService update should update a group successfully" time="0.005">
+    </testcase>
+    <testcase classname="GroupService update should throw UnprocessableEntityException when update fails" name="GroupService update should throw UnprocessableEntityException when update fails" time="0.018">
+    </testcase>
+    <testcase classname="GroupService update should throw NotFoundException when group not found" name="GroupService update should throw NotFoundException when group not found" time="0.006">
+    </testcase>
+    <testcase classname="GroupService remove should remove a group successfully" name="GroupService remove should remove a group successfully" time="0.007">
+    </testcase>
+    <testcase classname="GroupService remove should throw UnprocessableEntityException when removal fails" name="GroupService remove should throw UnprocessableEntityException when removal fails" time="0.002">
+    </testcase>
+    <testcase classname="GroupService remove should throw NotFoundException when group not found" name="GroupService remove should throw NotFoundException when group not found" time="0.002">
+    </testcase>
+    <testcase classname="GroupService getGroupMembers should return group members" name="GroupService getGroupMembers should return group members" time="0.002">
+    </testcase>
+    <testcase classname="GroupService getGroupMembers should throw NotFoundException when group not found" name="GroupService getGroupMembers should throw NotFoundException when group not found" time="0.002">
+    </testcase>
+    <testcase classname="GroupService getGroupTournaments should return group tournaments" name="GroupService getGroupTournaments should return group tournaments" time="0.002">
+    </testcase>
+    <testcase classname="GroupService getGroupTournaments should throw NotFoundException when group not found" name="GroupService getGroupTournaments should throw NotFoundException when group not found" time="0.003">
+    </testcase>
+    <testcase classname="GroupService getGroupFollowers should return group followers" name="GroupService getGroupFollowers should return group followers" time="0.004">
+    </testcase>
+    <testcase classname="GroupService getGroupFollowers should throw NotFoundException when group not found" name="GroupService getGroupFollowers should throw NotFoundException when group not found" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupMembershipService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.448" tests="14">
+    <testcase classname="GroupMembershipService should be defined" name="GroupMembershipService should be defined" time="0.015">
+    </testcase>
+    <testcase classname="GroupMembershipService create should create a group membership" name="GroupMembershipService create should create a group membership" time="0.006">
+    </testcase>
+    <testcase classname="GroupMembershipService findAll should return all group memberships" name="GroupMembershipService findAll should return all group memberships" time="0.006">
+    </testcase>
+    <testcase classname="GroupMembershipService findOne should return a single group membership" name="GroupMembershipService findOne should return a single group membership" time="0.005">
+    </testcase>
+    <testcase classname="GroupMembershipService findOne should return a single group membership with custom response type" name="GroupMembershipService findOne should return a single group membership with custom response type" time="0.002">
+    </testcase>
+    <testcase classname="GroupMembershipService update should update a group membership" name="GroupMembershipService update should update a group membership" time="0.002">
+    </testcase>
+    <testcase classname="GroupMembershipService remove should remove a group membership" name="GroupMembershipService remove should remove a group membership" time="0.005">
+    </testcase>
+    <testcase classname="GroupMembershipService role checks isAdmin should return true for admin role" name="GroupMembershipService role checks isAdmin should return true for admin role" time="0.002">
+    </testcase>
+    <testcase classname="GroupMembershipService role checks isAdmin should return true for owner role" name="GroupMembershipService role checks isAdmin should return true for owner role" time="0.004">
+    </testcase>
+    <testcase classname="GroupMembershipService role checks isAdmin should return false for member role" name="GroupMembershipService role checks isAdmin should return false for member role" time="0.002">
+    </testcase>
+    <testcase classname="GroupMembershipService role checks isMember should return true when membership exists" name="GroupMembershipService role checks isMember should return true when membership exists" time="0.004">
+    </testcase>
+    <testcase classname="GroupMembershipService role checks isMember should return false when membership does not exist" name="GroupMembershipService role checks isMember should return false when membership does not exist" time="0.001">
+    </testcase>
+    <testcase classname="GroupMembershipService role checks isOwner should return true for owner role" name="GroupMembershipService role checks isOwner should return true for owner role" time="0.002">
+    </testcase>
+    <testcase classname="GroupMembershipService role checks isOwner should return false for non-owner roles" name="GroupMembershipService role checks isOwner should return false for non-owner roles" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="CategoryController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="10.03" tests="10">
+    <testcase classname="CategoryController should be defined" name="CategoryController should be defined" time="0.022">
+    </testcase>
+    <testcase classname="CategoryController should return a valid query" name="CategoryController should return a valid query" time="0.014">
+    </testcase>
+    <testcase classname="CategoryController should return a category" name="CategoryController should return a category" time="0.005">
+    </testcase>
+    <testcase classname="CategoryController should create a category" name="CategoryController should create a category" time="0.019">
+    </testcase>
+    <testcase classname="CategoryController should update a category" name="CategoryController should update a category" time="0.005">
+    </testcase>
+    <testcase classname="CategoryController should remove a category" name="CategoryController should remove a category" time="0.004">
+    </testcase>
+    <testcase classname="CategoryController should throw NotFoundException when category is not found" name="CategoryController should throw NotFoundException when category is not found" time="0.024">
+    </testcase>
+    <testcase classname="CategoryController should throw UnprocessableEntityException when category creation fails" name="CategoryController should throw UnprocessableEntityException when category creation fails" time="0.004">
+    </testcase>
+    <testcase classname="CategoryController should throw NotFoundException when updating non-existent category" name="CategoryController should throw NotFoundException when updating non-existent category" time="0.004">
+    </testcase>
+    <testcase classname="CategoryController should throw NotFoundException when removing non-existent category" name="CategoryController should throw NotFoundException when removing non-existent category" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="10.155" tests="8">
+    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.022">
+    </testcase>
+    <testcase classname="UsersController should return a valid query" name="UsersController should return a valid query" time="0.011">
+    </testcase>
+    <testcase classname="UsersController should return a user" name="UsersController should return a user" time="0.003">
+    </testcase>
+    <testcase classname="UsersController should create a user" name="UsersController should create a user" time="0.004">
+    </testcase>
+    <testcase classname="UsersController should update a user" name="UsersController should update a user" time="0.003">
+    </testcase>
+    <testcase classname="UsersController should delete a user" name="UsersController should delete a user" time="0.003">
+    </testcase>
+    <testcase classname="UsersController should delete me" name="UsersController should delete me" time="0.005">
+    </testcase>
+    <testcase classname="UsersController should update me" name="UsersController should update me" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupInviteQuery" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.336" tests="13">
+    <testcase classname="GroupInviteQuery should pass validation with valid data" name="GroupInviteQuery should pass validation with valid data" time="0.003">
+    </testcase>
+    <testcase classname="GroupInviteQuery should pass validation with partial data" name="GroupInviteQuery should pass validation with partial data" time="0.001">
+    </testcase>
+    <testcase classname="GroupInviteQuery should fail validation with invalid userId type" name="GroupInviteQuery should fail validation with invalid userId type" time="0.001">
+    </testcase>
+    <testcase classname="GroupInviteQuery should fail validation with invalid groupId type" name="GroupInviteQuery should fail validation with invalid groupId type" time="0.001">
+    </testcase>
+    <testcase classname="CreateGroupInviteDto should pass validation with valid data" name="CreateGroupInviteDto should pass validation with valid data" time="0.001">
+    </testcase>
+    <testcase classname="CreateGroupInviteDto should pass validation without optional relatedLFPId" name="CreateGroupInviteDto should pass validation without optional relatedLFPId" time="0">
+    </testcase>
+    <testcase classname="CreateGroupInviteDto should fail validation without required message" name="CreateGroupInviteDto should fail validation without required message" time="0.001">
+    </testcase>
+    <testcase classname="CreateGroupInviteDto should fail validation with invalid message type" name="CreateGroupInviteDto should fail validation with invalid message type" time="0">
+    </testcase>
+    <testcase classname="UpdateGroupInviteDto should pass validation with valid data" name="UpdateGroupInviteDto should pass validation with valid data" time="0.001">
+    </testcase>
+    <testcase classname="UpdateGroupInviteDto should pass validation with partial data" name="UpdateGroupInviteDto should pass validation with partial data" time="0">
+    </testcase>
+    <testcase classname="UpdateGroupInviteDto should pass validation with empty object" name="UpdateGroupInviteDto should pass validation with empty object" time="0">
+    </testcase>
+    <testcase classname="UpdateGroupInviteDto should fail validation with invalid message type" name="UpdateGroupInviteDto should fail validation with invalid message type" time="0.001">
+    </testcase>
+    <testcase classname="UpdateGroupInviteDto should fail validation with invalid relatedLFPId type" name="UpdateGroupInviteDto should fail validation with invalid relatedLFPId type" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="10.165" tests="13">
+    <testcase classname="GroupController should be defined" name="GroupController should be defined" time="0.016">
+    </testcase>
+    <testcase classname="GroupController create should create a group" name="GroupController create should create a group" time="0.015">
+    </testcase>
+    <testcase classname="GroupController findAll should return array of groups with metadata" name="GroupController findAll should return array of groups with metadata" time="0.011">
+    </testcase>
+    <testcase classname="GroupController findOne should return a group with BASE response type" name="GroupController findOne should return a group with BASE response type" time="0.002">
+    </testcase>
+    <testcase classname="GroupController findOne should return a group with MINI response type" name="GroupController findOne should return a group with MINI response type" time="0.003">
+    </testcase>
+    <testcase classname="GroupController findOne should return a group with MINI_WITH_LOGO response type" name="GroupController findOne should return a group with MINI_WITH_LOGO response type" time="0.003">
+    </testcase>
+    <testcase classname="GroupController findOne should return a group with MINI_WITH_COUNTRY response type" name="GroupController findOne should return a group with MINI_WITH_COUNTRY response type" time="0.003">
+    </testcase>
+    <testcase classname="GroupController findOne should return a group with EXTENDED response type" name="GroupController findOne should return a group with EXTENDED response type" time="0.002">
+    </testcase>
+    <testcase classname="GroupController update should update a group" name="GroupController update should update a group" time="0.003">
+    </testcase>
+    <testcase classname="GroupController remove should remove a group" name="GroupController remove should remove a group" time="0.003">
+    </testcase>
+    <testcase classname="GroupController getGroupMembers should return group members" name="GroupController getGroupMembers should return group members" time="0.004">
+    </testcase>
+    <testcase classname="GroupController getGroupTournaments should return group tournaments" name="GroupController getGroupTournaments should return group tournaments" time="0.009">
+    </testcase>
+    <testcase classname="GroupController getGroupFollowers should return group followers" name="GroupController getGroupFollowers should return group followers" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="NotificationsService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="10.271" tests="8">
+    <testcase classname="NotificationsService should throw an error if Firebase credentials are not set" name="NotificationsService should throw an error if Firebase credentials are not set" time="0.043">
+    </testcase>
+    <testcase classname="NotificationsService should be defined" name="NotificationsService should be defined" time="0.002">
+    </testcase>
+    <testcase classname="NotificationsService sendNotificationToUser should send notification to user" name="NotificationsService sendNotificationToUser should send notification to user" time="0.003">
+    </testcase>
+    <testcase classname="NotificationsService sendNotificationToUser should throw InternalServerErrorException if sending notification fails" name="NotificationsService sendNotificationToUser should throw InternalServerErrorException if sending notification fails" time="0.003">
+    </testcase>
+    <testcase classname="NotificationsService sendNotification should send notification" name="NotificationsService sendNotification should send notification" time="0.006">
+    </testcase>
+    <testcase classname="NotificationsService sendNotification should throw InternalServerErrorException if sending notification fails" name="NotificationsService sendNotification should throw InternalServerErrorException if sending notification fails" time="0.031">
+    </testcase>
+    <testcase classname="NotificationsService sendMulticastNotification should send multicast notification" name="NotificationsService sendMulticastNotification should send multicast notification" time="0.003">
+    </testcase>
+    <testcase classname="NotificationsService sendMulticastNotification should throw InternalServerErrorException if sending multicast notification fails" name="NotificationsService sendMulticastNotification should throw InternalServerErrorException if sending multicast notification fails" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="FollowersController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.617" tests="5">
+    <testcase classname="FollowersController should be defined" name="FollowersController should be defined" time="0.007">
+    </testcase>
+    <testcase classname="FollowersController findAll should return followers with metadata" name="FollowersController findAll should return followers with metadata" time="0.003">
+    </testcase>
+    <testcase classname="FollowersController findOne should return a single follower relationship" name="FollowersController findOne should return a single follower relationship" time="0.002">
+    </testcase>
+    <testcase classname="FollowersController create should create a follower relationship" name="FollowersController create should create a follower relationship" time="0.005">
+    </testcase>
+    <testcase classname="FollowersController remove should remove a follower relationship" name="FollowersController remove should remove a follower relationship" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.55" tests="10">
+    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.005">
+    </testcase>
+    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.048">
+    </testcase>
+    <testcase classname="UsersService should throw an unprocessable entity exception when creating a user fails" name="UsersService should throw an unprocessable entity exception when creating a user fails" time="0.064">
+    </testcase>
+    <testcase classname="UsersService should throw an error when creating a user with an existing email" name="UsersService should throw an error when creating a user with an existing email" time="0.102">
+    </testcase>
+    <testcase classname="UsersService should update a user" name="UsersService should update a user" time="0.002">
+    </testcase>
+    <testcase classname="UsersService should throw an error when updating a user with an existing email" name="UsersService should throw an error when updating a user with an existing email" time="0.002">
+    </testcase>
+    <testcase classname="UsersService should delete a user" name="UsersService should delete a user" time="0.002">
+    </testcase>
+    <testcase classname="UsersService should throw an error when deleting a user with a wrong id" name="UsersService should throw an error when deleting a user with a wrong id" time="0.002">
+    </testcase>
+    <testcase classname="UsersService should find a user" name="UsersService should find a user" time="0.003">
+    </testcase>
+    <testcase classname="UsersService should throw an error when finding a user with a wrong id" name="UsersService should throw an error when finding a user with a wrong id" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="ConditionalAdminGuard" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.54" tests="7">
+    <testcase classname="ConditionalAdminGuard when affiliatedGroupId is provided should check group admin permissions" name="ConditionalAdminGuard when affiliatedGroupId is provided should check group admin permissions" time="0.013">
+    </testcase>
+    <testcase classname="ConditionalAdminGuard when affiliatedGroupId is provided should deny access when group admin check fails" name="ConditionalAdminGuard when affiliatedGroupId is provided should deny access when group admin check fails" time="0.003">
+    </testcase>
+    <testcase classname="ConditionalAdminGuard when affiliatedGroupId is not provided should allow access without group admin check" name="ConditionalAdminGuard when affiliatedGroupId is not provided should allow access without group admin check" time="0.003">
+    </testcase>
+    <testcase classname="ConditionalAdminGuard when affiliatedGroupId is not provided should allow access with empty request body" name="ConditionalAdminGuard when affiliatedGroupId is not provided should allow access with empty request body" time="0.018">
+    </testcase>
+    <testcase classname="ConditionalAdminGuard when affiliatedGroupId is not provided should allow access with null affiliatedGroupId" name="ConditionalAdminGuard when affiliatedGroupId is not provided should allow access with null affiliatedGroupId" time="0.003">
+    </testcase>
+    <testcase classname="ConditionalAdminGuard edge cases should handle undefined request" name="ConditionalAdminGuard edge cases should handle undefined request" time="0.002">
+    </testcase>
+    <testcase classname="ConditionalAdminGuard edge cases should handle request without body" name="ConditionalAdminGuard edge cases should handle request without body" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="CategoryService" errors="0" failures="1" skipped="0" timestamp="2025-01-13T04:23:54" time="10.356" tests="11">
+    <testcase classname="CategoryService should be defined" name="CategoryService should be defined" time="0.016">
+    </testcase>
+    <testcase classname="CategoryService should create a category" name="CategoryService should create a category" time="0.005">
+    </testcase>
+    <testcase classname="CategoryService should throw an unprocessable entity exception when creating a category fails" name="CategoryService should throw an unprocessable entity exception when creating a category fails" time="0.021">
+    </testcase>
+    <testcase classname="CategoryService should throw an error when creating a category with a duplicate name" name="CategoryService should throw an error when creating a category with a duplicate name" time="0.004">
+    </testcase>
+    <testcase classname="CategoryService should find all categories" name="CategoryService should find all categories" time="0.003">
+    </testcase>
+    <testcase classname="CategoryService should find one category" name="CategoryService should find one category" time="0.003">
+    </testcase>
+    <testcase classname="CategoryService should throw not found exception when category does not exist" name="CategoryService should throw not found exception when category does not exist" time="0.031">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected constructor: NotFoundException
+Received constructor: TypeError
+
+Received message: &quot;Cannot read properties of null (reading &apos;0&apos;)&quot;
+
+      49 |     const results = await this.repository.getSingleQuery(id, responseType);
+      50 |
+    &gt; 51 |     if (!results[0]) {
+         |                 ^
+      52 |       throw new NotFoundException(`Category with ID ${id} not found`);
+      53 |     }
+      54 |
+
+      at CategoryService.findOne (src/category/category.service.ts:51:17)
+      at Object.&lt;anonymous&gt; (src/category/tests/category.service.spec.ts:115:5)
+    at Object.toThrow (/media/drmodun/data/repos/tournament-app/node_modules/expect/build/index.js:218:22)
+    at Object.&lt;anonymous&gt; (/media/drmodun/data/repos/tournament-app/apps/api/src/category/tests/category.service.spec.ts:117:15)
+    at Promise.then.completed (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:121:9)
+    at run (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/media/drmodun/data/repos/tournament-app/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/media/drmodun/data/repos/tournament-app/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="CategoryService should update a category" name="CategoryService should update a category" time="0.002">
+    </testcase>
+    <testcase classname="CategoryService should throw not found exception when updating non-existent category" name="CategoryService should throw not found exception when updating non-existent category" time="0.003">
+    </testcase>
+    <testcase classname="CategoryService should remove a category" name="CategoryService should remove a category" time="0.003">
+    </testcase>
+    <testcase classname="CategoryService should throw not found exception when removing non-existent category" name="CategoryService should throw not found exception when removing non-existent category" time="0.013">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.517" tests="9">
+    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.005">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.002">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.002">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" name="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of valid UpdateUserInfo object" name="UserRequestsDtos should pass validation of valid UpdateUserInfo object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of empty UserQuery object" name="UserRequestsDtos should pass validation of empty UserQuery object" time="0.001">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid UserQuery object" name="UserRequestsDtos should fail validation of invalid UserQuery object" time="0">
+    </testcase>
+    <testcase classname="UserRequestsDtos should pass validation of valid UserQuery object" name="UserRequestsDtos should pass validation of valid UserQuery object" time="0.002">
+    </testcase>
+    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="BlobService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.484" tests="10">
+    <testcase classname="BlobService should throw an error if AWS credentials are not set" name="BlobService should throw an error if AWS credentials are not set" time="0.026">
+    </testcase>
+    <testcase classname="BlobService should be defined" name="BlobService should be defined" time="0.003">
+    </testcase>
+    <testcase classname="BlobService generateKey should generate a key with the correct format" name="BlobService generateKey should generate a key with the correct format" time="0.004">
+    </testcase>
+    <testcase classname="BlobService generateKey should default to txt extension if mime type is not provided" name="BlobService generateKey should default to txt extension if mime type is not provided" time="0.003">
+    </testcase>
+    <testcase classname="BlobService uploadFile should upload a file successfully" name="BlobService uploadFile should upload a file successfully" time="0.008">
+    </testcase>
+    <testcase classname="BlobService uploadFile should throw an error if upload fails" name="BlobService uploadFile should throw an error if upload fails" time="0.025">
+    </testcase>
+    <testcase classname="BlobService deleteFile should delete a file successfully" name="BlobService deleteFile should delete a file successfully" time="0.003">
+    </testcase>
+    <testcase classname="BlobService deleteFile should throw an error if delete fails" name="BlobService deleteFile should throw an error if delete fails" time="0.003">
+    </testcase>
+    <testcase classname="BlobService getFile should retrieve a file successfully" name="BlobService getFile should retrieve a file successfully" time="0.004">
+    </testcase>
+    <testcase classname="BlobService getFile should throw an error if retrieval fails" name="BlobService getFile should throw an error if retrieval fails" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="DTO Validation Tests" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.441" tests="5">
+    <testcase classname="DTO Validation Tests should validate LoginRequest" name="DTO Validation Tests should validate LoginRequest" time="0.005">
+    </testcase>
+    <testcase classname="DTO Validation Tests should validate ChangePasswordRequest" name="DTO Validation Tests should validate ChangePasswordRequest" time="0.001">
+    </testcase>
+    <testcase classname="DTO Validation Tests should validate SendResetPasswordEmailRequest" name="DTO Validation Tests should validate SendResetPasswordEmailRequest" time="0.001">
+    </testcase>
+    <testcase classname="DTO Validation Tests should validate ResetPasswordRequest" name="DTO Validation Tests should validate ResetPasswordRequest" time="0.001">
+    </testcase>
+    <testcase classname="DTO Validation Tests should validate UpdateEmailRequest" name="DTO Validation Tests should validate UpdateEmailRequest" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupInvitesController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.751" tests="6">
+    <testcase classname="GroupInvitesController should be defined" name="GroupInvitesController should be defined" time="0.024">
+    </testcase>
+    <testcase classname="GroupInvitesController create should create a group invite" name="GroupInvitesController create should create a group invite" time="0.006">
+    </testcase>
+    <testcase classname="GroupInvitesController findAll should return an array of group invites" name="GroupInvitesController findAll should return an array of group invites" time="0.013">
+    </testcase>
+    <testcase classname="GroupInvitesController findOne should return a group invite" name="GroupInvitesController findOne should return a group invite" time="0.003">
+    </testcase>
+    <testcase classname="GroupInvitesController update should update a group invite" name="GroupInvitesController update should update a group invite" time="0.002">
+    </testcase>
+    <testcase classname="GroupInvitesController remove should remove a group invite" name="GroupInvitesController remove should remove a group invite" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="MyDateRange" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.155" tests="2">
+    <testcase classname="MyDateRange should pass validation when endDate is greater than startDate" name="MyDateRange should pass validation when endDate is greater than startDate" time="0.003">
+    </testcase>
+    <testcase classname="MyDateRange should fail validation when endDate same as startDate" name="MyDateRange should fail validation when endDate same as startDate" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupJoinRequestQuery" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.506" tests="11">
+    <testcase classname="GroupJoinRequestQuery should pass validation with valid data" name="GroupJoinRequestQuery should pass validation with valid data" time="0.015">
+    </testcase>
+    <testcase classname="GroupJoinRequestQuery should pass validation with partial data" name="GroupJoinRequestQuery should pass validation with partial data" time="0.001">
+    </testcase>
+    <testcase classname="GroupJoinRequestQuery should fail validation with invalid userId type" name="GroupJoinRequestQuery should fail validation with invalid userId type" time="0.001">
+    </testcase>
+    <testcase classname="CreateGroupJoinRequestDto should pass validation with valid data" name="CreateGroupJoinRequestDto should pass validation with valid data" time="0">
+    </testcase>
+    <testcase classname="CreateGroupJoinRequestDto should pass validation without optional relatedLFPId" name="CreateGroupJoinRequestDto should pass validation without optional relatedLFPId" time="0.001">
+    </testcase>
+    <testcase classname="CreateGroupJoinRequestDto should fail validation without required message" name="CreateGroupJoinRequestDto should fail validation without required message" time="0">
+    </testcase>
+    <testcase classname="CreateGroupJoinRequestDto should fail validation with invalid message type" name="CreateGroupJoinRequestDto should fail validation with invalid message type" time="0.001">
+    </testcase>
+    <testcase classname="UpdateGroupJoinRequestDto should pass validation with valid data" name="UpdateGroupJoinRequestDto should pass validation with valid data" time="0">
+    </testcase>
+    <testcase classname="UpdateGroupJoinRequestDto should pass validation with empty object (all fields optional)" name="UpdateGroupJoinRequestDto should pass validation with empty object (all fields optional)" time="0.001">
+    </testcase>
+    <testcase classname="UpdateGroupJoinRequestDto should fail validation with invalid message type" name="UpdateGroupJoinRequestDto should fail validation with invalid message type" time="0">
+    </testcase>
+    <testcase classname="UpdateGroupJoinRequestDto should fail validation with invalid relatedLFPId type" name="UpdateGroupJoinRequestDto should fail validation with invalid relatedLFPId type" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="FollowerQuery" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.5" tests="4">
+    <testcase classname="FollowerQuery should pass validation with valid data" name="FollowerQuery should pass validation with valid data" time="0.005">
+    </testcase>
+    <testcase classname="FollowerQuery should fail validation with invalid userId" name="FollowerQuery should fail validation with invalid userId" time="0.001">
+    </testcase>
+    <testcase classname="FollowerQuery should fail validation with invalid followerId" name="FollowerQuery should fail validation with invalid followerId" time="0.001">
+    </testcase>
+    <testcase classname="FollowerQuery should pass validation with no optional fields" name="FollowerQuery should pass validation with no optional fields" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="EmailService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.499" tests="9">
+    <testcase classname="EmailService should throw an error if email credentials are not set" name="EmailService should throw an error if email credentials are not set" time="0.046">
+    </testcase>
+    <testcase classname="EmailService should generate Mailgun message data" name="EmailService should generate Mailgun message data" time="0.002">
+    </testcase>
+    <testcase classname="EmailService should return the correct template" name="EmailService should return the correct template" time="0.002">
+    </testcase>
+    <testcase classname="EmailService should throw an error if the template is not found" name="EmailService should throw an error if the template is not found" time="0.075">
+    </testcase>
+    <testcase classname="EmailService should validate the data correctly" name="EmailService should validate the data correctly" time="0.002">
+    </testcase>
+    <testcase classname="EmailService should render the template correctly" name="EmailService should render the template correctly" time="0.002">
+    </testcase>
+    <testcase classname="EmailService should return the rendered email" name="EmailService should return the rendered email" time="0.001">
+    </testcase>
+    <testcase classname="EmailService should send the email correctly" name="EmailService should send the email correctly" time="0.002">
+    </testcase>
+    <testcase classname="EmailService should throw an error if the email could not be sent" name="EmailService should throw an error if the email could not be sent" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="GroupMembershipRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.285" tests="4">
+    <testcase classname="GroupMembershipRequestsDtos GroupMembershipQuery should pass validation of empty GroupMembershipQuery object" name="GroupMembershipRequestsDtos GroupMembershipQuery should pass validation of empty GroupMembershipQuery object" time="0.001">
+    </testcase>
+    <testcase classname="GroupMembershipRequestsDtos GroupMembershipQuery should fail validation of invalid GroupMembershipQuery object" name="GroupMembershipRequestsDtos GroupMembershipQuery should fail validation of invalid GroupMembershipQuery object" time="0.003">
+    </testcase>
+    <testcase classname="GroupMembershipRequestsDtos GroupMembershipQuery should pass validation of valid GroupMembershipQuery object" name="GroupMembershipRequestsDtos GroupMembershipQuery should pass validation of valid GroupMembershipQuery object" time="0">
+    </testcase>
+    <testcase classname="GroupMembershipRequestsDtos GroupMembershipQuery should fail validation with partial valid fields" name="GroupMembershipRequestsDtos GroupMembershipQuery should fail validation with partial valid fields" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="AppController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.147" tests="1">
+    <testcase classname="AppController root should return &quot;Hello World!&quot;" name="AppController root should return &quot;Hello World!&quot;" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="10.467" tests="6">
+    <testcase classname="AuthController login should return tokens on successful login" name="AuthController login should return tokens on successful login" time="0.02">
+    </testcase>
+    <testcase classname="AuthController login should propagate errors from auth service" name="AuthController login should propagate errors from auth service" time="0.013">
+    </testcase>
+    <testcase classname="AuthController refresh should return new tokens on successful refresh" name="AuthController refresh should return new tokens on successful refresh" time="0.004">
+    </testcase>
+    <testcase classname="AuthController refresh should propagate errors from auth service" name="AuthController refresh should propagate errors from auth service" time="0.004">
+    </testcase>
+    <testcase classname="AuthController authCallback should return tokens for Google OAuth callback" name="AuthController authCallback should return tokens for Google OAuth callback" time="0.004">
+    </testcase>
+    <testcase classname="AuthController authCallback should propagate errors from auth service" name="AuthController authCallback should propagate errors from auth service" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="CurrentUser" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.113" tests="2">
+    <testcase classname="CurrentUser should return user from request" name="CurrentUser should return user from request" time="0">
+    </testcase>
+    <testcase classname="CurrentUser should return null if user is not present in request" name="CurrentUser should return null if user is not present in request" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="MyNumber" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.128" tests="3">
+    <testcase classname="MyNumber should pass validation when maximum is greater than minimum" name="MyNumber should pass validation when maximum is greater than minimum" time="0.002">
     </testcase>
     <testcase classname="MyNumber should fail validation when maximum is less than minimum" name="MyNumber should fail validation when maximum is less than minimum" time="0.001">
     </testcase>
     <testcase classname="MyNumber should fail validation when maximum is equal to minimum" name="MyNumber should fail validation when maximum is equal to minimum" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.823" tests="5">
-    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.005">
+  <testsuite name="MetadataMaker" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:05" time="0.056" tests="5">
+    <testcase classname="MetadataMaker makeMetadataFromQuery should return the correct metadata" name="MetadataMaker makeMetadataFromQuery should return the correct metadata" time="0.001">
     </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0">
+    <testcase classname="MetadataMaker makeLinks should return the correct links" name="MetadataMaker makeLinks should return the correct links" time="0">
     </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0.001">
+    <testcase classname="MetadataMaker makeLinks should handle URLs without page query parameter" name="MetadataMaker makeLinks should handle URLs without page query parameter" time="0">
     </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0.002">
+    <testcase classname="MetadataMaker makePagination should return the correct pagination" name="MetadataMaker makePagination should return the correct pagination" time="0">
     </testcase>
-    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="UserRequestsDtos" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="3.824" tests="9">
-    <testcase classname="UserRequestsDtos should fail validation of empty CreateUserRequest object" name="UserRequestsDtos should fail validation of empty CreateUserRequest object" time="0.007">
-    </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0.002">
-    </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid CreateUserRequest object" name="UserRequestsDtos should pass validation of valid CreateUserRequest object" time="0.001">
-    </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" name="UserRequestsDtos should fail validation of invalid UpdateUserInfo object" time="0.001">
-    </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid UpdateUserInfo object" name="UserRequestsDtos should pass validation of valid UpdateUserInfo object" time="0.001">
-    </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of empty UserQuery object" name="UserRequestsDtos should pass validation of empty UserQuery object" time="0">
-    </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid UserQuery object" name="UserRequestsDtos should fail validation of invalid UserQuery object" time="0.001">
-    </testcase>
-    <testcase classname="UserRequestsDtos should pass validation of valid UserQuery object" name="UserRequestsDtos should pass validation of valid UserQuery object" time="0.001">
-    </testcase>
-    <testcase classname="UserRequestsDtos should fail validation of invalid CreateUserRequest object" name="UserRequestsDtos should fail validation of invalid CreateUserRequest object" time="0">
+    <testcase classname="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" name="MetadataMaker makePagination should return the correct pagination when returnFullCount is false" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="UserDrizzleRepository" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.652" tests="9">
-    <testcase classname="UserDrizzleRepository should be defined" name="UserDrizzleRepository should be defined" time="0.018">
+  <testsuite name="RefreshToken" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:05" time="0.094" tests="2">
+    <testcase classname="RefreshToken should return refreshToken from request" name="RefreshToken should return refreshToken from request" time="0.001">
     </testcase>
-    <testcase classname="UserDrizzleRepository getQuery should return a valid query with base response type" name="UserDrizzleRepository getQuery should return a valid query with base response type" time="0.007">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getQuery should return a valid query with extended response type" name="UserDrizzleRepository getQuery should return a valid query with extended response type" time="0.004">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with base response type" time="0.004">
-    </testcase>
-    <testcase classname="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" name="UserDrizzleRepository getSingleQuery should return a valid single query with extended response type" time="0.005">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should create a valid entity given a valid request" name="UserDrizzleRepository should create a valid entity given a valid request" time="0.003">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should update a valid entity given a valid request" name="UserDrizzleRepository should update a valid entity given a valid request" time="0.004">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should delete a valid entity given a valid id" name="UserDrizzleRepository should delete a valid entity given a valid id" time="0.003">
-    </testcase>
-    <testcase classname="UserDrizzleRepository should check if an entity exists given a valid id" name="UserDrizzleRepository should check if an entity exists given a valid id" time="0.002">
+    <testcase classname="RefreshToken should return null if user is not present in request" name="RefreshToken should return null if user is not present in request" time="0.006">
     </testcase>
   </testsuite>
-  <testsuite name="UsersService" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.812" tests="8">
-    <testcase classname="UsersService should be defined" name="UsersService should be defined" time="0.012">
+  <testsuite name="RefreshTokenStrategy" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.225" tests="3">
+    <testcase classname="RefreshTokenStrategy should be defined" name="RefreshTokenStrategy should be defined" time="0.004">
     </testcase>
-    <testcase classname="UsersService should create a user" name="UsersService should create a user" time="0.046">
+    <testcase classname="RefreshTokenStrategy validate should return payload with refresh token" name="RefreshTokenStrategy validate should return payload with refresh token" time="0.002">
     </testcase>
-    <testcase classname="UsersService should throw an unprocessable entity exception when creating a user fails" name="UsersService should throw an unprocessable entity exception when creating a user fails" time="0.048">
-    </testcase>
-    <testcase classname="UsersService should throw an error when creating a user with an existing email" name="UsersService should throw an error when creating a user with an existing email" time="0.044">
-    </testcase>
-    <testcase classname="UsersService should update a user" name="UsersService should update a user" time="0.001">
-    </testcase>
-    <testcase classname="UsersService should throw an error when updating a user with an existing email" name="UsersService should throw an error when updating a user with an existing email" time="0.002">
-    </testcase>
-    <testcase classname="UsersService should delete a user" name="UsersService should delete a user" time="0.001">
-    </testcase>
-    <testcase classname="UsersService should throw an error when deleting a user with a wrong id" name="UsersService should throw an error when deleting a user with a wrong id" time="0.001">
+    <testcase classname="RefreshTokenStrategy validate should handle malformed Authorization header" name="RefreshTokenStrategy validate should handle malformed Authorization header" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="UsersController" errors="0" failures="0" skipped="0" timestamp="2024-09-30T23:42:10" time="4.834" tests="4">
-    <testcase classname="UsersController should be defined" name="UsersController should be defined" time="0.01">
+  <testsuite name="GroupJoinRequestsController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.798" tests="8">
+    <testcase classname="GroupJoinRequestsController should be defined" name="GroupJoinRequestsController should be defined" time="0.011">
     </testcase>
-    <testcase classname="UsersController should return a valid query" name="UsersController should return a valid query" time="0.004">
+    <testcase classname="GroupJoinRequestsController create should create a group join request" name="GroupJoinRequestsController create should create a group join request" time="0.005">
     </testcase>
-    <testcase classname="UsersController should return a user" name="UsersController should return a user" time="0.001">
+    <testcase classname="GroupJoinRequestsController findAll should return an array of group join requests" name="GroupJoinRequestsController findAll should return an array of group join requests" time="0.01">
     </testcase>
-    <testcase classname="UsersController should create a user" name="UsersController should create a user" time="0.001">
+    <testcase classname="GroupJoinRequestsController findOne should return a group join request" name="GroupJoinRequestsController findOne should return a group join request" time="0.002">
+    </testcase>
+    <testcase classname="GroupJoinRequestsController update should update a group join request" name="GroupJoinRequestsController update should update a group join request" time="0.003">
+    </testcase>
+    <testcase classname="GroupJoinRequestsController remove should remove a group join request" name="GroupJoinRequestsController remove should remove a group join request" time="0.002">
+    </testcase>
+    <testcase classname="GroupJoinRequestsController accept should accept a group join request" name="GroupJoinRequestsController accept should accept a group join request" time="0.002">
+    </testcase>
+    <testcase classname="GroupJoinRequestsController reject should reject a group join request" name="GroupJoinRequestsController reject should reject a group join request" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="GoogleStrategy" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.434" tests="5">
+    <testcase classname="GoogleStrategy should be defined" name="GoogleStrategy should be defined" time="0.027">
+    </testcase>
+    <testcase classname="GoogleStrategy validate should return existing user if found" name="GoogleStrategy validate should return existing user if found" time="0.003">
+    </testcase>
+    <testcase classname="GoogleStrategy validate should create new user if not found" name="GoogleStrategy validate should create new user if not found" time="0.003">
+    </testcase>
+    <testcase classname="GoogleStrategy validate should throw InternalServerErrorException if user creation fails" name="GoogleStrategy validate should throw InternalServerErrorException if user creation fails" time="0.008">
+    </testcase>
+    <testcase classname="GoogleStrategy validate should throw InternalServerErrorException if created user cannot be found" name="GoogleStrategy validate should throw InternalServerErrorException if created user cannot be found" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="AccessTokenStrategy" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.318" tests="2">
+    <testcase classname="AccessTokenStrategy validate should return validated user when user exists" name="AccessTokenStrategy validate should return validated user when user exists" time="0.009">
+    </testcase>
+    <testcase classname="AccessTokenStrategy validate should throw UnauthorizedException when user does not exist" name="AccessTokenStrategy validate should throw UnauthorizedException when user does not exist" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="FollowersService" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.279" tests="8">
+    <testcase classname="FollowersService should be defined" name="FollowersService should be defined" time="0.005">
+    </testcase>
+    <testcase classname="FollowersService create should create a follower relationship" name="FollowersService create should create a follower relationship" time="0.002">
+    </testcase>
+    <testcase classname="FollowersService create should throw error when trying to follow self" name="FollowersService create should throw error when trying to follow self" time="0.015">
+    </testcase>
+    <testcase classname="FollowersService findAll should return array of followers" name="FollowersService findAll should return array of followers" time="0.002">
+    </testcase>
+    <testcase classname="FollowersService findOne should return a follower relationship" name="FollowersService findOne should return a follower relationship" time="0.005">
+    </testcase>
+    <testcase classname="FollowersService findOne should throw error when follower relationship not found" name="FollowersService findOne should throw error when follower relationship not found" time="0.002">
+    </testcase>
+    <testcase classname="FollowersService remove should remove a follower relationship" name="FollowersService remove should remove a follower relationship" time="0.002">
+    </testcase>
+    <testcase classname="FollowersService remove should throw error when trying to remove non-existent relationship" name="FollowersService remove should throw error when trying to remove non-existent relationship" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="PostgresExceptionFilter" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.169" tests="8">
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23505" name="PostgresExceptionFilter should handle PostgresError with code 23505" time="0.011">
+    </testcase>
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 23503" name="PostgresExceptionFilter should handle PostgresError with code 23503" time="0.001">
+    </testcase>
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42P01" name="PostgresExceptionFilter should handle PostgresError with code 42P01" time="0.001">
+    </testcase>
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 42703" name="PostgresExceptionFilter should handle PostgresError with code 42703" time="0.001">
+    </testcase>
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 08006" name="PostgresExceptionFilter should handle PostgresError with code 08006" time="0.001">
+    </testcase>
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 53300" name="PostgresExceptionFilter should handle PostgresError with code 53300" time="0.001">
+    </testcase>
+    <testcase classname="PostgresExceptionFilter should handle PostgresError with code 57014" name="PostgresExceptionFilter should handle PostgresError with code 57014" time="0">
+    </testcase>
+    <testcase classname="PostgresExceptionFilter should handle unknown PostgresError code" name="PostgresExceptionFilter should handle unknown PostgresError code" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="NotificationTemplatesFiller" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.163" tests="5">
+    <testcase classname="NotificationTemplatesFiller compileTemplates should compile all templates" name="NotificationTemplatesFiller compileTemplates should compile all templates" time="0.001">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller getTemplate should return the compiled template" name="NotificationTemplatesFiller getTemplate should return the compiled template" time="0">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller getTemplate should throw an error if template not found" name="NotificationTemplatesFiller getTemplate should throw an error if template not found" time="0.006">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller fill should fill the template with provided data" name="NotificationTemplatesFiller fill should fill the template with provided data" time="0.001">
+    </testcase>
+    <testcase classname="NotificationTemplatesFiller fill should throw an error if required keys are missing" name="NotificationTemplatesFiller fill should throw an error if required keys are missing" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="BaseQuery" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:24:04" time="0.238" tests="5">
+    <testcase classname="BaseQuery should pass validation of valid BaseQuery object" name="BaseQuery should pass validation of valid BaseQuery object" time="0.004">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative page number" name="BaseQuery should fail validation of BaseQuery object with negative page number" time="0.001">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with negative pageSize number" name="BaseQuery should fail validation of BaseQuery object with negative pageSize number" time="0">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" name="BaseQuery should fail validation of BaseQuery object with pageSize more than 100" time="0">
+    </testcase>
+    <testcase classname="BaseQuery should fail validation of BaseQuery object with invalid order" name="BaseQuery should fail validation of BaseQuery object with invalid order" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="TournamentController" errors="0" failures="0" skipped="0" timestamp="2025-01-13T04:23:54" time="10.85" tests="8">
+    <testcase classname="TournamentController findAll should return tournaments with metadata" name="TournamentController findAll should return tournaments with metadata" time="0.012">
+    </testcase>
+    <testcase classname="TournamentController findOne should return a single tournament" name="TournamentController findOne should return a single tournament" time="0.003">
+    </testcase>
+    <testcase classname="TournamentController create should create a tournament" name="TournamentController create should create a tournament" time="0.002">
+    </testcase>
+    <testcase classname="TournamentController update should update a tournament" name="TournamentController update should update a tournament" time="0.002">
+    </testcase>
+    <testcase classname="TournamentController remove should remove a tournament" name="TournamentController remove should remove a tournament" time="0.003">
+    </testcase>
+    <testcase classname="TournamentController guard combinations create endpoint guards should require ConditionalAdminGuard" name="TournamentController guard combinations create endpoint guards should require ConditionalAdminGuard" time="0.004">
+    </testcase>
+    <testcase classname="TournamentController guard combinations update endpoint guards should require both ConditionalAdminGuard and TournamentAdminGuard" name="TournamentController guard combinations update endpoint guards should require both ConditionalAdminGuard and TournamentAdminGuard" time="0.004">
+    </testcase>
+    <testcase classname="TournamentController guard combinations remove endpoint guards should require AdminAuthGuard and ConditionalAdminGuard" name="TournamentController guard combinations remove endpoint guards should require AdminAuthGuard and ConditionalAdminGuard" time="0.002">
     </testcase>
   </testsuite>
 </testsuites>

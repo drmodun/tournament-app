@@ -1,0 +1,1 @@
+ALTER TABLE "tournament" ADD COLUMN "tournament_team_type" "tournament_team_type" DEFAULT 'team';

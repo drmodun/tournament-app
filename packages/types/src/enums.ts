@@ -34,7 +34,22 @@ export enum OrganizerRoleEnum {
 }
 
 export enum notificationTypeEnum {
-  INFO = "info",
+  WELCOME = "welcome",
+  RESET_PASSWORD = "reset-password",
+  VERIFY_EMAIL = "verify-email",
+  NOTIFICATION_OF_BAN = "notification-of-ban",
+  BET_OUTCOME = "bet-outcome",
+  TOURNAMENT_REMINDER = "tournament-reminder",
+  TOURNAMENT_START = "tournament-start",
+  TOURNAMENT_END = "tournament-end",
+  GROUP_INVITATION = "group-invitation",
+  GROUP_JOIN_REQUEST = "group-join-request",
+  GROUP_JOIN_APPROVAL = "group-join-approval",
+  GROUP_JOIN_REJECTION = "group-join-rejection",
+  GROUP_REMOVAL = "group-removal",
+  GROUP_ADMIN_PROMOTION = "group-admin-promotion",
+  GROUP_ADMIN_DEMOTION = "group-admin-demotion",
+  TEST = "test-template",
 }
 //TODO: add more types
 
@@ -92,6 +107,7 @@ export type groupRoleEnumType =
 export enum groupRoleEnum {
   OWNER = "owner",
   MEMBER = "member",
+  ADMIN = "admin",
 }
 
 export type betStatusEnumType =
@@ -104,7 +120,7 @@ export enum betTypeEnum {
 
 export type betTypeEnumType = (typeof betTypeEnum)[keyof typeof betTypeEnum];
 
-export enum typeOfEvent {
+export enum stageTypeEnum {
   GROUP = "group",
   KNOCKOUT = "knockout",
   SWISS = "swiss",
@@ -115,7 +131,8 @@ export enum typeOfEvent {
   EVALUATED_COMPETITION = "evaluated_competition",
 }
 
-export type typeOfEventType = (typeof typeOfEvent)[keyof typeof typeOfEvent];
+export type stageTypeEnumType =
+  (typeof stageTypeEnum)[keyof typeof stageTypeEnum];
 
 export enum tournamentLocationEnum {
   ONLINE = "online",
@@ -126,15 +143,15 @@ export enum tournamentLocationEnum {
 export type tournamentLocationEnumType =
   (typeof tournamentLocationEnum)[keyof typeof tournamentLocationEnum];
 
-export enum eventStatusEnum {
+export enum stageStatusEnum {
   UPCOMING = "upcoming",
   ONGOING = "ongoing",
   FINISHED = "finished",
   CANCELLED = "cancelled",
 }
 
-export type eventStatusEnumType =
-  (typeof eventStatusEnum)[keyof typeof eventStatusEnum];
+export type stageStatusEnumType =
+  (typeof stageStatusEnum)[keyof typeof stageStatusEnum];
 
 export enum categoryTypeEnum {
   PROGRAMMING = "programming",
@@ -195,6 +212,50 @@ export enum submissionStatusEnum {
   TIME_LIMIT_EXCEEDED = "time_limit_exceeded",
   MEMORY_LIMIT_EXCEEDED = "memory_limit_exceeded",
 }
+
+export enum groupTypeEnum {
+  PRIVATE = "private",
+  PUBLIC = "public",
+}
+
+export type groupTypeEnumType =
+  (typeof groupTypeEnum)[keyof typeof groupTypeEnum];
+
+export type tournamentPromotionTypeEnumType =
+  (typeof tournamentPromotionTypeEnum)[keyof typeof tournamentPromotionTypeEnum];
+
+export enum groupFocusEnum {
+  PARTICIPATION = "participation",
+  ORGANIZATION = "organization",
+  HYBRID = "hybrid",
+}
+
+export type groupFocusEnumType =
+  (typeof groupFocusEnum)[keyof typeof groupFocusEnum];
+
+export enum pointConversionTypeEnum {
+  STAGE_TO_STAGE = "stage_to_stage",
+  STAGE_TO_TOURNAMENT = "stage_to_tournament",
+  TOURNAMENT_TO_TOURNAMENT = "tournament_to_tournament",
+}
+
+export type pointConversionTypeEnumType =
+  (typeof pointConversionTypeEnum)[keyof typeof pointConversionTypeEnum];
+
+export enum pointConversionStrategyEnum {
+  QUALIFICATION = "qualification",
+  RANKING = "ranking",
+  ELIMINATION = "elimination", // eliminate teams under certain point threshold
+  HYBRID = "hybrid",
+  SEED = "seed",
+  TIE_BREAKER = "tie_breaker",
+  QUALIFICATION_WITH_LCQ = "qualification_with_lcq",
+
+  // TODO: add more if needed
+}
+
+export type pointConversionStrategyEnumType =
+  (typeof pointConversionStrategyEnum)[keyof typeof pointConversionStrategyEnum];
 
 export const exportEnumValues = (
   enumToExport: object

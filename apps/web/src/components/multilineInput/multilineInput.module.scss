@@ -1,0 +1,26 @@
+@import "../../styles/";
+
+.input {
+  min-height: $baseComponentHeight * 2;
+  border-radius: $borderRadius;
+  max-width: 100%;
+  padding: $padding $doublePadding;
+  border: none;
+  font-size: $fontSize;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $lightMuted;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.lightPlaceholder::placeholder {
+  color: $darkMuted;
+}

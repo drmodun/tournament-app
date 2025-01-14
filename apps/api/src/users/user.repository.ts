@@ -1,6 +1,5 @@
 import {
   BaseUserUpdateRequest,
-  UserResponseEnumType,
   UserResponsesEnum,
   UserSortingEnum,
   UserSortingEnumType,
@@ -12,12 +11,19 @@ import {
   participation,
   user,
 } from '../db/schema';
-import { alias, PgColumn, PgSelect } from 'drizzle-orm/pg-core';
+import {
+  alias,
+  AnyPgSelectQueryBuilder,
+  PgColumn,
+  PgSelect,
+  PgSelectJoinFn,
+} from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { and, count, countDistinct, eq, SQL, sql } from 'drizzle-orm';
+import { and, countDistinct, eq, SQL } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { UserQuery } from './dto/requests.dto';
+import { UserDtosEnum, UserReturnTypesEnumType } from './types';
 
 @Injectable()
 export class UserDrizzleRepository extends PrimaryRepository<
@@ -28,23 +34,16 @@ export class UserDrizzleRepository extends PrimaryRepository<
   constructor() {
     super(user);
   }
-  conditionallyJoin<TSelect extends PgSelect>(
+  conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
-    typeEnum: UserResponseEnumType,
-  ) {
+    typeEnum: UserReturnTypesEnumType,
+  ):
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | TSelect {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:
         return query
           .leftJoin(follower, eq(user.id, follower.userId))
-          .groupBy(user.id);
-
-      case UserResponsesEnum.EXTENDED:
-        return query
-          .leftJoin(follower, eq(user.id, follower.userId))
-          .leftJoin(
-            alias(follower, 'followingAlias'),
-            eq(user.id, follower.followerId),
-          )
           .groupBy(user.id);
 
       case UserResponsesEnum.ADMIN:
@@ -60,7 +59,9 @@ export class UserDrizzleRepository extends PrimaryRepository<
     }
   }
 
-  public getMappingObject(responseEnum: UserResponseEnumType) {
+  public getMappingObject(
+    responseEnum: UserReturnTypesEnumType, //TODO: add dtos as seperate mapping types
+  ) {
     switch (responseEnum) {
       case UserResponsesEnum.MINI:
         return {
@@ -83,23 +84,36 @@ export class UserDrizzleRepository extends PrimaryRepository<
           bio: user.bio,
           email: user.email,
           level: user.level,
+          name: user.name,
           updatedAt: user.updatedAt,
-          followers: sql<number>`cast(count(${follower.followerId}) as int)`,
+          followers: db.$count(follower, eq(follower.userId, user.id)),
         };
       case UserResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(UserResponsesEnum.BASE),
-          following: count(alias(follower, 'followingAlias')),
+          following: db.$count(follower, eq(follower.followerId, user.id)),
           location: user.location,
           createdAt: user.createdAt,
         };
       case UserResponsesEnum.ADMIN:
         return {
           ...this.getMappingObject(UserResponsesEnum.EXTENDED),
-          subscription: user.subscription,
           password: user.password,
           role: user.role,
           code: user.code,
+        };
+      case UserDtosEnum.VALIDATED:
+        return {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        };
+      case UserDtosEnum.CREDENTIALS:
+        return {
+          id: user.id,
+          role: user.role,
+          email: user.email,
+          password: user.password,
         };
       default:
         return {};
@@ -156,19 +170,13 @@ export class UserDrizzleRepository extends PrimaryRepository<
 
   getSingleQuery(
     id: number,
-    responseType: UserResponseEnumType = UserResponsesEnum.BASE,
+    responseType: UserReturnTypesEnumType = UserResponsesEnum.BASE,
   ) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(selectedType)
       .from(user)
-      .where(
-        and(
-          eq(user.id, id),
-          eq(user.isEmailVerified, true),
-          eq(user.hasSelectedInterests, true),
-        ),
-      )
+      .where(and(eq(user.id, id), eq(user.isEmailVerified, true)))
       .$dynamic() as PgSelect<'user', typeof selectedType>;
 
     const Query = this.conditionallyJoin(baseQuery, responseType);

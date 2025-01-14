@@ -1,0 +1,122 @@
+@import "../../styles/";
+
+.select {
+}
+
+.optionsWrapper {
+  position: absolute;
+  overflow: auto;
+  z-index: -1;
+}
+
+.zIndex {
+  z-index: 97;
+}
+
+.options {
+  padding: $halfPadding $padding;
+  border-radius: 0 $borderRadius $borderRadius $borderRadius;
+  height: 100%;
+  @media screen and (max-width: $tabletBreakpoint) {
+    margin-left: 0;
+  }
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  align-items: flex-start;
+  width: 0;
+  position: relative;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.selectButtonActive {
+  border-radius: $borderRadius $borderRadius 0 0;
+  transition: border-radius $animationDuration $animationEasingFunction;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    border-bottom-left-radius: 0;
+  }
+}
+
+.hiddenAnimation {
+  animation: undrop $animationDuration $animationEasingFunction forwards;
+}
+
+.unhiddenAnimation {
+  animation: drop $animationDuration $animationEasingFunction forwards;
+}
+
+.hidden {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -99;
+}
+.selectArrowRotated {
+  transform: rotate(90deg);
+}
+
+.selectArrow {
+  transition: transform $animationDuration $animationEasingFunction;
+  margin-left: $padding;
+}
+
+.selectButton {
+  white-space: nowrap;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.search {
+  margin-bottom: $padding;
+  margin-top: $halfPadding;
+}
+
+@keyframes undrop {
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  to {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateY(-$padding);
+    pointer-events: none;
+  }
+}
+
+@keyframes drop {
+  from {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateY(-$padding);
+    pointer-events: none;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.option {
+  height: $baseComponentHeight;
+  white-space: nowrap;
+  margin-bottom: $halfPadding;
+}

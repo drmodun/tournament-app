@@ -24,8 +24,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: &a2
+      tags: &a1
         - users
+    patch:
+      operationId: UsersController_updateMe
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserInfo"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a1
+      security:
+        - bearer: []
+    delete:
+      operationId: UsersController_deleteMe
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MiniUserResponse"
+      tags: *a1
+      security:
+        - bearer: []
     get:
       operationId: UsersController_findAll
       parameters:
@@ -117,7 +149,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a1 2024-09-30T23:43:35.967Z
+                        updatedAt: &a2 2025-01-13T03:02:29.650Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -212,12 +244,26 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: *a1
-                        createdAt: 2024-09-30T23:43:35.967Z
+                        updatedAt: *a2
+                        createdAt: 2025-01-13T03:02:29.650Z
                         following: 0
                         location: New York
           description: ""
-      tags: *a2
+      tags: *a1
+  /users/me:
+    get:
+      operationId: UsersController_findMe
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtendedUserResponse"
+      tags: *a1
+      security:
+        - bearer: []
   /users/{id}:
     get:
       operationId: UsersController_findOne
@@ -255,7 +301,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2024-09-30T23:43:35.967Z
+                    updatedAt: &a3 2025-01-13T03:02:29.650Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -283,11 +329,11 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2024-09-30T23:43:35.967Z
+                    createdAt: 2025-01-13T03:02:29.650Z
                     following: 0
                     location: New York
           description: ""
-      tags: *a2
+      tags: *a1
     patch:
       operationId: UsersController_update
       parameters:
@@ -309,7 +355,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a2
+      tags: *a1
+      security:
+        - bearer: []
     delete:
       operationId: UsersController_remove
       parameters:
@@ -325,7 +373,2303 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a2
+      tags: *a1
+      security:
+        - bearer: []
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokensResponse"
+      tags: &a4
+        - auth
+  /auth/refresh:
+    get:
+      operationId: AuthController_refresh
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokensResponse"
+        "401":
+          description: ""
+      tags: *a4
+      security:
+        - bearer: []
+  /auth/google:
+    get:
+      operationId: AuthController_auth
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: *a4
+  /auth/google/callback:
+    get:
+      operationId: AuthController_authCallback
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokensResponse"
+      tags: *a4
+      security:
+        - bearer: []
+  /groups:
+    get:
+      operationId: GroupController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: abbreviation
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: focus
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: location
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: country
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                mini-with-logo:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI-WITH-LOGO
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        logo: https://example.com/chess-club-logo.jpg
+                mini-with-country:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI-WITH-COUNTRY
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                        description: A community of chess enthusiasts
+                        type: Sports Club
+                        focus: Chess
+                        location: Split
+                        updatedAt: 2025-01-13T03:02:29.801Z
+                        memberCount: 50
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /groups?page=1
+                        prev: /groups?page=0
+                        next: /groups?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                        description: A community of chess enthusiasts
+                        type: Sports Club
+                        focus: Chess
+                        location: Split
+                        updatedAt: 2025-01-13T03:02:29.801Z
+                        memberCount: 50
+                        createdAt: 2025-01-13T03:02:29.801Z
+                        tournamentCount: 10
+                        subscriberCount: 100
+          description: ""
+      tags: &a5
+        - groups
+    post:
+      operationId: GroupController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Chess Club
+                abbreviation: CC
+                country: Croatia
+                logo: https://example.com/chess-club-logo.jpg
+                description: A community of chess enthusiasts
+                type: Sports Club
+                focus: Chess
+                location: Split
+                updatedAt: 2025-01-13T03:02:29.801Z
+                memberCount: 50
+          description: ""
+      tags: *a5
+      security:
+        - bearer: []
+  /groups/{groupId}:
+    get:
+      operationId: GroupController_findOne
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                mini-with-logo:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    logo: https://example.com/chess-club-logo.jpg
+                mini-with-country:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                base:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                    description: A community of chess enthusiasts
+                    type: Sports Club
+                    focus: Chess
+                    location: Split
+                    updatedAt: 2025-01-13T03:02:29.801Z
+                    memberCount: 50
+                extended:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                    description: A community of chess enthusiasts
+                    type: Sports Club
+                    focus: Chess
+                    location: Split
+                    updatedAt: 2025-01-13T03:02:29.801Z
+                    memberCount: 50
+                    createdAt: 2025-01-13T03:02:29.801Z
+                    tournamentCount: 10
+                    subscriberCount: 100
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/MiniGroupResponse"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithCountry"
+                  - $ref: "#/components/schemas/GroupResponse"
+                  - $ref: "#/components/schemas/GroupResponseExtended"
+          description: ""
+      tags: *a5
+    patch:
+      operationId: GroupController_update
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Chess Club
+                abbreviation: CC
+                country: Croatia
+                logo: https://example.com/chess-club-logo.jpg
+                description: A community of chess enthusiasts
+                type: Sports Club
+                focus: Chess
+                location: Split
+                updatedAt: 2025-01-13T03:02:29.801Z
+                memberCount: 50
+          description: ""
+      tags: *a5
+      security:
+        - bearer: []
+    delete:
+      operationId: GroupController_remove
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a5
+      security:
+        - bearer: []
+  /groups/{groupId}/members:
+    get:
+      operationId: GroupController_getGroupMembers
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                group:
+                  id: 1
+                  name: Chess Club
+                  abbreviation: CC
+                  country: Croatia
+                  logo: https://example.com/chess-club-logo.jpg
+                  description: A community of chess enthusiasts
+                  type: Sports Club
+                  focus: Chess
+                  location: Split
+                  updatedAt: 2025-01-13T03:02:29.801Z
+                  memberCount: 50
+                members: []
+          description: ""
+      tags: *a5
+  /groups/{groupId}/tournaments:
+    get:
+      operationId: GroupController_getGroupTournaments
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                group:
+                  id: 1
+                  name: Chess Club
+                  abbreviation: CC
+                  country: Croatia
+                  logo: https://example.com/chess-club-logo.jpg
+                  description: A community of chess enthusiasts
+                  type: Sports Club
+                  focus: Chess
+                  location: Split
+                  updatedAt: 2025-01-13T03:02:29.801Z
+                  memberCount: 50
+                tournaments: []
+          description: ""
+      tags: *a5
+  /groups/{groupId}/followers:
+    get:
+      operationId: GroupController_getGroupFollowers
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                group:
+                  id: 1
+                  name: Chess Club
+                  abbreviation: CC
+                  country: Croatia
+                  logo: https://example.com/chess-club-logo.jpg
+                  description: A community of chess enthusiasts
+                  type: Sports Club
+                  focus: Chess
+                  location: Split
+                  updatedAt: 2025-01-13T03:02:29.801Z
+                  memberCount: 50
+                followers: []
+          description: ""
+      tags: *a5
+  /group-membership:
+    get:
+      operationId: GroupMembershipController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: role
+          required: false
+          in: query
+          schema:
+            enum:
+              - owner
+              - member
+              - admin
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                MinimalMembershipResponse:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: MINIMALMEMBERSHIPRESPONSE
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                GroupMembershipResponse:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: GROUPMEMBERSHIPRESPONSE
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                        user: &a6
+                          id: 1
+                          username: john_doe
+                          profilePicture: https://example.com/image.jpg
+                        group: &a7
+                          id: 1
+                          name: Cool Group
+                          logo: https://example.com/logo.jpg
+                          abbreviation: CG
+                        createdAt: 2025-01-13T03:02:29.805Z
+                UserMembershipResponseWithDates:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: USERMEMBERSHIPRESPONSEWITHDATES
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                        user: *a6
+                        group: *a7
+                        createdAt: 2025-01-13T03:02:29.805Z
+                        country: country
+                        id: 1
+                        username: username
+                        profilePicture: profilePicture
+                GroupMembershipResponseWithDates:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: GROUPMEMBERSHIPRESPONSEWITHDATES
+                    results:
+                      - userId: 1
+                        groupId: 1
+                        role: member
+                        user: *a6
+                        group: *a7
+                        createdAt: 2025-01-13T03:02:29.805Z
+                        country: country
+                        name: name
+                        logo: logo
+                        id: 1
+                        abbreviation: abbreviation
+                GroupMembershipKey:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: https://example.com/api/group-membership?page=1
+                        prev: https://example.com/api/group-membership?page=0
+                        next: https://example.com/api/group-membership?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        role: member
+                        field: createdAt
+                        order: desc
+                        responseType: GROUPMEMBERSHIPKEY
+                    results:
+                      - userId: 1
+                        groupId: 1
+          description: ""
+      tags: &a8
+        - group-membership
+  /group-membership/{groupId}/leave:
+    delete:
+      operationId: GroupMembershipController_removeMyself
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a8
+      security:
+        - bearer: []
+  /group-membership/{groupId}/{userId}:
+    get:
+      operationId: GroupMembershipController_findOne
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                MinimalMembershipResponse:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                GroupMembershipResponse:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                    user: &a9
+                      id: 1
+                      username: john_doe
+                      profilePicture: https://example.com/image.jpg
+                    group: &a10
+                      id: 1
+                      name: Cool Group
+                      logo: https://example.com/logo.jpg
+                      abbreviation: CG
+                    createdAt: 2025-01-13T03:02:29.805Z
+                UserMembershipResponseWithDates:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                    user: *a9
+                    group: *a10
+                    createdAt: 2025-01-13T03:02:29.805Z
+                    country: country
+                    id: 1
+                    username: username
+                    profilePicture: profilePicture
+                GroupMembershipResponseWithDates:
+                  value:
+                    userId: 1
+                    groupId: 1
+                    role: member
+                    user: *a9
+                    group: *a10
+                    createdAt: 2025-01-13T03:02:29.805Z
+                    country: country
+                    name: name
+                    logo: logo
+                    id: 1
+                    abbreviation: abbreviation
+                GroupMembershipKey:
+                  value:
+                    userId: 1
+                    groupId: 1
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/MinimalMembershipResponse"
+                  - $ref: "#/components/schemas/GroupMembershipResponse"
+                  - $ref: "#/components/schemas/UserMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipKey"
+          description: ""
+      tags: *a8
+    post:
+      operationId: GroupMembershipController_create
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a8
+      security:
+        - bearer: []
+    delete:
+      operationId: GroupMembershipController_remove
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a8
+      security:
+        - bearer: []
+    patch:
+      operationId: GroupMembershipController_update
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupMembershipUpdateRequest"
+      responses:
+        "200":
+          description: ""
+      tags: *a8
+      security:
+        - bearer: []
+  /followers:
+    get:
+      operationId: FollowersController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: followerId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                base:
+                  value:
+                    id: 1
+                    username: john_doe
+                    createdAt: 2025-01-13T03:02:29.809Z
+                    bio: I am a user
+                    profilePicture: https://example.com/image.jpg
+                    country: USA
+                    name: John Doe
+                    email: john@doe.com
+                    followers: 0
+                    level: 0
+                    updatedAt: 2025-01-13T03:02:29.809Z
+                mini:
+                  value:
+                    createdAt: 2025-01-13T03:02:29.809Z
+                    id: 1
+                    username: john_doe
+          description: ""
+      tags: &a11
+        - followers
+  /followers/{userId}/{followerId}:
+    get:
+      operationId: FollowersController_findOne
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: followerId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FollowerMiniResponse"
+      tags: *a11
+  /followers/{userId}:
+    post:
+      operationId: FollowersController_create
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a11
+      security:
+        - bearer: []
+    delete:
+      operationId: FollowersController_remove
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a11
+      security:
+        - bearer: []
+  /group-join-requests:
+    get:
+      operationId: GroupJoinRequestsController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: relatedLFPId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                with-user:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-USER
+                    results:
+                      - id: 1
+                        username: john_doe
+                        profilePicture: https://example.com/image.jpg
+                        country: USA
+                        bio: I am a cool person
+                        email: john.doe@example.com
+                        followers: 0
+                        level: 0
+                        name: John Doe
+                        updatedAt: 2025-01-13T03:02:29.650Z
+                        groupId: 1
+                        message: I would like to join this group
+                with-mini-user:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-MINI-USER
+                    results:
+                      - id: 1
+                        username: john_doe
+                        profilePicture: https://example.com/image.jpg
+                        createdAt: 2025-01-13T03:02:29.817Z
+                with-group:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-GROUP
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        country: Croatia
+                        logo: https://example.com/chess-club-logo.jpg
+                        description: A community of chess enthusiasts
+                        type: Sports Club
+                        focus: Chess
+                        location: Split
+                        updatedAt: 2025-01-13T03:02:29.801Z
+                        memberCount: 50
+                        userId: 1
+                        message: I would like to join this group
+                with-mini-group:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-join-requests?page=1
+                        prev: /group-join-requests?page=0
+                        next: /group-join-requests?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: WITH-MINI-GROUP
+                    results:
+                      - id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                        logo: https://example.com/chess-club-logo.jpg
+                        createdAt: 2025-01-13T03:02:29.817Z
+          description: ""
+      tags: &a12
+        - group-join-requests
+      security: &a13
+        - bearer: []
+  /group-join-requests/{groupId}:
+    post:
+      operationId: GroupJoinRequestsController_create
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupJoinRequestDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a12
+      security: *a13
+    patch:
+      operationId: GroupJoinRequestsController_update
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupJoinRequestDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a12
+      security: *a13
+    delete:
+      operationId: GroupJoinRequestsController_remove
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a12
+      security: *a13
+  /group-join-requests/{groupId}/{userId}:
+    get:
+      operationId: GroupJoinRequestsController_findOne
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a specific group join request
+          content:
+            application/json:
+              examples:
+                with-user:
+                  value:
+                    id: 1
+                    username: john_doe
+                    profilePicture: https://example.com/image.jpg
+                    country: USA
+                    bio: I am a cool person
+                    email: john.doe@example.com
+                    followers: 0
+                    level: 0
+                    name: John Doe
+                    updatedAt: 2025-01-13T03:02:29.650Z
+                    groupId: 1
+                    message: I would like to join this group
+                with-mini-user:
+                  value:
+                    id: 1
+                    username: john_doe
+                    profilePicture: https://example.com/image.jpg
+                    createdAt: 2025-01-13T03:02:29.817Z
+                with-group:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    country: Croatia
+                    logo: https://example.com/chess-club-logo.jpg
+                    description: A community of chess enthusiasts
+                    type: Sports Club
+                    focus: Chess
+                    location: Split
+                    updatedAt: 2025-01-13T03:02:29.801Z
+                    memberCount: 50
+                    userId: 1
+                    message: I would like to join this group
+                with-mini-group:
+                  value:
+                    id: 1
+                    name: Chess Club
+                    abbreviation: CC
+                    logo: https://example.com/chess-club-logo.jpg
+                    createdAt: 2025-01-13T03:02:29.817Z
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithGroupResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniGroupResponse"
+      tags: *a12
+      security: *a13
+  /group-join-requests/{groupId}/{userId}/accept:
+    post:
+      operationId: GroupJoinRequestsController_accept
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a12
+      security: *a13
+  /group-join-requests/{groupId}/{userId}/reject:
+    delete:
+      operationId: GroupJoinRequestsController_reject
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a12
+      security: *a13
+  /group-invites:
+    get:
+      operationId: GroupInvitesController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: relatedLFPId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                with-user:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-invites?page=1
+                        prev: /group-invites?page=0
+                        next: /group-invites?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: WITH-USER
+                    results:
+                      - id: 1
+                        username: john_doe
+                        bio: I am a user
+                        profilePicture: https://example.com/image.jpg
+                        country: USA
+                        name: John Doe
+                        email: john@doe.com
+                        followers: 0
+                        level: 0
+                        updatedAt: 2025-01-13T03:02:29.820Z
+                        message: Would you like to join our group?
+                        groupId: 1
+                with-mini-user:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-invites?page=1
+                        prev: /group-invites?page=0
+                        next: /group-invites?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: WITH-MINI-USER
+                    results:
+                      - id: 1
+                        username: john_doe
+                        profilePicture: https://example.com/image.jpg
+                        createdAt: 2025-01-13T03:02:29.820Z
+                with-group:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-invites?page=1
+                        prev: /group-invites?page=0
+                        next: /group-invites?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: WITH-GROUP
+                    results:
+                      - id: 1
+                        name: Example Group
+                        description: This is an example group
+                        logo: https://example.com/logo.jpg
+                        memberCount: 10
+                        message: Would you like to join our group?
+                        userId: 1
+                        abbreviation: EG
+                        country: USA
+                        focus: Hybrid
+                        location: New York
+                        type: Public
+                        updatedAt: 1/13/2025
+                with-mini-group:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /group-invites?page=1
+                        prev: /group-invites?page=0
+                        next: /group-invites?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: WITH-MINI-GROUP
+                    results:
+                      - id: 1
+                        name: Example Group
+                        abbreviation: EG
+                        logo: https://example.com/logo.jpg
+                        createdAt: 2025-01-13T03:02:29.820Z
+          description: ""
+      tags: &a14
+        - group-invites
+  /group-invites/{groupId}/accept:
+    post:
+      operationId: GroupInvitesController_accept
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a14
+      security:
+        - bearer: []
+  /group-invites/{groupId}/reject:
+    delete:
+      operationId: GroupInvitesController_reject
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a14
+      security:
+        - bearer: []
+  /group-invites/{groupId}/{userId}:
+    post:
+      operationId: GroupInvitesController_create
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupInviteDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a14
+      security:
+        - bearer: []
+    get:
+      operationId: GroupInvitesController_findOne
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                with-user:
+                  value:
+                    id: 1
+                    username: john_doe
+                    bio: I am a user
+                    profilePicture: https://example.com/image.jpg
+                    country: USA
+                    name: John Doe
+                    email: john@doe.com
+                    followers: 0
+                    level: 0
+                    updatedAt: 2025-01-13T03:02:29.820Z
+                    message: Would you like to join our group?
+                    groupId: 1
+                with-mini-user:
+                  value:
+                    id: 1
+                    username: john_doe
+                    profilePicture: https://example.com/image.jpg
+                    createdAt: 2025-01-13T03:02:29.820Z
+                with-group:
+                  value:
+                    id: 1
+                    name: Example Group
+                    description: This is an example group
+                    logo: https://example.com/logo.jpg
+                    memberCount: 10
+                    message: Would you like to join our group?
+                    userId: 1
+                    abbreviation: EG
+                    country: USA
+                    focus: Hybrid
+                    location: New York
+                    type: Public
+                    updatedAt: 1/13/2025
+                with-mini-group:
+                  value:
+                    id: 1
+                    name: Example Group
+                    abbreviation: EG
+                    logo: https://example.com/logo.jpg
+                    createdAt: 2025-01-13T03:02:29.820Z
+          description: ""
+      tags: *a14
+    patch:
+      operationId: GroupInvitesController_update
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupInviteDto"
+      responses:
+        "200":
+          description: ""
+      tags: *a14
+      security:
+        - bearer: []
+    delete:
+      operationId: GroupInvitesController_remove
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a14
+      security:
+        - bearer: []
+  /categories:
+    get:
+      operationId: CategoryController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        name: Chess
+                mini-with-logo:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI-WITH-LOGO
+                    results:
+                      - id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                        description: Chess tournaments and competitions
+                        type: programming
+                        tournamentCount: 5
+                        activeTournamentCount: 3
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /categories?page=1
+                        prev: /categories?page=0
+                        next: /categories?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                        description: Chess tournaments and competitions
+                        type: programming
+                        tournamentCount: 5
+                        activeTournamentCount: 3
+                        createdAt: 2024-01-07T14:00:00.000Z
+                        updatedAt: 2024-01-07T14:00:00.000Z
+          description: ""
+      tags: &a15
+        - categories
+    post:
+      operationId: CategoryController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCategoryRequest"
+      responses:
+        "200":
+          description: Creates a new category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a15
+      security:
+        - bearer: []
+  /categories/{categoryId}:
+    get:
+      operationId: CategoryController_findOne
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a single category
+          content:
+            application/json:
+              schema:
+                examples:
+                  mini:
+                    value:
+                      id: 1
+                      name: Chess
+                  mini-with-logo:
+                    value:
+                      id: 1
+                      name: Chess
+                      logo: https://example.com/chess-category-logo.jpg
+                  base:
+                    value:
+                      id: 1
+                      name: Chess
+                      logo: https://example.com/chess-category-logo.jpg
+                      description: Chess tournaments and competitions
+                      type: programming
+                      tournamentCount: 5
+                      activeTournamentCount: 3
+                  extended:
+                    value:
+                      id: 1
+                      name: Chess
+                      logo: https://example.com/chess-category-logo.jpg
+                      description: Chess tournaments and competitions
+                      type: programming
+                      tournamentCount: 5
+                      activeTournamentCount: 3
+                      createdAt: 2024-01-07T14:00:00.000Z
+                      updatedAt: 2024-01-07T14:00:00.000Z
+      tags: *a15
+    patch:
+      operationId: CategoryController_update
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCategoryRequest"
+      responses:
+        "200":
+          description: Updates a category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a15
+      security:
+        - bearer: []
+    delete:
+      operationId: CategoryController_remove
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Deletes a category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a15
+      security:
+        - bearer: []
+  /tournaments:
+    get:
+      operationId: TournamentController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: location
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: teamType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: isRanked
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: minimumMMR
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: maximumMMR
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isMultipleTeamsPerGroupAllowed
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: categoryId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: affiliatedGroupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: creatorId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: minParticipants
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: maxParticipants
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isPublic
+          required: false
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: &a16 2025-02-01T10:00:00.000Z
+                        endDate: &a17 2025-03-01T18:00:00.000Z
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: &a18 2025-02-01T10:00:00.000Z
+                mini-with-logo:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a16
+                        endDate: *a17
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: MINI-WITH-LOGO
+                    results:
+                      - &a23
+                        id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a18
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a16
+                        endDate: *a17
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a18
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                        description: International Chess Championship 2025
+                        teamType: solo
+                        creator: &a19
+                          id: 1
+                          username: chessmaster
+                        affiliatedGroup: &a20
+                          id: 1
+                          name: Chess Club
+                          abbreviation: CC
+                        endDate: &a21 2025-03-01T18:00:00.000Z
+                        maxParticipants: 64
+                        currentParticipants: 32
+                        isPublic: true
+                        category: &a22
+                          id: 1
+                          name: Chess
+                          logo: https://example.com/chess-category-logo.jpg
+                        links: https://chess.com/tournament/123
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a16
+                        endDate: *a17
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a18
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                        description: International Chess Championship 2025
+                        teamType: solo
+                        creator: *a19
+                        affiliatedGroup: *a20
+                        endDate: *a21
+                        maxParticipants: 64
+                        currentParticipants: 32
+                        isPublic: true
+                        category: *a22
+                        links: https://chess.com/tournament/123
+                        createdAt: 2025-01-01T00:00:00.000Z
+                        updatedAt: 2025-01-07T14:00:00.000Z
+                        isMultipleTeamsPerGroupAllowed: false
+                        isFakePlayersAllowed: false
+                        parentTournament: *a23
+                        conversionRuleId: 1
+                        isRanked: true
+                        maximumMMR: 2500
+                        minimumMMR: 1500
+          description: ""
+      tags: &a24
+        - tournaments
+    post:
+      operationId: TournamentController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTournamentRequest"
+      responses:
+        "200":
+          description: Creates a new tournament
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a24
+      security:
+        - bearer: []
+  /tournaments/{tournamentId}:
+    get:
+      operationId: TournamentController_findOne
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a single tournament
+          content:
+            application/json:
+              schema:
+                examples:
+                  mini:
+                    value:
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: &a25 2025-02-01T10:00:00.000Z
+                  mini-with-logo:
+                    value: &a30
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: *a25
+                      location: online
+                      logo: https://example.com/chess-tournament-logo.jpg
+                      country: DE
+                  base:
+                    value:
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: *a25
+                      location: online
+                      logo: https://example.com/chess-tournament-logo.jpg
+                      country: DE
+                      description: International Chess Championship 2025
+                      teamType: solo
+                      creator: &a26
+                        id: 1
+                        username: chessmaster
+                      affiliatedGroup: &a27
+                        id: 1
+                        name: Chess Club
+                        abbreviation: CC
+                      endDate: &a28 2025-03-01T18:00:00.000Z
+                      maxParticipants: 64
+                      currentParticipants: 32
+                      isPublic: true
+                      category: &a29
+                        id: 1
+                        name: Chess
+                        logo: https://example.com/chess-category-logo.jpg
+                      links: https://chess.com/tournament/123
+                  extended:
+                    value:
+                      id: 1
+                      name: Chess Championship 2025
+                      type: league
+                      startDate: *a25
+                      location: online
+                      logo: https://example.com/chess-tournament-logo.jpg
+                      country: DE
+                      description: International Chess Championship 2025
+                      teamType: solo
+                      creator: *a26
+                      affiliatedGroup: *a27
+                      endDate: *a28
+                      maxParticipants: 64
+                      currentParticipants: 32
+                      isPublic: true
+                      category: *a29
+                      links: https://chess.com/tournament/123
+                      createdAt: 2025-01-01T00:00:00.000Z
+                      updatedAt: 2025-01-07T14:00:00.000Z
+                      isMultipleTeamsPerGroupAllowed: false
+                      isFakePlayersAllowed: false
+                      parentTournament: *a30
+                      conversionRuleId: 1
+                      isRanked: true
+                      maximumMMR: 2500
+                      minimumMMR: 1500
+      tags: *a24
+    patch:
+      operationId: TournamentController_update
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTournamentRequest"
+      responses:
+        "200":
+          description: Updates a tournament
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a24
+      security:
+        - bearer: []
+    delete:
+      operationId: TournamentController_remove
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Deletes a tournament
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a24
+      security:
+        - bearer: []
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -668,4 +3012,1327 @@ components:
         bio:
           type: string
         location:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    TokensResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          readOnly: true
+        refreshToken:
+          type: string
+          readOnly: true
+      required:
+        - accessToken
+        - refreshToken
+    MiniGroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+    MiniGroupResponseWithLogo:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+    MiniGroupResponseWithCountry:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+    GroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+    GroupResponseExtended:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+        createdAt:
+          type: string
+          readOnly: true
+        tournamentCount:
+          type: number
+          readOnly: true
+        subscriberCount:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+        - createdAt
+        - tournamentCount
+        - subscriberCount
+    CreateGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        abbreviation:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - private
+            - public
+        focus:
+          type: string
+          enum:
+            - participation
+            - organization
+            - hybrid
+        logo:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+      required:
+        - name
+        - abbreviation
+        - description
+        - type
+        - focus
+        - logo
+    UpdateGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        abbreviation:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - private
+            - public
+        focus:
+          type: string
+          enum:
+            - participation
+            - organization
+            - hybrid
+        logo:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+    MinimalMembershipResponse:
+      type: object
+      properties:
+        groupId:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+      required:
+        - groupId
+        - userId
+        - role
+    GroupMembershipResponse:
+      type: object
+      properties:
+        groupId:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+        user:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
+        group:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+        createdAt:
+          type: string
+          readOnly: true
+      required:
+        - groupId
+        - userId
+        - role
+        - user
+        - group
+        - createdAt
+    UserMembershipResponseWithDates:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+      required:
+        - id
+        - username
+        - profilePicture
+        - country
+        - createdAt
+        - role
+    GroupMembershipResponseWithDates:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+          enum:
+            - owner
+            - member
+            - admin
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - createdAt
+        - role
+    GroupMembershipKey:
+      type: object
+      properties:
+        userId:
+          type: number
+          readOnly: true
+        groupId:
+          type: number
+          readOnly: true
+      required:
+        - userId
+        - groupId
+    GroupMembershipUpdateRequest:
+      type: object
+      properties:
+        role:
+          type: string
+    FollowerResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        bio:
+          type: string
+          readOnly: true
+        level:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        followers:
+          type: number
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - username
+        - profilePicture
+        - country
+        - email
+        - bio
+        - level
+        - name
+        - updatedAt
+        - followers
+        - createdAt
+    FollowerMiniResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - username
+        - createdAt
+    GroupJoinRequestWithUserResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        bio:
+          type: string
+          readOnly: true
+        level:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        followers:
+          type: number
+          readOnly: true
+        groupId:
+          type: number
+        message:
+          type: string
+      required:
+        - id
+        - username
+        - profilePicture
+        - country
+        - email
+        - bio
+        - level
+        - name
+        - updatedAt
+        - followers
+        - groupId
+        - message
+    GroupJoinRequestWithMiniUserResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - username
+        - profilePicture
+        - createdAt
+    GroupJoinRequestWithGroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+        message:
+          type: string
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+        - userId
+        - message
+    GroupJoinRequestWithMiniGroupResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - createdAt
+    CreateGroupJoinRequestDto:
+      type: object
+      properties:
+        message:
+          type: string
+        relatedLFPId:
+          type: number
+      required:
+        - message
+    UpdateGroupJoinRequestDto:
+      type: object
+      properties:
+        message:
+          type: string
+        relatedLFPId:
+          type: number
+    GroupInviteWithUserResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        bio:
+          type: string
+          readOnly: true
+        level:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        followers:
+          type: number
+          readOnly: true
+        message:
+          type: string
+        groupId:
+          type: number
+      required:
+        - id
+        - username
+        - profilePicture
+        - country
+        - email
+        - bio
+        - level
+        - name
+        - updatedAt
+        - followers
+        - message
+        - groupId
+    GroupInviteWithMiniUserResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        profilePicture:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - username
+        - profilePicture
+        - createdAt
+    GroupInviteWithGroupResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+        message:
+          type: string
+        userId:
+          type: number
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+        - message
+        - userId
+    GroupInviteWithMiniGroupResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        abbreviation:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        focus:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        updatedAt:
+          type: string
+          readOnly: true
+        memberCount:
+          type: number
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - name
+        - abbreviation
+        - logo
+        - country
+        - description
+        - type
+        - focus
+        - location
+        - updatedAt
+        - memberCount
+        - createdAt
+    CreateGroupInviteDto:
+      type: object
+      properties:
+        message:
+          type: string
+        relatedLFPId:
+          type: number
+      required:
+        - message
+    UpdateGroupInviteDto:
+      type: object
+      properties:
+        message:
+          type: string
+        relatedLFPId:
+          type: number
+    CategoryMiniResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+    CategoryMiniResponseWithLogo:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - logo
+    CategoryResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        tournamentCount:
+          type: number
+          readOnly: true
+        activeTournamentCount:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - logo
+        - description
+        - type
+        - tournamentCount
+        - activeTournamentCount
+    CategoryResponseExtended:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        tournamentCount:
+          type: number
+          readOnly: true
+        activeTournamentCount:
+          type: number
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - logo
+        - description
+        - type
+        - tournamentCount
+        - activeTournamentCount
+        - createdAt
+        - updatedAt
+    CreateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        logo:
+          type: string
+        type:
+          type: string
+      required:
+        - name
+        - description
+        - logo
+        - type
+    UpdateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+    MiniTournamentResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+    MiniTournamentResponseWithLogo:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+        - location
+        - logo
+        - country
+    TournamentResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        teamType:
+          type: string
+          readOnly: true
+        creator:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponse"
+        affiliatedGroup:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponse"
+        endDate:
+          format: date-time
+          type: string
+          readOnly: true
+        maxParticipants:
+          type: number
+          readOnly: true
+        currentParticipants:
+          type: number
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        category:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
+        links:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+        - location
+        - logo
+        - country
+        - description
+        - teamType
+        - creator
+        - affiliatedGroup
+        - endDate
+        - maxParticipants
+        - currentParticipants
+        - isPublic
+        - category
+        - links
+    ExtendedTournamentResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        logo:
+          type: string
+          readOnly: true
+        country:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        teamType:
+          type: string
+          readOnly: true
+        creator:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponse"
+        affiliatedGroup:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponse"
+        endDate:
+          format: date-time
+          type: string
+          readOnly: true
+        maxParticipants:
+          type: number
+          readOnly: true
+        currentParticipants:
+          type: number
+          readOnly: true
+        isPublic:
+          type: boolean
+          readOnly: true
+        category:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
+        links:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+        isMultipleTeamsPerGroupAllowed:
+          type: boolean
+          readOnly: true
+        isFakePlayersAllowed:
+          type: boolean
+          readOnly: true
+        parentTournament:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
+        conversionRuleId:
+          type: number
+          readOnly: true
+        isRanked:
+          type: boolean
+          readOnly: true
+        maximumMMR:
+          type: number
+          readOnly: true
+        minimumMMR:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - type
+        - startDate
+        - location
+        - logo
+        - country
+        - description
+        - teamType
+        - creator
+        - affiliatedGroup
+        - endDate
+        - maxParticipants
+        - currentParticipants
+        - isPublic
+        - category
+        - links
+        - createdAt
+        - updatedAt
+        - isMultipleTeamsPerGroupAllowed
+        - isFakePlayersAllowed
+        - parentTournament
+        - conversionRuleId
+        - isRanked
+        - maximumMMR
+        - minimumMMR
+    CreateTournamentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        country:
+          type: string
+        tournamentType:
+          type: string
+          enum:
+            - league
+            - competition
+            - seasonal
+            - contest
+            - event
+        location:
+          type: string
+          enum:
+            - online
+            - offline
+            - hybrid
+        teamType:
+          type: string
+          enum:
+            - solo
+            - team
+            - mixed
+        isMultipleTeamsPerGroupAllowed:
+          type: boolean
+        isFakePlayersAllowed:
+          type: boolean
+        parentTournamentId:
+          type: number
+        conversionRuleId:
+          type: number
+        maxParticipants:
+          type: number
+        startDate:
+          format: date-time
+          type: string
+        endDate:
+          format: date-time
+          type: string
+        isPublic:
+          type: boolean
+        isRanked:
+          type: boolean
+        categoryId:
+          type: number
+        maximumMMR:
+          type: number
+        minimumMMR:
+          type: number
+        creatorId:
+          type: number
+        affiliatedGroupId:
+          type: number
+        links:
+          type: string
+      required:
+        - name
+        - description
+        - country
+        - tournamentType
+        - location
+        - teamType
+        - maxParticipants
+        - startDate
+        - endDate
+        - isPublic
+        - isRanked
+        - categoryId
+        - creatorId
+    UpdateTournamentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        country:
+          type: string
+        tournamentType:
+          type: string
+          enum:
+            - league
+            - competition
+            - seasonal
+            - contest
+            - event
+        location:
+          type: string
+          enum:
+            - online
+            - offline
+            - hybrid
+        teamType:
+          type: string
+          enum:
+            - solo
+            - team
+            - mixed
+        isMultipleTeamsPerGroupAllowed:
+          type: boolean
+        isFakePlayersAllowed:
+          type: boolean
+        parentTournamentId:
+          type: number
+        conversionRuleId:
+          type: number
+        startDate:
+          format: date-time
+          type: string
+        endDate:
+          format: date-time
+          type: string
+        maxParticipants:
+          type: number
+        isPublic:
+          type: boolean
+        isRanked:
+          type: boolean
+        categoryId:
+          type: number
+        maximumMMR:
+          type: number
+        minimumMMR:
+          type: number
+        creatorId:
+          type: number
+        affiliatedGroupId:
+          type: number
+        links:
           type: string

@@ -2,8 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { UserDrizzleRepository } from '../user.repository';
-import { UserResponsesEnum } from '@tournament-app/types';
-import { CreateUserRequest, UserQuery } from '../dto/requests.dto';
+import { UserResponsesEnum, userRoleEnum } from '@tournament-app/types';
+import {
+  CreateUserRequest,
+  UpdateUserInfo,
+  UserQuery,
+} from '../dto/requests.dto';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -97,6 +102,86 @@ describe('UsersController', () => {
     };
 
     const result = await controller.create(request);
+
+    expect(result).toEqual({ id: 1 });
+  });
+
+  it('should update a user', async () => {
+    jest
+      .spyOn(UsersService.prototype, 'update')
+      .mockImplementation(async () => {
+        return { id: 1 };
+      });
+
+    const request: CreateUserRequest = {
+      username: 'john_doe',
+      bio: 'I am a user',
+      country: 'USA',
+      email: 'john@doe.com',
+      location: 'New York',
+      password: 'password',
+      name: 'John Doe',
+      profilePicture: 'https://example.com/john_doe.jpg',
+    };
+
+    const result = await controller.update(1, request);
+
+    expect(result).toEqual({ id: 1 });
+  });
+
+  it('should delete a user', async () => {
+    jest
+      .spyOn(UsersService.prototype, 'remove')
+      .mockImplementation(async () => {
+        return { id: 1 };
+      });
+
+    const result = await controller.remove(1);
+
+    expect(result).toEqual({ id: 1 });
+  });
+
+  it('should delete me', async () => {
+    jest
+      .spyOn(UsersService.prototype, 'remove')
+      .mockImplementation(async () => {
+        return { id: 1 };
+      });
+
+    const user = {
+      id: 1,
+      email: 'john@doe.com',
+      role: userRoleEnum.USER,
+    } satisfies ValidatedUserDto;
+
+    const result = await controller.deleteMe(user);
+
+    expect(result).toEqual({ id: 1 });
+  });
+
+  it('should update me', async () => {
+    jest
+      .spyOn(UsersService.prototype, 'update')
+      .mockImplementation(async () => {
+        return { id: 1 };
+      });
+
+    const user = {
+      id: 1,
+      email: 'john@doe.com',
+      role: userRoleEnum.USER,
+    } satisfies ValidatedUserDto;
+
+    const request: UpdateUserInfo = {
+      username: 'john_doe',
+      bio: 'I am a user',
+      country: 'USA',
+      location: 'New York',
+      name: 'John Doe',
+      profilePicture: 'https://example.com/john_doe.jpg',
+    };
+
+    const result = await controller.updateMe(user, request);
 
     expect(result).toEqual({ id: 1 });
   });

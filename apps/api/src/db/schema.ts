@@ -2,7 +2,6 @@ import {
   betStatusEnum,
   betTypeEnum,
   chatRoomTypeEnum,
-  eventStatusEnum,
   exportEnumValues,
   groupRoleEnum,
   likeTypeEnum,
@@ -18,6 +17,12 @@ import {
   tournamentTypeEnum,
   userRoleEnum,
   categoryTypeEnum,
+  tournamentTeamTypeEnum,
+  groupFocusEnum,
+  groupTypeEnum,
+  pointConversionTypeEnum,
+  pointConversionStrategyEnum,
+  stageTypeEnum,
 } from '@tournament-app/types';
 import {
   serial,
@@ -28,6 +33,7 @@ import {
   boolean,
   integer,
   primaryKey,
+  numeric,
 } from 'drizzle-orm/pg-core';
 
 export const userRole = pgEnum('user_role', exportEnumValues(userRoleEnum));
@@ -56,7 +62,7 @@ export const submissionStatus = pgEnum(
 
 export const tournamentTeamType = pgEnum(
   'tournament_team_type',
-  exportEnumValues(tournamentTypeEnum),
+  exportEnumValues(tournamentTeamTypeEnum),
 );
 
 export const betType = pgEnum('bet_type', exportEnumValues(betTypeEnum));
@@ -71,6 +77,13 @@ export const quizQuestionType = pgEnum(
   exportEnumValues(quizQuestionTypeEnum),
 );
 
+export const stageType = pgEnum('stage_type', exportEnumValues(stageTypeEnum));
+
+export const stageStatus = pgEnum(
+  'stage_status',
+  exportEnumValues(tournamentTypeEnum),
+);
+
 export const matchupType = pgEnum(
   'matchup_type',
   exportEnumValues(matchupTypeEnum),
@@ -83,9 +96,14 @@ export const tournamentLocation = pgEnum(
   exportEnumValues(tournamentLocationEnum),
 );
 
-export const eventStatus = pgEnum(
-  'event_status',
-  exportEnumValues(eventStatusEnum),
+export const pointConversionType = pgEnum(
+  'point_conversion_strategy_type',
+  exportEnumValues(pointConversionTypeEnum),
+);
+
+export const pointConversionStrategy = pgEnum(
+  'point_conversion_strategy',
+  exportEnumValues(pointConversionStrategyEnum),
 );
 
 export const tournamentPromotionType = pgEnum(
@@ -110,6 +128,13 @@ export const categoryType = pgEnum(
 
 export const groupRole = pgEnum('group_role', exportEnumValues(groupRoleEnum));
 
+export const groupFocus = pgEnum(
+  'group_focus',
+  exportEnumValues(groupFocusEnum),
+);
+
+export const groupType = pgEnum('group_type', exportEnumValues(groupTypeEnum));
+
 export const user = pgTable('user', {
   id: serial('id').unique().primaryKey(),
   name: text('name').notNull(),
@@ -119,7 +144,6 @@ export const user = pgTable('user', {
   email: text('email').notNull().unique(),
   password: text('password'), //hashed password
   role: userRole('role').default('user'),
-  subscription: userSubscription('subscription').default('free'),
   code: text('code')
     .$defaultFn(() => Math.random().toString(36).slice(8))
     .unique(),
@@ -131,9 +155,79 @@ export const user = pgTable('user', {
     .$onUpdate(() => new Date()), //TODO: see if there is a better alternative
   country: text('country'), //TODO: possibly setup enum
   location: text('location'),
+  stripeCustomerId: text('stripe_customer_id'),
   bettingPoints: integer('betting_points').default(100),
+  customerId: text('customer_id'),
   level: integer('level').default(1),
 });
+
+export const userNotificationSettings = pgTable('user_notification_settings', {
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .unique(),
+  emailNotifications: boolean('email_notifications').default(true),
+  pushNotifications: boolean('push_notifications').default(true),
+  inAppNotifications: boolean('in_app_notifications').default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const userToNotificationTokens = pgTable('user_to_notification_tokens', {
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  token: text('token').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const subscription = pgTable('subscription', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  enum: userSubscription('enum'), //TODO: potentially remove
+  description: text('description'),
+  benefits: text('benefits'),
+  stripeProductId: text('stripe_product_id'),
+  price: integer('price').notNull(), //price in cents euro
+  autoRenewal: boolean('auto_renewal').default(true),
+  nextPaymentDate: timestamp('next_payment_date', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const subscriptionBenefit = pgTable('subscription_benefits', {
+  id: serial('id').primaryKey(),
+  subscriptionId: integer('subscription_id')
+    .references(() => subscription.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  benefit: text('benefit').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const subscriptionToUser = pgTable(
+  'subscription_user',
+  {
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    subscriptionId: integer('subscription_id')
+      .references(() => subscription.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    startDate: timestamp('start_date', { withTimezone: true }).notNull(),
+    endDate: timestamp('end_date', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.subscriptionId] }),
+  }),
+);
 
 export const achievement = pgTable('achievement', {
   id: serial('id').primaryKey(),
@@ -178,24 +272,48 @@ export const tournament = pgTable('tournament', {
     'online',
   ),
   country: text('country'),
+  parentTournamentId: integer('parent_tournament_id').references(
+    () => tournament.id,
+    {
+      onDelete: 'cascade',
+    },
+  ),
+  conversionRuleId: integer('conversion_rule_id').references(
+    () => pointConversionRule.id,
+  ),
   minimumLevel: integer('minimum_level').default(1),
   logo: text('logo'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   isPublic: boolean('is_public').default(true),
-  links: text('links'), //csv of links
+  links: text('links'), //TODO: potentially remove or replace with a fully fledged entity
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   tournamentType: tournamentType('tournament_type').default('league'),
   minimumMMR: integer('minimum_mmr').default(0),
   maximumMMR: integer('maximum_mmr').default(3000),
-  location: text('location'),
+  location: text('location'), // TODO: consider making a seperate rules entity if this has too many properties
+  isMultipleTeamsPerGroupAllowed: boolean(
+    'is_multiple_teams_per_group_allowed',
+  ).default(false),
+  isFakePlayersAllowed: boolean('is_fake_players_allowed').default(false),
+  isRanked: boolean('is_ranked').default(false),
   maxParticipants: integer('max_participants').default(32),
-  category: integer('category_id')
+  tournamentTeamType: tournamentTeamType('tournament_team_type').default(
+    'team',
+  ),
+  categoryId: integer('category_id')
     .references(() => category.id, {
       onDelete: 'cascade',
     })
     .notNull(),
-  subcategory: integer('subcategory_id').references(() => subcategory.id), // Maybe change this to one-to-many
+  creatorId: integer('creator_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  affiliatedGroupId: integer('affiliated_group_id').references(() => group.id, {
+    onDelete: 'cascade',
+  }), // TODO:  consider if there can be multiple groups
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date()),
@@ -264,10 +382,30 @@ export const chatRoomMessage = pgTable('chatRoomMessage', {
       onDelete: 'cascade',
     })
     .notNull(),
-  chatRoomMessage: text('chatRoomMessage').notNull(),
+  message: text('message').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   visibility: messageVisibility('visibility').default('public'),
 });
+
+export const groupFollower = pgTable(
+  'group_follower',
+  {
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.groupId] }),
+  }),
+);
 
 export const follower = pgTable(
   'follower',
@@ -316,9 +454,32 @@ export const group = pgTable('group', {
   abbreviation: text('abbreviation').notNull(),
   description: text('description'),
   logo: text('logo'),
+  country: text('country'),
+  location: text('location'),
+  type: groupType('group_type').default('public'),
+  focus: groupFocus('group_focus').default('hybrid'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   chatRoomId: integer('chat_room_id').references(() => chatRoom.id),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  //TODO: if needed create a separate settings entity
 });
+
+export const groupInterests = pgTable(
+  'group_interests',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id)
+      .notNull(),
+    categoryId: integer('category_id')
+      .references(() => category.id)
+      .notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.categoryId] }),
+  }),
+);
 
 export const groupToUser = pgTable(
   'group_user',
@@ -333,11 +494,59 @@ export const groupToUser = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    role: text('role').default('member'),
+    role: groupRole('role').default('member'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.groupId] }),
+  }),
+);
+
+export const groupInvite = pgTable(
+  'group_invite',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    message: text('message'), // TO add more fields and stuff if needed
+    relatedLFGId: integer('related_lfg_id').references(
+      () => lookingForGroup.id,
+    ), // If it is related to any LFG
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.userId] }),
+  }),
+);
+
+export const groupJoinRequest = pgTable(
+  'group_join_request',
+  {
+    groupId: integer('group_id')
+      .references(() => group.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    message: text('message'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    relatedLFPId: integer('related_lfp_id').references(
+      () => lookingForPlayers.id,
+    ),
+  }, // TODO: the response to this is literally creating another group membership or just straight up deleting the join request
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.userId] }),
   }),
 );
 
@@ -346,8 +555,11 @@ export const category = pgTable('category', {
   name: text('name').notNull(),
   description: text('description'),
   image: text('image'),
-  categoryType: categoryType('category_type').default('other'),
+  type: categoryType('category_type').default('other'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const interests = pgTable(
@@ -383,36 +595,56 @@ export const subcategory = pgTable('subcategory', {
     .notNull(),
 });
 
-export const participation = pgTable(
-  'participation',
-  {
-    groupId: integer('group_id')
-      .references(() => group.id, {
-        onDelete: 'cascade',
-      })
-      .notNull(),
-    tournamentId: integer('tournament_id')
-      .references(() => tournament.id, {
-        onDelete: 'cascade',
-      })
-      .notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-    points: integer('points').default(0),
-  },
-  (t) => ({
-    pk: primaryKey({ columns: [t.groupId, t.tournamentId] }),
-  }),
-);
+export const pointConversionRule = pgTable('conversion_rule', {
+  id: serial('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  source: integer('source').notNull(),
+  destination: integer('destination').notNull(),
+  points: integer('points').default(0),
+  type: pointConversionType('type').default('stage_to_stage'),
+  strategy: pointConversionStrategy('strategy').default('ranking'),
+  from: integer('from'),
+  to: integer('to'),
+  minPoints: integer('min_points'),
+  maxPoints: integer('max_points'),
+  pointsPerPlace: integer('points_per_place'),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
 
-export const event = pgTable('event', {
+export const participation = pgTable('participation', {
+  id: serial('id').primaryKey(),
+  groupId: integer('group_id').references(() => group.id, {
+    onDelete: 'cascade',
+  }),
+  userId: integer('user_id').references(() => user.id, {
+    onDelete: 'cascade',
+  }),
+  tournamentId: integer('tournament_id')
+    .references(() => tournament.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  isFake: boolean('is_fake').default(false),
+  temporaryGroupName: text('temporary_group_name'),
+  temporaryGroupProfilePicture: text('temporary_group_profile_picture'), // TODO: if deemed ineffective, remove these and create a separate entity
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  points: integer('points').default(0),
+});
+
+export const stage = pgTable('stage', {
   id: serial('id').primaryKey(),
   tournamentId: integer('tournament_id').references(() => tournament.id, {
     onDelete: 'cascade',
   }),
-  eventStatus: eventStatus('event_status').default('upcoming'), //TODO: maybe run a cron job to update this
-  eventType: text('event_type').default('group'),
+  conversionRuleId: integer('conversion_rule_id').references(
+    () => pointConversionRule.id,
+  ),
+  stageStatus: stageStatus('stage_status').default('upcoming'), //TODO: maybe run a cron job to update this
+  stageType: stageType('stage_type').default('group'),
   name: text('name').notNull(),
-  eventLocation: tournamentLocation('event_location').default('online'),
+  stageLocation: tournamentLocation('stage_location').default('online'),
   description: text('description'),
   logo: text('logo'),
   chatRoomId: integer('chat_room_id').references(() => chatRoom.id),
@@ -428,11 +660,13 @@ export const event = pgTable('event', {
 
 export const roster = pgTable('roster', {
   id: serial('id').primaryKey(), //Multiple teams per group allowed
-  groupId: integer('group_id').references(() => group.id, {
-    onDelete: 'cascade',
-  }),
-  eventId: integer('event_id')
-    .references(() => event.id, {
+  participationId: integer('participation_id')
+    .references(() => participation.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  stageId: integer('stage_id')
+    .references(() => stage.id, {
       onDelete: 'cascade',
     })
     .notNull(),
@@ -448,6 +682,9 @@ export const userToRoster = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
+    isTemporary: boolean('is_temporary').default(false),
+    temporaryUserProfilePicture: text('temporary_user_profile_picture'),
+    temporaryUsername: text('temporary_username'),
     rosterId: integer('roster_id')
       .references(() => roster.id, {
         onDelete: 'cascade',
@@ -464,8 +701,8 @@ export const userToRoster = pgTable(
 
 export const matchup = pgTable('matchup', {
   id: serial('id').primaryKey(),
-  eventId: integer('event_id')
-    .references(() => event.id, {
+  stageId: integer('stage_id')
+    .references(() => stage.id, {
       onDelete: 'cascade',
     })
     .notNull(),
@@ -543,7 +780,7 @@ export const bets = pgTable('bets', {
   betType: betType('bet_type').default('winner'),
   bettingNumber: integer('betting_number').default(1),
   amount: integer('amount').notNull(),
-  odd: integer('odd').notNull(),
+  odd: numeric('odd', { precision: 10, scale: 2 }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -577,7 +814,7 @@ export const notification = pgTable('notification', {
     })
     .notNull(),
   message: text('message').notNull(),
-  type: notificationType('type').default('info'),
+  type: text('type').default('test-template'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   read: boolean('read').default(false),
 });
@@ -605,8 +842,18 @@ export const tournamentPost = pgTable('tournament_post', {
     })
     .notNull(),
   title: text('title').notNull(),
-  images: text('images'), //csv of images
   message: text('message').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const tournamentPostImage = pgTable('tournament_post_image', {
+  id: serial('id').primaryKey(),
+  postId: integer('post_id')
+    .references(() => tournamentPost.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  imageUrl: text('image_url').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -643,8 +890,8 @@ export const categoryToLFG = pgTable(
 
 export const lookingForPlayers = pgTable('looking_for_players', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id') // TODO: change this go groupId later
-    .references(() => user.id, {
+  groupId: integer('group_id')
+    .references(() => group.id, {
       onDelete: 'cascade',
     })
     .notNull(),
@@ -679,14 +926,24 @@ export const resultPost = pgTable('result_post', {
       onDelete: 'cascade',
     })
     .notNull(),
-  eventId: integer('event_id')
-    .references(() => event.id, {
+  stageId: integer('stage_id')
+    .references(() => stage.id, {
       onDelete: 'cascade',
     })
     .notNull(),
   title: text('title').notNull(),
-  images: text('images'), //csv of images
   message: text('message').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const resultPostImage = pgTable('result_post_image', {
+  id: serial('id').primaryKey(),
+  postId: integer('post_id')
+    .references(() => resultPost.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  imageUrl: text('image_url').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -698,7 +955,12 @@ export const like = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    postId: integer('post_id').notNull(),
+    postId: integer('post_id').references(
+      () => tournamentPost.id || resultPost.id,
+      {
+        onDelete: 'cascade',
+      },
+    ),
     likeType: likeType('like_type').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
@@ -751,7 +1013,7 @@ export const review = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    eventId: integer('event_id').references(() => event.id, {
+    stageId: integer('stage_id').references(() => stage.id, {
       onDelete: 'cascade',
     }),
     review: text('review').notNull(),
@@ -760,7 +1022,7 @@ export const review = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.userId, t.eventId] }),
+    pk: primaryKey({ columns: [t.userId, t.stageId] }),
   }),
 );
 
@@ -817,6 +1079,23 @@ export const competitiveProgrammingContest = pgTable(
     endDate: timestamp('end_date', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
+);
+
+export const contestAllowedLanguage = pgTable(
+  'contest_allowed_language',
+  {
+    contestId: integer('contest_id')
+      .references(() => competitiveProgrammingContest.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    language: text('language').notNull(), // TODO: make this into an enum
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    // Primary key
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.contestId, t.language] }),
+  }),
 );
 
 export const problem = pgTable('problem', {

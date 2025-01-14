@@ -1,0 +1,31 @@
+@import "../../styles/";
+
+.toast {
+  min-height: $baseComponentHeight;
+  width: 100%;
+  border-radius: $borderRadius;
+  padding: $halfPadding $doublePadding;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.message {
+  font-size: $fontSize;
+  text-overflow: ellipsis;
+  max-height: 5 * $fontSize;
+  text-align: left;
+  overflow: hidden;
+}
+
+.check {
+  height: 0.5 * $baseComponentHeight;
+  width: auto;
+  margin-right: $padding;
+}

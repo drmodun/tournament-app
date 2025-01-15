@@ -11,13 +11,12 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@tournament-app/types": "*",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@googlemaps/markerclusterer": "^2.5.3",
     "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.21",
-    "@tanstack/react-query": "^5.62.11",
+    "@tanstack/react-query": "^5.64.1",
     "@tiptap/extension-code-block": "^2.10.3",
     "@tiptap/extension-underline": "^2.10.3",
     "@tiptap/pm": "^2.10.3",

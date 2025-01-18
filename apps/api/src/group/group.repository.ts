@@ -11,7 +11,7 @@ import {
 } from '@tournament-app/types';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { GroupQuery } from './dto/requests.dto';
-import { GroupReturnTypesEnumType } from './types';
+import { GroupDtosEnum, GroupReturnTypesEnumType } from './types';
 import {
   AnyPgSelectQueryBuilder,
   PgColumn,
@@ -95,6 +95,11 @@ export class GroupDrizzleRepository extends PrimaryRepository<
             groupFollower,
             eq(groupFollower.groupId, group.id),
           ),
+        };
+      case GroupDtosEnum.TYPE:
+        return {
+          id: group.id,
+          type: group.type,
         };
       default:
         return this.getMappingObject(GroupResponsesEnum.BASE);

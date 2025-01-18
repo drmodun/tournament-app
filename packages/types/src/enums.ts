@@ -216,6 +216,7 @@ export enum submissionStatusEnum {
 export enum groupTypeEnum {
   PRIVATE = "private",
   PUBLIC = "public",
+  FAKE = "fake",
 }
 
 export type groupTypeEnumType =
@@ -230,10 +231,10 @@ export enum participationStatusEnum {
   REJECTED = "rejected",
   WITHDRAWN = "withdrawn",
   DISQUALIFIED = "disqualified",
-  COMPLETED = "completed"
+  COMPLETED = "completed",
 }
 
-export type participationStatusEnumType = 
+export type participationStatusEnumType =
   (typeof participationStatusEnum)[keyof typeof participationStatusEnum];
 
 export enum groupFocusEnum {

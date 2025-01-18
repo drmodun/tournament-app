@@ -15,15 +15,18 @@ import {
   GroupInviteResponsesEnum,
 } from '@tournament-app/types';
 import { GroupInviteWithUserResponseDto } from './dto/responses.dto';
-
+import { GroupService } from 'src/group/group.service';
 @Injectable()
 export class GroupInvitesService {
   constructor(
     private readonly repository: GroupInviteDrizzleRepository,
     private readonly groupMembershipService: GroupMembershipService,
+    private readonly groupService: GroupService,
   ) {}
 
   async create(groupId: number, userId: number, dto: CreateGroupInviteDto) {
+    await this.groupService.checkIfGroupIsReal(groupId);
+
     await this.checkIfUserIsAlreadyMember(userId, groupId);
 
     await this.repository.createEntity({

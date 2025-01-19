@@ -25,6 +25,7 @@ export const groupInviteWithUserExample = {
   name: 'John Doe',
   email: 'john@doe.com',
   followers: 0,
+  isFake: false,
   level: 0,
   updatedAt: new Date(),
   message: 'Would you like to join our group?',
@@ -36,6 +37,7 @@ export const groupInviteWithMiniUserExample = {
   username: 'john_doe',
   profilePicture: 'https://example.com/image.jpg',
   createdAt: new Date(),
+  isFake: false,
 } satisfies GroupInviteWithMiniUserResponseDto;
 
 export const groupInviteWithGroupExample = {

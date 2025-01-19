@@ -61,6 +61,7 @@ async function createUsers() {
     bio: 'I am an admin user',
     profilePicture: 'https://example.com/admin.jpg',
     isEmailVerified: true,
+    isFake: false,
     role: userRoleEnum.ADMIN,
   } as CreateUserRequest & { isEmailVerified: boolean; role: string };
 
@@ -70,6 +71,7 @@ async function createUsers() {
     email: 'nonadmin@example',
     password: DEFAULT_PASSWORD,
     country: 'United States',
+    isFake: false,
     location: 'San Francisco',
     username: 'nonadmin',
     bio: 'I am a non-admin user',
@@ -89,6 +91,7 @@ async function createUsers() {
       location: faker.location.city(),
       username: faker.internet.userName(),
       bio: faker.lorem.paragraph(),
+      isFake: false,
       profilePicture: faker.image.avatar(),
       isEmailVerified: true,
       role: i <= 5 ? userRoleEnum.ADMIN : userRoleEnum.USER,

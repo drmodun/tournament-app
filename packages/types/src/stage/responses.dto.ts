@@ -33,3 +33,26 @@ export interface IExtendedStageResponseWithTournament
   extends IExtendedStageResponse {
   tournament: ITournamentResponse;
 }
+
+export type BaseStageResponseType =
+  | IMiniStageResponse
+  | IStageResponse
+  | IExtendedStageResponse
+  | IStageResponseWithTournament
+  | IExtendedStageResponseWithTournament;
+
+export enum StageResponsesEnum {
+  MINI = "mini",
+  BASE = "base",
+  EXTENDED = "extended",
+  WITH_TOURNAMENT = "withTournament",
+  WITH_EXTENDED_TOURNAMENT = "withExtendedTournament",
+}
+
+export enum StageSortingEnum {
+  NAME = "name",
+  CREATED_AT = "createdAt",
+  UPDATED_AT = "updatedAt",
+  START_DATE = "startDate",
+  END_DATE = "endDate",
+}

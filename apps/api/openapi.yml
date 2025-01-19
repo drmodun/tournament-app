@@ -142,6 +142,7 @@ paths:
                     results:
                       - id: 1
                         username: john_doe
+                        isFake: false
                         profilePicture: https://example.com/image.jpg
                         country: USA
                         bio: I am a cool person
@@ -149,7 +150,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2025-01-19T01:12:11.143Z
+                        updatedAt: &a2 2025-01-19T01:59:33.080Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -192,6 +193,7 @@ paths:
                     results:
                       - id: 1
                         username: john_doe
+                        isFake: false
                         profilePicture: https://example.com/image.jpg
                         country: USA
                 MiniUserResponseWithProfilePicture:
@@ -215,6 +217,7 @@ paths:
                     results:
                       - id: 1
                         username: john_doe
+                        isFake: false
                         profilePicture: https://example.com/image.jpg
                 ExtendedUserResponse:
                   value:
@@ -237,6 +240,7 @@ paths:
                     results:
                       - id: 1
                         username: john_doe
+                        isFake: false
                         profilePicture: https://example.com/image.jpg
                         country: USA
                         bio: I am a cool person
@@ -245,7 +249,7 @@ paths:
                         level: 0
                         name: John Doe
                         updatedAt: *a2
-                        createdAt: 2025-01-19T01:12:11.143Z
+                        createdAt: 2025-01-19T01:59:33.080Z
                         following: 0
                         location: New York
           description: ""
@@ -294,6 +298,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
+                    isFake: false
                     profilePicture: https://example.com/image.jpg
                     country: USA
                     bio: I am a cool person
@@ -301,7 +306,7 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2025-01-19T01:12:11.143Z
+                    updatedAt: &a3 2025-01-19T01:59:33.080Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -310,17 +315,20 @@ paths:
                   value:
                     id: 1
                     username: john_doe
+                    isFake: false
                     profilePicture: https://example.com/image.jpg
                     country: USA
                 MiniUserResponseWithProfilePicture:
                   value:
                     id: 1
                     username: john_doe
+                    isFake: false
                     profilePicture: https://example.com/image.jpg
                 ExtendedUserResponse:
                   value:
                     id: 1
                     username: john_doe
+                    isFake: false
                     profilePicture: https://example.com/image.jpg
                     country: USA
                     bio: I am a cool person
@@ -329,7 +337,7 @@ paths:
                     level: 0
                     name: John Doe
                     updatedAt: *a3
-                    createdAt: 2025-01-19T01:12:11.143Z
+                    createdAt: 2025-01-19T01:59:33.080Z
                     following: 0
                     location: New York
           description: ""
@@ -366,6 +374,26 @@ paths:
           in: path
           schema:
             type: number
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a1
+      security:
+        - bearer: []
+  /users/fake:
+    post:
+      operationId: UsersController_createFake
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
       responses:
         "201":
           description: ""
@@ -583,7 +611,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-19T01:12:11.427Z
+                        updatedAt: 2025-01-19T01:59:33.241Z
                         memberCount: 50
                 extended:
                   value:
@@ -609,9 +637,9 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-19T01:12:11.427Z
+                        updatedAt: 2025-01-19T01:59:33.241Z
                         memberCount: 50
-                        createdAt: 2025-01-19T01:12:11.427Z
+                        createdAt: 2025-01-19T01:59:33.241Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -640,7 +668,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2025-01-19T01:12:11.427Z
+                updatedAt: 2025-01-19T01:59:33.241Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -694,7 +722,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-19T01:12:11.427Z
+                    updatedAt: 2025-01-19T01:59:33.241Z
                     memberCount: 50
                 extended:
                   value:
@@ -707,9 +735,9 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-19T01:12:11.427Z
+                    updatedAt: 2025-01-19T01:59:33.241Z
                     memberCount: 50
-                    createdAt: 2025-01-19T01:12:11.427Z
+                    createdAt: 2025-01-19T01:59:33.241Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -749,7 +777,7 @@ paths:
                 type: Sports Club
                 focus: Chess
                 location: Split
-                updatedAt: 2025-01-19T01:12:11.427Z
+                updatedAt: 2025-01-19T01:59:33.241Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -793,7 +821,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-19T01:12:11.427Z
+                  updatedAt: 2025-01-19T01:59:33.241Z
                   memberCount: 50
                 members: []
           description: ""
@@ -822,7 +850,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-19T01:12:11.427Z
+                  updatedAt: 2025-01-19T01:59:33.241Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -851,7 +879,7 @@ paths:
                   type: Sports Club
                   focus: Chess
                   location: Split
-                  updatedAt: 2025-01-19T01:12:11.427Z
+                  updatedAt: 2025-01-19T01:59:33.241Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -962,6 +990,7 @@ paths:
                         role: member
                         user: &a6
                           id: 1
+                          isFake: false
                           username: john_doe
                           profilePicture: https://example.com/image.jpg
                         group: &a7
@@ -969,7 +998,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-01-19T01:12:11.434Z
+                        createdAt: 2025-01-19T01:59:33.245Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -995,7 +1024,8 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2025-01-19T01:12:11.434Z
+                        createdAt: 2025-01-19T01:59:33.245Z
+                        isFake: false
                         country: country
                         id: 1
                         username: username
@@ -1025,7 +1055,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2025-01-19T01:12:11.434Z
+                        createdAt: 2025-01-19T01:59:33.245Z
                         country: country
                         name: name
                         logo: logo
@@ -1107,6 +1137,7 @@ paths:
                     role: member
                     user: &a9
                       id: 1
+                      isFake: false
                       username: john_doe
                       profilePicture: https://example.com/image.jpg
                     group: &a10
@@ -1114,7 +1145,7 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-01-19T01:12:11.434Z
+                    createdAt: 2025-01-19T01:59:33.245Z
                 UserMembershipResponseWithDates:
                   value:
                     userId: 1
@@ -1122,7 +1153,8 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-01-19T01:12:11.434Z
+                    createdAt: 2025-01-19T01:59:33.245Z
+                    isFake: false
                     country: country
                     id: 1
                     username: username
@@ -1134,7 +1166,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-01-19T01:12:11.434Z
+                    createdAt: 2025-01-19T01:59:33.245Z
                     country: country
                     name: name
                     logo: logo
@@ -1269,7 +1301,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-01-19T01:12:11.442Z
+                    createdAt: 2025-01-19T01:59:33.248Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1277,11 +1309,13 @@ paths:
                     email: john@doe.com
                     followers: 0
                     level: 0
-                    updatedAt: 2025-01-19T01:12:11.442Z
+                    isFake: false
+                    updatedAt: 2025-01-19T01:59:33.248Z
                 mini:
                   value:
-                    createdAt: 2025-01-19T01:12:11.442Z
+                    createdAt: 2025-01-19T01:59:33.248Z
                     id: 1
+                    isFake: false
                     username: john_doe
           description: ""
       tags: &a11
@@ -1408,6 +1442,7 @@ paths:
                     results:
                       - id: 1
                         username: john_doe
+                        isFake: false
                         profilePicture: https://example.com/image.jpg
                         country: USA
                         bio: I am a cool person
@@ -1415,7 +1450,7 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: 2025-01-19T01:12:11.143Z
+                        updatedAt: 2025-01-19T01:59:33.080Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1435,8 +1470,9 @@ paths:
                     results:
                       - id: 1
                         username: john_doe
+                        isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-01-19T01:12:11.452Z
+                        createdAt: 2025-01-19T01:59:33.254Z
                 with-group:
                   value:
                     metadata:
@@ -1461,7 +1497,7 @@ paths:
                         type: Sports Club
                         focus: Chess
                         location: Split
-                        updatedAt: 2025-01-19T01:12:11.427Z
+                        updatedAt: 2025-01-19T01:59:33.241Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1484,7 +1520,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-01-19T01:12:11.452Z
+                        createdAt: 2025-01-19T01:59:33.254Z
           description: ""
       tags: &a12
         - group-join-requests
@@ -1571,6 +1607,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
+                    isFake: false
                     profilePicture: https://example.com/image.jpg
                     country: USA
                     bio: I am a cool person
@@ -1578,15 +1615,16 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: 2025-01-19T01:12:11.143Z
+                    updatedAt: 2025-01-19T01:59:33.080Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
                   value:
                     id: 1
                     username: john_doe
+                    isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-01-19T01:12:11.452Z
+                    createdAt: 2025-01-19T01:59:33.254Z
                 with-group:
                   value:
                     id: 1
@@ -1598,7 +1636,7 @@ paths:
                     type: Sports Club
                     focus: Chess
                     location: Split
-                    updatedAt: 2025-01-19T01:12:11.427Z
+                    updatedAt: 2025-01-19T01:59:33.241Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -1608,7 +1646,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-01-19T01:12:11.452Z
+                    createdAt: 2025-01-19T01:59:33.254Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -1734,8 +1772,9 @@ paths:
                         name: John Doe
                         email: john@doe.com
                         followers: 0
+                        isFake: false
                         level: 0
-                        updatedAt: 2025-01-19T01:12:11.468Z
+                        updatedAt: 2025-01-19T01:59:33.258Z
                         message: Would you like to join our group?
                         groupId: 1
                 with-mini-user:
@@ -1758,7 +1797,8 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-01-19T01:12:11.468Z
+                        createdAt: 2025-01-19T01:59:33.258Z
+                        isFake: false
                 with-group:
                   value:
                     metadata:
@@ -1810,7 +1850,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-01-19T01:12:11.468Z
+                        createdAt: 2025-01-19T01:59:33.258Z
           description: ""
       tags: &a14
         - group-invites
@@ -1903,8 +1943,9 @@ paths:
                     name: John Doe
                     email: john@doe.com
                     followers: 0
+                    isFake: false
                     level: 0
-                    updatedAt: 2025-01-19T01:12:11.468Z
+                    updatedAt: 2025-01-19T01:59:33.258Z
                     message: Would you like to join our group?
                     groupId: 1
                 with-mini-user:
@@ -1912,7 +1953,8 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-01-19T01:12:11.468Z
+                    createdAt: 2025-01-19T01:59:33.258Z
+                    isFake: false
                 with-group:
                   value:
                     id: 1
@@ -1934,7 +1976,7 @@ paths:
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-01-19T01:12:11.468Z
+                    createdAt: 2025-01-19T01:59:33.258Z
           description: ""
       tags: *a14
     patch:
@@ -2449,6 +2491,7 @@ paths:
                         creator: &a19
                           id: 1
                           username: chessmaster
+                          isFake: false
                         affiliatedGroup: &a20
                           id: 1
                           name: Chess Club
@@ -2586,6 +2629,7 @@ paths:
                       creator: &a26
                         id: 1
                         username: chessmaster
+                        isFake: false
                       affiliatedGroup: &a27
                         id: 1
                         name: Chess Club
@@ -2670,6 +2714,65 @@ paths:
       tags: *a24
       security:
         - bearer: []
+  /stage:
+    post:
+      operationId: StageController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStageDto"
+      responses:
+        "201":
+          description: ""
+    get:
+      operationId: StageController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /stage/{id}:
+    get:
+      operationId: StageController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+    patch:
+      operationId: StageController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStageDto"
+      responses:
+        "200":
+          description: ""
+    delete:
+      operationId: StageController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -2693,9 +2796,13 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
       required:
         - id
         - username
+        - isFake
     MiniUserResponseWithProfilePicture:
       type: object
       properties:
@@ -2705,12 +2812,16 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         profilePicture:
           type: string
           readOnly: true
       required:
         - id
         - username
+        - isFake
         - profilePicture
     MiniUserResponseWithCountry:
       type: object
@@ -2721,6 +2832,9 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         profilePicture:
           type: string
           readOnly: true
@@ -2730,6 +2844,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
     UserResponse:
@@ -2740,6 +2855,9 @@ components:
           readOnly: true
         username:
           type: string
+          readOnly: true
+        isFake:
+          type: boolean
           readOnly: true
         profilePicture:
           type: string
@@ -2769,6 +2887,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
         - email
@@ -2785,6 +2904,9 @@ components:
           readOnly: true
         username:
           type: string
+          readOnly: true
+        isFake:
+          type: boolean
           readOnly: true
         profilePicture:
           type: string
@@ -2824,6 +2946,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
         - email
@@ -2843,6 +2966,9 @@ components:
           readOnly: true
         username:
           type: string
+          readOnly: true
+        isFake:
+          type: boolean
           readOnly: true
         profilePicture:
           type: string
@@ -2895,6 +3021,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
         - email
@@ -3327,6 +3454,9 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         profilePicture:
           type: string
           readOnly: true
@@ -3347,6 +3477,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
         - createdAt
@@ -3414,6 +3545,9 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         profilePicture:
           type: string
           readOnly: true
@@ -3445,6 +3579,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
         - email
@@ -3463,12 +3598,16 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         createdAt:
           format: date-time
           type: string
       required:
         - id
         - username
+        - isFake
         - createdAt
     GroupJoinRequestWithUserResponse:
       type: object
@@ -3478,6 +3617,9 @@ components:
           readOnly: true
         username:
           type: string
+          readOnly: true
+        isFake:
+          type: boolean
           readOnly: true
         profilePicture:
           type: string
@@ -3511,6 +3653,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
         - email
@@ -3530,6 +3673,9 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         profilePicture:
           type: string
           readOnly: true
@@ -3539,6 +3685,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - createdAt
     GroupJoinRequestWithGroupResponse:
@@ -3644,6 +3791,9 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         profilePicture:
           type: string
           readOnly: true
@@ -3676,6 +3826,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - country
         - email
@@ -3695,6 +3846,9 @@ components:
         username:
           type: string
           readOnly: true
+        isFake:
+          type: boolean
+          readOnly: true
         profilePicture:
           type: string
           readOnly: true
@@ -3704,6 +3858,7 @@ components:
       required:
         - id
         - username
+        - isFake
         - profilePicture
         - createdAt
     GroupInviteWithGroupResponseDto:
@@ -4338,3 +4493,9 @@ components:
           type: number
         links:
           type: string
+    CreateStageDto:
+      type: object
+      properties: {}
+    UpdateStageDto:
+      type: object
+      properties: {}

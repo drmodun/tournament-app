@@ -17,12 +17,14 @@ export const followerResponseExample = {
   email: 'john@doe.com',
   followers: 0,
   level: 0,
+  isFake: false,
   updatedAt: new Date(),
 } satisfies FollowerResponse;
 
 export const followerMiniResponseExample = {
   createdAt: new Date(),
   id: 1,
+  isFake: false,
   username: 'john_doe',
 } satisfies FollowerMiniResponse;
 

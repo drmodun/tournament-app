@@ -13,7 +13,6 @@ import { GroupJoinRequestsModule } from './group-join-requests/group-join-reques
 import { GroupInvitesModule } from './group-invites/group-invites.module';
 import { CategoryModule } from './category/category.module';
 import { TournamentModule } from './tournament/tournament.module';
-import { ParticipationModule } from './participation/participation.module';
 import { StageModule } from './stage/stage.module';
 
 @Module({
@@ -30,7 +29,6 @@ import { StageModule } from './stage/stage.module';
     GroupInvitesModule,
     CategoryModule,
     TournamentModule,
-    ParticipationModule,
     StageModule,
   ],
   controllers: [AppController],

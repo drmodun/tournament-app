@@ -204,17 +204,20 @@ export class StageQuery extends BaseQuery {
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   tournamentId?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   minPlayersPerTeam?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Max(100)
   maxPlayersPerTeam?: number;

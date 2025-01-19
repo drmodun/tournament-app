@@ -125,6 +125,7 @@ describe('GroupInvitesController (e2e)', () => {
         'country',
         'followers',
         'level',
+        'isFake',
         'name',
         'updatedAt',
       ]);
@@ -174,6 +175,7 @@ describe('GroupInvitesController (e2e)', () => {
       const expectedFields = new Set([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'createdAt',
       ]);
@@ -327,6 +329,7 @@ describe('GroupInvitesController (e2e)', () => {
         'country',
         'followers',
         'level',
+        'isFake',
         'name',
         'updatedAt',
       ]);
@@ -370,6 +373,7 @@ describe('GroupInvitesController (e2e)', () => {
       const expectedFields = new Set([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'createdAt',
       ]);

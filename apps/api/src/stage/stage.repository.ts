@@ -109,8 +109,8 @@ export class StageDrizzleRepository extends PrimaryRepository<
         return {
           id: stage.id,
           name: stage.name,
-          startDate: stage.startDate,
-          endDate: stage.endDate,
+          tournamentId: stage.tournamentId,
+          stageStatus: stage.stageStatus,
         };
       case StageResponsesEnum.BASE:
         return {
@@ -118,6 +118,8 @@ export class StageDrizzleRepository extends PrimaryRepository<
           stageType: stage.stageType,
           description: stage.description,
           logo: stage.logo,
+          startDate: stage.startDate,
+          endDate: stage.endDate,
           rostersParticipating: db.$count(roster, eq(roster.stageId, stage.id)),
         };
       case StageResponsesEnum.WITH_TOURNAMENT:

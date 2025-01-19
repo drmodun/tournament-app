@@ -1,6 +1,5 @@
-  import { stageStatusEnumType, stageTypeEnumType } from "src/enums";
+import { stageStatusEnumType, stageTypeEnumType } from "src/enums";
 import {
-  IMiniTournamentResponse,
   IMiniTournamentResponseWithLogo,
   ITournamentResponse,
 } from "src/tournament";
@@ -16,6 +15,8 @@ export interface IStageResponse extends IMiniStageResponse {
   stageType: stageTypeEnumType;
   description: string;
   rostersParticipating: number;
+  startDate: Date;
+  endDate: Date;
   logo?: string;
 }
 
@@ -24,8 +25,6 @@ export interface IStageResponseWithTournament extends IStageResponse {
 }
 
 export interface IExtendedStageResponse extends IStageResponse {
-  endDate: Date;
-  startDate: Date;
   minPlayersPerTeam: number;
   maxPlayersPerTeam: number;
 }

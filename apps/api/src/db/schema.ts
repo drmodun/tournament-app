@@ -23,6 +23,7 @@ import {
   pointConversionTypeEnum,
   pointConversionStrategyEnum,
   stageTypeEnum,
+  stageStatusEnum,
 } from '@tournament-app/types';
 import {
   serial,
@@ -81,7 +82,7 @@ export const stageType = pgEnum('stage_type', exportEnumValues(stageTypeEnum));
 
 export const stageStatus = pgEnum(
   'stage_status',
-  exportEnumValues(tournamentTypeEnum),
+  exportEnumValues(stageStatusEnum),
 );
 
 export const matchupType = pgEnum(

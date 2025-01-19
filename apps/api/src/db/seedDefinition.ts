@@ -17,6 +17,7 @@ import {
   tournamentTypeEnum,
   tournamentTeamTypeEnum,
 } from '@tournament-app/types';
+import { stageTypeEnum, stageStatusEnum } from '@tournament-app/types';
 
 async function teardown() {
   console.log('Teardown database...');
@@ -438,6 +439,55 @@ async function createTournaments() {
   );
 }
 
+async function createStages() {
+  const tournaments = await db.select().from(tables.tournament);
+  const stages = [];
+
+  for (const tournament of tournaments) {
+    // Create 2-4 stages per tournament
+    const numStages = faker.number.int({ min: 2, max: 4 });
+
+    for (let i = 0; i < numStages; i++) {
+      const startDate =
+        i === 0
+          ? tournament.startDate
+          : faker.date.between({
+              from: tournament.startDate,
+              to: tournament.endDate,
+            });
+
+      const endDate = faker.date.between({
+        from: startDate,
+        to: tournament.endDate,
+      });
+
+      stages.push({
+        id: stages.length + 1,
+        name: i === 0 ? 'Group Stage' : `Playoff Stage ${i}`,
+        description: faker.lorem.paragraph(),
+        startDate,
+        endDate,
+        stageType: i === 0 ? stageTypeEnum.ROUND_ROBIN : stageTypeEnum.KNOCKOUT,
+        stageStatus: faker.helpers.arrayElement(Object.values(stageStatusEnum)),
+        stageLocation: faker.helpers.arrayElement(
+          Object.values(tournamentLocationEnum),
+        ),
+        minPlayersPerTeam: faker.number.int({ min: 1, max: 10 }),
+        maxPlayersPerTeam: faker.number.int({ min: 1, max: 10 }),
+        tournamentId: tournament.id,
+      });
+    }
+  }
+
+  await db.insert(tables.stage).values(stages);
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE event_id_seq RESTART WITH ${sql.raw(
+      String(stages.length + 1),
+    )}`,
+  );
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -448,8 +498,9 @@ export async function seed() {
   await createFollowers();
   await createGroups();
   await createGroupMemberships();
-  await createGroupInvites();
   await createGroupJoinRequests();
+  await createGroupInvites();
   await createCategories();
   await createTournaments();
+  await createStages();
 }

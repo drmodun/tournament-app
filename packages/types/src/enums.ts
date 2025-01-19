@@ -128,6 +128,8 @@ export enum stageTypeEnum {
   FIXTURE = "fixture",
   DOUBLE_ELIMINATION = "double_elimination",
   QUIZ = "quiz",
+  COMPASS = "compass",
+  TRIPLE_ELIMINATION = "triple_elimination",
   EVALUATED_COMPETITION = "evaluated_competition",
 }
 

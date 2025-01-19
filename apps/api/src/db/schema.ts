@@ -626,7 +626,6 @@ export const participation = pgTable('participation', {
       onDelete: 'cascade',
     })
     .notNull(),
-  isFake: boolean('is_fake').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   points: integer('points').default(0),
 });
@@ -645,7 +644,6 @@ export const stage = pgTable('stage', {
   stageLocation: tournamentLocation('stage_location').default('online'),
   description: text('description'),
   logo: text('logo'),
-  chatRoomId: integer('chat_room_id').references(() => chatRoom.id),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

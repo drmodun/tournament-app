@@ -1,4 +1,4 @@
-import { stageStatusEnumType, stageTypeEnumType } from "src/enums";
+  import { stageStatusEnumType, stageTypeEnumType } from "src/enums";
 import {
   IMiniTournamentResponse,
   IMiniTournamentResponseWithLogo,
@@ -15,6 +15,7 @@ export interface IMiniStageResponse {
 export interface IStageResponse extends IMiniStageResponse {
   stageType: stageTypeEnumType;
   description: string;
+  rostersParticipating: number;
   logo?: string;
 }
 

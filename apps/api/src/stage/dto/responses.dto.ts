@@ -40,6 +40,9 @@ export class StageResponse extends MiniStageResponse implements IStageResponse {
   @IsOptional()
   @ApiResponseProperty()
   logo?: string;
+
+  @ApiResponseProperty()
+  rostersParticipating: number;
 }
 
 export class StageResponseWithTournament

@@ -1,26 +1,76 @@
-import { Injectable } from '@nestjs/common';
-import { CreateStageDto } from './dto/create-stage.dto';
-import { UpdateStageDto } from './dto/update-stage.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import {
+  ICreateStageDto,
+  IUpdateStageDto,
+  StageResponsesEnum,
+  BaseStageResponseType,
+} from '@tournament-app/types';
+import { StageDrizzleRepository } from './stage.repository';
+import { StageQuery } from './dto/requests.dto';
 
 @Injectable()
 export class StageService {
-  create(createStageDto: CreateStageDto) {
-    return 'This action adds a new stage';
+  constructor(private readonly repository: StageDrizzleRepository) {}
+
+  async create(createStageDto: ICreateStageDto) {
+    const stage = await this.repository.createEntity({
+      ...createStageDto,
+    });
+
+    if (!stage[0]) {
+      throw new UnprocessableEntityException('Stage creation failed');
+    }
+
+    return stage[0];
   }
 
-  findAll() {
-    return `This action returns all stage`;
+  async findAll<TResponseType extends BaseStageResponseType>(
+    query: StageQuery,
+  ): Promise<TResponseType[]> {
+    const { responseType = StageResponsesEnum.BASE, ...queryParams } = query;
+    const queryFunction = this.repository.getQuery({
+      ...queryParams,
+      responseType,
+    });
+
+    const results = await queryFunction;
+    return results as TResponseType[];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stage`;
+  async findOne<TResponseType extends BaseStageResponseType>(
+    id: number,
+    responseType: StageResponsesEnum = StageResponsesEnum.BASE,
+  ): Promise<TResponseType> {
+    const results = await this.repository.getSingleQuery(id, responseType);
+
+    if (!results.length) {
+      throw new NotFoundException(`Stage with ID ${id} not found`);
+    }
+
+    return results[0] as TResponseType;
   }
 
-  update(id: number, updateStageDto: UpdateStageDto) {
-    return `This action updates a #${id} stage`;
+  async update(id: number, updateStageDto: IUpdateStageDto) {
+    const stage = await this.repository.updateEntity(id, updateStageDto);
+
+    if (!stage[0]) {
+      throw new NotFoundException(`Stage with ID ${id} not found`);
+    }
+
+    return stage[0];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} stage`;
+  async remove(id: number) {
+    const action = await this.repository.deleteEntity(id);
+
+    if (!action[0]) {
+      throw new NotFoundException(`Stage with ID ${id} not found`);
+    }
+
+    return action[0];
   }
 }

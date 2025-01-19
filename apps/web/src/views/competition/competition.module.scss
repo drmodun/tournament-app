@@ -1,0 +1,137 @@
+@use "../../styles/" as *;
+
+.pfp {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.left {
+  overflow-y: scroll;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: $doublePadding;
+  width: clamp(0px, 100%, $desktopLargeBreakpoint);
+  height: calc(100vh - $doublePadding * 6);
+  overflow: hidden;
+
+  @media screen and (max-width: $desktopLargeBreakpoint) {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+.joinButton {
+  width: 100%;
+  margin-top: $padding;
+}
+
+.right {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.banner {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  height: 4 * $baseComponentHeight;
+
+  @media screen and (max-width: $desktopLargeBreakpoint) {
+    height: 6 * $baseComponentHeight;
+  }
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  @media screen and (max-width: $desktopLargeBreakpoint) {
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.organiserName {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    font-size: $fontSize;
+  }
+}
+
+.organiserName + .organiserName {
+  margin-top: $halfPadding;
+}
+
+.bannerLogo {
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: $borderRadius;
+
+  @media screen and (max-width: $desktopLargeBreakpoint) {
+    height: 50%;
+  }
+}
+
+.bannerText {
+  overflow: hidden;
+  padding: $padding;
+}
+
+.contestantsList {
+  display: flex;
+  -webkit-mask-image: -webkit-gradient(
+    linear,
+    left top,
+    right bottom,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
+  gap: $halfPadding / 2;
+  position: relative;
+}
+
+.dates {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding / 2;
+  position: relative;
+}
+
+.sidebarSection + .sidebarSection {
+  margin-top: $halfPadding;
+}
+
+.rule {
+  padding-left: $halfPadding;
+}
+
+.content {
+  padding-top: $padding;
+}
+
+.mutedColor {
+  color: $disabled;
+}

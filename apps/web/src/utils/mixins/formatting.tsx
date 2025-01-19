@@ -64,6 +64,10 @@ export const formatDate = (date: Date) => {
   return dateFormat(date, "mmm dS, 'yy").toLowerCase();
 };
 
+export const formatDateTime = (date: Date) => {
+  return dateFormat(date, "H:MM dd.mm 'yy").toLowerCase();
+};
+
 export const calculateBestValueFormat = (targetValue: number) => {
   // value prefixes
   const valueNames = ["", "K", "M", "B", "T", "P", "E", "Z", "Y", "R", "Q"];

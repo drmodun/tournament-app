@@ -1,0 +1,28 @@
+@import "../../styles/";
+
+.screen {
+  margin-top: $doublePadding * 2;
+  padding-bottom: $doublePadding * 2;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-left: $horizontalMargin;
+  padding-right: $horizontalMargin;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+  }
+
+  padding-bottom: $doublePadding * 2;
+  padding-top: $doublePadding * 2;
+}
+
+.navbar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+}

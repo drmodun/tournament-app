@@ -11,7 +11,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@tournament-app/types": "*",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@googlemaps/markerclusterer": "^2.5.3",
@@ -37,8 +36,10 @@
     "react": "^19.0.0-rc-34d0c5e357-20240607",
     "react-dom": "^19.0.0-rc-34d0c5e357-20240607",
     "react-hook-form": "^7.53.1",
+    "react-markdown": "^9.0.3",
     "react-material-symbols": "^4.4.0",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "tiptap-markdown": "^0.8.10"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.7.0",

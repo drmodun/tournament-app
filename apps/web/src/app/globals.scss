@@ -12,6 +12,11 @@
   scrollbar-width: thin;
 }
 
+ol,
+ul {
+  padding-left: $doublePadding;
+}
+
 body {
   background-color: $dark;
 }

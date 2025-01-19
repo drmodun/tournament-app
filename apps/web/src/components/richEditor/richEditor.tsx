@@ -16,12 +16,15 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import TitleIcon from "@mui/icons-material/Title";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
+import { Markdown } from "tiptap-markdown";
+import { useEffect } from "react";
 
 interface RichEditorProps {
   style?: React.CSSProperties;
   variant?: TextVariants;
   startingContent?: string;
   editable?: boolean;
+  isSSR?: boolean;
 }
 
 export default function RichEditor({
@@ -29,6 +32,7 @@ export default function RichEditor({
   variant = "dark",
   startingContent = "",
   editable = true,
+  isSSR = false,
 }: RichEditorProps) {
   const editor = useEditor({
     editable: editable,
@@ -38,8 +42,10 @@ export default function RichEditor({
       Heading.configure({
         levels: [1, 2, 3],
       }),
+      Markdown,
     ],
     content: startingContent,
+    immediatelyRender: !isSSR,
     editorProps: {
       attributes: {
         class: clsx(
@@ -94,8 +100,21 @@ export default function RichEditor({
   const redo = () => editor?.chain().focus().redo().run();
   const isRedoDisabled = !editor?.can().chain().focus().redo().run();
 
+  useEffect(() => {
+    Markdown.configure({
+      html: true,
+      tightLists: true,
+      tightListClass: "tight",
+      bulletListMarker: "-",
+      linkify: true,
+      breaks: false,
+      transformPastedText: true,
+      transformCopiedText: false,
+    });
+  }, []);
+
   return (
-    <div className={clsx(styles.wrapper)}>
+    <div className={clsx(styles.wrapper)} style={style}>
       <div className={clsx(styles.menuBar)}>
         <div className={clsx(styles.menuBarPart)}>
           <button

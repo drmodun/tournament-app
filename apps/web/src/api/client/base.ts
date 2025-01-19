@@ -47,6 +47,7 @@ export const getRefreshToken = () => {
 
 clientApi.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
+  console.log(accessToken);
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -55,5 +56,40 @@ clientApi.interceptors.request.use((config) => {
 
 clientApi.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status !== 401 || originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    if (originalRequest.url === "/auth/refresh") {
+      clearAuthTokens();
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+    const refreshToken = getRefreshToken();
+
+    if (!refreshToken) {
+      clearAuthTokens();
+      return Promise.reject(error);
+    }
+
+    try {
+      const response = await clientApi.post<any>("/auth/refresh", null, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+
+      const { accessToken, refreshToken: newRefreshToken } = response.data;
+      setAuthTokens(accessToken, newRefreshToken);
+      originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+      return clientApi(originalRequest);
+    } catch (refreshError) {
+      clearAuthTokens();
+      return Promise.reject(refreshError);
+    }
+  }
 );

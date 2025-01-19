@@ -1,17 +1,20 @@
+"use client";
+
 import { IUserLoginResponse } from "@tournament-app/types";
 import { clientApi, getRefreshToken, setAuthTokens } from "api/client/base";
 import { useMutation } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { useRouter } from "next/router";
-import { setTimeout } from "node:timers";
 import { useAuth } from "./useAuth";
+import { AxiosResponse } from "axios";
 
 export const refreshUser = async () =>
-  clientApi.post<never, IUserLoginResponse>("/auth/refresh", {
-    headers: {
-      Authorization: `Bearer ${getRefreshToken()}`,
-    },
-  });
+  clientApi
+    .post<never, AxiosResponse<IUserLoginResponse>>("/auth/refresh", {
+      headers: {
+        Authorization: `Bearer ${getRefreshToken()}`,
+      },
+    })
+    .then((res) => res.data);
 // TODO: make google login later
 
 export const useRefresh = () => {

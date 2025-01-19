@@ -1,3 +1,5 @@
+"use client";
+
 import {
   IEmailPasswordLoginRequest,
   IUserLoginResponse,
@@ -5,21 +7,23 @@ import {
 import { clientApi, setAuthTokens } from "api/client/base";
 import { useMutation } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { useRouter } from "next/router";
-import { setTimeout } from "node:timers";
+import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
+import { AxiosResponse } from "axios";
 
 export const loginUser = async (data: IEmailPasswordLoginRequest) =>
-  clientApi.post<IEmailPasswordLoginRequest, IUserLoginResponse>(
-    "/auth/login",
-    data
-  );
+  clientApi
+    .post<
+      IEmailPasswordLoginRequest,
+      AxiosResponse<IUserLoginResponse>
+    >("/auth/login", data)
+    .then((res) => res.data);
 // TODO: make google login later
 
 export const useLogin = () => {
   const toast = useToastContext();
   const navigate = useRouter();
-  const { refetch } = useAuth();
+  const { refetch, isSuccess } = useAuth();
 
   return useMutation({
     mutationFn: loginUser,
@@ -27,7 +31,12 @@ export const useLogin = () => {
       setAuthTokens(data.accessToken, data.refreshToken);
       toast.addToast("Successfully logged in", "success"); //TODO: make this an object for easier and more consistent usage
       await refetch();
-      
+
+      if (!isSuccess) {
+        toast.addToast("Error logging in", "error");
+        return;
+      }
+
       setTimeout(() => navigate.push("/"), 1000);
     },
     onError: (error: any) => {

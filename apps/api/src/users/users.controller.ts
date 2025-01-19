@@ -165,4 +165,12 @@ export class UsersController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.remove(id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post('fake')
+  @ApiCreatedResponse({ type: ActionResponsePrimary })
+  async createFake(@Body() createUserDto: CreateUserRequest) {
+    return await this.usersService.create({ ...createUserDto, isFake: true });
+  }
 }

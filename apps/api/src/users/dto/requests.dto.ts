@@ -13,9 +13,11 @@ import {
   IsEmail,
   IsStrongPassword,
   IsUrl,
+  IsBoolean,
 } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
 import { UserReturnTypesEnumType } from '../types';
+import { Type } from 'class-transformer';
 
 export class CreateUserRequest implements ICreateUserRequest {
   @IsString()
@@ -44,6 +46,11 @@ export class CreateUserRequest implements ICreateUserRequest {
   @IsStrongPassword()
   @ApiProperty()
   password: string;
+
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  isFake: boolean;
 
   @IsOptional()
   @IsUrl()

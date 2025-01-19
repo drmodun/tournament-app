@@ -67,6 +67,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
         return {
           id: user.id,
           username: user.username,
+          isFake: user.isFake,
         };
       case UserResponsesEnum.MINI_WITH_PFP:
         return {
@@ -107,6 +108,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
           id: user.id,
           email: user.email,
           role: user.role,
+          isFake: user.isFake,
         };
       case UserDtosEnum.CREDENTIALS:
         return {

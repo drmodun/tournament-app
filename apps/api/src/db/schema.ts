@@ -147,6 +147,7 @@ export const user = pgTable('user', {
   code: text('code')
     .$defaultFn(() => Math.random().toString(36).slice(8))
     .unique(),
+  isFake: boolean('is_fake').default(false),
   isEmailVerified: boolean('is_email_verified').default(false),
   hasSelectedInterests: boolean('has_selected_interests').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

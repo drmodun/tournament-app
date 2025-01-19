@@ -3,6 +3,7 @@ import { userRoleEnum } from "src/enums";
 export interface IMiniUserResponse {
   id: number;
   username: string;
+  isFake: boolean;
 }
 
 export interface IMiniUserResponseWithProfilePicture extends IMiniUserResponse {

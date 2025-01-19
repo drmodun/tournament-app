@@ -6,6 +6,7 @@ export interface ICreateUserRequest {
   password: string;
   profilePicture?: string;
   country: string;
+  isFake?: boolean;
   location?: string;
 }
 

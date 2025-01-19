@@ -1,6 +1,6 @@
 import { participationStatusEnum } from "../enums";
 
-export interface ICreateParticipationRequest {
+export interface ICreateSingleParticipationRequest {
   userId: number;
   tournamentId: number;
   status?: participationStatusEnum;

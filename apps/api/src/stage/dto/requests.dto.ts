@@ -19,14 +19,17 @@ import {
   tournamentLocationEnum,
 } from '@tournament-app/types';
 import { BaseQuery } from '../../base/query/baseQuery';
+import { IsDateGreaterThan } from 'src/base/decorators/isDateGreaterThan';
 
 export class CreateStageRequest implements ICreateStageDto {
   @IsInt()
+  @Type(() => Number)
   @ApiProperty()
   tournamentId: number;
 
   @IsOptional()
   @IsInt()
+  @Type(() => Number)
   @ApiPropertyOptional()
   conversionRuleId?: number;
 
@@ -63,14 +66,17 @@ export class CreateStageRequest implements ICreateStageDto {
   @ApiPropertyOptional()
   logo?: string;
 
-  @Type(() => Date)
   @IsDate()
+  @Type(() => Date)
   @ApiProperty()
   startDate: Date;
 
   @IsOptional()
   @Type(() => Date)
   @IsDate()
+  @IsDateGreaterThan('startDate', {
+    message: 'End date must be greater than start date',
+  })
   @ApiPropertyOptional()
   endDate?: Date;
 
@@ -92,11 +98,13 @@ export class CreateStageRequest implements ICreateStageDto {
 export class UpdateStageRequest implements IUpdateStageDto {
   @IsOptional()
   @IsInt()
+  @Type(() => Number)
   @ApiPropertyOptional()
   tournamentId?: number;
 
   @IsOptional()
   @IsInt()
+  @Type(() => Number)
   @ApiPropertyOptional()
   conversionRuleId?: number;
 

@@ -32,6 +32,7 @@ export const miniStageExample: MiniStageResponse = {
 
 export const stageExample: StageResponse = {
   ...miniStageExample,
+  rostersParticipating: 0,
   stageType: stageTypeEnum.ROUND_ROBIN,
   description: 'Initial group stage of the tournament',
   logo: 'https://example.com/stage-logo.jpg',

@@ -29,7 +29,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
       UserDtosEnum.VALIDATED,
     )) satisfies ValidatedUserDto;
 
-    if (!authUser || authUser.isFake) {
+    if (!authUser) {
       throw new UnauthorizedException();
     }
 

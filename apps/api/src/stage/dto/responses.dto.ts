@@ -43,6 +43,12 @@ export class StageResponse extends MiniStageResponse implements IStageResponse {
 
   @ApiResponseProperty()
   rostersParticipating: number;
+
+  @ApiResponseProperty()
+  startDate: Date;
+
+  @ApiResponseProperty()
+  endDate: Date;
 }
 
 export class StageResponseWithTournament

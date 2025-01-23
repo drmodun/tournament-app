@@ -17,6 +17,8 @@ describe('StageController', () => {
 
   const mockStage: IStageResponse = {
     id: 1,
+    startDate: new Date(),
+    endDate: new Date(),
     name: 'Test Stage',
     description: 'Test Description',
     stageType: stageTypeEnum.KNOCKOUT,

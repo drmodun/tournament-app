@@ -74,6 +74,7 @@ describe('GroupMembershipService', () => {
           id: 1,
           username: 'test',
           profilePicture: 'test.jpg',
+          isFake: false,
         },
         group: {
           id: 1,
@@ -105,6 +106,7 @@ describe('GroupMembershipService', () => {
           id: 1,
           username: 'test',
           profilePicture: 'test.jpg',
+          isFake: false,
         },
         group: {
           id: 1,

@@ -42,6 +42,7 @@ export const withLogoExample: MiniTournamentResponseWithLogo = {
 const creatorExample: MiniUserResponse = {
   id: 1,
   username: 'chessmaster',
+  isFake: false,
 };
 
 const groupExample: MiniGroupResponse = {

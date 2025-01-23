@@ -77,6 +77,7 @@ describe('GoogleStrategy', () => {
       expect(mockUsersService.create).toHaveBeenCalledWith({
         email: 'test@example.com',
         username: 'Test',
+        isFake: false,
         profilePicture: 'photo-url',
         country: 'None',
         name: 'Test',

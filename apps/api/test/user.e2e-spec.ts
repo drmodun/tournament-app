@@ -53,7 +53,7 @@ describe('UserController', () => {
       const { results, metadata } = response.body;
 
       expect(results.length).toEqual(12);
-      expect(Object.keys(results[0])).toEqual(['id', 'username']);
+      expect(Object.keys(results[0])).toEqual(['id', 'username', 'isFake']);
 
       expect(metadata.pagination).toEqual({
         page: 1,
@@ -74,6 +74,7 @@ describe('UserController', () => {
       expect(Object.keys(results[0])).toEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
       ]);
 
@@ -96,6 +97,7 @@ describe('UserController', () => {
       expect(Object.keys(results[0])).toEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
       ]);
@@ -122,6 +124,7 @@ describe('UserController', () => {
       expect(Object.keys(results[0])).toEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -154,6 +157,7 @@ describe('UserController', () => {
       expect(Object.keys(results[0])).toEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -436,6 +440,7 @@ describe('UserController', () => {
       expect(response.body).toEqual({
         id: 4,
         username: expect.any(String),
+        isFake: false,
         email: expect.any(String),
         name: expect.any(String),
         bio: expect.any(String),

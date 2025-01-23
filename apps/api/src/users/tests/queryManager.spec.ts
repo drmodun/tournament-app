@@ -39,6 +39,7 @@ describe('UserDrizzleRepository', () => {
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -77,6 +78,7 @@ describe('UserDrizzleRepository', () => {
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -114,6 +116,7 @@ describe('UserDrizzleRepository', () => {
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -143,6 +146,7 @@ describe('UserDrizzleRepository', () => {
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',

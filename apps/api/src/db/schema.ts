@@ -23,6 +23,7 @@ import {
   pointConversionTypeEnum,
   pointConversionStrategyEnum,
   stageTypeEnum,
+  stageStatusEnum,
 } from '@tournament-app/types';
 import {
   serial,
@@ -81,7 +82,7 @@ export const stageType = pgEnum('stage_type', exportEnumValues(stageTypeEnum));
 
 export const stageStatus = pgEnum(
   'stage_status',
-  exportEnumValues(tournamentTypeEnum),
+  exportEnumValues(stageStatusEnum),
 );
 
 export const matchupType = pgEnum(
@@ -626,7 +627,6 @@ export const participation = pgTable('participation', {
       onDelete: 'cascade',
     })
     .notNull(),
-  isFake: boolean('is_fake').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   points: integer('points').default(0),
 });
@@ -645,7 +645,6 @@ export const stage = pgTable('stage', {
   stageLocation: tournamentLocation('stage_location').default('online'),
   description: text('description'),
   logo: text('logo'),
-  chatRoomId: integer('chat_room_id').references(() => chatRoom.id),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

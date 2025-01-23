@@ -33,8 +33,8 @@ describe('UsersController', () => {
       .spyOn(UsersService.prototype, 'findAll')
       .mockImplementation(async () => {
         return [
-          { id: 1, username: 'john_doe' },
-          { id: 2, username: 'jane_doe' },
+          { id: 1, username: 'john_doe', isFake: false },
+          { id: 2, username: 'jane_doe', isFake: false },
         ];
       });
 
@@ -53,8 +53,8 @@ describe('UsersController', () => {
     const result = await controller.findAll(request, req);
 
     expect(result.results).toEqual([
-      { id: 1, username: 'john_doe' },
-      { id: 2, username: 'jane_doe' },
+      { id: 1, username: 'john_doe', isFake: false },
+      { id: 2, username: 'jane_doe', isFake: false },
     ]);
 
     expect(result.metadata).toEqual({
@@ -75,12 +75,12 @@ describe('UsersController', () => {
     jest
       .spyOn(UsersService.prototype, 'findOne')
       .mockImplementation(async () => {
-        return { id: 1, username: 'john_doe' };
+        return { id: 1, username: 'john_doe', isFake: false };
       });
 
     const result = await controller.findOne(1, UserResponsesEnum.MINI);
 
-    expect(result).toEqual({ id: 1, username: 'john_doe' });
+    expect(result).toEqual({ id: 1, username: 'john_doe', isFake: false });
   });
 
   it('should create a user', async () => {

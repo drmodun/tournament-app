@@ -48,7 +48,7 @@ export class CategoryService {
   ): Promise<TResponseType> {
     const results = await this.repository.getSingleQuery(id, responseType);
 
-    if (!results[0]) {
+    if (!results?.length) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
 

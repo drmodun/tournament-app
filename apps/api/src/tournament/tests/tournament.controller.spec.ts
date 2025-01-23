@@ -39,6 +39,7 @@ describe('TournamentController', () => {
     creator: {
       id: 1,
       username: 'testuser',
+      isFake: false,
     },
     affiliatedGroup: {
       id: 1,

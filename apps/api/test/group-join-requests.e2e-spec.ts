@@ -145,6 +145,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
         'email',
         'profilePicture',
         'groupId',
+        'isFake',
         'message',
         'bio',
         'country',
@@ -196,6 +197,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
 
       const expectedFields = new Set([
         'id',
+        'isFake',
         'username',
         'profilePicture',
         'createdAt',
@@ -246,6 +248,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
         'groupId',
         'message',
         'bio',
+        'isFake',
         'country',
         'followers',
         'level',

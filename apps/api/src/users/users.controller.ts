@@ -171,6 +171,10 @@ export class UsersController {
   @Post('fake')
   @ApiCreatedResponse({ type: ActionResponsePrimary })
   async createFake(@Body() createUserDto: CreateUserRequest) {
-    return await this.usersService.create({ ...createUserDto, isFake: true });
+    return await this.usersService.create({
+      ...createUserDto,
+      isFake: true,
+      email: crypto.randomUUID(), // to make logins effectively impossible
+    });
   }
 }

@@ -50,7 +50,7 @@ export class CreateUserRequest implements ICreateUserRequest {
   @IsOptional()
   @Type(() => Boolean)
   @IsBoolean()
-  isFake: boolean;
+  isFake?: boolean;
 
   @IsOptional()
   @IsUrl()

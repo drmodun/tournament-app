@@ -14,6 +14,7 @@ import { GroupInvitesModule } from './group-invites/group-invites.module';
 import { CategoryModule } from './category/category.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { StageModule } from './stage/stage.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -30,6 +31,12 @@ import { StageModule } from './stage/stage.module';
     CategoryModule,
     TournamentModule,
     StageModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,6 +16,8 @@ services:
       context: .
       dockerfile: ./apps/api/Dockerfile
     restart: always
+    depends_on:
+      - redis
     ports:
       - 5500:5500
 
@@ -37,6 +39,17 @@ services:
     ports:
       - 3001:3001
 
+  redis:
+    container_name: redis
+    image: redis:latest # Use the latest official Redis image
+    restart: always
+    ports:
+      - 6379:6379 # Expose Redis port
+    volumes:
+      - redis_data:/data # Mount a volume for Redis data persistence
+    networks:
+      - app_network
+
 # Define a network, which allows containers to communicate
 # with each other, by using their container name as a hostname
 networks:
@@ -46,3 +59,4 @@ networks:
 
 volumes:
   db_data:
+  redis_data:

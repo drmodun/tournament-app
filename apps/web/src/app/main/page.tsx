@@ -5,7 +5,7 @@ import PromotedEvents from "views/promotedEvents";
 import MapSidebar from "views/mapSidebar";
 import { IUserResponse } from "@tournament-app/types";
 
-export const user: IUserResponse = {
+const user: IUserResponse = {
   id: 1,
   username: "username",
   email: "email",

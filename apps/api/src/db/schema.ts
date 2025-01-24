@@ -459,7 +459,6 @@ export const group = pgTable('group', {
   type: groupType('group_type').default('public'),
   focus: groupFocus('group_focus').default('hybrid'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  chatRoomId: integer('chat_room_id').references(() => chatRoom.id),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date()),

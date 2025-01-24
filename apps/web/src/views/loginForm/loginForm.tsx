@@ -8,6 +8,7 @@ import Input from "components/input";
 import { TextVariants } from "types/styleTypes";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "components/button";
+import { useLogin } from "api/client/hooks/auth/useLogin";
 
 type LoginInputs = {
   email: "string";
@@ -20,7 +21,10 @@ export default function LoginForm({
   variant?: TextVariants;
 }) {
   const methods = useForm<LoginInputs>();
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => console.log(data);
+  const { mutateAsync } = useLogin();
+
+  const onSubmit: SubmitHandler<LoginInputs> = async (data) =>
+    await mutateAsync(data);
 
   //console.log(methods.watch("email"));
 

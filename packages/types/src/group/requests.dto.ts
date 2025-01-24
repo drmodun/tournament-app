@@ -12,6 +12,13 @@ export interface ICreateGroupRequest {
   userId?: number; // Only set by api
 }
 
+export interface ICreateFakeGroupRequest {
+  name: string;
+  abbreviation: string;
+  logo: string; // Dunno if this will work immediately
+  country?: string;
+}
+
 export interface IUpdateGroupRequest {
   name?: string;
   abbreviation?: string;

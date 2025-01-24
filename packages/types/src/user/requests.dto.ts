@@ -27,3 +27,10 @@ export interface UserQueryType {
   country?: string;
   location?: string;
 } // TODO: potentially add checks for this as well
+
+export interface ICreateFakeUserRequest {
+  username: string;
+  name: string;
+  country?: string;
+  location?: string;
+}

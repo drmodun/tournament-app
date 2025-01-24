@@ -14,6 +14,7 @@ import {
 import { GroupService } from './group.service';
 import { GroupAdminGuard } from './guards/group-admin.guard';
 import {
+  CreateFakeGroupRequest,
   CreateGroupRequest,
   GroupQuery,
   UpdateGroupRequest,
@@ -22,6 +23,7 @@ import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiExtraModels,
   ApiOkResponse,
   ApiTags,
@@ -38,10 +40,16 @@ import {
   groupQueryResponses,
   groupResponseSchema,
 } from './dto/examples';
-import { GroupResponsesEnum, IQueryMetadata } from '@tournament-app/types';
+import {
+  groupFocusEnum,
+  GroupResponsesEnum,
+  groupTypeEnum,
+  IQueryMetadata,
+} from '@tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GroupOwnerGuard } from './guards/group-owner.guard';
+import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 
 @ApiTags('groups')
 @ApiExtraModels(
@@ -178,5 +186,33 @@ export class GroupController {
   })
   async getGroupFollowers(@Param('groupId', ParseIntPipe) id: number) {
     return await this.groupService.getGroupFollowers(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({
+    content: {
+      'application/json': {
+        example: {
+          success: true,
+          id: 1,
+        },
+      },
+    },
+  })
+  async createFake(
+    @Body() createGroupDto: CreateFakeGroupRequest,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupService.create(
+      {
+        ...createGroupDto,
+        focus: groupFocusEnum.HYBRID,
+        type: groupTypeEnum.FAKE,
+        description:
+          'A temporary group created for seeding or testing purposes',
+      },
+      user.id,
+    );
   }
 }

@@ -12,3 +12,4 @@ export * from "./groupInvites";
 export * from "./category";
 export * from "./tournament";
 export * from "./stage";
+export * from "./participation";

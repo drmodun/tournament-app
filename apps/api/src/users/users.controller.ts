@@ -13,6 +13,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
+  ICreateFakeGroupRequest,
+  ICreateUserRequest,
   IQueryMetadata,
   UserResponseEnumType,
   UserResponsesEnum,
@@ -170,11 +172,14 @@ export class UsersController {
   @ApiBearerAuth()
   @Post('fake')
   @ApiCreatedResponse({ type: ActionResponsePrimary })
-  async createFake(@Body() createUserDto: CreateUserRequest) {
+  async createFake(
+    @Body() createUserDto: ICreateUserRequest,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
     return await this.usersService.create({
       ...createUserDto,
       isFake: true,
-      email: crypto.randomUUID(), // to make logins effectively impossible
+      email: crypto.randomUUID(), // to make logins effectively impossible and satisfy the unique constraint
     });
   }
 }

@@ -14,6 +14,7 @@ import { GroupInvitesModule } from './group-invites/group-invites.module';
 import { CategoryModule } from './category/category.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { StageModule } from './stage/stage.module';
+import { ParticipationModule } from './participation/participation.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { StageModule } from './stage/stage.module';
     CategoryModule,
     TournamentModule,
     StageModule,
+    ParticipationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

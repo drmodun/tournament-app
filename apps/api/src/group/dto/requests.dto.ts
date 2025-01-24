@@ -6,6 +6,7 @@ import {
   groupFocusEnumType,
   groupTypeEnum,
   groupFocusEnum,
+  ICreateFakeGroupRequest,
 } from '@tournament-app/types';
 import {
   IsString,
@@ -137,4 +138,29 @@ export class GroupQuery extends BaseQuery implements IGroupQuery {
   @IsOptional()
   @IsString()
   country?: string;
+}
+
+export class CreateFakeGroupRequest implements ICreateFakeGroupRequest {
+  @IsString()
+  @MinLength(3)
+  @MaxLength(30)
+  @ApiProperty()
+  name: string;
+
+  @IsString()
+  @MinLength(2)
+  @MaxLength(10)
+  @ApiProperty()
+  abbreviation: string;
+
+  @IsUrl()
+  @ApiProperty()
+  logo: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  country?: string;
+
+  userId: number;
 }

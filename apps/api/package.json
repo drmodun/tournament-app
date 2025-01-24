@@ -17,7 +17,7 @@
     "generate": "dotenv -e ../../.env -c -- drizzle-kit generate && cd ../..",
     "migrate": "dotenv -c -e ../../.env -- drizzle-kit migrate ",
     "migrate:test": "dotenv -c -e ../../.env.test -- drizzle-kit migrate",
-    "studio": "drizzle-kit studio",
+    "studio": "dotenv -c -e ../../.env -- drizzle-kit studio",
     "test:watch": "dotenv -e ../../.env.test -c -- jest --watch",
     "test:cov": "dotenv -e ../../.env.test -c -- jest --coverage",
     "test:debug": "dotenv -e ../../.env.test -c -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",

@@ -16,6 +16,7 @@ import {
   ColumnBaseConfig,
   ColumnDataType,
   eq,
+  gte,
   InferSelectModel,
   sql,
   SQL,
@@ -92,7 +93,7 @@ export class ParticipationDrizzleRepository extends PrimaryRepository<
 
   public sortRecord: Record<
     ParticipationSortingEnum,
-    PgColumn<ColumnBaseConfig<ColumnDataType, string>, {}, {}> | SQL<number>
+    PgColumn<ColumnBaseConfig<ColumnDataType, string>> | SQL<number>
   > = {
     [ParticipationSortingEnum.CREATED_AT]: participation.createdAt,
     [ParticipationSortingEnum.NAME]: sql`COALESCE("user"."username", "group"."name")`,
@@ -139,7 +140,7 @@ export class ParticipationDrizzleRepository extends PrimaryRepository<
         case 'tournamentId':
           return eq(participation.tournamentId, +parsed);
         case 'points':
-          return eq(participation.points, +parsed);
+          return gte(participation.points, +parsed);
         default:
           return;
       }

@@ -91,7 +91,6 @@ export const groupResponseSchema = {
   ),
 };
 
-// Example for response type enum
 export const groupResponseTypeExample: SwaggerExamples<{
   responseType: GroupResponsesEnum;
 }> = {
@@ -102,7 +101,6 @@ export const groupResponseTypeExample: SwaggerExamples<{
   },
 };
 
-// Example for sorting enum
 export const groupSortingExample: SwaggerExamples<{ sort: GroupSortingEnum }> =
   {
     default: {

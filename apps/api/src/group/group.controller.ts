@@ -49,7 +49,6 @@ import {
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GroupOwnerGuard } from './guards/group-owner.guard';
-import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 
 @ApiTags('groups')
 @ApiExtraModels(

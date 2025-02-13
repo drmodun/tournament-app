@@ -39,11 +39,11 @@ export interface IExtendedTournamentResponse extends ITournamentResponse {
   updatedAt: Date;
   isMultipleTeamsPerGroupAllowed: boolean;
   isFakePlayersAllowed: boolean;
-  parentTournament: IMiniTournamentResponseWithLogo;
+  parentTournament?: IMiniTournamentResponseWithLogo;
   conversionRuleId: number; // TODO: replace with a conversion rule entity later
   isRanked: boolean;
-  maximumMMR: number;
-  minimumMMR: number;
+  maximumMMR?: number;
+  minimumMMR?: number;
 }
 
 export type BaseTournamentResponseType =

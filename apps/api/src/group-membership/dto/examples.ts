@@ -43,7 +43,6 @@ export const groupMembershipExample = {
 } satisfies GroupMembershipResponse;
 
 export const userMembershipWithDatesExample = {
-  ...groupMembershipExample,
   createdAt: new Date(),
   isFake: false,
   role: groupRoleEnum.MEMBER,

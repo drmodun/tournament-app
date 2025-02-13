@@ -288,11 +288,11 @@ export const tournament = pgTable('tournament', {
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   isPublic: boolean('is_public').default(true),
-  links: text('links'), //TODO: potentially remove or replace with a fully fledged entity
+  links: text('links'), //TODO: potentially remove or  replace with a fully fledged entity
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   tournamentType: tournamentType('tournament_type').default('league'),
   minimumMMR: integer('minimum_mmr').default(0),
-  maximumMMR: integer('maximum_mmr').default(3000),
+  maximumMMR: integer('maximum_mmr').default(3000), //TODO: roster
   location: text('location'), // TODO: consider making a seperate rules entity if this has too many properties
   isMultipleTeamsPerGroupAllowed: boolean(
     'is_multiple_teams_per_group_allowed',

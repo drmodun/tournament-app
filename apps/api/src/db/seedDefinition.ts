@@ -488,6 +488,53 @@ async function createStages() {
   );
 }
 
+async function createParticipations() {
+  const NUM_PARTICIPATIONS_TO_CREATE = process.env.SEED_PARTICIPATIONS_COUNT
+    ? parseInt(process.env.SEED_PARTICIPATIONS_COUNT, 10)
+    : 100;
+
+  const participations = [];
+  const tournaments = await db.select().from(tables.tournament);
+  const users = await db.select().from(tables.user);
+  const groupMemberships = await db.select().from(tables.groupToUser);
+
+  for (let i = 0; i < NUM_PARTICIPATIONS_TO_CREATE; i++) {
+    const tournament = faker.helpers.arrayElement(tournaments);
+    const user = faker.helpers.arrayElement(users);
+
+    let groupId = null;
+    if (tournament.affiliatedGroupId) {
+      const userMembership = groupMemberships.find(
+        (gm) =>
+          gm.userId === user.id && gm.groupId === tournament.affiliatedGroupId,
+      );
+      if (userMembership) {
+        groupId = tournament.affiliatedGroupId;
+      }
+    }
+
+    participations.push({
+      id: i + 1,
+      tournamentId: tournament.id,
+      userId: user.id,
+      groupId,
+      points: faker.number.int({ min: 0, max: 1000 }),
+      createdAt: faker.date.between({
+        from: tournament.startDate,
+        to: tournament.endDate,
+      }),
+    });
+  }
+
+  await db.insert(tables.participation).values(participations);
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE participation_participation_id_seq RESTART WITH ${sql.raw(
+      String(NUM_PARTICIPATIONS_TO_CREATE + 1),
+    )}`,
+  );
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -503,4 +550,5 @@ export async function seed() {
   await createCategories();
   await createTournaments();
   await createStages();
+  await createParticipations();
 }

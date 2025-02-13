@@ -7,22 +7,22 @@ import { BaseQuery } from 'src/base/query/baseQuery';
 export class QueryParticipationDto extends BaseQuery<ParticipationResponsesEnum> {
   @ApiPropertyOptional()
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @IsPositive()
   tournamentId?: number;
 
   @ApiPropertyOptional()
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value))
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @IsPositive()
+  @IsOptional()
   userId?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @IsPositive()
   groupId?: number;
 }

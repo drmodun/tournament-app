@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ParticipationDrizzleRepository } from './participation.repository';
 import {
   ParticipationResponsesEnum,
   BaseParticipationResponseType,
 } from '@tournament-app/types';
 import { QueryParticipationDto } from './dto/requests.dto';
+import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
+import { TournamentParticipantArgument } from './types';
 
 @Injectable()
 export class ParticipationService {
@@ -12,18 +18,27 @@ export class ParticipationService {
     private readonly participationRepository: ParticipationDrizzleRepository,
   ) {}
 
-  async create(tournamentId: number, userId?: number, groupId?: number) {
+  async create(
+    tournamentId: number,
+    { groupId, userId }: TournamentParticipantArgument,
+  ) {
     if (!userId && !groupId) {
-      throw new Error('Either userId or groupId must be provided');
+      throw new BadRequestException(
+        'Either userId or groupId must be provided',
+      );
     }
 
-    const action = this.participationRepository.createEntity({
+    const action = await this.participationRepository.createEntity({
       tournamentId,
       userId,
       groupId,
     });
 
-    await action;
+    if (!action[0]) {
+      throw new BadRequestException('Failed to create participation');
+    }
+
+    return action[0];
   }
 
   async findAll<TResponseType extends BaseParticipationResponseType>(
@@ -66,7 +81,7 @@ export class ParticipationService {
     updateParticipationDto: Partial<{
       points: number;
     }>,
-  ): Promise<void> {
+  ): Promise<ActionResponsePrimary> {
     if (!(await this.entityExists(id))) {
       throw new NotFoundException('Participation not found');
     }
@@ -76,7 +91,13 @@ export class ParticipationService {
       updateParticipationDto,
     );
 
-    await action;
+    const result = await action;
+
+    if (!result[0]) {
+      throw new NotFoundException('Participation update failed');
+    }
+
+    return result[0];
   }
 
   async entityExists(id: number): Promise<boolean> {
@@ -97,8 +118,7 @@ export class ParticipationService {
 
   async isParticipant(
     tournamentId: number,
-    userId?: number,
-    groupId?: number,
+    { groupId, userId }: TournamentParticipantArgument,
   ): Promise<boolean> {
     if (!userId && !groupId) {
       return false;

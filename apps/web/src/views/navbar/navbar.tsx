@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./navbar.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
@@ -11,6 +11,8 @@ import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useDrawerContext } from "utils/hooks/useDrawerContext";
 import { useThemeContext } from "utils/hooks/useThemeContext";
+import { useAuth } from "api/client/hooks/auth/useAuth";
+import ProgressWheel from "components/progressWheel";
 
 export interface NavbarProps {
   style?: React.CSSProperties;
@@ -19,12 +21,13 @@ export interface NavbarProps {
 }
 
 export default function Navbar({ style, variant, className }: NavbarProps) {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const drawerContext = useDrawerContext();
   const { theme } = useThemeContext();
 
   const colorTheme: Variants = variant ?? theme;
   const textColorTheme = textColor(colorTheme);
+
+  const { data, isSuccess, isLoading } = useAuth();
 
   return (
     <div className={clsx(styles.wrapper, className)} style={style}>
@@ -40,7 +43,7 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
         <div
           className={clsx(styles.pageLinks, styles[`${textColorTheme}Links`])}
         >
-          {isLoggedIn ? (
+          {isSuccess && data.id ? (
             <>
               <Link href="/landingPage2#contact">manage competitions</Link>
               <Link href="/manageTeams">manage teams</Link>
@@ -55,10 +58,12 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
           )}
         </div>
         <div className={styles.userPageLinks}>
-          {isLoggedIn ? (
+          {isLoading ? (
+            <ProgressWheel variant={colorTheme} />
+          ) : isSuccess && data.id ? (
             <Link href="/user">
               <img
-                src="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
+                src={data?.profilePicture ?? ""}
                 alt=""
                 className={styles.userImage}
               />

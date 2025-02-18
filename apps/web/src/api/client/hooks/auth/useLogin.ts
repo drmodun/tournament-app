@@ -29,22 +29,22 @@ export const useLogin = () => {
     mutationFn: loginUser,
     onSuccess: async (data) => {
       setAuthTokens(data.accessToken, data.refreshToken);
-      toast.addToast("Successfully logged in", "success"); //TODO: make this an object for easier and more consistent usage
+      toast.addToast("successfully logged in", "success"); //TODO: make this an object for easier and more consistent usage
       await refetch();
 
       if (!isSuccess) {
-        toast.addToast("Error logging in", "error");
+        toast.addToast("error logging in", "error");
         return;
       }
 
       setTimeout(() => navigate.push("/"), 1000);
     },
     onError: (error: any) => {
-      toast.addToast("Invalid credentials", "error"); //TODO: maybe make this show the server error message, or just log it
+      toast.addToast("invalid credentials", "error"); //TODO: maybe make this show the server error message, or just log it
       console.error(error);
     },
     onMutate: () => {
-      toast.addToast("Logging in...", "info");
+      toast.addToast("logging in...", "info");
     },
   });
 };

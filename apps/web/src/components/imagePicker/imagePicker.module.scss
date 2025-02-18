@@ -1,0 +1,15 @@
+@import "../../styles/";
+
+.wrapper {
+  padding: $padding;
+  border-radius: $borderRadius;
+  width: min-content;
+}
+
+.sliders {
+  margin-top: $padding;
+}
+
+.editor {
+  border-radius: $borderRadius;
+}

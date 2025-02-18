@@ -8,7 +8,7 @@ import Dialog from "components/dialog";
 import Button from "components/button";
 import Input from "components/input";
 import Chip from "components/chip";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CheckboxGroup from "components/checkboxGroup";
 import { textColor } from "types/styleTypes";
@@ -21,6 +21,14 @@ import Dropdown from "components/dropdown";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import {
+  IGroupMembershipResponse,
+  IGroupMembershipResponseWithDates,
+} from "@tournament-app/types";
+import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinRequests";
+import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
+import AddLFPForm from "views/addLFPForm";
+import ViewLFP from "views/viewLFP";
 
 type Item = {
   name: string;
@@ -31,19 +39,14 @@ type Category = Item & {
   active: boolean;
 };
 
-type LFPEntry = {
-  id: string;
-  content: string;
-  authorName: string;
-  authorID: string;
-  country: string | undefined;
-  age: number;
-  experienceLevel: string;
-};
-
-export default function ManageTeams() {
+export default function ManageTeams({
+  team,
+}: {
+  team: IGroupMembershipResponse;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+  //const { data, isLoading } = useGroupJoinRequests(team.group.id);
 
   const [lfpCampaigns, setLfpCampaigns] = useState<Item[]>([
     { name: "looking for CS:GO player this is a post!!!", id: "1" },
@@ -69,34 +72,6 @@ export default function ManageTeams() {
       id: "7",
     },
     { name: "looking for CS:GO player this is a post!!!", id: "8" },
-  ]);
-
-  const [teamMembers, setTeamMembers] = useState<Item[]>([
-    { name: "team member number 1", id: "1" },
-    {
-      name: "team member number 2",
-      id: "2",
-    },
-    {
-      name: "team member number 3",
-      id: "3",
-    },
-    {
-      name: "team member number 4",
-      id: "4",
-    },
-    {
-      name: "team member number 5",
-      id: "5",
-    },
-  ]);
-
-  const [rosters, setRosters] = useState<Item[]>([
-    { name: "roster number 1", id: "1" },
-    {
-      name: "roster number 2",
-      id: "2",
-    },
   ]);
 
   const [lfpEntries, setLfpEntries] = useState([
@@ -220,18 +195,11 @@ export default function ManageTeams() {
 
   const [requirements, setRequirements] = useState<string[]>([]);
 
-  const teamMembersRef = useRef<HTMLDivElement>(null);
-  const rostersRef = useRef<HTMLDivElement>(null);
-
   const [addLfpModalActive, setAddLfpModalActive] = useState<boolean>(false);
-  const [viewLfpModalActive, setViewLfpModalActive] = useState<boolean>(true);
+  const [viewLfpModalActive, setViewLfpModalActive] = useState<boolean>(false);
 
   const [selectedLfpEntryList, setSelectedLfpEntryList] = useState<number>(0);
   const [selectedLfpEntry, setSelectedLfpEntry] = useState<number>(0);
-
-  const addRequirement = (val: string) => {
-    setRequirements((prev) => [...prev, val]);
-  };
 
   const [lfpCampaignCategories, setLfpCampaignCategories] = useState<
     Category[]
@@ -272,188 +240,48 @@ export default function ManageTeams() {
         onClose={() => setAddLfpModalActive(false)}
         variant={theme}
         className={styles.lfpDialogWrapper}
-      >
-        <h3 className={globals[`${textColorTheme}Color`]}>
-          add looking for players campaign
-        </h3>
-        <div className={styles.lfpInputsWrapper}>
-          <Input
-            label="campaign name"
-            variant={textColorTheme}
-            placeholder="enter campaign name"
-            labelVariant={textColorTheme}
-          />
-          <div className={styles.editor}>
-            <p className={styles.contentLabelLfp}>content</p>
-            <RichEditor
-              variant={textColorTheme}
-              startingContent="write all the needed details for your campaign!"
-            />
-          </div>
-          <div className={styles.requirements}>
-            <Input
-              label="requirements"
-              variant={textColorTheme}
-              placeholder="enter every requirement"
-              labelVariant={textColorTheme}
-              doesSubmit={true}
-              submitLabel="add"
-              onSubmit={addRequirement}
-            />
-            <div className={styles.checkboxWrapper}>
-              <CheckboxGroup
-                checkboxes={requirements.map((x) => {
-                  return {
-                    label: x,
-                    variant: textColorTheme,
-                    labelVariant: textColorTheme,
-                  };
-                })}
-              />
-            </div>
-            <div className={styles.categoryWrapper}>
-              <Dropdown
-                doesSearch={true}
-                searchPlaceholder="search for categories"
-                placeholder="select category"
-                label="category"
-                variant={textColorTheme}
-                options={lfpCampaignCategories.map((Category) => {
-                  return {
-                    label: Category.name,
-                    id: Category.id,
-                    style: { display: Category.active ? "block" : "none" },
-                  };
-                })}
-              />
-            </div>
-          </div>
-        </div>
-        <Button
-          variant={"primary"}
-          label="post"
-          className={styles.submitLfpButton}
-          onClick={handleLfpSubmission}
-        />
-      </Dialog>
+      ></Dialog>
       <Dialog
         active={viewLfpModalActive}
         onClose={() => setViewLfpModalActive(false)}
         variant={theme}
         className={styles.lfpViewDialogWrapper}
       >
-        <div className={styles.lfpInfo}>
-          <b>{lfpCampaigns[selectedLfpEntry].name}</b>
-          <div className={styles.lfpUser}>
-            <PersonIcon />{" "}
-            <p>
-              {lfpEntries[selectedLfpEntry][selectedLfpEntryList].authorName} |{" "}
-              {getUnicodeFlagIcon(
-                lfpEntries[selectedLfpEntry][selectedLfpEntryList].country,
-              )}{" "}
-              | {lfpEntries[selectedLfpEntry][selectedLfpEntryList].age + "y "}{" "}
-              |{" "}
-              {
-                lfpEntries[selectedLfpEntry][selectedLfpEntryList]
-                  .experienceLevel
-              }
-            </p>
-          </div>
-
-          <div>
-            <p className={styles.contentLabelLfp}>entry</p>
-            {lfpEntries[selectedLfpEntry][selectedLfpEntryList].content && (
-              <RichEditor
-                editable={false}
-                startingContent={
-                  lfpEntries[selectedLfpEntry][selectedLfpEntryList].content
-                }
-              />
-            )}
-          </div>
-        </div>
-        <div className={styles.lfpActionButtons}>
-          <button
-            className={clsx(styles.arrowButton)}
-            onClick={decrementActiveLfpSubmission}
-          >
-            <ArrowBackIcon
-              className={clsx(
-                styles.lfpActionArrowLeft,
-                styles[`${textColorTheme}Fill`],
-              )}
-            />
-          </button>
-          <Button
-            variant="danger"
-            label="decline"
-            className={styles.lfpActionButton}
-          />
-          <Button
-            variant="primary"
-            label="accept"
-            className={styles.lfpActionButton}
-          />
-          <button
-            className={clsx(styles.arrowButton)}
-            onClick={incrementActiveLfpSubmission}
-          >
-            <ArrowForwardIcon
-              className={clsx(
-                styles.lfpActionArrowRight,
-                styles[`${textColorTheme}Fill`],
-              )}
-            />
-          </button>
-        </div>
+        <ViewLFP />
       </Dialog>
       <div className={styles.left}>
         <div>
-          <p className={clsx(styles.teamName, globals[`${theme}Color`])}>
-            <b className={clsx(globals[`${theme}Color`], globals.largeText)}>
-              team name
-            </b>{" "}
-            28/03/2024
-          </p>
-          <div className={styles.teamsWrapper}>
-            <GroupIcon className={styles[`${theme}Fill`]} />
-            <div
-              className={styles.teams}
-              ref={teamMembersRef}
-              onWheel={(e) => {
-                if (teamMembersRef?.current) {
-                  teamMembersRef.current.scrollLeft += e.deltaY > 0 ? 50 : -50;
-                }
-              }}
-            >
-              {teamMembers.map((teamMember) => (
-                <Chip
-                  key={teamMember.id}
-                  label={teamMember.name}
-                  variant={theme}
-                />
-              ))}
+          <p
+            className={clsx(
+              styles.teamName,
+              globals[`${theme}Color`],
+              styles.keepInLine,
+            )}
+          >
+            <img
+              src={team.group.logo}
+              alt="team logo"
+              className={styles.teamImage}
+            />
+            <div>
+              <b className={clsx(globals[`${theme}Color`], globals.largeText)}>
+                {`${team?.group?.name} (${team?.group?.abbreviation})`}
+              </b>{" "}
+              {formatDate(new Date(team.createdAt))}
             </div>
+          </p>
+
+          <div className={styles.property}>
+            <p>your role</p>
+            <b>{team?.role}</b>
           </div>
+
           <p className={clsx(styles.rostersText, globals[`${theme}Color`])}>
-            rosters
+            rosters <GroupsIcon className={styles[`${theme}Fill`]} />
           </p>
-          <div className={styles.rostersWrapper}>
-            <GroupsIcon className={styles[`${theme}Fill`]} />
-            <div
-              className={styles.rosters}
-              ref={rostersRef}
-              onWheel={(e) => {
-                if (rostersRef?.current) {
-                  rostersRef.current.scrollLeft += e.deltaY > 0 ? 50 : -50;
-                }
-              }}
-            >
-              {rosters.map((roster) => (
-                <Chip key={roster.id} label={roster.name} variant={theme} />
-              ))}
-            </div>
-          </div>
+          <p>
+            teams <GroupIcon className={styles[`${theme}Fill`]} />
+          </p>
         </div>
       </div>
       <div className={styles.right}>

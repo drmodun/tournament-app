@@ -40,7 +40,6 @@ export default function LoginForm({
             >
               <div className={styles.inputWrapper}>
                 <Input
-                  labelVariant={variant}
                   variant={methods.formState.errors.email ? "danger" : variant}
                   label="email"
                   placeholder="enter your email address"
@@ -66,7 +65,6 @@ export default function LoginForm({
               </div>
               <div className={styles.inputWrapper}>
                 <Input
-                  labelVariant={variant}
                   variant={
                     methods.formState.errors.password ? "danger" : variant
                   }

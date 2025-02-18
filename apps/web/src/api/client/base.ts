@@ -91,5 +91,5 @@ clientApi.interceptors.response.use(
       clearAuthTokens();
       return Promise.reject(refreshError);
     }
-  }
+  },
 );

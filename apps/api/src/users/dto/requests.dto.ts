@@ -63,7 +63,6 @@ export class CreateUserRequest implements ICreateUserRequest {
 export class UpdateUserInfo implements IUpdateUserInfo {
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUrl()
   profilePicture?: string;
 
   @ApiPropertyOptional()

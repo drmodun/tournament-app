@@ -9,11 +9,11 @@
 }
 
 .lightEditorColor > * {
-  color: $light;
+  color: $light !important;
 }
 
 .darkEditorColor > * {
-  color: $dark;
+  color: $dark !important;
 }
 
 .menuButton {
@@ -86,4 +86,12 @@
 
 .darkFill > * {
   fill: $dark;
+}
+
+.editor1 {
+  color: black !important;
+}
+
+.editor > * {
+  color: black !important;
 }

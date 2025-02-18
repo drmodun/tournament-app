@@ -169,3 +169,28 @@
   border: none;
   cursor: pointer;
 }
+
+.keepInLine {
+  white-space: nowrap;
+}
+
+.teamName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: $halfPadding;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.property {
+  display: flex;
+  gap: $halfPadding;
+}
+
+.teamImage {
+  width: 2 * $baseComponentHeight;
+  height: 2 * $baseComponentHeight;
+  border-radius: $borderRadius;
+  object-fit: cover;
+}

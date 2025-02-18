@@ -28,7 +28,7 @@ export const useRefresh = () => {
       await refetch();
     },
     onError: (error: any) => {
-      toast.addToast("Login failed", "error");
+      toast.addToast("login failed", "error");
       console.error(error);
     },
   });

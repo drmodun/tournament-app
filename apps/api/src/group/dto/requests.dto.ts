@@ -44,7 +44,6 @@ export class CreateGroupRequest implements ICreateGroupRequest {
   @ApiProperty({ enum: groupFocusEnum })
   focus: groupFocusEnumType;
 
-  @IsUrl()
   @ApiProperty()
   logo: string;
 
@@ -92,7 +91,6 @@ export class UpdateGroupRequest implements IUpdateGroupRequest {
   focus?: groupFocusEnum;
 
   @IsOptional()
-  @IsUrl()
   @ApiPropertyOptional()
   logo?: string;
 

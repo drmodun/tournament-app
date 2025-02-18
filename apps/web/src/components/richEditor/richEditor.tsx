@@ -18,6 +18,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import { Markdown } from "tiptap-markdown";
 import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 
 interface RichEditorProps {
   style?: React.CSSProperties;
@@ -25,6 +26,9 @@ interface RichEditorProps {
   startingContent?: string;
   editable?: boolean;
   isSSR?: boolean;
+  isReactHookForm?: boolean;
+  required?: boolean;
+  name?: string;
 }
 
 export default function RichEditor({
@@ -33,12 +37,31 @@ export default function RichEditor({
   startingContent = "",
   editable = true,
   isSSR = false,
+  isReactHookForm = false,
+  required = false,
+  name,
 }: RichEditorProps) {
+  const methods = useFormContext();
+
+  const handleChange = () => {
+    isReactHookForm &&
+      name &&
+      methods.setValue(name, editor?.getHTML(), {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+  };
+
   const editor = useEditor({
+    onUpdate: handleChange,
     editable: editable,
     extensions: [
       StarterKit,
-      Underline,
+      Underline.configure({
+        HTMLAttributes: {
+          color: "black",
+        },
+      }),
       Heading.configure({
         levels: [1, 2, 3],
       }),
@@ -48,6 +71,7 @@ export default function RichEditor({
     immediatelyRender: !isSSR,
     editorProps: {
       attributes: {
+        style: "color: black !important;",
         class: clsx(
           styles[`${textColor(variant)}EditorColor`],
           globals[`${variant}BackgroundColor`],
@@ -57,15 +81,36 @@ export default function RichEditor({
     },
   });
 
+  useEffect(() => {
+    if (isReactHookForm && name) {
+      methods.register(name, { required: required });
+      if (startingContent) {
+        methods.setValue(name, editor?.getHTML(), {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    }
+  }, []);
+
   if (!editable) return <EditorContent editor={editor} />;
 
-  const toggleBold = () => editor?.chain().focus().toggleBold().run();
+  const toggleBold = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleBold().run();
+  };
   const isBoldDisabled = !editor?.can().chain().focus().toggleBold().run();
 
-  const toggleItalics = () => editor?.chain().focus().toggleItalic().run();
+  const toggleItalics = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleItalic().run();
+  };
   const isItalicsDisabled = !editor?.can().chain().focus().toggleItalic().run();
 
-  const toggleUnderline = () => editor?.chain().focus().toggleUnderline().run();
+  const toggleUnderline = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleUnderline().run();
+  };
   const isUnderlineDisabled = !editor
     ?.can()
     .chain()
@@ -73,8 +118,10 @@ export default function RichEditor({
     .toggleUnderline()
     .run();
 
-  const toggleBulletList = () =>
+  const toggleBulletList = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     editor?.chain().focus().toggleBulletList().run();
+  };
   const isBulletListDisabled = !editor
     ?.can()
     .chain()
@@ -82,8 +129,10 @@ export default function RichEditor({
     .toggleBulletList()
     .run();
 
-  const toggleHeading = () =>
+  const toggleHeading = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     editor?.chain().focus().toggleHeading({ level: 1 }).run();
+  };
   const isHeadingDisabled = !editor
     ?.can()
     .chain()
@@ -91,13 +140,22 @@ export default function RichEditor({
     .toggleHeading({ level: 1 })
     .run();
 
-  const toggleStrike = () => editor?.chain().focus().toggleStrike().run();
+  const toggleStrike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleStrike().run();
+  };
   const isStrikeDisabled = !editor?.can().chain().focus().toggleStrike().run();
 
-  const undo = () => editor?.chain().focus().undo().run();
+  const undo = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().undo().run();
+  };
   const isUndoDisabled = !editor?.can().chain().focus().undo().run();
 
-  const redo = () => editor?.chain().focus().redo().run();
+  const redo = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().redo().run();
+  };
   const isRedoDisabled = !editor?.can().chain().focus().redo().run();
 
   useEffect(() => {
@@ -337,7 +395,11 @@ export default function RichEditor({
           </button>
         </div>
       </div>
-      <EditorContent editor={editor} />
+      <EditorContent
+        editor={editor}
+        style={{ color: "black !important" }}
+        className={styles.editor1}
+      />
     </div>
   );
 }

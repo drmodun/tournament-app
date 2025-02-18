@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import globals from "styles/globals.module.scss";
 import Navbar from "views/navbar";
@@ -10,18 +10,29 @@ import Button from "components/button";
 import ManageSettings from "views/manageSettings";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { textColor } from "types/styleTypes";
+import { useAuth } from "api/client/hooks/auth/useAuth";
+import { useRouter } from "next/navigation";
+import ProgressWheel from "components/progressWheel";
 
 export default function User() {
   const [activeTab, setActiveTab] = useState<number>(0);
   const { theme } = useThemeContext();
+  const router = useRouter();
+
+  const { data, isLoading, isSuccess } = useAuth();
+
   const tabs: { component: JSX.Element; name: string }[] = [
-    { component: <ManageUser />, name: "manage user" },
+    { component: <ManageUser data={data} />, name: "manage user" },
     { component: <ManageSettings />, name: "manage settings" },
   ];
 
+  useEffect(() => {
+    if (!isSuccess && !isLoading) router.push("/");
+  }, [isLoading]);
+
   return (
     <div className={styles.wrapper}>
-      <Navbar className={styles.navbar} />
+      <Navbar className={styles.navbar} variant={theme} />
 
       <div>
         <div className={clsx(styles.screen)}>
@@ -45,7 +56,11 @@ export default function User() {
               />
             ))}
           </div>
-          {tabs[activeTab].component}
+          {isLoading ? (
+            <ProgressWheel variant={theme} />
+          ) : (
+            tabs[activeTab].component
+          )}
         </div>
       </div>
     </div>

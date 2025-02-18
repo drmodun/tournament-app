@@ -95,6 +95,8 @@
     padding-top: 0;
     padding-bottom: 0;
     opacity: 0;
+    z-index: -1;
+    display: none;
     transform: translateY(-$padding);
     pointer-events: none;
   }

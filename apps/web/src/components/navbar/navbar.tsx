@@ -6,6 +6,8 @@ import { TextVariants } from "types/styleTypes";
 import clsx from "clsx";
 import Input from "components/input";
 import Dropdown from "components/dropdown";
+import { useAuth } from "api/client/hooks/auth/useAuth";
+import { useEffect } from "react";
 
 export interface NavbarProps {
   style?: React.CSSProperties;
@@ -22,6 +24,12 @@ export default function Navbar({
   searchClassName,
   searchVariant,
 }: NavbarProps) {
+  const { data, isSuccess, isLoading, isError } = useAuth();
+
+  useEffect(() => {
+    console.log("THIS THE DATA", isSuccess, isLoading, data);
+  }, [data, isSuccess, isLoading]);
+
   return (
     <div
       className={clsx(
@@ -35,6 +43,8 @@ export default function Navbar({
         className={styles.profilePicture}
         src="https://prairieblossomnursery.com/cdn/shop/products/Hibiscusfiesta_6b1a41c4-9fdd-42e5-95bf-1fd610fe0c9c_1200x1200.png?v=1671389287"
       />
+      <p>{`AAAAAAAAAAAAAAAAAAa ${isSuccess}, ${isLoading}, ${isError}, ${data?.email}, ${data?.followers}, ${data?.following}, ${data?.id}, ${data?.name}`}</p>
+
       <div className={styles.interactiveSection}>
         <Input
           placeholder="search..."

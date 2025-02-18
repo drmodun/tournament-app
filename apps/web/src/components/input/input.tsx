@@ -32,6 +32,7 @@ interface InputProps {
   onSubmit?: Function;
   min?: string;
   max?: string;
+  step?: string;
   defaultValue?: string;
   fullClassName?: string;
 }
@@ -56,6 +57,7 @@ export default function Input({
   onSubmit = () => {},
   min,
   max,
+  step,
   defaultValue,
   fullClassName,
 }: InputProps) {
@@ -101,6 +103,7 @@ export default function Input({
                 min={min}
                 max={max}
                 style={style}
+                step={step}
                 {...methods.register(name, {
                   required: required,
                   onChange: handleChange,
@@ -126,6 +129,7 @@ export default function Input({
             min={min}
             max={max}
             style={style}
+            step={step}
             onChange={handleChange}
           />
         )}

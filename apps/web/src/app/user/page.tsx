@@ -19,7 +19,7 @@ export default function User() {
   const { theme } = useThemeContext();
   const router = useRouter();
 
-  const { data, isLoading, isSuccess } = useAuth();
+  const { data, isLoading, isSuccess, isError } = useAuth();
 
   const tabs: { component: JSX.Element; name: string }[] = [
     { component: <ManageUser data={data} />, name: "manage user" },
@@ -27,7 +27,7 @@ export default function User() {
   ];
 
   useEffect(() => {
-    if (!isSuccess && !isLoading) router.push("/");
+    if (isError && !isLoading) router.push("/login");
   }, [isLoading]);
 
   return (

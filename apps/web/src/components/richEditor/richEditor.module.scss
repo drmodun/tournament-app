@@ -4,16 +4,6 @@
   border-radius: $borderRadius;
   padding: $padding;
   min-height: 2 * $baseComponentHeight;
-
-  color: black;
-}
-
-.lightEditorColor > * {
-  color: $light !important;
-}
-
-.darkEditorColor > * {
-  color: $dark !important;
 }
 
 .menuButton {
@@ -86,12 +76,4 @@
 
 .darkFill > * {
   fill: $dark;
-}
-
-.editor1 {
-  color: black !important;
-}
-
-.editor > * {
-  color: black !important;
 }

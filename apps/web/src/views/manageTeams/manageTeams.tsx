@@ -19,9 +19,9 @@ import AddIcon from "@mui/icons-material/Add";
 import RichEditor from "components/richEditor";
 import Dropdown from "components/dropdown";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import EditIcon from "@mui/icons-material/Edit";
 import {
+  groupRoleEnum,
   IGroupMembershipResponse,
   IGroupMembershipResponseWithDates,
 } from "@tournament-app/types";
@@ -29,14 +29,13 @@ import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinReques
 import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import AddLFPForm from "views/addLFPForm";
 import ViewLFP from "views/viewLFP";
+import ManageTeamMembers from "views/manageTeamMembers";
+import EditTeamForm from "views/editTeamForm";
+import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
 
 type Item = {
   name: string;
   id: string;
-};
-
-type Category = Item & {
-  active: boolean;
 };
 
 export default function ManageTeams({
@@ -46,7 +45,9 @@ export default function ManageTeams({
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+  const editGroupMutation = useEditGroup(team.groupId);
   //const { data, isLoading } = useGroupJoinRequests(team.group.id);
+  // const {data: groupMembers, isLoading: groupMembersIsLoading} = useGetGroupMembers(team.group.id);
 
   const [lfpCampaigns, setLfpCampaigns] = useState<Item[]>([
     { name: "looking for CS:GO player this is a post!!!", id: "1" },
@@ -74,159 +75,11 @@ export default function ManageTeams({
     { name: "looking for CS:GO player this is a post!!!", id: "8" },
   ]);
 
-  const [lfpEntries, setLfpEntries] = useState([
-    [
-      {
-        id: "1",
-        content: "<h1> this is a post where we look for Fortnite players</h1>",
-        authorName: "Stjepan Lacković",
-        age: 23,
-        country: "HR",
-        authorID: "18149414",
-        experienceLevel: "expert",
-      },
-      {
-        id: "1",
-        content: "### this is a post where we look for Minecraft players",
-        authorName: "Dave Mustaine",
-        age: 90,
-        country: "RS",
-        authorID: "18149431414",
-        experienceLevel: "expert",
-      },
-      {
-        id: "3",
-        content:
-          "### this is a post where we look for League of Legends players",
-        authorName: "John Doe",
-        age: 25,
-        country: "US",
-        authorID: "18149415",
-        experienceLevel: "intermediate",
-      },
-      {
-        id: "4",
-        content: "### this is a post where we look for Valorant players",
-        authorName: "Jane Smith",
-        age: 28,
-        country: "UK",
-        authorID: "18149416",
-        experienceLevel: "beginner",
-      },
-      {
-        id: "5",
-        content: "### this is a post where we look for Dota 2 players",
-        authorName: "Alice Johnson",
-        age: 30,
-        country: "CA",
-        authorID: "18149417",
-        experienceLevel: "expert",
-      },
-      {
-        id: "6",
-        content:
-          "### WHEREVER I MAY ROAMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmmm (yeah)",
-        authorName: "Bob Brown",
-        age: 22,
-        country: "AU",
-        authorID: "18149418",
-        experienceLevel: "intermediate",
-      },
-    ],
-    [
-      {
-        id: "7",
-        content: "### this is a post where we look for Fortnite players",
-        authorName: "Stjepan Lacković",
-        age: 23,
-        country: "HR",
-        authorID: "18149414",
-        experienceLevel: "expert",
-      },
-      {
-        id: "8",
-        content: "### this is a post where we look for Minecraft players",
-        authorName: "Dave Mustaine",
-        age: 90,
-        country: "RS",
-        authorID: "18149431414",
-        experienceLevel: "expert",
-      },
-      {
-        id: "9",
-        content:
-          "### this is a post where we look for League of Legends players",
-        authorName: "John Doe",
-        age: 25,
-        country: "US",
-        authorID: "18149415",
-        experienceLevel: "intermediate",
-      },
-      {
-        id: "10",
-        content: "### this is a post where we look for Valorant players",
-        authorName: "Jane Smith",
-        age: 28,
-        country: "UK",
-        authorID: "18149416",
-        experienceLevel: "beginner",
-      },
-      {
-        id: "11",
-        content: "### this is a post where we look for Dota 2 players",
-        authorName: "Alice Johnson",
-        age: 30,
-        country: "CA",
-        authorID: "18149417",
-        experienceLevel: "expert",
-      },
-      {
-        id: "12",
-        content:
-          "### WHEREVER I MAY ROAMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmmm (yeah)",
-        authorName: "Bob Brown",
-        age: 22,
-        country: "AU",
-        authorID: "18149418",
-        experienceLevel: "intermediate",
-      },
-    ],
-  ]);
-
-  const [requirements, setRequirements] = useState<string[]>([]);
-
   const [addLfpModalActive, setAddLfpModalActive] = useState<boolean>(false);
   const [viewLfpModalActive, setViewLfpModalActive] = useState<boolean>(false);
-
-  const [selectedLfpEntryList, setSelectedLfpEntryList] = useState<number>(0);
-  const [selectedLfpEntry, setSelectedLfpEntry] = useState<number>(0);
-
-  const [lfpCampaignCategories, setLfpCampaignCategories] = useState<
-    Category[]
-  >([
-    { name: "category 1", id: "1", active: true },
-    { name: "category 2", id: "2", active: true },
-    { name: "category 3", id: "3", active: true },
-    { name: "category 4", id: "4", active: true },
-    { name: "category 5", id: "5", active: true },
-    { name: "category 6", id: "6", active: true },
-  ]);
-
-  const handleLfpSubmission = () => {
-    setAddLfpModalActive(false);
-  };
-
-  const decrementActiveLfpSubmission = () => {
-    if (selectedLfpEntryList <= 0)
-      setSelectedLfpEntryList(lfpEntries[selectedLfpEntry].length - 1);
-    else setSelectedLfpEntryList((curr: number) => curr - 1);
-  };
-
-  const incrementActiveLfpSubmission = () => {
-    if (selectedLfpEntryList >= lfpEntries[selectedLfpEntry].length - 1)
-      setSelectedLfpEntryList(0);
-    else setSelectedLfpEntryList((curr: number) => curr + 1);
-  };
+  const [membersModalActive, setMembersModalActive] = useState<boolean>(false);
+  const [editTeamModalActive, setEditTeamModalActive] =
+    useState<boolean>(false);
 
   return (
     <div
@@ -236,11 +89,19 @@ export default function ManageTeams({
       )}
     >
       <Dialog
+        active={editTeamModalActive}
+        onClose={() => setEditTeamModalActive(false)}
+        variant={theme}
+        className={styles.editTeamDialogWrapper}
+      >
+        <EditTeamForm mutation={editGroupMutation} groupId={team.groupId} />
+      </Dialog>
+      <Dialog
         active={addLfpModalActive}
         onClose={() => setAddLfpModalActive(false)}
         variant={theme}
         className={styles.lfpDialogWrapper}
-      ></Dialog>
+      />
       <Dialog
         active={viewLfpModalActive}
         onClose={() => setViewLfpModalActive(false)}
@@ -249,8 +110,21 @@ export default function ManageTeams({
       >
         <ViewLFP />
       </Dialog>
+      <Dialog
+        active={membersModalActive}
+        onClose={() => setMembersModalActive(false)}
+        variant={theme}
+        className={styles.membersDialogWrapper}
+      >
+        <ManageTeamMembers teamId={team.groupId} />
+      </Dialog>
       <div className={styles.left}>
         <div>
+          <img
+            src={team.group.logo}
+            alt="team logo"
+            className={styles.teamImage}
+          />
           <p
             className={clsx(
               styles.teamName,
@@ -258,11 +132,6 @@ export default function ManageTeams({
               styles.keepInLine,
             )}
           >
-            <img
-              src={team.group.logo}
-              alt="team logo"
-              className={styles.teamImage}
-            />
             <div>
               <b className={clsx(globals[`${theme}Color`], globals.largeText)}>
                 {`${team?.group?.name} (${team?.group?.abbreviation})`}
@@ -272,16 +141,40 @@ export default function ManageTeams({
           </p>
 
           <div className={styles.property}>
-            <p>your role</p>
-            <b>{team?.role}</b>
+            <p className={globals[`${theme}Color`]}>your role</p>
+            <b className={globals[`${theme}Color`]}>{team?.role}</b>
           </div>
-
-          <p className={clsx(styles.rostersText, globals[`${theme}Color`])}>
-            rosters <GroupsIcon className={styles[`${theme}Fill`]} />
-          </p>
-          <p>
-            teams <GroupIcon className={styles[`${theme}Fill`]} />
-          </p>
+        </div>
+        <div className={styles.leftButtons}>
+          <Button
+            label="members"
+            variant={theme}
+            className={styles.rostersButton}
+            onClick={() => setMembersModalActive(true)}
+          >
+            <GroupIcon
+              className={clsx(
+                styles[`${textColorTheme}Fill`],
+                styles.buttonIconPadding,
+              )}
+            />
+          </Button>
+          {(team.role === groupRoleEnum.ADMIN ||
+            team.role === groupRoleEnum.OWNER) && (
+            <Button
+              label="edit"
+              variant="secondary"
+              className={styles.rostersButton}
+              onClick={() => setEditTeamModalActive(true)}
+            >
+              <EditIcon
+                className={clsx(
+                  styles[`${textColorTheme}Fill`],
+                  styles.buttonIconPadding,
+                )}
+              />
+            </Button>
+          )}
         </div>
       </div>
       <div className={styles.right}>
@@ -306,7 +199,14 @@ export default function ManageTeams({
                     globals.doublePaddingVertical,
                   )}
                 >
-                  <p className={styles.campaignTitle}>{campaign.name}</p>
+                  <p
+                    className={clsx(
+                      styles.campaignTitle,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    {campaign.name}
+                  </p>
                   <ArrowOutwardIcon
                     className={styles[`${textColorTheme}Fill`]}
                   />

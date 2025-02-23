@@ -1,8 +1,8 @@
 @use "../../styles/" as *;
 
 .pfp {
-  width: $baseComponentHeight * 3;
-  height: $baseComponentHeight * 3;
+  width: $baseComponentHeight * 3.5;
+  height: $baseComponentHeight * 3.5;
   border-radius: $borderRadius;
   object-fit: cover;
 }
@@ -17,7 +17,14 @@
   flex-direction: row;
   width: 100%;
   gap: $doublePadding;
-  height: $baseComponentHeight * 3;
+  height: $baseComponentHeight * 3.5;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    height: $baseComponentHeight * 7;
+    gap: $halfPadding;
+    align-items: center;
+  }
 }
 
 .editButton {
@@ -63,11 +70,12 @@
 
 .editWrapper {
   width: 100%;
-  padding-right: 2 * $baseComponentHeight + $doublePadding;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: $padding;
+  overflow: hidden;
 }
 
 .dialog {

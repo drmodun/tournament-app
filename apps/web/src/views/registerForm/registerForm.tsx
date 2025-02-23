@@ -5,7 +5,7 @@ import styles from "./registerForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Input from "components/input";
-import { TextVariants } from "types/styleTypes";
+import { textColor, TextVariants } from "types/styleTypes";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "components/button";
 
@@ -27,7 +27,15 @@ export default function RegisterForm({
 
   return (
     <div className={styles.wrapper}>
-      <h1 className={clsx(globals.titleText, styles.header)}>register</h1>
+      <h1
+        className={clsx(
+          globals.titleText,
+          styles.header,
+          styles[`${textColor(variant)}Header`],
+        )}
+      >
+        register
+      </h1>
       <div className={styles.formWrapper}>
         <div>
           <FormProvider {...methods}>
@@ -37,9 +45,10 @@ export default function RegisterForm({
             >
               <div className={styles.inputWrapper}>
                 <Input
-                  labelVariant={variant}
                   variant={
-                    methods.formState.errors.username ? "danger" : variant
+                    methods.formState.errors.username
+                      ? "danger"
+                      : textColor(variant)
                   }
                   label="username"
                   placeholder="enter your username"
@@ -64,8 +73,11 @@ export default function RegisterForm({
                   </p>
                 )}
                 <Input
-                  labelVariant={variant}
-                  variant={methods.formState.errors.email ? "danger" : variant}
+                  variant={
+                    methods.formState.errors.email
+                      ? "danger"
+                      : textColor(variant)
+                  }
                   label="email"
                   placeholder="enter your email address"
                   name="email"
@@ -90,9 +102,10 @@ export default function RegisterForm({
               </div>
               <div className={styles.inputWrapper}>
                 <Input
-                  labelVariant={variant}
                   variant={
-                    methods.formState.errors.password ? "danger" : variant
+                    methods.formState.errors.password
+                      ? "danger"
+                      : textColor(variant)
                   }
                   label="password"
                   placeholder="enter your password"
@@ -119,7 +132,7 @@ export default function RegisterForm({
                 )}
               </div>
               <Button
-                label="login"
+                label="register"
                 variant="primary"
                 submit={true}
                 className={styles.submitButton}

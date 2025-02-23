@@ -63,7 +63,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
             <DrawerElement
               icon={FormatListBulletedIcon}
               label="manage competitions"
-              href="/landingPage2#contact"
+              href="/manageCompetitions"
             />
             <DrawerElement
               icon={HelpIcon}

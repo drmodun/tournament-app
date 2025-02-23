@@ -14,7 +14,7 @@ export default function LoginPage() {
     <div className={styles.wrapper}>
       <Navbar className={styles.navbar} />
       <div className={styles.screen}>
-        <LoginForm variant={textColor(theme)} />
+        <LoginForm variant={theme} />
       </div>
     </div>
   );

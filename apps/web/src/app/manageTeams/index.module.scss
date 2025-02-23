@@ -12,9 +12,13 @@
   padding-left: $horizontalMargin;
   padding-right: $horizontalMargin;
 
-  @media screen and (max-width: $tabletBreakpoint) {
+  @media screen and (max-width: $desktopBreakpoint) {
     padding-left: $doublePadding;
     padding-right: $doublePadding;
+  }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
   }
 
   padding-bottom: $doublePadding * 2;
@@ -30,14 +34,18 @@
 .tabs {
   width: 100%;
   display: flex;
-  margin-bottom: $doublePadding;
   gap: $halfPadding;
   padding-left: $padding;
   padding-right: $padding;
   border-radius: $borderRadius;
+  margin-bottom: $doublePadding;
 
   @media screen and (max-width: $desktopBreakpoint) {
-    height: $baseComponentHeight * 3 + $padding * 3;
+    height: 3 * $baseComponentHeight + 3 * $padding;
+  }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 2 * $baseComponentHeight + 2.5 * $padding;
   }
 }
 

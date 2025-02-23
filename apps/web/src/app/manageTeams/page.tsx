@@ -98,7 +98,7 @@ export default function Teams() {
                       styles.hidden,
                   )}
                   onClick={() => setActiveTab(index)}
-                  label={tab?.group.name}
+                  label={tab?.group?.name}
                   variant={activeTab === index ? "primary" : textColor(theme)}
                 />
               ))}
@@ -112,10 +112,9 @@ export default function Teams() {
               <ArrowForwardIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
             <button
-              className={clsx(styles.button)}
+              className={clsx(styles.button, styles.addButton)}
               title="create team"
-              onClick={forward}
-              disabled={activeTab >= data?.results.length - 2}
+              onClick={() => setDialogActive(true)}
             >
               <AddIcon className={clsx(styles[`${theme}Fill`])} />
             </button>

@@ -1,16 +1,17 @@
 @import "../../styles/";
 
 .screen {
-  width: 100%;
+  width: clamp(0px, 100%, $desktopBreakpoint);
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  justify-self: center;
   padding-left: $horizontalMargin;
   padding-right: $horizontalMargin;
 
-  @media screen and (max-width: $tabletBreakpoint) {
+  @media screen and (max-width: $desktopBreakpoint) {
     padding-left: $doublePadding;
     padding-right: $doublePadding;
   }

@@ -18,7 +18,7 @@ import {
   IUpdateUserInfo,
 } from "@tournament-app/types";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { formatDate } from "utils/mixins/formatting";
+import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import ImageDrop from "components/imageDrop";
 import ImagePicker from "components/imagePicker";
@@ -27,6 +27,7 @@ import RichEditor from "components/richEditor";
 import { leaveUserGroups } from "api/client/hooks/groups/useLeaveUserGroups";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import UserEditForm from "views/userEditForm";
+import Button from "components/button";
 
 type Team = {
   name: string;
@@ -54,7 +55,7 @@ export default function ManageUser({
 
   const scrollRefTeams = useRef<HTMLDivElement>(null);
 
-  const { data: groupData } = useUserGroups(data?.id ?? -1);
+  const { data: groupData } = useUserGroups();
 
   return (
     <div className={styles.wrapper}>
@@ -80,6 +81,9 @@ export default function ManageUser({
           src={data?.profilePicture}
           alt="Profile picture"
           className={clsx(styles.pfp)}
+          onError={(e) => {
+            e.currentTarget.src = "/profilePicture.png";
+          }}
         />
         <div
           className={clsx(
@@ -102,9 +106,14 @@ export default function ManageUser({
           <div className={styles.userInfo}>
             <b className={styles.boldText}>location</b>
             <p className={clsx(styles.infoText)}>
-              {data?.location.toLowerCase()}, croatia{" "}
-              {`${getUnicodeFlagIcon("HR")}`}
+              {data?.location.toLowerCase()}
             </p>
+          </div>
+          <div className={styles.userInfo}>
+            <b className={styles.boldText}>country</b>
+            <p
+              className={clsx(styles.infoText)}
+            >{`${data?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[data?.country] ?? "ZZ")}`}</p>
           </div>
           <div className={styles.userInfo}>
             <b className={styles.boldText}>level</b>
@@ -174,6 +183,7 @@ export default function ManageUser({
             <LaunchIcon className={clsx(styles[`${textColorTheme}Fill`])} />
           </div>
         </Link>
+        <Button label="delete user" variant="danger" />
       </div>
     </div>
   );

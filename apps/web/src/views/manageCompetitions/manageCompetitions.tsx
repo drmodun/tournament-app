@@ -16,6 +16,9 @@ import CardExpanded from "components/cardExpanded";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "components/button";
 import SlideButton from "components/slideButton";
+import { IExtendedUserResponse, IUserResponse } from "@tournament-app/types";
+import { useGetUserOrganizedCompetitions } from "api/client/hooks/competitions/useGetUserOrganizedCompetitions";
+import ProgressWheel from "components/progressWheel";
 
 type CompetitionInputs = {
   name: string;
@@ -43,9 +46,14 @@ type EditCompetitionInputs = {
   leagueFormat?: boolean;
 };
 
-export default function ManageCompetitions() {
+export default function ManageCompetitions({
+  user,
+}: {
+  user: IExtendedUserResponse;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+  const { isLoading, data } = useGetUserOrganizedCompetitions();
 
   const addMethods = useForm<CompetitionInputs>();
   const onAddSubmit: SubmitHandler<CompetitionInputs> = (data) =>
@@ -473,17 +481,29 @@ export default function ManageCompetitions() {
           <AddIcon className={styles[`${theme}Fill`]} />
         </button>
       </div>
-      <div className={styles.competitionsWrapper}>
-        <div className={styles.competitions}>
-          {exampleCards.map((card, index) => (
-            <CardExpanded
-              key={index}
-              {...card}
-              onClick={() => handleEditCompetition(index)}
-            />
-          ))}
+      {isLoading ? (
+        <ProgressWheel variant={textColorTheme} />
+      ) : (
+        <div className={styles.competitionsWrapper}>
+          <div className={styles.competitions}>
+            {data?.results.map((card, index) => (
+              <CardExpanded
+                key={index}
+                image={card.logo}
+                label={card.name}
+                startDate={new Date(card?.startDate.toString()).getTime()}
+                endDate={new Date(card?.endDate.toString()).getTime()}
+                category={card.category.name}
+                participants={card.currentParticipants}
+                location={card?.location}
+                locationDetails={card.location}
+                variant={theme}
+                onClick={() => handleEditCompetition(index)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

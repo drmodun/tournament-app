@@ -13,6 +13,7 @@ import { useDrawerContext } from "utils/hooks/useDrawerContext";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import ProgressWheel from "components/progressWheel";
+import { useLogout } from "api/client/hooks/auth/useLogout";
 
 export interface NavbarProps {
   style?: React.CSSProperties;
@@ -28,6 +29,7 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
   const textColorTheme = textColor(colorTheme);
 
   const { data, isSuccess, isLoading } = useAuth();
+  const logout = useLogout();
 
   return (
     <div className={clsx(styles.wrapper, className)} style={style}>
@@ -45,8 +47,11 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
         >
           {isSuccess && data.id ? (
             <>
-              <Link href="/landingPage2#contact">manage competitions</Link>
+              <Link href="/manageCompetitions">manage competitions</Link>
               <Link href="/manageTeams">manage teams</Link>
+              <Link href="/" onClick={logout}>
+                logout
+              </Link>
             </>
           ) : (
             <>
@@ -63,9 +68,11 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
           ) : isSuccess && data.id ? (
             <Link href="/user">
               <img
-                src={data?.profilePicture ?? ""}
-                alt=""
+                src={data?.profilePicture ?? "/profilePicture.png"}
                 className={styles.userImage}
+                onError={(e) => {
+                  e.currentTarget.src = "/profilePicture.png";
+                }}
               />
             </Link>
           ) : (

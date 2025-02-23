@@ -1,7 +1,7 @@
 @import "../../styles/";
 
 .screen {
-  margin-top: $doublePadding * 2;
+  padding-top: $doublePadding * 4;
   padding-bottom: $doublePadding * 2;
   width: 100%;
   display: flex;
@@ -15,9 +15,6 @@
     padding-left: $doublePadding;
     padding-right: $doublePadding;
   }
-
-  padding-bottom: $doublePadding * 2;
-  padding-top: $doublePadding * 2;
 }
 
 .navbar {

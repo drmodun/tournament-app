@@ -19,6 +19,8 @@ import RedoIcon from "@mui/icons-material/Redo";
 import { Markdown } from "tiptap-markdown";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { Color } from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
 
 interface RichEditorProps {
   style?: React.CSSProperties;
@@ -57,25 +59,24 @@ export default function RichEditor({
     editable: editable,
     extensions: [
       StarterKit,
-      Underline.configure({
-        HTMLAttributes: {
-          color: "black",
-        },
-      }),
+      Underline,
       Heading.configure({
         levels: [1, 2, 3],
       }),
       Markdown,
+      TextStyle,
+      Color.configure({
+        types: ["textStyle"],
+      }),
     ],
     content: startingContent,
     immediatelyRender: !isSSR,
     editorProps: {
       attributes: {
-        style: "color: black !important;",
         class: clsx(
-          styles[`${textColor(variant)}EditorColor`],
           globals[`${variant}BackgroundColor`],
           styles.editor,
+          globals[`${textColor(variant)}Color`],
         ),
       },
     },
@@ -395,11 +396,7 @@ export default function RichEditor({
           </button>
         </div>
       </div>
-      <EditorContent
-        editor={editor}
-        style={{ color: "black !important" }}
-        className={styles.editor1}
-      />
+      <EditorContent editor={editor} className={styles.editor1} />
     </div>
   );
 }

@@ -48,7 +48,6 @@ export default function CreateTeamForm({
   const [file, setFile] = useState<File>();
   const [placeId, setPlaceId] = useState<string>();
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
-  const [locationType, setLocationType] = useState<LocationType>("online");
 
   const addMethods = useForm<ICreateGroupRequest>();
   const onAddSubmit: SubmitHandler<ICreateGroupRequest> = (data) => {
@@ -73,9 +72,6 @@ export default function CreateTeamForm({
         onSubmit={addMethods.handleSubmit(onAddSubmit)}
         className={styles.form}
       >
-        <button onClick={() => console.log(addMethods.formState.errors)}>
-          dasdasds
-        </button>
         <div className={styles.dialogOption}>
           <Input
             variant={textColorTheme}
@@ -155,7 +151,9 @@ export default function CreateTeamForm({
         </div>
 
         <div className={styles.dialogOption}>
-          <p className={globals.label}>description</p>
+          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
+            description
+          </p>
           <RichEditor
             name="description"
             isReactHookForm={true}
@@ -174,6 +172,7 @@ export default function CreateTeamForm({
             options={["participation", "organization", "hybrid"]}
             isReactFormHook={true}
             name="focus"
+            variant={textColorTheme}
           />
         </div>
         <div className={styles.dialogOption}>
@@ -184,6 +183,7 @@ export default function CreateTeamForm({
             options={["private", "public"]}
             isReactFormHook={true}
             name="type"
+            variant={textColorTheme}
           />
         </div>
         <div className={styles.dialogOption}>
@@ -206,55 +206,37 @@ export default function CreateTeamForm({
             searchClassName={styles.dropdown}
             style={{ width: "100%" }}
           />
+          {addMethods.formState.errors.country?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            location type
-          </p>
-          <SlideButton
-            options={["online", "offline", "hybrid"]}
+          <Input
+            variant={textColorTheme}
+            label="location"
+            placeholder="enter your place of residence"
+            name="location"
+            required={true}
+            className={styles.input}
+            isReactFormHook={true}
             onChange={(e) => {
-              setLocationType(e as LocationType);
+              setPlaceId(undefined);
+              fetchAutocomplete(e.target).then((autocomplete) => {
+                const tempListener = autocomplete.addListener(
+                  "place_changed",
+                  () => handleAutocomplete(autocomplete),
+                );
+                setListener(tempListener);
+              });
             }}
           />
+
+          {addMethods.formState.errors.location?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
-        {locationType !== "online" && (
-          <div className={styles.dialogOption}>
-            <Input
-              variant={textColorTheme}
-              label="location"
-              placeholder="enter your place of residence"
-              name="location"
-              required={true}
-              className={styles.input}
-              isReactFormHook={true}
-              onChange={(e) => {
-                setPlaceId(undefined);
-                fetchAutocomplete(e.target).then((autocomplete) => {
-                  const tempListener = autocomplete.addListener(
-                    "place_changed",
-                    () => handleAutocomplete(autocomplete),
-                  );
-                  setListener(tempListener);
-                });
-              }}
-            />
 
-            {addMethods.formState.errors.location?.type === "required" && (
-              <p className={styles.error}>this field is required!</p>
-            )}
-          </div>
-        )}
-
-        <Button
-          variant={"primary"}
-          onClick={() => {
-            console.log(addMethods.formState.errors);
-            console.log(addMethods.getValues());
-          }}
-          submit={true}
-          label="create competition"
-        />
+        <Button variant={"primary"} submit={true} label="create competition" />
       </form>
     </FormProvider>
   );

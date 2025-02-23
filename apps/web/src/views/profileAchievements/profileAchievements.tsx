@@ -1,16 +1,28 @@
+"use client";
+
 import React from "react";
 import styles from "./profileAchievements.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { textColor } from "types/styleTypes";
 
 export default function ProfileAchievements() {
+  const { theme } = useThemeContext();
+  const textColorTheme = textColor(theme);
   return (
     <div className={styles.wrapper}>
       <div className={styles.leftContent}>
-        <h1 className={clsx(globals.titleText, styles.header)}>
+        <h1
+          className={clsx(
+            globals.titleText,
+            styles.header,
+            styles[`${textColorTheme}Header`],
+          )}
+        >
           track your success and level up!
         </h1>
-        <p className={clsx(styles.text)}>
+        <p className={clsx(styles.text, globals[`${textColorTheme}Color`])}>
           winning.sh celebrates your competitive journey with personalized
           profiles that showcase your achievements and elo ranking ✨. compete,
           win, and watch as you level up through the ranks 🚀💪. unlock badges

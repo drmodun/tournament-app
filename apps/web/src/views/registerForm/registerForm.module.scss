@@ -1,17 +1,28 @@
 @use "../../styles/" as *;
 
 .header {
-  -webkit-text-fill-color: $dark;
-  margin-bottom: $doublePadding;
-  @include text-outline(
-    $offset: $halfPadding / 2,
-    $color: #ffffff,
-    $num-steps: 32
-  );
-
   @media screen and (max-width: $desktopBreakpoint) {
     font-size: $headerFontSize !important;
   }
+  margin-bottom: $padding;
+}
+
+.lightHeader {
+  -webkit-text-fill-color: $dark;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $light,
+    $num-steps: 32
+  );
+}
+
+.darkHeader {
+  -webkit-text-fill-color: $light;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $dark,
+    $num-steps: 32
+  );
 }
 
 .imageAligner {

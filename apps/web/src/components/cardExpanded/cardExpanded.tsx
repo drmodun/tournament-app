@@ -175,7 +175,7 @@ export default function Card({
           <ArrowRightIcon className={globals[`${textColor(variant)}Fill`]} />
         </div>
       </div>
-      <img src={image} alt={label} className={clsx(styles.image)} />
+      <img src={image} className={clsx(styles.image)} />
     </button>
   );
 }

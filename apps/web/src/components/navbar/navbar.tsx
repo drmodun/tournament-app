@@ -25,11 +25,6 @@ export default function Navbar({
   searchVariant,
 }: NavbarProps) {
   const { data, isSuccess, isLoading, isError } = useAuth();
-
-  useEffect(() => {
-    console.log("THIS THE DATA", isSuccess, isLoading, data);
-  }, [data, isSuccess, isLoading]);
-
   return (
     <div
       className={clsx(

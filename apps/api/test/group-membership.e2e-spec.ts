@@ -203,7 +203,6 @@ describe('GroupMembershipController (e2e)', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      // Verify the membership was deleted
       await request(app.getHttpServer())
         .get(`/group-membership/${groupId}/${userId}`)
         .set('Authorization', `Bearer ${authToken}`)
@@ -227,8 +226,7 @@ describe('GroupMembershipController (e2e)', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      // Verify the membership was deleted
-      const userId = 3; // Assuming this is the logged-in user's ID
+      const userId = 3;
       await request(app.getHttpServer())
         .get(`/group-membership/${groupId}/${userId}`)
         .set('Authorization', `Bearer ${authToken}`)

@@ -125,7 +125,9 @@ export class ParticipationService {
     }
 
     const results = await this.participationRepository.getQuery({
-      query: { userId, tournamentId, groupId },
+      userId,
+      tournamentId,
+      groupId,
     } as QueryParticipationDto);
 
     return results.length > 0;

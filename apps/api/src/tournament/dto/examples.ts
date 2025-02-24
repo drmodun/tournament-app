@@ -91,7 +91,7 @@ export const createExample: CreateTournamentRequest = {
   country: 'DE',
   tournamentType: tournamentTypeEnum.LEAGUE,
   location: tournamentLocationEnum.ONLINE,
-  teamType: tournamentTeamTypeEnum.SOLO,
+  tournamentTeamType: tournamentTeamTypeEnum.SOLO,
   maxParticipants: 64,
   startDate: new Date('2025-02-01T10:00:00Z'),
   endDate: new Date('2025-03-01T18:00:00Z'),

@@ -54,7 +54,7 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
 
   @IsEnum(tournamentTeamTypeEnum)
   @ApiProperty({ enum: tournamentTeamTypeEnum })
-  teamType: tournamentTeamTypeEnum;
+  tournamentTeamType: tournamentTeamTypeEnum;
 
   @IsOptional()
   @IsBoolean()

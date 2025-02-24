@@ -127,10 +127,7 @@ describe('CanCancelParticipationGuard', () => {
       const result = await guard.canActivate(context);
 
       expect(result).toBe(true);
-      expect(participationService.findOne).toHaveBeenCalledWith(
-        1,
-        ParticipationResponsesEnum.PARTICIPANT,
-      );
+      expect(participationService.findOne).toHaveBeenCalledWith(1);
       expect(tournamentService.findOne).toHaveBeenCalledWith(1);
     });
 
@@ -474,7 +471,6 @@ describe('CanCancelParticipationGuard', () => {
       await expect(guard.canActivate(context)).rejects.toThrow(
         new ForbiddenException('Participation not found'),
       );
-      expect(tournamentService.findOne).toHaveBeenCalledWith(1);
     });
 
     it('should handle missing tournament gracefully', async () => {

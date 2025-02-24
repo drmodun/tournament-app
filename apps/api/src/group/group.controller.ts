@@ -189,6 +189,7 @@ export class GroupController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @Post('fake')
   @ApiCreatedResponse({
     content: {
       'application/json': {

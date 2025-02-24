@@ -6,7 +6,9 @@ import {
 import { ITournamentResponse } from '@tournament-app/types';
 import { TournamentService } from 'src/tournament/tournament.service';
 import { TournamentMaximumParticipantsGuard } from './tournament-max-participants.guard';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class TournamentStartDateGuard
   extends TournamentMaximumParticipantsGuard
   implements CanActivate

@@ -10,12 +10,16 @@ import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { TournamentService } from 'src/tournament/tournament.service';
 import { GroupMembershipService } from 'src/group-membership/group-membership.service';
+import { UsersService } from 'src/users/users.service';
+import { UsersModule } from 'src/users/users.module';
+import { GroupModule } from 'src/group/group.module';
 
 describe('ParticipationController', () => {
   let controller: ParticipationController;
   let service: jest.Mocked<ParticipationService>;
   let tournamentService: jest.Mocked<TournamentService>;
   let groupMembershipService: jest.Mocked<GroupMembershipService>;
+  let userService: jest.Mocked<UsersService>;
 
   const mockParticipation = {
     id: 1,
@@ -43,6 +47,10 @@ describe('ParticipationController', () => {
       findOne: jest.fn(),
     };
 
+    const mockUserService = {
+      findOne: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ParticipationController],
       providers: [
@@ -58,13 +66,19 @@ describe('ParticipationController', () => {
           provide: GroupMembershipService,
           useValue: mockGroupMembershipService,
         },
+        {
+          provide: UsersService,
+          useValue: mockUserService,
+        },
       ],
+      imports: [UsersModule, GroupModule],
     }).compile();
 
     controller = module.get<ParticipationController>(ParticipationController);
     service = module.get(ParticipationService);
     tournamentService = module.get(TournamentService);
     groupMembershipService = module.get(GroupMembershipService);
+    userService = module.get(UsersService);
   });
 
   it('should be defined', () => {

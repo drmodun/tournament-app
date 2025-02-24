@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  Injectable,
 } from '@nestjs/common';
 import {
   ITournamentResponse,
@@ -10,6 +11,7 @@ import {
 } from '@tournament-app/types';
 import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';
 
+@Injectable()
 export class TeamTypeTournamentParticipationGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

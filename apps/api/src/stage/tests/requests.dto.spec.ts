@@ -44,7 +44,6 @@ describe('StageRequestsDtos', () => {
       };
       const createRequest = plainToInstance(CreateStageRequest, body);
       const errors = await validate(createRequest);
-      console.log(errors);
       expect(errors.length).toBe(2);
       expect(errors.map((x) => x.property)).toContain('name');
       expect(errors.map((x) => x.property)).toContain('description');
@@ -62,7 +61,6 @@ describe('StageRequestsDtos', () => {
       };
       const createRequest = plainToInstance(CreateStageRequest, body);
       const errors = await validate(createRequest);
-      console.log(errors);
       expect(errors.length).toBe(0);
     });
   });

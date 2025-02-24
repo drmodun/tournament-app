@@ -11,5 +11,6 @@ import { GroupMembershipModule } from 'src/group-membership/group-membership.mod
   controllers: [ParticipationController],
   providers: [ParticipationService, ParticipationDrizzleRepository],
   imports: [UsersModule, GroupModule, TournamentModule, GroupMembershipModule],
+  exports: [ParticipationService, ParticipationDrizzleRepository],
 })
 export class ParticipationModule {}

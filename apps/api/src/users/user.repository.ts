@@ -185,4 +185,20 @@ export class UserDrizzleRepository extends PrimaryRepository<
 
     return Query;
   }
+
+  getSingleQueryIncludingFake(
+    id: number,
+    responseType: UserReturnTypesEnumType = UserResponsesEnum.BASE,
+  ) {
+    const selectedType = this.getMappingObject(responseType);
+    const baseQuery = db
+      .select(selectedType)
+      .from(user)
+      .where(eq(user.id, id))
+      .$dynamic() as PgSelect<'user', typeof selectedType>;
+
+    const Query = this.conditionallyJoin(baseQuery, responseType);
+
+    return Query;
+  }
 }

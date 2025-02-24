@@ -12,7 +12,6 @@ import { tournamentTeamTypeEnum, groupTypeEnum } from '@tournament-app/types';
 
 describe('TournamentIsFakePlayersAllowedGuard', () => {
   let guard: TournamentIsFakePlayersAllowedGuard;
-
   let userService: jest.Mocked<UsersService>;
   let groupService: jest.Mocked<GroupService>;
 
@@ -47,6 +46,7 @@ describe('TournamentIsFakePlayersAllowedGuard', () => {
 
     const mockUserService = {
       findOne: jest.fn(),
+      findOneIncludingFake: jest.fn(),
     };
 
     const mockGroupService = {
@@ -73,9 +73,6 @@ describe('TournamentIsFakePlayersAllowedGuard', () => {
 
     userService = module.get(UsersService);
     groupService = module.get(GroupService);
-
-    guard['groupService'] = groupService;
-    guard['userService'] = userService;
   });
 
   describe('canActivate - Solo Player', () => {
@@ -83,56 +80,38 @@ describe('TournamentIsFakePlayersAllowedGuard', () => {
       (TeamTypeExtractor.getTeamTypeFromUrl as jest.Mock).mockReturnValue(
         tournamentTeamTypeEnum.SOLO,
       );
-      guard['groupService'] = groupService;
     });
 
     it('should allow real player participation', async () => {
       const context = createMockExecutionContext(false, false, 1);
-      userService.findOne.mockResolvedValue({
+      userService.findOneIncludingFake.mockResolvedValue({
         username: 'user',
         id: 1,
         isFake: false,
       });
 
-      groupService.findOne.mockResolvedValue({
-        id: 1,
-        type: groupTypeEnum.PUBLIC,
-      });
-
       const result = await guard.canActivate(context);
-
       expect(result).toBe(true);
     });
 
     it('should allow fake player in unranked tournament that allows fake players', async () => {
       const context = createMockExecutionContext(true, false, 1);
-      userService.findOne.mockResolvedValue({
+      userService.findOneIncludingFake.mockResolvedValue({
         username: 'user',
         id: 1,
         isFake: true,
       });
 
-      groupService.findOne.mockResolvedValue({
-        id: 1,
-        type: groupTypeEnum.PUBLIC,
-      });
-
       const result = await guard.canActivate(context);
-
       expect(result).toBe(true);
     });
 
     it('should deny fake player in tournament that does not allow fake players', async () => {
       const context = createMockExecutionContext(false, false, 1);
-      userService.findOne.mockResolvedValue({
+      userService.findOneIncludingFake.mockResolvedValue({
         username: 'user',
         id: 1,
         isFake: true,
-      });
-
-      groupService.findOne.mockResolvedValue({
-        id: 1,
-        type: groupTypeEnum.PUBLIC,
       });
 
       await expect(guard.canActivate(context)).rejects.toThrow(
@@ -144,7 +123,7 @@ describe('TournamentIsFakePlayersAllowedGuard', () => {
 
     it('should deny fake player in ranked tournament', async () => {
       const context = createMockExecutionContext(true, true, 1);
-      userService.findOne.mockResolvedValue({
+      userService.findOneIncludingFake.mockResolvedValue({
         username: 'user',
         id: 1,
         isFake: true,
@@ -171,8 +150,6 @@ describe('TournamentIsFakePlayersAllowedGuard', () => {
       (TeamTypeExtractor.getTeamTypeFromUrl as jest.Mock).mockReturnValue(
         tournamentTeamTypeEnum.TEAM,
       );
-
-      guard['groupService'] = groupService;
     });
 
     it('should allow real group participation', async () => {
@@ -189,7 +166,6 @@ describe('TournamentIsFakePlayersAllowedGuard', () => {
       });
 
       const result = await guard.canActivate(context);
-
       expect(result).toBe(true);
     });
 
@@ -207,7 +183,6 @@ describe('TournamentIsFakePlayersAllowedGuard', () => {
       });
 
       const result = await guard.canActivate(context);
-
       expect(result).toBe(true);
     });
 

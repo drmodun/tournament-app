@@ -240,7 +240,9 @@ describe('ParticipationService', () => {
 
       expect(result).toBe(true);
       expect(repository.getQuery).toHaveBeenCalledWith({
-        query: { userId: 1, tournamentId, groupId: undefined },
+        userId: 1,
+        tournamentId,
+        groupId: undefined,
       });
     });
 
@@ -254,7 +256,9 @@ describe('ParticipationService', () => {
 
       expect(result).toBe(true);
       expect(repository.getQuery).toHaveBeenCalledWith({
-        query: { userId: undefined, tournamentId, groupId: 1 },
+        userId: undefined,
+        tournamentId,
+        groupId: 1,
       });
     });
 

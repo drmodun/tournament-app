@@ -126,7 +126,7 @@ describe('TournamentController', () => {
       endDate: new Date(),
       categoryId: 1,
       location: tournamentLocationEnum.ONLINE,
-      teamType: tournamentTeamTypeEnum.MIXED,
+      tournamentTeamType: tournamentTeamTypeEnum.MIXED,
       tournamentType: tournamentTypeEnum.COMPETITION,
       isPublic: true,
       links: 'https://chess.com/tournament/123',

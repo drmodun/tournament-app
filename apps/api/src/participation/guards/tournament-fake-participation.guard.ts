@@ -14,12 +14,15 @@ import {
 import { UsersService } from 'src/users/users.service';
 import { GroupService } from 'src/group/group.service';
 import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class TournamentIsFakePlayersAllowedGuard implements CanActivate {
   constructor(
     private userService: UsersService,
     private groupService: GroupService,
   ) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
@@ -48,7 +51,7 @@ export class TournamentIsFakePlayersAllowedGuard implements CanActivate {
   private async checkIfPlayerIsFake(userId: number): Promise<boolean> {
     if (!userId) throw new BadRequestException('User id is not provided');
 
-    const user = await this.userService.findOne<IMiniUserResponse>(
+    const user = await this.userService.findOneIncludingFake<IMiniUserResponse>(
       userId,
       UserResponsesEnum.MINI,
     );

@@ -133,7 +133,6 @@ export class ParticipationController {
       groupId,
     });
   }
-
   @UseGuards(
     JwtAuthGuard,
     TournamentMaximumParticipantsGuard,

@@ -10,7 +10,7 @@ export interface ICreateTournamentRequest {
   country: string;
   tournamentType: tournamentTypeEnum;
   location: tournamentLocationEnum;
-  teamType: tournamentTeamTypeEnum;
+  tournamentTeamType: tournamentTeamTypeEnum;
   isMultipleTeamsPerGroupAllowed?: boolean;
   isFakePlayersAllowed?: boolean;
   parentTournamentId?: number;
@@ -34,7 +34,7 @@ export interface IUpdateTournamentRequest {
   country?: string;
   tournamentType?: tournamentTypeEnum;
   location?: tournamentLocationEnum;
-  teamType?: tournamentTeamTypeEnum;
+  tournamentTeamType?: tournamentTeamTypeEnum;
   isMultipleTeamsPerGroupAllowed?: boolean;
   isFakePlayersAllowed?: boolean;
   parentTournamentId?: number;

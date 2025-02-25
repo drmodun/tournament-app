@@ -7,7 +7,7 @@ export interface ICreateGroupRequest {
   type: groupTypeEnumType;
   focus: groupFocusEnumType;
   logo: string; // Dunno if this will work immediately
-  location?: string;
+  locationId?: number;
   country?: string;
   userId?: number; // Only set by api
 }
@@ -17,6 +17,7 @@ export interface ICreateFakeGroupRequest {
   abbreviation: string;
   logo: string; // Dunno if this will work immediately
   country?: string;
+  locationId?: number;
 }
 
 export interface IUpdateGroupRequest {
@@ -26,7 +27,7 @@ export interface IUpdateGroupRequest {
   type?: groupTypeEnumType;
   focus?: groupFocusEnumType;
   logo?: string; // Dunno if this will work immediately
-  location?: string;
+  locationId?: number;
   category?: string[];
 }
 
@@ -35,6 +36,6 @@ export interface IGroupQuery {
   abbreviation?: string;
   type?: groupTypeEnumType;
   focus?: groupFocusEnumType;
-  location?: string;
   country?: string;
+  locationId?: number;
 }

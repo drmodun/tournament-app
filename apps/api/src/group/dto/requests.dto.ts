@@ -13,8 +13,8 @@ import {
   MinLength,
   MaxLength,
   IsOptional,
-  IsUrl,
   IsEnum,
+  IsInt,
 } from 'class-validator';
 import { BaseQuery } from '../../base/query/baseQuery';
 
@@ -45,14 +45,13 @@ export class CreateGroupRequest implements ICreateGroupRequest {
   @ApiProperty({ enum: groupFocusEnum })
   focus: groupFocusEnumType;
 
-  @IsUrl()
   @ApiProperty()
   logo: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   @ApiPropertyOptional()
-  location?: string;
+  locationId?: number;
 
   @IsOptional()
   @IsString()
@@ -93,14 +92,13 @@ export class UpdateGroupRequest implements IUpdateGroupRequest {
   focus?: groupFocusEnum;
 
   @IsOptional()
-  @IsUrl()
   @ApiPropertyOptional()
   logo?: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   @ApiPropertyOptional()
-  location?: string;
+  locationId?: number; // TODO: add special location specific stuff later
 
   @IsOptional()
   @IsString()
@@ -153,7 +151,6 @@ export class CreateFakeGroupRequest implements ICreateFakeGroupRequest {
   @ApiProperty()
   abbreviation: string;
 
-  @IsUrl()
   @ApiProperty()
   logo: string;
 

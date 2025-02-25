@@ -15,6 +15,7 @@ import {
   userGroupBlockList,
   groupInterests,
   category,
+  location,
 } from '../db/schema';
 import {
   ICreateGroupRequest,
@@ -54,15 +55,15 @@ export class GroupDrizzleRepository extends PrimaryRepository<
     switch (typeEnum) {
       case GroupResponsesEnum.BASE:
         return query
-          .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
-          .groupBy(group.id);
+          .leftJoin(location, eq(group.locationId, location.id))
+          .leftJoin(groupToUser, eq(group.id, groupToUser.groupId));
 
       case GroupResponsesEnum.EXTENDED:
         return query
+          .leftJoin(location, eq(group.locationId, location.id))
           .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
           .leftJoin(participation, eq(group.id, participation.groupId))
-          .leftJoin(groupFollower, eq(group.id, groupFollower.groupId))
-          .groupBy(group.id);
+          .leftJoin(groupFollower, eq(group.id, groupFollower.groupId));
 
       default:
         return query;
@@ -76,6 +77,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           id: group.id,
           name: group.name,
           abbreviation: group.abbreviation,
+          locationId: group.locationId,
         };
       case GroupResponsesEnum.MINI_WITH_LOGO:
         return {
@@ -94,18 +96,26 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           type: group.type,
           focus: group.focus,
           logo: group.logo,
-          location: group.location,
           updatedAt: group.updatedAt,
           memberCount: db.$count(
             groupToUser,
             eq(groupToUser.groupId, group.id),
           ),
+          location: {
+            id: location.id,
+            name: location.name,
+            apiId: location.apiId,
+            coordinates: location.coordinates,
+          },
         };
       case GroupResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(GroupResponsesEnum.BASE),
           createdAt: group.createdAt,
-          tournamentCount: sql<number>`cast(count(${participation.tournamentId}) as int)`,
+          tournamentCount: db.$count(
+            participation,
+            eq(participation.groupId, group.id),
+          ),
           subscriberCount: db.$count(
             groupFollower,
             eq(groupFollower.groupId, group.id),
@@ -136,7 +146,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           type: createGroupDto.type,
           focus: createGroupDto.focus,
           logo: createGroupDto.logo,
-          location: createGroupDto.location,
           country: createGroupDto.country,
         } as InferInsertModel<typeof group>)
         .returning();
@@ -186,8 +195,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           return eq(group.type, parsed);
         case 'focus':
           return eq(group.focus, parsed);
-        case 'location':
-          return eq(group.location, parsed);
         case 'country':
           return eq(group.country, parsed);
         default:

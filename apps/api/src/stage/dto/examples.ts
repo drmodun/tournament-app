@@ -38,6 +38,13 @@ export const stageExample: StageResponse = {
   stageType: stageTypeEnum.ROUND_ROBIN,
   description: 'Initial group stage of the tournament',
   logo: 'https://example.com/stage-logo.jpg',
+  locationId: 1,
+  location: {
+    id: 1,
+    name: 'Chess Club',
+    coordinates: [12.345678, 12.345678],
+    apiId: 'chess-club',
+  },
 };
 
 const tournamentExample: MiniTournamentResponseWithLogo = {
@@ -48,6 +55,7 @@ const tournamentExample: MiniTournamentResponseWithLogo = {
   location: tournamentLocationEnum.ONLINE,
   logo: 'https://example.com/tournament-logo.jpg',
   country: 'DE',
+  locationId: 1,
 };
 
 const fullTournamentExample: TournamentResponse = {
@@ -58,6 +66,12 @@ const fullTournamentExample: TournamentResponse = {
     id: 1,
     username: 'chessmaster',
     isFake: false,
+  },
+  actualLocation: {
+    id: 1,
+    name: 'Chess Club',
+    coordinates: [12.345678, 12.345678],
+    apiId: 'chess-club',
   },
   affiliatedGroup: {
     id: 1,

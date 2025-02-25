@@ -44,22 +44,10 @@ describe('Category DTOs', () => {
       expect(errors[0].constraints).toHaveProperty('maxLength');
     });
 
-    it('should fail with invalid logo URL', async () => {
-      const dto = new CreateCategoryRequest();
-      dto.name = 'Test Category';
-      dto.description = 'Test Description';
-      dto.logo = 'not-a-url';
-      dto.type = categoryTypeEnum.OTHER;
-
-      const errors = await validate(dto);
-      expect(errors.length).toBeGreaterThan(0);
-      expect(errors[0].constraints).toHaveProperty('isUrl');
-    });
-
     it('should fail with missing required fields', async () => {
       const dto = new CreateCategoryRequest();
       const errors = await validate(dto);
-      expect(errors.length).toBe(4); // name, description, logo, and type are required
+      expect(errors.length).toBe(3); // name, description, and type are required
     });
   });
 
@@ -135,21 +123,6 @@ describe('Category DTOs', () => {
 
       const errors = await validate(dto);
       expect(errors.length).toBe(0);
-    });
-
-    it('should fail with invalid logo URL', async () => {
-      const dto = new UploadCategoryLogoRequest();
-      dto.logo = 'not-a-url';
-
-      const errors = await validate(dto);
-      expect(errors.length).toBeGreaterThan(0);
-      expect(errors[0].constraints).toHaveProperty('isUrl');
-    });
-
-    it('should fail with missing logo', async () => {
-      const dto = new UploadCategoryLogoRequest();
-      const errors = await validate(dto);
-      expect(errors.length).toBeGreaterThan(0);
     });
   });
 });

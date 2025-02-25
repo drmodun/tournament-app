@@ -41,6 +41,7 @@ describe('TournamentController', () => {
       username: 'testuser',
       isFake: false,
     },
+
     affiliatedGroup: {
       id: 1,
       abbreviation: 'TST',
@@ -135,6 +136,7 @@ describe('TournamentController', () => {
       isRanked: true,
       affiliatedGroupId: 1,
       creatorId: 1,
+      locationId: 1,
     };
     it('should create a tournament', async () => {
       service.create.mockResolvedValue(mockTournament);
@@ -149,6 +151,7 @@ describe('TournamentController', () => {
   describe('update', () => {
     const updateDto: UpdateTournamentRequest = {
       name: 'Updated Tournament',
+      locationId: 1,
     };
 
     it('should update a tournament', async () => {

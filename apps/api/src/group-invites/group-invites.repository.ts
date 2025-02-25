@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GroupInviteQuery } from './dto/requests.dto';
-import { groupInvite } from '../db/schema';
+import { groupInvite, location } from '../db/schema';
 import {
   PgSelectJoinFn,
   AnyPgSelectQueryBuilder,
@@ -53,7 +53,9 @@ export class GroupInviteDrizzleRepository extends CompositeRepository<
       case GroupInviteResponsesEnum.WITH_USER:
         return query.leftJoin(user, eq(groupInvite.userId, user.id));
       case GroupInviteResponsesEnum.WITH_GROUP:
-        return query.leftJoin(group, eq(groupInvite.groupId, group.id));
+        return query
+          .leftJoin(group, eq(groupInvite.groupId, group.id))
+          .leftJoin(location, eq(group.locationId, location.id));
       case GroupInviteResponsesEnum.WITH_MINI_USER:
         return query.leftJoin(user, eq(groupInvite.userId, user.id));
       case GroupInviteResponsesEnum.WITH_MINI_GROUP:

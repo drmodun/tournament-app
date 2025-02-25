@@ -70,6 +70,7 @@ describe('StageController (e2e)', () => {
       startDate: new Date(),
       endDate: new Date(Date.now() + 86400000), // tomorrow
       stageType: stageTypeEnum.KNOCKOUT,
+      locationId: 1,
     };
 
     it('should create a stage when user is tournament admin', async () => {
@@ -153,7 +154,7 @@ describe('StageController (e2e)', () => {
       expect(stage.tournament).toHaveProperty('name');
       expect(stage.tournament).toHaveProperty('type');
       expect(stage.tournament).toHaveProperty('startDate');
-      expect(stage.tournament).toHaveProperty('location');
+      expect(stage.tournament).toHaveProperty('locationId');
     });
 
     it('should return stages with EXTENDED response type', async () => {

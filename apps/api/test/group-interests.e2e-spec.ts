@@ -80,7 +80,7 @@ describe('GroupInterestsController (e2e)', () => {
         focus: groupFocusEnum.HYBRID,
         logo: 'https://example.com/logo.png',
         type: groupTypeEnum.PUBLIC,
-        location: 'Test Location',
+        locationId: 1,
         country: 'Test Country',
       } satisfies ICreateGroupRequest)
       .expect(201);

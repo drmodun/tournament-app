@@ -57,9 +57,18 @@ export class LocationService {
   }
 
   async update(id: number, updateLocationDto: IUpdateLocationRequest) {
+    const locationToUpdate = await this.repository.getSingleQuery(id);
+
+    if (!(locationToUpdate?.length > 0)) {
+      throw new NotFoundException(`Location with ID ${id} not found`);
+    }
+
     const location = await this.repository.updateEntity(id, {
       ...updateLocationDto,
-      coordinates: [updateLocationDto.lng, updateLocationDto.lat],
+      ...(updateLocationDto.lng &&
+        updateLocationDto.lat && {
+          coordinates: [updateLocationDto.lng, updateLocationDto.lat],
+        }),
     });
 
     if (!location) {

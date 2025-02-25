@@ -535,6 +535,55 @@ async function createParticipations() {
   );
 }
 
+async function createInterests() {
+  const userInterests = [];
+  const users = await db.select().from(tables.user);
+  const categories = await db.select().from(tables.category);
+
+  // Each user has 1-3 interests randomly
+  for (const user of users) {
+    const numberOfInterests = faker.number.int({ min: 1, max: 3 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numberOfInterests);
+
+    for (const category of selectedCategories) {
+      userInterests.push({
+        userId: user.id,
+        categoryId: category.id,
+        createdAt: faker.date.past(),
+      });
+    }
+  }
+
+  await db.insert(tables.interests).values(userInterests).execute();
+}
+
+async function createGroupInterests() {
+  const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
+    ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
+    : 20;
+
+  const groupInterestsList = [];
+  const groups = await db.select().from(tables.group);
+  const categories = await db.select().from(tables.category);
+
+  // Each group has 1-4 interests randomly
+  for (const group of groups) {
+    const numberOfInterests = faker.number.int({ min: 1, max: 4 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numberOfInterests);
+
+    for (const category of selectedCategories) {
+      groupInterestsList.push({
+        groupId: group.id,
+        categoryId: category.id,
+      });
+    }
+  }
+
+  await db.insert(tables.groupInterests).values(groupInterestsList).execute();
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -551,4 +600,6 @@ export async function seed() {
   await createTournaments();
   await createStages();
   await createParticipations();
+  await createInterests();
+  await createGroupInterests();
 }

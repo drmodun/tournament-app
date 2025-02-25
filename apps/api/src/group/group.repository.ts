@@ -13,6 +13,8 @@ import {
   groupToUser,
   participation,
   userGroupBlockList,
+  groupInterests,
+  category,
 } from '../db/schema';
 import {
   ICreateGroupRequest,
@@ -266,5 +268,58 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       .limit(pageSize)
       .offset((page - 1) * pageSize)
       .groupBy(group.id);
+  }
+
+  async checkIfGroupInterestExists(groupId: number, categoryId: number) {
+    const result = await db
+      .select()
+      .from(groupInterests)
+      .where(
+        and(
+          eq(groupInterests.groupId, groupId),
+          eq(groupInterests.categoryId, categoryId),
+        ),
+      )
+      .limit(1);
+
+    return result.length > 0;
+  }
+
+  async createGroupInterest(groupId: number, categoryId: number) {
+    await db.insert(groupInterests).values({
+      groupId,
+      categoryId,
+    });
+  }
+
+  async deleteGroupInterest(groupId: number, categoryId: number) {
+    await db
+      .delete(groupInterests)
+      .where(
+        and(
+          eq(groupInterests.groupId, groupId),
+          eq(groupInterests.categoryId, categoryId),
+        ),
+      );
+  }
+
+  async getGroupInterests(groupId: number, page: number, pageSize: number) {
+    const offset = (page - 1) * pageSize;
+
+    const results = await db
+      .select({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        type: category.type,
+        image: category.image,
+      })
+      .from(groupInterests)
+      .where(eq(groupInterests.groupId, groupId))
+      .innerJoin(category, eq(category.id, groupInterests.categoryId))
+      .limit(pageSize)
+      .offset(offset);
+
+    return results;
   }
 }

@@ -18,6 +18,7 @@ import { ParticipationModule } from './participation/participation.module';
 import { BlockedGroupsModule } from './blocked-groups/blocked-groups.module';
 import { BlockedUsersModule } from './group/blocked-users/blocked-users.module';
 import { InterestModule } from './interest/interest.module';
+import { GroupInterestsModule } from './group/group-interests/group-interests.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { InterestModule } from './interest/interest.module';
     BlockedGroupsModule,
     BlockedUsersModule,
     InterestModule,
+    GroupInterestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

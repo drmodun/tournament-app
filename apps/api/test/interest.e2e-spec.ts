@@ -9,11 +9,16 @@ import { AppModule } from './../src/app.module';
 import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
+import {
+  categoryTypeEnum,
+  ICreateCategoryRequest,
+} from '@tournament-app/types';
 
 describe('InterestController (e2e)', () => {
   let app: INestApplication;
   let authToken: string;
   let testCategoryId: number;
+  let anotherAuthToken: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -33,20 +38,36 @@ describe('InterestController (e2e)', () => {
     await app.init();
 
     const { body: authUser } = await request(app.getHttpServer())
-      .get('/users/31')
+      .get('/users/22')
+      .expect(200);
+
+    const { body: anotherUser } = await request(app.getHttpServer())
+      .get('/users/3')
       .expect(200);
 
     const loginResponse = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ email: authUser.email, password: 'Password123!' });
 
+    const anotherLoginResponse = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: anotherUser.email, password: 'Password123!' });
+
     authToken = loginResponse.body.accessToken;
+    anotherAuthToken = anotherLoginResponse.body.accessToken;
 
     const { body: categories } = await request(app.getHttpServer())
-      .get('/categories')
-      .expect(200);
+      .post('/categories')
+      .set('Authorization', `Bearer ${anotherAuthToken}`)
+      .send({
+        name: 'Test Category',
+        description: 'Test Description',
+        logo: 'https://example.com/logo.png',
+        type: categoryTypeEnum.PROGRAMMING,
+      } satisfies ICreateCategoryRequest)
+      .expect(201);
 
-    testCategoryId = categories.results[0]?.id || 1;
+    testCategoryId = categories.id;
   });
 
   describe('GET /interest', () => {
@@ -88,7 +109,7 @@ describe('InterestController (e2e)', () => {
         .expect(201);
 
       const { body: anotherUser } = await request(app.getHttpServer())
-        .get('/users/32')
+        .get('/users/27')
         .expect(200);
 
       const anotherLoginResponse = await request(app.getHttpServer())

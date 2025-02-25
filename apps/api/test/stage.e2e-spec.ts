@@ -154,7 +154,7 @@ describe('StageController (e2e)', () => {
       expect(stage.tournament).toHaveProperty('name');
       expect(stage.tournament).toHaveProperty('type');
       expect(stage.tournament).toHaveProperty('startDate');
-      expect(stage.tournament).toHaveProperty('location');
+      expect(stage.tournament).toHaveProperty('locationId');
     });
 
     it('should return stages with EXTENDED response type', async () => {

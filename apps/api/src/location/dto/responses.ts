@@ -25,7 +25,6 @@ export class LocationResponse
 
   @ApiResponseProperty()
   coordinates: [number, number];
-  lng: number;
 }
 
 export class ExtendedLocationResponse

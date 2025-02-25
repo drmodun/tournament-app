@@ -21,8 +21,7 @@ export const miniLocationExample: MiniLocationResponse = {
 export const locationExample: LocationResponse = {
   ...miniLocationExample,
   name: 'Paris',
-  lat: 48.856614,
-  lng: 2.3522219,
+  coordinates: [48.856614, 2.3522219],
 };
 
 export const extendedLocationExample: ExtendedLocationResponse = {
@@ -44,7 +43,7 @@ export const updateLocationExample: UpdateLocationDto = {
   lng: 2.3522219,
 };
 
-export const locationResponses: SwaggerExamples<BaseLocationResponseType> = {
+export const locationResponses: SwaggerExamples<BaseLocationResponse> = {
   [LocationResponsesEnum.MINI]: { value: miniLocationExample },
   [LocationResponsesEnum.BASE]: { value: locationExample },
   [LocationResponsesEnum.EXTENDED]: { value: extendedLocationExample },

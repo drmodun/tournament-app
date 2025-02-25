@@ -62,7 +62,7 @@ describe('BlockedUsersController (e2e)', () => {
         abbreviation: 'exp',
         logo: 'https://www.logo.hrvatska.hr/logo.png',
         country: 'hr',
-        location: 'hrvatska',
+        locationId: 1,
       } satisfies ICreateGroupRequest)
       .expect(201);
 

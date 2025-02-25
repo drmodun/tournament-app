@@ -38,7 +38,8 @@ export abstract class PrimaryRepository<
     return db
       .insert(this.model)
       .values(createRequest as InferInsertModel<TTable>)
-      .returning({ id: this.model.id }); // If the id field is not called id then we messed up
+      .returning({ id: this.model.id });
+    // If the id field is not called id then we messed up
   }
 
   updateEntity(

@@ -55,17 +55,15 @@ export class GroupDrizzleRepository extends PrimaryRepository<
     switch (typeEnum) {
       case GroupResponsesEnum.BASE:
         return query
-          .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
           .leftJoin(location, eq(group.locationId, location.id))
-          .groupBy(group.id);
+          .leftJoin(groupToUser, eq(group.id, groupToUser.groupId));
 
       case GroupResponsesEnum.EXTENDED:
         return query
+          .leftJoin(location, eq(group.locationId, location.id))
           .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
           .leftJoin(participation, eq(group.id, participation.groupId))
-          .leftJoin(groupFollower, eq(group.id, groupFollower.groupId))
-          .leftJoin(location, eq(group.locationId, location.id))
-          .groupBy(group.id);
+          .leftJoin(groupFollower, eq(group.id, groupFollower.groupId));
 
       default:
         return query;
@@ -114,7 +112,10 @@ export class GroupDrizzleRepository extends PrimaryRepository<
         return {
           ...this.getMappingObject(GroupResponsesEnum.BASE),
           createdAt: group.createdAt,
-          tournamentCount: sql<number>`cast(count(${participation.tournamentId}) as int)`,
+          tournamentCount: db.$count(
+            participation,
+            eq(participation.groupId, group.id),
+          ),
           subscriberCount: db.$count(
             groupFollower,
             eq(groupFollower.groupId, group.id),

@@ -12,7 +12,6 @@ import {
   IsOptional,
   IsEmail,
   IsStrongPassword,
-  IsUrl,
   IsBoolean,
 } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
@@ -53,7 +52,6 @@ export class CreateUserRequest implements ICreateUserRequest {
   isFake?: boolean;
 
   @IsOptional()
-  @IsUrl()
   @ApiPropertyOptional()
   profilePicture?: string;
 
@@ -70,7 +68,6 @@ export class CreateUserRequest implements ICreateUserRequest {
 export class UpdateUserInfo implements IUpdateUserInfo {
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUrl()
   profilePicture?: string;
 
   @ApiPropertyOptional()

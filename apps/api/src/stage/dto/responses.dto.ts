@@ -5,12 +5,15 @@ import {
   IStageResponseWithTournament,
   IExtendedStageResponse,
   IExtendedStageResponseWithTournament,
+  ILocationResponse,
 } from '@tournament-app/types';
 import {
   stageStatusEnumType,
   stageTypeEnumType,
 } from '@tournament-app/types/src/enums';
+import { Type } from 'class-transformer';
 import { IsOptional } from 'class-validator';
+import { LocationResponse } from 'src/location/dto/responses';
 import {
   MiniTournamentResponseWithLogo,
   TournamentResponse,
@@ -28,6 +31,9 @@ export class MiniStageResponse implements IMiniStageResponse {
 
   @ApiResponseProperty()
   stageStatus: stageStatusEnumType;
+
+  @ApiResponseProperty()
+  locationId?: number;
 }
 
 export class StageResponse extends MiniStageResponse implements IStageResponse {
@@ -49,6 +55,10 @@ export class StageResponse extends MiniStageResponse implements IStageResponse {
 
   @ApiResponseProperty()
   endDate: Date;
+
+  @ApiResponseProperty({ type: LocationResponse })
+  @Type(() => LocationResponse)
+  location?: ILocationResponse;
 }
 
 export class StageResponseWithTournament

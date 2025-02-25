@@ -69,6 +69,12 @@ export const tournamentExample: TournamentResponse = {
   isPublic: true,
   category: categoryExample,
   links: 'https://chess.com/tournament/123',
+  actualLocation: {
+    id: 1,
+    name: 'Chess Club',
+    coordinates: [12.345678, 12.345678],
+    apiId: 'chess-club',
+  },
 };
 
 export const extendedExample: ExtendedTournamentResponse = {
@@ -96,6 +102,7 @@ export const createExample: CreateTournamentRequest = {
   startDate: new Date('2025-02-01T10:00:00Z'),
   endDate: new Date('2025-03-01T18:00:00Z'),
   isPublic: true,
+  locationId: 1,
   isRanked: true,
   categoryId: 1,
   creatorId: 1,
@@ -107,6 +114,7 @@ export const updateExample: UpdateTournamentRequest = {
   description: 'Updated International Chess Championship 2025',
   maxParticipants: 128,
   isPublic: false,
+  locationId: 1,
 };
 
 // Swagger Examples

@@ -1,4 +1,5 @@
 import { stageStatusEnumType, stageTypeEnumType } from "src/enums";
+import { ILocationResponse } from "src/location/responses.dto";
 import {
   IMiniTournamentResponseWithLogo,
   ITournamentResponse,
@@ -9,6 +10,7 @@ export interface IMiniStageResponse {
   name: string;
   tournamentId: number;
   stageStatus: stageStatusEnumType;
+  locationId?: number;
 }
 
 export interface IStageResponse extends IMiniStageResponse {
@@ -17,6 +19,7 @@ export interface IStageResponse extends IMiniStageResponse {
   rostersParticipating: number;
   startDate: Date;
   endDate: Date;
+  location?: ILocationResponse;
   logo?: string;
 }
 

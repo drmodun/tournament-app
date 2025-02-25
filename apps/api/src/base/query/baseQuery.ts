@@ -10,6 +10,7 @@ import {
   IsString,
   Max,
 } from 'class-validator';
+import { PaginationInstance } from './baseResponse';
 
 export abstract class BaseQuery<TResponseType extends string = string>
   implements Partial<BaseQueryType<TResponseType>>
@@ -47,6 +48,23 @@ export abstract class BaseQuery<TResponseType extends string = string>
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsPositive()
+  @Max(100)
+  pageSize?: number;
+}
+
+export class PaginationOnly implements Partial<PaginationInstance> {
+  @ApiPropertyOptional()
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  page?: number;
+
+  @ApiPropertyOptional()
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
   @Max(100)
   pageSize?: number;
 }

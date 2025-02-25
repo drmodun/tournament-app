@@ -39,6 +39,7 @@ export class CreateGroupJoinRequestDto implements ICreateGroupJoinRequest {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
   @IsInt()
   relatedLFPId?: number;
 }
@@ -51,6 +52,7 @@ export class UpdateGroupJoinRequestDto implements IUpdateGroupJoinRequest {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
   @IsInt()
   relatedLFPId?: number;
 }

@@ -45,7 +45,7 @@ describe('GroupController (e2e)', () => {
       type: groupTypeEnum.PRIVATE,
       focus: groupFocusEnum.HYBRID,
       logo: 'logo.png',
-      location: 'Test Location',
+      locationId: 1,
       country: 'Test Country',
     };
 
@@ -83,6 +83,7 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
           ]);
           expect(res.body.metadata.pagination).toEqual({
             page: 1,
@@ -103,6 +104,7 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'logo',
           ]);
           expect(res.body.metadata.pagination).toEqual({
@@ -124,6 +126,7 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'country',
           ]);
           expect(res.body.metadata.pagination).toEqual({
@@ -145,14 +148,15 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'country',
             'description',
             'type',
             'focus',
             'logo',
-            'location',
             'updatedAt',
             'memberCount',
+            'location',
           ]);
           expect(res.body.metadata.pagination).toEqual({
             page: 1,
@@ -173,14 +177,15 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'country',
             'description',
             'type',
             'focus',
             'logo',
-            'location',
             'updatedAt',
             'memberCount',
+            'location',
             'createdAt',
             'tournamentCount',
             'subscriberCount',
@@ -224,7 +229,12 @@ describe('GroupController (e2e)', () => {
         .get(`/groups/${createdGroupId}?responseType=mini`)
         .expect(200)
         .expect((res) => {
-          expect(Object.keys(res.body)).toEqual(['id', 'name', 'abbreviation']);
+          expect(Object.keys(res.body)).toEqual([
+            'id',
+            'name',
+            'abbreviation',
+            'locationId',
+          ]);
         });
     });
 
@@ -237,6 +247,7 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'logo',
           ]);
         });
@@ -251,6 +262,7 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'country',
           ]);
         });
@@ -265,14 +277,15 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'country',
             'description',
             'type',
             'focus',
             'logo',
-            'location',
             'updatedAt',
             'memberCount',
+            'location',
           ]);
         });
     });
@@ -286,14 +299,15 @@ describe('GroupController (e2e)', () => {
             'id',
             'name',
             'abbreviation',
+            'locationId',
             'country',
             'description',
             'type',
             'focus',
             'logo',
-            'location',
             'updatedAt',
             'memberCount',
+            'location',
             'createdAt',
             'tournamentCount',
             'subscriberCount',

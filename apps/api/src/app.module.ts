@@ -17,6 +17,7 @@ import { StageModule } from './stage/stage.module';
 import { ParticipationModule } from './participation/participation.module';
 import { BlockedGroupsModule } from './blocked-groups/blocked-groups.module';
 import { BlockedUsersModule } from './group/blocked-users/blocked-users.module';
+import { LfgModule } from './lfg/lfg.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { BlockedUsersModule } from './group/blocked-users/blocked-users.module';
     ParticipationModule,
     BlockedGroupsModule,
     BlockedUsersModule,
+    LfgModule,
   ],
   controllers: [AppController],
   providers: [AppService],

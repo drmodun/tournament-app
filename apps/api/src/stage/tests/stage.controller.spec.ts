@@ -26,6 +26,13 @@ describe('StageController', () => {
     stageStatus: stageStatusEnum.UPCOMING,
     tournamentId: 1,
     logo: 'https://example.com/logo.png',
+    locationId: 1,
+    location: {
+      id: 1,
+      name: 'Test Location',
+      coordinates: [12.345678, 12.345678],
+      apiId: 'test-location',
+    },
   };
 
   beforeEach(async () => {

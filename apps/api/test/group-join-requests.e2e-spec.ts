@@ -74,7 +74,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -114,7 +114,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -178,6 +178,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
         'updatedAt',
         'memberCount',
         'location',
+        'locationId',
         'country',
         'userId',
         'message',
@@ -219,6 +220,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
         'id',
         'name',
         'abbreviation',
+        'locationId',
         'logo',
         'createdAt',
       ]);
@@ -317,7 +319,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -354,7 +356,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -399,7 +401,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -436,7 +438,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 

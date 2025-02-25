@@ -1,7 +1,10 @@
+import { ILocationResponse } from "src/location/responses.dto";
+
 export interface IMiniGroupResponse {
   id: number;
   name: string;
   abbreviation: string;
+  locationId?: number;
 }
 
 export interface IMiniGroupResponseWithLogo extends IMiniGroupResponse {
@@ -18,9 +21,9 @@ export interface IGroupResponse extends IMiniGroupResponseWithCountry {
   type: string;
   focus: string;
   logo: string;
-  location: string;
   updatedAt: string;
   memberCount: number;
+  location?: ILocationResponse;
 }
 
 export interface IGroupResponseExtended extends IGroupResponse {

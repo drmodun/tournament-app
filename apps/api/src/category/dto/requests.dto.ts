@@ -10,7 +10,6 @@ import {
   MinLength,
   MaxLength,
   IsOptional,
-  IsUrl,
   IsEnum,
 } from 'class-validator';
 import { BaseQuery } from '../../base/query/baseQuery';
@@ -28,7 +27,6 @@ export class CreateCategoryRequest implements ICreateCategoryRequest {
   @ApiProperty()
   description: string;
 
-  @IsUrl()
   @ApiProperty()
   logo: string;
 
@@ -73,7 +71,6 @@ export class CategoryQuery extends BaseQuery implements ICategoryQuery {
 }
 
 export class UploadCategoryLogoRequest {
-  @IsUrl()
   @ApiProperty()
   logo: string;
 }

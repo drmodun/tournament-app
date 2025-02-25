@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsString,
   MinLength,
@@ -30,6 +30,7 @@ export class CreateStageRequest implements ICreateStageDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   conversionRuleId?: number;
 
@@ -83,6 +84,12 @@ export class CreateStageRequest implements ICreateStageDto {
   @IsOptional()
   @IsInt()
   @Min(1)
+  @ApiPropertyOptional()
+  locationId?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
   @Max(100)
   @ApiPropertyOptional()
   minPlayersPerTeam?: number;
@@ -99,12 +106,14 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   tournamentId?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   conversionRuleId?: number;
 
@@ -143,6 +152,12 @@ export class UpdateStageRequest implements IUpdateStageDto {
   logo?: string;
 
   @IsOptional()
+  @IsInt()
+  @Min(1)
+  @ApiPropertyOptional()
+  locationId?: number;
+
+  @IsOptional()
   @Type(() => Date)
   @IsDate()
   @ApiPropertyOptional()
@@ -158,6 +173,7 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @IsInt()
   @Min(1)
   @Max(100)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   minPlayersPerTeam?: number;
 
@@ -165,6 +181,7 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @IsInt()
   @Min(1)
   @Max(100)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   maxPlayersPerTeam?: number;
 }
@@ -205,6 +222,7 @@ export class StageQuery extends BaseQuery {
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
+  @Transform(({ value }) => parseInt(value))
   @IsInt()
   tournamentId?: number;
 
@@ -220,5 +238,6 @@ export class StageQuery extends BaseQuery {
   @Type(() => Number)
   @IsInt()
   @Max(100)
+  @Transform(({ value }) => parseInt(value))
   maxPlayersPerTeam?: number;
 }

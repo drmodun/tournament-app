@@ -51,7 +51,7 @@ export const groupInviteWithGroupExample = {
   abbreviation: 'EG',
   country: 'USA',
   focus: 'Hybrid',
-  location: 'New York',
+  locationId: 1,
   type: 'Public',
   updatedAt: new Date().toLocaleDateString(),
 } satisfies IGroupInviteWithGroupResponse;

@@ -10,6 +10,7 @@ import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
 import { BaseQuery } from '../query/baseQuery';
+import { LocationResponsesEnum } from '@tournament-app/types';
 export interface TableWithId extends PgTable<TableConfig> {
   id: PgColumn<ColumnBaseConfig<'number', 'PgSerial'>>;
 }
@@ -21,7 +22,10 @@ export abstract class PrimaryRepository<
     InferInsertModel<TTable>
   >,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
-  getSingleQuery(id: number, responseType: string) {
+  getSingleQuery(
+    id: number,
+    responseType: string = LocationResponsesEnum.BASE,
+  ) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(this.getMappingObject(responseType))
@@ -38,7 +42,8 @@ export abstract class PrimaryRepository<
     return db
       .insert(this.model)
       .values(createRequest as InferInsertModel<TTable>)
-      .returning({ id: this.model.id }); // If the id field is not called id then we messed up
+      .returning({ id: this.model.id });
+    // If the id field is not called id then we messed up
   }
 
   updateEntity(

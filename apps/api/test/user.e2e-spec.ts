@@ -134,7 +134,6 @@ describe('UserController', () => {
         'updatedAt',
         'followers',
         'following',
-        'location',
         'createdAt',
       ]);
 
@@ -444,7 +443,6 @@ describe('UserController', () => {
         email: expect.any(String),
         name: expect.any(String),
         bio: expect.any(String),
-        location: expect.any(String),
         profilePicture: expect.any(String),
         country: expect.any(String),
         followers: expect.any(Number),

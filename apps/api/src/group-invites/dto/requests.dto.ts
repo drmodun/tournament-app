@@ -39,6 +39,7 @@ export class CreateGroupInviteDto implements ICreateGroupInviteDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
   @IsInt()
   relatedLFPId?: number;
 }
@@ -51,6 +52,7 @@ export class UpdateGroupInviteDto implements IUpdateGroupInviteDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
   @IsInt()
   relatedLFPId?: number;
 }

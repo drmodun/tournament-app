@@ -11,6 +11,7 @@ export interface ICreateStageDto {
   stageType?: stageTypeEnum;
   name: string;
   stageLocation?: tournamentLocationEnumType;
+  locationId?: number;
   description?: string;
   logo?: string;
   startDate: Date;
@@ -26,6 +27,7 @@ export interface IUpdateStageDto {
   stageType?: stageTypeEnum;
   name?: string;
   stageLocation?: tournamentLocationEnumType;
+  locationId?: number;
   description?: string;
   logo?: string;
   startDate?: Date;

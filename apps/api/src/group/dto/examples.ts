@@ -39,7 +39,6 @@ export const baseResponseExample: GroupResponse = {
   description: 'A community of chess enthusiasts',
   type: 'Sports Club',
   focus: 'Chess',
-  location: 'Split',
   updatedAt: new Date().toISOString(),
   memberCount: 50,
 };

@@ -69,6 +69,7 @@ describe('TournamentService', () => {
       isRanked: true,
       affiliatedGroupId: 1,
       creatorId: 1,
+      locationId: 1,
     };
 
     it('should successfully create a tournament', async () => {

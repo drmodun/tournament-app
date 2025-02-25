@@ -13,7 +13,6 @@ import {
   MinLength,
   MaxLength,
   IsOptional,
-  IsUrl,
   IsEnum,
   IsInt,
 } from 'class-validator';
@@ -46,7 +45,6 @@ export class CreateGroupRequest implements ICreateGroupRequest {
   @ApiProperty({ enum: groupFocusEnum })
   focus: groupFocusEnumType;
 
-  @IsUrl()
   @ApiProperty()
   logo: string;
 
@@ -94,7 +92,6 @@ export class UpdateGroupRequest implements IUpdateGroupRequest {
   focus?: groupFocusEnum;
 
   @IsOptional()
-  @IsUrl()
   @ApiPropertyOptional()
   logo?: string;
 
@@ -154,7 +151,6 @@ export class CreateFakeGroupRequest implements ICreateFakeGroupRequest {
   @ApiProperty()
   abbreviation: string;
 
-  @IsUrl()
   @ApiProperty()
   logo: string;
 

@@ -19,7 +19,6 @@ describe('GroupRequestsDtos', () => {
         'description',
         'type',
         'focus',
-        'logo',
       ]);
     });
 
@@ -42,7 +41,6 @@ describe('GroupRequestsDtos', () => {
         'description',
         'type',
         'focus',
-        'logo',
       ]);
     });
 
@@ -90,7 +88,6 @@ describe('GroupRequestsDtos', () => {
         'description',
         'type',
         'focus',
-        'logo',
       ]);
     });
 

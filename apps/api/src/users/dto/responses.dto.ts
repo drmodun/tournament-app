@@ -18,6 +18,9 @@ export class MiniUserResponse implements IMiniUserResponse {
 
   @ApiResponseProperty()
   username: string;
+
+  @ApiResponseProperty()
+  isFake: boolean;
 }
 
 export class MiniUserResponseWithProfilePicture

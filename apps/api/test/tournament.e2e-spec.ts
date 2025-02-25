@@ -96,7 +96,7 @@ describe('TournamentController (e2e)', () => {
       endDate: new Date(),
       categoryId: 1,
       location: tournamentLocationEnum.ONLINE,
-      teamType: tournamentTeamTypeEnum.MIXED,
+      tournamentTeamType: tournamentTeamTypeEnum.MIXED,
       tournamentType: tournamentTypeEnum.COMPETITION,
       isPublic: true,
       links: 'https://chess.com/tournament/123',
@@ -105,6 +105,7 @@ describe('TournamentController (e2e)', () => {
       isRanked: true,
       affiliatedGroupId: 1,
       creatorId: 1,
+      locationId: 1,
     };
 
     it('should create tournament when user is authorized', async () => {
@@ -240,7 +241,7 @@ describe('TournamentController (e2e)', () => {
         endDate: new Date(),
         categoryId: 1,
         location: tournamentLocationEnum.ONLINE,
-        teamType: tournamentTeamTypeEnum.MIXED,
+        tournamentTeamType: tournamentTeamTypeEnum.MIXED,
         tournamentType: tournamentTypeEnum.COMPETITION,
         isPublic: true,
         links: 'https://chess.com/tournament/123',
@@ -249,6 +250,7 @@ describe('TournamentController (e2e)', () => {
         isRanked: true,
         affiliatedGroupId: 1,
         creatorId: 1,
+        locationId: 1,
       };
 
       const createResponse = await request(app.getHttpServer())
@@ -312,7 +314,7 @@ describe('TournamentController (e2e)', () => {
         endDate: new Date(),
         categoryId: 1,
         location: tournamentLocationEnum.ONLINE,
-        teamType: tournamentTeamTypeEnum.MIXED,
+        tournamentTeamType: tournamentTeamTypeEnum.MIXED,
         tournamentType: tournamentTypeEnum.COMPETITION,
         isPublic: true,
         links: 'https://chess.com/tournament/123',

@@ -6,14 +6,15 @@ import {
   groupFocusEnumType,
   groupTypeEnum,
   groupFocusEnum,
+  ICreateFakeGroupRequest,
 } from '@tournament-app/types';
 import {
   IsString,
   MinLength,
   MaxLength,
   IsOptional,
-  IsUrl,
   IsEnum,
+  IsInt,
 } from 'class-validator';
 import { BaseQuery } from '../../base/query/baseQuery';
 
@@ -44,14 +45,13 @@ export class CreateGroupRequest implements ICreateGroupRequest {
   @ApiProperty({ enum: groupFocusEnum })
   focus: groupFocusEnumType;
 
-  @IsUrl()
   @ApiProperty()
   logo: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   @ApiPropertyOptional()
-  location?: string;
+  locationId?: number;
 
   @IsOptional()
   @IsString()
@@ -92,14 +92,13 @@ export class UpdateGroupRequest implements IUpdateGroupRequest {
   focus?: groupFocusEnum;
 
   @IsOptional()
-  @IsUrl()
   @ApiPropertyOptional()
   logo?: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   @ApiPropertyOptional()
-  location?: string;
+  locationId?: number; // TODO: add special location specific stuff later
 
   @IsOptional()
   @IsString()
@@ -137,4 +136,28 @@ export class GroupQuery extends BaseQuery implements IGroupQuery {
   @IsOptional()
   @IsString()
   country?: string;
+}
+
+export class CreateFakeGroupRequest implements ICreateFakeGroupRequest {
+  @IsString()
+  @MinLength(3)
+  @MaxLength(30)
+  @ApiProperty()
+  name: string;
+
+  @IsString()
+  @MinLength(2)
+  @MaxLength(10)
+  @ApiProperty()
+  abbreviation: string;
+
+  @ApiProperty()
+  logo: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  country?: string;
+
+  userId: number;
 }

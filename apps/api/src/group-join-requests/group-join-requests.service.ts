@@ -58,6 +58,8 @@ export class GroupJoinRequestsService {
       throw new BadRequestException(
         'You cannot create a group join request for a private group',
       );
+    } else {
+      throw new BadRequestException('You cannot join a fake group');
     }
   }
 

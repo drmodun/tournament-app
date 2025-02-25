@@ -92,6 +92,69 @@
       "when": 1736733024707,
       "tag": "0012_cultured_apocalypse",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1737244308254,
+      "tag": "0013_short_beast",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1737249423994,
+      "tag": "0014_dark_jamie_braddock",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1737250590261,
+      "tag": "0015_futuristic_emma_frost",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1737255034855,
+      "tag": "0016_gigantic_wonder_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1740441810468,
+      "tag": "0017_broad_cloak",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1740448749040,
+      "tag": "0018_majestic_victor_mancha",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1740506305323,
+      "tag": "0019_tricky_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1740507807363,
+      "tag": "0020_youthful_skullbuster",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1740507902005,
+      "tag": "0021_wise_human_robot",
+      "breakpoints": true
     }
   ]
 }

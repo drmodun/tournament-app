@@ -39,7 +39,6 @@ export const baseResponseExample: GroupResponse = {
   description: 'A community of chess enthusiasts',
   type: 'Sports Club',
   focus: 'Chess',
-  location: 'Split',
   updatedAt: new Date().toISOString(),
   memberCount: 50,
 };
@@ -91,7 +90,6 @@ export const groupResponseSchema = {
   ),
 };
 
-// Example for response type enum
 export const groupResponseTypeExample: SwaggerExamples<{
   responseType: GroupResponsesEnum;
 }> = {
@@ -102,7 +100,6 @@ export const groupResponseTypeExample: SwaggerExamples<{
   },
 };
 
-// Example for sorting enum
 export const groupSortingExample: SwaggerExamples<{ sort: GroupSortingEnum }> =
   {
     default: {

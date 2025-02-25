@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -6,6 +7,7 @@ import {
 import {
   GroupMembershipResponsesEnum,
   GroupResponsesEnum,
+  groupTypeEnum,
 } from '@tournament-app/types';
 import { GroupDrizzleRepository } from './group.repository';
 import {
@@ -14,7 +16,12 @@ import {
   GroupQuery,
 } from './dto/requests.dto';
 import { IGroupResponse } from '@tournament-app/types';
-import { AnyGroupReturnType, GroupReturnTypesEnumType } from './types';
+import {
+  AnyGroupReturnType,
+  GroupDtosEnum,
+  GroupReturnTypesEnumType,
+  IGroupWithTypeOnly,
+} from './types';
 import { GroupMembershipService } from '../group-membership/group-membership.service';
 
 @Injectable()
@@ -61,6 +68,23 @@ export class GroupService {
     }
 
     return results[0] as TResponseType;
+  }
+
+  async checkIfGroupIsReal(groupId: number) {
+    const exists = await this.findOne<IGroupWithTypeOnly>(
+      groupId,
+      GroupDtosEnum.TYPE,
+    );
+
+    if (!exists) {
+      throw new NotFoundException('Group not found');
+    }
+
+    if (exists.type == groupTypeEnum.FAKE) {
+      throw new BadRequestException(
+        'You cannot do this action with a fake group',
+      );
+    }
   }
 
   async update(id: number, updateGroupDto: UpdateGroupRequest) {

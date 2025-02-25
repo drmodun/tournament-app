@@ -17,6 +17,7 @@ import {
   tournamentTypeEnum,
   tournamentTeamTypeEnum,
 } from '@tournament-app/types';
+import { stageTypeEnum, stageStatusEnum } from '@tournament-app/types';
 
 async function teardown() {
   console.log('Teardown database...');
@@ -56,11 +57,11 @@ async function createUsers() {
     email: 'admin@example.com',
     password: DEFAULT_PASSWORD,
     country: 'United States',
-    location: 'San Francisco',
     username: 'admin',
     bio: 'I am an admin user',
     profilePicture: 'https://example.com/admin.jpg',
     isEmailVerified: true,
+    isFake: false,
     role: userRoleEnum.ADMIN,
   } as CreateUserRequest & { isEmailVerified: boolean; role: string };
 
@@ -70,7 +71,7 @@ async function createUsers() {
     email: 'nonadmin@example',
     password: DEFAULT_PASSWORD,
     country: 'United States',
-    location: 'San Francisco',
+    isFake: false,
     username: 'nonadmin',
     bio: 'I am a non-admin user',
     profilePicture: 'https://example.com/nonadmin.jpg',
@@ -86,9 +87,9 @@ async function createUsers() {
       password: DEFAULT_PASSWORD,
       // Password123!, default password for all seed users
       country: faker.location.country(),
-      location: faker.location.city(),
       username: faker.internet.userName(),
       bio: faker.lorem.paragraph(),
+      isFake: false,
       profilePicture: faker.image.avatar(),
       isEmailVerified: true,
       role: i <= 5 ? userRoleEnum.ADMIN : userRoleEnum.USER,
@@ -229,7 +230,6 @@ async function createGroups() {
       type: groupTypeEnum.PUBLIC,
       focus: groupFocusEnum.HYBRID,
       logo: faker.image.imageUrl(),
-      location: faker.location.city(),
       country: faker.location.country(),
     } satisfies CreateGroupRequest & { id: number });
   }
@@ -410,7 +410,6 @@ async function createTournaments() {
       ),
       minimumMMR: faker.number.int({ min: 0, max: 2000 }),
       maximumMMR: faker.number.int({ min: 2001, max: 5000 }),
-      location: faker.location.city(),
       isMultipleTeamsPerGroupAllowed: faker.datatype.boolean(),
       isFakePlayersAllowed: faker.datatype.boolean(),
       isRanked: faker.datatype.boolean(),
@@ -435,6 +434,175 @@ async function createTournaments() {
   );
 }
 
+async function createStages() {
+  const tournaments = await db.select().from(tables.tournament);
+  const stages = [];
+
+  for (const tournament of tournaments) {
+    // Create 2-4 stages per tournament
+    const numStages = faker.number.int({ min: 2, max: 4 });
+
+    for (let i = 0; i < numStages; i++) {
+      const startDate =
+        i === 0
+          ? tournament.startDate
+          : faker.date.between({
+              from: tournament.startDate,
+              to: tournament.endDate,
+            });
+
+      const endDate = faker.date.between({
+        from: startDate,
+        to: tournament.endDate,
+      });
+
+      stages.push({
+        id: stages.length + 1,
+        name: i === 0 ? 'Group Stage' : `Playoff Stage ${i}`,
+        description: faker.lorem.paragraph(),
+        startDate,
+        endDate,
+        stageType: i === 0 ? stageTypeEnum.ROUND_ROBIN : stageTypeEnum.KNOCKOUT,
+        stageStatus: faker.helpers.arrayElement(Object.values(stageStatusEnum)),
+        stageLocation: faker.helpers.arrayElement(
+          Object.values(tournamentLocationEnum),
+        ),
+        minPlayersPerTeam: faker.number.int({ min: 1, max: 10 }),
+        maxPlayersPerTeam: faker.number.int({ min: 1, max: 10 }),
+        tournamentId: tournament.id,
+      });
+    }
+  }
+
+  await db.insert(tables.stage).values(stages);
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE event_id_seq RESTART WITH ${sql.raw(
+      String(stages.length + 1),
+    )}`,
+  );
+}
+
+async function createParticipations() {
+  const NUM_PARTICIPATIONS_TO_CREATE = process.env.SEED_PARTICIPATIONS_COUNT
+    ? parseInt(process.env.SEED_PARTICIPATIONS_COUNT, 10)
+    : 100;
+
+  const participations = [];
+  const tournaments = await db.select().from(tables.tournament);
+  const users = await db.select().from(tables.user);
+  const groupMemberships = await db.select().from(tables.groupToUser);
+
+  for (let i = 0; i < NUM_PARTICIPATIONS_TO_CREATE; i++) {
+    const tournament = faker.helpers.arrayElement(tournaments);
+    const user = faker.helpers.arrayElement(users);
+
+    let groupId = null;
+    if (tournament.affiliatedGroupId) {
+      const userMembership = groupMemberships.find(
+        (gm) =>
+          gm.userId === user.id && gm.groupId === tournament.affiliatedGroupId,
+      );
+      if (userMembership) {
+        groupId = tournament.affiliatedGroupId;
+      }
+    }
+
+    participations.push({
+      id: i + 1,
+      tournamentId: tournament.id,
+      userId: user.id,
+      groupId,
+      points: faker.number.int({ min: 0, max: 1000 }),
+      createdAt: faker.date.between({
+        from: tournament.startDate,
+        to: tournament.endDate,
+      }),
+    });
+  }
+
+  await db.insert(tables.participation).values(participations);
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE participation_participation_id_seq RESTART WITH ${sql.raw(
+      String(NUM_PARTICIPATIONS_TO_CREATE + 1),
+    )}`,
+  );
+}
+
+async function createInterests() {
+  const userInterests = [];
+  const users = await db.select().from(tables.user);
+  const categories = await db.select().from(tables.category);
+
+  // Each user has 1-3 interests randomly
+  for (const user of users) {
+    const numberOfInterests = faker.number.int({ min: 1, max: 3 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numberOfInterests);
+
+    for (const category of selectedCategories) {
+      userInterests.push({
+        userId: user.id,
+        categoryId: category.id,
+        createdAt: faker.date.past(),
+      });
+    }
+  }
+
+  await db.insert(tables.interests).values(userInterests).execute();
+}
+
+async function createGroupInterests() {
+  const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
+    ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
+    : 20;
+
+  const groupInterestsList = [];
+  const groups = await db.select().from(tables.group);
+  const categories = await db.select().from(tables.category);
+
+  // Each group has 1-4 interests randomly
+  for (const group of groups) {
+    const numberOfInterests = faker.number.int({ min: 1, max: 4 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numberOfInterests);
+
+    for (const category of selectedCategories) {
+      groupInterestsList.push({
+        groupId: group.id,
+        categoryId: category.id,
+      });
+    }
+  }
+
+  await db.insert(tables.groupInterests).values(groupInterestsList).execute();
+}
+
+async function createLocations() {
+  const locations = [];
+  const NUM_OF_LOCATIONS = process.env.SEED_LOCATIONS_COUNT
+    ? parseInt(process.env.SEED_LOCATIONS_COUNT, 10)
+    : 100;
+
+  for (let i = 0; i < NUM_OF_LOCATIONS; i++) {
+    locations.push({
+      id: i + 1,
+      name: faker.location.city(),
+      coordinates: [faker.location.latitude(), faker.location.longitude()],
+      apiId: faker.string.uuid(),
+    });
+  }
+
+  await db.insert(tables.location).values(locations).execute();
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE location_id_seq RESTART WITH ${sql.raw(
+      String(NUM_OF_LOCATIONS + 1), // TODO: check if this screws up indexes
+    )}`,
+  );
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -442,11 +610,16 @@ export async function seed() {
 
   await teardown();
   await createUsers();
+  await createLocations();
   await createFollowers();
   await createGroups();
   await createGroupMemberships();
-  await createGroupInvites();
   await createGroupJoinRequests();
+  await createGroupInvites();
   await createCategories();
   await createTournaments();
+  await createStages();
+  await createParticipations();
+  await createInterests();
+  await createGroupInterests();
 }

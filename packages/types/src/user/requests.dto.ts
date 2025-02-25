@@ -6,7 +6,7 @@ export interface ICreateUserRequest {
   password: string;
   profilePicture?: string;
   country: string;
-  location?: string;
+  isFake?: boolean;
 }
 
 export interface IUpdateUserInfo {
@@ -24,5 +24,10 @@ export interface UserQueryType {
   username?: string;
   email?: string;
   country?: string;
-  location?: string;
 } // TODO: potentially add checks for this as well
+
+export interface ICreateFakeUserRequest {
+  username: string;
+  name: string;
+  country?: string;
+}

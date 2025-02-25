@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GroupJoinRequestQuery } from './dto/requests.dto';
-import { groupJoinRequest } from '../db/schema';
+import { groupJoinRequest, location } from '../db/schema';
 import {
   PgSelectJoinFn,
   AnyPgSelectQueryBuilder,
@@ -53,7 +53,9 @@ export class GroupJoinRequestDrizzleRepository extends CompositeRepository<
       case GroupJoinRequestResponsesEnum.WITH_USER:
         return query.leftJoin(user, eq(groupJoinRequest.userId, user.id));
       case GroupJoinRequestResponsesEnum.WITH_GROUP:
-        return query.leftJoin(group, eq(groupJoinRequest.groupId, group.id));
+        return query
+          .leftJoin(group, eq(groupJoinRequest.groupId, group.id))
+          .leftJoin(location, eq(group.locationId, location.id));
       case GroupJoinRequestResponsesEnum.WITH_MINI_USER:
         return query.leftJoin(user, eq(groupJoinRequest.userId, user.id));
       case GroupJoinRequestResponsesEnum.WITH_MINI_GROUP:

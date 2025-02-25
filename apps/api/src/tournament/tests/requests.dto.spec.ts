@@ -30,7 +30,7 @@ describe('TournamentRequestsDtos', () => {
         country: true,
         tournamentType: 'invalid_type',
         location: 'invalid_location',
-        teamType: 'invalid_team_type',
+        tournamentTeamType: 'invalid_team_type',
         maxParticipants: 'not_a_number',
         startDate: 'invalid_date',
         endDate: 'invalid_date',
@@ -38,6 +38,7 @@ describe('TournamentRequestsDtos', () => {
         isRanked: 'not_a_boolean',
         categoryId: 'not_a_number',
         creatorId: 'not_a_number',
+        locationId: 'not_a_number',
       };
       const createRequest = plainToInstance(CreateTournamentRequest, body);
       const errors = await validate(createRequest);
@@ -51,7 +52,7 @@ describe('TournamentRequestsDtos', () => {
         country: 'USA', // too long
         tournamentType: tournamentTypeEnum.LEAGUE,
         location: tournamentLocationEnum.ONLINE,
-        teamType: tournamentTeamTypeEnum.SOLO,
+        tournamentTeamType: tournamentTeamTypeEnum.SOLO,
         maxParticipants: 32,
         startDate: new Date(),
         endDate: new Date(),
@@ -76,7 +77,7 @@ describe('TournamentRequestsDtos', () => {
         country: 'DE',
         tournamentType: tournamentTypeEnum.LEAGUE,
         location: tournamentLocationEnum.ONLINE,
-        teamType: tournamentTeamTypeEnum.SOLO,
+        tournamentTeamType: tournamentTeamTypeEnum.SOLO,
         maxParticipants: 1, // too low
         minimumMMR: -1, // too low
         maximumMMR: 20000, // too high
@@ -100,7 +101,7 @@ describe('TournamentRequestsDtos', () => {
         country: 'DE',
         tournamentType: tournamentTypeEnum.LEAGUE,
         location: tournamentLocationEnum.ONLINE,
-        teamType: tournamentTeamTypeEnum.SOLO,
+        tournamentTeamType: tournamentTeamTypeEnum.SOLO,
         maxParticipants: 32,
         startDate: new Date(),
         endDate: new Date(),
@@ -162,7 +163,7 @@ describe('TournamentRequestsDtos', () => {
         name: 123,
         type: 'invalid_type',
         location: 'invalid_location',
-        teamType: 'invalid_team_type',
+        tournamentTeamType: 'invalid_team_type',
         startDate: 'invalid_date',
         endDate: 'invalid_date',
         isRanked: 'not_a_boolean',
@@ -182,7 +183,7 @@ describe('TournamentRequestsDtos', () => {
         name: 'Tournament Search',
         type: tournamentTypeEnum.LEAGUE,
         location: tournamentLocationEnum.ONLINE,
-        teamType: tournamentTeamTypeEnum.SOLO,
+        tournamentTeamType: tournamentTeamTypeEnum.SOLO,
         startDate: new Date(),
         endDate: new Date(),
         isRanked: true,

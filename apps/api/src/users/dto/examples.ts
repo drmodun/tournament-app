@@ -13,6 +13,7 @@ import { BaseUserResponseType, UserResponsesEnum } from '@tournament-app/types';
 export const miniUserResponseExample = {
   id: 1,
   username: 'john_doe',
+  isFake: false, // TODO: think if this is useless or problematic
 } satisfies MiniUserResponse;
 
 export const miniUserResponseWithProfilePictureExample = {

@@ -4,6 +4,7 @@ import { GroupInviteDrizzleRepository } from '../group-invites.repository';
 import { GroupMembershipService } from '../../group-membership/group-membership.service';
 import { GroupInviteResponsesEnum } from '@tournament-app/types';
 import { BadRequestException } from '@nestjs/common';
+import { GroupService } from '../../group/group.service';
 
 describe('GroupInvitesService', () => {
   let service: GroupInvitesService;
@@ -21,6 +22,11 @@ describe('GroupInvitesService', () => {
     entityExists: jest.fn(),
   };
 
+  const mockGroupService = {
+    checkIfGroupIsReal: jest.fn(),
+    findOne: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -32,6 +38,10 @@ describe('GroupInvitesService', () => {
         {
           provide: GroupMembershipService,
           useValue: mockGroupMembershipService,
+        },
+        {
+          provide: GroupService,
+          useValue: mockGroupService,
         },
       ],
     }).compile();
@@ -52,9 +62,11 @@ describe('GroupInvitesService', () => {
         message: 'test message',
       };
 
+      mockGroupService.checkIfGroupIsReal.mockResolvedValue(undefined);
       mockGroupMembershipService.entityExists.mockResolvedValue(false);
       await service.create(1, 1, createDto);
 
+      expect(mockGroupService.checkIfGroupIsReal).toHaveBeenCalledWith(1);
       expect(repository.createEntity).toHaveBeenCalledWith({
         groupId: 1,
         userId: 1,
@@ -63,6 +75,7 @@ describe('GroupInvitesService', () => {
     });
 
     it('should throw BadRequestException if user is already a member', async () => {
+      mockGroupService.checkIfGroupIsReal.mockResolvedValue(undefined);
       mockGroupMembershipService.entityExists.mockResolvedValue(true);
 
       await expect(service.create(1, 1, { message: 'test' })).rejects.toThrow(

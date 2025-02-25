@@ -13,6 +13,13 @@ import { GroupJoinRequestsModule } from './group-join-requests/group-join-reques
 import { GroupInvitesModule } from './group-invites/group-invites.module';
 import { CategoryModule } from './category/category.module';
 import { TournamentModule } from './tournament/tournament.module';
+import { StageModule } from './stage/stage.module';
+import { ParticipationModule } from './participation/participation.module';
+import { BlockedGroupsModule } from './blocked-groups/blocked-groups.module';
+import { BlockedUsersModule } from './group/blocked-users/blocked-users.module';
+import { InterestModule } from './interest/interest.module';
+import { GroupInterestsModule } from './group/group-interests/group-interests.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -28,6 +35,13 @@ import { TournamentModule } from './tournament/tournament.module';
     GroupInvitesModule,
     CategoryModule,
     TournamentModule,
+    StageModule,
+    ParticipationModule,
+    BlockedGroupsModule,
+    BlockedUsersModule,
+    InterestModule,
+    GroupInterestsModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

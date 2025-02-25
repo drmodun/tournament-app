@@ -9,6 +9,7 @@ import {
   groupFocusEnum,
 } from '@tournament-app/types';
 import {
+  BadRequestException,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -60,7 +61,7 @@ describe('GroupService', () => {
       type: groupTypeEnum.PRIVATE,
       focus: groupFocusEnum.HYBRID,
       logo: 'logo.png',
-      location: 'Test Location',
+      locationId: 1,
       country: 'Test Country',
     };
     const userId = 1;
@@ -260,6 +261,39 @@ describe('GroupService', () => {
       await expect(service.getGroupFollowers(id)).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('checkIfGroupIsReal', () => {
+    const groupId = 1;
+
+    it('should return void when group exists', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { id: groupId, type: groupTypeEnum.PUBLIC },
+      ]);
+
+      await expect(service.checkIfGroupIsReal(groupId)).resolves.not.toThrow();
+      expect(mockRepository.getSingleQuery).toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException when group type is FAKE', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { id: groupId, type: groupTypeEnum.FAKE },
+      ]);
+
+      await expect(service.checkIfGroupIsReal(groupId)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(mockRepository.getSingleQuery).toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException when group does not exist', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([]);
+
+      await expect(service.checkIfGroupIsReal(groupId)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(mockRepository.getSingleQuery).toHaveBeenCalled();
     });
   });
 });

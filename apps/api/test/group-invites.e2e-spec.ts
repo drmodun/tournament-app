@@ -80,7 +80,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -125,6 +125,7 @@ describe('GroupInvitesController (e2e)', () => {
         'country',
         'followers',
         'level',
+        'isFake',
         'name',
         'updatedAt',
       ]);
@@ -155,6 +156,7 @@ describe('GroupInvitesController (e2e)', () => {
         'location',
         'country',
         'userId',
+        'locationId',
         'message',
       ]);
 
@@ -174,6 +176,7 @@ describe('GroupInvitesController (e2e)', () => {
       const expectedFields = new Set([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'createdAt',
       ]);
@@ -195,6 +198,7 @@ describe('GroupInvitesController (e2e)', () => {
         'id',
         'name',
         'abbreviation',
+        'locationId',
         'logo',
         'createdAt',
       ]);
@@ -241,7 +245,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -293,7 +297,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -327,6 +331,7 @@ describe('GroupInvitesController (e2e)', () => {
         'country',
         'followers',
         'level',
+        'isFake',
         'name',
         'updatedAt',
       ]);
@@ -354,6 +359,7 @@ describe('GroupInvitesController (e2e)', () => {
         'location',
         'country',
         'userId',
+        'locationId',
         'message',
       ]);
 
@@ -370,6 +376,7 @@ describe('GroupInvitesController (e2e)', () => {
       const expectedFields = new Set([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'createdAt',
       ]);
@@ -389,6 +396,7 @@ describe('GroupInvitesController (e2e)', () => {
         'name',
         'abbreviation',
         'logo',
+        'locationId',
         'createdAt',
       ]);
 
@@ -418,7 +426,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -499,7 +507,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -539,7 +547,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -585,7 +593,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 
@@ -611,7 +619,7 @@ describe('GroupInvitesController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
 

@@ -128,6 +128,8 @@ export enum stageTypeEnum {
   FIXTURE = "fixture",
   DOUBLE_ELIMINATION = "double_elimination",
   QUIZ = "quiz",
+  COMPASS = "compass",
+  TRIPLE_ELIMINATION = "triple_elimination",
   EVALUATED_COMPETITION = "evaluated_competition",
 }
 
@@ -216,6 +218,7 @@ export enum submissionStatusEnum {
 export enum groupTypeEnum {
   PRIVATE = "private",
   PUBLIC = "public",
+  FAKE = "fake",
 }
 
 export type groupTypeEnumType =
@@ -223,6 +226,18 @@ export type groupTypeEnumType =
 
 export type tournamentPromotionTypeEnumType =
   (typeof tournamentPromotionTypeEnum)[keyof typeof tournamentPromotionTypeEnum];
+
+export enum participationStatusEnum {
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+  WITHDRAWN = "withdrawn",
+  DISQUALIFIED = "disqualified",
+  COMPLETED = "completed",
+}
+
+export type participationStatusEnumType =
+  (typeof participationStatusEnum)[keyof typeof participationStatusEnum];
 
 export enum groupFocusEnum {
   PARTICIPATION = "participation",

@@ -52,6 +52,24 @@ export class UsersService {
     return results[0] as TResponseType;
   }
 
+  async findOneIncludingFake<
+    TResponseType extends AnyUserReturnType = ExtendedUserResponse,
+  >(
+    id: number,
+    responseType: UserReturnTypesEnumType = UserResponsesEnum.EXTENDED,
+  ) {
+    const results = await this.repository.getSingleQueryIncludingFake(
+      id,
+      responseType,
+    );
+
+    if (results.length === 0) {
+      throw new NotFoundException('User not found');
+    }
+
+    return results[0] as TResponseType;
+  }
+
   async update(id: number, updateUserDto: UpdateUserInfo) {
     const action = await this.repository.updateEntity(id, updateUserDto);
 

@@ -77,10 +77,10 @@ describe('GoogleStrategy', () => {
       expect(mockUsersService.create).toHaveBeenCalledWith({
         email: 'test@example.com',
         username: 'Test',
+        isFake: false,
         profilePicture: 'photo-url',
         country: 'None',
         name: 'Test',
-        location: 'None',
         password: expect.any(String),
       });
       expect(done).toHaveBeenCalledWith(null, mockValidatedUser);

@@ -39,6 +39,7 @@ describe('UserDrizzleRepository', () => {
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -61,7 +62,6 @@ describe('UserDrizzleRepository', () => {
       const query: UserQuery = {
         responseType: UserResponsesEnum.EXTENDED,
         name: 'John Doe',
-        location: 'New York',
         field: UserSortingEnum.LEVEL,
         order: 'desc',
         page: 2,
@@ -73,10 +73,11 @@ describe('UserDrizzleRepository', () => {
       const sql = result.toSQL().sql;
       const params = result.toSQL().params;
 
-      expect(params).toEqual(['John Doe', 'New York', 20, 20]);
+      expect(params).toEqual(['John Doe', 20, 20]);
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -86,16 +87,14 @@ describe('UserDrizzleRepository', () => {
         'updatedAt',
         'followers',
         'following',
-        'location',
         'createdAt',
       ]);
 
       expect(sql).toContain('from "user"');
-      expect(sql).toContain('where ("user"."name" = ');
-      expect(sql).toContain('and "user"."location" = ');
+      expect(sql).toContain('where "user"."name" = ');
       expect(sql).toContain('order by "user"."level" desc');
-      expect(sql).toContain('limit $3');
-      expect(sql).toContain('offset $4');
+      expect(sql).toContain('limit $2');
+      expect(sql).toContain('offset $3');
     });
   });
 
@@ -114,6 +113,7 @@ describe('UserDrizzleRepository', () => {
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -143,6 +143,7 @@ describe('UserDrizzleRepository', () => {
       expect(Object.keys(result._.selectedFields)).toStrictEqual([
         'id',
         'username',
+        'isFake',
         'profilePicture',
         'country',
         'bio',
@@ -152,7 +153,6 @@ describe('UserDrizzleRepository', () => {
         'updatedAt',
         'followers',
         'following',
-        'location',
         'createdAt',
       ]);
 
@@ -170,7 +170,6 @@ describe('UserDrizzleRepository', () => {
       country: 'USA',
       name: 'John Doe',
       password: 'password123',
-      location: 'New York',
       profilePicture: 'https://www.google.com',
     };
 
@@ -193,7 +192,6 @@ describe('UserDrizzleRepository', () => {
       country: 'USA',
       name: 'John Doe',
       password: 'password123',
-      location: 'New York',
       profilePicture: 'https://www.google.com',
     };
 

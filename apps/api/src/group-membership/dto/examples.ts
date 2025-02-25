@@ -26,6 +26,7 @@ export const groupMembershipExample = {
   ...minimalGroupMembershipExample,
   user: {
     id: 1,
+    isFake: false,
     username: 'john_doe',
     profilePicture: 'https://example.com/image.jpg',
   },
@@ -42,8 +43,8 @@ export const groupMembershipExample = {
 } satisfies GroupMembershipResponse;
 
 export const userMembershipWithDatesExample = {
-  ...groupMembershipExample,
   createdAt: new Date(),
+  isFake: false,
   role: groupRoleEnum.MEMBER,
   country: 'country',
   id: 1,

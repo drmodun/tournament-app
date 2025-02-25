@@ -6,23 +6,26 @@ import {
 } from "../enums";
 import { IMiniUserResponse } from "../user/responses.dto";
 import { IMiniGroupResponse } from "src/group";
+import { ILocationResponse } from "src/location/responses.dto";
 
 export interface IMiniTournamentResponse {
   id: number;
   name: string;
   type: tournamentTypeEnum;
   startDate: Date;
+  locationId?: number;
 }
 
 export interface IMiniTournamentResponseWithLogo
   extends IMiniTournamentResponse {
-  location: tournamentLocationEnum;
+  location?: tournamentLocationEnum;
   logo: string;
   country: string;
 }
 
 export interface ITournamentResponse extends IMiniTournamentResponseWithLogo {
   description: string;
+  actualLocation?: ILocationResponse;
   teamType: tournamentTeamTypeEnum;
   creator: IMiniUserResponse;
   affiliatedGroup?: IMiniGroupResponse;
@@ -39,11 +42,11 @@ export interface IExtendedTournamentResponse extends ITournamentResponse {
   updatedAt: Date;
   isMultipleTeamsPerGroupAllowed: boolean;
   isFakePlayersAllowed: boolean;
-  parentTournament: IMiniTournamentResponseWithLogo;
+  parentTournament?: IMiniTournamentResponseWithLogo;
   conversionRuleId: number; // TODO: replace with a conversion rule entity later
   isRanked: boolean;
-  maximumMMR: number;
-  minimumMMR: number;
+  maximumMMR?: number;
+  minimumMMR?: number;
 }
 
 export type BaseTournamentResponseType =

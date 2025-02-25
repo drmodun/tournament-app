@@ -12,10 +12,11 @@ import {
   IsOptional,
   IsEmail,
   IsStrongPassword,
-  IsUrl,
+  IsBoolean,
 } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
 import { UserReturnTypesEnumType } from '../types';
+import { Type } from 'class-transformer';
 
 export class CreateUserRequest implements ICreateUserRequest {
   @IsString()
@@ -46,7 +47,11 @@ export class CreateUserRequest implements ICreateUserRequest {
   password: string;
 
   @IsOptional()
-  @IsUrl()
+  @Type(() => Boolean)
+  @IsBoolean()
+  isFake?: boolean;
+
+  @IsOptional()
   @ApiPropertyOptional()
   profilePicture?: string;
 
@@ -63,7 +68,6 @@ export class CreateUserRequest implements ICreateUserRequest {
 export class UpdateUserInfo implements IUpdateUserInfo {
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUrl()
   profilePicture?: string;
 
   @ApiPropertyOptional()

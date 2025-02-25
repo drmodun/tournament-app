@@ -6,7 +6,7 @@
     "build": {
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
       "dependsOn": ["^build"],
-      "env": ["NEXT_PUBLIC_API_HOST"]
+      "env": ["NEXT_PUBLIC_API_HOST", "GOOGLE_MAPS_API_KEY"]
     },
     "test": {
       "outputs": ["coverage/**"],

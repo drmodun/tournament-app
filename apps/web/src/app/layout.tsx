@@ -1,3 +1,7 @@
+import "./globals.scss";
+import { ClientProviders } from "utils/providers/ClientProviders";
+import Drawer from "views/drawer";
+
 export default function RootLayout({
   children,
 }: {
@@ -5,7 +9,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Tournament App" />
+      </head>
+      <body>
+        <ClientProviders>
+          {children}
+          <Drawer />
+        </ClientProviders>
+      </body>
     </html>
   );
 }

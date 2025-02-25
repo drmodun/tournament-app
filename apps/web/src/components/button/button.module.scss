@@ -15,6 +15,11 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.disabled:hover {
+  cursor: not-allowed !important;
+}
+
 .label {
   font-size: $fontSize;
   overflow: hidden;

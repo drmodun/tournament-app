@@ -1,19 +1,26 @@
 @import "../../styles/";
 
 .chip {
-  height: $baseComponentHeight;
   border-radius: $borderRadius;
-  padding: 0 $doublePadding;
+  padding: $halfPadding / 2 $padding;
   border: none;
   &:hover {
     cursor: pointer;
   }
+
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .label {
   font-size: $fontSize;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .primarySelectedBorder {

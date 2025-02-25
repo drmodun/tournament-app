@@ -110,7 +110,7 @@ describe('CategoryService', () => {
   it('should throw not found exception when category does not exist', async () => {
     jest
       .spyOn(CategoryDrizzleRepository.prototype, 'getSingleQuery')
-      .mockResolvedValue(null);
+      .mockResolvedValue([]);
 
     await expect(
       service.findOne(999, CategoryResponsesEnum.BASE),

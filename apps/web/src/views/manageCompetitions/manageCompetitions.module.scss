@@ -1,0 +1,65 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+  flex-direction: column;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.competitionsTitle {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding / 2;
+}
+
+.addButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.competitions {
+  display: grid;
+  width: 100%;
+  gap: $padding;
+  grid-template-columns: repeat(auto-fill, minmax($phoneBreakpoint, 1fr));
+}
+
+.dialog {
+  width: 75%;
+}
+
+.dialogFromTo {
+  display: flex;
+  gap: $halfPadding;
+  align-items: flex-end;
+}
+
+.dialogOption {
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
+}
+
+.optionName {
+  margin-bottom: $halfPadding / 2;
+  font-size: $fontSize * 0.875;
+  white-space: nowrap;
+}
+
+.form {
+  display: flex;
+  gap: $halfPadding;
+  flex-direction: column;
+}

@@ -63,7 +63,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       country: 'None',
       isFake: false,
       name: name.givenName,
-      location: 'None',
       password: crypto.randomUUID(),
     }); //TODO: remind the user to change their country and loacation
 

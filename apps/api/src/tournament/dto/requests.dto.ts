@@ -138,6 +138,11 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @IsString()
   @ApiPropertyOptional()
   links?: string;
+
+  @IsOptional()
+  @IsInt()
+  @ApiPropertyOptional()
+  locationId?: number;
 }
 
 export class UpdateTournamentRequest implements IUpdateTournamentRequest {
@@ -267,6 +272,11 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
   @IsString()
   @ApiPropertyOptional()
   links?: string;
+
+  @IsOptional()
+  @IsInt()
+  @ApiPropertyOptional()
+  locationId?: number;
 }
 
 export class TournamentQuery

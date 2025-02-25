@@ -7,10 +7,13 @@ import {
   tournamentTypeEnum,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
+  ILocationResponse,
 } from '@tournament-app/types';
 import { CategoryMiniResponseWithLogo } from 'src/category/dto/responses.dto';
+import { LocationResponse } from 'src/location/dto/responses';
 import { MiniGroupResponse } from 'src/group/dto/responses.dto';
 import { MiniUserResponse } from 'src/users/dto/responses.dto';
+import { Type } from 'class-transformer';
 
 export class MiniTournamentResponse implements IMiniTournamentResponse {
   @ApiResponseProperty()
@@ -24,6 +27,9 @@ export class MiniTournamentResponse implements IMiniTournamentResponse {
 
   @ApiResponseProperty()
   startDate: Date;
+
+  @ApiResponseProperty()
+  locationId?: number;
 }
 
 export class MiniTournamentResponseWithLogo
@@ -73,6 +79,10 @@ export class TournamentResponse
 
   @ApiResponseProperty()
   links: string;
+
+  @ApiResponseProperty({ type: LocationResponse })
+  @Type(() => LocationResponse)
+  actualLocation?: ILocationResponse;
 }
 
 export class ExtendedTournamentResponse

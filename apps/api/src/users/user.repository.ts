@@ -96,7 +96,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
         return {
           ...this.getMappingObject(UserResponsesEnum.BASE),
           following: db.$count(follower, eq(follower.followerId, user.id)),
-          location: user.location,
           createdAt: user.createdAt,
         };
       case UserResponsesEnum.ADMIN:
@@ -130,7 +129,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
     [UserSortingEnum.USERNAME]: user.username,
     [UserSortingEnum.LEVEL]: user.level,
     [UserSortingEnum.COUNTRY]: user.country,
-    [UserSortingEnum.LOCATION]: user.location,
     [UserSortingEnum.BETTING_POINTS]: user.bettingPoints,
     [UserSortingEnum.GROUP_JOIN_DATE]: groupToUser.createdAt,
     [UserSortingEnum.TOURNAMENTS_MODERATED]: countDistinct(
@@ -165,8 +163,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
           return eq(user.email, parsed);
         case 'country':
           return eq(user.country, parsed);
-        case 'location':
-          return eq(user.location, parsed);
         default:
           return;
       }

@@ -15,6 +15,7 @@ import {
   userGroupBlockList,
   groupInterests,
   category,
+  location,
 } from '../db/schema';
 import {
   ICreateGroupRequest,
@@ -55,6 +56,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       case GroupResponsesEnum.BASE:
         return query
           .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
+          .leftJoin(location, eq(group.locationId, location.id))
           .groupBy(group.id);
 
       case GroupResponsesEnum.EXTENDED:
@@ -62,6 +64,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
           .leftJoin(participation, eq(group.id, participation.groupId))
           .leftJoin(groupFollower, eq(group.id, groupFollower.groupId))
+          .leftJoin(location, eq(group.locationId, location.id))
           .groupBy(group.id);
 
       default:
@@ -76,6 +79,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           id: group.id,
           name: group.name,
           abbreviation: group.abbreviation,
+          locationId: group.locationId,
         };
       case GroupResponsesEnum.MINI_WITH_LOGO:
         return {
@@ -94,12 +98,17 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           type: group.type,
           focus: group.focus,
           logo: group.logo,
-          location: group.location,
           updatedAt: group.updatedAt,
           memberCount: db.$count(
             groupToUser,
             eq(groupToUser.groupId, group.id),
           ),
+          location: {
+            id: location.id,
+            name: location.name,
+            apiId: location.apiId,
+            coordinates: location.coordinates,
+          },
         };
       case GroupResponsesEnum.EXTENDED:
         return {
@@ -136,7 +145,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           type: createGroupDto.type,
           focus: createGroupDto.focus,
           logo: createGroupDto.logo,
-          location: createGroupDto.location,
           country: createGroupDto.country,
         } as InferInsertModel<typeof group>)
         .returning();
@@ -186,8 +194,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           return eq(group.type, parsed);
         case 'focus':
           return eq(group.focus, parsed);
-        case 'location':
-          return eq(group.location, parsed);
         case 'country':
           return eq(group.country, parsed);
         default:

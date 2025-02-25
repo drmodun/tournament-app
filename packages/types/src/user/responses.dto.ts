@@ -56,7 +56,6 @@ export enum UserSortingEnum {
   LEVEL = "level",
   UPDATED_AT = "updatedAt",
   COUNTRY = "country",
-  LOCATION = "location",
   BETTING_POINTS = "betting-points",
   TOURNAMENT_PARTICIPATION = "tournament-participation",
   TOURNAMENTS_WON = "tournaments-won", // TODO: This has to be custom sqled

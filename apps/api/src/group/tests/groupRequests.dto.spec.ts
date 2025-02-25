@@ -31,7 +31,6 @@ describe('GroupRequestsDtos', () => {
         type: 'invalid_type',
         focus: 'invalid_focus',
         logo: 'not_a_url',
-        location: '',
         country: '',
       };
       const createGroupRequest = plainToInstance(CreateGroupRequest, body);
@@ -55,7 +54,7 @@ describe('GroupRequestsDtos', () => {
         type: groupTypeEnum.PRIVATE,
         focus: groupFocusEnum.ORGANIZATION,
         logo: 'https://example.com/logo.jpg',
-        location: 'Split',
+        locationId: 1,
         country: 'Croatia',
       };
 
@@ -103,7 +102,7 @@ describe('GroupRequestsDtos', () => {
         type: groupTypeEnum.PRIVATE,
         focus: groupFocusEnum.PARTICIPATION,
         logo: 'https://example.com/updated-logo.jpg',
-        location: 'Zagreb',
+        locationId: 1,
         country: 'Croatia',
       };
 
@@ -138,7 +137,7 @@ describe('GroupRequestsDtos', () => {
         abbreviation: 'CC',
         type: groupTypeEnum.PUBLIC,
         focus: groupFocusEnum.HYBRID,
-        location: 'Split',
+        locationId: 1,
         country: 'Croatia',
       };
 

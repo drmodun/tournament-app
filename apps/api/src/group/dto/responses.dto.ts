@@ -7,7 +7,10 @@ import {
   IGroupResponseExtended,
   GroupResponsesEnum,
   GroupSortingEnum,
+  ILocationResponse,
 } from '@tournament-app/types';
+import { Type } from 'class-transformer';
+import { LocationResponse } from 'src/location/dto/responses';
 
 export class MiniGroupResponse implements IMiniGroupResponse {
   @ApiResponseProperty()
@@ -18,6 +21,9 @@ export class MiniGroupResponse implements IMiniGroupResponse {
 
   @ApiResponseProperty()
   abbreviation: string;
+
+  @ApiResponseProperty()
+  locationId?: number;
 }
 
 export class MiniGroupResponseWithLogo
@@ -49,8 +55,9 @@ export class GroupResponse
   @ApiResponseProperty()
   focus: string;
 
-  @ApiResponseProperty()
-  location: string;
+  @ApiResponseProperty({ type: LocationResponse })
+  @Type(() => LocationResponse)
+  location?: ILocationResponse;
 
   @ApiResponseProperty()
   updatedAt: string;

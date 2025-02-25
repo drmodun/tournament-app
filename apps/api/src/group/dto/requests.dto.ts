@@ -15,6 +15,7 @@ import {
   IsOptional,
   IsUrl,
   IsEnum,
+  IsInt,
 } from 'class-validator';
 import { BaseQuery } from '../../base/query/baseQuery';
 
@@ -50,9 +51,9 @@ export class CreateGroupRequest implements ICreateGroupRequest {
   logo: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   @ApiPropertyOptional()
-  location?: string;
+  locationId?: number;
 
   @IsOptional()
   @IsString()
@@ -98,9 +99,9 @@ export class UpdateGroupRequest implements IUpdateGroupRequest {
   logo?: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   @ApiPropertyOptional()
-  location?: string;
+  locationId?: number; // TODO: add special location specific stuff later
 
   @IsOptional()
   @IsString()

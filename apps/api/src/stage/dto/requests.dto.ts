@@ -84,6 +84,12 @@ export class CreateStageRequest implements ICreateStageDto {
   @IsOptional()
   @IsInt()
   @Min(1)
+  @ApiPropertyOptional()
+  locationId?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
   @Max(100)
   @ApiPropertyOptional()
   minPlayersPerTeam?: number;
@@ -144,6 +150,12 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @IsString()
   @ApiPropertyOptional()
   logo?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @ApiPropertyOptional()
+  locationId?: number;
 
   @IsOptional()
   @Type(() => Date)

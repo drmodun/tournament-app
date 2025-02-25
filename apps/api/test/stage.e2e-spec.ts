@@ -70,6 +70,7 @@ describe('StageController (e2e)', () => {
       startDate: new Date(),
       endDate: new Date(Date.now() + 86400000), // tomorrow
       stageType: stageTypeEnum.KNOCKOUT,
+      locationId: 1,
     };
 
     it('should create a stage when user is tournament admin', async () => {

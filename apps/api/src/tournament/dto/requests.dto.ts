@@ -20,7 +20,7 @@ import {
   IsDate,
   IsInt,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { BaseQuery } from '../../base/query/baseQuery';
 import { TournamentReturnTypesEnumType } from '../types';
 import { tournamentLocation, tournamentTeamType } from 'src/db/schema';
@@ -73,12 +73,14 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
 
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   conversionRuleId?: number;
 
   @IsInt()
   @Min(2)
   @Max(1024)
+  @Transform(({ value }) => parseInt(value))
   @ApiProperty()
   maxParticipants: number;
 
@@ -101,6 +103,7 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   isRanked: boolean;
 
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiProperty()
   categoryId: number;
 
@@ -108,6 +111,7 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @IsNumber()
   @Min(0)
   @Max(10000)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   maximumMMR?: number;
 
@@ -115,15 +119,18 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @IsNumber()
   @Min(0)
   @Max(10000)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   minimumMMR?: number;
 
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiProperty()
   creatorId: number;
 
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   affiliatedGroupId?: number;
 
@@ -182,11 +189,13 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
 
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   parentTournamentId?: number;
 
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   conversionRuleId?: number;
 
@@ -206,6 +215,7 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
   @IsInt()
   @Min(2)
   @Max(1024)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   maxParticipants?: number;
 
@@ -221,6 +231,7 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
 
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   categoryId?: number;
 
@@ -228,6 +239,7 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
   @IsNumber()
   @Min(0)
   @Max(10000)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   maximumMMR?: number;
 
@@ -235,16 +247,19 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
   @IsNumber()
   @Min(0)
   @Max(10000)
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   minimumMMR?: number;
 
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   creatorId?: number;
 
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   affiliatedGroupId?: number;
 
@@ -301,12 +316,14 @@ export class TournamentQuery
   @IsOptional()
   @IsNumber()
   @Min(0)
+  @Transform(({ value }) => parseInt(value))
   minimumMMR?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   @Max(10000)
+  @Transform(({ value }) => parseInt(value))
   maximumMMR?: number;
 
   @ApiPropertyOptional()
@@ -317,28 +334,33 @@ export class TournamentQuery
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   categoryId?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   affiliatedGroupId?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
+  @Transform(({ value }) => parseInt(value))
   creatorId?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Min(2)
+  @Transform(({ value }) => parseInt(value))
   minParticipants?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Max(1024)
+  @Transform(({ value }) => parseInt(value))
   maxParticipants?: number;
 
   @ApiPropertyOptional()

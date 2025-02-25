@@ -5,9 +5,11 @@ import {
   UserSortingEnumType,
 } from '@tournament-app/types';
 import {
+  category,
   follower,
   groupToUser,
   groupUserBlockList,
+  interests,
   organizer,
   participation,
   user,
@@ -234,6 +236,49 @@ export class UserDrizzleRepository extends PrimaryRepository<
           eq(groupUserBlockList.groupId, groupId),
         ),
       );
+  }
+
+  async createInterest(categoryId: number, userId: number) {
+    await db.insert(interests).values({
+      categoryId,
+      userId,
+    });
+  }
+
+  async deleteInterest(categoryId: number, userId: number) {
+    await db
+      .delete(interests)
+      .where(
+        and(eq(interests.categoryId, categoryId), eq(interests.userId, userId)),
+      );
+  }
+
+  async checkIfInterestExists(categoryId: number, userId: number) {
+    const exists = await db
+      .select()
+      .from(interests)
+      .where(
+        and(eq(interests.categoryId, categoryId), eq(interests.userId, userId)),
+      );
+
+    return !!exists.length;
+  }
+
+  async getInterestCategories(userId: number, page: number, pageSize: number) {
+    return db
+      .select({
+        id: category.id,
+        name: category.name,
+        image: category.image,
+        type: category.type,
+        description: category.description,
+      })
+      .from(interests)
+      .where(eq(interests.userId, userId))
+      .leftJoin(category, eq(interests.categoryId, category.id))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
+      .groupBy(category.id);
   }
 
   getBlockedUsers(groupId: number, page: number, pageSize: number) {

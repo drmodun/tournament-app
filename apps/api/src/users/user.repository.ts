@@ -7,6 +7,7 @@ import {
 import {
   follower,
   groupToUser,
+  groupUserBlockList,
   organizer,
   participation,
   user,
@@ -200,5 +201,54 @@ export class UserDrizzleRepository extends PrimaryRepository<
     const Query = this.conditionallyJoin(baseQuery, responseType);
 
     return Query;
+  }
+
+  async checkIfUserIsBlocked(groupId: number, userId: number) {
+    const exists = await db
+      .select()
+      .from(groupUserBlockList)
+      .where(
+        and(
+          eq(groupUserBlockList.blockedUserId, userId),
+          eq(groupUserBlockList.groupId, groupId),
+        ),
+      )
+      .limit(1);
+
+    return !!exists.length;
+  }
+
+  async blockUser(groupId: number, userId: number) {
+    await db.insert(groupUserBlockList).values({
+      blockedUserId: userId,
+      groupId,
+    });
+  }
+
+  async unblockUser(groupId: number, userId: number) {
+    await db
+      .delete(groupUserBlockList)
+      .where(
+        and(
+          eq(groupUserBlockList.blockedUserId, userId),
+          eq(groupUserBlockList.groupId, groupId),
+        ),
+      );
+  }
+
+  getBlockedUsers(groupId: number, page: number, pageSize: number) {
+    return db
+      .select({
+        id: user.id,
+        username: user.username,
+        profilePic: user.profilePicture,
+        country: user.country,
+      })
+      .from(groupUserBlockList)
+      .where(eq(groupUserBlockList.groupId, groupId))
+      .rightJoin(user, eq(user.id, groupUserBlockList.blockedUserId))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
+      .groupBy(user.id);
   }
 }

@@ -1,6 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { eq, SQL, sql, countDistinct, InferInsertModel } from 'drizzle-orm';
-import { group, groupFollower, groupToUser, participation } from '../db/schema';
+import {
+  eq,
+  SQL,
+  sql,
+  countDistinct,
+  InferInsertModel,
+  and,
+} from 'drizzle-orm';
+import {
+  group,
+  groupFollower,
+  groupToUser,
+  participation,
+  userGroupBlockList,
+} from '../db/schema';
 import {
   ICreateGroupRequest,
   IUpdateGroupRequest,
@@ -203,5 +216,55 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       .where(eq(groupFollower.groupId, groupId));
 
     return query;
+  }
+
+  async blockGroup(userId: number, groupId: number) {
+    await db.insert(userGroupBlockList).values({
+      userId,
+      blockedGroupId: groupId,
+    });
+  }
+
+  async unblockGroup(userId: number, groupId: number) {
+    await db
+      .delete(userGroupBlockList)
+      .where(
+        and(
+          eq(userGroupBlockList.userId, userId),
+          eq(userGroupBlockList.blockedGroupId, groupId),
+        ),
+      );
+  }
+
+  async checkIfGroupIsBlocked(userId: number, groupId: number) {
+    const exists = await db
+      .select()
+      .from(userGroupBlockList)
+      .where(
+        and(
+          eq(userGroupBlockList.userId, userId),
+          eq(userGroupBlockList.blockedGroupId, groupId),
+        ),
+      )
+      .limit(1);
+
+    return !!exists.length;
+  }
+
+  getBlockedGroups(userId: number, page: number, pageSize: number) {
+    return db
+      .select({
+        id: group.id,
+        name: group.name,
+        abbreviation: group.abbreviation,
+        country: group.country,
+        logo: group.logo,
+      })
+      .from(userGroupBlockList)
+      .where(eq(userGroupBlockList.userId, userId))
+      .rightJoin(group, eq(group.id, userGroupBlockList.blockedGroupId))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize)
+      .groupBy(group.id);
   }
 }

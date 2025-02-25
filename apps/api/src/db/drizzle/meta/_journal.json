@@ -127,6 +127,13 @@
       "when": 1740441810468,
       "tag": "0017_broad_cloak",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1740448749040,
+      "tag": "0018_majestic_victor_mancha",
+      "breakpoints": true
     }
   ]
 }

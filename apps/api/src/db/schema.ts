@@ -860,7 +860,7 @@ export const lookingForGroup = pgTable('looking_for_group', {
       onDelete: 'cascade',
     })
     .notNull(),
-  message: text('message').notNull(),
+  message: text('message').notNull(), // Ideally a full markdown
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -914,6 +914,36 @@ export const categoryToLFP = pgTable(
     pk: primaryKey({ columns: [t.categoryId, t.lfpId] }),
   }),
 );
+
+export const userGroupBlockList = pgTable('user_group_block_list', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  blockedGroupId: integer('blocked_group_id')
+    .references(() => group.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const groupUserBlockList = pgTable('group_user_block_list', {
+  id: serial('id').primaryKey(),
+  groupId: integer('group_id')
+    .references(() => group.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  blockedUserId: integer('blocked_user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
 
 export const resultPost = pgTable('result_post', {
   id: serial('id').primaryKey(),

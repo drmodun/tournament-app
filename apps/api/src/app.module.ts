@@ -15,6 +15,8 @@ import { CategoryModule } from './category/category.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { StageModule } from './stage/stage.module';
 import { ParticipationModule } from './participation/participation.module';
+import { BlockedGroupsModule } from './blocked-groups/blocked-groups.module';
+import { BlockedUsersModule } from './group/blocked-users/blocked-users.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { ParticipationModule } from './participation/participation.module';
     TournamentModule,
     StageModule,
     ParticipationModule,
+    BlockedGroupsModule,
+    BlockedUsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

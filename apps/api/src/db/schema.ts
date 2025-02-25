@@ -291,7 +291,7 @@ export const tournament = pgTable('tournament', {
   links: text('links'), //TODO: potentially remove or  replace with a fully fledged entity
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   tournamentType: tournamentType('tournament_type').default('league'),
-  minimumMMR: integer('minimum_mmr').default(0),
+  minimumMMR: integer('minimum_mmr').default(0), // TODO: change this to elo, purely naming sake
   maximumMMR: integer('maximum_mmr').default(3000), //TODO: roster
   location: text('location'), // TODO: consider making a seperate rules entity if this has too many properties
   isMultipleTeamsPerGroupAllowed: boolean(
@@ -793,9 +793,8 @@ export const categoryCareer = pgTable(
       .references(() => user.id, {
         onDelete: 'cascade',
       })
-      .notNull(),
-    matchmakingPoints: integer('matchmaking_points').default(1000),
-    level: integer('level').default(1),
+      .notNull(), // TODO: consider the fastest twa to get total played matches
+    elo: integer('elo').default(1000), // TODO: implement anon records for deleted users
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
   (t) => ({

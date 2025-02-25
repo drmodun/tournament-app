@@ -120,6 +120,13 @@
       "when": 1737255034855,
       "tag": "0016_gigantic_wonder_man",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1740441810468,
+      "tag": "0017_broad_cloak",
+      "breakpoints": true
     }
   ]
 }

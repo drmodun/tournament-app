@@ -46,6 +46,15 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
+  @Get('map')
+  @ApiOkResponse({
+    description: 'Returns all locations unpaginated ',
+    type: ActionResponsePrimary,
+  })
+  async getMap() {
+    return await this.locationService.getMap();
+  }
+
   @Get()
   @ApiOkResponse({
     content: {

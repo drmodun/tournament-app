@@ -97,6 +97,8 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           );
         case 'categoryId':
           return eq(tournament, value as number);
+        case 'locationId':
+          return eq(tournament.locationId, value as number);
         case 'affiliatedGroupId':
           return eq(tournament.affiliatedGroupId, value as number);
         case 'creatorId':

@@ -72,6 +72,12 @@ export class LocationService {
     return results[0] as TResponseType;
   }
 
+  async getMap() {
+    const locations = await this.repository.getMap();
+
+    return locations;
+  }
+
   async update(id: number, updateLocationDto: IUpdateLocationRequest) {
     const locationToUpdate = await this.repository.getSingleQuery(id);
 

@@ -60,6 +60,19 @@ import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post('fake')
+  @ApiCreatedResponse({ type: ActionResponsePrimary })
+  async createFake(@Body() createUserDto: ICreateUserRequest) {
+    return await this.usersService.create({
+      ...createUserDto,
+      isFake: true,
+      email: crypto.randomUUID(), // to make logins effectively impossible and satisfy the unique constraint
+      dateOfBirth: new Date(), // Does not matter for fake users
+    });
+  } // TODO: test fake functions if time allows it
+
   @ApiExtraModels(
     MiniUserResponse,
     MiniUserResponseWithProfilePicture,
@@ -166,17 +179,4 @@ export class UsersController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.remove(id);
   }
-
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @Post('fake')
-  @ApiCreatedResponse({ type: ActionResponsePrimary })
-  async createFake(@Body() createUserDto: ICreateUserRequest) {
-    return await this.usersService.create({
-      ...createUserDto,
-      isFake: true,
-      email: crypto.randomUUID(), // to make logins effectively impossible and satisfy the unique constraint
-      dateOfBirth: new Date(), // Does not matter for fake users
-    });
-  } // TODO: test fake functions if time allows it
 }

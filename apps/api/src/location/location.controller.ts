@@ -91,7 +91,7 @@ export class LocationController {
   }
 
   @Post()
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new location',
@@ -116,7 +116,7 @@ export class LocationController {
   }
 
   @Delete(':locationId')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Deletes a location',

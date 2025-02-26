@@ -1,0 +1,38 @@
+"use client";
+
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { IExtendedUserResponse } from "@tournament-app/types";
+import { clientApi, getAccessToken } from "api/client/base";
+import { AxiosResponse } from "axios";
+import { useToastContext } from "utils/hooks/useToastContext";
+
+export const rejectGroupJoinRequest = async (data: {
+  groupId: number | undefined;
+  userId: number | undefined;
+}) =>
+  clientApi
+    .delete<
+      never,
+      AxiosResponse<never>
+    >(`/group-join-requests/${data?.groupId}/${data?.userId}/reject`)
+    .then((res) => res.data);
+
+export const useRejectGroupJoinRequest = () => {
+  const toast = useToastContext();
+
+  return useMutation({
+    mutationKey: ["me"],
+    mutationFn: rejectGroupJoinRequest,
+    retryDelay: 10000,
+    onSuccess: async (data) => {
+      toast.addToast("successfully rejected join request", "success");
+    },
+    onError: (error: any) => {
+      toast.addToast("an error occurred..", "error");
+      console.error(error);
+    },
+    onMutate: () => {
+      toast.addToast("rejecting join request...", "info");
+    },
+  });
+};

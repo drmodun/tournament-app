@@ -1,33 +1,67 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "./registerForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Input from "components/input";
-import { TextVariants } from "types/styleTypes";
+import { textColor, TextVariants } from "types/styleTypes";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "components/button";
+import { ICreateUserRequest } from "@tournament-app/types";
+import { useRegister } from "api/client/hooks/auth/useRegister";
+import SlideButton from "components/slideButton";
+import Dropdown from "components/dropdown";
+import { countries } from "country-flag-icons";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { fetchAutocomplete } from "api/googleMapsAPI/places";
+import RichEditor from "components/richEditor";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import ImagePicker from "components/imagePicker";
+import ImageDrop from "components/imageDrop";
+import { toBase64 } from "utils/mixins/helpers";
 
-type RegisterInputs = {
-  username: "string";
-  email: "string";
-  password: "string";
-};
+export default function RegisterForm() {
+  const { theme } = useThemeContext();
+  const textColorTheme = textColor(theme);
+  const { mutateAsync } = useRegister();
+  const methods = useForm<ICreateUserRequest>();
+  const onSubmit: SubmitHandler<ICreateUserRequest> = async (data) => {
+    data.location = placeId;
+    data.country = data.country.split(" ")[0];
+    console.log(data.profilePicture);
+    await mutateAsync(data);
+  };
 
-export default function RegisterForm({
-  variant = "light",
-}: {
-  variant?: TextVariants;
-}) {
-  const methods = useForm<RegisterInputs>();
-  const onSubmit: SubmitHandler<RegisterInputs> = (data) => console.log(data);
+  const [
+    participatesInOnsiteCompetitions,
+    setParticipatesInOnsiteCompetitions,
+  ] = useState<string>("no");
 
-  //console.log(methods.watch("email"));
+  const [preferredRadius, setPreferredRadius] = useState<number | undefined>(0);
+  const [listener, setListener] = useState<google.maps.MapsEventListener>();
+  const [placeId, setPlaceId] = useState<string>();
+
+  const handleAutocomplete = (
+    autocomplete: google.maps.places.Autocomplete,
+  ) => {
+    listener && google.maps.event.removeListener(listener);
+    setPlaceId(autocomplete.getPlace().place_id);
+  };
+
+  const [file, setFile] = useState<File>();
 
   return (
     <div className={styles.wrapper}>
-      <h1 className={clsx(globals.titleText, styles.header)}>register</h1>
+      <h1
+        className={clsx(
+          globals.titleText,
+          styles.header,
+          styles[`${textColorTheme}Header`],
+        )}
+      >
+        register
+      </h1>
       <div className={styles.formWrapper}>
         <div>
           <FormProvider {...methods}>
@@ -37,9 +71,10 @@ export default function RegisterForm({
             >
               <div className={styles.inputWrapper}>
                 <Input
-                  labelVariant={variant}
                   variant={
-                    methods.formState.errors.username ? "danger" : variant
+                    methods.formState.errors.username
+                      ? "danger"
+                      : textColorTheme
                   }
                   label="username"
                   placeholder="enter your username"
@@ -56,16 +91,29 @@ export default function RegisterForm({
                   }}
                 />
                 {methods.formState.errors.username?.type === "required" && (
-                  <p className={styles.error}>this field is required!</p>
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
                 )}
                 {methods.formState.errors.username?.type === "pattern" && (
-                  <p className={styles.error}>
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
                     {methods.formState.errors.username.message}
                   </p>
                 )}
                 <Input
-                  labelVariant={variant}
-                  variant={methods.formState.errors.email ? "danger" : variant}
+                  variant={
+                    methods.formState.errors.email ? "danger" : textColorTheme
+                  }
                   label="email"
                   placeholder="enter your email address"
                   name="email"
@@ -80,19 +128,32 @@ export default function RegisterForm({
                   }}
                 />
                 {methods.formState.errors.email?.type === "required" && (
-                  <p className={styles.error}>this field is required!</p>
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
                 )}
                 {methods.formState.errors.email?.type === "pattern" && (
-                  <p className={styles.error}>
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
                     {methods.formState.errors.email.message}
                   </p>
                 )}
               </div>
               <div className={styles.inputWrapper}>
                 <Input
-                  labelVariant={variant}
                   variant={
-                    methods.formState.errors.password ? "danger" : variant
+                    methods.formState.errors.password
+                      ? "danger"
+                      : textColorTheme
                   }
                   label="password"
                   placeholder="enter your password"
@@ -103,23 +164,228 @@ export default function RegisterForm({
                   isReactFormHook={true}
                   reactFormHookProps={{
                     pattern: {
-                      value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,32}$/,
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])\S{8,32}$/,
                       message:
                         "password must contain at least 1 uppercase letter, 1 number and be at least 8 characters long",
                     },
                   }}
                 />
                 {methods.formState.errors.password?.type === "required" && (
-                  <p className={styles.error}>this field is required!</p>
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
                 )}
                 {methods.formState.errors.password?.type === "pattern" && (
-                  <p className={styles.error}>
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
                     {methods.formState.errors.password.message}
                   </p>
                 )}
               </div>
+              <div className={clsx(styles.inputWrapper)}>
+                <Input
+                  variant={
+                    methods.formState.errors.name ? "danger" : textColorTheme
+                  }
+                  label="full name"
+                  placeholder="enter your full name"
+                  name="name"
+                  required={true}
+                  className={styles.input}
+                  isReactFormHook={true}
+                  reactFormHookProps={{
+                    pattern: {
+                      value: /(?![0-9])\w/i,
+                      message: "full name must be a valid name!",
+                    },
+                  }}
+                />
+
+                {methods.formState.errors.name?.type === "required" && (
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
+                )}
+                {methods.formState.errors.name?.type === "pattern" && (
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    {methods.formState.errors.name.message}
+                  </p>
+                )}
+              </div>
+              <div className={clsx(styles.inputWrapper)}>
+                <Dropdown
+                  variant={
+                    methods.formState.errors.country ? "danger" : textColorTheme
+                  }
+                  options={countries.map((country) => {
+                    return {
+                      label: `${country} ${getUnicodeFlagIcon(country)}`,
+                    };
+                  })}
+                  searchPlaceholder="search..."
+                  doesSearch={true}
+                  label="nationality"
+                  placeholder="select your nationality"
+                  name="country"
+                  isReactHookForm={true}
+                  required={true}
+                  className={styles.input}
+                  innerWrapperClassName={styles.dropdown}
+                  optionsClassName={styles.dropdown}
+                  searchClassName={styles.dropdown}
+                  style={{ width: "100%" }}
+                />
+                {methods.formState.errors.country?.type === "required" && (
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
+                )}
+              </div>
+              <div className={clsx(styles.inputWrapper)}>
+                <Input
+                  variant={
+                    methods.formState.errors.country && !placeId
+                      ? "danger"
+                      : textColorTheme
+                  }
+                  label="place"
+                  placeholder="enter your place of residence"
+                  name="place"
+                  required={true}
+                  className={styles.input}
+                  isReactFormHook={true}
+                  onChange={(e) => {
+                    setPlaceId(undefined);
+                    fetchAutocomplete(e.target).then((autocomplete) => {
+                      const tempListener = autocomplete.addListener(
+                        "place_changed",
+                        () => handleAutocomplete(autocomplete),
+                      );
+                      setListener(tempListener);
+                    });
+                  }}
+                />
+                {methods.formState.errors.country?.type === "required" &&
+                  !placeId && (
+                    <p
+                      className={clsx(
+                        styles.error,
+                        globals[`${textColorTheme}Color`],
+                      )}
+                    >
+                      this field is required!
+                    </p>
+                  )}
+              </div>
+              <div className={clsx(styles.inputWrapper)}>
+                <p
+                  className={clsx(
+                    globals.label,
+                    globals[`${textColorTheme}Color`],
+                  )}
+                >
+                  bio
+                </p>
+
+                <div className={styles.input}>
+                  <RichEditor
+                    variant={textColorTheme}
+                    name="bio"
+                    isReactHookForm={true}
+                    required={true}
+                  />
+                </div>
+
+                {methods.formState.errors.bio?.type === "required" &&
+                  !placeId && (
+                    <p
+                      className={clsx(
+                        styles.error,
+                        globals[`${textColorTheme}Color`],
+                      )}
+                    >
+                      this field is required!
+                    </p>
+                  )}
+              </div>
+              <div className={clsx(styles.inputWrapper)}>
+                <p
+                  className={clsx(
+                    globals.label,
+                    globals[`${textColorTheme}Color`],
+                  )}
+                >
+                  profile picture
+                </p>
+                <div className={styles.input}>
+                  {file ? (
+                    <ImagePicker
+                      variant={
+                        methods.formState.errors.profilePicture
+                          ? "danger"
+                          : textColorTheme
+                      }
+                      file={file}
+                      name="profilePicture"
+                      isReactFormHook={true}
+                      className={styles.imagePicker}
+                      required={true}
+                    />
+                  ) : (
+                    <ImageDrop
+                      onFile={setFile}
+                      variant={
+                        methods.formState.errors.profilePicture
+                          ? "danger"
+                          : textColorTheme
+                      }
+                      className={styles.imageDrop}
+                      required={true}
+                      name="profilePicture"
+                      isReactFormHook={true}
+                    />
+                  )}
+                </div>
+                {methods.formState.errors.profilePicture?.type === "required" &&
+                  !placeId && (
+                    <p
+                      className={clsx(
+                        styles.error,
+                        globals[`${textColorTheme}Color`],
+                      )}
+                    >
+                      this field is required!
+                    </p>
+                  )}
+              </div>
+
               <Button
-                label="login"
+                label="register"
                 variant="primary"
                 submit={true}
                 className={styles.submitButton}

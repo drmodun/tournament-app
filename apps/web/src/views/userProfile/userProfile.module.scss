@@ -1,0 +1,59 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+}
+
+.pfp {
+  width: 3 * $baseComponentHeight;
+  height: 3 * $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.usernameSpan {
+  font-size: $fontSize;
+  font-style: italic;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.userInfo {
+  display: flex;
+  gap: $halfPadding;
+}
+
+.userInfo + .userInfo {
+  margin-top: $halfPadding;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.bio {
+  flex-direction: column !important;
+  width: clamp(0px, 100%, $desktopBreakpoint);
+}
+
+.submitButton {
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}

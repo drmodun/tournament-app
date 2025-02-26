@@ -4,16 +4,6 @@
   border-radius: $borderRadius;
   padding: $padding;
   min-height: 2 * $baseComponentHeight;
-
-  color: black;
-}
-
-.lightEditorColor > * {
-  color: $light;
-}
-
-.darkEditorColor > * {
-  color: $dark;
 }
 
 .menuButton {
@@ -30,6 +20,10 @@
   @media screen and (max-width: $tabletBreakpoint) {
     width: 100%;
   }
+}
+
+.menuButtonMobile {
+  width: 100% !important;
 }
 
 .menuButtonIconLight > * {
@@ -70,6 +64,11 @@
   }
 }
 
+.menuBarMobile {
+  flex-wrap: wrap !important;
+  flex-direction: column !important;
+}
+
 .menuBarPart {
   display: flex;
   margin-bottom: $halfPadding / 2;
@@ -78,6 +77,10 @@
   @media screen and (max-width: $tabletBreakpoint) {
     width: 100%;
   }
+}
+
+.menuBarPartMobile {
+  width: 100% !important;
 }
 
 .lightFill > * {

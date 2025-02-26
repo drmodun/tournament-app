@@ -7,13 +7,13 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  color: $light;
-  scrollbar-color: #ffffff transparent;
+  scrollbar-color: transparent;
   scrollbar-width: thin;
 }
 
-body {
-  background-color: $dark;
+ol,
+ul {
+  padding-left: $doublePadding;
 }
 
 // google maps styles

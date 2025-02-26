@@ -32,8 +32,10 @@ interface InputProps {
   onSubmit?: Function;
   min?: string;
   max?: string;
+  step?: string;
   defaultValue?: string;
   fullClassName?: string;
+  doesSubmitReactHookForm?: boolean;
 }
 
 export default function Input({
@@ -56,8 +58,10 @@ export default function Input({
   onSubmit = () => {},
   min,
   max,
+  step,
   defaultValue,
   fullClassName,
+  doesSubmitReactHookForm = false,
 }: InputProps) {
   const [value, setValue] = useState<string>("");
   const methods = useFormContext();
@@ -101,6 +105,7 @@ export default function Input({
                 min={min}
                 max={max}
                 style={style}
+                step={step}
                 {...methods.register(name, {
                   required: required,
                   onChange: handleChange,
@@ -126,6 +131,7 @@ export default function Input({
             min={min}
             max={max}
             style={style}
+            step={step}
             onChange={handleChange}
           />
         )}
@@ -139,6 +145,7 @@ export default function Input({
               globals[`${variant}MutedBackgroundColor`],
             )}
             style={submitStyle}
+            type={doesSubmitReactHookForm ? "submit" : "button"}
           >
             {submitLabel}
           </button>

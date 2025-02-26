@@ -8,7 +8,7 @@ export default function User() {
     <div className={styles.wrapper}>
       <Navbar className={styles.navbar} />
       <div className={styles.screen}>
-        <RegisterForm variant="light" />
+        <RegisterForm />
       </div>
     </div>
   );

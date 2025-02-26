@@ -22,7 +22,7 @@ export interface DrawerElementProps {
 
 export default function DrawerElement({
   style,
-  variant = "light",
+  variant,
   className,
   icon,
   label = "",
@@ -49,7 +49,11 @@ export default function DrawerElement({
         </p>
         {icon &&
           React.createElement(icon, {
-            className: clsx(styles.icon, styles[`${variant}Icon`]),
+            className: clsx(
+              styles.icon,
+              styles[`${variant}Icon`],
+              globals[`${textColor(colorTheme)}Fill`],
+            ),
           })}
       </div>
     </Link>

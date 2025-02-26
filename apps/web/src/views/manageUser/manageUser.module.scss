@@ -1,8 +1,8 @@
 @use "../../styles/" as *;
 
 .pfp {
-  width: $baseComponentHeight * 2;
-  height: $baseComponentHeight * 2;
+  width: $baseComponentHeight * 3.5;
+  height: $baseComponentHeight * 3.5;
   border-radius: $borderRadius;
   object-fit: cover;
 }
@@ -17,7 +17,14 @@
   flex-direction: row;
   width: 100%;
   gap: $doublePadding;
-  height: $baseComponentHeight * 2;
+  height: $baseComponentHeight * 3.5;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    height: $baseComponentHeight * 7;
+    gap: $halfPadding;
+    align-items: center;
+  }
 }
 
 .editButton {
@@ -57,16 +64,18 @@
 }
 
 .interest,
-.team {
+.teamText {
   padding-right: $padding;
 }
 
 .editWrapper {
   width: 100%;
-  padding-right: 2 * $baseComponentHeight + $doublePadding;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: $padding;
+  overflow: hidden;
 }
 
 .dialog {
@@ -97,5 +106,57 @@
   display: flex;
   gap: $halfPadding;
   align-items: center;
+}
+
+.descriptionText {
+  margin-top: $halfPadding;
+}
+
+.userInfo {
+  display: flex;
+  gap: $halfPadding;
+}
+
+.usernameSpan {
+  color: inherit;
+  font-style: italic;
+  font-size: $fontSize;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  margin-top: $padding;
+}
+
+.team {
+  flex-basis: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.boldText,
+.userInfo,
+.infoText,
+.usernameEdit,
+.descriptionText,
+.description {
+  color: inherit;
+}
+
+.pfpEdit {
+  margin-top: $halfPadding;
+}
+
+.imageDrop,
+.imagePicker,
+.pfpEdit {
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100% !important;
+  }
+}
+
+.formItem + .formItem {
   margin-top: $padding;
 }

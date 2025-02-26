@@ -1,5 +1,6 @@
 "use client";
 
+import ToastList from "components/toastList";
 import { createContext, ReactNode, useState } from "react";
 import {
   ToastProps,
@@ -40,6 +41,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
       {children}
+      <ToastList />
     </ToastContext.Provider>
   );
 };

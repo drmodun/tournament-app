@@ -1,0 +1,159 @@
+@use "../../styles/" as *;
+
+.pfp {
+  width: $baseComponentHeight * 3;
+  height: $baseComponentHeight * 3;
+  border-radius: $borderRadius;
+  object-fit: cover;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.profileEdit {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: $doublePadding;
+  height: $baseComponentHeight * 3;
+}
+
+.editButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: $borderRadius;
+  cursor: pointer;
+}
+
+.interests,
+.teams {
+  display: flex;
+  gap: $halfPadding / 2;
+  overflow-x: hidden;
+  align-items: center;
+  overflow-y: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:hover {
+    overflow-x: scroll;
+  }
+}
+
+.teamsEdit,
+.interestsEdit {
+  display: flex;
+  gap: $halfPadding / 2;
+  align-items: center;
+}
+
+.interest,
+.teamText {
+  padding-right: $padding;
+}
+
+.editWrapper {
+  width: 100%;
+  padding-right: 2 * $baseComponentHeight + $doublePadding;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: $padding;
+}
+
+.dialog {
+  max-width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.noItemsText {
+  font-weight: 300;
+  color: gray;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.manageTeamsText {
+  font-weight: 700;
+}
+
+.manageTeamsWrapper {
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
+}
+
+.descriptionText {
+  margin-top: $halfPadding;
+}
+
+.userInfo {
+  display: flex;
+  gap: $halfPadding;
+}
+
+.usernameSpan {
+  color: inherit;
+  font-style: italic;
+  font-size: $fontSize;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  margin-top: $padding;
+}
+
+.team {
+  flex-basis: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: min-content;
+}
+
+.boldText,
+.userInfo,
+.infoText,
+.usernameEdit,
+.descriptionText,
+.description {
+  color: inherit;
+}
+
+.pfpEdit {
+  margin-top: $halfPadding;
+}
+
+.imageDrop,
+.imagePicker,
+.pfpEdit {
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100% !important;
+  }
+}
+
+.formItem + .formItem {
+  margin-top: $padding;
+}
+
+.updateButton {
+  width: 100%;
+}

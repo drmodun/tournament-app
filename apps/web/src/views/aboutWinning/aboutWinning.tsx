@@ -1,15 +1,26 @@
+"use client";
+
 import styles from "./aboutWinning.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { textColor } from "types/styleTypes";
 
 export default function AboutWinning() {
+  const { theme } = useThemeContext();
   return (
-    <div className={styles.wrapper}>
+    <div className={clsx(styles.wrapper, globals[`${theme}BackgroundColor`])}>
       <div className={styles.leftContent}>
-        <h1 className={clsx(globals.titleText, styles.header)}>
+        <h1
+          className={clsx(
+            globals.titleText,
+            styles.header,
+            styles[`${textColor(theme)}Header`],
+          )}
+        >
           what is winning.sh?
         </h1>
-        <p className={clsx(styles.text)}>
+        <p className={clsx(styles.text, globals[`${textColor(theme)}Color`])}>
           winning.sh is the ultimate solution for hosting, promoting, and
           joining competitions 🏆. Whether it's a sports tournament 🏀, e-sports
           challenge 👨🏻‍💻, pub quiz 📝, or any other competitive event. say goodbye

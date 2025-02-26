@@ -57,6 +57,13 @@ export default function SlideButton({
   };
 
   useEffect(() => {
+    if (name && isReactFormHook) {
+      methods.register(name);
+      methods.setValue(name, options[0], {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
     for (let i = 0; i < options.length; i++) {
       if (options[i] == defaultValue) {
         setSelected(i);

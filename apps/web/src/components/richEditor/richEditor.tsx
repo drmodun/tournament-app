@@ -16,12 +16,22 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import TitleIcon from "@mui/icons-material/Title";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
+import { Markdown } from "tiptap-markdown";
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
+import { Color } from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
 
 interface RichEditorProps {
   style?: React.CSSProperties;
   variant?: TextVariants;
   startingContent?: string;
   editable?: boolean;
+  isSSR?: boolean;
+  isReactHookForm?: boolean;
+  required?: boolean;
+  mobile?: boolean;
+  name?: string;
 }
 
 export default function RichEditor({
@@ -29,8 +39,25 @@ export default function RichEditor({
   variant = "dark",
   startingContent = "",
   editable = true,
+  isSSR = false,
+  isReactHookForm = false,
+  required = false,
+  mobile = false,
+  name,
 }: RichEditorProps) {
+  const methods = useFormContext();
+
+  const handleChange = () => {
+    isReactHookForm &&
+      name &&
+      methods.setValue(name, editor?.getHTML(), {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+  };
+
   const editor = useEditor({
+    onUpdate: handleChange,
     editable: editable,
     extensions: [
       StarterKit,
@@ -38,28 +65,55 @@ export default function RichEditor({
       Heading.configure({
         levels: [1, 2, 3],
       }),
+      Markdown,
+      TextStyle,
+      Color.configure({
+        types: ["textStyle"],
+      }),
     ],
     content: startingContent,
+    immediatelyRender: !isSSR,
     editorProps: {
       attributes: {
         class: clsx(
-          styles[`${textColor(variant)}EditorColor`],
           globals[`${variant}BackgroundColor`],
           styles.editor,
+          globals[`${textColor(variant)}Color`],
         ),
       },
     },
   });
 
+  useEffect(() => {
+    if (isReactHookForm && name) {
+      methods.register(name, { required: required });
+      if (startingContent) {
+        methods.setValue(name, editor?.getHTML(), {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    }
+  }, []);
+
   if (!editable) return <EditorContent editor={editor} />;
 
-  const toggleBold = () => editor?.chain().focus().toggleBold().run();
+  const toggleBold = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleBold().run();
+  };
   const isBoldDisabled = !editor?.can().chain().focus().toggleBold().run();
 
-  const toggleItalics = () => editor?.chain().focus().toggleItalic().run();
+  const toggleItalics = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleItalic().run();
+  };
   const isItalicsDisabled = !editor?.can().chain().focus().toggleItalic().run();
 
-  const toggleUnderline = () => editor?.chain().focus().toggleUnderline().run();
+  const toggleUnderline = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleUnderline().run();
+  };
   const isUnderlineDisabled = !editor
     ?.can()
     .chain()
@@ -67,8 +121,10 @@ export default function RichEditor({
     .toggleUnderline()
     .run();
 
-  const toggleBulletList = () =>
+  const toggleBulletList = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     editor?.chain().focus().toggleBulletList().run();
+  };
   const isBulletListDisabled = !editor
     ?.can()
     .chain()
@@ -76,8 +132,10 @@ export default function RichEditor({
     .toggleBulletList()
     .run();
 
-  const toggleHeading = () =>
+  const toggleHeading = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     editor?.chain().focus().toggleHeading({ level: 1 }).run();
+  };
   const isHeadingDisabled = !editor
     ?.can()
     .chain()
@@ -85,19 +143,46 @@ export default function RichEditor({
     .toggleHeading({ level: 1 })
     .run();
 
-  const toggleStrike = () => editor?.chain().focus().toggleStrike().run();
+  const toggleStrike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().toggleStrike().run();
+  };
   const isStrikeDisabled = !editor?.can().chain().focus().toggleStrike().run();
 
-  const undo = () => editor?.chain().focus().undo().run();
+  const undo = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().undo().run();
+  };
   const isUndoDisabled = !editor?.can().chain().focus().undo().run();
 
-  const redo = () => editor?.chain().focus().redo().run();
+  const redo = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    editor?.chain().focus().redo().run();
+  };
   const isRedoDisabled = !editor?.can().chain().focus().redo().run();
 
+  useEffect(() => {
+    Markdown.configure({
+      html: true,
+      tightLists: true,
+      tightListClass: "tight",
+      bulletListMarker: "-",
+      linkify: true,
+      breaks: false,
+      transformPastedText: true,
+      transformCopiedText: false,
+    });
+  }, []);
+
   return (
-    <div className={clsx(styles.wrapper)}>
-      <div className={clsx(styles.menuBar)}>
-        <div className={clsx(styles.menuBarPart)}>
+    <div className={clsx(styles.wrapper)} style={style}>
+      <div className={clsx(styles.menuBar, mobile && styles.menuBarMobile)}>
+        <div
+          className={clsx(
+            styles.menuBarPart,
+            mobile && styles.menuBarPartMobile,
+          )}
+        >
           <button
             title="menu button"
             onClick={toggleBold}
@@ -112,6 +197,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatBoldIcon
@@ -140,6 +226,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatItalicIcon
@@ -167,6 +254,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatStrikethroughIcon
@@ -194,6 +282,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatUnderlinedIcon
@@ -223,6 +312,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatListBulletedIcon
@@ -250,6 +340,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <TitleIcon
@@ -277,6 +368,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <UndoIcon
@@ -304,6 +396,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <RedoIcon
@@ -318,7 +411,7 @@ export default function RichEditor({
           </button>
         </div>
       </div>
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className={styles.editor1} />
     </div>
   );
 }

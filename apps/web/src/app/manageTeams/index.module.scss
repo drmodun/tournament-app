@@ -1,10 +1,10 @@
 @import "../../styles/";
 
 .screen {
-  margin-top: $doublePadding * 2;
+  padding-top: $doublePadding * 4;
   padding-bottom: $doublePadding * 2;
   width: 100%;
-  height: calc(100vh - $doublePadding * 2);
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,13 +12,22 @@
   padding-left: $horizontalMargin;
   padding-right: $horizontalMargin;
 
-  @media screen and (max-width: $tabletBreakpoint) {
+  @media screen and (max-width: $desktopBreakpoint) {
     padding-left: $doublePadding;
     padding-right: $doublePadding;
   }
 
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+    height: 100%;
+  }
+
   padding-bottom: $doublePadding * 2;
-  padding-top: $doublePadding * 2;
 }
 
 .navbar {
@@ -31,15 +40,27 @@
 .tabs {
   width: 100%;
   display: flex;
-  margin-bottom: $doublePadding;
   gap: $halfPadding;
   padding-left: $padding;
   padding-right: $padding;
   border-radius: $borderRadius;
+  margin-bottom: $doublePadding;
 
   @media screen and (max-width: $desktopBreakpoint) {
-    height: $baseComponentHeight * 3 + $padding * 3;
+    height: 3 * $baseComponentHeight + 3 * $padding;
   }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 2 * $baseComponentHeight + 2.5 * $padding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    height: 2 * $baseComponentHeight + 2.5 * $padding;
+  }
+}
+
+.teamsWrapper:nth-of-type(1n + 15) {
+  display: none;
 }
 
 .tab {
@@ -56,7 +77,7 @@
   fill: $dark;
 }
 
-.arrowButton {
+.button {
   border: 0;
   background-color: transparent;
   width: $baseComponentHeight;
@@ -74,4 +95,24 @@
   @media screen and (max-width: $desktopBreakpoint) {
     flex-wrap: wrap;
   }
+}
+
+.dialog {
+  width: 75%;
+  overflow-y: auto;
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.progressWheelWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

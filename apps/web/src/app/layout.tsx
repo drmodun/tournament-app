@@ -1,5 +1,6 @@
 import "./globals.scss";
 import { ClientProviders } from "utils/providers/ClientProviders";
+import QueryProvider from "utils/providers/QueryProvider";
 import Drawer from "views/drawer";
 
 export default function RootLayout({
@@ -16,8 +17,10 @@ export default function RootLayout({
       </head>
       <body>
         <ClientProviders>
-          {children}
-          <Drawer />
+          <QueryProvider>
+            {children}
+            <Drawer />
+          </QueryProvider>
         </ClientProviders>
       </body>
     </html>

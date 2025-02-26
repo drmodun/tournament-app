@@ -7,6 +7,16 @@
   border-radius: $borderRadius;
   display: flex;
   gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
 }
 
 .lightFill > * {
@@ -44,11 +54,32 @@
 
 .left {
   width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+    gap: $padding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    width: 100%;
+    gap: $padding;
+  }
 }
 
 .right {
   width: 40%;
   max-height: 100%;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    width: 100%;
+  }
 }
 
 .rostersText,
@@ -84,6 +115,10 @@
   position: relative;
   height: 100%;
   width: 100%;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    position: static;
+  }
 }
 
 .campaignsInnerWrapper {
@@ -94,6 +129,10 @@
   height: calc(100% - $halfPadding);
   overflow-y: scroll;
   scrollbar-width: none;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    position: static;
+  }
 }
 
 .campaignTitle {
@@ -168,4 +207,47 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+
+.keepInLine {
+  white-space: nowrap;
+}
+
+.teamName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: $halfPadding;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.property {
+  display: flex;
+  gap: $halfPadding;
+}
+
+.teamImage {
+  width: 2 * $baseComponentHeight;
+  height: 2 * $baseComponentHeight;
+  border-radius: $borderRadius;
+  object-fit: cover;
+}
+
+.membersDialogWrapper,
+.editTeamDialogWrapper {
+  width: 75%;
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}
+
+.buttonIconPadding {
+  margin-left: $padding;
+}
+
+.leftButtons {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
 }

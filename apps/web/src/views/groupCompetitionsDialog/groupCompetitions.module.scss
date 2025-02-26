@@ -1,0 +1,65 @@
+@use "../../styles/" as *;
+
+.noTextDecoration {
+  text-decoration: none !important;
+}
+
+.userCardLink {
+  background-color: transparent;
+  border-radius: $borderRadius;
+  padding: $padding;
+}
+
+.userCardWrapper {
+  display: flex;
+  gap: $padding;
+  padding: $halfPadding;
+  border-radius: $borderRadius;
+  flex-wrap: wrap;
+}
+
+.userCardInnerWrapper {
+  display: flex;
+  gap: $padding;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+.userCardProfilePicture,
+.userCardRemoveButton {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+  border: none;
+  flex-basis: $baseComponentHeight;
+  flex-shrink: 0;
+}
+
+.userCardTextWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.userCardText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: inherit;
+}
+
+.groupMembers {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(5 * $baseComponentHeight, 1fr)
+  );
+  gap: $padding;
+}
+
+.title {
+  margin-bottom: $halfPadding;
+}

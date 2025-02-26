@@ -1,17 +1,29 @@
+"use client";
+
 import styles from "./promote.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Link from "next/link";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { textColor } from "types/styleTypes";
 
 export default function Promote() {
+  const { theme } = useThemeContext();
+  const textColorTheme = textColor(theme);
   return (
     <div className={styles.wrapper}>
       <div className={styles.leftContent}>
-        <h1 className={clsx(globals.titleText, styles.header)}>
+        <h1
+          className={clsx(
+            globals.titleText,
+            styles.header,
+            styles[`${textColorTheme}Header`],
+          )}
+        >
           promote your events!
         </h1>
-        <p className={clsx(styles.text)}>
+        <p className={clsx(styles.text, globals[`${textColorTheme}Color`])}>
           promoting your event is a breeze with winning.sh! 🎉 get your
           competition featured at the top of our main page for maximum
           visibility 📢, making it easier to attract participants. reach a wider
@@ -19,7 +31,10 @@ export default function Promote() {
         </p>
         <Link
           href="mailto: winning.sh.info@gmail.com"
-          className={styles.promoteLink}
+          className={clsx(
+            styles.promoteLink,
+            globals[`${textColorTheme}Color`],
+          )}
         >
           <p className={styles.promoteText}>promote</p>
           <ArrowRightIcon />

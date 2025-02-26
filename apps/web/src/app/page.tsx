@@ -23,6 +23,9 @@ import { useToastContext } from "utils/hooks/useToastContext";
 import CardExpanded from "components/cardExpanded";
 import RichEditor from "components/richEditor/richEditor";
 import SlideButton from "components/slideButton";
+import ImagePicker from "components/imagePicker";
+import AddIcon from "@mui/icons-material/Add";
+import ImageDrop from "components/imageDrop";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -31,7 +34,7 @@ export default function Web() {
   const [response, setResponse] = useState<{ message: string } | null>(null);
   const [error, setError] = useState<string | undefined>();
   const [dialogActive, setDialogActive] = useState<boolean>(false);
-
+  const [file, setFile] = useState<File>();
   const toastContext = useToastContext();
   useEffect(() => {
     setResponse(null);
@@ -67,6 +70,11 @@ export default function Web() {
       <SlideButton
         options={["HIIII", "hiIII GUYSSSS", "I HOLD THE WHEELLLLLLL"]}
       />
+      <div>
+        <ImageDrop onFile={setFile} variant="light" />
+        <ImagePicker file={file} onChange={(e) => console.log(e)} />
+      </div>
+
       <Button
         label="hi guys"
         variant="dark"
@@ -287,7 +295,6 @@ export default function Web() {
         variant="danger"
       ></Carousel>
 
-      <ToastList />
       <Dropdown
         options={[
           {

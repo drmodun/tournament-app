@@ -37,7 +37,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      <div className={globals[`${theme}BackgroundColor`]}>{children}</div>
+      <div
+        className={globals[`${theme}BackgroundColor`]}
+        style={{ minHeight: "100vh", height: "100%", width: "100%" }}
+      >
+        {children}
+      </div>
     </ThemeContext.Provider>
   );
 };

@@ -252,6 +252,54 @@
   fill: $dangerMuted;
 }
 
+.primaryFillChildren > * {
+  fill: $primary;
+}
+
+.secondaryFillChildren > * {
+  fill: $secondary;
+}
+
+.lightFillChildren > * {
+  fill: $light;
+}
+
+.darkFillChildren > * {
+  fill: $dark;
+}
+
+.warningFillChildren > * {
+  fill: $warning;
+}
+
+.dangerFillChildren > * {
+  fill: $danger;
+}
+
+.primaryMutedFillChildren > * {
+  fill: $primaryMuted;
+}
+
+.secondaryMutedFillChildren > * {
+  fill: $secondaryMuted;
+}
+
+.lightMutedFillChildren > * {
+  fill: $lightMuted;
+}
+
+.darkMutedFillChildren > * {
+  fill: $darkMuted;
+}
+
+.warningMutedFillChildren > * {
+  fill: $warningMuted;
+}
+
+.dangerMutedFillChildren > * {
+  fill: $dangerMuted;
+}
+
 .hidden {
   display: none !important;
 }

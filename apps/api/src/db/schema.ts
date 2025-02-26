@@ -520,6 +520,31 @@ export const groupToUser = pgTable(
   }),
 );
 
+export const groupRequirements = pgTable('group_requirements', {
+  id: serial('id').primaryKey(),
+  groupId: integer('group_id')
+    .references(() => group.id, {
+      onDelete: 'cascade',
+    })
+    .unique(),
+  minimumAge: integer('minimum_age'),
+  maximumAge: integer('maximum_age'),
+  isSameCountry: boolean('is_same_country').default(false),
+});
+
+export const eloRequirement = pgTable('elo_requirement', {
+  id: serial('id').primaryKey(),
+  groupRequirementId: integer('group_id').references(() => group.id, {
+    onDelete: 'cascade',
+  }),
+  categoryId: integer('category_id').references(() => category.id, {
+    onDelete: 'cascade',
+  }),
+  minimumElo: integer('minimum_elo'),
+  maximumElo: integer('maximum_elo'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
 export const groupInvite = pgTable(
   'group_invite',
   {

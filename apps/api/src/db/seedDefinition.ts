@@ -606,6 +606,60 @@ async function createLocations() {
   );
 }
 
+async function createGroupRequirements() {
+  const groups = await db.select().from(tables.group);
+  const categories = await db.select().from(tables.category);
+  const requirements = [];
+  const eloRequirements = [];
+
+  // Create requirements for about 30% of groups
+  for (const group of groups) {
+    if (Math.random() < 0.3) {
+      const requirement = {
+        id: requirements.length + 1,
+        groupId: group.id,
+        minimumAge: faker.number.int({ min: 13, max: 25 }),
+        maximumAge: faker.number.int({ min: 26, max: 60 }),
+        isSameCountry: faker.datatype.boolean(),
+      };
+      requirements.push(requirement);
+
+      // Add 1-3 elo requirements per group
+      const numEloRequirements = faker.number.int({ min: 1, max: 3 });
+      const shuffledCategories = [...categories].sort(
+        () => 0.5 - Math.random(),
+      );
+      const selectedCategories = shuffledCategories.slice(
+        0,
+        numEloRequirements,
+      );
+
+      for (const category of selectedCategories) {
+        const minElo = faker.number.int({ min: 800, max: 2000 });
+        eloRequirements.push({
+          groupRequirementId: requirement.id,
+          categoryId: category.id,
+          minimumElo: minElo,
+          maximumElo: minElo + faker.number.int({ min: 500, max: 1500 }),
+        });
+      }
+    }
+  }
+
+  if (requirements.length > 0) {
+    await db.insert(tables.groupRequirements).values(requirements);
+    await db.execute(
+      sql<string>`ALTER SEQUENCE group_requirements_id_seq RESTART WITH ${sql.raw(
+        String(requirements.length + 1),
+      )}`,
+    );
+  }
+
+  if (eloRequirements.length > 0) {
+    await db.insert(tables.eloRequirement).values(eloRequirements);
+  }
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -625,4 +679,5 @@ export async function seed() {
   await createParticipations();
   await createInterests();
   await createGroupInterests();
+  await createGroupRequirements();
 }

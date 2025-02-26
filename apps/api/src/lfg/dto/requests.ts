@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ICreateLFGRequest, IUpdateLFGRequest } from '@tournament-app/types';
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import {
   IsString,
   MinLength,
@@ -8,7 +8,6 @@ import {
   IsArray,
   IsOptional,
   IsInt,
-  IsNumber,
 } from 'class-validator';
 
 export class CreateLFGRequest implements ICreateLFGRequest {

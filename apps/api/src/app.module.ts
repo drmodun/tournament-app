@@ -21,6 +21,7 @@ import { LfgModule } from './lfg/lfg.module';
 import { InterestModule } from './interest/interest.module';
 import { GroupInterestsModule } from './group/group-interests/group-interests.module';
 import { LocationModule } from './location/location.module';
+import { GroupRequirementsModule } from './group/requirements/group-requirements.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { LocationModule } from './location/location.module';
     InterestModule,
     GroupInterestsModule,
     LocationModule,
+    GroupRequirementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

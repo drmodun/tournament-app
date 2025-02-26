@@ -35,6 +35,7 @@ import {
   integer,
   primaryKey,
   numeric,
+  geometry,
 } from 'drizzle-orm/pg-core';
 
 export const userRole = pgEnum('user_role', exportEnumValues(userRoleEnum));
@@ -150,17 +151,16 @@ export const user = pgTable('user', {
     .unique(),
   isFake: boolean('is_fake').default(false), // TODO: make sure all the filters only use the real users
   isEmailVerified: boolean('is_email_verified').default(false),
-  hasSelectedInterests: boolean('has_selected_interests').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .$onUpdate(() => new Date()), //TODO: see if there is a better alternative
   country: text('country'), //TODO: possibly setup enum
-  location: text('location'),
   stripeCustomerId: text('stripe_customer_id'),
   bettingPoints: integer('betting_points').default(100),
   customerId: text('customer_id'),
   level: integer('level').default(1),
+  // For gdpr sake we will not store location, just use geolocation in query params
 });
 
 export const userNotificationSettings = pgTable('user_notification_settings', {
@@ -182,6 +182,14 @@ export const userToNotificationTokens = pgTable('user_to_notification_tokens', {
     })
     .notNull(),
   token: text('token').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const location = pgTable('location', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  apiId: text('api_id').notNull(),
+  coordinates: geometry('coordinates', { type: 'POINT' }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -293,7 +301,9 @@ export const tournament = pgTable('tournament', {
   tournamentType: tournamentType('tournament_type').default('league'),
   minimumMMR: integer('minimum_mmr').default(0), // TODO: change this to elo, purely naming sake
   maximumMMR: integer('maximum_mmr').default(3000), //TODO: roster
-  location: text('location'), // TODO: consider making a seperate rules entity if this has too many properties
+  locationId: integer('location_id').references(() => location.id, {
+    onDelete: 'cascade',
+  }), // TODO: consider making a seperate rules entity if this has too many properties
   isMultipleTeamsPerGroupAllowed: boolean(
     'is_multiple_teams_per_group_allowed',
   ).default(false),
@@ -457,7 +467,9 @@ export const group = pgTable('group', {
   description: text('description'),
   logo: text('logo'),
   country: text('country'),
-  location: text('location'),
+  locationId: integer('location_id').references(() => location.id, {
+    onDelete: 'cascade',
+  }),
   type: groupType('group_type').default('public'),
   focus: groupFocus('group_focus').default('hybrid'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -643,6 +655,9 @@ export const stage = pgTable('stage', {
   stageType: stageType('stage_type').default('group'),
   name: text('name').notNull(),
   stageLocation: tournamentLocation('stage_location').default('online'),
+  locationId: integer('location_id').references(() => location.id, {
+    onDelete: 'cascade',
+  }),
   description: text('description'),
   logo: text('logo'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),

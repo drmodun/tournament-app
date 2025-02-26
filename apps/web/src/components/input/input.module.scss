@@ -26,7 +26,7 @@
 
 .submitButton {
   height: $baseComponentHeight;
-  border-radius: 0px $borderRadius $borderRadius 0;
+  border-radius: 0 $borderRadius $borderRadius 0;
   border: none;
   padding: 0 $doublePadding;
   font-size: $fontSize;
@@ -38,11 +38,6 @@
 
 .submitInput {
   border-radius: $borderRadius 0px 0px $borderRadius;
-}
-
-.label {
-  font-size: $fontSize * 0.875;
-  margin-bottom: $halfPadding / 2;
 }
 
 .inputWrapper {

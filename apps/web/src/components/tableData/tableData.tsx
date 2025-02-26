@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import styles from "./tableData.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
@@ -30,7 +29,7 @@ export default function TableData({
           : globals[`${variant}BackgroundColorDynamic`],
         isHeader && globals.textBold,
         globals[`${textColor(variant)}Color`],
-        className
+        className,
       )}
       style={style}
     >

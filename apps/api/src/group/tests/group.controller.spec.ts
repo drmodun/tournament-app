@@ -55,7 +55,7 @@ describe('GroupController', () => {
       type: groupTypeEnum.PRIVATE,
       focus: groupFocusEnum.HYBRID,
       logo: 'logo.png',
-      location: 'Test Location',
+      locationId: 1,
       country: 'Test Country',
     };
     const userId = 1;

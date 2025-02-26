@@ -16,3 +16,4 @@ export * from "./participation";
 export * from "./constants";
 export * from "./career";
 export * from "./lfg";
+export * from "./location";

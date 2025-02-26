@@ -2,7 +2,7 @@
 
 import styles from "./tooltip.module.scss";
 import globals from "styles/globals.module.scss";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ANIMATION_DURATION, textColor, Variants } from "types/styleTypes";
 import clsx from "clsx";
 

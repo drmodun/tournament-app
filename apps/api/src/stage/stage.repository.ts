@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { stage, tournament, roster } from '../db/schema';
+import { stage, tournament, roster, location } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { eq, gte, lte, SQL } from 'drizzle-orm';
+import { aliasedTable, eq, gte, lte, SQL } from 'drizzle-orm';
 import {
   IUpdateStageDto,
   stageStatusEnum,
@@ -35,12 +35,31 @@ export class StageDrizzleRepository extends PrimaryRepository<
     | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
     | TSelect {
     switch (typeEnum) {
+      case StageResponsesEnum.EXTENDED:
+        return query.leftJoin(location, eq(stage.locationId, location.id));
+      case StageResponsesEnum.BASE:
+        return query.leftJoin(location, eq(stage.locationId, location.id));
       case StageResponsesEnum.WITH_TOURNAMENT:
+        const tournamentLocation = aliasedTable(location, 'tournamentLocation');
+        return query
+          .leftJoin(location, eq(stage.locationId, location.id))
+          .leftJoin(tournament, eq(stage.tournamentId, tournament.id))
+          .leftJoin(
+            tournamentLocation,
+            eq(tournament.locationId, tournamentLocation.id),
+          );
       case StageResponsesEnum.WITH_EXTENDED_TOURNAMENT:
-        return query.leftJoin(
-          tournament,
-          eq(stage.tournamentId, tournament.id),
+        const tournamentLocationAlias = aliasedTable(
+          location,
+          'tournamentLocation',
         );
+        return query
+          .leftJoin(tournament, eq(stage.tournamentId, tournament.id))
+          .leftJoin(location, eq(stage.locationId, location.id))
+          .leftJoin(
+            tournamentLocationAlias,
+            eq(tournament.locationId, tournamentLocationAlias.id),
+          );
       default:
         return query;
     }
@@ -78,23 +97,6 @@ export class StageDrizzleRepository extends PrimaryRepository<
       .filter(Boolean);
   }
 
-  getValidOrderBy(field: string): keyof typeof stage {
-    switch (field) {
-      case StageSortingEnum.NAME:
-        return 'name';
-      case StageSortingEnum.CREATED_AT:
-        return 'createdAt';
-      case StageSortingEnum.UPDATED_AT:
-        return 'updatedAt';
-      case StageSortingEnum.START_DATE:
-        return 'startDate';
-      case StageSortingEnum.END_DATE:
-        return 'endDate';
-      default:
-        return 'createdAt';
-    }
-  }
-
   sortRecord: Record<StageSortingEnum, PgColumn | SQL<number>> = {
     [StageSortingEnum.NAME]: stage.name,
     [StageSortingEnum.CREATED_AT]: stage.createdAt,
@@ -111,6 +113,7 @@ export class StageDrizzleRepository extends PrimaryRepository<
           name: stage.name,
           tournamentId: stage.tournamentId,
           stageStatus: stage.stageStatus,
+          locationId: stage.locationId,
         };
       case StageResponsesEnum.BASE:
         return {
@@ -121,6 +124,12 @@ export class StageDrizzleRepository extends PrimaryRepository<
           startDate: stage.startDate,
           endDate: stage.endDate,
           rostersParticipating: db.$count(roster, eq(roster.stageId, stage.id)),
+          location: {
+            id: location.id,
+            name: location.name,
+            apiId: location.apiId,
+            coordinates: location.coordinates,
+          },
         };
       case StageResponsesEnum.WITH_TOURNAMENT:
         return {
@@ -130,9 +139,14 @@ export class StageDrizzleRepository extends PrimaryRepository<
             name: tournament.name,
             type: tournament.tournamentType,
             startDate: tournament.startDate,
-            location: tournament.location,
             logo: tournament.logo,
             country: tournament.country,
+            locationId: tournament.locationId,
+            location: {
+              id: location.id,
+              name: location.name,
+              apiId: location.apiId,
+            },
           },
         };
       case StageResponsesEnum.EXTENDED:
@@ -149,9 +163,15 @@ export class StageDrizzleRepository extends PrimaryRepository<
             name: tournament.name,
             type: tournament.tournamentType,
             startDate: tournament.startDate,
-            location: tournament.location,
             logo: tournament.logo,
+            locationId: tournament.locationId,
             country: tournament.country,
+            location: {
+              id: location.id,
+              name: location.name,
+              apiId: location.apiId,
+              coordinates: location.coordinates,
+            }, // TODO: check if this is correct
           },
         };
       default:

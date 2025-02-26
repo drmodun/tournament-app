@@ -1,0 +1,79 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: $padding;
+  flex-direction: column;
+}
+
+.mapWrapper {
+  height: 50%;
+  width: 100%;
+  margin-bottom: $halfPadding;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.primaryFill > * {
+  fill: $primary;
+}
+
+.bottom {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $doublePadding;
+}
+
+.bottomLeft {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.locationInfo {
+  padding: $padding $doublePadding;
+  border-radius: $borderRadius;
+  cursor: pointer;
+}
+
+.poiTitle {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+  margin-bottom: $halfPadding;
+}
+
+.innerWrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.locationInfoWrapper + .locationInfoWrapper {
+  padding-top: $halfPadding;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+.locationInfos {
+  height: 50%;
+  width: 100%;
+  scrollbar-width: none;
+  overflow-y: auto;
+  padding-bottom: $doublePadding;
+}

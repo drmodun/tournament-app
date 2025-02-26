@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactElement } from "react";
+import React from "react";
 import styles from "./tableRow.module.scss";
 import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
@@ -25,7 +25,8 @@ export default function TableRow({
 }: TableRowProps) {
   const renderChildren = () => {
     return React.Children.map(children, (child) => {
-      return React.cloneElement(child as ReactElement, {
+      if (!child) return null;
+      return React.cloneElement(child as React.ReactElement, {
         variant: variant,
       });
     });

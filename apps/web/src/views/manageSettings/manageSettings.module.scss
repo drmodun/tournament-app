@@ -1,0 +1,22 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: column;
+  gap: $doublePadding;
+}
+
+.setting {
+  display: flex;
+  gap: $padding;
+  align-items: center;
+}
+
+.options {
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
+}

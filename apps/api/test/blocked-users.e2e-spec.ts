@@ -62,7 +62,7 @@ describe('BlockedUsersController (e2e)', () => {
         abbreviation: 'exp',
         logo: 'https://www.logo.hrvatska.hr/logo.png',
         country: 'hr',
-        location: 'hrvatska',
+        locationId: 1,
       } satisfies ICreateGroupRequest)
       .expect(201);
 
@@ -223,7 +223,7 @@ describe('BlockedUsersController (e2e)', () => {
 
     it('should require group admin privileges', async () => {
       const { body: authUser } = await request(app.getHttpServer())
-        .get('/users/32')
+        .get('/users/22')
         .expect(200);
 
       const loginResponse = await request(app.getHttpServer())

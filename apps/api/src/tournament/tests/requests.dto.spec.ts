@@ -38,6 +38,7 @@ describe('TournamentRequestsDtos', () => {
         isRanked: 'not_a_boolean',
         categoryId: 'not_a_number',
         creatorId: 'not_a_number',
+        locationId: 'not_a_number',
       };
       const createRequest = plainToInstance(CreateTournamentRequest, body);
       const errors = await validate(createRequest);

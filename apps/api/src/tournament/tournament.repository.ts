@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { category, group, participation, tournament, user } from '../db/schema';
+import {
+  category,
+  group,
+  location,
+  participation,
+  tournament,
+  user,
+} from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
 import { aliasedTable, eq, gte, lte, SQL } from 'drizzle-orm';
 import {
   IUpdateTournamentRequest,
-  tournamentLocationEnum,
   TournamentResponseEnumType,
   TournamentResponsesEnum,
   TournamentSortingEnum,
@@ -41,7 +47,8 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
         return query
           .leftJoin(user, eq(tournament.creatorId, user.id))
           .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
-          .leftJoin(category, eq(tournament.categoryId, category.id));
+          .leftJoin(category, eq(tournament.categoryId, category.id))
+          .leftJoin(location, eq(tournament.locationId, location.id));
 
       case TournamentResponsesEnum.EXTENDED:
         const parent = aliasedTable(tournament, 'parent');
@@ -49,6 +56,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           .leftJoin(user, eq(tournament.creatorId, user.id))
           .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
           .leftJoin(category, eq(tournament.categoryId, category.id))
+          .leftJoin(location, eq(tournament.locationId, location.id))
           .leftJoin(parent, eq(tournament.id, parent.id));
       default:
         return query;
@@ -66,7 +74,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
         case 'type':
           return eq(tournament.tournamentType, value as tournamentTypeEnum);
         case 'location':
-          return eq(tournament.location, value as tournamentLocationEnum);
+          return eq(tournament.locationId, value as number);
         case 'teamType':
           return eq(
             tournament.tournamentTeamType,
@@ -124,7 +132,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
     ),
     [TournamentSortingEnum.MAXIMUM_PARTICIPANTS]: tournament.maxParticipants,
     [TournamentSortingEnum.TOURNAMENT_TYPE]: tournament.tournamentType,
-    [TournamentSortingEnum.TOURNAMENT_LOCATION]: tournament.location,
+    [TournamentSortingEnum.TOURNAMENT_LOCATION]: tournament.tournamentLocation,
     [TournamentSortingEnum.COUNTRY]: tournament.country,
   };
 
@@ -136,11 +144,12 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           name: tournament.name,
           type: tournament.tournamentType,
           startDate: tournament.startDate,
+          locationId: tournament.locationId,
         };
       case TournamentResponsesEnum.MINI_WITH_LOGO:
         return {
           ...this.getMappingObject(TournamentResponsesEnum.MINI),
-          location: tournament.location,
+          location: tournament.tournamentLocation,
           logo: tournament.logo,
           country: tournament.country,
         };
@@ -170,6 +179,12 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
             name: category.name,
             logo: category.image,
           },
+          actualLocation: {
+            id: location.id,
+            name: location.name,
+            apiId: location.apiId,
+            coordinates: location.coordinates,
+          },
           links: tournament.links,
         };
 
@@ -186,7 +201,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
             name: tournament.name,
             type: tournament.tournamentType,
             startDate: tournament.startDate,
-            location: tournament.location,
+            location: tournament.tournamentLocation,
             logo: tournament.logo,
             country: tournament.country,
           },

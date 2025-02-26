@@ -105,6 +105,7 @@ describe('TournamentController (e2e)', () => {
       isRanked: true,
       affiliatedGroupId: 1,
       creatorId: 1,
+      locationId: 1,
     };
 
     it('should create tournament when user is authorized', async () => {
@@ -249,6 +250,7 @@ describe('TournamentController (e2e)', () => {
         isRanked: true,
         affiliatedGroupId: 1,
         creatorId: 1,
+        locationId: 1,
       };
 
       const createResponse = await request(app.getHttpServer())

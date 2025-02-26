@@ -57,7 +57,6 @@ async function createUsers() {
     email: 'admin@example.com',
     password: DEFAULT_PASSWORD,
     country: 'United States',
-    location: 'San Francisco',
     username: 'admin',
     bio: 'I am an admin user',
     profilePicture: 'https://example.com/admin.jpg',
@@ -73,7 +72,6 @@ async function createUsers() {
     password: DEFAULT_PASSWORD,
     country: 'United States',
     isFake: false,
-    location: 'San Francisco',
     username: 'nonadmin',
     bio: 'I am a non-admin user',
     profilePicture: 'https://example.com/nonadmin.jpg',
@@ -89,7 +87,6 @@ async function createUsers() {
       password: DEFAULT_PASSWORD,
       // Password123!, default password for all seed users
       country: faker.location.country(),
-      location: faker.location.city(),
       username: faker.internet.userName(),
       bio: faker.lorem.paragraph(),
       isFake: false,
@@ -233,7 +230,6 @@ async function createGroups() {
       type: groupTypeEnum.PUBLIC,
       focus: groupFocusEnum.HYBRID,
       logo: faker.image.imageUrl(),
-      location: faker.location.city(),
       country: faker.location.country(),
     } satisfies CreateGroupRequest & { id: number });
   }
@@ -414,7 +410,6 @@ async function createTournaments() {
       ),
       minimumMMR: faker.number.int({ min: 0, max: 2000 }),
       maximumMMR: faker.number.int({ min: 2001, max: 5000 }),
-      location: faker.location.city(),
       isMultipleTeamsPerGroupAllowed: faker.datatype.boolean(),
       isFakePlayersAllowed: faker.datatype.boolean(),
       isRanked: faker.datatype.boolean(),
@@ -535,6 +530,79 @@ async function createParticipations() {
   );
 }
 
+async function createInterests() {
+  const userInterests = [];
+  const users = await db.select().from(tables.user);
+  const categories = await db.select().from(tables.category);
+
+  // Each user has 1-3 interests randomly
+  for (const user of users) {
+    const numberOfInterests = faker.number.int({ min: 1, max: 3 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numberOfInterests);
+
+    for (const category of selectedCategories) {
+      userInterests.push({
+        userId: user.id,
+        categoryId: category.id,
+        createdAt: faker.date.past(),
+      });
+    }
+  }
+
+  await db.insert(tables.interests).values(userInterests).execute();
+}
+
+async function createGroupInterests() {
+  const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
+    ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
+    : 20;
+
+  const groupInterestsList = [];
+  const groups = await db.select().from(tables.group);
+  const categories = await db.select().from(tables.category);
+
+  // Each group has 1-4 interests randomly
+  for (const group of groups) {
+    const numberOfInterests = faker.number.int({ min: 1, max: 4 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numberOfInterests);
+
+    for (const category of selectedCategories) {
+      groupInterestsList.push({
+        groupId: group.id,
+        categoryId: category.id,
+      });
+    }
+  }
+
+  await db.insert(tables.groupInterests).values(groupInterestsList).execute();
+}
+
+async function createLocations() {
+  const locations = [];
+  const NUM_OF_LOCATIONS = process.env.SEED_LOCATIONS_COUNT
+    ? parseInt(process.env.SEED_LOCATIONS_COUNT, 10)
+    : 100;
+
+  for (let i = 0; i < NUM_OF_LOCATIONS; i++) {
+    locations.push({
+      id: i + 1,
+      name: faker.location.city(),
+      coordinates: [faker.location.latitude(), faker.location.longitude()],
+      apiId: faker.string.uuid(),
+    });
+  }
+
+  await db.insert(tables.location).values(locations).execute();
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE location_id_seq RESTART WITH ${sql.raw(
+      String(NUM_OF_LOCATIONS + 1), // TODO: check if this screws up indexes
+    )}`,
+  );
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -542,6 +610,7 @@ export async function seed() {
 
   await teardown();
   await createUsers();
+  await createLocations();
   await createFollowers();
   await createGroups();
   await createGroupMemberships();
@@ -551,4 +620,6 @@ export async function seed() {
   await createTournaments();
   await createStages();
   await createParticipations();
+  await createInterests();
+  await createGroupInterests();
 }

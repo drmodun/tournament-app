@@ -1,0 +1,171 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.teamsWrapper,
+.rostersWrapper {
+  display: flex;
+  gap: $padding;
+  align-items: center;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.teams,
+.rosters {
+  display: flex;
+  gap: $halfPadding / 2;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+.campaign {
+  width: 100%;
+  border-radius: $borderRadius;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  width: 60%;
+}
+
+.right {
+  width: 40%;
+  max-height: 100%;
+}
+
+.rostersText,
+.teamsWrapper {
+  margin-top: $halfPadding;
+}
+
+.rostersText {
+  margin-bottom: $halfPadding / 2;
+}
+
+.lfpButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.lfpTopWrapper {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding / 2;
+}
+
+.campaigns {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+  max-height: 100%;
+  cursor: pointer;
+}
+
+.campaignsWrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.campaignsInnerWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - $halfPadding);
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.campaignTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
+}
+
+.checkboxWrapper {
+  pointer-events: none;
+  padding-left: $padding;
+  padding-top: $halfPadding;
+}
+
+.lfpDialogWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.contentLabelLfp {
+  font-size: $fontSize * 0.875;
+  margin-bottom: $halfPadding / 2;
+}
+
+.lfpInputsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.lfpActionButtons {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.lfpActionButton {
+  width: 100%;
+}
+
+.lfpActionArrowRight {
+  margin-left: $halfPadding;
+}
+
+.lfpActionArrowLeft {
+  margin-right: $halfPadding;
+}
+
+.lfpViewDialogWrapper {
+  width: 75%;
+}
+
+.lfpActionButtons,
+.lfpUser {
+  display: flex;
+  gap: $halfPadding / 2;
+  align-items: center;
+}
+
+.lfpInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.arrowButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

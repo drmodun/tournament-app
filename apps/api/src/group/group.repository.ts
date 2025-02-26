@@ -13,6 +13,9 @@ import {
   groupToUser,
   participation,
   userGroupBlockList,
+  groupInterests,
+  category,
+  location,
 } from '../db/schema';
 import {
   ICreateGroupRequest,
@@ -52,15 +55,15 @@ export class GroupDrizzleRepository extends PrimaryRepository<
     switch (typeEnum) {
       case GroupResponsesEnum.BASE:
         return query
-          .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
-          .groupBy(group.id);
+          .leftJoin(location, eq(group.locationId, location.id))
+          .leftJoin(groupToUser, eq(group.id, groupToUser.groupId));
 
       case GroupResponsesEnum.EXTENDED:
         return query
+          .leftJoin(location, eq(group.locationId, location.id))
           .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
           .leftJoin(participation, eq(group.id, participation.groupId))
-          .leftJoin(groupFollower, eq(group.id, groupFollower.groupId))
-          .groupBy(group.id);
+          .leftJoin(groupFollower, eq(group.id, groupFollower.groupId));
 
       default:
         return query;
@@ -74,6 +77,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           id: group.id,
           name: group.name,
           abbreviation: group.abbreviation,
+          locationId: group.locationId,
         };
       case GroupResponsesEnum.MINI_WITH_LOGO:
         return {
@@ -92,18 +96,26 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           type: group.type,
           focus: group.focus,
           logo: group.logo,
-          location: group.location,
           updatedAt: group.updatedAt,
           memberCount: db.$count(
             groupToUser,
             eq(groupToUser.groupId, group.id),
           ),
+          location: {
+            id: location.id,
+            name: location.name,
+            apiId: location.apiId,
+            coordinates: location.coordinates,
+          },
         };
       case GroupResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(GroupResponsesEnum.BASE),
           createdAt: group.createdAt,
-          tournamentCount: sql<number>`cast(count(${participation.tournamentId}) as int)`,
+          tournamentCount: db.$count(
+            participation,
+            eq(participation.groupId, group.id),
+          ),
           subscriberCount: db.$count(
             groupFollower,
             eq(groupFollower.groupId, group.id),
@@ -134,7 +146,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           type: createGroupDto.type,
           focus: createGroupDto.focus,
           logo: createGroupDto.logo,
-          location: createGroupDto.location,
           country: createGroupDto.country,
         } as InferInsertModel<typeof group>)
         .returning();
@@ -184,8 +195,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           return eq(group.type, parsed);
         case 'focus':
           return eq(group.focus, parsed);
-        case 'location':
-          return eq(group.location, parsed);
         case 'country':
           return eq(group.country, parsed);
         default:
@@ -266,5 +275,58 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       .limit(pageSize)
       .offset((page - 1) * pageSize)
       .groupBy(group.id);
+  }
+
+  async checkIfGroupInterestExists(groupId: number, categoryId: number) {
+    const result = await db
+      .select()
+      .from(groupInterests)
+      .where(
+        and(
+          eq(groupInterests.groupId, groupId),
+          eq(groupInterests.categoryId, categoryId),
+        ),
+      )
+      .limit(1);
+
+    return result.length > 0;
+  }
+
+  async createGroupInterest(groupId: number, categoryId: number) {
+    await db.insert(groupInterests).values({
+      groupId,
+      categoryId,
+    });
+  }
+
+  async deleteGroupInterest(groupId: number, categoryId: number) {
+    await db
+      .delete(groupInterests)
+      .where(
+        and(
+          eq(groupInterests.groupId, groupId),
+          eq(groupInterests.categoryId, categoryId),
+        ),
+      );
+  }
+
+  async getGroupInterests(groupId: number, page: number, pageSize: number) {
+    const offset = (page - 1) * pageSize;
+
+    const results = await db
+      .select({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        type: category.type,
+        image: category.image,
+      })
+      .from(groupInterests)
+      .where(eq(groupInterests.groupId, groupId))
+      .innerJoin(category, eq(category.id, groupInterests.categoryId))
+      .limit(pageSize)
+      .offset(offset);
+
+    return results;
   }
 }

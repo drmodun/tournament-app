@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+@import "../styles/";
+
+* {
+  font-family: "Lexend", "Menlo", "Monaco", "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Roboto", "Ubuntu", "Courier New", sans-serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: $light;
+  scrollbar-color: #ffffff transparent;
+  scrollbar-width: thin;
+}
+
+body {
+  background-color: $dark;
+}
+
+// google maps styles
+.pac-container {
+  border-radius: $borderRadius;
+  background-color: $dark;
+}
+
+.pac-container::after {
+  display: none !important;
+}
+
+.pac-matched {
+  background-color: $light;
+  color: $dark;
+}
+
+.pac-item-query {
+  color: $light;
+}
+
+.pac-item {
+  padding: $padding $doublePadding;
+  border: none;
+  color: $light;
+}
+
+.pac-item:hover {
+  color: $dark;
+  .pac-container {
+    background-color: $light;
+  }
+
+  .pac-matched {
+    background-color: $dark;
+    color: $light;
+  }
+
+  .pac-item-query {
+    color: $dark;
+  }
+}

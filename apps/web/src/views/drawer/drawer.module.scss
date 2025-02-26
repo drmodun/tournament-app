@@ -1,0 +1,92 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  height: 100vh;
+  width: 100%;
+  background-color: #00000050;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.hiddenAnimate {
+  animation: disappear 1s forwards;
+}
+
+.animate {
+  animation: unslide 1s forwards !important;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    animation: unslideMobile 1s forwards;
+  }
+}
+
+.drawer {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  padding: $padding;
+  padding-right: $horizontalMargin + $padding;
+  animation: slide 1s forwards;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    padding-right: $doublePadding + $padding;
+    animation: slideMobile 1s forwards;
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX($horizontalMargin);
+  }
+}
+
+@keyframes unslide {
+  from {
+    transform: translateX($horizontalMargin);
+  }
+  to {
+    transform: translateX(100%);
+    display: none;
+  }
+}
+
+@keyframes slideMobile {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX($doublePadding);
+  }
+}
+
+@keyframes unslideMobile {
+  from {
+    transform: translateX($doublePadding);
+  }
+  to {
+    transform: translateX(100%);
+    display: none;
+  }
+}
+
+@keyframes disappear {
+  from {
+  }
+  to {
+    display: none;
+  }
+}

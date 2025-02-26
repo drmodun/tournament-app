@@ -611,7 +611,7 @@ describe('ParticipationController (e2e)', () => {
           type: groupTypeEnum.PUBLIC,
           focus: groupFocusEnum.HYBRID,
           logo: 'logo.png',
-          location: 'Test Location',
+          locationId: 1,
         } satisfies ICreateGroupRequest)
         .expect(201);
 

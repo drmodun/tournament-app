@@ -5,7 +5,6 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { PostgresError } from 'postgres';
 import { CreateLocationDto, UpdateLocationDto } from '../dto/requests';
 import { LocationResponsesEnum } from '@tournament-app/types';
 
@@ -25,6 +24,7 @@ describe('LocationService', () => {
             getSingleQuery: jest.fn(),
             updateEntity: jest.fn(),
             deleteEntity: jest.fn(),
+            getMap: jest.fn(),
           },
         },
       ],
@@ -188,6 +188,21 @@ describe('LocationService', () => {
       jest.spyOn(repository, 'deleteEntity').mockResolvedValue([]);
 
       await expect(service.remove(999)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getMap', () => {
+    it('should return all locations', async () => {
+      jest.spyOn(repository, 'getMap').mockResolvedValue([
+        { id: 1, name: 'Location 1', coordinates: [40.7128, -74.006] },
+        { id: 2, name: 'Location 2', coordinates: [40.7128, -74.006] },
+      ]);
+
+      const result = await service.getMap();
+      expect(result).toEqual([
+        { id: 1, name: 'Location 1', coordinates: [40.7128, -74.006] },
+        { id: 2, name: 'Location 2', coordinates: [40.7128, -74.006] },
+      ]);
     });
   });
 });

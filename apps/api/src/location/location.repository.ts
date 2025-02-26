@@ -12,6 +12,7 @@ import {
   PgColumn,
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
+import { db } from 'src/db/db';
 
 @Injectable()
 export class LocationDrizzleRepository extends PrimaryRepository<
@@ -90,5 +91,15 @@ export class LocationDrizzleRepository extends PrimaryRepository<
       default:
         return {}; // TODO: check if there are more of these potentially problematic empty objects
     }
+  }
+
+  async getMap() {
+    return db
+      .select({
+        id: location.id,
+        name: location.name,
+        coordinates: location.coordinates,
+      })
+      .from(location);
   }
 }

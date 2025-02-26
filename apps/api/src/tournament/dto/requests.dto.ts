@@ -301,6 +301,12 @@ export class TournamentQuery
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value))
+  locationId?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @Type(() => tournamentTeamType)
   @IsEnum(tournamentTeamTypeEnum)
   teamType?: tournamentTeamTypeEnum;

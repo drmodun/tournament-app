@@ -101,6 +101,35 @@ export class GroupController {
     return await this.groupService.findOne(id, responseType);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Post('fake')
+  @ApiCreatedResponse({
+    content: {
+      'application/json': {
+        example: {
+          success: true,
+          id: 1,
+        },
+      },
+    },
+  })
+  async createFake(
+    @Body() createGroupDto: CreateFakeGroupRequest,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupService.create(
+      {
+        ...createGroupDto,
+        focus: groupFocusEnum.HYBRID,
+        type: groupTypeEnum.FAKE,
+        description:
+          'A temporary group created for seeding or testing purposes',
+      },
+      user.id,
+    );
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -185,34 +214,5 @@ export class GroupController {
   })
   async getGroupFollowers(@Param('groupId', ParseIntPipe) id: number) {
     return await this.groupService.getGroupFollowers(id);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @Post('fake')
-  @ApiCreatedResponse({
-    content: {
-      'application/json': {
-        example: {
-          success: true,
-          id: 1,
-        },
-      },
-    },
-  })
-  async createFake(
-    @Body() createGroupDto: CreateFakeGroupRequest,
-    @CurrentUser() user: ValidatedUserDto,
-  ) {
-    return await this.groupService.create(
-      {
-        ...createGroupDto,
-        focus: groupFocusEnum.HYBRID,
-        type: groupTypeEnum.FAKE,
-        description:
-          'A temporary group created for seeding or testing purposes',
-      },
-      user.id,
-    );
   }
 }

@@ -61,6 +61,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       username: name.givenName,
       profilePicture: photos[0].value,
       country: 'None',
+      dateOfBirth: new Date(), // TODO: make the user choose their date of birth post registration
       isFake: false,
       name: name.givenName,
       password: crypto.randomUUID(),

@@ -40,9 +40,9 @@ describe('UsersService', () => {
       password: 'Password123!',
       name: 'John Doe',
       bio: 'I am a person',
-      location: 'USA',
       profilePicture: 'https://example.com/image.jpg',
       country: 'USA',
+      dateOfBirth: new Date(),
     };
 
     const result = await service.create(request);
@@ -61,9 +61,9 @@ describe('UsersService', () => {
       password: 'Password123!',
       name: 'John Doe',
       bio: 'I am a person',
-      location: 'USA',
       profilePicture: 'https://example.com/image.jpg',
       country: 'USA',
+      dateOfBirth: new Date(),
     };
 
     await expect(service.create(request)).rejects.toThrow(
@@ -82,9 +82,9 @@ describe('UsersService', () => {
       password: 'Password123!',
       name: 'John Doe',
       bio: 'I am a person',
-      location: 'USA',
       profilePicture: 'https://example.com/image.jpg',
       country: 'USA',
+      dateOfBirth: new Date(),
     };
 
     await expect(service.create(request)).rejects.toThrow();

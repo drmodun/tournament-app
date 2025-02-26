@@ -81,6 +81,7 @@ describe('GoogleStrategy', () => {
         profilePicture: 'photo-url',
         country: 'None',
         name: 'Test',
+        dateOfBirth: expect.any(Date),
         password: expect.any(String),
       });
       expect(done).toHaveBeenCalledWith(null, mockValidatedUser);

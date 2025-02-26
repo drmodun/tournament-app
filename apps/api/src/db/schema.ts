@@ -25,6 +25,7 @@ import {
   stageTypeEnum,
   stageStatusEnum,
 } from '@tournament-app/types';
+import { sql } from 'drizzle-orm';
 import {
   serial,
   text,
@@ -160,6 +161,10 @@ export const user = pgTable('user', {
   bettingPoints: integer('betting_points').default(100),
   customerId: text('customer_id'),
   level: integer('level').default(1),
+  dateOfBirth: timestamp('date_of_birth', { withTimezone: true })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+
   // For gdpr sake we will not store location, just use geolocation in query params
 });
 

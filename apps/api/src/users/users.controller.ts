@@ -176,6 +176,7 @@ export class UsersController {
       ...createUserDto,
       isFake: true,
       email: crypto.randomUUID(), // to make logins effectively impossible and satisfy the unique constraint
+      dateOfBirth: new Date(), // Does not matter for fake users
     });
   } // TODO: test fake functions if time allows it
 }

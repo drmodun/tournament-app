@@ -64,6 +64,7 @@ describe('LFG Request DTOs', () => {
       });
 
       const errors = await validate(dto);
+      console.log(errors.length);
       expect(errors.length).toBe(0);
     });
 

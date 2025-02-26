@@ -22,7 +22,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { and, countDistinct, eq, SQL } from 'drizzle-orm';
+import { and, countDistinct, eq, sql, SQL } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { UserQuery } from './dto/requests.dto';
@@ -89,6 +89,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
           email: user.email,
           level: user.level,
           name: user.name,
+          age: sql<number>`EXTRACT(YEAR FROM AGE(CURRENT_DATE, ${user.dateOfBirth}))::INT`, // Check if this is correct
           updatedAt: user.updatedAt,
           followers: db.$count(follower, eq(follower.userId, user.id)),
         };
@@ -150,7 +151,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     return clauses.map(([key, value]) => {
       const field = user[key];
       if (!field) return;
-      const parsed = value as string;
+      const parsed = value;
 
       // TODO: some type fixes
 
@@ -163,6 +164,12 @@ export class UserDrizzleRepository extends PrimaryRepository<
           return eq(user.email, parsed);
         case 'country':
           return eq(user.country, parsed);
+        case 'age':
+          const today = new Date();
+          const age = today.getFullYear() - (parsed as number);
+          const dateOfBirth = new Date(age);
+
+          return eq(user.dateOfBirth, dateOfBirth);
         default:
           return;
       }

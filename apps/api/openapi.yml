@@ -116,6 +116,11 @@ paths:
           in: query
           schema:
             type: string
+        - name: age
+          required: false
+          in: query
+          schema:
+            type: number
       responses:
         "200":
           content:
@@ -150,7 +155,8 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: &a2 2025-02-25T22:00:39.985Z
+                        age: 20
+                        updatedAt: &a2 2025-02-26T13:38:22.138Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -248,8 +254,9 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
+                        age: 20
                         updatedAt: *a2
-                        createdAt: 2025-02-25T22:00:39.985Z
+                        createdAt: 2025-02-26T13:38:22.138Z
                         following: 0
                         location: New York
           description: ""
@@ -306,7 +313,8 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: &a3 2025-02-25T22:00:39.985Z
+                    age: 20
+                    updatedAt: &a3 2025-02-26T13:38:22.138Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -336,8 +344,9 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
+                    age: 20
                     updatedAt: *a3
-                    createdAt: 2025-02-25T22:00:39.985Z
+                    createdAt: 2025-02-26T13:38:22.138Z
                     following: 0
                     location: New York
           description: ""
@@ -604,7 +613,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-02-25T22:00:40.149Z
+                        updatedAt: 2025-02-26T13:38:22.349Z
                         memberCount: 50
                 extended:
                   value:
@@ -629,9 +638,9 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-02-25T22:00:40.149Z
+                        updatedAt: 2025-02-26T13:38:22.349Z
                         memberCount: 50
-                        createdAt: 2025-02-25T22:00:40.149Z
+                        createdAt: 2025-02-26T13:38:22.349Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -659,7 +668,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-02-25T22:00:40.149Z
+                updatedAt: 2025-02-26T13:38:22.349Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -712,7 +721,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-02-25T22:00:40.149Z
+                    updatedAt: 2025-02-26T13:38:22.349Z
                     memberCount: 50
                 extended:
                   value:
@@ -724,9 +733,9 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-02-25T22:00:40.149Z
+                    updatedAt: 2025-02-26T13:38:22.349Z
                     memberCount: 50
-                    createdAt: 2025-02-25T22:00:40.149Z
+                    createdAt: 2025-02-26T13:38:22.349Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -765,7 +774,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-02-25T22:00:40.149Z
+                updatedAt: 2025-02-26T13:38:22.349Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -808,7 +817,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-02-25T22:00:40.149Z
+                  updatedAt: 2025-02-26T13:38:22.349Z
                   memberCount: 50
                 members: []
           description: ""
@@ -836,7 +845,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-02-25T22:00:40.149Z
+                  updatedAt: 2025-02-26T13:38:22.349Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -864,7 +873,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-02-25T22:00:40.149Z
+                  updatedAt: 2025-02-26T13:38:22.349Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -1004,7 +1013,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-02-25T22:00:40.153Z
+                        createdAt: 2025-02-26T13:38:22.353Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1025,7 +1034,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-02-25T22:00:40.153Z
+                      - createdAt: 2025-02-26T13:38:22.353Z
                         isFake: false
                         role: member
                         country: country
@@ -1057,7 +1066,7 @@ paths:
                         role: member
                         user: *a6
                         group: *a7
-                        createdAt: 2025-02-25T22:00:40.153Z
+                        createdAt: 2025-02-26T13:38:22.353Z
                         country: country
                         name: name
                         logo: logo
@@ -1147,10 +1156,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-02-25T22:00:40.153Z
+                    createdAt: 2025-02-26T13:38:22.353Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-02-25T22:00:40.153Z
+                    createdAt: 2025-02-26T13:38:22.353Z
                     isFake: false
                     role: member
                     country: country
@@ -1164,7 +1173,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-02-25T22:00:40.153Z
+                    createdAt: 2025-02-26T13:38:22.353Z
                     country: country
                     name: name
                     logo: logo
@@ -1299,7 +1308,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-02-25T22:00:40.157Z
+                    createdAt: 2025-02-26T13:38:22.357Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1308,10 +1317,11 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-02-25T22:00:40.157Z
+                    updatedAt: 2025-02-26T13:38:22.357Z
+                    age: 20
                 mini:
                   value:
-                    createdAt: 2025-02-25T22:00:40.157Z
+                    createdAt: 2025-02-26T13:38:22.357Z
                     id: 1
                     isFake: false
                     username: john_doe
@@ -1448,7 +1458,8 @@ paths:
                         followers: 0
                         level: 0
                         name: John Doe
-                        updatedAt: 2025-02-25T22:00:39.985Z
+                        age: 20
+                        updatedAt: 2025-02-26T13:38:22.138Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1470,7 +1481,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-02-25T22:00:40.163Z
+                        createdAt: 2025-02-26T13:38:22.362Z
                 with-group:
                   value:
                     metadata:
@@ -1494,7 +1505,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-02-25T22:00:40.149Z
+                        updatedAt: 2025-02-26T13:38:22.349Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1517,7 +1528,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-02-25T22:00:40.163Z
+                        createdAt: 2025-02-26T13:38:22.362Z
           description: ""
       tags: &a12
         - group-join-requests
@@ -1612,7 +1623,8 @@ paths:
                     followers: 0
                     level: 0
                     name: John Doe
-                    updatedAt: 2025-02-25T22:00:39.985Z
+                    age: 20
+                    updatedAt: 2025-02-26T13:38:22.138Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -1621,7 +1633,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-02-25T22:00:40.163Z
+                    createdAt: 2025-02-26T13:38:22.362Z
                 with-group:
                   value:
                     id: 1
@@ -1632,7 +1644,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-02-25T22:00:40.149Z
+                    updatedAt: 2025-02-26T13:38:22.349Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -1642,7 +1654,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-02-25T22:00:40.163Z
+                    createdAt: 2025-02-26T13:38:22.362Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -1770,9 +1782,10 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-02-25T22:00:40.167Z
+                        updatedAt: 2025-02-26T13:38:22.366Z
                         message: Would you like to join our group?
                         groupId: 1
+                        age: 20
                 with-mini-user:
                   value:
                     metadata:
@@ -1793,7 +1806,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-02-25T22:00:40.167Z
+                        createdAt: 2025-02-26T13:38:22.366Z
                         isFake: false
                 with-group:
                   value:
@@ -1824,7 +1837,7 @@ paths:
                         focus: Hybrid
                         locationId: 1
                         type: Public
-                        updatedAt: 2/25/2025
+                        updatedAt: 2/26/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -1846,7 +1859,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-02-25T22:00:40.167Z
+                        createdAt: 2025-02-26T13:38:22.366Z
           description: ""
       tags: &a14
         - group-invites
@@ -1941,15 +1954,16 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-02-25T22:00:40.167Z
+                    updatedAt: 2025-02-26T13:38:22.366Z
                     message: Would you like to join our group?
                     groupId: 1
+                    age: 20
                 with-mini-user:
                   value:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-02-25T22:00:40.167Z
+                    createdAt: 2025-02-26T13:38:22.366Z
                     isFake: false
                 with-group:
                   value:
@@ -1965,14 +1979,14 @@ paths:
                     focus: Hybrid
                     locationId: 1
                     type: Public
-                    updatedAt: 2/25/2025
+                    updatedAt: 2/26/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-02-25T22:00:40.167Z
+                    createdAt: 2025-02-26T13:38:22.366Z
           description: ""
       tags: *a14
     patch:
@@ -2825,8 +2839,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a33 2025-02-25T22:00:40.183Z
-                    endDate: &a34 2025-02-25T22:00:40.183Z
+                    startDate: &a33 2025-02-26T13:38:22.381Z
+                    endDate: &a34 2025-02-26T13:38:22.381Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -2964,8 +2978,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a39 2025-02-25T22:00:40.183Z
-                    endDate: &a40 2025-02-25T22:00:40.183Z
+                    startDate: &a39 2025-02-26T13:38:22.381Z
+                    endDate: &a40 2025-02-26T13:38:22.381Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3252,15 +3266,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-02-25T22:00:40.189Z
+                          startDate: 2025-02-26T13:38:22.386Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-02-25T22:00:40.189Z
-                        updatedAt: 2025-02-25T22:00:40.189Z
+                        createdAt: 2025-02-26T13:38:22.386Z
+                        updatedAt: 2025-02-26T13:38:22.386Z
                 base:
                   value:
                     metadata:
@@ -3363,15 +3377,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-02-25T22:00:40.189Z
+                          startDate: 2025-02-26T13:38:22.386Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-02-25T22:00:40.189Z
-                        updatedAt: 2025-02-25T22:00:40.189Z
+                        createdAt: 2025-02-26T13:38:22.386Z
+                        updatedAt: 2025-02-26T13:38:22.386Z
                 base:
                   value:
                     metadata:
@@ -3843,7 +3857,7 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2025-02-25T22:00:40.148Z
+                        createdAt: 2025-02-26T13:38:22.348Z
           description: ""
       tags: &a53
         - locations
@@ -3905,7 +3919,7 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2025-02-25T22:00:40.148Z
+                      createdAt: 2025-02-26T13:38:22.348Z
       tags: *a53
     patch:
       operationId: LocationController_update
@@ -4053,6 +4067,9 @@ components:
         name:
           type: string
           readOnly: true
+        age:
+          type: number
+          readOnly: true
         updatedAt:
           format: date-time
           type: string
@@ -4070,6 +4087,7 @@ components:
         - bio
         - level
         - name
+        - age
         - updatedAt
         - followers
     ExtendedUserResponse:
@@ -4102,6 +4120,9 @@ components:
         name:
           type: string
           readOnly: true
+        age:
+          type: number
+          readOnly: true
         updatedAt:
           format: date-time
           type: string
@@ -4129,6 +4150,7 @@ components:
         - bio
         - level
         - name
+        - age
         - updatedAt
         - followers
         - location
@@ -4163,6 +4185,9 @@ components:
           readOnly: true
         name:
           type: string
+          readOnly: true
+        age:
+          type: number
           readOnly: true
         updatedAt:
           format: date-time
@@ -4204,6 +4229,7 @@ components:
         - bio
         - level
         - name
+        - age
         - updatedAt
         - followers
         - location
@@ -4285,7 +4311,8 @@ components:
           type: string
         country:
           type: string
-        location:
+        dateOfBirth:
+          format: date-time
           type: string
       required:
         - name
@@ -4293,6 +4320,7 @@ components:
         - email
         - password
         - country
+        - dateOfBirth
     ActionResponsePrimary:
       type: object
       properties:
@@ -4313,6 +4341,9 @@ components:
         name:
           type: string
         bio:
+          type: string
+        dateOfBirth:
+          format: date-time
           type: string
         location:
           type: string
@@ -4805,6 +4836,9 @@ components:
         name:
           type: string
           readOnly: true
+        age:
+          type: number
+          readOnly: true
         updatedAt:
           format: date-time
           type: string
@@ -4825,6 +4859,7 @@ components:
         - bio
         - level
         - name
+        - age
         - updatedAt
         - followers
         - createdAt
@@ -4878,6 +4913,9 @@ components:
         name:
           type: string
           readOnly: true
+        age:
+          type: number
+          readOnly: true
         updatedAt:
           format: date-time
           type: string
@@ -4899,6 +4937,7 @@ components:
         - bio
         - level
         - name
+        - age
         - updatedAt
         - followers
         - groupId
@@ -5060,6 +5099,9 @@ components:
         name:
           type: string
           readOnly: true
+        age:
+          type: number
+          readOnly: true
         updatedAt:
           format: date-time
           type: string
@@ -5081,6 +5123,7 @@ components:
         - bio
         - level
         - name
+        - age
         - updatedAt
         - followers
         - message

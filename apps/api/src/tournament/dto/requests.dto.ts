@@ -87,7 +87,7 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @Type(() => Date)
   @IsDate()
   @ApiProperty()
-  startDate: Date;
+  startDate: Date; // TODO: change other dates to ISO string
 
   @Type(() => Date)
   @IsDate()

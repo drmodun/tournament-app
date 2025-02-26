@@ -30,6 +30,7 @@ export const groupInviteWithUserExample = {
   updatedAt: new Date(),
   message: 'Would you like to join our group?',
   groupId: 1,
+  age: 20,
 } satisfies GroupInviteWithUserResponseDto;
 
 export const groupInviteWithMiniUserExample = {

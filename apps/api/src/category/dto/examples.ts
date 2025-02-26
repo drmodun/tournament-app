@@ -20,13 +20,13 @@ import {
 } from './requests.dto';
 
 // Response Examples
-const baseExample: CategoryMiniResponse = {
+export const categoryMiniExample: CategoryMiniResponse = {
   id: 1,
   name: 'Chess',
 };
 
 export const withLogoExample: CategoryMiniResponseWithLogo = {
-  ...baseExample,
+  ...categoryMiniExample,
   logo: 'https://example.com/chess-category-logo.jpg',
 };
 
@@ -47,7 +47,7 @@ export const extendedExample: CategoryResponseExtended = {
 };
 
 export const categoryResponses: SwaggerExamples<BaseCategoryResponseType> = {
-  [CategoryResponsesEnum.MINI]: { value: baseExample },
+  [CategoryResponsesEnum.MINI]: { value: categoryMiniExample },
   [CategoryResponsesEnum.MINI_WITH_LOGO]: { value: withLogoExample },
   [CategoryResponsesEnum.BASE]: { value: categoryExample },
   [CategoryResponsesEnum.EXTENDED]: { value: extendedExample },

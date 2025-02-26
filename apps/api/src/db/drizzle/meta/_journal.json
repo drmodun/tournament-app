@@ -155,6 +155,20 @@
       "when": 1740507902005,
       "tag": "0021_wise_human_robot",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1740575825864,
+      "tag": "0022_safe_shatterstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1740575856599,
+      "tag": "0023_kind_greymalkin",
+      "breakpoints": true
     }
   ]
 }

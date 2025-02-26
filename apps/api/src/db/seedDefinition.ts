@@ -61,6 +61,7 @@ async function createUsers() {
     bio: 'I am an admin user',
     profilePicture: 'https://example.com/admin.jpg',
     isEmailVerified: true,
+    dateOfBirth: faker.date.birthdate(),
     isFake: false,
     role: userRoleEnum.ADMIN,
   } as CreateUserRequest & { isEmailVerified: boolean; role: string };
@@ -68,6 +69,7 @@ async function createUsers() {
   const nonAdminUser = {
     id: NUM_USERS_TO_CREATE + 2,
     name: 'Non-Admin User',
+    dateOfBirth: faker.date.birthdate(),
     email: 'nonadmin@example',
     password: DEFAULT_PASSWORD,
     country: 'United States',
@@ -92,6 +94,7 @@ async function createUsers() {
       isFake: false,
       profilePicture: faker.image.avatar(),
       isEmailVerified: true,
+      dateOfBirth: faker.date.birthdate(),
       role: i <= 5 ? userRoleEnum.ADMIN : userRoleEnum.USER,
     } as CreateUserRequest & { isEmailVerified: boolean; role: string });
   }

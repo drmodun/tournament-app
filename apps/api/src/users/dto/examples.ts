@@ -33,6 +33,7 @@ export const defaultExample = {
   followers: 0,
   level: 0,
   name: 'John Doe',
+  age: 20,
   updatedAt: new Date(),
 } satisfies UserResponse;
 

@@ -13,12 +13,12 @@ import {
   miniUserResponseExample,
   miniUserResponseWithCountryExample,
 } from 'src/users/dto/examples';
-import {
-  categoryMiniExample,
-  categoryMiniWithLogoExample,
-} from 'src/category/dto/examples';
 import { BaseLFGResponseType, LFGResponsesEnum } from '@tournament-app/types';
 import { CreateLFGRequest, UpdateLFGRequest } from './requests';
+import {
+  categoryMiniExample,
+  withLogoExample,
+} from 'src/category/dto/examples';
 
 // Base example
 const baseExample: LFGMiniResponse = {
@@ -26,7 +26,7 @@ const baseExample: LFGMiniResponse = {
   userId: 1,
   message: 'Looking for a competitive team for upcoming tournaments',
   createdAt: new Date('2024-01-07T14:00:00Z'),
-  updatedAt: new Date('2024-01-07T14:00:00Z'),
+  categoryId: 1,
 };
 
 // Career category example
@@ -35,7 +35,7 @@ const careerExample: CareerCategoryResponse = {
   categoryId: 1,
   elo: 1500,
   createdAt: new Date('2024-01-07T14:00:00Z'),
-  category: categoryMiniWithLogoExample,
+  category: withLogoExample,
 };
 
 // With user example
@@ -81,11 +81,13 @@ export const lfgRequests = {
   updateLFGExample,
 };
 
-export const lfgQueryResponses = generateQueryExamples<BaseLFGResponseType>({
-  examples: lfgResponses,
-  baseUrl: '/lfg',
-  defaultQuery: {
-    page: 1,
-    pageSize: 10,
+export const lfgQueryResponses = generateQueryExamples<BaseLFGResponseType, {}>(
+  {
+    examples: lfgResponses,
+    baseUrl: '/lfg',
+    defaultQuery: {
+      page: 1,
+      pageSize: 10,
+    },
   },
-});
+);

@@ -56,6 +56,9 @@ export class UserResponse
   name: string;
 
   @ApiResponseProperty()
+  age: number;
+
+  @ApiResponseProperty()
   updatedAt: Date;
 
   @ApiResponseProperty()

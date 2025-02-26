@@ -21,6 +21,7 @@ export interface IUserResponse extends IMiniUserResponseWithCountry {
   level: number;
   name: string;
   updatedAt: Date;
+  age: number;
   followers: number;
 }
 

@@ -19,6 +19,7 @@ export const followerResponseExample = {
   level: 0,
   isFake: false,
   updatedAt: new Date(),
+  age: 20,
 } satisfies FollowerResponse;
 
 export const followerMiniResponseExample = {

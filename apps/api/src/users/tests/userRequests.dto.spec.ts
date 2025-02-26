@@ -17,6 +17,7 @@ describe('UserRequestsDtos', () => {
       'email',
       'password',
       'country',
+      'dateOfBirth',
     ]);
   });
 
@@ -27,6 +28,7 @@ describe('UserRequestsDtos', () => {
       email: 'jan',
       password: 'password!',
       country: 'USA',
+      dateOfBirth: 'asd',
     };
     const createUserRequest = plainToInstance(CreateUserRequest, body);
     const errors = await validate(createUserRequest);
@@ -36,6 +38,7 @@ describe('UserRequestsDtos', () => {
       'username',
       'email',
       'password',
+      'dateOfBirth',
     ]);
   });
 
@@ -46,6 +49,7 @@ describe('UserRequestsDtos', () => {
       email: 'john@doe.com',
       password: 'Password123!',
       country: 'USA',
+      dateOfBirth: '2025-01-01',
     };
 
     const createUserRequest = plainToInstance(CreateUserRequest, body);
@@ -59,6 +63,7 @@ describe('UserRequestsDtos', () => {
       username: 'jo',
       bio: 'I',
       country: 'USA',
+      dateOfBirth: 'asd',
     };
 
     const updateUserRequest = plainToInstance(UpdateUserInfo, body);
@@ -68,6 +73,7 @@ describe('UserRequestsDtos', () => {
       'username',
       'name',
       'bio',
+      'dateOfBirth',
     ]);
   });
 
@@ -77,6 +83,7 @@ describe('UserRequestsDtos', () => {
       username: 'john_doe',
       bio: 'I am a user',
       country: 'USA',
+      dateOfBirth: '2025-01-01',
     };
 
     const updateUserRequest = plainToInstance(UpdateUserInfo, body);
@@ -96,8 +103,8 @@ describe('UserRequestsDtos', () => {
       username: 1,
       country: 2,
       email: '',
-      location: 3,
       name: 4,
+      age: 's',
     };
 
     const userQueryRequest = plainToInstance(UserQuery, body);
@@ -108,7 +115,7 @@ describe('UserRequestsDtos', () => {
       'username',
       'email',
       'country',
-      'location',
+      'age',
     ]);
   });
 
@@ -117,7 +124,6 @@ describe('UserRequestsDtos', () => {
       username: 'john_doe',
       country: 'en',
       email: 'john.doe@gmail.com',
-      location: 'New York',
       name: 'John Doe',
     };
 
@@ -133,6 +139,7 @@ describe('UserRequestsDtos', () => {
       email: 'jan',
       password: 'password!',
       country: 'invalid',
+      dateOfBirth: 'asd',
     };
     const createUserRequest = plainToInstance(CreateUserRequest, body);
     const errors = await validate(createUserRequest);
@@ -142,6 +149,7 @@ describe('UserRequestsDtos', () => {
       'username',
       'email',
       'password',
+      'dateOfBirth',
     ]);
   });
 });

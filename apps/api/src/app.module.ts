@@ -17,13 +17,10 @@ import { StageModule } from './stage/stage.module';
 import { ParticipationModule } from './participation/participation.module';
 import { BlockedGroupsModule } from './blocked-groups/blocked-groups.module';
 import { BlockedUsersModule } from './group/blocked-users/blocked-users.module';
-<<<<<<< HEAD
 import { LfgModule } from './lfg/lfg.module';
-=======
 import { InterestModule } from './interest/interest.module';
 import { GroupInterestsModule } from './group/group-interests/group-interests.module';
 import { LocationModule } from './location/location.module';
->>>>>>> main
 
 @Module({
   imports: [
@@ -43,13 +40,10 @@ import { LocationModule } from './location/location.module';
     ParticipationModule,
     BlockedGroupsModule,
     BlockedUsersModule,
-<<<<<<< HEAD
     LfgModule,
-=======
     InterestModule,
     GroupInterestsModule,
     LocationModule,
->>>>>>> main
   ],
   controllers: [AppController],
   providers: [AppService],

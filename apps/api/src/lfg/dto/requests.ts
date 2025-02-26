@@ -7,6 +7,8 @@ import {
   MaxLength,
   IsArray,
   IsOptional,
+  IsInt,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateLFGRequest implements ICreateLFGRequest {
@@ -17,11 +19,19 @@ export class CreateLFGRequest implements ICreateLFGRequest {
   message: string;
 
   @ApiProperty()
-  @IsArray({
-    each: true,
+  @IsArray()
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) {
+      return value.map((id) => {
+        if (typeof id === 'string') {
+          return parseInt(id, 10);
+        }
+        return id;
+      });
+    }
+    return value;
   })
-  @Transform(({ value }) => value.map((id) => parseInt(id)))
-  @Type(() => Number)
+  @IsInt({ each: true })
   categoryIds: number[];
 }
 
@@ -35,10 +45,18 @@ export class UpdateLFGRequest implements IUpdateLFGRequest {
 
   @IsOptional()
   @ApiPropertyOptional()
-  @IsArray({
-    each: true,
+  @IsArray()
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) {
+      return value.map((id) => {
+        if (typeof id === 'string') {
+          return parseInt(id, 10);
+        }
+        return id;
+      });
+    }
+    return value;
   })
-  @Transform(({ value }) => value.map((id) => parseInt(id)))
-  @Type(() => Number)
+  @IsInt({ each: true })
   categoryIds?: number[];
 }

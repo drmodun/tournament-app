@@ -13,10 +13,12 @@ import {
   IsEmail,
   IsStrongPassword,
   IsBoolean,
+  IsDate,
+  IsNumber,
 } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
 import { UserReturnTypesEnumType } from '../types';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateUserRequest implements ICreateUserRequest {
   @IsString()
@@ -59,10 +61,10 @@ export class CreateUserRequest implements ICreateUserRequest {
   @ApiProperty()
   country: string;
 
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional()
-  location?: string;
+  @IsDate()
+  @ApiProperty()
+  @Transform(({ value }) => new Date(value))
+  dateOfBirth: Date;
 }
 
 export class UpdateUserInfo implements IUpdateUserInfo {
@@ -91,6 +93,12 @@ export class UpdateUserInfo implements IUpdateUserInfo {
   @MinLength(3)
   @MaxLength(300)
   bio?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  dateOfBirth?: Date;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -142,6 +150,12 @@ export class UserQuery
   @IsOptional()
   @IsString()
   location?: string;
+
+  @ApiPropertyOptional()
+  @Transform(({ value }) => parseInt(value))
+  @IsOptional()
+  @IsNumber()
+  age?: number;
 }
 
 //TODO: test query params more carefully and see if more transformations have to be done

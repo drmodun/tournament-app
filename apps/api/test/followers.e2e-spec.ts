@@ -115,7 +115,7 @@ describe('FollowersController (e2e)', () => {
           password: 'Password123!',
           country: 'USA',
           name: 'Test User',
-          location: 'New York',
+          dateOfBirth: new Date(),
         } satisfies CreateUserRequest)
         .expect(201);
 
@@ -148,7 +148,7 @@ describe('FollowersController (e2e)', () => {
           password: 'Password123!',
           country: 'USA',
           name: 'Test User',
-          location: 'New York',
+          dateOfBirth: new Date(),
         } satisfies CreateUserRequest)
         .expect(201);
 
@@ -179,7 +179,7 @@ describe('FollowersController (e2e)', () => {
           password: 'Password123!',
           country: 'USA',
           name: 'Test User',
-          location: 'New York',
+          dateOfBirth: new Date(),
         } satisfies CreateUserRequest)
         .expect(201);
 

@@ -123,6 +123,7 @@ describe('GroupInvitesController (e2e)', () => {
         'message',
         'bio',
         'country',
+        'age',
         'followers',
         'level',
         'isFake',
@@ -323,6 +324,7 @@ describe('GroupInvitesController (e2e)', () => {
       const expectedFields = new Set([
         'id',
         'username',
+        'age',
         'email',
         'profilePicture',
         'groupId',

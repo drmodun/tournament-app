@@ -131,6 +131,7 @@ describe('UserController', () => {
         'email',
         'level',
         'name',
+        'age',
         'updatedAt',
         'followers',
         'following',
@@ -163,6 +164,7 @@ describe('UserController', () => {
         'email',
         'level',
         'name',
+        'age',
         'updatedAt',
         'followers',
       ]);
@@ -349,8 +351,8 @@ describe('UserController', () => {
         bio: 'I am a user',
         country: 'USA',
         email: 'johssn@doe.com',
-        location: 'New York',
         password: 'Password123!',
+        dateOfBirth: new Date(),
         name: 'John Doe',
         profilePicture: 'https://example.com/john_doe.jpg',
       };
@@ -370,7 +372,7 @@ describe('UserController', () => {
         bio: 'I am a user',
         country: 'USA',
         email: 'ad',
-        location: 'New York',
+        dateOfBirth: new Date(),
         password: 'Password',
       };
 
@@ -398,7 +400,7 @@ describe('UserController', () => {
         name: 'John Doe',
         country: 'USA',
         email,
-        location: 'New York',
+        dateOfBirth: new Date(),
         password: 'Password123!',
       };
 
@@ -445,6 +447,7 @@ describe('UserController', () => {
         bio: expect.any(String),
         profilePicture: expect.any(String),
         country: expect.any(String),
+        age: expect.any(Number),
         followers: expect.any(Number),
         following: expect.any(Number),
         level: expect.any(Number),
@@ -486,6 +489,34 @@ describe('UserController', () => {
         .expect(200);
 
       expect(response.body).toEqual({ id: 4 });
+    });
+
+    it('should calculate age correctly when updating a user', async () => {
+      const dateOfBirth = new Date();
+      dateOfBirth.setUTCFullYear(dateOfBirth.getFullYear() - 25); // Set DOB to 25 years ago
+      dateOfBirth.setUTCDate(dateOfBirth.getUTCDate() - 1); // The frontend will handle timezones, no need to set to UTC
+
+      const createRequest: UpdateUserInfo = {
+        username: 'age_test_user',
+        bio: 'Testing age calculation',
+        country: 'USA',
+        dateOfBirth: dateOfBirth,
+      };
+
+      const response = await request(app.getHttpServer())
+        .patch(`/users/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(createRequest)
+        .expect(200);
+
+      const userId = response.body.id;
+      console.log(response.body);
+
+      const userResponse = await request(app.getHttpServer())
+        .get(`/users/${userId}`)
+        .expect(200);
+
+      expect(userResponse.body.age).toBe(25);
     });
 
     it('should return 401 if no access token is provided', async () => {

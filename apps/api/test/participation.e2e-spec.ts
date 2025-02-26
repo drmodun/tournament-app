@@ -449,6 +449,7 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           name: 'Fake Player',
           password: 'Password123!',
+          dateOfBirth: new Date(),
         } satisfies ICreateUserRequest)
         .expect(201);
 

@@ -11,161 +11,183 @@ import { LocationResponsesEnum } from '@tournament-app/types';
 
 describe('LocationService', () => {
   let service: LocationService;
-
-  jest.mock('../location.repository');
+  let repository: LocationDrizzleRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LocationService, LocationDrizzleRepository],
+      providers: [
+        LocationService,
+        {
+          provide: LocationDrizzleRepository,
+          useValue: {
+            createEntity: jest.fn(),
+            getQuery: jest.fn(),
+            getSingleQuery: jest.fn(),
+            updateEntity: jest.fn(),
+            deleteEntity: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<LocationService>(LocationService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
-  it('should create a location', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'createEntity')
-      .mockResolvedValue([{ id: 1 }]);
-
-    const request: CreateLocationDto = {
-      name: 'Test Location',
-      apiId: 'location123',
-      lat: 40.7128,
-      lng: -74.006,
-    };
-
-    const result = await service.create(request);
-
-    expect(result).toEqual({ id: 1 });
-  });
-
-  it('should throw an unprocessable entity exception when creating a location fails', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'createEntity')
-      .mockResolvedValue([]);
-
-    const request: CreateLocationDto = {
-      name: 'Test Location',
-      apiId: 'location123',
-      lat: 40.7128,
-      lng: -74.006,
-    };
-
-    await expect(service.create(request)).rejects.toThrow(
-      UnprocessableEntityException,
+    repository = module.get<LocationDrizzleRepository>(
+      LocationDrizzleRepository,
     );
   });
 
-  it('should throw an error when creating a location with a duplicate apiId', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'createEntity')
-      .mockRejectedValue(new PostgresError('23505'));
+  describe('getLocationByApiId', () => {
+    it('should return location when found', async () => {
+      const mockLocation = { id: 1, apiId: 'test123' };
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([mockLocation]);
 
-    const request: CreateLocationDto = {
-      name: 'Test Location',
-      apiId: 'location123',
-      lat: 40.7128,
-      lng: -74.006,
-    };
-
-    await expect(service.create(request)).rejects.toThrow(PostgresError);
-  });
-
-  it('should find all locations', async () => {
-    const mockLocations = [
-      { id: 1, name: 'Location 1', coordinates: [40.7128, -74.006] },
-      { id: 2, name: 'Location 2', coordinates: [34.0522, -118.2437] },
-    ];
-
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'getQuery')
-      .mockResolvedValue(mockLocations);
-
-    const result = await service.findAll({
-      responseType: LocationResponsesEnum.BASE,
+      const result = await service.getLocationByApiId('test123');
+      expect(result).toEqual(mockLocation);
     });
 
-    expect(result).toEqual(mockLocations);
+    it('should return undefined when location not found', async () => {
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([]);
+
+      const result = await service.getLocationByApiId('nonexistent');
+      expect(result).toBeUndefined();
+    });
   });
 
-  it('should find one location', async () => {
-    const mockLocation = [
-      { id: 1, name: 'Location 1', coordinates: [40.7128, -74.006] },
-    ];
-
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'getSingleQuery')
-      .mockResolvedValue(mockLocation);
-
-    const result = await service.findOne(1, LocationResponsesEnum.BASE);
-
-    expect(result).toEqual(mockLocation[0]);
-  });
-
-  it('should throw not found exception when location does not exist', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'getSingleQuery')
-      .mockResolvedValue(null);
-
-    await expect(
-      service.findOne(999, LocationResponsesEnum.BASE),
-    ).rejects.toThrow(NotFoundException);
-  });
-
-  it('should update a location', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'updateEntity')
-      .mockResolvedValue([{ id: 1 }]);
-
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'getSingleQuery')
-      .mockResolvedValue([{ id: 1 }]);
-
-    const request: UpdateLocationDto = {
-      name: 'Updated Location',
-      apiId: 'updatedLocation123',
+  describe('create', () => {
+    const createDto: CreateLocationDto = {
+      name: 'Test Location',
+      apiId: 'location123',
       lat: 40.7128,
       lng: -74.006,
     };
 
-    const result = await service.update(1, request);
+    it('should return existing location if found by apiId', async () => {
+      const existingLocation = { id: 1, apiId: 'location123' };
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([existingLocation]);
 
-    expect(result).toEqual({ id: 1 });
+      const result = await service.create(createDto);
+      expect(result).toEqual(existingLocation);
+      expect(repository.createEntity).not.toHaveBeenCalled();
+    });
+
+    it('should create new location if not exists', async () => {
+      const newLocation = { id: 1, ...createDto };
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([]);
+      jest.spyOn(repository, 'createEntity').mockResolvedValue([newLocation]);
+
+      const result = await service.create(createDto);
+      expect(result).toEqual(newLocation);
+      expect(repository.createEntity).toHaveBeenCalledWith({
+        ...createDto,
+        coordinates: [createDto.lng, createDto.lat],
+      });
+    });
+
+    it('should throw UnprocessableEntityException when creation fails', async () => {
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([]);
+      jest.spyOn(repository, 'createEntity').mockResolvedValue([]);
+
+      await expect(service.create(createDto)).rejects.toThrow(
+        UnprocessableEntityException,
+      );
+    });
   });
 
-  it('should throw not found exception when updating non-existent location', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'updateEntity')
-      .mockResolvedValue(null);
+  describe('findAll', () => {
+    it('should return all locations with default response type', async () => {
+      const mockLocations = [{ id: 1 }, { id: 2 }];
+      jest.spyOn(repository, 'getQuery').mockResolvedValue(mockLocations);
 
-    const request: UpdateLocationDto = {
+      const result = await service.findAll({});
+      expect(result).toEqual(mockLocations);
+      expect(repository.getQuery).toHaveBeenCalledWith({
+        responseType: LocationResponsesEnum.BASE,
+      });
+    });
+
+    it('should return locations with specified response type', async () => {
+      const mockLocations = [{ id: 1, createdAt: new Date() }];
+      jest.spyOn(repository, 'getQuery').mockResolvedValue(mockLocations);
+
+      const result = await service.findAll({
+        responseType: LocationResponsesEnum.EXTENDED,
+      });
+      expect(result).toEqual(mockLocations);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a single location', async () => {
+      const mockLocation = { id: 1 };
+      jest
+        .spyOn(repository, 'getSingleQuery')
+        .mockResolvedValue([mockLocation]);
+
+      const result = await service.findOne(1);
+      expect(result).toEqual(mockLocation);
+    });
+
+    it('should throw NotFoundException when location not found', async () => {
+      jest.spyOn(repository, 'getSingleQuery').mockResolvedValue([]);
+
+      await expect(service.findOne(999)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('update', () => {
+    const updateDto: UpdateLocationDto = {
       name: 'Updated Location',
+      lat: 40.7128,
+      lng: -74.006,
     };
 
-    await expect(service.update(999, request)).rejects.toThrow(
-      NotFoundException,
-    );
+    it('should update location successfully', async () => {
+      const mockLocation = { id: 1 };
+      jest
+        .spyOn(repository, 'getSingleQuery')
+        .mockResolvedValue([mockLocation]);
+      jest.spyOn(repository, 'updateEntity').mockResolvedValue([mockLocation]);
+
+      const result = await service.update(1, updateDto);
+      expect(result).toEqual(mockLocation);
+    });
+
+    it('should throw NotFoundException when location not found', async () => {
+      jest.spyOn(repository, 'getSingleQuery').mockResolvedValue([]);
+
+      await expect(service.update(999, updateDto)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('should update with coordinates when lat and lng provided', async () => {
+      const mockLocation = { id: 1 };
+      jest
+        .spyOn(repository, 'getSingleQuery')
+        .mockResolvedValue([mockLocation]);
+      jest.spyOn(repository, 'updateEntity').mockResolvedValue([mockLocation]);
+
+      await service.update(1, updateDto);
+      expect(repository.updateEntity).toHaveBeenCalledWith(1, {
+        ...updateDto,
+        coordinates: [updateDto.lng, updateDto.lat],
+      });
+    });
   });
 
-  it('should remove a location', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'deleteEntity')
-      .mockResolvedValue([{ id: 1 }]);
+  describe('remove', () => {
+    it('should remove location successfully', async () => {
+      const mockLocation = { id: 1 };
+      jest.spyOn(repository, 'deleteEntity').mockResolvedValue([mockLocation]);
 
-    const result = await service.remove(1);
+      const result = await service.remove(1);
+      expect(result).toEqual(mockLocation);
+    });
 
-    expect(result).toEqual({ id: 1 });
-  });
+    it('should throw NotFoundException when location not found', async () => {
+      jest.spyOn(repository, 'deleteEntity').mockResolvedValue([]);
 
-  it('should throw not found exception when removing non-existent location', async () => {
-    jest
-      .spyOn(LocationDrizzleRepository.prototype, 'deleteEntity')
-      .mockResolvedValue([]);
-
-    await expect(service.remove(999)).rejects.toThrow(NotFoundException);
+      await expect(service.remove(999)).rejects.toThrow(NotFoundException);
+    });
   });
 });

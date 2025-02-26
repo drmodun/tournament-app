@@ -19,6 +19,7 @@ import SlideButton from "components/slideButton";
 import { IExtendedUserResponse, IUserResponse } from "@tournament-app/types";
 import { useGetUserOrganizedCompetitions } from "api/client/hooks/competitions/useGetUserOrganizedCompetitions";
 import ProgressWheel from "components/progressWheel";
+import CreateTournamentForm from "views/createTournamentForm";
 
 type CompetitionInputs = {
   name: string;
@@ -178,147 +179,11 @@ export default function ManageCompetitions({
     >
       <Dialog
         variant={theme}
-        active={isAddDialogOpen}
+        active={true} //isAddDialogOpen}
         onClose={() => setIsAddDialogOpen(false)}
         className={styles.dialog}
       >
-        <FormProvider {...addMethods}>
-          <form
-            onSubmit={addMethods.handleSubmit(onAddSubmit)}
-            className={styles.form}
-          >
-            <div className={styles.dialogOption}>
-              <Input
-                variant={textColorTheme}
-                label="competition name"
-                placeholder="enter competition name"
-                isReactFormHook={true}
-                required={true}
-                name="name"
-              />
-            </div>
-            <div className={styles.dialogOption}>
-              <Dropdown
-                doesSearch={true}
-                searchPlaceholder="category name"
-                label="select competition category"
-                variant={textColorTheme}
-                placeholder="select"
-                isReactHookForm={true}
-                required={true}
-                name="category"
-                options={[
-                  { label: "programming" },
-                  { label: "sports" },
-                  { label: "other" },
-                ]}
-              />
-            </div>
-            <div className={styles.dialogOption}>
-              <Dropdown
-                doesSearch={true}
-                searchPlaceholder="competition type"
-                label="select competition type"
-                placeholder="select"
-                variant={textColorTheme}
-                isReactHookForm={true}
-                required={true}
-                name="type"
-                options={[
-                  { label: "league" },
-                  { label: "competition" },
-                  { label: "seasonal" },
-                  { label: "contest" },
-                  { label: "event" },
-                ]}
-              />
-            </div>
-            <div className={styles.dialogOption}>
-              <p className={styles.optionName}>location</p>
-              <SlideButton options={["offline", "online", "hybrid"]} />
-            </div>
-            <div className={styles.dialogOption}>
-              <p className={styles.optionName}>team competition</p>
-              <CheckboxGroup
-                checkboxes={[
-                  {
-                    variant: textColorTheme,
-                    onSelect: () => {
-                      console.log("hi");
-                    },
-                  },
-                ]}
-                isReactHookForm={true}
-                name="teamCompetition"
-              />
-            </div>
-            <div className={styles.dialogOption}>
-              <p className={styles.optionName}>public</p>
-              <CheckboxGroup
-                checkboxes={[{ variant: textColorTheme }]}
-                isReactHookForm={true}
-                name="public"
-              />
-            </div>
-
-            <div className={styles.dialogOption}>
-              <p className={styles.optionName}>league format</p>
-              <CheckboxGroup
-                checkboxes={[
-                  {
-                    variant: textColorTheme,
-                  },
-                ]}
-                isReactHookForm={true}
-                name="leagueFormat"
-              />
-            </div>
-            <div className={styles.dialogOption}>
-              <p className={styles.optionName}>elo contraint</p>
-              <CheckboxGroup
-                checkboxes={[
-                  {
-                    variant: textColorTheme,
-                    onSelect: handleEloContraint,
-                  },
-                ]}
-                isReactHookForm={true}
-                name="eloConstraint"
-              />
-            </div>
-            {isEloConstrained && (
-              <div className={styles.dialogFromTo}>
-                <Input
-                  variant={textColorTheme}
-                  placeholder="from"
-                  type="number"
-                  name="eloRange.0"
-                  isReactFormHook={true}
-                  required={true}
-                />
-                <Input
-                  variant={textColorTheme}
-                  placeholder="to"
-                  type="number"
-                  name="eloRange.1"
-                  isReactFormHook={true}
-                  required={true}
-                />
-              </div>
-            )}
-
-            <Button
-              variant={
-                addMethods.formState.isValid ? "primary" : textColorTheme
-              }
-              disabled={!addMethods.formState.isValid}
-              onClick={() => {
-                console.log(addMethods.formState.errors);
-              }}
-              label="create competition"
-            />
-          </form>
-        </FormProvider>
+        <CreateTournamentForm userId={user.id} />
       </Dialog>
       <Dialog
         variant={theme}

@@ -1,29 +1,43 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
-  IExtendedUserResponse,
-  IGroupMembershipResponseWithDates,
+  GroupJoinRequestResponsesEnum,
+  IBaseQueryResponse,
+  IGroupJoinRequestQuery,
+  IGroupJoinRequestWithMiniUserResponse,
+  IGroupJoinRequestWithUserResponse,
 } from "@tournament-app/types";
 import { clientApi, getAccessToken } from "api/client/base";
 import { AxiosResponse } from "axios";
 
-export const getGroupJoinRequests = async (groupId: number) =>
+export const getGroupJoinRequests = async (
+  groupId: number | undefined,
+  page: number | undefined,
+) =>
   clientApi
-    .get<never, AxiosResponse<any>>(`/group-join-requests`, {
+    .get<
+      never,
+      AxiosResponse<IBaseQueryResponse<IGroupJoinRequestWithMiniUserResponse>>
+    >(`/group-join-requests`, {
       params: {
-        responseType: "with-mini-user",
+        responseType: GroupJoinRequestResponsesEnum.WITH_MINI_USER,
         groupId: groupId,
+        page: page ?? 1,
+        pageSize: 5,
       },
     })
     .then((res) => res.data);
 
-export const useGroupJoinRequests = (groupId: number) => {
-  return useQuery({
+export const useGroupJoinRequests = (groupId: number | undefined) => {
+  return useInfiniteQuery({
     queryKey: ["group", "me"],
-    queryFn: () => getGroupJoinRequests(groupId),
+    queryFn: ({ pageParam }: { pageParam?: number }) =>
+      getGroupJoinRequests(groupId, pageParam),
     staleTime: Infinity,
     retryDelay: 10000,
     enabled: getAccessToken() !== null,
+    getNextPageParam: (page, pages) => pages.length + 1, // TODO: promjeni kada je dodan fullCount
+    initialPageParam: 1,
   });
 };

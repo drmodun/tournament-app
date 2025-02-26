@@ -15,7 +15,7 @@
 
 .options {
   padding: $halfPadding $padding;
-  border-radius: 0 $borderRadius $borderRadius $borderRadius;
+  border-radius: 0 0 $borderRadius $borderRadius;
   height: 100%;
   @media screen and (max-width: $tabletBreakpoint) {
     margin-left: 0;

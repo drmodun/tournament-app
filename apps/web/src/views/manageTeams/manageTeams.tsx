@@ -6,32 +6,21 @@ import { clsx } from "clsx";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import Dialog from "components/dialog";
 import Button from "components/button";
-import Input from "components/input";
-import Chip from "components/chip";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import CheckboxGroup from "components/checkboxGroup";
 import { textColor } from "types/styleTypes";
-import GroupsIcon from "@mui/icons-material/Groups";
 import GroupIcon from "@mui/icons-material/Group";
-import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
-import RichEditor from "components/richEditor";
-import Dropdown from "components/dropdown";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import InboxIcon from "@mui/icons-material/Inbox";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  groupRoleEnum,
-  IGroupMembershipResponse,
-  IGroupMembershipResponseWithDates,
-} from "@tournament-app/types";
-import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinRequests";
+import { groupRoleEnum, IGroupMembershipResponse } from "@tournament-app/types";
 import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import AddLFPForm from "views/addLFPForm";
 import ViewLFP from "views/viewLFP";
 import ManageTeamMembers from "views/manageTeamMembers";
 import EditTeamForm from "views/editTeamForm";
 import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
+import GroupJoinRequests from "views/groupJoinRequests";
 
 type Item = {
   name: string;
@@ -45,9 +34,7 @@ export default function ManageTeams({
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const editGroupMutation = useEditGroup(team.groupId);
-  //const { data, isLoading } = useGroupJoinRequests(team.group.id);
-  // const {data: groupMembers, isLoading: groupMembersIsLoading} = useGetGroupMembers(team.group.id);
+  const editGroupMutation = useEditGroup(team?.groupId);
 
   const [lfpCampaigns, setLfpCampaigns] = useState<Item[]>([
     { name: "looking for CS:GO player this is a post!!!", id: "1" },
@@ -78,6 +65,8 @@ export default function ManageTeams({
   const [addLfpModalActive, setAddLfpModalActive] = useState<boolean>(false);
   const [viewLfpModalActive, setViewLfpModalActive] = useState<boolean>(false);
   const [membersModalActive, setMembersModalActive] = useState<boolean>(false);
+  const [groupJoinRequestsModal, setGroupJoinRequestsModal] =
+    useState<boolean>(false);
   const [editTeamModalActive, setEditTeamModalActive] =
     useState<boolean>(false);
 
@@ -94,7 +83,15 @@ export default function ManageTeams({
         variant={theme}
         className={styles.editTeamDialogWrapper}
       >
-        <EditTeamForm mutation={editGroupMutation} groupId={team.groupId} />
+        <EditTeamForm mutation={editGroupMutation} groupId={team?.groupId} />
+      </Dialog>
+      <Dialog
+        active={groupJoinRequestsModal}
+        onClose={() => setGroupJoinRequestsModal(false)}
+        variant={theme}
+        className={styles.editTeamDialogWrapper}
+      >
+        <GroupJoinRequests groupId={team?.groupId} />
       </Dialog>
       <Dialog
         active={addLfpModalActive}
@@ -116,12 +113,12 @@ export default function ManageTeams({
         variant={theme}
         className={styles.membersDialogWrapper}
       >
-        <ManageTeamMembers teamId={team.groupId} />
+        <ManageTeamMembers teamId={team?.groupId} />
       </Dialog>
       <div className={styles.left}>
         <div>
           <img
-            src={team.group.logo}
+            src={team?.group?.logo}
             alt="team logo"
             className={styles.teamImage}
           />
@@ -136,7 +133,7 @@ export default function ManageTeams({
               <b className={clsx(globals[`${theme}Color`], globals.largeText)}>
                 {`${team?.group?.name} (${team?.group?.abbreviation})`}
               </b>{" "}
-              {formatDate(new Date(team.createdAt))}
+              {formatDate(new Date(team?.createdAt))}
             </div>
           </p>
 
@@ -159,8 +156,21 @@ export default function ManageTeams({
               )}
             />
           </Button>
-          {(team.role === groupRoleEnum.ADMIN ||
-            team.role === groupRoleEnum.OWNER) && (
+          <Button
+            label="group join requests"
+            variant="primary"
+            className={styles.rostersButton}
+            onClick={() => setGroupJoinRequestsModal(true)}
+          >
+            <InboxIcon
+              className={clsx(
+                styles[`${textColorTheme}Fill`],
+                styles.buttonIconPadding,
+              )}
+            />
+          </Button>
+          {(team?.role === groupRoleEnum.ADMIN ||
+            team?.role === groupRoleEnum.OWNER) && (
             <Button
               label="edit"
               variant="secondary"

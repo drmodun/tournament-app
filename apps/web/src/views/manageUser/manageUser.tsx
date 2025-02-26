@@ -13,7 +13,10 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { textColor } from "types/styleTypes";
 import LaunchIcon from "@mui/icons-material/Launch";
 import {
+  GroupMembershipResponsesEnum,
+  IBaseQueryResponse,
   IExtendedUserResponse,
+  IGroupMembershipResponse,
   IGroupMembershipResponseWithDates,
   IUpdateUserInfo,
 } from "@tournament-app/types";
@@ -28,6 +31,11 @@ import { leaveUserGroups } from "api/client/hooks/groups/useLeaveUserGroups";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import UserEditForm from "views/userEditForm";
 import Button from "components/button";
+import { useRouter } from "next/navigation";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
+import UserFollowersDialog from "views/userFollowersModal";
 
 type Team = {
   name: string;
@@ -49,13 +57,17 @@ export default function ManageUser({
   data: IExtendedUserResponse | undefined;
 }) {
   const [dialogActive, setDialogActive] = useState<boolean>(false);
+  const [userFollowersDialog, setUserFollowersDialog] =
+    useState<boolean>(false);
 
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+  const router = useRouter();
 
   const scrollRefTeams = useRef<HTMLDivElement>(null);
 
-  const { data: groupData } = useUserGroups();
+  const { data: groupData, fetchNextPage } = useUserGroups(true);
+  const deleteUserMutation = useDeleteUser(data?.id);
 
   return (
     <div className={styles.wrapper}>
@@ -66,6 +78,14 @@ export default function ManageUser({
         className={styles.dialog}
       >
         <UserEditForm data={data} groupData={groupData} />
+      </Dialog>
+      <Dialog
+        active={userFollowersDialog}
+        onClose={() => setUserFollowersDialog(false)}
+        variant={theme}
+        className={styles.dialog}
+      >
+        <UserFollowersDialog userId={data?.id} />
       </Dialog>
       <div className={styles.profileEdit}>
         <button
@@ -113,7 +133,7 @@ export default function ManageUser({
             <b className={styles.boldText}>country</b>
             <p
               className={clsx(styles.infoText)}
-            >{`${data?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[data?.country] ?? "ZZ")}`}</p>
+            >{`${data?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[data?.country ?? ""] ?? "ZZ")}`}</p>
           </div>
           <div className={styles.userInfo}>
             <b className={styles.boldText}>level</b>
@@ -131,11 +151,12 @@ export default function ManageUser({
         <div className={styles.description}>
           <b className={styles.boldText}>bio</b>
           <p className={styles.descriptionText}>
-            <RichEditor
-              startingContent={data?.bio ?? "no bio yet."}
-              editable={false}
-              variant={textColorTheme}
-            />
+            <Markdown
+              className={globals[`${textColorTheme}Color`]}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {data?.bio ?? "no bio yet."}
+            </Markdown>
           </p>
         </div>
 
@@ -154,19 +175,31 @@ export default function ManageUser({
               }
             }}
           >
-            {groupData?.results.map(
-              (team: IGroupMembershipResponseWithDates) => {
-                return (
-                  <div className={styles.team}>
+            {groupData?.pages.map(
+              (page: IBaseQueryResponse<GroupMembershipResponsesEnum>) =>
+                page.results.map((team: GroupMembershipResponsesEnum) => (
+                  <div
+                    className={styles.team}
+                    onClick={() => router.push(`/group/${team?.id}`)}
+                  >
                     <Chip
-                      key={team.id}
-                      label={team.name}
+                      key={team?.id}
+                      label={team?.name}
                       variant={textColorTheme}
                       className={styles.team}
                     />
                   </div>
-                );
-              },
+                )),
+            )}
+            {groupData?.pages?.length === 0 ? (
+              "no teams yet."
+            ) : (
+              <Chip
+                key={"load team button"}
+                label="load more"
+                variant="secondary"
+                onClick={() => fetchNextPage()}
+              ></Chip>
             )}
           </div>
         </div>
@@ -183,7 +216,16 @@ export default function ManageUser({
             <LaunchIcon className={clsx(styles[`${textColorTheme}Fill`])} />
           </div>
         </Link>
-        <Button label="delete user" variant="danger" />
+        <Button
+          label="view followers"
+          variant="secondary"
+          onClick={() => setUserFollowersDialog(true)}
+        ></Button>
+        <Button
+          label="delete user"
+          variant="danger"
+          onClick={() => deleteUserMutation.mutate()}
+        />
       </div>
     </div>
   );

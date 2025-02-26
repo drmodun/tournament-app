@@ -10,13 +10,6 @@ import Button from "components/button";
 import ManageSettings from "views/manageSettings";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { textColor, TextVariants } from "types/styleTypes";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ManageTeams from "views/manageTeams";
-import AddIcon from "@mui/icons-material/Add";
-import { useAuth } from "api/client/hooks/auth/useAuth";
-import { useRouter } from "next/navigation";
-import Dialog from "components/dialog";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Input from "components/input";
 import Dropdown from "components/dropdown";
@@ -190,7 +183,10 @@ export default function CreateTeamForm({
           <Dropdown
             options={countries.map((country) => {
               return {
-                label: COUNTRY_CODES_TO_NAMES[country],
+                label:
+                  COUNTRY_CODES_TO_NAMES[
+                    country as keyof typeof COUNTRY_CODES_TO_NAMES
+                  ],
               };
             })}
             searchPlaceholder="search..."

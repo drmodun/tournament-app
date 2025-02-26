@@ -22,6 +22,10 @@
   }
 }
 
+.menuButtonMobile {
+  width: 100% !important;
+}
+
 .menuButtonIconLight > * {
   fill: $dark;
 }
@@ -60,6 +64,11 @@
   }
 }
 
+.menuBarMobile {
+  flex-wrap: wrap !important;
+  flex-direction: column !important;
+}
+
 .menuBarPart {
   display: flex;
   margin-bottom: $halfPadding / 2;
@@ -68,6 +77,10 @@
   @media screen and (max-width: $tabletBreakpoint) {
     width: 100%;
   }
+}
+
+.menuBarPartMobile {
+  width: 100% !important;
 }
 
 .lightFill > * {

@@ -71,7 +71,6 @@
 
 .input {
   width: clamp(0px, 75%, $desktopBreakpoint);
-  margin-bottom: $padding;
 
   @media screen and (max-width: $desktopBreakpoint) {
     width: 100%;
@@ -91,8 +90,33 @@
 }
 
 .error {
-  margin-bottom: $padding;
   text-align: left;
+  width: clamp(0px, 75%, $desktopBreakpoint);
+  margin-top: $halfPadding;
+  color: $danger;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    width: 100%;
+  }
+}
+
+.innerFormWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.mmrInputs {
+  display: flex;
+  gap: $halfPadding;
+  width: 100%;
+}
+
+.mmrInput {
+  width: 100% !important;
+}
+
+.dropdown {
   width: clamp(0px, 75%, $desktopBreakpoint);
 
   @media screen and (max-width: $desktopBreakpoint) {

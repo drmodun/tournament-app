@@ -1,45 +1,22 @@
 "use client";
 
-import styles from "./userProfile.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import Dialog from "components/dialog";
-import Button from "components/button";
-import Input from "components/input";
-import Chip from "components/chip";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import CheckboxGroup from "components/checkboxGroup";
-import { textColor } from "types/styleTypes";
-import GroupsIcon from "@mui/icons-material/Groups";
-import GroupIcon from "@mui/icons-material/Group";
-import PersonIcon from "@mui/icons-material/Person";
-import AddIcon from "@mui/icons-material/Add";
-import RichEditor from "components/richEditor";
-import Dropdown from "components/dropdown";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  groupRoleEnum,
-  IExtendedUserResponse,
-  IGroupMembershipResponse,
-  IGroupMembershipResponseWithDates,
-} from "@tournament-app/types";
-import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinRequests";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
-import AddLFPForm from "views/addLFPForm";
-import ViewLFP from "views/viewLFP";
-import ManageTeamMembers from "views/manageTeamMembers";
-import EditTeamForm from "views/editTeamForm";
-import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
-import Link from "next/link";
+import { IExtendedUserResponse } from "@tournament-app/types";
+import { useAuth } from "api/client/hooks/auth/useAuth";
+import { useCheckIfFollowingUser } from "api/client/hooks/followers/useCheckIfFollowingUser";
 import { useFollowUser } from "api/client/hooks/followers/useFollowUser";
 import { useUnfollowUser } from "api/client/hooks/followers/useUnfollowUser";
-import { useCheckIfFollowingUser } from "api/client/hooks/followers/useCheckIfFollowingUser";
-import { useToastContext } from "utils/hooks/useToastContext";
-import { useAuth } from "api/client/hooks/auth/useAuth";
-import ProgressWheel from "components/progressWheel";
+import { clsx } from "clsx";
+import Button from "components/button";
+import RichEditor from "components/richEditor";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
+import styles from "./userProfile.module.scss";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
   const { theme } = useThemeContext();
@@ -115,11 +92,12 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
         <div className={clsx(styles.userInfo, styles.bio)}>
           <b className={styles.boldText}>bio</b>
           <p className={styles.descriptionText}>
-            <RichEditor
-              startingContent={user?.bio ?? "no bio yet."}
-              editable={false}
-              variant={textColorTheme}
-            />
+            <Markdown
+              className={globals[`${textColorTheme}Color`]}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {user?.bio ?? "no bio yet."}
+            </Markdown>
           </p>
         </div>
         <div className={styles.userInfo}>

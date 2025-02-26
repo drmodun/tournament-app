@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { clientApi } from "api/client/base";
+import { clientApi, getAccessToken } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useAuth } from "../auth/useAuth";
@@ -12,8 +12,31 @@ import {
 
 export const createCompetition = async (data: ICreateTournamentRequest) =>
   clientApi
-    .post<never, AxiosResponse<{ id: number }>>(`/tournaments`, { body: data })
+    .post<ICreateTournamentRequest, AxiosResponse<{ id: number }>>(
+      `/tournaments`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+        body: JSON.stringify(data),
+      },
+    )
     .then((res) => res.data);
+
+export const createCompetitionFetch = (data: ICreateTournamentRequest) => {
+  return fetch(
+    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/tournaments`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+      body: JSON.stringify(data),
+    },
+  );
+};
 
 export const useCreateCompetition = () => {
   const toast = useToastContext();
@@ -21,8 +44,8 @@ export const useCreateCompetition = () => {
   return useMutation({
     mutationKey: ["me"],
     mutationFn: createCompetition,
-    retryDelay: 10000,
-    retry: 3,
+    retryDelay: 5000,
+    retry: 2,
     onSuccess: async (data) => {
       toast.addToast("successfully created competition", "success");
     },
@@ -32,6 +55,7 @@ export const useCreateCompetition = () => {
         "error",
       );
       console.error(error);
+      console.log(error.message);
     },
     onMutate: () => {
       toast.addToast("creating competition...", "info");

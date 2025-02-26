@@ -64,7 +64,7 @@ export default function userEditForm({ data, groupData }: UserEditFormProps) {
   };
 
   const deleteTeam = (id: number) => {
-    setTeams(teams.filter((team) => team.id !== id));
+    setTeams(teams?.filter((team) => team.id !== id));
     setTeamIdDeletions((prev) => [...prev, id]);
   };
 
@@ -189,10 +189,10 @@ export default function userEditForm({ data, groupData }: UserEditFormProps) {
               }
             }}
           >
-            {teams.length == 0 ? (
+            {teams?.length == 0 ? (
               <p className={styles.noItemsText}>you have no teams!</p>
             ) : (
-              teams.map((team: IGroupMembershipResponseWithDates) => {
+              teams?.map((team: IGroupMembershipResponseWithDates) => {
                 return (
                   <div className={styles.team} key={team.id}>
                     <Chip

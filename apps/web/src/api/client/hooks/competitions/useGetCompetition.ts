@@ -21,14 +21,6 @@ export const getCompetition = async (competitionId: number | undefined) =>
     >(`/tournaments/${competitionId}`, { params: { id: competitionId, responseType: TournamentResponsesEnum.EXTENDED } })
     .then((res) => res.data);
 
-export const fetchCompetition = async (competitionId: number | undefined) =>
-  fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/tournaments/${competitionId}?responseType=${TournamentResponsesEnum.EXTENDED}`,
-    {
-      headers: { "Content-Type": "application/json" },
-    },
-  ).then((res) => res.json().then((res) => res));
-
 export const useGetCompetition = (competitionId: number) => {
   return useQuery({
     queryKey: ["competition"],

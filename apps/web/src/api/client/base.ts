@@ -47,7 +47,6 @@ export const getRefreshToken = () => {
 
 clientApi.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
-  console.log(accessToken);
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }

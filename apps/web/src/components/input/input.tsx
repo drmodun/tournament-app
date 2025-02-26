@@ -35,6 +35,7 @@ interface InputProps {
   step?: string;
   defaultValue?: string;
   fullClassName?: string;
+  doesSubmitReactHookForm?: boolean;
 }
 
 export default function Input({
@@ -60,6 +61,7 @@ export default function Input({
   step,
   defaultValue,
   fullClassName,
+  doesSubmitReactHookForm = false,
 }: InputProps) {
   const [value, setValue] = useState<string>("");
   const methods = useFormContext();
@@ -143,6 +145,7 @@ export default function Input({
               globals[`${variant}MutedBackgroundColor`],
             )}
             style={submitStyle}
+            type={doesSubmitReactHookForm ? "submit" : "button"}
           >
             {submitLabel}
           </button>

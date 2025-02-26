@@ -30,6 +30,7 @@ interface RichEditorProps {
   isSSR?: boolean;
   isReactHookForm?: boolean;
   required?: boolean;
+  mobile?: boolean;
   name?: string;
 }
 
@@ -41,6 +42,7 @@ export default function RichEditor({
   isSSR = false,
   isReactHookForm = false,
   required = false,
+  mobile = false,
   name,
 }: RichEditorProps) {
   const methods = useFormContext();
@@ -174,8 +176,13 @@ export default function RichEditor({
 
   return (
     <div className={clsx(styles.wrapper)} style={style}>
-      <div className={clsx(styles.menuBar)}>
-        <div className={clsx(styles.menuBarPart)}>
+      <div className={clsx(styles.menuBar, mobile && styles.menuBarMobile)}>
+        <div
+          className={clsx(
+            styles.menuBarPart,
+            mobile && styles.menuBarPartMobile,
+          )}
+        >
           <button
             title="menu button"
             onClick={toggleBold}
@@ -190,6 +197,7 @@ export default function RichEditor({
                       : styles.menuButtonDark,
                   ],
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatBoldIcon
@@ -218,6 +226,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatItalicIcon
@@ -245,6 +254,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatStrikethroughIcon
@@ -272,6 +282,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatUnderlinedIcon
@@ -301,6 +312,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <FormatListBulletedIcon
@@ -328,6 +340,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <TitleIcon
@@ -355,6 +368,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <UndoIcon
@@ -382,6 +396,7 @@ export default function RichEditor({
                   ],
 
               styles.menuButton,
+              mobile && styles.menuButtonMobile,
             )}
           >
             <RedoIcon

@@ -32,13 +32,6 @@ export const useLogin = () => {
       toast.addToast("successfully logged in", "success"); //TODO: make this an object for easier and more consistent usage
       await refetch();
 
-      /*
-      if (!isSuccess) {
-        toast.addToast("error logging in", "error");
-        return;
-      }
-        */
-
       setTimeout(() => navigate.push("/"), 1000);
     },
     onError: (error: any) => {

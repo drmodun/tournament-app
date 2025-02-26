@@ -16,6 +16,7 @@ import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import { IExtendedTournamentResponse } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useRouter } from "next/navigation";
+import rehypeRaw from "rehype-raw";
 
 type SidebarSectionProps = {
   name: string;
@@ -64,7 +65,10 @@ export default function Competition({
           </div>
         </div>
         <div className={clsx(styles.content)}>
-          <Markdown className={globals[`${textColorTheme}Color`]}>
+          <Markdown
+            className={globals[`${textColorTheme}Color`]}
+            rehypePlugins={[rehypeRaw]}
+          >
             {competition?.description}
           </Markdown>
         </div>
@@ -103,13 +107,6 @@ export default function Competition({
             <Chip label={competition?.category?.name}></Chip>
           </SidebarSection>
         </div>
-        <Button
-          label="join competition"
-          variant="primary"
-          disabled={!isSuccess}
-          className={styles.joinButton}
-          onClick={handleJoin}
-        />
       </div>
     </div>
   );

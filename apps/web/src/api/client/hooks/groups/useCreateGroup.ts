@@ -9,7 +9,7 @@ import { useToastContext } from "utils/hooks/useToastContext";
 
 export const createGroup = async (data: ICreateGroupRequest) =>
   clientApi
-    .post<never, AxiosResponse<any>>(`/groups`, data)
+    .post<never, AxiosResponse<ICreateGroupRequest>>(`/groups`, data)
     .then((res) => res.data);
 
 export const useCreateGroup = () => {

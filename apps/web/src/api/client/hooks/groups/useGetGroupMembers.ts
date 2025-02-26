@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import {
   groupRoleEnumType,
   ICreateGroupRequest,
@@ -25,7 +25,7 @@ type GroupMembersType = {
   }[];
 };
 
-export const getGroupMembers = async (groupId: number) =>
+export const getGroupMembers = async (groupId: number | undefined) =>
   clientApi
     .get<
       never,
@@ -33,7 +33,7 @@ export const getGroupMembers = async (groupId: number) =>
     >(`/groups/${groupId}/members`, { params: { groupId } })
     .then((res) => res.data);
 
-export const useGetGroupMembers = (groupId: number) => {
+export const useGetGroupMembers = (groupId: number | undefined) => {
   return useQuery({
     queryKey: ["group", "me"],
     queryFn: () => getGroupMembers(groupId),

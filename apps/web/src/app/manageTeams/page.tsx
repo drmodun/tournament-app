@@ -19,39 +19,59 @@ import CreateTeamForm from "views/createTeamForm";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import ProgressWheel from "components/progressWheel";
+import { set } from "lodash";
 
 export default function Teams() {
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [activePage, setActivePage] = useState<number>(0);
   const { theme } = useThemeContext();
   const router = useRouter();
   const [dialogActive, setDialogActive] = useState<boolean>(false);
   const textColorTheme = textColor(theme);
+  const [fetchLimit, setFetchLimit] = useState<number>(-1);
 
-  const { data, isLoading, isSuccess } = useUserGroups();
+  const {
+    data,
+    isLoading,
+    isSuccess,
+    fetchNextPage,
+    fetchPreviousPage,
+    isFetchNextPageError,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    isFetchPreviousPageError,
+  } = useUserGroups();
   const createGroupMutation = useCreateGroup();
 
   useEffect(() => {
-    console.log(data);
-    if (!isSuccess && !isLoading) router.push("/");
-  }, [isLoading]);
-
-  const backward = () => {
-    setActiveTab((tab) => {
-      if (!data?.results) return 0;
-      return (tab - 1) % data?.results?.length;
-    });
-  };
-
-  const forward = () => {
-    setActiveTab((tab) => {
-      if (!data?.results) return 0;
-      return (tab + 1) % data?.results?.length;
-    });
-  };
-
-  useEffect(() => {
     createGroupMutation.isSuccess && setDialogActive(false);
-  }, [createGroupMutation.isSuccess]);
+    console.log(data);
+  }, [createGroupMutation.isSuccess, data]);
+
+  const forward = async () => {
+    const page = await fetchNextPage();
+
+    if (
+      isFetchNextPageError ||
+      (page.data?.pages[activePage + 1]?.results?.length ?? -1) == 0
+    ) {
+      setFetchLimit(activePage);
+      return;
+    }
+
+    setActivePage((curr) => curr + 1);
+    setActiveTab(0);
+  };
+
+  const backward = async () => {
+    if (activePage === 0) return;
+
+    await fetchPreviousPage();
+
+    setActivePage((curr) => curr - 1);
+    setActiveTab(0);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -64,7 +84,7 @@ export default function Teams() {
         <CreateTeamForm mutation={createGroupMutation} />
       </Dialog>
       <Navbar className={styles.navbar} />
-      {isLoading || data?.results == null ? (
+      {isLoading || data?.pages == null ? (
         <div className={styles.progressWheelWrapper}>
           <ProgressWheel variant={textColorTheme} />
         </div>
@@ -80,34 +100,47 @@ export default function Teams() {
               className={clsx(styles.button)}
               title="back"
               onClick={backward}
-              disabled={activeTab <= 0}
+              disabled={
+                isFetchPreviousPageError ||
+                isFetchingPreviousPage ||
+                isFetching ||
+                isLoading ||
+                activePage === 0
+              }
             >
               <ArrowBackIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
             <div className={styles.teamsWrapper}>
-              {data?.results.map((tab, index) => (
-                <Button
-                  key={index}
-                  className={clsx(
-                    styles.tab,
-                    activeTab === index && styles.active,
-                    activeTab === index && globals.primaryBackgroundColor,
-                    ((index !== activeTab && index !== activeTab + 1) ||
-                      (index === data?.results.length - 2 &&
-                        activeTab == data?.results.length - 1)) &&
-                      styles.hidden,
-                  )}
-                  onClick={() => setActiveTab(index)}
-                  label={tab?.group?.name}
-                  variant={activeTab === index ? "primary" : textColor(theme)}
-                />
-              ))}
+              {[...(data?.pages[activePage]?.results ?? [])].map(
+                (tab, index) => {
+                  return (
+                    <Button
+                      key={index}
+                      className={clsx(
+                        styles.tab,
+                        activeTab === index && styles.active,
+                      )}
+                      onClick={() => setActiveTab(index)}
+                      label={tab.group.name}
+                      variant={
+                        activeTab === index ? "primary" : textColor(theme)
+                      }
+                    />
+                  );
+                },
+              )}
             </div>
             <button
               className={clsx(styles.button)}
               title="forward"
               onClick={forward}
-              disabled={activeTab >= data?.results.length - 2}
+              disabled={
+                isFetchNextPageError ||
+                isFetchingNextPage ||
+                isFetching ||
+                isLoading ||
+                fetchLimit === activePage
+              }
             >
               <ArrowForwardIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
@@ -119,7 +152,11 @@ export default function Teams() {
               <AddIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
           </div>
-          <ManageTeams team={data?.results[activeTab]} />
+          {
+            <ManageTeams
+              team={data?.pages[Math.floor(activePage)]?.results[activeTab]}
+            />
+          }
         </div>
       )}
     </div>

@@ -1,20 +1,14 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { IExtendedUserResponse } from "@tournament-app/types";
+import { IExtendedUserResponse, IUpdateUserInfo } from "@tournament-app/types";
 import { clientApi, getAccessToken } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 type UpdateUserInfo = {
   id: number;
-  profilePicture?: string;
-  country?: string;
-  username?: string;
-  name?: string;
-  bio?: string;
-  location?: string;
-};
+} & IUpdateUserInfo;
 export const updateUser = async (updateFields: UpdateUserInfo) => {
   const { id, ...data } = updateFields;
   return clientApi

@@ -2,10 +2,7 @@ import styles from "./index.module.scss";
 import Navbar from "views/navbar";
 import { clsx } from "clsx";
 import Competition from "views/competition";
-import {
-  fetchCompetition,
-  getCompetition,
-} from "api/client/hooks/competitions/useGetCompetition";
+import { fetchCompetition } from "api/client/hooks/competitions/serverFetches";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export default async function Contest({

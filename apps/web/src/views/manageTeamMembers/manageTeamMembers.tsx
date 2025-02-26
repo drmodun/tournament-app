@@ -14,7 +14,6 @@ import {
   IMiniUserResponseWithCountry,
   userRoleEnumType,
 } from "@tournament-app/types";
-import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinRequests";
 import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import AddLFPForm from "views/addLFPForm";
 import ViewLFP from "views/viewLFP";
@@ -125,10 +124,10 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
             <b className={globals[`${textColorTheme}Color`]}>team members</b>
           </p>
           <div className={styles.groupMembers}>
-            {groupMembers?.members.length == 0 || !groupMembers ? (
+            {groupMembers?.members?.length == 0 || !groupMembers ? (
               <p>there are no team members!</p>
             ) : (
-              groupMembers?.members.map(
+              groupMembers?.members?.map(
                 (member: {
                   id: number;
                   username: string;

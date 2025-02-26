@@ -45,7 +45,7 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
         <div
           className={clsx(styles.pageLinks, styles[`${textColorTheme}Links`])}
         >
-          {isSuccess && data.id ? (
+          {isSuccess && data?.id ? (
             <>
               <Link href="/manageCompetitions">manage competitions</Link>
               <Link href="/manageTeams">manage teams</Link>
@@ -65,7 +65,7 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
         <div className={styles.userPageLinks}>
           {isLoading ? (
             <ProgressWheel variant={colorTheme} />
-          ) : isSuccess && data.id ? (
+          ) : isSuccess && data?.id ? (
             <Link href="/user">
               <img
                 src={data?.profilePicture ?? "/profilePicture.png"}

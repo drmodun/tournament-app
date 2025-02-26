@@ -21,7 +21,7 @@ import { countries } from "country-flag-icons";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import ImageDrop from "components/imageDrop";
 import ImagePicker from "components/imagePicker";
-import { COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
+import { COUNTRY_CODE, COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
 import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { UseMutationResult } from "@tanstack/react-query";
@@ -117,7 +117,7 @@ export default function CreateTeamForm({
             defaultValue={data?.abbreviation}
             reactFormHookProps={{
               pattern: {
-                value: /^([A-Za-zŽžÀ-ÿ]|[\p{P}\p{S}]){2,6}/iu,
+                value: /^\S{2,6}/i,
                 message:
                   "abbreviation must be between 3 and 5 characters without whitespaces",
               },
@@ -213,9 +213,12 @@ export default function CreateTeamForm({
         </div>
         <div className={styles.dialogOption}>
           <Dropdown
-            options={countries.map((country) => {
+            options={countries.map((country: string) => {
               return {
-                label: COUNTRY_CODES_TO_NAMES[country],
+                label:
+                  COUNTRY_CODES_TO_NAMES[
+                    (country as keyof typeof COUNTRY_CODES_TO_NAMES) ?? "ZZ"
+                  ],
               };
             })}
             searchPlaceholder="search..."

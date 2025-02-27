@@ -60,7 +60,7 @@ describe('InterestController (e2e)', () => {
       .post('/categories')
       .set('Authorization', `Bearer ${anotherAuthToken}`)
       .send({
-        name: 'Test Category',
+        name: 'Testing Category',
         description: 'Test Description',
         logo: 'https://example.com/logo.png',
         type: categoryTypeEnum.PROGRAMMING,

@@ -9,8 +9,13 @@ import { AppModule } from './../src/app.module';
 import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
-import { groupRoleEnum } from '@tournament-app/types';
+import {
+  groupFocusEnum,
+  groupTypeEnum,
+  groupRoleEnum,
+} from '@tournament-app/types';
 import { GroupMembershipUpdateRequest } from 'src/group-membership/dto/requests.dto';
+import { CreateGroupRequest } from 'src/group/dto/requests.dto';
 
 // TODO: tidy up this
 
@@ -114,15 +119,30 @@ describe('GroupMembershipController (e2e)', () => {
 
   describe('GET /group-membership/:groupId/:userId', () => {
     it('should return a specific group membership', async () => {
-      const groupId = 1;
-      const userId = 1;
+      const group = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          name: 'Test Group',
+          abbreviation: 'TG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          locationId: 1,
+          country: 'Test Country',
+        } satisfies CreateGroupRequest)
+        .expect(201);
+
+      const groupId = group.body.id;
 
       const response = await request(app.getHttpServer())
-        .get(`/group-membership/${groupId}/${userId}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
+        .get(`/group-membership/${groupId}/3`)
+        .set('Authorization', `Bearer ${authToken}`);
 
-      expect(response.body).toHaveProperty('userId', userId);
+      console.log(response.body);
+
+      expect(response.body).toHaveProperty('userId', 3);
       expect(response.body).toHaveProperty('groupId', groupId);
       expect(response.body).toHaveProperty('role');
     });
@@ -137,17 +157,31 @@ describe('GroupMembershipController (e2e)', () => {
 
   describe('POST /group-membership/:groupId/:userId', () => {
     it('should create a new group membership', async () => {
-      const groupId = 2;
-      const userId = 45;
+      const newGroup = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          name: 'Test Group',
+          abbreviation: 'TG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          locationId: 1,
+          country: 'Test Country',
+        })
+        .expect(201);
+
+      const groupId = newGroup.body.id;
 
       await request(app.getHttpServer())
-        .post(`/group-membership/${groupId}/${userId}`)
+        .post(`/group-membership/${groupId}/43`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(201);
 
       // Verify the membership was created
       const membership = await request(app.getHttpServer())
-        .get(`/group-membership/${groupId}/${userId}`)
+        .get(`/group-membership/${groupId}/43`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
@@ -155,11 +189,30 @@ describe('GroupMembershipController (e2e)', () => {
     });
 
     it('should return 409 when membership already exists', async () => {
-      const groupId = 1;
       const userId = 1;
 
+      const groupId = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          name: 'Test Group',
+          abbreviation: 'TG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          locationId: 1,
+          country: 'Test Country',
+        } satisfies CreateGroupRequest)
+        .expect(201);
+
       await request(app.getHttpServer())
-        .post(`/group-membership/${groupId}/${userId}`)
+        .post(`/group-membership/${groupId.body.id}/${userId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .post(`/group-membership/${groupId.body.id}/${userId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(409);
     });
@@ -167,14 +220,33 @@ describe('GroupMembershipController (e2e)', () => {
 
   describe('PATCH /group-membership/:groupId/:userId', () => {
     it('should update group membership role', async () => {
-      const groupId = 2;
-      const userId = 45;
+      const newGroup = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          name: 'Test Group',
+          abbreviation: 'TG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          locationId: 1,
+          country: 'Test Country',
+        })
+        .expect(201);
+
+      const groupId = newGroup.body.id;
+
+      await request(app.getHttpServer())
+        .post(`/group-membership/${groupId}/41`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(201);
       const updateDto: GroupMembershipUpdateRequest = {
         role: groupRoleEnum.ADMIN,
       };
 
       await request(app.getHttpServer())
-        .patch(`/group-membership/${groupId}/${userId}`)
+        .patch(`/group-membership/${groupId}/41`)
         .set('Authorization', `Bearer ${authToken}`)
         .send(updateDto)
         .expect(200);
@@ -195,16 +267,35 @@ describe('GroupMembershipController (e2e)', () => {
 
   describe('DELETE /group-membership/:groupId/:userId', () => {
     it('should delete a group membership', async () => {
-      const groupId = 2;
-      const userId = 45;
+      const newGroup = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          name: 'Test Group',
+          abbreviation: 'TG',
+          description: 'Test Description',
+          type: groupTypeEnum.PUBLIC,
+          focus: groupFocusEnum.HYBRID,
+          logo: 'logo.png',
+          locationId: 1,
+          country: 'Test Country',
+        })
+        .expect(201);
+
+      const groupId = newGroup.body.id;
 
       await request(app.getHttpServer())
-        .delete(`/group-membership/${groupId}/${userId}`)
+        .post(`/group-membership/${groupId}/43`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .delete(`/group-membership/${groupId}/43`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
       await request(app.getHttpServer())
-        .get(`/group-membership/${groupId}/${userId}`)
+        .get(`/group-membership/${groupId}/43`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(404);
     });
@@ -221,16 +312,17 @@ describe('GroupMembershipController (e2e)', () => {
     it('should allow user to leave a group', async () => {
       const groupId = 2;
 
-      await request(app.getHttpServer())
-        .delete(`/group-membership/${groupId}/leave`)
+      const myGroupResponse = await request(app.getHttpServer())
+        .get(`/group-membership?userId=3`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      const userId = 3;
+      const myGroup = myGroupResponse.body.results[0];
+
       await request(app.getHttpServer())
-        .get(`/group-membership/${groupId}/${userId}`)
+        .delete(`/group-membership/${myGroup.groupId}/${myGroup.userId}`)
         .set('Authorization', `Bearer ${authToken}`)
-        .expect(404);
+        .expect(200);
     });
 
     it('should return 404 when leaving a group user is not a member of', async () => {

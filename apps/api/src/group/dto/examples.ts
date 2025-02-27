@@ -13,7 +13,7 @@ import {
 import { GroupQuery } from './requests.dto';
 import { GroupResponsesEnum, GroupSortingEnum } from '@tournament-app/types';
 
-const baseExample: MiniGroupResponse = {
+export const baseExample: MiniGroupResponse = {
   id: 1,
   name: 'Chess Club',
   abbreviation: 'CC',

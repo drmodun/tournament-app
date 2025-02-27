@@ -12,6 +12,7 @@ import {
 import {
   miniUserResponseExample,
   miniUserResponseWithCountryExample,
+  userResponseExamples,
 } from 'src/users/dto/examples';
 import { BaseLFGResponseType, LFGResponsesEnum } from '@tournament-app/types';
 import { CreateLFGRequest, UpdateLFGRequest } from './requests';
@@ -53,7 +54,7 @@ const withCategoryExample: MiniLFGResponseWithCategory = {
 // Full response example
 const responseExample: LFGResponse = {
   ...baseExample,
-  user: miniUserResponseWithCountryExample,
+  user: userResponseExamples.UserResponse.value,
   careers: [careerExample],
 };
 
@@ -88,6 +89,7 @@ export const lfgQueryResponses = generateQueryExamples<BaseLFGResponseType, {}>(
     defaultQuery: {
       page: 1,
       pageSize: 10,
+      userId: 1,
     },
   },
 );

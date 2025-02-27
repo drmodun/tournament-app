@@ -169,6 +169,20 @@
       "when": 1740575856599,
       "tag": "0023_kind_greymalkin",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1740594785822,
+      "tag": "0024_short_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1740675745675,
+      "tag": "0025_clean_brood",
+      "breakpoints": true
     }
   ]
 }

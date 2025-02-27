@@ -13,6 +13,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from 'src/db/db';
+import { LocationHelper } from 'src/base/static/locationHelper';
 
 @Injectable()
 export class LocationDrizzleRepository extends PrimaryRepository<
@@ -21,7 +22,7 @@ export class LocationDrizzleRepository extends PrimaryRepository<
   Partial<{
     name: string;
     apiId: string;
-    coordinates: [number, number];
+    coordinates: string;
   }>
 > {
   constructor() {
@@ -50,9 +51,13 @@ export class LocationDrizzleRepository extends PrimaryRepository<
           if (!query['lat'] || !query['lng']) {
             throw new Error('lat and lng are required for distance query');
           }
+
+          const point = LocationHelper.ConvertToWKT(query['lng'], query['lat']);
+          const convertedPoint = LocationHelper.ST_GeographyFromText(point);
+
           return sql`ST_DWithin(
             ${location.coordinates},
-            ST_SetSRID(ST_MakePoint(${query['lat']}, ${query['lng']}), 4326),
+            ${convertedPoint},
             ${query['distance']}
           )`;
         default:
@@ -81,7 +86,9 @@ export class LocationDrizzleRepository extends PrimaryRepository<
         return {
           ...this.getMappingObject(LocationResponsesEnum.MINI),
           name: location.name,
-          coordinates: location.coordinates,
+          coordinates: sql`ST_AsGeoJSON(${location.coordinates})`.mapWith(
+            (x) => JSON.parse(x).coordinates,
+          ),
         };
       case LocationResponsesEnum.EXTENDED:
         return {
@@ -98,7 +105,9 @@ export class LocationDrizzleRepository extends PrimaryRepository<
       .select({
         id: location.id,
         name: location.name,
-        coordinates: location.coordinates,
+        coordinates: sql`ST_AsGeoJSON(${location.coordinates})`.mapWith(
+          (x) => JSON.parse(x).coordinates,
+        ),
       })
       .from(location);
   }

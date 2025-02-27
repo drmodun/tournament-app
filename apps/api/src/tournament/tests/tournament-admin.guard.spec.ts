@@ -105,7 +105,10 @@ describe('TournamentAdminGuard', () => {
       const result = await guard.canActivate(context);
 
       expect(result).toBeTruthy();
-      expect(tournamentService.findOne).toHaveBeenCalledWith(1);
+      expect(tournamentService.findOne).toHaveBeenCalledWith(
+        1,
+        'with-relations',
+      );
     });
 
     it('should get tournamentId from request body if not in params', async () => {
@@ -125,7 +128,10 @@ describe('TournamentAdminGuard', () => {
       const result = await guard.canActivate(context);
 
       expect(result).toBeTruthy();
-      expect(tournamentService.findOne).toHaveBeenCalledWith(1);
+      expect(tournamentService.findOne).toHaveBeenCalledWith(
+        1,
+        'with-relations',
+      );
     });
 
     it('should get tournamentId from query if not in params or body', async () => {
@@ -145,7 +151,10 @@ describe('TournamentAdminGuard', () => {
       const result = await guard.canActivate(context);
 
       expect(result).toBeTruthy();
-      expect(tournamentService.findOne).toHaveBeenCalledWith(1);
+      expect(tournamentService.findOne).toHaveBeenCalledWith(
+        1,
+        'with-relations',
+      );
     });
   });
 
@@ -159,7 +168,10 @@ describe('TournamentAdminGuard', () => {
       const result = await guard.canActivate(context);
 
       expect(result).toBeTruthy();
-      expect(tournamentService.findOne).toHaveBeenCalledWith(1);
+      expect(tournamentService.findOne).toHaveBeenCalledWith(
+        1,
+        'with-relations',
+      );
       expect(groupMembershipService.isAdmin).toHaveBeenCalledWith(
         mockTournament.affiliatedGroupId,
         3,
@@ -203,7 +215,10 @@ describe('TournamentAdminGuard', () => {
       const result = await guard.canActivate(context);
 
       expect(result).toBeFalsy();
-      expect(tournamentService.findOne).toHaveBeenCalledWith(null);
+      expect(tournamentService.findOne).toHaveBeenCalledWith(
+        null,
+        'with-relations',
+      );
     });
 
     it('should deny access when user is not creator and not group admin', async () => {

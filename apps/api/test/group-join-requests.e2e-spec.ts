@@ -9,7 +9,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
   let app: INestApplication;
   let authToken: string;
   let adminAuthToken: string;
-
+  let groupId: number;
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
@@ -28,6 +28,23 @@ describe('GroupJoinRequestsController (e2e)', () => {
       .expect(201);
 
     adminAuthToken = auth.body.accessToken;
+
+    const newGroup = await request(app.getHttpServer())
+      .post('/groups')
+      .set('Authorization', `Bearer ${adminAuthToken}`)
+      .send({
+        name: 'Test Group',
+        abbreviation: 'TG',
+        description: 'Test Description',
+        type: groupTypeEnum.PUBLIC,
+        focus: groupFocusEnum.HYBRID,
+        logo: 'logo.png',
+        locationId: 1,
+        country: 'Test Country',
+      } satisfies CreateGroupRequest)
+      .expect(201);
+
+    groupId = newGroup.body.id;
 
     const testNonAdminUser = await request(app.getHttpServer())
       .get('/users/40')
@@ -77,6 +94,8 @@ describe('GroupJoinRequestsController (e2e)', () => {
           locationId: 1,
           country: 'Test Country',
         } satisfies CreateGroupRequest);
+
+      groupId = createGroup.body.id;
 
       await request(app.getHttpServer())
         .post(`/group-join-requests/${createGroup.body.id}`)
@@ -272,7 +291,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
       };
 
       await request(app.getHttpServer())
-        .patch('/group-join-requests/1')
+        .patch(`/group-join-requests/${groupId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .send(updateDto)
         .expect(200);
@@ -284,7 +303,7 @@ describe('GroupJoinRequestsController (e2e)', () => {
       };
 
       await request(app.getHttpServer())
-        .patch('/group-join-requests/1')
+        .patch(`/group-join-requests/${groupId}`)
         .set('Authorization', `Bearer ${adminAuthToken}`)
         .send(updateDto)
         .expect(403);
@@ -294,14 +313,14 @@ describe('GroupJoinRequestsController (e2e)', () => {
   describe('/group-join-requests/:groupId (DELETE)', () => {
     it('should delete a group join request', async () => {
       await request(app.getHttpServer())
-        .delete('/group-join-requests/1')
+        .delete(`/group-join-requests/${groupId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
     });
 
     it('should not allow other users to delete the request', async () => {
       await request(app.getHttpServer())
-        .delete('/group-join-requests/2')
+        .delete(`/group-join-requests/${groupId}`)
         .set('Authorization', `Bearer ${adminAuthToken}`)
         .expect(403);
     });

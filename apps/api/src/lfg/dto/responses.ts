@@ -3,22 +3,19 @@ import { Type } from 'class-transformer';
 import { IsNumber, IsString, IsDate, ValidateNested } from 'class-validator';
 import {
   IMiniUserResponse,
-  IMiniUserResponseWithCountry,
   ICategoryMiniResponse,
   ICareerCategoryResponse,
   ILFGMiniResponse,
   IMiniLFGResponseWithUser,
   IMiniLFGResponseWithCategory,
   ILFGResponse,
+  IUserResponse,
 } from '@tournament-app/types';
 import {
   CategoryMiniResponse,
   CategoryMiniResponseWithLogo,
 } from 'src/category/dto/responses.dto';
-import {
-  MiniUserResponse,
-  MiniUserResponseWithCountry,
-} from 'src/users/dto/responses.dto';
+import { MiniUserResponse, UserResponse } from 'src/users/dto/responses.dto';
 
 export class CareerCategoryResponse implements ICareerCategoryResponse {
   @ApiResponseProperty()
@@ -87,8 +84,8 @@ export class MiniLFGResponseWithCategory
 export class LFGResponse extends LFGMiniResponse implements ILFGResponse {
   @ApiResponseProperty()
   @ValidateNested()
-  @Type(() => MiniUserResponseWithCountry)
-  user: IMiniUserResponseWithCountry;
+  @Type(() => UserResponse)
+  user: IUserResponse;
 
   @ApiResponseProperty({ type: [CareerCategoryResponse] })
   @ValidateNested({ each: true })

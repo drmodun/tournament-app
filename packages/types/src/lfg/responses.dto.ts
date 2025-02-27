@@ -1,11 +1,14 @@
 import { ICareerCategoryResponse } from "src/career";
 import { ICategoryMiniResponse } from "src/category";
-import { IMiniUserResponse, IMiniUserResponseWithCountry } from "src/user";
+import {
+  IMiniUserResponse,
+  IMiniUserResponseWithCountry,
+  IUserResponse,
+} from "src/user";
 
 export interface ILFGMiniResponse {
   id: number;
   userId: number;
-  categoryId: number;
   message: string;
   createdAt: Date;
 }
@@ -19,7 +22,7 @@ export interface IMiniLFGResponseWithCategory extends ILFGMiniResponse {
 }
 
 export interface ILFGResponse extends ILFGMiniResponse {
-  user: IMiniUserResponseWithCountry;
+  user: IUserResponse;
   careers: ICareerCategoryResponse[];
 }
 

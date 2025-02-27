@@ -660,6 +660,95 @@ async function createGroupRequirements() {
   }
 }
 
+async function createCareers() {
+  const users = await db.select().from(tables.user);
+  const categories = await db.select().from(tables.category);
+  const careers = [];
+
+  // Give each user 1-3 careers with specific ELO ranges
+  for (const user of users) {
+    const numCareers = faker.number.int({ min: 1, max: 3 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numCareers);
+
+    for (const category of selectedCategories) {
+      careers.push({
+        userId: user.id,
+        categoryId: category.id,
+        elo: faker.number.int({ min: 800, max: 3500 }), // Wide range to match filters
+        createdAt: faker.date.past(),
+      });
+    }
+  }
+
+  await db.insert(tables.categoryCareer).values(careers);
+}
+
+async function createLFG() {
+  const users = await db.select().from(tables.user);
+  const lfgEntries = [];
+
+  // Create LFG entries for about 40% of users
+  for (const user of users) {
+    if (Math.random() < 0.4) {
+      lfgEntries.push({
+        userId: user.id,
+        message: faker.lorem.sentence(),
+        createdAt: faker.date.recent(),
+      });
+    }
+  }
+
+  await db.insert(tables.lookingForGroup).values(lfgEntries);
+}
+
+async function createCategoryToLFG() {
+  const lfgEntries = await db.select().from(tables.lookingForGroup);
+  const categories = await db.select().from(tables.category);
+  const connections = [];
+
+  // Connect each LFG entry to 1-2 categories
+  for (const lfg of lfgEntries) {
+    const numCategories = faker.number.int({ min: 1, max: 2 });
+    const shuffledCategories = [...categories].sort(() => 0.5 - Math.random());
+    const selectedCategories = shuffledCategories.slice(0, numCategories);
+
+    for (const category of selectedCategories) {
+      connections.push({
+        lfgId: lfg.id,
+        categoryId: category.id,
+      });
+    }
+  }
+
+  await db.insert(tables.categoryToLFG).values(connections);
+}
+
+async function createBlockedUsers() {
+  const groups = await db.select().from(tables.group);
+  const users = await db.select().from(tables.user);
+  const blockedUsers = [];
+
+  // Block 1-3 users in about 20% of groups
+  for (const group of groups) {
+    if (Math.random() < 0.2) {
+      const numBlocked = faker.number.int({ min: 1, max: 3 });
+      const shuffledUsers = [...users].sort(() => 0.5 - Math.random());
+      const selectedUsers = shuffledUsers.slice(0, numBlocked);
+
+      for (const user of selectedUsers) {
+        blockedUsers.push({
+          groupId: group.id,
+          blockedUserId: user.id,
+          createdAt: faker.date.past(),
+        });
+      }
+    }
+  }
+
+  await db.insert(tables.groupUserBlockList).values(blockedUsers);
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -674,6 +763,10 @@ export async function seed() {
   await createGroupJoinRequests();
   await createGroupInvites();
   await createCategories();
+  await createCareers();
+  await createLFG();
+  await createCategoryToLFG();
+  await createBlockedUsers();
   await createTournaments();
   await createStages();
   await createParticipations();

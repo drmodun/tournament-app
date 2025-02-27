@@ -1,5 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ICreateLFGRequest, IUpdateLFGRequest } from '@tournament-app/types';
+import {
+  ICreateLFGRequest,
+  ILfgQuery,
+  IUpdateLFGRequest,
+  LFGResponsesEnumType,
+} from '@tournament-app/types';
 import { Transform } from 'class-transformer';
 import {
   IsString,
@@ -8,7 +13,9 @@ import {
   IsArray,
   IsOptional,
   IsInt,
+  IsNumber,
 } from 'class-validator';
+import { BaseQuery } from 'src/base/query/baseQuery';
 
 export class CreateLFGRequest implements ICreateLFGRequest {
   @IsString()
@@ -22,7 +29,7 @@ export class CreateLFGRequest implements ICreateLFGRequest {
   @Transform(({ value }) => {
     if (Array.isArray(value)) {
       return value.map((id) => {
-        if (typeof id === 'string') {
+        if (typeof id == 'string') {
           return parseInt(id, 10);
         }
         return id;
@@ -48,7 +55,7 @@ export class UpdateLFGRequest implements IUpdateLFGRequest {
   @Transform(({ value }) => {
     if (Array.isArray(value)) {
       return value.map((id) => {
-        if (typeof id === 'string') {
+        if (typeof id == 'string') {
           return parseInt(id, 10);
         }
         return id;
@@ -58,4 +65,15 @@ export class UpdateLFGRequest implements IUpdateLFGRequest {
   })
   @IsInt({ each: true })
   categoryIds?: number[];
+}
+
+export class LFGQuery
+  extends BaseQuery<LFGResponsesEnumType>
+  implements ILfgQuery
+{
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value))
+  @ApiPropertyOptional()
+  userId?: number;
 }

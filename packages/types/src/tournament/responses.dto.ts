@@ -98,4 +98,5 @@ export interface TournamentQueryType {
   minParticipants?: number;
   maxParticipants?: number;
   isPublic?: boolean;
+  locationId?: number;
 }

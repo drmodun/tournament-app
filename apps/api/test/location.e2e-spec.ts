@@ -189,6 +189,20 @@ describe('LocationController (e2e)', () => {
     });
   });
 
+  describe('GET /locations/map', () => {
+    it('should return all locations', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/locations/map`)
+        .expect(200);
+
+      expect(response.body[0]).toHaveProperty('id');
+      expect(response.body[0]).toHaveProperty('name');
+      expect(response.body[0]).toHaveProperty('coordinates');
+
+      expect(response.body.length).toBeGreaterThan(25);
+    });
+  });
+
   describe('POST /locations', () => {
     it('should create a new location when authenticated as admin', async () => {
       const locationData: CreateLocationDto = {

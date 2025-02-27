@@ -53,11 +53,11 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
           animate && !drawerContext.drawerOpen && styles.animate,
         )}
       >
-        {isSuccess && data.id ? (
+        {isSuccess && data?.id ? (
           <>
             <DrawerElement
               icon={AccountCircleIcon}
-              label={data.name}
+              label={data?.name}
               href="/user"
             />
             <DrawerElement

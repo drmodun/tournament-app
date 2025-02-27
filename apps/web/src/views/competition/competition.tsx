@@ -17,7 +17,10 @@ import { IExtendedTournamentResponse } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useRouter } from "next/navigation";
 import rehypeRaw from "rehype-raw";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import EditCompetitionForm from "views/editCompetitionForm";
+import Dialog from "components/dialog";
+import ProgressWheel from "components/progressWheel";
 
 type SidebarSectionProps = {
   name: string;
@@ -32,12 +35,19 @@ export default function Competition({
   const { data, isLoading, isSuccess } = useAuth();
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
-  const handleJoin = () => {
-    if (!isSuccess) return;
-  };
+  const handleDeleteCompetition = async () => {};
+
   return (
     <div className={clsx(styles.wrapper)}>
+      <Dialog
+        active={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        variant={theme}
+      >
+        <EditCompetitionForm competition={competition} />
+      </Dialog>
       <div className={clsx(styles.left)}>
         <div className={clsx(styles.banner)}>
           <div className={styles.bannerContent}>
@@ -90,19 +100,9 @@ export default function Competition({
           </SidebarSection>
           <SidebarSection name="location">
             <Chip
-              label={
-                competition?.actualLocation?.name != undefined
-                  ? competition?.actualLocation?.name
-                  : competition?.location
-              }
+              label={`${competition?.location} ${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
             ></Chip>
           </SidebarSection>
-          <SidebarSection name="country">
-            <Chip
-              label={`${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
-            ></Chip>
-          </SidebarSection>
-
           <SidebarSection name="mmr">
             <div className={styles.dates}>
               <Chip label={competition?.minimumMMR?.toString()}></Chip>
@@ -117,6 +117,27 @@ export default function Competition({
             <Chip label={competition?.category?.name}></Chip>
           </SidebarSection>
         </div>
+        {isLoading ? (
+          <ProgressWheel variant={textColorTheme} />
+        ) : (
+          data &&
+          (data.id == competition.creator.id ? (
+            <div className={styles.manageCompetitionsButtons}>
+              <Button
+                label="edit competition"
+                variant="warning"
+                onClick={() => setEditDialogOpen(true)}
+              />
+              <Button
+                label="delete competition"
+                variant="danger"
+                onClick={handleDeleteCompetition}
+              />
+            </div>
+          ) : (
+            <Button label="send join request" variant="primary" />
+          ))
+        )}
       </div>
     </div>
   );

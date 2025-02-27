@@ -229,7 +229,7 @@ describe('TournamentController', () => {
           TournamentController.prototype.update,
         );
         expect(guards).toBeDefined();
-        expect(guards.length).toBe(3);
+        expect(guards.length).toBe(2);
       });
     });
 

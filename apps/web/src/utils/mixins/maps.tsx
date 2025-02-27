@@ -1,6 +1,4 @@
 import { AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { DARK, LIGHT } from "./constants";
 
 const MAP_MARKER_COLOR = {
   background: "#21262c",
@@ -31,8 +29,6 @@ export const PoiMarkers = (props: {
   locations: MarkerLocation[];
   onMarkerClick?: (location: MarkerLocation) => void;
 }) => {
-  const { theme } = useThemeContext();
-
   return (
     <>
       {props.locations.map((location: MarkerLocation) => (
@@ -41,7 +37,7 @@ export const PoiMarkers = (props: {
             location.location.lat +
             location.location.lng +
             location.pois.map((poi) => poi.id).join("")
-          }
+          } // TODO: make this unique or fix later
           position={location.location}
           clickable={true}
           onClick={() => {
@@ -50,9 +46,9 @@ export const PoiMarkers = (props: {
           }}
         >
           <Pin
-            background={theme === "dark" ? DARK : LIGHT}
-            glyphColor={theme === "dark" ? LIGHT : DARK}
-            borderColor={theme === "dark" ? LIGHT : DARK}
+            background={MAP_MARKER_COLOR.background}
+            glyphColor={MAP_MARKER_COLOR.glyph}
+            borderColor={MAP_MARKER_COLOR.border}
           />
         </AdvancedMarker>
       ))}

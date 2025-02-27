@@ -6,7 +6,6 @@
   display: flex;
   gap: $padding;
   flex-direction: column;
-  border-radius: $borderRadius;
 }
 
 .mapWrapper {
@@ -77,8 +76,4 @@
   scrollbar-width: none;
   overflow-y: auto;
   padding-bottom: $doublePadding;
-}
-
-.mapElement > * {
-  border-radius: $borderRadius;
 }

@@ -205,4 +205,28 @@ describe('LocationController', () => {
 
     await expect(controller.remove(999)).rejects.toThrow(NotFoundException);
   });
+
+  describe('getMap', () => {
+    it('should return all locations', async () => {
+      jest.spyOn(LocationService.prototype, 'getMap').mockResolvedValue([
+        {
+          id: 1,
+          name: 'Location 1',
+          coordinates: [40.7128, -74.006],
+        },
+        {
+          id: 2,
+          name: 'Location 2',
+          coordinates: [40.7128, -74.006],
+        },
+      ]);
+
+      const result = await controller.getMap();
+
+      expect(result).toEqual([
+        { id: 1, name: 'Location 1', coordinates: [40.7128, -74.006] },
+        { id: 2, name: 'Location 2', coordinates: [40.7128, -74.006] },
+      ]);
+    });
+  });
 });

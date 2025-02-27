@@ -71,15 +71,22 @@ export const formatDate = (date: Date) => {
 
 export const formatDateHTMLInput = (date: Date) => {
   try {
-    const d: string = dateFormat(date, "yyyy-mm-dd").toLowerCase();
+    const d: string = dateFormat(date, "yyyy-mm-dd");
     return d;
   } catch {
     return "unknown";
   }
 };
 
-export const formatDateTime = (date: Date) => {
-  return dateFormat(date, "H:MM dd.mm 'yy").toLowerCase();
+export const formatDateTimeHTMLInput = (date: Date) => {
+  try {
+    const _date = formatDateHTMLInput(date);
+    const d: string = _date + "T" + dateFormat(date, "HH:mm");
+    console.log(d);
+    return d;
+  } catch {
+    return "unknown";
+  }
 };
 
 export const calculateBestValueFormat = (targetValue: number) => {

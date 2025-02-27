@@ -197,7 +197,7 @@ describe('TournamentController (e2e)', () => {
 
     it('should filter tournaments by query parameters', async () => {
       const response = await request(app.getHttpServer()).get(
-        '/tournaments?type=SINGLE_ELIMINATION&location=ONLINE&isPublic=true',
+        '/tournaments?type=SINGLE_ELIMINATION&location=ONLINE&isPublic=true&locationId=2',
       );
 
       const tournaments = response.body.results;
@@ -209,6 +209,7 @@ describe('TournamentController (e2e)', () => {
         expect(tournament.type).toBe('SINGLE_ELIMINATION');
         expect(tournament.location).toBe('ONLINE');
         expect(tournament.isPublic).toBe(true);
+        expect(tournament.locationId).toBe(2);
       });
     });
   });

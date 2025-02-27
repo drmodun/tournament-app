@@ -56,11 +56,3 @@ ul {
     color: $dark;
   }
 }
-
-html,
-* {
-  scrollbar-width: none !important;
-}
-::-webkit-scrollbar {
-  width: 0px !important;
-}

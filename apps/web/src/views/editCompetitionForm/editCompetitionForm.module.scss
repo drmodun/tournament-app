@@ -1,0 +1,58 @@
+@import "../../styles/";
+
+.tab {
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.removeLogoButton {
+  width: 100%;
+  margin-top: $halfPadding;
+}
+
+.imagePickerWrapper {
+  width: min-content;
+}
+
+.button {
+  border: 0;
+  background-color: transparent;
+  width: $baseComponentHeight;
+  cursor: pointer;
+}
+
+.teamsWrapper {
+  width: 100%;
+  display: flex;
+  margin-bottom: $doublePadding;
+  gap: $halfPadding;
+  padding-top: $padding;
+  padding-bottom: $padding;
+  height: $baseComponentHeight;
+  @media screen and (max-width: $desktopBreakpoint) {
+    flex-wrap: wrap;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.error {
+  margin-top: $halfPadding;
+  color: $danger;
+  font-size: $fontSize * 0.875;
+}
+.innerFormWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.mmrInputs {
+  display: flex;
+  gap: $halfPadding;
+}

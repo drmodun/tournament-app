@@ -135,3 +135,9 @@
 .mutedColor {
   color: $disabled;
 }
+
+.manageCompetitionsButtons {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}

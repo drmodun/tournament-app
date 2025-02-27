@@ -17,7 +17,23 @@ import { LocationQuery } from './dto/requests';
 export class LocationService {
   constructor(private readonly repository: LocationDrizzleRepository) {}
 
+  async getLocationByApiId(apiId: string) {
+    const location = await this.repository.getQuery({
+      apiId,
+    } as LocationQuery);
+
+    return location[0];
+  }
+
   async create(createLocationDto: ICreateLocationRequest) {
+    const potentialLocation = await this.getLocationByApiId(
+      createLocationDto.apiId,
+    );
+
+    if (potentialLocation) {
+      return potentialLocation;
+    }
+
     const location = await this.repository.createEntity({
       ...createLocationDto,
       coordinates: [createLocationDto.lng, createLocationDto.lat],
@@ -54,6 +70,12 @@ export class LocationService {
     }
 
     return results[0] as TResponseType;
+  }
+
+  async getMap() {
+    const locations = await this.repository.getMap();
+
+    return locations;
   }
 
   async update(id: number, updateLocationDto: IUpdateLocationRequest) {

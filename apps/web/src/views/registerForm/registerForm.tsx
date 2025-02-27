@@ -20,33 +20,19 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import ImagePicker from "components/imagePicker";
 import ImageDrop from "components/imageDrop";
 import { toBase64 } from "utils/mixins/helpers";
+import { formatDateHTMLInput } from "utils/mixins/formatting";
 
 export default function RegisterForm() {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+
   const { mutateAsync } = useRegister();
+
   const methods = useForm<ICreateUserRequest>();
   const onSubmit: SubmitHandler<ICreateUserRequest> = async (data) => {
-    data.location = placeId;
     data.country = data.country.split(" ")[0];
     console.log(data.profilePicture);
     await mutateAsync(data);
-  };
-
-  const [
-    participatesInOnsiteCompetitions,
-    setParticipatesInOnsiteCompetitions,
-  ] = useState<string>("no");
-
-  const [preferredRadius, setPreferredRadius] = useState<number | undefined>(0);
-  const [listener, setListener] = useState<google.maps.MapsEventListener>();
-  const [placeId, setPlaceId] = useState<string>();
-
-  const handleAutocomplete = (
-    autocomplete: google.maps.places.Autocomplete,
-  ) => {
-    listener && google.maps.event.removeListener(listener);
-    setPlaceId(autocomplete.getPlace().place_id);
   };
 
   const [file, setFile] = useState<File>();
@@ -266,41 +252,33 @@ export default function RegisterForm() {
                   </p>
                 )}
               </div>
-              <div className={clsx(styles.inputWrapper)}>
+              <div className={styles.inputWrapper}>
                 <Input
                   variant={
-                    methods.formState.errors.country && !placeId
+                    methods.formState.errors.dateOfBirth
                       ? "danger"
                       : textColorTheme
                   }
-                  label="place"
-                  placeholder="enter your place of residence"
-                  name="place"
+                  label="date of birth"
+                  placeholder="enter your date of birth"
+                  name="dateOfBirth"
                   required={true}
                   className={styles.input}
+                  type="date"
                   isReactFormHook={true}
-                  onChange={(e) => {
-                    setPlaceId(undefined);
-                    fetchAutocomplete(e.target).then((autocomplete) => {
-                      const tempListener = autocomplete.addListener(
-                        "place_changed",
-                        () => handleAutocomplete(autocomplete),
-                      );
-                      setListener(tempListener);
-                    });
-                  }}
+                  min="1900-01-01"
+                  max={formatDateHTMLInput(new Date())}
                 />
-                {methods.formState.errors.country?.type === "required" &&
-                  !placeId && (
-                    <p
-                      className={clsx(
-                        styles.error,
-                        globals[`${textColorTheme}Color`],
-                      )}
-                    >
-                      this field is required!
-                    </p>
-                  )}
+                {methods.formState.errors.dateOfBirth?.type === "required" && (
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
+                )}
               </div>
               <div className={clsx(styles.inputWrapper)}>
                 <p
@@ -321,17 +299,16 @@ export default function RegisterForm() {
                   />
                 </div>
 
-                {methods.formState.errors.bio?.type === "required" &&
-                  !placeId && (
-                    <p
-                      className={clsx(
-                        styles.error,
-                        globals[`${textColorTheme}Color`],
-                      )}
-                    >
-                      this field is required!
-                    </p>
-                  )}
+                {methods.formState.errors.bio?.type === "required" && (
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
+                )}
               </div>
               <div className={clsx(styles.inputWrapper)}>
                 <p
@@ -371,17 +348,17 @@ export default function RegisterForm() {
                     />
                   )}
                 </div>
-                {methods.formState.errors.profilePicture?.type === "required" &&
-                  !placeId && (
-                    <p
-                      className={clsx(
-                        styles.error,
-                        globals[`${textColorTheme}Color`],
-                      )}
-                    >
-                      this field is required!
-                    </p>
-                  )}
+                {methods.formState.errors.profilePicture?.type ===
+                  "required" && (
+                  <p
+                    className={clsx(
+                      styles.error,
+                      globals[`${textColorTheme}Color`],
+                    )}
+                  >
+                    this field is required!
+                  </p>
+                )}
               </div>
 
               <Button

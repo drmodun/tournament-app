@@ -6,40 +6,27 @@ import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useAuth } from "../auth/useAuth";
 import {
+  ICreateLocationRequest,
   ICreateTournamentRequest,
   ITournamentResponse,
 } from "@tournament-app/types";
 
-export const createCompetition = async (data: ICreateTournamentRequest) =>
+export const createLocation = async (data: ICreateLocationRequest) =>
   clientApi
     .post<
-      ICreateTournamentRequest,
+      ICreateLocationRequest,
       AxiosResponse<{ id: number }>
-    >(`/tournaments`, data)
+    >(`/locations`, data)
     .then((res) => res.data);
 
-export const createCompetitionFetch = (data: ICreateTournamentRequest) => {
-  return fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/tournaments`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAccessToken()}`,
-      },
-      body: JSON.stringify(data),
-    },
-  );
-};
-
-export const useCreateCompetition = () => {
+export const useCreateLocation = () => {
   const toast = useToastContext();
 
   return useMutation({
     mutationKey: ["me"],
-    mutationFn: createCompetition,
-    retryDelay: 5000,
-    retry: 2,
+    mutationFn: createLocation,
+    retryDelay: 2000,
+    retry: 3,
     onSuccess: async (data) => {
       toast.addToast("successfully created competition", "success");
     },

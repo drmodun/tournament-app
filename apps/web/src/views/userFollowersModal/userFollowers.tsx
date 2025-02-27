@@ -67,82 +67,90 @@ export default function UserFollowersDialog({
           <p>
             <b className={globals[`${textColorTheme}Color`]}>followers</b>
           </p>
-          <div className={styles.userCardContainer}>
-            <button
-              disabled={
-                isFetching ||
-                page === 0 ||
-                isFetchPreviousPageError ||
-                isFetchingPreviousPage
-              }
-              onClick={backward}
-              className={styles.arrowButton}
-            >
-              <ArrowBackIcon
-                className={clsx(globals[`${textColorTheme}FillChildren`])}
-              />
-            </button>
-            <div className={styles.userCardWrapper}>
-              {data?.pages[page]?.results?.length == 0 ? (
-                <p>you have no followers</p>
-              ) : (
-                data?.pages[page].results?.map((user) => {
-                  return (
-                    <Link
-                      href={`/user/${user.id}`}
-                      className={clsx(
-                        styles.noTextDecoration,
-                        styles.userCardLink,
-                        globals[`${textColorTheme}BackgroundColor`],
-                      )}
-                    >
-                      <div className={styles.userCardInnerWrapper}>
-                        <img
-                          src={user.profilePicture}
-                          alt={`${user.username}'s profile picture`}
-                          className={styles.userCardProfilePicture}
-                          onError={(e) => {
-                            e.currentTarget.src = "/profilePicture.png";
-                          }}
-                        />
-                        <div
-                          className={clsx(
-                            globals[`${theme}Color`],
-                            styles.userCardTextWrapper,
-                          )}
-                          title={user.username}
-                        >
-                          <b className={styles.userCardText}>
-                            {user.username}{" "}
-                          </b>
-                          <p className={styles.userCardText}>
-                            {user.country &&
-                              getUnicodeFlagIcon(
-                                COUNTRY_NAMES_TO_CODES[user.country] ?? "ZZ",
-                              )}
-                          </p>
+          {data?.pages[0]?.results.length === 0 ? (
+            <p className={globals[`${textColorTheme}Color`]}>
+              you have no followers.
+            </p>
+          ) : (
+            <div className={styles.userCardContainer}>
+              <button
+                disabled={
+                  isFetching ||
+                  page === 0 ||
+                  isFetchPreviousPageError ||
+                  isFetchingPreviousPage
+                }
+                onClick={backward}
+                className={styles.arrowButton}
+              >
+                <ArrowBackIcon
+                  className={clsx(globals[`${textColorTheme}FillChildren`])}
+                />
+              </button>
+              <div className={styles.userCardWrapper}>
+                {data?.pages[page]?.results?.length == 0 ? (
+                  <p className={globals[`${textColorTheme}Color`]}>
+                    you have no followers
+                  </p>
+                ) : (
+                  data?.pages[page].results?.map((user) => {
+                    return (
+                      <Link
+                        href={`/user/${user.id}`}
+                        className={clsx(
+                          styles.noTextDecoration,
+                          styles.userCardLink,
+                          globals[`${textColorTheme}BackgroundColor`],
+                        )}
+                      >
+                        <div className={styles.userCardInnerWrapper}>
+                          <img
+                            src={user.profilePicture}
+                            alt={`${user.username}'s profile picture`}
+                            className={styles.userCardProfilePicture}
+                            onError={(e) => {
+                              e.currentTarget.src = "/profilePicture.png";
+                            }}
+                          />
+                          <div
+                            className={clsx(
+                              globals[`${theme}Color`],
+                              styles.userCardTextWrapper,
+                            )}
+                            title={user.username}
+                          >
+                            <b className={styles.userCardText}>
+                              {user.username}{" "}
+                            </b>
+                            <p className={styles.userCardText}>
+                              {user.country &&
+                                getUnicodeFlagIcon(
+                                  COUNTRY_NAMES_TO_CODES[user.country] ?? "ZZ",
+                                )}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  );
-                })
-              )}
+                      </Link>
+                    );
+                  })
+                )}
+              </div>
+              <button
+                disabled={
+                  isFetching ||
+                  isFetchNextPageError ||
+                  isFetchingNextPage ||
+                  fetchLimit === page
+                }
+                onClick={forward}
+                className={styles.arrowButton}
+              >
+                <ArrowForwardIcon
+                  className={clsx(globals[`${textColorTheme}FillChildren`])}
+                />
+              </button>
             </div>
-            <button
-              disabled={
-                isFetching ||
-                isFetchNextPageError ||
-                isFetchingNextPage ||
-                fetchLimit === page
-              }
-              onClick={forward}
-              className={styles.arrowButton}
-            >
-              <ArrowForwardIcon
-                className={clsx(globals[`${textColorTheme}FillChildren`])}
-              />
-            </button>
-          </div>
+          )}
         </>
       )}
     </div>

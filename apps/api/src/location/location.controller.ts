@@ -31,7 +31,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { LocationResponsesEnum, IQueryMetadata } from '@tournament-app/types';
-import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -82,7 +81,7 @@ export class LocationController {
   }
 
   @Post()
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new location',
@@ -107,7 +106,7 @@ export class LocationController {
   }
 
   @Delete(':locationId')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Deletes a location',

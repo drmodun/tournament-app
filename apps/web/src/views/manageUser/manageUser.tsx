@@ -37,20 +37,6 @@ import rehypeRaw from "rehype-raw";
 import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
 import UserFollowersDialog from "views/userFollowersModal";
 
-type Team = {
-  name: string;
-  id: string;
-};
-
-type UpdateUserForm = {
-  profilePicture?: string;
-  country?: string;
-  username?: string;
-  name?: string;
-  bio?: string;
-  location?: string;
-};
-
 export default function ManageUser({
   data,
 }: {
@@ -66,7 +52,13 @@ export default function ManageUser({
 
   const scrollRefTeams = useRef<HTMLDivElement>(null);
 
-  const { data: groupData, fetchNextPage } = useUserGroups(true);
+  const {
+    data: groupData,
+    fetchNextPage,
+    isFetchNextPageError,
+    isFetchingNextPage,
+    isFetching,
+  } = useUserGroups(true);
   const deleteUserMutation = useDeleteUser(data?.id);
 
   return (
@@ -77,7 +69,7 @@ export default function ManageUser({
         variant={theme}
         className={styles.dialog}
       >
-        <UserEditForm data={data} groupData={groupData} />
+        <UserEditForm data={data} />
       </Dialog>
       <Dialog
         active={userFollowersDialog}
@@ -124,16 +116,10 @@ export default function ManageUser({
             </p>
           </div>
           <div className={styles.userInfo}>
-            <b className={styles.boldText}>location</b>
-            <p className={clsx(styles.infoText)}>
-              {data?.location.toLowerCase()}
-            </p>
-          </div>
-          <div className={styles.userInfo}>
             <b className={styles.boldText}>country</b>
             <p
               className={clsx(styles.infoText)}
-            >{`${data?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[data?.country ?? ""] ?? "ZZ")}`}</p>
+            >{`${data?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[data?.country ?? ""] ?? data?.country ?? "ZZ")}`}</p>
           </div>
           <div className={styles.userInfo}>
             <b className={styles.boldText}>level</b>
@@ -191,16 +177,18 @@ export default function ManageUser({
                   </div>
                 )),
             )}
-            {groupData?.pages?.length === 0 ? (
-              "no teams yet."
-            ) : (
-              <Chip
-                key={"load team button"}
-                label="load more"
-                variant="secondary"
-                onClick={() => fetchNextPage()}
-              ></Chip>
-            )}
+            {groupData?.pages[0].results.length === 0
+              ? "no teams yet."
+              : isFetchNextPageError ||
+                isFetchingNextPage ||
+                (isFetching && (
+                  <Chip
+                    key={"load team button"}
+                    label="load more"
+                    variant="secondary"
+                    onClick={() => fetchNextPage()}
+                  ></Chip>
+                ))}
           </div>
         </div>
         <Link href="/manageTeams">

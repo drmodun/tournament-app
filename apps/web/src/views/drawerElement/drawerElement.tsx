@@ -52,7 +52,7 @@ export default function DrawerElement({
             className: clsx(
               styles.icon,
               styles[`${variant}Icon`],
-              globals[`${textColor(colorTheme)}Fill`],
+              globals[`${textColor(colorTheme)}FillChildren`],
             ),
           })}
       </div>

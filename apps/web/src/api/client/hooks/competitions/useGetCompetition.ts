@@ -1,5 +1,3 @@
-"use server";
-
 import { useQuery } from "@tanstack/react-query";
 import {
   groupRoleEnumType,

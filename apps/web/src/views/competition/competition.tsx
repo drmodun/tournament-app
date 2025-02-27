@@ -17,6 +17,7 @@ import { IExtendedTournamentResponse } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useRouter } from "next/navigation";
 import rehypeRaw from "rehype-raw";
+import { useEffect } from "react";
 
 type SidebarSectionProps = {
   name: string;
@@ -31,7 +32,6 @@ export default function Competition({
   const { data, isLoading, isSuccess } = useAuth();
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const router = useRouter();
 
   const handleJoin = () => {
     if (!isSuccess) return;
@@ -90,9 +90,19 @@ export default function Competition({
           </SidebarSection>
           <SidebarSection name="location">
             <Chip
-              label={`${competition?.location} ${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
+              label={
+                competition?.actualLocation?.name != undefined
+                  ? competition?.actualLocation?.name
+                  : competition?.location
+              }
             ></Chip>
           </SidebarSection>
+          <SidebarSection name="country">
+            <Chip
+              label={`${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
+            ></Chip>
+          </SidebarSection>
+
           <SidebarSection name="mmr">
             <div className={styles.dates}>
               <Chip label={competition?.minimumMMR?.toString()}></Chip>

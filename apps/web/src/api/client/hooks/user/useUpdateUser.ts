@@ -6,13 +6,9 @@ import { clientApi, getAccessToken } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-type UpdateUserInfo = {
-  id: number;
-} & IUpdateUserInfo;
-export const updateUser = async (updateFields: UpdateUserInfo) => {
-  const { id, ...data } = updateFields;
+export const updateUser = async (updateFields: IUpdateUserInfo) => {
   return clientApi
-    .patch<never, AxiosResponse<UpdateUserInfo>>(`/users/${id}`, data)
+    .patch<never, AxiosResponse<IUpdateUserInfo>>(`/users`, updateFields)
     .then((res) => res.data);
 };
 
@@ -30,7 +26,7 @@ export const useUpdateUser = () => {
       console.error(error);
     },
     onMutate: () => {
-      toast.addToast("logging in...", "info");
+      toast.addToast("updating user...", "info");
     },
   });
 };

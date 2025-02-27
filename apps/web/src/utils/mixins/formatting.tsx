@@ -69,6 +69,15 @@ export const formatDate = (date: Date) => {
   }
 };
 
+export const formatDateHTMLInput = (date: Date) => {
+  try {
+    const d: string = dateFormat(date, "yyyy-mm-dd").toLowerCase();
+    return d;
+  } catch {
+    return "unknown";
+  }
+};
+
 export const formatDateTime = (date: Date) => {
   return dateFormat(date, "H:MM dd.mm 'yy").toLowerCase();
 };

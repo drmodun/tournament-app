@@ -15,7 +15,6 @@ import {
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import ImageDrop from "components/imageDrop";
 import ImagePicker from "components/imagePicker";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import RichEditor from "components/richEditor";
 import {
   leaveUserGroups,
@@ -23,114 +22,45 @@ import {
 } from "api/client/hooks/groups/useLeaveUserGroups";
 import { useUpdateUser } from "api/client/hooks/user/useUpdateUser";
 import Button from "components/button";
+import { formatDateHTMLInput } from "utils/mixins/formatting";
+import Dropdown from "components/dropdown";
+import { countries } from "country-flag-icons";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { toBase64 } from "utils/mixins/helpers";
 
-type UserEditFormProps = {
+export default function userEditForm({
+  data,
+}: {
   data: IExtendedUserResponse | undefined;
-  groupData: any;
-};
-
-type UpdateUserForm = {
-  profilePicture?: string;
-  country?: string;
-  username?: string;
-  name?: string;
-  bio?: string;
-  location?: string;
-};
-
-export default function userEditForm({ data, groupData }: UserEditFormProps) {
+}) {
   const updateUser = useUpdateUser();
-  const leaveUserGroups = useLeaveUserGroups();
 
-  const [teams, setTeams] = useState<IGroupMembershipResponseWithDates[]>([]);
-  const [teamIdDeletions, setTeamIdDeletions] = useState<number[]>([]);
-  const [placeId, setPlaceId] = useState<string>();
-  const [listener, setListener] = useState<google.maps.MapsEventListener>();
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
-
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<File | string>();
 
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  const scrollRefTeamsEdit = useRef<HTMLDivElement>(null);
-
-  const methods = useForm<UpdateUserForm>();
-  const onSubmit: SubmitHandler<UpdateUserForm> = async (_data) => {
+  const methods = useForm<IUpdateUserInfo>();
+  const onSubmit: SubmitHandler<IUpdateUserInfo> = async (_data) => {
     if (!data) return;
-    console.log("DATA:", _data);
-    updateUser.mutate({ ..._data, id: data?.id });
-    leaveUserGroups.mutate(teamIdDeletions);
-  };
-
-  const deleteTeam = (id: number) => {
-    setTeams(teams?.filter((team) => team.id !== id));
-    setTeamIdDeletions((prev) => [...prev, id]);
-  };
-
-  const handleAutocomplete = (
-    autocomplete: google.maps.places.Autocomplete,
-  ) => {
-    listener && google.maps.event.removeListener(listener);
-    setPlaceId(autocomplete.getPlace().place_id);
-  };
-
-  const checkValidity = () => {
-    if (!methods.formState.isValid) {
-      setIsFormValid(false);
-      return;
-    }
-
-    if (
-      file ||
-      data?.username !== methods.getValues("username") ||
-      (data?.location !== methods.getValues("location") && placeId) ||
-      data?.bio !== methods.getValues("bio") ||
-      teamIdDeletions.length > 0
-    ) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
+    _data.country = _data.country?.split(" ")[0];
+    updateUser.mutate(_data);
   };
 
   useEffect(() => {
-    setTeams(groupData?.results);
-  }, [groupData]);
+    if (data?.profilePicture) {
+      setFile(data.profilePicture);
+    }
+  }, [data]);
 
-  useEffect(() => {
-    checkValidity();
-  }, [methods.getValues()]);
+  const deleteProfilePicture = () => {
+    setFile(undefined);
+    methods.setValue("profilePicture", "");
+  };
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(onSubmit)}
-        className={styles.form}
-        onChange={checkValidity}
-      >
-        <div className={styles.formItem}>
-          <h3 className={globals[`${textColorTheme}Color`]}>
-            change profile picture
-          </h3>
-          <div className={styles.pfpEdit}>
-            {file ? (
-              <ImagePicker
-                file={file}
-                name="profilePicture"
-                isReactFormHook={true}
-                variant={textColorTheme}
-                className={styles.imagePicker}
-              />
-            ) : (
-              <ImageDrop
-                onFile={setFile}
-                variant={textColorTheme}
-                className={styles.imageDrop}
-              />
-            )}
-          </div>
-        </div>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles.formItem}>
           <h3 className={globals[`${textColorTheme}Color`]}>change username</h3>
           <Input
@@ -142,30 +72,58 @@ export default function userEditForm({ data, groupData }: UserEditFormProps) {
             isReactFormHook={true}
             name="username"
           />
+          {methods.formState.errors.username?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={styles.formItem}>
-          <h3 className={globals[`${textColorTheme}Color`]}>change location</h3>
+          <h3 className={globals[`${textColorTheme}Color`]}>
+            change full name
+          </h3>
           <Input
+            label="new name"
             variant={textColorTheme}
-            label="location"
-            placeholder="enter your place of residence"
-            name="location"
-            required={true}
-            className={styles.input}
+            placeholder="enter new name"
+            labelVariant={textColorTheme}
+            defaultValue={data?.name}
             isReactFormHook={true}
-            defaultValue={data?.location}
-            onChange={(e) => {
-              setPlaceId(undefined);
-              fetchAutocomplete(e.target).then((autocomplete) => {
-                const tempListener = autocomplete.addListener(
-                  "place_changed",
-                  () => handleAutocomplete(autocomplete),
-                );
-                setListener(tempListener);
-              });
-            }}
+            name="name"
           />
+          {methods.formState.errors.name?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
+        <div className={styles.formItem}>
+          <h3 className={globals[`${textColorTheme}Color`]}>
+            change profile picture
+          </h3>
+          <div className={styles.pfpEdit}>
+            {file ? (
+              <>
+                <ImagePicker
+                  file={file}
+                  name="profilePicture"
+                  isReactFormHook={true}
+                  variant={textColorTheme}
+                  className={styles.imagePicker}
+                />
+                <Button
+                  variant="danger"
+                  onClick={deleteProfilePicture}
+                  label="delete photo"
+                  className={styles.deletePhotoButton}
+                />
+              </>
+            ) : (
+              <ImageDrop
+                onFile={setFile}
+                variant={textColorTheme}
+                className={styles.imageDrop}
+              />
+            )}
+          </div>
+        </div>
+
         <div className={styles.formItem}>
           <h3 className={globals[`${textColorTheme}Color`]}>change bio</h3>
           <RichEditor
@@ -175,46 +133,61 @@ export default function userEditForm({ data, groupData }: UserEditFormProps) {
             startingContent={data?.bio}
             variant={textColorTheme}
           />
+          {methods.formState.errors.bio?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
 
         <div className={styles.formItem}>
-          <h3 className={globals[`${textColorTheme}Color`]}>delete teams</h3>
-          <div
-            className={styles.teams}
-            ref={scrollRefTeamsEdit}
-            onWheel={(e) => {
-              if (scrollRefTeamsEdit?.current) {
-                scrollRefTeamsEdit.current.scrollLeft +=
-                  e.deltaY > 0 ? 50 : -50;
-              }
-            }}
-          >
-            {teams?.length == 0 ? (
-              <p className={styles.noItemsText}>you have no teams!</p>
-            ) : (
-              teams?.map((team: IGroupMembershipResponseWithDates) => {
-                return (
-                  <div className={styles.team} key={team.id}>
-                    <Chip
-                      key={-team.id}
-                      label={team.name}
-                      variant={textColorTheme}
-                      className={styles.team}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteTeam(team.id);
-                      }}
-                    />
-                  </div>
-                );
-              })
-            )}
-          </div>
+          <h3 className={globals[`${textColorTheme}Color`]}>
+            change date of birth
+          </h3>
+          <Input
+            variant={textColorTheme}
+            label="new date of birth"
+            placeholder="enter your date of birth"
+            name="dateOfBirth"
+            required={true}
+            className={styles.input}
+            type="date"
+            isReactFormHook={true}
+            min="1900-01-01"
+            max={formatDateHTMLInput(new Date())}
+          />
+          {methods.formState.errors.dateOfBirth?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
+        </div>
+
+        <div className={styles.formItem}>
+          <h3 className={globals[`${textColorTheme}Color`]}>
+            change nationality
+          </h3>
+          <Dropdown
+            variant={textColorTheme}
+            label="new nationality"
+            placeholder="enter your nationality"
+            name="country"
+            required={true}
+            className={styles.input}
+            doesSearch={true}
+            searchPlaceholder="search..."
+            isReactHookForm={true}
+            defaultValue={`${data?.country} ${getUnicodeFlagIcon(data?.country ?? "ZZ")}`}
+            options={countries.map((country) => {
+              return {
+                label: `${country} ${getUnicodeFlagIcon(country)}`,
+              };
+            })}
+            style={{ width: "100%" }}
+          />
+          {methods.formState.errors.dateOfBirth?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={styles.formItem}>
           <Button
-            variant={isFormValid ? "primary" : textColorTheme}
-            disabled={!isFormValid}
+            variant="warning"
             submit={true}
             label="update"
             className={styles.updateButton}

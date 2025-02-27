@@ -5,7 +5,12 @@ import {
   IExtendedUserResponse,
   UserResponsesEnum,
 } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
@@ -24,7 +29,8 @@ export const useGetUser = (userId: number) => {
     queryKey: ["userId", "me"],
     queryFn: () => getUser(userId),
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: SMALL_QUERY_RETRY_DELAY,
+    retry: SMALL_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
   });
 };

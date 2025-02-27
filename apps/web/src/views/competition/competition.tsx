@@ -13,10 +13,19 @@ import {
 } from "utils/mixins/formatting";
 import Markdown from "react-markdown";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { IExtendedTournamentResponse } from "@tournament-app/types";
+import {
+  groupRoleEnum,
+  IExtendedTournamentResponse,
+} from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useRouter } from "next/navigation";
 import rehypeRaw from "rehype-raw";
+import { useEffect, useState } from "react";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
+import ProgressWheel from "components/progressWheel";
+import EditCompetitionForm from "views/editCompetitionForm";
+import Dialog from "components/dialog";
+import { useDeleteCompetition } from "api/client/hooks/competitions/useDeleteCompetition";
 
 type SidebarSectionProps = {
   name: string;
@@ -31,13 +40,22 @@ export default function Competition({
   const { data, isLoading, isSuccess } = useAuth();
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const router = useRouter();
+  const { data: groupMembershipData, isLoading: groupMembershipIsLoading } =
+    useCheckIfGroupMember(competition?.affiliatedGroup?.id);
 
-  const handleJoin = () => {
-    if (!isSuccess) return;
-  };
+  const deleteCompetitionMutation = useDeleteCompetition();
+
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+
   return (
     <div className={clsx(styles.wrapper)}>
+      <Dialog
+        active={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        variant={theme}
+      >
+        <EditCompetitionForm competition={competition} />
+      </Dialog>
       <div className={clsx(styles.left)}>
         <div className={clsx(styles.banner)}>
           <div className={styles.bannerContent}>
@@ -90,9 +108,19 @@ export default function Competition({
           </SidebarSection>
           <SidebarSection name="location">
             <Chip
-              label={`${competition?.location} ${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
+              label={
+                competition?.actualLocation?.name != undefined
+                  ? competition?.actualLocation?.name
+                  : competition?.location
+              }
             ></Chip>
           </SidebarSection>
+          <SidebarSection name="country">
+            <Chip
+              label={`${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
+            ></Chip>
+          </SidebarSection>
+
           <SidebarSection name="mmr">
             <div className={styles.dates}>
               <Chip label={competition?.minimumMMR?.toString()}></Chip>
@@ -107,6 +135,29 @@ export default function Competition({
             <Chip label={competition?.category?.name}></Chip>
           </SidebarSection>
         </div>
+        {groupMembershipIsLoading || isLoading ? (
+          <ProgressWheel variant={textColorTheme} />
+        ) : (
+          data &&
+          (groupMembershipData?.role === groupRoleEnum.ADMIN ||
+          groupMembershipData?.role === groupRoleEnum.OWNER ||
+          competition?.creator?.id == data?.id ? (
+            <div className={styles.manageCompetitionButtonsWrapper}>
+              <Button
+                variant="warning"
+                label="edit competition"
+                onClick={() => setEditModalOpen(true)}
+              />
+              <Button
+                variant="danger"
+                label="delete competition"
+                onClick={() => deleteCompetitionMutation.mutate(competition.id)}
+              />
+            </div>
+          ) : (
+            <Button variant="primary" label="send join invite" />
+          ))
+        )}
       </div>
     </div>
   );

@@ -32,6 +32,11 @@ export const useRegister = () => {
       setTimeout(() => navigate.push("/login"), 1000);
     },
     onError: (error: any) => {
+      if (error.response?.status === 413) {
+        toast.addToast("image too large. must be less than 2mb", "error");
+        return;
+      }
+
       toast.addToast("an error occurred...", "error");
       console.error(error);
     },

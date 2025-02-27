@@ -1,58 +1,65 @@
 "use client";
 
-import React, { useState } from "react";
-import styles from "./createTournamentForm.module.scss";
+import { useEffect, useState } from "react";
+import styles from "./editCompetitionForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import Input from "components/input";
+import Button from "components/button";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 import { textColor, TextVariants } from "types/styleTypes";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Button from "components/button";
-import { useLogin } from "api/client/hooks/auth/useLogin";
-import { useThemeContext } from "utils/hooks/useThemeContext";
+import Input from "components/input";
+import Dropdown from "components/dropdown";
+import SlideButton from "components/slideButton";
+import CheckboxGroup from "components/checkboxGroup";
 import {
-  ICreateTournamentRequest,
+  ICreateGroupRequest,
+  IExtendedTournamentResponse,
+  IGroupMembershipResponse,
+  ITournamentResponse,
+  IUpdateTournamentRequest,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
 } from "@tournament-app/types";
+import { useEditCompetition } from "api/client/hooks/competitions/useEditCompetition";
+import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import RichEditor from "components/richEditor";
-import SlideButton from "components/slideButton";
-import Dropdown from "components/dropdown";
 import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
-import ProgressWheel from "components/progressWheel";
-import { countries } from "country-flag-icons";
+import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
+import { useToastContext } from "utils/hooks/useToastContext";
 import {
   COUNTRY_CODES_TO_NAMES,
   COUNTRY_NAMES_TO_CODES,
-  formatDateHTMLInput,
+  formatDateTimeHTMLInput,
 } from "utils/mixins/formatting";
-import { useToastContext } from "utils/hooks/useToastContext";
-import {
-  createCompetitionFetch,
-  useCreateCompetition,
-} from "api/client/hooks/competitions/useCreateCompetition";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
+import { countries } from "country-flag-icons";
+import ProgressWheel from "components/progressWheel";
 
-export default function CreateTournamentForm({ userId }: { userId: number }) {
+export default function EditCompetitionForm({
+  competition,
+}: {
+  competition?: IExtendedTournamentResponse;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { data, isLoading } = useGetCategories();
   const toast = useToastContext();
-  const createCompetitionMutation = useCreateCompetition();
+  const updateCompetitionMutation = useEditCompetition();
   const createLocationMutation = useCreateLocation();
 
-  const methods = useForm<ICreateTournamentRequest>();
-  const onSubmit: SubmitHandler<ICreateTournamentRequest> = async (data) => {
+  const methods = useForm<IUpdateTournamentRequest>();
+  const onSubmit: SubmitHandler<
+    IUpdateTournamentRequest & { id?: number }
+  > = async (data) => {
     data.isFakePlayersAllowed = isFakePlayersAllowed;
     data.isPublic = isPublic;
     data.isRanked = isRanked;
     data.isMultipleTeamsPerGroupAllowed = isMultipleTeamsPerGroupAllowed;
     data.categoryId = categoryId;
-    data.creatorId = userId;
-    data.country = COUNTRY_NAMES_TO_CODES[data.country] ?? "ZZ";
+    data.country = COUNTRY_NAMES_TO_CODES[data?.country ?? ""] ?? "ZZ";
     data.locationId = locationId;
+    data.id = competition?.id;
     if (links.length > 0) data.links = links.join(",");
 
     // @ts-ignore
@@ -62,7 +69,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
 
     console.log(data);
 
-    createCompetitionMutation.mutate(data);
+    updateCompetitionMutation.mutate(data);
   };
 
   const [isRanked, setIsRanked] = useState<boolean>(false);
@@ -75,7 +82,6 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
   const [categoryId, setCategoryId] = useState<number>(-1);
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
   const [locationId, setLocationId] = useState<number>();
-  const [finalLocationName, setFinalLocationName] = useState<string>();
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
@@ -84,13 +90,6 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
     listener && google.maps.event.removeListener(listener);
 
     const place = autocomplete.getPlace();
-
-    console.log({
-      lat: place.geometry?.location?.lat(),
-      lng: place.geometry?.location?.lng(),
-      name: placeName,
-      apiId: place.place_id,
-    });
 
     if (!place.geometry?.location || !placeName || !place.place_id) return;
 
@@ -102,7 +101,6 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
     });
 
     setLocationId(res.id);
-    setFinalLocationName(placeName);
   };
 
   const handleAddLink = (val: string) => {
@@ -122,6 +120,15 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
     setLinks((links) => [...links, val]);
   };
 
+  const handleRemoveLink = (val: string) => {
+    const index = links.indexOf(val);
+    if (index > -1) setLinks((prev) => prev.splice(index, 1));
+  };
+
+  useEffect(() => {
+    setLinks(competition?.links.split(",") ?? []);
+  }, []);
+
   return (
     <FormProvider {...methods}>
       <form
@@ -134,13 +141,10 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             label="name"
             placeholder="enter the tournament's name"
             name="name"
-            required={true}
             className={styles.input}
             isReactFormHook={true}
+            defaultValue={competition?.name}
           />
-          {methods.formState.errors.name?.type === "required" && (
-            <p className={styles.error}>this field is required!</p>
-          )}
         </div>
         <div className={styles.inputWrapper}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
@@ -151,13 +155,8 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             isReactHookForm={true}
             name="description"
             variant={textColorTheme}
-            required={true}
+            startingContent={competition?.description}
           />
-          {methods.formState.errors.description?.type === "required" && (
-            <p className={clsx(styles.error, styles.errorSpacing)}>
-              this field is required!
-            </p>
-          )}
         </div>
         <div className={styles.inputWrapper}>
           <Input
@@ -165,17 +164,16 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             label="starting time"
             placeholder="enter the tournament's starting time"
             name="startDate"
-            required={true}
             className={styles.input}
             isReactFormHook={true}
             type="datetime-local"
             min={new Date()
               .toISOString()
               .slice(0, new Date().toISOString().lastIndexOf(":"))}
+            defaultValue={formatDateTimeHTMLInput(
+              competition?.startDate ?? new Date(),
+            )}
           />
-          {methods.formState.errors.startDate?.type === "required" && (
-            <p className={styles.error}>this field is required!</p>
-          )}
         </div>
         <div className={styles.inputWrapper}>
           <Input
@@ -183,17 +181,16 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             label="ending time"
             placeholder="enter the tournament's ending time"
             name="endDate"
-            required={true}
             className={styles.input}
             isReactFormHook={true}
             type="datetime-local"
             min={new Date()
               .toISOString()
               .slice(0, new Date().toISOString().lastIndexOf(":"))}
+            defaultValue={formatDateTimeHTMLInput(
+              competition?.endDate ?? new Date(),
+            )}
           />
-          {methods.formState.errors.endDate?.type === "required" && (
-            <p className={styles.error}>this field is required!</p>
-          )}
         </div>
         <div className={styles.inputWrapper}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
@@ -206,6 +203,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
               name="minimumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
+              defaultValue={competition?.minimumMMR?.toString()}
             />
             <Input
               variant={textColorTheme}
@@ -213,6 +211,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
               name="maximumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
+              defaultValue={competition?.maximumMMR?.toString()}
             />
           </div>
         </div>
@@ -222,13 +221,10 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             label="maximum number of participants"
             placeholder="enter the maximum number of participants"
             name="maxParticipants"
-            required={true}
             isReactFormHook={true}
             type="number"
+            defaultValue={competition?.maxParticipants?.toString()}
           />
-          {methods.formState.errors.maxParticipants?.type === "required" && (
-            <p className={styles.error}>this field is required!</p>
-          )}
         </div>
         <div className={clsx(styles.inputWrapper)}>
           <Input
@@ -247,10 +243,8 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
                 setListener(tempListener);
               });
             }}
+            defaultValue={competition?.actualLocation?.name}
           />
-          {methods.formState.errors.location?.type === "required" && (
-            <p className={styles.error}>this field is required!</p>
-          )}
         </div>
         <div className={clsx(styles.inputWrapper, styles.linksWrapper)}>
           <Input
@@ -263,7 +257,16 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
           />
           <ul className={clsx(globals[`${textColorTheme}Color`], styles.links)}>
             {links.map((link) => (
-              <li>{link}</li>
+              <li>
+                {link}{" "}
+                <button
+                  className={styles.linkRemoveButton}
+                  onClick={() => handleRemoveLink(link)}
+                  type="button"
+                >
+                  x
+                </button>
+              </li>
             ))}
           </ul>
         </div>
@@ -281,6 +284,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
               tournamentTeamTypeEnum.TEAM,
               tournamentTeamTypeEnum.MIXED,
             ]}
+            defaultValue={competition?.teamType}
           />
         </div>
         <div className={styles.inputWrapper}>
@@ -297,6 +301,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
               tournamentLocationEnum.ONLINE,
               tournamentLocationEnum.HYBRID,
             ]}
+            defaultValue={competition?.location}
           />
         </div>
         <div className={styles.inputWrapper}>
@@ -315,6 +320,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
               tournamentTypeEnum.LEAGUE,
               tournamentTypeEnum.SEASONAL,
             ]}
+            defaultValue={competition?.type}
           />
         </div>
         <div className={styles.inputWrapper}>
@@ -330,6 +336,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             onChange={(val: string) => {
               setIsPublic(val === "yes");
             }}
+            defaultValue={competition?.isPublic ? "yes" : "no"}
           />
         </div>
         <div className={styles.inputWrapper}>
@@ -345,6 +352,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             onChange={(val: string) => {
               setIsRanked(val === "yes");
             }}
+            defaultValue={competition?.isRanked ? "yes" : "no"}
           />
         </div>
         <div className={styles.inputWrapper}>
@@ -360,6 +368,9 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             onChange={(val: string) => {
               setIsMultipleTeamsPerGroupAllowed(val === "yes");
             }}
+            defaultValue={
+              competition?.isMultipleTeamsPerGroupAllowed ? "yes" : "no"
+            }
           />
         </div>
         <div className={styles.inputWrapper}>
@@ -375,6 +386,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             onChange={(val: string) => {
               setIsFakePlayersAllowed(val === "yes");
             }}
+            defaultValue={competition?.isFakePlayersAllowed ? "yes" : "no"}
           />
         </div>
         <div className={styles.inputWrapper}>
@@ -393,16 +405,19 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             placeholder="select tournament country"
             name="country"
             isReactHookForm={true}
-            required={true}
             variant={textColorTheme}
             className={styles.dropdown}
             searchClassName={styles.dropdown}
             innerWrapperClassName={styles.dropdown}
             optionsClassName={styles.dropdown}
+            defaultValue={
+              competition?.country
+                ? COUNTRY_CODES_TO_NAMES[
+                    competition.country as keyof typeof COUNTRY_CODES_TO_NAMES
+                  ]
+                : undefined
+            }
           />
-          {methods.formState.errors.country?.type === "required" && (
-            <p className={styles.error}>this field is required!</p>
-          )}
         </div>
         <div className={styles.inputWrapper}>
           {isLoading ? (
@@ -413,26 +428,23 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
               placeholder="select tournament category"
               name="categoryId"
               isReactHookForm={true}
-              required={true}
               variant={textColorTheme}
               options={
                 data?.results.map((category) => {
                   return { label: category.name };
                 }) ?? []
               }
+              defaultValue={competition?.category?.name}
               onSelect={(index: number) =>
                 setCategoryId(data?.results[index].id ?? -1)
               }
             />
           )}
-          {methods.formState.errors.categoryId?.type === "required" && (
-            <p className={styles.error}>dsadsadsa this field is required!</p>
-          )}
         </div>
 
         <Button
-          label="create competition"
-          variant="primary"
+          label="update competition"
+          variant="warning"
           submit={true}
           className={styles.submitButton}
         />

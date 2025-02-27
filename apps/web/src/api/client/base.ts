@@ -92,3 +92,10 @@ clientApi.interceptors.response.use(
     }
   },
 );
+
+export const LARGE_QUERY_RETRY_ATTEMPTS = 2;
+export const LARGE_QUERY_RETRY_DELAY = 1500;
+export const MEDIUM_QUERY_RETRY_ATTEMPTS = 3;
+export const MEDIUM_QUERY_RETRY_DELAY = 500;
+export const SMALL_QUERY_RETRY_ATTEMPTS = 4;
+export const SMALL_QUERY_RETRY_DELAY = 250;

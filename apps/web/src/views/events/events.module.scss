@@ -1,0 +1,50 @@
+@use "../../styles/" as *;
+
+.header {
+  @media screen and (max-width: $desktopBreakpoint) {
+    font-size: $headerFontSize !important;
+  }
+  margin-bottom: $doublePadding;
+}
+
+.lightHeader {
+  -webkit-text-fill-color: $light;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $dark,
+    $num-steps: 32
+  );
+}
+
+.darkHeader {
+  -webkit-text-fill-color: $dark;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $light,
+    $num-steps: 32
+  );
+}
+
+.outerEventsWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-basis: 5 * $baseComponentHeight;
+  overflow: hidden;
+  overflow-y: scroll;
+  gap: $halfPadding;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  overflow: hidden;
+}
+
+.title {
+  display: flex;
+  gap: $padding;
+  align-items: center;
+}

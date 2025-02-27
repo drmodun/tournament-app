@@ -1,5 +1,3 @@
-"use server";
-
 import { useQuery } from "@tanstack/react-query";
 import {
   groupRoleEnumType,
@@ -9,7 +7,13 @@ import {
   TournamentResponseEnumType,
   TournamentResponsesEnum,
 } from "@tournament-app/types";
-import { baseApiUrl, clientApi, getAccessToken } from "api/client/base";
+import {
+  baseApiUrl,
+  clientApi,
+  getAccessToken,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useAuth } from "../auth/useAuth";
 
@@ -26,6 +30,7 @@ export const useGetCompetition = (competitionId: number) => {
     queryKey: ["competition"],
     queryFn: () => getCompetition(competitionId),
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: SMALL_QUERY_RETRY_DELAY,
+    retry: SMALL_QUERY_RETRY_ATTEMPTS,
   });
 };

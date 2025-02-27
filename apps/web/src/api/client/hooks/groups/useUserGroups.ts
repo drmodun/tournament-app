@@ -15,7 +15,12 @@ import {
   IGroupMembershipResponse,
   IGroupMembershipResponseWithDates,
 } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  MEDIUM_QUERY_RETRY_ATTEMPTS,
+  MEDIUM_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useAuth } from "api/client/hooks/auth/useAuth";
@@ -72,7 +77,8 @@ export const useUserGroups = (mini: boolean = false) => {
         ? getUserGroupsMini(data?.id, pageParam)
         : getUserGroups(data?.id, pageParam),
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
+    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null && !!data?.id,
     getNextPageParam: (lastPage, pages) => {
       return lastPage.results.length < 2

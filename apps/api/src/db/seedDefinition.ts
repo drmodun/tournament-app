@@ -2,7 +2,7 @@ import { db } from './db';
 import * as tables from './schema';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { faker } from '@faker-js/faker';
-import { sql } from 'drizzle-orm';
+import { InferInsertModel, sql } from 'drizzle-orm';
 import { CreateUserRequest } from 'src/users/dto/requests.dto';
 import {
   groupFocusEnum,
@@ -18,27 +18,59 @@ import {
   tournamentTeamTypeEnum,
 } from '@tournament-app/types';
 import { stageTypeEnum, stageStatusEnum } from '@tournament-app/types';
+import { LocationHelper } from '../base/static/locationHelper';
 
 async function teardown() {
   console.log('Teardown database...');
 
   try {
-    const tablesToDelete = Object.entries(tables);
+    // Delete tables in order of dependencies (child tables first)
+    const tableDeleteOrder = [
+      // Relationship tables first
+      tables.categoryToLFP,
+      tables.categoryToLFG,
+      tables.categoryCareer,
+      tables.interests,
+      tables.groupInterests,
+      tables.eloRequirement,
+      tables.participation,
 
-    const deletions = tablesToDelete.map(async ([tableName, table]) => {
+      // Join/Request tables
+      tables.groupJoinRequest,
+      tables.groupInvite,
+      tables.groupToUser,
+
+      // Block lists
+      tables.groupUserBlockList,
+      tables.userGroupBlockList,
+
+      // Activity tables
+      tables.follower,
+      tables.lookingForPlayers,
+      tables.lookingForGroup,
+      tables.stage,
+
+      // Main entity tables with foreign keys
+      tables.tournament,
+      tables.groupRequirements,
+      tables.group,
+      tables.category,
+      tables.location,
+
+      // Base tables
+      tables.user,
+    ];
+
+    for (const table of tableDeleteOrder) {
       try {
-        if (table instanceof PgTable) {
-          console.log(`Dropping all rows from table ${tableName}`);
-          await db.delete(table);
-        }
+        console.log(`Dropping all rows from table ${table.name}`);
+        await db.delete(table);
       } catch (err) {
-        console.error(`Error deleting table ${tableName}`, err);
+        console.error(`Error deleting table ${table.name}:`, err);
       }
-    });
-
-    await Promise.all(deletions);
+    }
   } catch (err) {
-    console.error('Error deleting tables', err);
+    console.error('Error during teardown:', err);
   }
 }
 
@@ -47,7 +79,7 @@ async function createUsers() {
     '$2b$10$De5WinLZL9SL1qhKSHgeS.88OV5R1UcoRLeUEOnOTurMMk7mBVZhO'; // Password123!
   const NUM_USERS_TO_CREATE = process.env.SEED_USERS_COUNT
     ? parseInt(process.env.SEED_USERS_COUNT, 10)
-    : 50;
+    : 100;
 
   const randomUsers: CreateUserRequest[] = [];
 
@@ -112,7 +144,7 @@ async function createUsers() {
 async function createFollowers() {
   const NUM_OF_USERS = process.env.SEED_USERS_COUNT
     ? parseInt(process.env.SEED_USERS_COUNT, 10)
-    : 50;
+    : 100;
 
   const followers = new Set<string>();
   const userIds = Array.from({ length: NUM_OF_USERS }, (_, i) => i + 1);
@@ -161,10 +193,10 @@ async function createFollowers() {
 async function createGroupJoinRequests() {
   const NUM_OF_USERS = process.env.SEED_USERS_COUNT
     ? parseInt(process.env.SEED_USERS_COUNT, 10)
-    : 50;
+    : 100;
   const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
     ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
-    : 20;
+    : 100;
 
   const groupJoinRequests = new Set<string>();
   const userIds = Array.from({ length: NUM_OF_USERS }, (_, i) => i + 1);
@@ -221,7 +253,7 @@ async function createGroupJoinRequests() {
 async function createGroups() {
   const NUM_GROUPS_TO_CREATE = process.env.SEED_GROUPS_COUNT
     ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
-    : 50;
+    : 100;
 
   const groupData = [];
   for (let i = 1; i <= NUM_GROUPS_TO_CREATE; i++) {
@@ -233,6 +265,7 @@ async function createGroups() {
       type: groupTypeEnum.PUBLIC,
       focus: groupFocusEnum.HYBRID,
       logo: faker.image.imageUrl(),
+      locationId: faker.number.int({ min: 1, max: 100 }),
       country: faker.location.country(),
     } satisfies CreateGroupRequest & { id: number });
   }
@@ -242,37 +275,81 @@ async function createGroups() {
   await db.insert(tables.group).values(groupData).execute();
 
   await db.execute(
-    sql<string>`ALTER SEQUENCE group_id_seq RESTART WITH ${sql.raw(String(NUM_GROUPS_TO_CREATE + 1))}`,
+    sql<string>`ALTER SEQUENCE group_id_seq RESTART WITH ${sql.raw(
+      String(groupData.length + 1),
+    )}`,
   );
 }
 
 async function createGroupMemberships() {
-  const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
-    ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
-    : 50;
-  const NUM_OF_USERS = process.env.SEED_USERS_COUNT
-    ? parseInt(process.env.SEED_USERS_COUNT, 10)
-    : 50;
-
   const groupMemberships = [];
+  const users = await db.select().from(tables.user);
+  const groups = await db.select().from(tables.group);
 
-  for (let i = 0; i < NUM_OF_GROUPS; i++) {
-    for (let j = 0; j < Math.floor(NUM_OF_USERS / 2); j++) {
+  // For each group, create a structured membership hierarchy
+  for (const group of groups) {
+    // 1. Always assign an owner (1 per group)
+    const ownerUser = faker.helpers.arrayElement(users);
+    groupMemberships.push({
+      groupId: group.id,
+      userId: ownerUser.id,
+      role: groupRoleEnum.OWNER,
+    });
+
+    // 2. Assign 1-3 admins (excluding owner)
+    const adminCount = faker.number.int({ min: 1, max: 3 });
+    const potentialAdmins = users.filter((u) => u.id !== ownerUser.id);
+    const selectedAdmins = faker.helpers.arrayElements(
+      potentialAdmins,
+      adminCount,
+    );
+
+    for (const admin of selectedAdmins) {
       groupMemberships.push({
-        groupId: i + 1,
-        userId: j + 1,
-        role:
-          i <= 5
-            ? i === 0
-              ? groupRoleEnum.OWNER
-              : groupRoleEnum.ADMIN
-            : groupRoleEnum.MEMBER,
-      } satisfies {
-        groupId: number;
-        userId: number;
-        role: groupRoleEnum;
+        groupId: group.id,
+        userId: admin.id,
+        role: groupRoleEnum.ADMIN,
       });
     }
+
+    // 3. Assign members (between 20% and 40% of remaining users, excluding owner and admins)
+    const usedUserIds = new Set([
+      ownerUser.id,
+      ...selectedAdmins.map((a) => a.id),
+    ]);
+    const remainingUsers = users.filter((u) => !usedUserIds.has(u.id));
+
+    // Calculate number of regular members (20-40% of remaining users)
+    const memberCount = Math.floor(
+      remainingUsers.length * faker.number.float({ min: 0.2, max: 0.4 }),
+    );
+
+    const selectedMembers = faker.helpers.arrayElements(
+      remainingUsers,
+      memberCount,
+    );
+
+    for (const member of selectedMembers) {
+      groupMemberships.push({
+        groupId: group.id,
+        userId: member.id,
+        role: groupRoleEnum.MEMBER,
+      });
+    }
+  }
+
+  // Ensure each user is in at least one group
+  const usersInGroups = new Set(groupMemberships.map((m) => m.userId));
+  const usersNotInGroups = users.filter((u) => !usersInGroups.has(u.id));
+
+  for (const user of usersNotInGroups) {
+    // Assign to a random group as a member
+    const randomGroup = faker.helpers.arrayElement(groups);
+    groupMemberships.push({
+      groupId: randomGroup.id,
+      userId: user.id,
+      role: groupRoleEnum.MEMBER,
+    });
   }
 
   await db.insert(tables.groupToUser).values(groupMemberships).execute();
@@ -281,10 +358,10 @@ async function createGroupMemberships() {
 async function createGroupInvites() {
   const NUM_OF_USERS = process.env.SEED_USERS_COUNT
     ? parseInt(process.env.SEED_USERS_COUNT, 10)
-    : 50;
+    : 100;
   const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
     ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
-    : 20;
+    : 100;
 
   const groupInvites = new Set<string>();
   const userIds = Array.from({ length: NUM_OF_USERS }, (_, i) => i + 1);
@@ -372,19 +449,56 @@ async function createCategories() {
       logo: 'https://example.com/quiz.jpg',
       type: categoryTypeEnum.OTHER,
     },
+    {
+      id: 6,
+      name: 'Other',
+      description: 'Other categories',
+      logo: 'https://example.com/other.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
+    {
+      id: 7,
+      name: 'Programming Competitions',
+      description: 'Competitive programming tournaments and hackathons',
+      logo: 'https://example.com/programming.jpg',
+      type: categoryTypeEnum.PROGRAMMING,
+    },
+    {
+      id: 8,
+      name: 'Chess Tournaments',
+      description: 'Classical and speed chess competitions',
+      logo: 'https://example.com/chess.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
+    {
+      id: 9,
+      name: 'Esports - League of Legends',
+      description: 'Professional and amateur LoL tournaments',
+      logo: 'https://example.com/lol.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
+    {
+      id: 10,
+      name: 'Basketball Leagues',
+      description: '3v3 and 5v5 basketball tournaments',
+      logo: 'https://example.com/basketball.jpg',
+      type: categoryTypeEnum.OTHER,
+    },
   ];
 
   await db.insert(tables.category).values(categories).execute();
 
   await db.execute(
-    sql<string>`ALTER SEQUENCE category_id_seq RESTART WITH ${sql.raw('6')}`,
+    sql<string>`ALTER SEQUENCE category_id_seq RESTART WITH ${sql.raw(
+      String(categories.length + 1),
+    )}`,
   );
 }
 
 async function createTournaments() {
   const NUM_TOURNAMENTS_TO_CREATE = process.env.SEED_TOURNAMENTS_COUNT
     ? parseInt(process.env.SEED_TOURNAMENTS_COUNT, 10)
-    : 20;
+    : 50;
 
   const tournaments = [];
   const categories = await db.select().from(tables.category);
@@ -489,7 +603,7 @@ async function createStages() {
 async function createParticipations() {
   const NUM_PARTICIPATIONS_TO_CREATE = process.env.SEED_PARTICIPATIONS_COUNT
     ? parseInt(process.env.SEED_PARTICIPATIONS_COUNT, 10)
-    : 100;
+    : 200;
 
   const participations = [];
   const tournaments = await db.select().from(tables.tournament);
@@ -557,10 +671,6 @@ async function createInterests() {
 }
 
 async function createGroupInterests() {
-  const NUM_OF_GROUPS = process.env.SEED_GROUPS_COUNT
-    ? parseInt(process.env.SEED_GROUPS_COUNT, 10)
-    : 20;
-
   const groupInterestsList = [];
   const groups = await db.select().from(tables.group);
   const categories = await db.select().from(tables.category);
@@ -592,7 +702,10 @@ async function createLocations() {
     locations.push({
       id: i + 1,
       name: faker.location.city(),
-      coordinates: [faker.location.latitude(), faker.location.longitude()],
+      coordinates: LocationHelper.ConvertToWKT(
+        faker.location.latitude(),
+        faker.location.longitude(),
+      ),
       apiId: faker.string.uuid(),
     });
   }
@@ -612,9 +725,9 @@ async function createGroupRequirements() {
   const requirements = [];
   const eloRequirements = [];
 
-  // Create requirements for about 30% of groups
+  // Create requirements for about 50% of groups
   for (const group of groups) {
-    if (Math.random() < 0.3) {
+    if (Math.random() < 0.5) {
       const requirement = {
         id: requirements.length + 1,
         groupId: group.id,
@@ -749,6 +862,83 @@ async function createBlockedUsers() {
   await db.insert(tables.groupUserBlockList).values(blockedUsers);
 }
 
+async function createLFP() {
+  const groups = await db.select().from(tables.group);
+  const categories = await db.select().from(tables.category);
+  const lfpEntries = [];
+  const categoryConnections = [];
+
+  // Create LFP entries for about 30% of groups
+  for (const group of groups) {
+    if (Math.random() < 0.3) {
+      const lfpEntry = {
+        id: lfpEntries.length + 1,
+        groupId: group.id,
+        message: faker.lorem.paragraph(),
+        createdAt: faker.date.recent(),
+      };
+      lfpEntries.push(lfpEntry);
+
+      // Connect each LFP entry to 1-3 categories
+      const numCategories = faker.number.int({ min: 1, max: 3 });
+      const shuffledCategories = [...categories].sort(
+        () => 0.5 - Math.random(),
+      );
+      const selectedCategories = shuffledCategories.slice(0, numCategories);
+
+      for (const category of selectedCategories) {
+        categoryConnections.push({
+          lfpId: lfpEntry.id,
+          categoryId: category.id,
+          createdAt: faker.date.recent(),
+        });
+      }
+    }
+  }
+
+  if (lfpEntries.length > 0) {
+    await db.insert(tables.lookingForPlayers).values(lfpEntries);
+    await db.execute(
+      sql<string>`ALTER SEQUENCE looking_for_players_id_seq RESTART WITH ${sql.raw(
+        String(lfpEntries.length + 1),
+      )}`,
+    );
+  }
+
+  if (categoryConnections.length > 0) {
+    await db.insert(tables.categoryToLFP).values(categoryConnections);
+  }
+}
+
+async function createUserGroupBlockList() {
+  const users = await db.select().from(tables.user);
+  const groups = await db.select().from(tables.group);
+  const blockedGroups = [];
+
+  // Each user blocks ~5% of groups
+  for (const user of users) {
+    const numberOfBlockedGroups = Math.floor(groups.length * 0.05);
+    const shuffledGroups = [...groups].sort(() => 0.5 - Math.random());
+    const selectedGroups = shuffledGroups.slice(0, numberOfBlockedGroups);
+
+    for (const group of selectedGroups) {
+      blockedGroups.push({
+        userId: user.id,
+        blockedGroupId: group.id,
+      } satisfies InferInsertModel<typeof tables.userGroupBlockList>);
+    }
+  }
+
+  if (blockedGroups.length > 0) {
+    await db.insert(tables.userGroupBlockList).values(blockedGroups);
+    await db.execute(
+      sql<string>`ALTER SEQUENCE user_group_block_list_id_seq RESTART WITH ${sql.raw(
+        String(blockedGroups.length + 1),
+      )}`,
+    );
+  }
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -767,6 +957,8 @@ export async function seed() {
   await createLFG();
   await createCategoryToLFG();
   await createBlockedUsers();
+  await createUserGroupBlockList();
+  await createLFP();
   await createTournaments();
   await createStages();
   await createParticipations();

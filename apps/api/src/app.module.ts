@@ -22,7 +22,7 @@ import { InterestModule } from './interest/interest.module';
 import { GroupInterestsModule } from './group/group-interests/group-interests.module';
 import { LocationModule } from './location/location.module';
 import { GroupRequirementsModule } from './group/requirements/group-requirements.module';
-
+import { LFPModule } from './lfp/lfp.module';
 @Module({
   imports: [
     UsersModule,
@@ -44,6 +44,7 @@ import { GroupRequirementsModule } from './group/requirements/group-requirements
     LfgModule,
     InterestModule,
     GroupInterestsModule,
+    LFPModule,
     LocationModule,
     GroupRequirementsModule,
   ],

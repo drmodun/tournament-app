@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateLocationDto, UpdateLocationDto } from '../dto/requests';
 import { LocationResponsesEnum } from '@tournament-app/types';
+import { LocationHelper } from 'src/base/static/locationHelper';
 
 describe('LocationService', () => {
   let service: LocationService;
@@ -79,7 +80,7 @@ describe('LocationService', () => {
       expect(result).toEqual(newLocation);
       expect(repository.createEntity).toHaveBeenCalledWith({
         ...createDto,
-        coordinates: [createDto.lng, createDto.lat],
+        coordinates: LocationHelper.ConvertToWKT(createDto.lng, createDto.lat),
       });
     });
 
@@ -170,7 +171,7 @@ describe('LocationService', () => {
       await service.update(1, updateDto);
       expect(repository.updateEntity).toHaveBeenCalledWith(1, {
         ...updateDto,
-        coordinates: [updateDto.lng, updateDto.lat],
+        coordinates: LocationHelper.ConvertToWKT(updateDto.lng, updateDto.lat),
       });
     });
   });
@@ -194,8 +195,16 @@ describe('LocationService', () => {
   describe('getMap', () => {
     it('should return all locations', async () => {
       jest.spyOn(repository, 'getMap').mockResolvedValue([
-        { id: 1, name: 'Location 1', coordinates: [40.7128, -74.006] },
-        { id: 2, name: 'Location 2', coordinates: [40.7128, -74.006] },
+        {
+          id: 1,
+          name: 'Location 1',
+          coordinates: [40.7128, -74.006],
+        },
+        {
+          id: 2,
+          name: 'Location 2',
+          coordinates: [40.7128, -74.006],
+        },
       ]);
 
       const result = await service.getMap();

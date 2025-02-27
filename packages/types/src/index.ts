@@ -18,3 +18,4 @@ export * from "./career";
 export * from "./lfg";
 export * from "./location";
 export * from "./groupRequirements";
+export * from "./lfp";

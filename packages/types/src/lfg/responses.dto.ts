@@ -1,10 +1,6 @@
 import { ICareerCategoryResponse } from "src/career";
 import { ICategoryMiniResponse } from "src/category";
-import {
-  IMiniUserResponse,
-  IMiniUserResponseWithCountry,
-  IUserResponse,
-} from "src/user";
+import { IMiniUserResponse, IUserResponse } from "src/user";
 
 export interface ILFGMiniResponse {
   id: number;

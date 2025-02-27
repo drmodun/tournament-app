@@ -104,7 +104,7 @@ export class TournamentController {
   }
 
   @Patch(':tournamentId')
-  @UseGuards(JwtAuthGuard, ConditionalAdminGuard, TournamentAdminGuard)
+  @UseGuards(JwtAuthGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates a tournament',
@@ -118,7 +118,7 @@ export class TournamentController {
   }
 
   @Delete(':tournamentId')
-  @UseGuards(AdminAuthGuard, ConditionalAdminGuard)
+  @UseGuards(JwtAuthGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Deletes a tournament',

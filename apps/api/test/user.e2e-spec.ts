@@ -232,7 +232,7 @@ describe('UserController', () => {
       };
 
       await request(app.getHttpServer())
-        .patch('/users/100')
+        .patch('/users/9999999')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(update)
         .expect(404);
@@ -308,7 +308,7 @@ describe('UserController', () => {
 
     it('should return a 404 when deleting a non-existent user', async () => {
       await request(app.getHttpServer())
-        .delete('/users/100')
+        .delete('/users/9999999')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(404);
     });

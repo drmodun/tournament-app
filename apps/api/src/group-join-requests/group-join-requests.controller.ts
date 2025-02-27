@@ -82,7 +82,8 @@ export class GroupJoinRequestsController {
     };
   }
 
-  @UseGuards(GroupNonMemberGuard)
+  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @ApiBearerAuth()
   @Post(':groupId')
   async create(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -118,7 +119,8 @@ export class GroupJoinRequestsController {
     );
   }
 
-  @UseGuards(GroupNonMemberGuard)
+  @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @ApiBearerAuth()
   @Patch(':groupId')
   async update(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -133,6 +135,7 @@ export class GroupJoinRequestsController {
   }
 
   @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @ApiBearerAuth()
   @Delete(':groupId')
   async remove(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -142,7 +145,7 @@ export class GroupJoinRequestsController {
   }
 
   @Post(':groupId/:userId/accept')
-  @UseGuards(GroupAdminGuard)
+  @UseGuards(JwtAuthGuard, GroupAdminGuard)
   async accept(
     @Param('groupId', ParseIntPipe) groupId: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -151,7 +154,7 @@ export class GroupJoinRequestsController {
   }
 
   @Delete(':groupId/:userId/reject')
-  @UseGuards(GroupAdminGuard)
+  @UseGuards(JwtAuthGuard, GroupAdminGuard)
   async reject(
     @Param('groupId', ParseIntPipe) groupId: number,
     @Param('userId', ParseIntPipe) userId: number,

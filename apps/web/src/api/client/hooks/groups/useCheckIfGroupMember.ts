@@ -29,7 +29,7 @@ export const checkIfGroupMember = async (
       {
         params: {
           userId: userId,
-          groupId: userId,
+          groupId: groupId,
           responseType: GroupMembershipResponsesEnum.BASE,
         },
       },

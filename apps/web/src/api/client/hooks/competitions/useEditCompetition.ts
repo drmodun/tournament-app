@@ -13,10 +13,8 @@ import { IUpdateTournamentRequest } from "@tournament-app/types";
 export const editCompetition = async (
   data: IUpdateTournamentRequest & { id?: number },
 ) => {
-  const { id, ..._data } = data;
-  console.log(_data);
-  _data.locationId = 0;
-  _data.categoryId = 0;
+  const { id, categoryId, ..._data } = data;
+  if (categoryId != -1) _data.categoryId = categoryId;
   return clientApi
     .patch<
       IUpdateTournamentRequest,

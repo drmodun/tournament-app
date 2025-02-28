@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TournamentService } from '../tournament.service';
 import { userRoleEnum } from '@tournament-app/types';
-import { ITournamentWithRelations } from '../types';
+import { ITournamentWithRelations, TournamentDtosEnum } from '../types';
 import { GroupMembershipService } from 'src/group-membership/group-membership.service';
 
 @Injectable()
@@ -36,6 +36,7 @@ export class TournamentAdminGuard extends JwtAuthGuard implements CanActivate {
     const tournament =
       await this.tournamentService.findOne<ITournamentWithRelations>(
         tournamentId,
+        TournamentDtosEnum.WITH_RELATIONS,
       );
 
     if (!tournament) {

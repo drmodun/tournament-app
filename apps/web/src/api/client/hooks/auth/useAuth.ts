@@ -20,8 +20,7 @@ export const useAuth = () => {
     queryKey: ["me"],
     queryFn: getAuthenticatedUser,
     staleTime: Infinity,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
+    retryDelay: 5000,
     enabled: getAccessToken() !== null,
   });
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./createTournamentForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
@@ -34,6 +34,7 @@ import {
 } from "api/client/hooks/competitions/useCreateCompetition";
 import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
+import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 
 export default function CreateTournamentForm({ userId }: { userId: number }) {
   const { theme } = useThemeContext();
@@ -42,9 +43,24 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
   const toast = useToastContext();
   const createCompetitionMutation = useCreateCompetition();
   const createLocationMutation = useCreateLocation();
+  const {
+    isLoading: isGroupLoading,
+    data: groupData,
+    isFetchNextPageError,
+    isFetching,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useUserGroups(false, 20);
 
   const methods = useForm<ICreateTournamentRequest>();
   const onSubmit: SubmitHandler<ICreateTournamentRequest> = async (data) => {
+    if (data.startDate > data.endDate) {
+      toast.addToast(
+        "the starting time cannot be greater than then ending time",
+        "error",
+      );
+      return;
+    }
     data.isFakePlayersAllowed = isFakePlayersAllowed;
     data.isPublic = isPublic;
     data.isRanked = isRanked;
@@ -75,7 +91,9 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
   const [categoryId, setCategoryId] = useState<number>(-1);
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
   const [locationId, setLocationId] = useState<number>();
+  const [affiliatedGroupId, setAffiliatedGroupId] = useState<number>();
   const [finalLocationName, setFinalLocationName] = useState<string>();
+  const [reachedLimit, setReachedLimit] = useState<boolean>(false);
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
@@ -120,6 +138,22 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
     }
 
     setLinks((links) => [...links, val]);
+  };
+
+  const handleLoadMore = async () => {
+    const page = await fetchNextPage();
+    console.log(
+      page.data?.pages[page.data?.pages.length - 1]?.results?.length ?? -1,
+    );
+    if (
+      isFetchNextPageError ||
+      (page.data?.pages[page.data?.pages.length - 1]?.results?.length ?? -1) ==
+        0
+    ) {
+      console.log("LIMIT");
+      setReachedLimit(true);
+      return;
+    }
   };
 
   return (
@@ -225,6 +259,7 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             required={true}
             isReactFormHook={true}
             type="number"
+            min="1"
           />
           {methods.formState.errors.maxParticipants?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
@@ -396,10 +431,12 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             required={true}
             variant={textColorTheme}
             className={styles.dropdown}
-            searchClassName={styles.dropdown}
             innerWrapperClassName={styles.dropdown}
             optionsClassName={styles.dropdown}
+            style={{ width: "100%" }}
+            searchClassName={styles.search}
           />
+
           {methods.formState.errors.country?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
@@ -427,6 +464,51 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
           )}
           {methods.formState.errors.categoryId?.type === "required" && (
             <p className={styles.error}>dsadsadsa this field is required!</p>
+          )}
+        </div>
+        <div className={styles.inputWrapper}>
+          {!isGroupLoading && (
+            <div>
+              <Dropdown
+                options={groupData?.pages.flatMap((page) =>
+                  page.results.map((res) => ({
+                    label: res.group.name,
+                    value: res.group.id,
+                  })),
+                )}
+                searchPlaceholder="search..."
+                doesSearch={true}
+                label="affiliated group"
+                placeholder="select affiliated group"
+                name="affiliatedGroupId"
+                isReactHookForm={true}
+                variant={textColorTheme}
+                className={styles.dropdown}
+                innerWrapperClassName={styles.dropdown}
+                optionsClassName={styles.dropdown}
+                style={{ width: "100%" }}
+                searchClassName={styles.search}
+                onSelect={(val) => {
+                  setAffiliatedGroupId(
+                    groupData?.pages.flatMap((page) =>
+                      page.results.map((res) => ({
+                        label: res.group.name,
+                        value: res.group.id,
+                      })),
+                    )[val].value,
+                  );
+                }}
+              ></Dropdown>
+              <button
+                type="button"
+                onClick={() => fetchNextPage()}
+                disabled={
+                  isFetching || isFetchNextPageError || isFetchingNextPage
+                }
+              >
+                load more
+              </button>
+            </div>
           )}
         </div>
 

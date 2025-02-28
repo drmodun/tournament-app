@@ -5,7 +5,7 @@ import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Dialog from "components/dialog";
 import Input from "components/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CheckboxGroup from "components/checkboxGroup";
 import { textColor } from "types/styleTypes";
@@ -20,6 +20,10 @@ import { IExtendedUserResponse, IUserResponse } from "@tournament-app/types";
 import { useGetUserOrganizedCompetitions } from "api/client/hooks/competitions/useGetUserOrganizedCompetitions";
 import ProgressWheel from "components/progressWheel";
 import CreateTournamentForm from "views/createTournamentForm";
+import { useRouter } from "next/navigation";
+import { useAuth } from "api/client/hooks/auth/useAuth";
+import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
+import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 
 type CompetitionInputs = {
   name: string;
@@ -55,7 +59,13 @@ export default function ManageCompetitions({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { isLoading, data } = useGetUserOrganizedCompetitions();
+  const { isLoading: isLoadingUser, data: userData } = useAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoadingUser && !userData) router.push("/login");
+  }, [isLoadingUser, userData]);
 
   return (
     <div
@@ -70,7 +80,7 @@ export default function ManageCompetitions({
         onClose={() => setIsAddDialogOpen(false)}
         className={styles.dialog}
       >
-        <CreateTournamentForm userId={user.id} />
+        <CreateTournamentForm userId={user?.id} />
       </Dialog>
       <div className={styles.competitionsTitle}>
         <b className={clsx(globals[`${theme}Color`])}>your competitions</b>

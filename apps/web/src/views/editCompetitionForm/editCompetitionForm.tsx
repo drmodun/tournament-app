@@ -35,6 +35,7 @@ import {
 } from "utils/mixins/formatting";
 import { countries } from "country-flag-icons";
 import ProgressWheel from "components/progressWheel";
+import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
 
 export default function EditCompetitionForm({
   competition,

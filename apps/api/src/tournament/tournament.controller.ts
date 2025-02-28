@@ -118,7 +118,7 @@ export class TournamentController {
   }
 
   @Delete(':tournamentId')
-  @UseGuards(AdminAuthGuard, TournamentAdminGuard)
+  @UseGuards(JwtAuthGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Deletes a tournament',

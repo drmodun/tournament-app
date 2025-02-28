@@ -37,7 +37,7 @@ export default function GroupMembersDialog({
               {data?.members.map((user) => {
                 return (
                   <Link
-                    href={`/user/${user.id}`}
+                    href={`/user/${user?.id}`}
                     className={clsx(
                       styles.noTextDecoration,
                       styles.userCardLink,

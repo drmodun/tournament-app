@@ -23,7 +23,7 @@ export const useDeleteCompetition = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationKey: ["me"],
+    mutationKey: ["me", "groupId"],
     mutationFn: deleteCompetition,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,

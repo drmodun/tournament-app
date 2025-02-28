@@ -27,19 +27,5 @@ export const useCreateLocation = () => {
     mutationFn: createLocation,
     retryDelay: 2000,
     retry: 3,
-    onSuccess: async (data) => {
-      toast.addToast("successfully created competition", "success");
-    },
-    onError: (error: any) => {
-      toast.addToast(
-        "an error occurred while creating the competition..",
-        "error",
-      );
-      console.error(error);
-      console.log(error.message);
-    },
-    onMutate: () => {
-      toast.addToast("creating competition...", "info");
-    },
   });
 };

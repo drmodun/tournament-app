@@ -9,11 +9,13 @@ import {
 import {
   GroupMembershipResponsesEnum,
   GroupMembershipReturnTypesEnumType,
+  groupRoleEnum,
   IBaseQueryResponse,
   IExtendedUserResponse,
   IGroupMembershipQueryRequest,
   IGroupMembershipResponse,
   IGroupMembershipResponseWithDates,
+  userRoleEnum,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -25,10 +27,9 @@ import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 
-export const getUserGroups = async (
+export const getCreatorUserGroups = async (
   userId: number | undefined,
   page: number = 1,
-  pageSize?: number,
 ) =>
   clientApi
     .get<
@@ -38,55 +39,29 @@ export const getUserGroups = async (
       params: {
         responseType: GroupMembershipResponsesEnum.BASE,
         userId: userId,
-        pageSize: pageSize ?? 2,
+        pageSize: 10,
         page: page,
         returnFullCount: true,
+        role: groupRoleEnum.OWNER,
       },
     })
     .then((res) => {
       return res.data;
     });
 
-export const getUserGroupsMini = async (
-  userId: number | undefined,
-  page: number = 1,
-  pageSize?: number,
-) =>
-  clientApi
-    .get<
-      IGroupMembershipQueryRequest,
-      AxiosResponse<IBaseQueryResponse<IGroupMembershipResponse>>
-    >(`/group-membership`, {
-      params: {
-        responseType: GroupMembershipResponsesEnum.USER_MINI_WITH_COUNTRY,
-        userId: userId,
-        pageSize: pageSize ?? 2,
-        page: page,
-        returnFullCount: true,
-      },
-    })
-    .then((res) => {
-      return res.data;
-    });
-
-export const useUserGroups = (mini: boolean = false, pageSize: number = 2) => {
+export const useCreatorUserGroups = () => {
   const { data } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: ["group", "me", data?.id?.toString() ?? "guest", mini],
+    queryKey: ["group", "me", data?.id?.toString() ?? "guest"],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
-      mini
-        ? getUserGroupsMini(data?.id, pageParam, pageSize)
-        : getUserGroups(data?.id, pageParam, pageSize),
+      getCreatorUserGroups(data?.id, pageParam),
     staleTime: Infinity,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null && !!data?.id,
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage.results.length < 2
-        ? undefined
-        : lastPage.metadata.pagination.page + 1;
-    },
+    getNextPageParam: (lastPage, pages) =>
+      lastPage.metadata.pagination.page + 1,
     initialPageParam: 1,
   });
 };

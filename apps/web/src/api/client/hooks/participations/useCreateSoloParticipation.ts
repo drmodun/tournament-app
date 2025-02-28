@@ -28,7 +28,7 @@ export const useCreateSoloParticipation = () => {
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     onSuccess: async (data) => {
-      toast.addToast("successfully created a participation invite", "success");
+      toast.addToast("successfully joined competition", "success");
     },
     onError: (error: any) => {
       toast.addToast("an error occurred...", "error");
@@ -36,7 +36,7 @@ export const useCreateSoloParticipation = () => {
       console.log(error.message);
     },
     onMutate: () => {
-      toast.addToast("creating a participation invite...", "info");
+      toast.addToast("joining the competition...", "info");
     },
   });
 };

@@ -16,6 +16,7 @@ import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import {
   groupRoleEnum,
   IExtendedTournamentResponse,
+  tournamentTeamTypeEnum,
 } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useRouter } from "next/navigation";
@@ -26,6 +27,10 @@ import ProgressWheel from "components/progressWheel";
 import EditCompetitionForm from "views/editCompetitionForm";
 import Dialog from "components/dialog";
 import { useDeleteCompetition } from "api/client/hooks/competitions/useDeleteCompetition";
+import { useCreateSoloParticipation } from "api/client/hooks/participations/useCreateSoloParticipation";
+import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
+import GroupSelectDialog from "views/groupSelectDialog";
+import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
 
 type SidebarSectionProps = {
   name: string;
@@ -44,6 +49,12 @@ export default function Competition({
     useCheckIfGroupMember(competition?.affiliatedGroup?.id);
 
   const deleteCompetitionMutation = useDeleteCompetition();
+  const soloJoinCompetitionMutation = useCreateSoloParticipation();
+  const groupJoinCompetitionMutation = useCreateGroupParticipation();
+  const { data: participationData } = useCheckIfUserIsParticipating();
+
+  const [groupSelectModalOpen, setGroupSelectModalOpen] =
+    useState<boolean>(false);
 
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
 
@@ -55,6 +66,13 @@ export default function Competition({
         variant={theme}
       >
         <EditCompetitionForm competition={competition} />
+      </Dialog>
+      <Dialog
+        active={groupSelectModalOpen}
+        onClose={() => setGroupSelectModalOpen(false)}
+        variant={theme}
+      >
+        <GroupSelectDialog competitionId={competition?.id} />
       </Dialog>
       <div className={clsx(styles.left)}>
         <div className={clsx(styles.banner)}>
@@ -154,8 +172,27 @@ export default function Competition({
                 onClick={() => deleteCompetitionMutation.mutate(competition.id)}
               />
             </div>
+          ) : (participationData?.results?.length ?? -1) > 0 ? (
+            <></>
           ) : (
-            <Button variant="primary" label="send join invite" />
+            <div className={styles.manageCompetitionButtonsWrapper}>
+              {competition.teamType !== tournamentTeamTypeEnum.TEAM && (
+                <Button
+                  variant="primary"
+                  label="join competition"
+                  onClick={() =>
+                    soloJoinCompetitionMutation.mutate(competition?.id)
+                  }
+                />
+              )}
+              {competition.teamType !== tournamentTeamTypeEnum.SOLO && (
+                <Button
+                  variant="primary"
+                  label="join competition with group"
+                  onClick={() => setGroupSelectModalOpen(true)}
+                />
+              )}
+            </div>
           ))
         )}
       </div>

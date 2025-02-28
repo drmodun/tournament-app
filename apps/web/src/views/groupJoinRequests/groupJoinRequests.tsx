@@ -46,26 +46,14 @@ export default function GroupMembersDialog({
   const [fetchLimit, setFetchLimit] = useState<number>(-1);
 
   const backward = async () => {
-    console.log("BACKWARD", page);
     if (page == 0) return;
-    console.log("MADE IT", page);
     await fetchPreviousPage();
-    console.log(
-      isFetchNextPageError,
-      isFetchPreviousPageError,
-      isFetching,
-      isFetchingNextPage,
-      isFetchingPreviousPage,
-      page,
-    );
 
     setPage((curr) => curr - 1);
   };
 
   const forward = async () => {
-    console.log("FORWARD", page);
     const nextPage = await fetchNextPage();
-    console.log(nextPage, page);
 
     if (
       isFetchNextPageError ||
@@ -115,7 +103,7 @@ export default function GroupMembersDialog({
             <div className={styles.userCardWrapper}>
               {data?.pages[page]?.results.map((user) => (
                 <Link
-                  href={`/user/${user.id}`}
+                  href={`/user/${user?.id}`}
                   className={clsx(
                     styles.noTextDecoration,
                     styles.userCardLink,
@@ -124,8 +112,8 @@ export default function GroupMembersDialog({
                 >
                   <div className={styles.userCardInnerWrapper}>
                     <img
-                      src={user.profilePicture}
-                      alt={`${user.username}'s profile picture`}
+                      src={user?.profilePicture}
+                      alt={`${user?.username}'s profile picture`}
                       className={styles.userCardProfilePicture}
                       onError={(e) => {
                         e.currentTarget.src = "/profilePicture.png";
@@ -136,13 +124,13 @@ export default function GroupMembersDialog({
                         globals[`${theme}Color`],
                         styles.userCardTextWrapper,
                       )}
-                      title={user.username}
+                      title={user?.username}
                     >
-                      <b className={styles.userCardText}>{user.username}</b>
+                      <b className={styles.userCardText}>{user?.username}</b>
                     </div>
                     <div className={styles.decisionButtonWrapper}>
                       <Button
-                        onClick={() => handleAccept(user.id)}
+                        onClick={() => handleAccept(user?.id)}
                         variant="primary"
                       >
                         <DoneIcon
@@ -153,7 +141,7 @@ export default function GroupMembersDialog({
                         />
                       </Button>
                       <Button
-                        onClick={() => handleRemove(user.id)}
+                        onClick={() => handleRemove(user?.id)}
                         variant="danger"
                       >
                         <ClearIcon

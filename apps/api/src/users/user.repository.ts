@@ -10,8 +10,8 @@ import {
   groupToUser,
   groupUserBlockList,
   interests,
-  organizer,
   participation,
+  tournament,
   user,
 } from '../db/schema';
 import {
@@ -132,9 +132,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     [UserSortingEnum.COUNTRY]: user.country,
     [UserSortingEnum.BETTING_POINTS]: user.bettingPoints,
     [UserSortingEnum.GROUP_JOIN_DATE]: groupToUser.createdAt,
-    [UserSortingEnum.TOURNAMENTS_MODERATED]: countDistinct(
-      organizer.tournamentId,
-    ),
+    [UserSortingEnum.TOURNAMENTS_MODERATED]: countDistinct(tournament.id),
     [UserSortingEnum.TOURNAMENTS_WON]: countDistinct(
       participation.tournamentId, // TODO: add calculation later or scrap allTogether
     ),

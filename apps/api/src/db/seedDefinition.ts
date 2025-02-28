@@ -1,6 +1,5 @@
 import { db } from './db';
 import * as tables from './schema';
-import { PgTable } from 'drizzle-orm/pg-core';
 import { faker } from '@faker-js/faker';
 import { InferInsertModel, sql } from 'drizzle-orm';
 import { CreateUserRequest } from 'src/users/dto/requests.dto';
@@ -584,6 +583,8 @@ async function createStages() {
         stageLocation: faker.helpers.arrayElement(
           Object.values(tournamentLocationEnum),
         ),
+        locationId: faker.number.int({ min: 1, max: 100 }),
+        maxChanges: faker.number.int({ min: 0, max: 10 }),
         minPlayersPerTeam: faker.number.int({ min: 1, max: 10 }),
         maxPlayersPerTeam: faker.number.int({ min: 1, max: 10 }),
         tournamentId: tournament.id,

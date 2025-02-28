@@ -18,6 +18,7 @@ export interface ICreateStageDto {
   endDate?: Date;
   minPlayersPerTeam?: number;
   maxPlayersPerTeam?: number;
+  maxChanges?: number;
 }
 
 export interface IUpdateStageDto {
@@ -34,4 +35,5 @@ export interface IUpdateStageDto {
   endDate?: Date;
   minPlayersPerTeam?: number;
   maxPlayersPerTeam?: number;
+  maxChanges?: number;
 }

@@ -184,6 +184,14 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   maxPlayersPerTeam?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  @Transform(({ value }) => parseInt(value))
+  @ApiPropertyOptional()
+  maxChanges?: number;
 }
 
 export class StageQuery extends BaseQuery {

@@ -84,6 +84,9 @@ export class ExtendedStageResponse
 
   @ApiResponseProperty()
   maxPlayersPerTeam: number;
+
+  @ApiResponseProperty()
+  maxChanges: number;
 }
 
 export class ExtendedStageResponseWithTournament

@@ -12,6 +12,7 @@ import {
 } from '@tournament-app/types';
 import { LocationDrizzleRepository } from './location.repository';
 import { LocationQuery } from './dto/requests';
+import { LocationHelper } from 'src/base/static/locationHelper';
 
 @Injectable()
 export class LocationService {
@@ -36,7 +37,10 @@ export class LocationService {
 
     const location = await this.repository.createEntity({
       ...createLocationDto,
-      coordinates: [createLocationDto.lng, createLocationDto.lat],
+      coordinates: LocationHelper.ConvertToWKT(
+        createLocationDto.lng,
+        createLocationDto.lat,
+      ),
     });
 
     if (!location[0]) {
@@ -89,7 +93,10 @@ export class LocationService {
       ...updateLocationDto,
       ...(updateLocationDto.lng &&
         updateLocationDto.lat && {
-          coordinates: [updateLocationDto.lng, updateLocationDto.lat],
+          coordinates: LocationHelper.ConvertToWKT(
+            updateLocationDto.lng,
+            updateLocationDto.lat,
+          ),
         }),
     });
 

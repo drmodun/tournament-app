@@ -15,6 +15,8 @@ import { NoValuesToSetExceptionFilter } from 'src/base/exception/noValuesToSetEx
 describe('GroupInvitesController (e2e)', () => {
   let app: INestApplication;
   let authToken: string;
+  let groupId: number;
+  let oldGroupId: number;
   let adminAuthToken: string;
 
   beforeAll(async () => {
@@ -44,10 +46,29 @@ describe('GroupInvitesController (e2e)', () => {
 
     adminAuthToken = auth.body.accessToken;
 
-    await request(app.getHttpServer())
-      .post('/group-membership/2/41')
+    const groupResponse = await request(app.getHttpServer())
+      .post('/groups')
       .set('Authorization', `Bearer ${adminAuthToken}`)
-      .expect(201); // Add user 41 to group 2
+      .send({
+        name: 'Test Group',
+        abbreviation: 'TG',
+        description: 'Test Description',
+        type: groupTypeEnum.PUBLIC,
+        focus: groupFocusEnum.HYBRID,
+        logo: 'logo.png',
+        locationId: 1,
+        country: 'Test Country',
+      } satisfies CreateGroupRequest)
+      .expect(201);
+
+    groupId = groupResponse.body.id;
+    oldGroupId = groupResponse.body.id;
+    const req = await request(app.getHttpServer())
+      .post(`/group-membership/${groupId}/41`)
+      .set('Authorization', `Bearer ${adminAuthToken}`);
+    //expect(201); // Add user 41 to group 2
+
+    console.log(req.body, groupId);
 
     const testNonAdminUser = await request(app.getHttpServer())
       .get('/users/40')
@@ -263,7 +284,7 @@ describe('GroupInvitesController (e2e)', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/group-invites/2/41')
+        .post(`/group-invites/${oldGroupId}/41`)
         .set('Authorization', `Bearer ${adminAuthToken}`)
         .send(createDto)
         .expect(400);

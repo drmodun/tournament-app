@@ -27,7 +27,7 @@ export class GroupInvitesService {
   async create(groupId: number, userId: number, dto: CreateGroupInviteDto) {
     await this.groupService.checkIfGroupIsReal(groupId);
 
-    await this.checkIfUserIsAlreadyMember(userId, groupId);
+    await this.checkIfUserIsAlreadyMember(groupId, userId);
 
     await this.repository.createEntity({
       groupId,

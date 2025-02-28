@@ -37,7 +37,24 @@ import {
   primaryKey,
   numeric,
   geometry,
+  customType,
+  index,
 } from 'drizzle-orm/pg-core';
+
+const geography = customType<{
+  data: string;
+  config: { srid: number; type: string };
+}>({
+  dataType(config) {
+    return `geography(${config.type}, ${config.srid})`;
+  },
+  toDriver(value: string) {
+    return value; // Pass WKT strings to the database
+  },
+  fromDriver(value: string): string {
+    return value; // Receive WKT strings from the database
+  },
+});
 
 export const userRole = pgEnum('user_role', exportEnumValues(userRoleEnum));
 
@@ -190,13 +207,22 @@ export const userToNotificationTokens = pgTable('user_to_notification_tokens', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
-export const location = pgTable('location', {
-  id: serial('id').primaryKey(),
-  name: text('name').notNull(),
-  apiId: text('api_id').notNull(),
-  coordinates: geometry('coordinates', { type: 'POINT' }).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-});
+export const location = pgTable(
+  'location',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    apiId: text('api_id').notNull(),
+    coordinates: geography('coordinates', {
+      srid: 4326,
+      type: 'POINT',
+    }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (location) => ({
+    locationIndex: index('location_index').using('gist', location.coordinates),
+  }),
+);
 
 export const subscription = pgTable('subscription', {
   id: serial('id').primaryKey(),
@@ -519,6 +545,31 @@ export const groupToUser = pgTable(
     pk: primaryKey({ columns: [t.userId, t.groupId] }),
   }),
 );
+
+export const groupRequirements = pgTable('group_requirements', {
+  id: serial('id').primaryKey(),
+  groupId: integer('group_id')
+    .references(() => group.id, {
+      onDelete: 'cascade',
+    })
+    .unique(),
+  minimumAge: integer('minimum_age'),
+  maximumAge: integer('maximum_age'),
+  isSameCountry: boolean('is_same_country').default(false),
+});
+
+export const eloRequirement = pgTable('elo_requirement', {
+  id: serial('id').primaryKey(),
+  groupRequirementId: integer('group_id').references(() => group.id, {
+    onDelete: 'cascade',
+  }),
+  categoryId: integer('category_id').references(() => category.id, {
+    onDelete: 'cascade',
+  }),
+  minimumElo: integer('minimum_elo'),
+  maximumElo: integer('maximum_elo'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
 
 export const groupInvite = pgTable(
   'group_invite',

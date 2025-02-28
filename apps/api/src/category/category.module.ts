@@ -6,6 +6,6 @@ import { CategoryDrizzleRepository } from './category.repository';
 @Module({
   controllers: [CategoryController],
   providers: [CategoryService, CategoryDrizzleRepository],
-  exports: [CategoryService],
+  exports: [CategoryService, CategoryDrizzleRepository],
 })
 export class CategoryModule {}

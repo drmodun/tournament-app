@@ -196,7 +196,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -226,7 +225,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -260,7 +258,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -295,7 +292,6 @@ describe('ParticipationController (e2e)', () => {
           isRanked: true,
           creatorId: 1,
           endDate: new Date(Date.now() + 86400000),
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -327,7 +323,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -361,14 +356,29 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
       const teamTournamentId = createPublicTeamTournamentResponse.body.id;
-      const groupId = 1;
+      const group = await request(app.getHttpServer())
+        .post('/groups')
+        .set('Authorization', `Bearer ${groupAdminToken}`)
+        .send({
+          name: 'this is a test group',
+          country: 'US',
+          abbreviation: 'Gasdas',
+          logo: 'https://www.google.com',
+          focus: groupFocusEnum.HYBRID,
+          type: groupTypeEnum.PUBLIC,
+          locationId: 1,
+          description: 'this is a test group',
+        } satisfies ICreateGroupRequest)
+        .expect(201);
+
       await request(app.getHttpServer())
-        .post(`/participations/apply-group/${teamTournamentId}/${groupId}`)
+        .post(
+          `/participations/apply-group/${teamTournamentId}/${group.body.id}`,
+        )
         .set('Authorization', `Bearer ${groupAdminToken}`)
         .expect(201);
     });
@@ -393,7 +403,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -436,7 +445,6 @@ describe('ParticipationController (e2e)', () => {
           isFakePlayersAllowed: true,
           isRanked: false,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -493,7 +501,6 @@ describe('ParticipationController (e2e)', () => {
           isFakePlayersAllowed: true,
           isRanked: false,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -547,7 +554,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -582,7 +588,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -635,7 +640,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -672,7 +676,6 @@ describe('ParticipationController (e2e)', () => {
           country: 'US',
           isRanked: true,
           creatorId: 1,
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 
@@ -707,7 +710,6 @@ describe('ParticipationController (e2e)', () => {
           isRanked: true,
           creatorId: 1,
           endDate: new Date(Date.now() + 86400000),
-          affiliatedGroupId: 1,
         } satisfies ICreateTournamentRequest)
         .expect(201);
 

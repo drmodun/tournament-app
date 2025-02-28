@@ -10,4 +10,6 @@ export interface IUpdateLFGRequest {
   message?: string;
 }
 
-export interface ILfgQuery {}
+export interface ILfgQuery {
+  userId?: number;
+}

@@ -13,10 +13,24 @@ import {
 } from "utils/mixins/formatting";
 import Markdown from "react-markdown";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { IExtendedTournamentResponse } from "@tournament-app/types";
+import {
+  groupRoleEnum,
+  IExtendedTournamentResponse,
+  tournamentTeamTypeEnum,
+} from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useRouter } from "next/navigation";
 import rehypeRaw from "rehype-raw";
+import { useEffect, useState } from "react";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
+import ProgressWheel from "components/progressWheel";
+import EditCompetitionForm from "views/editCompetitionForm";
+import Dialog from "components/dialog";
+import { useDeleteCompetition } from "api/client/hooks/competitions/useDeleteCompetition";
+import { useCreateSoloParticipation } from "api/client/hooks/participations/useCreateSoloParticipation";
+import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
+import GroupSelectDialog from "views/groupSelectDialog";
+import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
 
 type SidebarSectionProps = {
   name: string;
@@ -31,13 +45,35 @@ export default function Competition({
   const { data, isLoading, isSuccess } = useAuth();
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const router = useRouter();
+  const { data: groupMembershipData, isLoading: groupMembershipIsLoading } =
+    useCheckIfGroupMember(competition?.affiliatedGroup?.id);
 
-  const handleJoin = () => {
-    if (!isSuccess) return;
-  };
+  const deleteCompetitionMutation = useDeleteCompetition();
+  const soloJoinCompetitionMutation = useCreateSoloParticipation();
+  const groupJoinCompetitionMutation = useCreateGroupParticipation();
+  const { data: participationData } = useCheckIfUserIsParticipating();
+
+  const [groupSelectModalOpen, setGroupSelectModalOpen] =
+    useState<boolean>(false);
+
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+
   return (
     <div className={clsx(styles.wrapper)}>
+      <Dialog
+        active={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        variant={theme}
+      >
+        <EditCompetitionForm competition={competition} />
+      </Dialog>
+      <Dialog
+        active={groupSelectModalOpen}
+        onClose={() => setGroupSelectModalOpen(false)}
+        variant={theme}
+      >
+        <GroupSelectDialog competitionId={competition?.id} />
+      </Dialog>
       <div className={clsx(styles.left)}>
         <div className={clsx(styles.banner)}>
           <div className={styles.bannerContent}>
@@ -90,9 +126,19 @@ export default function Competition({
           </SidebarSection>
           <SidebarSection name="location">
             <Chip
-              label={`${competition?.location} ${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
+              label={
+                competition?.actualLocation?.name != undefined
+                  ? competition?.actualLocation?.name
+                  : competition?.location
+              }
             ></Chip>
           </SidebarSection>
+          <SidebarSection name="country">
+            <Chip
+              label={`${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
+            ></Chip>
+          </SidebarSection>
+
           <SidebarSection name="mmr">
             <div className={styles.dates}>
               <Chip label={competition?.minimumMMR?.toString()}></Chip>
@@ -107,6 +153,48 @@ export default function Competition({
             <Chip label={competition?.category?.name}></Chip>
           </SidebarSection>
         </div>
+        {groupMembershipIsLoading || isLoading ? (
+          <ProgressWheel variant={textColorTheme} />
+        ) : (
+          data &&
+          (groupMembershipData?.role === groupRoleEnum.ADMIN ||
+          groupMembershipData?.role === groupRoleEnum.OWNER ||
+          competition?.creator?.id == data?.id ? (
+            <div className={styles.manageCompetitionButtonsWrapper}>
+              <Button
+                variant="warning"
+                label="edit competition"
+                onClick={() => setEditModalOpen(true)}
+              />
+              <Button
+                variant="danger"
+                label="delete competition"
+                onClick={() => deleteCompetitionMutation.mutate(competition.id)}
+              />
+            </div>
+          ) : (participationData?.results?.length ?? -1) > 0 ? (
+            <></>
+          ) : (
+            <div className={styles.manageCompetitionButtonsWrapper}>
+              {competition.teamType !== tournamentTeamTypeEnum.TEAM && (
+                <Button
+                  variant="primary"
+                  label="join competition"
+                  onClick={() =>
+                    soloJoinCompetitionMutation.mutate(competition?.id)
+                  }
+                />
+              )}
+              {competition.teamType !== tournamentTeamTypeEnum.SOLO && (
+                <Button
+                  variant="primary"
+                  label="join competition with group"
+                  onClick={() => setGroupSelectModalOpen(true)}
+                />
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

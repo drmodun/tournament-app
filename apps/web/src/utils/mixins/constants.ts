@@ -1,0 +1,13 @@
+export const PRIMARY = "#59c3c3";
+export const SECONDARY = "#197bbd";
+export const LIGHT = "#f2f2f2";
+export const DARK = "#21262c";
+export const DANGER = "#f45b69";
+export const WARNING = "#f2af29";
+export const PRIMARY_MUTED = "#71adad";
+export const SECONDARY_MUTED = "#2e77a8";
+export const LIGHT_MUTED = "#dedede";
+export const DARK_MUTED = "#383838";
+export const DANGER_MUTED = "#e26e78";
+export const WARNING_MUTED = "#dba73d";
+export const DISABLED = "#b5b5b3";

@@ -2,17 +2,20 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { IExtendedUserResponse, IUpdateUserInfo } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  MEDIUM_QUERY_RETRY_ATTEMPTS,
+  MEDIUM_QUERY_RETRY_DELAY,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-type UpdateUserInfo = {
-  id: number;
-} & IUpdateUserInfo;
-export const updateUser = async (updateFields: UpdateUserInfo) => {
-  const { id, ...data } = updateFields;
+export const updateUser = async (updateFields: IUpdateUserInfo) => {
   return clientApi
-    .patch<never, AxiosResponse<UpdateUserInfo>>(`/users/${id}`, data)
+    .patch<never, AxiosResponse<IUpdateUserInfo>>(`/users`, updateFields)
     .then((res) => res.data);
 };
 
@@ -21,7 +24,8 @@ export const useUpdateUser = () => {
   return useMutation({
     mutationKey: ["me"],
     mutationFn: updateUser,
-    retryDelay: 10000,
+    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
+    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     onSuccess: async (data) => {
       toast.addToast("successfully updated user", "success");
     },
@@ -30,7 +34,7 @@ export const useUpdateUser = () => {
       console.error(error);
     },
     onMutate: () => {
-      toast.addToast("logging in...", "info");
+      toast.addToast("updating user...", "info");
     },
   });
 };

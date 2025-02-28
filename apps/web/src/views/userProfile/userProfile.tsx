@@ -22,18 +22,18 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
   const { theme } = useThemeContext();
   const followUserMutation = useFollowUser();
   const unfollowUserMutation = useUnfollowUser();
-  const { data, isLoading } = useCheckIfFollowingUser(user.id);
+  const { data, isLoading } = useCheckIfFollowingUser(user?.id);
   const textColorTheme = textColor(theme);
   const { data: authData } = useAuth();
   const [buttonFollowed, setButtonFollowed] = useState<boolean | null>(null);
 
   const handleFollow = async () => {
-    await followUserMutation.mutateAsync(user.id);
+    await followUserMutation.mutateAsync(user?.id);
     if (!followUserMutation.isError) setButtonFollowed(true);
   };
 
   const handleUnfollow = async () => {
-    await unfollowUserMutation.mutateAsync(user.id);
+    await unfollowUserMutation.mutateAsync(user?.id);
     if (!unfollowUserMutation.isError) setButtonFollowed(false);
   };
 
@@ -112,7 +112,7 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
       <div className={styles.bottom}>
         {!isLoading &&
           authData &&
-          authData?.id !== user.id &&
+          authData?.id !== user?.id &&
           ((buttonFollowed === null && data) || buttonFollowed ? (
             <Button
               variant="danger"

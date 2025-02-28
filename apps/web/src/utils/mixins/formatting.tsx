@@ -62,8 +62,27 @@ export const calculateBestFutureDateFormat = (date: Date) => {
 
 export const formatDate = (date: Date) => {
   try {
-    const d: string = dateFormat(date, "mmm dS, 'yy").toLowerCase();
+    const d: string = dateFormat(date, "mmm dS, 'yy");
     return d;
+  } catch {
+    return "unknown";
+  }
+};
+
+export const formatDateHTMLInput = (date: Date) => {
+  try {
+    const d: string = dateFormat(date, "yyyy-mm-dd");
+    return d;
+  } catch {
+    return "unknown";
+  }
+};
+
+export const formatDateTimeHTMLInput = (date: Date) => {
+  try {
+    const _date = formatDateHTMLInput(date);
+    const d: string = dateFormat(date, "HH:mm");
+    return `${_date}T${d}`;
   } catch {
     return "unknown";
   }

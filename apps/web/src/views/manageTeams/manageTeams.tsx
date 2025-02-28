@@ -70,6 +70,13 @@ export default function ManageTeams({
   const [editTeamModalActive, setEditTeamModalActive] =
     useState<boolean>(false);
 
+  if (!team)
+    return (
+      <div>
+        <p className={globals[`${textColorTheme}Color`]}>you have no teams!</p>
+      </div>
+    );
+
   return (
     <div
       className={clsx(

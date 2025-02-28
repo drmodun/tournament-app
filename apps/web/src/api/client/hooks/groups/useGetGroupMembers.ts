@@ -8,7 +8,12 @@ import {
   IMiniUserResponseWithCountry,
   userRoleEnumType,
 } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  MEDIUM_QUERY_RETRY_ATTEMPTS,
+  MEDIUM_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
@@ -38,7 +43,8 @@ export const useGetGroupMembers = (groupId: number | undefined) => {
     queryKey: ["group", "me"],
     queryFn: () => getGroupMembers(groupId),
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
+    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
   });
 };

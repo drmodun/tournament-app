@@ -3,15 +3,16 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   CategoryResponsesEnum,
-  groupRoleEnumType,
   IBaseQueryResponse,
   ICategoryResponse,
-  IExtendedTournamentResponse,
-  IMiniGroupResponseWithCountry,
-  TournamentResponseEnumType,
-  TournamentResponsesEnum,
 } from "@tournament-app/types";
-import { baseApiUrl, clientApi, getAccessToken } from "api/client/base";
+import {
+  baseApiUrl,
+  clientApi,
+  getAccessToken,
+  MEDIUM_QUERY_RETRY_ATTEMPTS,
+  MEDIUM_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useAuth } from "../auth/useAuth";
 
@@ -28,7 +29,8 @@ export const useGetCategories = () => {
     queryKey: ["category", "me"],
     queryFn: getCategories,
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
+    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
   });
 };

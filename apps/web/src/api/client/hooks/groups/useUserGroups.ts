@@ -15,7 +15,12 @@ import {
   IGroupMembershipResponse,
   IGroupMembershipResponseWithDates,
 } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  MEDIUM_QUERY_RETRY_ATTEMPTS,
+  MEDIUM_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useAuth } from "api/client/hooks/auth/useAuth";
@@ -23,6 +28,7 @@ import { useAuth } from "api/client/hooks/auth/useAuth";
 export const getUserGroups = async (
   userId: number | undefined,
   page: number = 1,
+  pageSize?: number,
 ) =>
   clientApi
     .get<
@@ -32,7 +38,7 @@ export const getUserGroups = async (
       params: {
         responseType: GroupMembershipResponsesEnum.BASE,
         userId: userId,
-        pageSize: 2,
+        pageSize: pageSize ?? 2,
         page: page,
         returnFullCount: true,
       },
@@ -44,6 +50,7 @@ export const getUserGroups = async (
 export const getUserGroupsMini = async (
   userId: number | undefined,
   page: number = 1,
+  pageSize?: number,
 ) =>
   clientApi
     .get<
@@ -53,7 +60,7 @@ export const getUserGroupsMini = async (
       params: {
         responseType: GroupMembershipResponsesEnum.USER_MINI_WITH_COUNTRY,
         userId: userId,
-        pageSize: 2,
+        pageSize: pageSize ?? 2,
         page: page,
         returnFullCount: true,
       },
@@ -62,17 +69,18 @@ export const getUserGroupsMini = async (
       return res.data;
     });
 
-export const useUserGroups = (mini: boolean = false) => {
+export const useUserGroups = (mini: boolean = false, pageSize: number = 2) => {
   const { data } = useAuth();
 
   return useInfiniteQuery({
     queryKey: ["group", "me", data?.id?.toString() ?? "guest", mini],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       mini
-        ? getUserGroupsMini(data?.id, pageParam)
-        : getUserGroups(data?.id, pageParam),
+        ? getUserGroupsMini(data?.id, pageParam, pageSize)
+        : getUserGroups(data?.id, pageParam, pageSize),
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
+    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null && !!data?.id,
     getNextPageParam: (lastPage, pages) => {
       return lastPage.results.length < 2

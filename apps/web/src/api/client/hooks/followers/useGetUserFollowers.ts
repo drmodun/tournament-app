@@ -9,7 +9,12 @@ import {
   IFollowerResponse,
   IGroupJoinRequestWithUserResponse,
 } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { useAuth } from "../auth/useAuth";
 import { AxiosResponse } from "axios";
 
@@ -39,8 +44,8 @@ export const useGetUserFollowers = () => {
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       getUserFollowers(data?.id, pageParam),
     staleTime: Infinity,
-    retryDelay: 1000,
-    retry: 5,
+    retryDelay: SMALL_QUERY_RETRY_DELAY,
+    retry: SMALL_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: () => undefined,
     initialPageParam: 1,

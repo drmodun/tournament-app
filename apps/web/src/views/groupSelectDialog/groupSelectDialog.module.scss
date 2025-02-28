@@ -1,0 +1,27 @@
+@use "../../styles/" as *;
+
+.groupLogo {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.groupInfoWrapper {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+  border-radius: $borderRadius;
+  padding: $halfPadding $padding;
+}
+
+.inherit {
+  color: inherit;
+}
+
+.groupsWrapper {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+  margin-top: $padding;
+}

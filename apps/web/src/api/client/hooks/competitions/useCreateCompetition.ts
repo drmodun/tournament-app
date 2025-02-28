@@ -12,16 +12,10 @@ import {
 
 export const createCompetition = async (data: ICreateTournamentRequest) =>
   clientApi
-    .post<ICreateTournamentRequest, AxiosResponse<{ id: number }>>(
-      `/tournaments`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-        body: JSON.stringify(data),
-      },
-    )
+    .post<
+      ICreateTournamentRequest,
+      AxiosResponse<{ id: number }>
+    >(`/tournaments`, data)
     .then((res) => res.data);
 
 export const createCompetitionFetch = (data: ICreateTournamentRequest) => {

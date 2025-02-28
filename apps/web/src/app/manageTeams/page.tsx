@@ -19,7 +19,6 @@ import CreateTeamForm from "views/createTeamForm";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import ProgressWheel from "components/progressWheel";
-import { set } from "lodash";
 
 export default function Teams() {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -84,11 +83,11 @@ export default function Teams() {
         <CreateTeamForm mutation={createGroupMutation} />
       </Dialog>
       <Navbar className={styles.navbar} />
-      {isLoading || data?.pages == null ? (
+      {isLoading ? (
         <div className={styles.progressWheelWrapper}>
           <ProgressWheel variant={textColorTheme} />
         </div>
-      ) : (
+      ) : (data?.pages[0]?.results?.length ?? 0) > 0 ? (
         <div className={clsx(styles.screen)}>
           <div
             className={clsx(
@@ -152,11 +151,21 @@ export default function Teams() {
               <AddIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
           </div>
-          {
-            <ManageTeams
-              team={data?.pages[Math.floor(activePage)]?.results[activeTab]}
-            />
-          }
+
+          <ManageTeams
+            team={data?.pages[Math.floor(activePage)]?.results[activeTab]}
+          />
+        </div>
+      ) : (
+        <div className={styles.noTeams}>
+          <p
+            className={clsx(
+              globals[`${textColorTheme}Color`],
+              globals.largeText,
+            )}
+          >
+            you have no teams!
+          </p>
         </div>
       )}
     </div>

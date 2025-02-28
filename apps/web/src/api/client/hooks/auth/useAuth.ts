@@ -2,7 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { IExtendedUserResponse } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 
 export const getAuthenticatedUser = async () =>
@@ -15,7 +20,7 @@ export const useAuth = () => {
     queryKey: ["me"],
     queryFn: getAuthenticatedUser,
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: 5000,
     enabled: getAccessToken() !== null,
   });
 };

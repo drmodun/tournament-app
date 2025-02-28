@@ -17,6 +17,7 @@ import Chip from "components/chip";
 import FlagIcon from "@mui/icons-material/Flag";
 import PublicIcon from "@mui/icons-material/Public";
 import PlaceIcon from "@mui/icons-material/Place";
+import { useRouter } from "next/navigation";
 
 export interface CardExpandedProps {
   children?: React.ReactNode;
@@ -38,6 +39,7 @@ export interface CardExpandedProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   location?: "offline" | "online" | "hybrid";
   locationDetails?: string;
+  id?: number;
 }
 
 export default function Card({
@@ -59,7 +61,16 @@ export default function Card({
   onClick,
   location,
   locationDetails,
+  id,
 }: CardExpandedProps) {
+  const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    onClick && onClick(e);
+
+    if (id) router.push(`/contest/${id}`);
+  };
+
   return (
     <button
       className={clsx(
@@ -70,7 +81,7 @@ export default function Card({
         globals.paddingVertical,
       )}
       style={style}
-      onClick={onClick ? onClick : () => {}}
+      onClick={handleClick}
     >
       <div className={styles.top}>
         <p
@@ -101,7 +112,12 @@ export default function Card({
         <div className={styles.dates}>
           {organizerName && (
             <Chip label={organizerName} variant="secondary">
-              <FlagIcon className={clsx(globals.lightFill, styles.flagIcon)} />
+              <FlagIcon
+                className={clsx(
+                  globals[`${textColor(variant)}FillChildren`],
+                  styles.flagIcon,
+                )}
+              />
             </Chip>
           )}
           {location &&
@@ -111,14 +127,20 @@ export default function Card({
                   {locationDetails?.toLowerCase()}
                 </p>
                 <PlaceIcon
-                  className={clsx(globals.lightFill, styles.flagIcon)}
+                  className={clsx(
+                    globals[`${textColor(variant)}FillChildren`],
+                    styles.flagIcon,
+                  )}
                 />
               </div>
             ) : location == "online" ? (
               <div className={styles.locationDetails}>
                 <p className={globals[`${textColor(variant)}Color`]}>online</p>
                 <PublicIcon
-                  className={clsx(globals.lightFill, styles.flagIcon)}
+                  className={clsx(
+                    globals[`${textColor(variant)}FillChildren`],
+                    styles.flagIcon,
+                  )}
                 />
               </div>
             ) : (
@@ -127,13 +149,19 @@ export default function Card({
                   {locationDetails?.toLowerCase()}
                 </p>
                 <PlaceIcon
-                  className={clsx(globals.lightFill, styles.flagIcon)}
+                  className={clsx(
+                    globals[`${textColor(variant)}FillChildren`],
+                    styles.flagIcon,
+                  )}
                 />
                 <p className={globals[`${textColor(variant)}Color`]}>
                   or online
                 </p>
                 <PublicIcon
-                  className={clsx(globals.lightFill, styles.flagIcon)}
+                  className={clsx(
+                    globals[`${textColor(variant)}FillChildren`],
+                    styles.flagIcon,
+                  )}
                 />
               </div>
             ))}
@@ -141,11 +169,14 @@ export default function Card({
       </div>
       <div className={styles.bottomWrapper}>
         <div className={styles.tags}>
-          <Chip
-            key={"category"}
-            label={category}
-            variant={textColor(variant)}
-          />
+          {category && (
+            <Chip
+              key={"category"}
+              label={category}
+              variant={textColor(variant)}
+            />
+          )}
+
           {tags &&
             tags.map((tag) => <Chip key={tag} label={tag} variant={variant} />)}
         </div>
@@ -153,7 +184,9 @@ export default function Card({
         <div className={styles.bottom}>
           <div className={styles.participants}>
             {participants !== undefined && (
-              <PeopleIcon className={globals[`${textColor(variant)}Fill`]} />
+              <PeopleIcon
+                className={globals[`${textColor(variant)}FillChildren`]}
+              />
             )}
             {participants !== undefined && (
               <p className={clsx(globals[`${textColor(variant)}Color`])}>
@@ -163,7 +196,7 @@ export default function Card({
             <div />
             {viewers !== undefined && (
               <VisibilityIcon
-                className={globals[`${textColor(variant)}Fill`]}
+                className={globals[`${textColor(variant)}FillChildren`]}
               />
             )}
             {viewers !== undefined && (
@@ -172,10 +205,16 @@ export default function Card({
               </p>
             )}
           </div>
-          <ArrowRightIcon className={globals[`${textColor(variant)}Fill`]} />
+          <ArrowRightIcon
+            className={globals[`${textColor(variant)}FillChildren`]}
+          />
         </div>
       </div>
-      <img src={image} className={clsx(styles.image)} />
+      <img
+        src={image}
+        className={clsx(styles.image)}
+        onError={(e) => (e.currentTarget.src = `/${variant}.png`)}
+      />
     </button>
   );
 }

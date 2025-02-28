@@ -8,7 +8,12 @@ import {
   IGroupJoinRequestWithMiniUserResponse,
   IGroupJoinRequestWithUserResponse,
 } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import {
+  clientApi,
+  getAccessToken,
+  LARGE_QUERY_RETRY_ATTEMPTS,
+  LARGE_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 
 export const getGroupJoinRequests = async (
@@ -35,7 +40,8 @@ export const useGroupJoinRequests = (groupId: number | undefined) => {
     queryFn: ({ pageParam }: { pageParam?: number }) =>
       getGroupJoinRequests(groupId, pageParam),
     staleTime: Infinity,
-    retryDelay: 10000,
+    retryDelay: LARGE_QUERY_RETRY_DELAY,
+    retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (page, pages) => pages.length + 1, // TODO: promjeni kada je dodan fullCount
     initialPageParam: 1,

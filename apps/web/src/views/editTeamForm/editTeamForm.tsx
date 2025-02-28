@@ -27,8 +27,9 @@ import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { UseMutationResult } from "@tanstack/react-query";
 import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
 import ProgressWheel from "components/progressWheel";
-import { isError } from "lodash";
 import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
+import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
+import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
 
 type LocationType = "offline" | "online" | "hybrid";
 
@@ -47,6 +48,8 @@ export default function CreateTeamForm({
   const [file, setFile] = useState<File>();
   const [placeId, setPlaceId] = useState<string>();
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
+
+  const deleteGroupMutation = useDeleteGroup();
 
   const editMethods = useForm<Partial<ICreateGroupRequest>>();
   const onEditSubmit: SubmitHandler<Partial<ICreateGroupRequest>> = (data) => {
@@ -248,7 +251,7 @@ export default function CreateTeamForm({
             required={true}
             className={styles.input}
             isReactFormHook={true}
-            defaultValue={data?.location}
+            defaultValue={data?.location?.name}
             onChange={(e) => {
               setPlaceId(undefined);
               fetchAutocomplete(e.target).then((autocomplete) => {
@@ -261,12 +264,19 @@ export default function CreateTeamForm({
             }}
           />
 
-          {editMethods.formState.errors.location?.type === "required" && (
+          {editMethods.formState.errors.locationId?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
         </div>
 
-        <Button variant={"primary"} submit={true} label="update competition" />
+        <Button variant={"warning"} submit={true} label="update competition" />
+        <Button
+          label="delete competition"
+          variant="danger"
+          className={styles.submitButton}
+          submit={false}
+          onClick={() => deleteGroupMutation.mutate(groupId)}
+        />
       </form>
     </FormProvider>
   );

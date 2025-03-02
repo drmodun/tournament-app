@@ -8,9 +8,12 @@ import {
   IUpdateStageDto,
   StageResponsesEnum,
   BaseStageResponseType,
+  IStageResponse,
+  StageSortingEnum,
 } from '@tournament-app/types';
 import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
+import { StagesWithDates } from './types';
 
 @Injectable()
 export class StageService {
@@ -72,5 +75,33 @@ export class StageService {
     }
 
     return action[0];
+  }
+
+  async getFirstStage(tournamentId: number): Promise<IStageResponse> {
+    const stages = await this.repository.getQuery({
+      responseType: StageResponsesEnum.MINI,
+      field: StageSortingEnum.START_DATE,
+      order: 'asc',
+      tournamentId,
+    } satisfies StageQuery);
+
+    return stages[0];
+  }
+
+  async isFirstStage(stageId: number, tournamentId: number): Promise<boolean> {
+    const firstStage = await this.getFirstStage(tournamentId);
+
+    return stageId === firstStage.id;
+  }
+
+  async getStagesSortedByStartDate(
+    tournamentId: number,
+  ): Promise<StagesWithDates[]> {
+    const stages =
+      await this.repository.getAllTournamentStagesSortedByStartDate(
+        tournamentId,
+      );
+
+    return stages;
   }
 }

@@ -9,13 +9,12 @@ import { AxiosResponse } from "axios";
 
 export const refreshUser = async () =>
   clientApi
-    .post<never, AxiosResponse<IUserLoginResponse>>("/auth/refresh", {
+    .get<never, AxiosResponse<IUserLoginResponse>>("/auth/refresh", {
       headers: {
         Authorization: `Bearer ${getRefreshToken()}`,
       },
     })
     .then((res) => res.data);
-// TODO: make google login later
 
 export const useRefresh = () => {
   const toast = useToastContext();
@@ -24,7 +23,7 @@ export const useRefresh = () => {
   return useMutation({
     mutationFn: refreshUser,
     onSuccess: async (data) => {
-      setAuthTokens(data.accessToken, data.refreshToken);
+      setAuthTokens(data, data.refreshToken);
       await refetch();
     },
     onError: (error: any) => {

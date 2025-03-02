@@ -1,8 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { stage, tournament, roster, location } from '../db/schema';
+import {
+  stage,
+  tournament,
+  roster,
+  location,
+  userToRoster,
+} from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { aliasedTable, eq, gte, lte, SQL } from 'drizzle-orm';
+import {
+  aliasedTable,
+  and,
+  asc,
+  eq,
+  gte,
+  inArray,
+  lte,
+  notInArray,
+  or,
+  SQL,
+} from 'drizzle-orm';
 import {
   IUpdateStageDto,
   stageStatusEnum,
@@ -10,6 +27,7 @@ import {
   StageSortingEnum,
   stageTypeEnum,
   tournamentLocationEnum,
+  IStageResponse,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -17,11 +35,13 @@ import {
   PgColumn,
 } from 'drizzle-orm/pg-core';
 import { db } from 'src/db/db';
+import { StagesWithDates } from './types';
+import { StageQuery } from './dto/requests.dto';
 
 @Injectable()
 export class StageDrizzleRepository extends PrimaryRepository<
   typeof stage,
-  BaseQuery,
+  StageQuery,
   IUpdateStageDto
 > {
   constructor() {
@@ -95,6 +115,46 @@ export class StageDrizzleRepository extends PrimaryRepository<
         }
       })
       .filter(Boolean);
+  }
+  async isAnyMemberInAnotherRoster(
+    memberIds: number[],
+    stageId: number,
+    excludeRosterIds?: number[],
+  ): Promise<boolean> {
+    const isGivenExcludeRosterIds = excludeRosterIds?.length > 0;
+
+    const check = await db
+      .select()
+      .from(stage)
+      .rightJoin(roster, eq(roster.stageId, stage.id))
+      .rightJoin(userToRoster, eq(userToRoster.rosterId, roster.id))
+      .where(
+        and(
+          inArray(userToRoster.userId, memberIds),
+          eq(stage.id, stageId),
+          isGivenExcludeRosterIds
+            ? notInArray(roster.id, excludeRosterIds)
+            : undefined,
+        ),
+      );
+
+    return check.length > 0;
+  }
+
+  async getAllTournamentStagesSortedByStartDate(
+    tournamentId: number,
+  ): Promise<StagesWithDates[]> {
+    const stages = await db
+      .select({
+        id: stage.id,
+        startDate: stage.startDate,
+        endDate: stage.endDate,
+      })
+      .from(stage)
+      .where(eq(stage.tournamentId, tournamentId))
+      .orderBy(asc(stage.startDate));
+
+    return stages;
   }
 
   sortRecord: Record<StageSortingEnum, PgColumn | SQL<number>> = {

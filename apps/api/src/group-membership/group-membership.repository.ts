@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CompositeRepository } from 'src/base/repository/compositeRepository';
-import { BaseQuery } from 'src/base/query/baseQuery';
+import { BaseQuery, PaginationOnly } from 'src/base/query/baseQuery';
 import { group, groupToUser, user } from 'src/db/schema';
 import {
   GroupMembershipResponsesEnum,
   GroupMembershipSortingEnum,
   GroupMembershipSortType,
   GroupResponsesEnum,
+  IMiniGroupResponseWithLogo,
+  IMiniUserResponseWithProfilePicture,
   UserResponsesEnum,
 } from '@tournament-app/types';
 import { UserDrizzleRepository } from 'src/users/user.repository';
@@ -16,8 +18,9 @@ import {
   PgColumn,
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
-import { eq, InferSelectModel, SQL } from 'drizzle-orm';
+import { asc, eq, ilike, and, SQL, sql, InferSelectModel } from 'drizzle-orm';
 import { IGroupMembershipKey } from './dto/responses.dto';
+import { db } from 'src/db/db';
 
 @Injectable()
 export class GroupMembershipDrizzleRepository extends CompositeRepository<
@@ -138,12 +141,69 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
           return eq(groupToUser.userId, +parsed);
         case 'role':
           return eq(groupToUser.role, parsed);
+        case 'search':
+          return ilike(user.username, `%${parsed}%`);
         default:
           return;
       }
     });
   }
 
+  async autoComplete(
+    search: string,
+    groupId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return (await db
+      .select({
+        id: groupToUser.userId,
+        username: user.username,
+
+        profilePicture: user.profilePicture,
+        isFake: user.isFake,
+      })
+      .from(groupToUser)
+      .leftJoin(user, eq(groupToUser.userId, user.id))
+      .where(
+        and(
+          eq(groupToUser.groupId, groupId),
+          ilike(user.username, `%${search}%`),
+        ),
+      )
+      .orderBy(
+        sql<number>`CASE WHEN ${user.username} = ${search} THEN 0 ELSE 1 END`,
+        asc(user.username),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniUserResponseWithProfilePicture[];
+  }
+
+  async autoCompleteGroups(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return (await db
+      .select({
+        id: group.id,
+        name: group.name,
+        abbreviation: group.abbreviation,
+        country: group.country,
+        logo: group.logo,
+      })
+      .from(groupToUser)
+      .rightJoin(group, eq(groupToUser.groupId, group.id))
+      .where(
+        and(ilike(group.name, `%${search}%`), eq(groupToUser.userId, userId)),
+      )
+      .orderBy(asc(group.name))
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniGroupResponseWithLogo[];
+  }
   public sortRecord: Record<GroupMembershipSortType, PgColumn | SQL<number>> = {
     [GroupMembershipSortingEnum.CREATED_AT]: groupToUser.createdAt,
     [GroupMembershipSortingEnum.ROLE]: groupToUser.role,

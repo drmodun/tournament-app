@@ -49,6 +49,7 @@ import {
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GroupOwnerGuard } from './guards/group-owner.guard';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('groups')
 @ApiExtraModels(
@@ -61,6 +62,15 @@ import { GroupOwnerGuard } from './guards/group-owner.guard';
 @Controller('groups')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
+
+  @Get('auto-complete/:search')
+  @ApiOkResponse({ type: [MiniGroupResponseWithLogo] })
+  async groupAutoComplete(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.groupService.groupAutoComplete(search, query.pageSize);
+  }
 
   @Get()
   @ApiOkResponse({

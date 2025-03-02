@@ -101,6 +101,14 @@ export class GroupService {
     return this.findOne(id);
   }
 
+  async groupAutoComplete(
+    search: string,
+    pageSize: number = 10,
+    page: number = 1,
+  ) {
+    return await this.repository.groupAutoComplete(search, pageSize, page);
+  }
+
   async remove(id: number) {
     await this.findOne(id);
 

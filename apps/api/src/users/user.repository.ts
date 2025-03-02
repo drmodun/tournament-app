@@ -1,17 +1,20 @@
 import {
   BaseUserUpdateRequest,
+  ICareerUserResponse,
+  IMiniUserResponseWithProfilePicture,
   UserResponsesEnum,
   UserSortingEnum,
   UserSortingEnumType,
 } from '@tournament-app/types';
 import {
   category,
+  categoryCareer,
   follower,
   groupToUser,
   groupUserBlockList,
   interests,
-  organizer,
   participation,
+  tournament,
   user,
 } from '../db/schema';
 import {
@@ -22,11 +25,21 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { and, countDistinct, eq, sql, SQL } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  countDistinct,
+  eq,
+  ilike,
+  inArray,
+  sql,
+  SQL,
+} from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { UserQuery } from './dto/requests.dto';
 import { UserDtosEnum, UserReturnTypesEnumType } from './types';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class UserDrizzleRepository extends PrimaryRepository<
@@ -132,9 +145,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     [UserSortingEnum.COUNTRY]: user.country,
     [UserSortingEnum.BETTING_POINTS]: user.bettingPoints,
     [UserSortingEnum.GROUP_JOIN_DATE]: groupToUser.createdAt,
-    [UserSortingEnum.TOURNAMENTS_MODERATED]: countDistinct(
-      organizer.tournamentId,
-    ),
+    [UserSortingEnum.TOURNAMENTS_MODERATED]: countDistinct(tournament.id),
     [UserSortingEnum.TOURNAMENTS_WON]: countDistinct(
       participation.tournamentId, // TODO: add calculation later or scrap allTogether
     ),
@@ -142,6 +153,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     [UserSortingEnum.TOURNAMENT_PARTICIPATION]: countDistinct(
       participation.tournamentId,
     ),
+    [UserSortingEnum.SEARCH]: user.username,
   };
 
   getValidWhereClause(query: UserQuery): SQL[] {
@@ -162,6 +174,8 @@ export class UserDrizzleRepository extends PrimaryRepository<
           return eq(user.username, parsed);
         case 'email':
           return eq(user.email, parsed);
+        case 'search':
+          return ilike(user.username, `${parsed}%`);
         case 'country':
           return eq(user.country, parsed);
         case 'age':
@@ -223,6 +237,25 @@ export class UserDrizzleRepository extends PrimaryRepository<
     return !!exists.length;
   }
 
+  async userAutoComplete(
+    search: string,
+    pageSize: number = 10,
+    page: number = 1,
+  ): Promise<IMiniUserResponseWithProfilePicture[]> {
+    return (await db
+      .select({ ...this.getMappingObject(UserResponsesEnum.MINI_WITH_PFP) })
+      .from(user)
+      .where(ilike(user.username, `${search}%`))
+      .orderBy(
+        sql<number>`CASE WHEN ${user.username} = ${search} THEN 0 ELSE 1 END`,
+        asc(user.username),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniUserResponseWithProfilePicture[];
+  }
+
   async blockUser(groupId: number, userId: number) {
     await db.insert(groupUserBlockList).values({
       blockedUserId: userId,
@@ -256,6 +289,36 @@ export class UserDrizzleRepository extends PrimaryRepository<
       );
   }
 
+  async searchBlockedUsers(
+    search: string,
+    groupId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return (await db
+      .select({
+        id: user.id,
+        username: user.username,
+        profilePicture: user.profilePicture,
+        isFake: user.isFake,
+      })
+      .from(groupUserBlockList)
+      .rightJoin(user, eq(user.id, groupUserBlockList.blockedUserId))
+      .where(
+        and(
+          ilike(user.username, `${search}%`),
+          eq(groupUserBlockList.groupId, groupId),
+        ),
+      )
+      .orderBy(
+        sql<number>`CASE WHEN ${user.username} = ${search} THEN 0 ELSE 1 END`,
+        asc(user.username),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniUserResponseWithProfilePicture[];
+  }
+
   async checkIfInterestExists(categoryId: number, userId: number) {
     const exists = await db
       .select()
@@ -282,6 +345,34 @@ export class UserDrizzleRepository extends PrimaryRepository<
       .limit(pageSize)
       .offset((page - 1) * pageSize)
       .groupBy(category.id);
+  }
+
+  async getMultipleCareers(
+    userIds: number[],
+    categoryId: number,
+  ): Promise<ICareerUserResponse[]> {
+    // TODO: move this to the career repository if we decide to create it
+    return await db
+      .select({
+        userId: categoryCareer.userId,
+        categoryId: categoryCareer.categoryId,
+        elo: categoryCareer.elo,
+        createdAt: categoryCareer.createdAt,
+        user: {
+          id: user.id,
+          isFake: user.isFake,
+          username: user.username,
+          profilePicture: user.profilePicture,
+          country: user.country,
+        },
+      })
+      .from(categoryCareer)
+      .where(
+        and(
+          inArray(categoryCareer.userId, userIds),
+          eq(categoryCareer.categoryId, categoryId),
+        ),
+      );
   }
 
   getBlockedUsers(groupId: number, page: number, pageSize: number) {

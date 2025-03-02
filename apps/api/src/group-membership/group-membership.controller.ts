@@ -52,6 +52,8 @@ import {
 } from '@tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
+import { PaginationOnly } from 'src/base/query/baseQuery';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('group-membership')
 @ApiExtraModels(
@@ -70,6 +72,37 @@ export class GroupMembershipController {
   constructor(
     private readonly groupMembershipService: GroupMembershipService,
   ) {}
+
+  @Get('auto-complete/users/:groupId/:search')
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
+  async autoComplete(
+    @Param('groupId') groupId: number,
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.groupMembershipService.autoComplete(
+      groupId,
+      search,
+      query,
+    );
+  }
+
+  @Get('auto-complete/groups/:search')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: [MiniGroupResponseWithLogo] })
+  async autoCompleteGroups(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupMembershipService.autoCompleteGroups(
+      search,
+      user.id,
+      query,
+    );
+  }
 
   @Get()
   @ApiOkResponse({

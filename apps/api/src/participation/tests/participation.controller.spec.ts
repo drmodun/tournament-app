@@ -105,7 +105,7 @@ describe('ParticipationController', () => {
       } as any);
 
       expect(result).toEqual({
-        data: [mockParticipation],
+        results: [mockParticipation],
         metadata: {
           pagination: { page: 1, pageSize: 10 },
           links: undefined,

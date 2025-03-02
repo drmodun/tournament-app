@@ -23,6 +23,8 @@ import { GroupInterestsModule } from './group/group-interests/group-interests.mo
 import { LocationModule } from './location/location.module';
 import { GroupRequirementsModule } from './group/requirements/group-requirements.module';
 import { LFPModule } from './lfp/lfp.module';
+import { RosterModule } from './roster/roster.module';
+import { CareerModule } from './career/career.module';
 @Module({
   imports: [
     UsersModule,
@@ -47,6 +49,8 @@ import { LFPModule } from './lfp/lfp.module';
     LFPModule,
     LocationModule,
     GroupRequirementsModule,
+    RosterModule,
+    CareerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

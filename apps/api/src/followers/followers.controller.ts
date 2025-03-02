@@ -25,12 +25,44 @@ import { IQueryMetadata } from '@tournament-app/types';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
+import { PaginationOnly } from 'src/base/query/baseQuery';
+import { MiniUserResponseWithProfilePicture } from 'src/users/dto/responses.dto';
 
 @ApiTags('followers')
 @ApiExtraModels(FollowerResponse)
 @Controller('followers')
 export class FollowersController {
   constructor(private readonly followersService: FollowersService) {}
+
+  @Get('auto-complete/followers/:search')
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
+  async autoCompleteFollowers(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.followersService.autoCompleteFollowers(
+      search,
+      user.id,
+      query,
+    );
+  }
+
+  @Get('auto-complete/following/:search')
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
+  async autoCompleteFollowing(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.followersService.autoCompleteFollowing(
+      search,
+      user.id,
+      query,
+    );
+  }
 
   @Get()
   @ApiOkResponse({

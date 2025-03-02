@@ -9,9 +9,13 @@ import {
 import { UserDrizzleRepository } from 'src/users/user.repository';
 import {
   FollowerResponsesEnum,
+  IMiniUserResponse,
+  IMiniUserResponseWithProfilePicture,
   UserResponsesEnum,
 } from '@tournament-app/types';
-import { eq, SQL } from 'drizzle-orm';
+import { and, asc, eq, ilike, sql, SQL } from 'drizzle-orm';
+import { db } from 'src/db/db';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class FollowerDrizzleRepository extends CompositeRepository<
@@ -73,6 +77,62 @@ export class FollowerDrizzleRepository extends CompositeRepository<
     }
   }
 
+  async autoCompleteFollowers(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return (await db
+      .select({
+        id: user.id,
+        username: user.username,
+        profilePicture: user.profilePicture,
+        isFake: user.isFake,
+      })
+      .from(follower)
+      .leftJoin(user, eq(follower.followerId, user.id))
+      .where(
+        and(ilike(user.username, `${search}%`), eq(follower.userId, userId)),
+      )
+      .orderBy(
+        sql<number>`CASE WHEN ${user.username} = ${search} THEN 0 ELSE 1 END`,
+        asc(user.username),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniUserResponseWithProfilePicture[];
+  }
+
+  async autoCompleteFollowing(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return (await db
+      .select({
+        id: user.id,
+        username: user.username,
+        profilePicture: user.profilePicture,
+        isFake: user.isFake,
+      })
+      .from(follower)
+      .leftJoin(user, eq(follower.userId, user.id))
+      .where(
+        and(
+          ilike(user.username, `${search}%`),
+          eq(follower.followerId, userId),
+        ),
+      )
+      .orderBy(
+        sql<number>`CASE WHEN ${user.username} = ${search} THEN 0 ELSE 1 END`,
+        asc(user.username),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniUserResponseWithProfilePicture[];
+  }
   getValidWhereClause(query: FollowerQuery): SQL[] {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);

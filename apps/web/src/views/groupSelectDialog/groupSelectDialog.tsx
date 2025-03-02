@@ -16,6 +16,10 @@ import ProgressWheel from "components/progressWheel";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import { useAdminUserGroups } from "api/client/hooks/groups/useAdminUserGroups";
 import { useCreatorUserGroups } from "api/client/hooks/groups/useCreatorUserGroups";
+import Button from "components/button";
+import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
+import { useCheckIfGroupIsParticipating } from "api/client/hooks/participations/useCheckIfGroupIsParticipating";
+import { useAuth } from "api/client/hooks/auth/useAuth";
 
 export default function GroupSelectDialog({
   competitionId,
@@ -30,7 +34,6 @@ export default function GroupSelectDialog({
   const [adminFetchLimit, setAdminFetchLimit] = useState<number>(-1);
   const [creatorFetchLimit, setCreatorFetchLimit] = useState<number>(-1);
   const [selectedGroup, setSelectedGroup] = useState<number>(-1);
-
   const {
     data: adminData,
     isLoading: adminIsLoading,
@@ -41,33 +44,151 @@ export default function GroupSelectDialog({
     isFetchPreviousPageError: adminIsFetchPreviousPageError,
     fetchPreviousPage: adminFetchPreviousPage,
   } = useAdminUserGroups();
+  const {
+    data: creatorData,
+    isLoading: creatorIsLoading,
+    fetchNextPage: creatorFetchNextPage,
+    isFetchingNextPage: creatorIsFetchingNextPage,
+    isFetchingPreviousPage: creatorIsFetchingPreviousPage,
+    isFetchNextPageError: creatorIsFetchNextPageError,
+    isFetchPreviousPageError: creatorIsFetchPreviousPageError,
+    fetchPreviousPage: creatorFetchPreviousPage,
+  } = useCreatorUserGroups();
+  const { data } = useAuth();
 
-  const forward = async () => {
+  const joinGroupMutation = useCreateGroupParticipation();
+  const participationCheckMutation = useCheckIfGroupIsParticipating();
+
+  const forward = async (forAdmin: boolean = false) => {
     let nextPage;
 
-    nextPage = await adminFetchNextPage();
+    if (forAdmin) nextPage = await adminFetchNextPage();
+    else nextPage = await creatorFetchNextPage();
 
     if (
-      adminIsFetchNextPageError ||
-      (nextPage.data?.pages[adminPage + 1]?.results?.length ?? -1) == 0
+      forAdmin &&
+      (adminIsFetchNextPageError ||
+        (nextPage.data?.pages[adminPage + 1]?.results?.length ?? -1) == 0)
     ) {
       setAdminFetchLimit(adminPage);
       return;
+    } else if (forAdmin) {
+      setAdminPage((curr) => curr + 1);
+      return;
     }
 
-    setAdminPage((curr) => curr + 1);
+    if (
+      creatorIsFetchNextPageError ||
+      (nextPage.data?.pages[creatorPage + 1]?.results?.length ?? -1) == 0
+    ) {
+      setCreatorFetchLimit(creatorPage);
+      return;
+    }
+
+    setCreatorPage((curr) => curr + 1);
   };
 
-  const backward = async () => {
-    if (adminPage == 0) return;
-    await adminFetchPreviousPage();
+  const backward = async (forAdmin: boolean = false) => {
+    if (forAdmin) {
+      if (adminPage == 0) return;
+      await adminFetchPreviousPage();
 
-    setAdminPage((curr) => curr - 1);
+      setAdminPage((curr) => curr - 1);
+    } else {
+      if (creatorPage == 0) return;
+      await creatorFetchPreviousPage();
+
+      setCreatorPage((curr) => curr - 1);
+    }
+  };
+
+  const join = async () => {
+    if (selectedGroup === -1 || !competitionId || !data) return;
+    const participationCheck = await participationCheckMutation.mutateAsync({
+      tournamentId: competitionId,
+      groupId: selectedGroup,
+    });
+
+    if (
+      participationCheckMutation.isError ||
+      (participationCheck?.results?.length ?? -1) <= 0
+    ) {
+      await joinGroupMutation.mutateAsync({
+        id: competitionId,
+        groupId: selectedGroup,
+        userId: data!.id,
+      });
+    }
   };
 
   return (
     <div className={clsx(styles.wrapper)}>
       <p>
+        <b className={globals[`${textColorTheme}Color`]}>groups you own</b>
+      </p>
+      {creatorIsLoading ? (
+        <ProgressWheel variant={textColorTheme} />
+      ) : (
+        <div className={styles.groupsWrapper}>
+          <ArrowBackIcon
+            onClick={backward}
+            className={clsx(
+              styles.arrow,
+              creatorPage == 0 ? styles.disabled : styles.enabled,
+              globals[`${textColorTheme}FillChildren`],
+            )}
+          />
+          <div className={styles.groupsInnerWrapper}>
+            {creatorIsFetchingNextPage ? (
+              <ProgressWheel variant={textColorTheme} />
+            ) : (
+              creatorData?.pages[creatorPage]?.results?.map((group) => {
+                return (
+                  <div
+                    onClick={() => setSelectedGroup(group?.groupId)}
+                    className={clsx(
+                      group.groupId === selectedGroup
+                        ? [globals.primaryBackgroundColor, globals.lightColor]
+                        : [
+                            globals[`${textColorTheme}BackgroundColor`],
+                            globals[`${theme}Color`],
+                          ],
+                      styles.groupInfoWrapper,
+                    )}
+                  >
+                    <img
+                      src={group?.group?.logo}
+                      alt="group logo"
+                      onError={(e) => (e.currentTarget.src = "/noimg.jpg")}
+                      className={styles.groupLogo}
+                    />
+                    <div
+                      className={clsx(
+                        styles.inherit,
+                        styles.groupInfoTextWrapper,
+                      )}
+                    >
+                      <p className={styles.inherit}>{group?.group?.name}</p>
+                      <p className={globals.inherit}>
+                        {group?.group?.abbreviation}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          <ArrowForwardIcon
+            onClick={forward}
+            className={clsx(
+              styles.arrow,
+              adminPage == 0 ? styles.disabled : styles.enabled,
+              globals[`${textColorTheme}FillChildren`],
+            )}
+          />
+        </div>
+      )}
+      <p className={styles.secondTitle}>
         <b className={globals[`${textColorTheme}Color`]}>
           groups you administrate
         </b>
@@ -77,62 +198,55 @@ export default function GroupSelectDialog({
       ) : (
         <div className={styles.groupsWrapper}>
           <ArrowBackIcon
-            onClick={() =>
-              !adminIsFetchPreviousPageError &&
-              !adminIsFetchingPreviousPage &&
-              adminPage != 0 &&
-              backward()
-            }
+            onClick={() => backward(true)}
             className={clsx(
               styles.arrow,
               adminPage == 0 ? styles.disabled : styles.enabled,
               globals[`${textColorTheme}FillChildren`],
             )}
           />
-          <div>
-            {adminData?.pages[adminPage]?.results?.map((group) => {
-              console.log(group);
-              return (
-                <div
-                  onClick={() => setSelectedGroup(group?.groupId)}
-                  className={clsx(
-                    group.groupId === selectedGroup
-                      ? [globals.primaryBackgroundColor, globals.lightColor]
-                      : [
-                          globals[`${textColorTheme}BackgroundColor`],
-                          globals[`${theme}Color`],
-                        ],
-                    styles.groupInfoWrapper,
-                  )}
-                >
-                  <img
-                    src={group?.group?.logo}
-                    alt="group logo"
-                    onError={(e) => (e.currentTarget.src = "/noimg.jpg")}
-                    className={styles.groupLogo}
-                  />
+          <div className={styles.groupsInnerWrapper}>
+            {adminIsFetchingNextPage ? (
+              <ProgressWheel variant={textColorTheme} />
+            ) : (
+              adminData?.pages[adminPage]?.results?.map((group) => {
+                return (
                   <div
+                    onClick={() => setSelectedGroup(group?.groupId)}
                     className={clsx(
-                      styles.inherit,
-                      styles.groupInfoTextWrapper,
+                      group.groupId === selectedGroup
+                        ? [globals.primaryBackgroundColor, globals.lightColor]
+                        : [
+                            globals[`${textColorTheme}BackgroundColor`],
+                            globals[`${theme}Color`],
+                          ],
+                      styles.groupInfoWrapper,
                     )}
                   >
-                    <p className={styles.inherit}>{group?.group?.name}</p>
-                    <p className={globals.inherit}>
-                      {group?.group?.abbreviation}
-                    </p>
+                    <img
+                      src={group?.group?.logo}
+                      alt="group logo"
+                      onError={(e) => (e.currentTarget.src = "/noimg.jpg")}
+                      className={styles.groupLogo}
+                    />
+                    <div
+                      className={clsx(
+                        styles.inherit,
+                        styles.groupInfoTextWrapper,
+                      )}
+                    >
+                      <p className={styles.inherit}>{group?.group?.name}</p>
+                      <p className={globals.inherit}>
+                        {group?.group?.abbreviation}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
           <ArrowForwardIcon
-            onClick={() =>
-              !adminIsFetchNextPageError &&
-              !adminIsFetchingNextPage &&
-              adminPage != adminFetchLimit &&
-              forward()
-            }
+            onClick={() => forward(true)}
             className={clsx(
               styles.arrow,
               adminPage == 0 ? styles.disabled : styles.enabled,
@@ -141,6 +255,13 @@ export default function GroupSelectDialog({
           />
         </div>
       )}
+      <Button
+        disabled={selectedGroup === -1}
+        label="join with group"
+        variant="primary"
+        className={styles.submitButton}
+        onClick={join}
+      />
     </div>
   );
 }

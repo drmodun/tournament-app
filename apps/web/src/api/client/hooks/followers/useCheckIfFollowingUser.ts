@@ -31,7 +31,7 @@ export const useCheckIfFollowingUser = (followerId: number) => {
   const { data } = useAuth();
 
   return useQuery({
-    queryKey: ["group", "me"],
+    queryKey: [followerId, "me", "follower"],
     queryFn: () => checkIfFollowingUser(data?.id, followerId),
     staleTime: Infinity,
     retryDelay: SMALL_QUERY_RETRY_DELAY,

@@ -32,7 +32,7 @@ export const getUserOrganizedCompetitions = async (
 export const useGetUserOrganizedCompetitions = () => {
   const { data } = useAuth();
   return useQuery({
-    queryKey: ["competition", "me"],
+    queryKey: [data?.id, "competition", "me"],
     queryFn: () => getUserOrganizedCompetitions(data?.id),
     staleTime: Infinity,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,

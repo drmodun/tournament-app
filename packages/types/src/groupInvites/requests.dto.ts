@@ -1,15 +1,15 @@
 export interface IGroupInviteQuery {
   userId?: number;
   groupId?: number;
-  relatedLFTId?: number;
+  relatedLFGId?: number;
 }
 
 export interface ICreateGroupInviteDto {
   message: string;
-  relatedLFTId?: number;
+  relatedLFGId?: number;
 }
 
 export interface IUpdateGroupInviteDto {
   message?: string;
-  relatedLFTId?: number;
+  relatedLFGId?: number;
 }

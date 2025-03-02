@@ -143,3 +143,11 @@
   flex-direction: column;
   gap: $halfPadding;
 }
+
+.dialog {
+  width: 75%;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}

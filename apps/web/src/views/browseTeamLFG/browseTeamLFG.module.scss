@@ -1,0 +1,95 @@
+@import "../../styles/";
+
+.error {
+  font-size: $fontSize * 0.875;
+  color: $danger;
+  margin-top: $halfPadding;
+}
+
+.submitLfpButton {
+  width: 100%;
+  margin-top: $padding;
+}
+
+.title {
+  margin-bottom: $padding;
+}
+.input {
+  width: 100%;
+}
+
+.profilePicture {
+  width: $baseComponentHeight * 2;
+  height: $baseComponentHeight * 2;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+  border-radius: $borderRadius;
+  padding: $padding;
+}
+
+.userCardText {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.name {
+  font-size: $largeFontSize;
+}
+
+.lfg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userInfo {
+  width: 100%;
+}
+
+.careers {
+  width: 100%;
+}
+
+.interests {
+  font-weight: 700;
+  margin-top: $padding;
+}
+
+.careerWrapper {
+  display: flex;
+  gap: $halfPadding;
+  flex-wrap: wrap;
+}
+
+.actionButtons {
+  margin-top: $padding;
+  width: 100%;
+  display: flex;
+  gap: $padding;
+}
+
+.actionButton {
+  width: 100%;
+}
+
+.wrapper {
+  width: 100%;
+  padding: $padding;
+}
+.paginationWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.paginationButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

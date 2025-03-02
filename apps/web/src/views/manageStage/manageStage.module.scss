@@ -1,0 +1,69 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  max-width: $desktopBreakpoint;
+  height: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+}
+
+.addButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  gap: $padding;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.stagesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $doublePadding;
+}
+
+.stageItem {
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.description {
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+.info {
+  margin-left: $halfPadding;
+}
+
+.title {
+  margin-bottom: $halfPadding;
+}
+
+.loadMore {
+  margin-top: $padding;
+  width: 100%;
+}

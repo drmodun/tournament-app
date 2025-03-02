@@ -6,7 +6,7 @@ import {
   IUserLoginResponse,
 } from "@tournament-app/types";
 import { clientApi, setAuthTokens } from "api/client/base";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
@@ -20,6 +20,7 @@ export const registerUser = async (data: ICreateUserRequest) =>
 export const useRegister = () => {
   const toast = useToastContext();
   const navigate = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: registerUser,
@@ -29,7 +30,11 @@ export const useRegister = () => {
         "success",
       );
 
-      setTimeout(() => navigate.push("/login"), 1000);
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("me"),
+      });
+
+      setTimeout(() => navigate.push("/login"));
     },
     onError: (error: any) => {
       if (error.response?.status === 413) {

@@ -36,7 +36,7 @@ export const getGroupJoinRequests = async (
 
 export const useGroupJoinRequests = (groupId: number | undefined) => {
   return useInfiniteQuery({
-    queryKey: ["group", "me"],
+    queryKey: ["group", "me", groupId],
     queryFn: ({ pageParam }: { pageParam?: number }) =>
       getGroupJoinRequests(groupId, pageParam),
     staleTime: Infinity,

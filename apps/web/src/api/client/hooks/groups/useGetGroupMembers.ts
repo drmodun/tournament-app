@@ -30,7 +30,7 @@ type GroupMembersType = {
   }[];
 };
 
-export const getGroupMembers = async (groupId: number | undefined) =>
+export const getGroupMembers = async (page?: number, groupId?: number) =>
   clientApi
     .get<
       never,
@@ -39,12 +39,15 @@ export const getGroupMembers = async (groupId: number | undefined) =>
     .then((res) => res.data);
 
 export const useGetGroupMembers = (groupId: number | undefined) => {
-  return useQuery({
-    queryKey: ["group", "me"],
-    queryFn: () => getGroupMembers(groupId),
+  return useInfiniteQuery({
+    queryKey: ["group", groupId],
+    queryFn: ({ pageParam }: { pageParam?: number }) =>
+      getGroupMembers(pageParam, groupId),
     staleTime: Infinity,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
+    getNextPageParam: (lastPage, allPages) => allPages.length + 1,
+    initialPageParam: 1,
   });
 };

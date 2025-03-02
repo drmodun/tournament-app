@@ -60,7 +60,6 @@ export default function ManageUser({
     isFetching,
   } = useUserGroups(true);
   const deleteUserMutation = useDeleteUser(data?.id);
-
   return (
     <div className={styles.wrapper}>
       <Dialog

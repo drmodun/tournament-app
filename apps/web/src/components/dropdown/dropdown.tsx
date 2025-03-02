@@ -45,6 +45,8 @@ interface DropdownProps {
   innerWrapperClassName?: string;
   className?: string;
   defaultValue?: string;
+  searchExternally?: boolean;
+  onSearch?: (search: string) => void;
 }
 
 export default function Dropdown({

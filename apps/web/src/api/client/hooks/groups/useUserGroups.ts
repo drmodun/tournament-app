@@ -73,7 +73,7 @@ export const useUserGroups = (mini: boolean = false, pageSize: number = 2) => {
   const { data } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: ["group", "me", data?.id?.toString() ?? "guest", mini],
+    queryKey: ["group", "me", data?.id, mini, pageSize],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       mini
         ? getUserGroupsMini(data?.id, pageParam, pageSize)

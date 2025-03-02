@@ -45,18 +45,33 @@ export default function Competition({
   const { data, isLoading, isSuccess } = useAuth();
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const { data: groupMembershipData, isLoading: groupMembershipIsLoading } =
-    useCheckIfGroupMember(competition?.affiliatedGroup?.id);
+  const {
+    data: groupMembershipData,
+    isLoading: groupMembershipIsLoading,
+    isError,
+  } = useCheckIfGroupMember(competition?.affiliatedGroup?.id);
 
   const deleteCompetitionMutation = useDeleteCompetition();
   const soloJoinCompetitionMutation = useCreateSoloParticipation();
   const groupJoinCompetitionMutation = useCreateGroupParticipation();
-  const { data: participationData } = useCheckIfUserIsParticipating();
+  const { data: participationData } = useCheckIfUserIsParticipating(
+    competition?.id,
+    data?.id,
+  );
 
   const [groupSelectModalOpen, setGroupSelectModalOpen] =
     useState<boolean>(false);
 
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log(
+      "groupMembershipData",
+      groupMembershipData,
+      participationData?.results,
+      !competition?.isPublic,
+    );
+  }, [groupMembershipData, competition, participationData]);
 
   return (
     <div className={clsx(styles.wrapper)}>
@@ -64,6 +79,7 @@ export default function Competition({
         active={editModalOpen}
         onClose={() => setEditModalOpen(false)}
         variant={theme}
+        className={styles.dialog}
       >
         <EditCompetitionForm competition={competition} />
       </Dialog>
@@ -71,6 +87,7 @@ export default function Competition({
         active={groupSelectModalOpen}
         onClose={() => setGroupSelectModalOpen(false)}
         variant={theme}
+        className={styles.dialog}
       >
         <GroupSelectDialog competitionId={competition?.id} />
       </Dialog>
@@ -172,7 +189,8 @@ export default function Competition({
                 onClick={() => deleteCompetitionMutation.mutate(competition.id)}
               />
             </div>
-          ) : (participationData?.results?.length ?? -1) > 0 ? (
+          ) : (participationData?.results?.length ?? -1) > 0 ||
+            !competition?.isPublic ? (
             <></>
           ) : (
             <div className={styles.manageCompetitionButtonsWrapper}>

@@ -7,6 +7,7 @@ import {
   IExtendedUserResponse,
   IGroupResponseExtended,
   IParticipationResponse,
+  ParticipationResponsesEnum,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -26,7 +27,7 @@ export const checkIfUserIsParticipating = async (data: {
       `/participations`,
       {
         params: {
-          responseType: GroupResponsesEnum.BASE,
+          responseType: ParticipationResponsesEnum.BASE,
           ...data,
         },
       },
@@ -38,7 +39,7 @@ export const useCheckIfUserIsParticipating = (
   userId?: number,
 ) => {
   return useQuery({
-    queryKey: ["group", "me"],
+    queryKey: ["group", "me", tournamentId, userId],
     queryFn: () => checkIfUserIsParticipating({ tournamentId, userId }),
     staleTime: Infinity,
     retryDelay: SMALL_QUERY_RETRY_DELAY,

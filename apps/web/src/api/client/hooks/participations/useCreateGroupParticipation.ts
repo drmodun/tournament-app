@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   clientApi,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
@@ -9,10 +9,12 @@ import {
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { IUpdateTournamentRequest } from "@tournament-app/types";
+import { useAuth } from "../auth/useAuth";
 
 export const createGroupParticipation = async (data: {
   id: number;
   groupId: number;
+  userId: number;
 }) => {
   return clientApi
     .post<
@@ -24,14 +26,17 @@ export const createGroupParticipation = async (data: {
 
 export const useCreateGroupParticipation = () => {
   const toast = useToastContext();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["me", "group", "participation"],
     mutationFn: createGroupParticipation,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     onSuccess: async (data) => {
       toast.addToast("successfully joined competition", "success");
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("participation"),
+      });
     },
     onError: (error: any) => {
       toast.addToast("an error occurred...", "error");

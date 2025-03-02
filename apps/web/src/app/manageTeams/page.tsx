@@ -45,10 +45,11 @@ export default function Teams() {
 
   useEffect(() => {
     createGroupMutation.isSuccess && setDialogActive(false);
-    console.log(data);
   }, [createGroupMutation.isSuccess, data]);
 
   const forward = async () => {
+    if ((data?.pages[activePage]?.results?.length ?? -1) < 2) return;
+
     const page = await fetchNextPage();
 
     if (

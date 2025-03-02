@@ -26,7 +26,7 @@ export const getCategories = async () =>
 
 export const useGetCategories = () => {
   return useQuery({
-    queryKey: ["category", "me"],
+    queryKey: ["category"],
     queryFn: getCategories,
     staleTime: Infinity,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,

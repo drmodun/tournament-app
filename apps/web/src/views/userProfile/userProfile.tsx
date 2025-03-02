@@ -9,7 +9,7 @@ import { clsx } from "clsx";
 import Button from "components/button";
 import RichEditor from "components/richEditor";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -70,14 +70,14 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
         <div className={styles.userInfo}>
           <b className={styles.boldText}>location</b>
           <p className={clsx(styles.infoText)}>
-            {user?.location.toLowerCase()}
+            {(user?.location ?? "").toLowerCase()}
           </p>
         </div>
         <div className={styles.userInfo}>
           <b className={styles.boldText}>country</b>
           <p
             className={clsx(styles.infoText)}
-          >{`${user?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[user.country] ?? "ZZ")}`}</p>
+          >{`${user?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[user?.country ?? ""] ?? "ZZ")}`}</p>
         </div>
         <div className={styles.userInfo}>
           <b className={styles.boldText}>level</b>
@@ -102,11 +102,11 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
         </div>
         <div className={styles.userInfo}>
           <b className={styles.boldText}>followers</b>
-          <p className={clsx(styles.infoText)}>{user.followers}</p>
+          <p className={clsx(styles.infoText)}>{user?.followers}</p>
         </div>
         <div className={styles.userInfo}>
           <b className={styles.boldText}>following</b>
-          <p className={clsx(styles.infoText)}>{user.following}</p>
+          <p className={clsx(styles.infoText)}>{user?.following}</p>
         </div>
       </div>
       <div className={styles.bottom}>

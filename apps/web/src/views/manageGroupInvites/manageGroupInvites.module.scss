@@ -1,0 +1,98 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  max-width: $desktopBreakpoint;
+  height: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+}
+
+.addButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  gap: $padding;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.infiniteLoad {
+  overflow-y: auto;
+  z-index: 101;
+  max-height: calc(100vh - $doublePadding * 4);
+  padding: $padding;
+
+  .invitesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: $padding;
+  }
+
+  .inviteItem {
+    padding: $padding;
+    border-radius: $borderRadius;
+    display: flex;
+    flex-direction: column;
+    gap: $halfPadding;
+  }
+
+  .loadMoreTrigger {
+    height: $baseComponentHeight;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: $padding;
+  }
+}
+
+.invitesContainer + .invitesContainer {
+  margin-top: $padding;
+}
+
+.description {
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+.info {
+  margin-left: $halfPadding;
+}
+
+.title {
+  margin-bottom: $halfPadding;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: $padding;
+}
+
+.actionButton {
+  width: 100%;
+}
+
+.editTeamDialogWrapper {
+  z-index: 200;
+}

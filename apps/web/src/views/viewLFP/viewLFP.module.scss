@@ -1,1 +1,54 @@
 @import "../../styles/";
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: $borderRadius;
+  padding: $padding;
+  text-decoration: none;
+  gap: $padding;
+}
+
+.pfp {
+  width: $baseComponentHeight * 2;
+  height: $baseComponentHeight * 2;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+.textTop {
+  display: flex;
+  gap: $padding;
+  align-items: center;
+}
+
+.actionButtons {
+  display: flex;
+  gap: $halfPadding;
+  width: 100%;
+}
+
+.actionButton,
+.wrapper {
+  width: 100%;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  width: 100%;
+}
+
+.pagination {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: $padding;
+  padding: $padding;
+  border-radius: $borderRadius;
+  margin-top: $padding;
+}
+
+.paginationButton {
+  border: 0;
+  background-color: transparent;
+}

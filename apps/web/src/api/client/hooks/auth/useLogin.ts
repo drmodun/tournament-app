@@ -5,7 +5,7 @@ import {
   IUserLoginResponse,
 } from "@tournament-app/types";
 import { clientApi, setAuthTokens } from "api/client/base";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
@@ -23,12 +23,16 @@ export const loginUser = async (data: IEmailPasswordLoginRequest) =>
 export const useLogin = () => {
   const toast = useToastContext();
   const navigate = useRouter();
+  const queryClient = useQueryClient();
   const { refetch, isSuccess } = useAuth();
 
   return useMutation({
     mutationFn: loginUser,
     onSuccess: async (data) => {
       setAuthTokens(data.accessToken, data.refreshToken);
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("me"),
+      });
       toast.addToast("successfully logged in", "success"); //TODO: make this an object for easier and more consistent usage
       await refetch();
 
@@ -41,5 +45,6 @@ export const useLogin = () => {
     onMutate: () => {
       toast.addToast("logging in...", "info");
     },
+    retryDelay: 5000,
   });
 };

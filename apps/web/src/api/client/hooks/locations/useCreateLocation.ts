@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi, getAccessToken } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
@@ -21,11 +21,16 @@ export const createLocation = async (data: ICreateLocationRequest) =>
 
 export const useCreateLocation = () => {
   const toast = useToastContext();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["me"],
     mutationFn: createLocation,
     retryDelay: 2000,
     retry: 3,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("location"),
+      });
+    },
   });
 };

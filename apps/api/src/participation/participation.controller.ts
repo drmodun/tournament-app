@@ -70,7 +70,7 @@ export class ParticipationController {
     );
 
     return {
-      data: results,
+      results: results,
       metadata,
     };
   }

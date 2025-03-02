@@ -6,6 +6,7 @@
 
 .userCardLink {
   background-color: transparent;
+  min-width: 0;
 }
 
 .userCardWrapper {
@@ -32,7 +33,10 @@
   border-radius: $borderRadius;
   border: none;
   flex-basis: $baseComponentHeight;
-  flex-shrink: 0;
+}
+
+.userCardRemoveButton {
+  flex: 0 0 $baseComponentHeight;
 }
 
 .userCardTextWrapper {
@@ -40,12 +44,14 @@
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  width: 100%;
 }
 
 .userCardText {
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-grow: 0;
+  flex-shrink: 1;
+  white-space: nowrap;
 }
 
 .groupMembers {
@@ -59,4 +65,8 @@
 
 .title {
   margin-bottom: $halfPadding;
+}
+
+.loadMoreButton {
+  margin-left: $padding;
 }

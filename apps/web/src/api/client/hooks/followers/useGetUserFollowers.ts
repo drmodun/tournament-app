@@ -40,7 +40,7 @@ export const useGetUserFollowers = () => {
   const { data } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: ["group", "me"],
+    queryKey: ["me", "follower"],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       getUserFollowers(data?.id, pageParam),
     staleTime: Infinity,

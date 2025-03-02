@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IExtendedUserResponse } from "@tournament-app/types";
 import { clientApi, getAccessToken } from "api/client/base";
 import { AxiosResponse } from "axios";
@@ -16,13 +16,16 @@ export const removeUser = async (data: { groupId: number; userId: number }) =>
 
 export const useRemoveUserFromGroup = () => {
   const toast = useToastContext();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["me"],
     mutationFn: removeUser,
     retryDelay: 10000,
     onSuccess: async (data) => {
       toast.addToast("successfully removed user from group", "success");
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("group"),
+      });
     },
     onError: (error: any) => {
       toast.addToast(

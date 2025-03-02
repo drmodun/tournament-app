@@ -3,6 +3,7 @@ import { FollowerDrizzleRepository } from './followers.repository';
 import { FollowerQuery } from './dto/request.dto';
 import { FollowerResponse } from './dto/responses.dto';
 import { FollowerResponsesEnum } from '@tournament-app/types';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class FollowersService {
@@ -61,6 +62,28 @@ export class FollowersService {
     });
 
     return results.length > 0;
+  }
+
+  async autoCompleteFollowers(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return await this.followerRepository.autoCompleteFollowers(search, userId, {
+      pageSize,
+      page,
+    });
+  }
+
+  async autoCompleteFollowing(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return await this.followerRepository.autoCompleteFollowing(search, userId, {
+      pageSize,
+      page,
+    });
   }
 }
 

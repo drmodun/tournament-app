@@ -37,6 +37,10 @@ export interface FullCountRequest {
   returnFullCount: boolean;
 }
 
+export interface BaseSearchRequest {
+  search?: string;
+}
+
 export interface ResponseTypeRequest<TResponseType extends string> {
   responseType: TResponseType;
 }
@@ -45,6 +49,7 @@ export type BaseQueryType<TResponseType extends string = string> =
   BaseSortRequest &
     FullCountRequest &
     ResponseTypeRequest<TResponseType> &
-    BasePaginationRequest;
+    BasePaginationRequest &
+    BaseSearchRequest;
 
 // Possibly validate these with class validator later

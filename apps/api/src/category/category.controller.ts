@@ -35,6 +35,7 @@ import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('categories')
 @ApiExtraModels(
@@ -46,6 +47,19 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
+
+  @Get('auto-complete/:search')
+  @ApiOkResponse({ type: [CategoryMiniResponseWithLogo] })
+  async categoryAutoComplete(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.categoryService.categoryAutoComplete(
+      search,
+      query.pageSize,
+      query.page,
+    );
+  }
 
   @Get()
   @ApiOkResponse({

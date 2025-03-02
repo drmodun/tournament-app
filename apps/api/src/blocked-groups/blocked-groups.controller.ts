@@ -10,17 +10,34 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BlockedGroupsService } from './blocked-groups.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
+import { MiniGroupResponseWithLogo } from 'src/group/dto/responses.dto';
 
 @Controller('blocked-groups')
 @ApiTags('Blocked Groups')
 export class BlockedGroupsController {
   constructor(private readonly blockedGroupsService: BlockedGroupsService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: [MiniGroupResponseWithLogo] })
+  @Get('auto-complete/:search')
+  async autoComplete(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.blockedGroupsService.searchBlockedGroups(
+      search,
+      user.id,
+      query,
+    );
+  }
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

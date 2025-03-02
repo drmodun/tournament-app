@@ -10,6 +10,7 @@ import {
   groupRoleEnum,
 } from '@tournament-app/types';
 import { GroupMembershipResponse } from './dto/responses.dto';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class GroupMembershipService {
@@ -35,6 +36,17 @@ export class GroupMembershipService {
     return results as TResponseType[];
   }
 
+  async autoComplete(
+    groupId: number,
+    search: string,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return await this.groupMembershipRepository.autoComplete(search, groupId, {
+      pageSize,
+      page,
+    });
+  }
+
   async findOne<
     TResponseType extends
       BaseGroupMembershipResponseType = GroupMembershipResponse,
@@ -56,6 +68,18 @@ export class GroupMembershipService {
     }
 
     return results[0] as TResponseType;
+  }
+
+  async autoCompleteGroups(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return await this.groupMembershipRepository.autoCompleteGroups(
+      search,
+      userId,
+      { pageSize, page },
+    );
   }
 
   async findOneWithoutThrow(

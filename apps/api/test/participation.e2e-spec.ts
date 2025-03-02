@@ -95,8 +95,8 @@ describe('ParticipationController (e2e)', () => {
         .set('Authorization', `Bearer ${regularUserToken}`)
         .expect(200);
 
-      expect(response.body.data[0]).toHaveProperty('id');
-      expect(response.body.data[0]).toHaveProperty('tournamentId');
+      expect(response.body.results[0]).toHaveProperty('id');
+      expect(response.body.results[0]).toHaveProperty('tournamentId');
       expect(response.body.metadata).toBeDefined();
     });
 
@@ -106,8 +106,8 @@ describe('ParticipationController (e2e)', () => {
         .set('Authorization', `Bearer ${regularUserToken}`)
         .expect(200);
 
-      expect(response.body.data[0]).toHaveProperty('id');
-      expect(response.body.data[0]).toHaveProperty('tournamentId');
+      expect(response.body.results[0]).toHaveProperty('id');
+      expect(response.body.results[0]).toHaveProperty('tournamentId');
       expect(response.body.metadata).toBeDefined();
     });
 
@@ -117,10 +117,10 @@ describe('ParticipationController (e2e)', () => {
         .set('Authorization', `Bearer ${regularUserToken}`)
         .expect(200);
 
-      expect(response.body.data[0]).toHaveProperty('id');
-      expect(response.body.data[0]).toHaveProperty('tournamentId');
-      expect(response.body.data[0]).toHaveProperty('userId');
-      expect(response.body.data[0]).toHaveProperty('groupId');
+      expect(response.body.results[0]).toHaveProperty('id');
+      expect(response.body.results[0]).toHaveProperty('tournamentId');
+      expect(response.body.results[0]).toHaveProperty('userId');
+      expect(response.body.results[0]).toHaveProperty('groupId');
       expect(response.body.metadata).toBeDefined();
     });
 
@@ -132,7 +132,7 @@ describe('ParticipationController (e2e)', () => {
         .expect(200);
 
       expect(
-        response.body.data.every((p) => p.tournamentId === tournamentId),
+        response.body.results.every((p) => p.tournamentId === tournamentId),
       ).toBeTruthy();
     });
 
@@ -143,7 +143,9 @@ describe('ParticipationController (e2e)', () => {
         .set('Authorization', `Bearer ${regularUserToken}`)
         .expect(200);
 
-      expect(response.body.data.every((p) => p.userId === userId)).toBeTruthy();
+      expect(
+        response.body.results.every((p) => p.userId === userId),
+      ).toBeTruthy();
     });
 
     it('should filter participations by groupId', async () => {
@@ -154,7 +156,7 @@ describe('ParticipationController (e2e)', () => {
         .expect(200);
 
       expect(
-        response.body.data.every((p) => p.groupId === groupId),
+        response.body.results.every((p) => p.groupId === groupId),
       ).toBeTruthy();
     });
   });

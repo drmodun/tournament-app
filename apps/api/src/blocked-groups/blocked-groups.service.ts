@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 import { GroupDrizzleRepository } from 'src/group/group.repository';
 
 @Injectable()
@@ -41,5 +42,16 @@ export class BlockedGroupsService {
     );
 
     return results;
+  }
+
+  async searchBlockedGroups(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return await this.groupRepository.searchBlockedGroups(search, userId, {
+      pageSize,
+      page,
+    });
   }
 }

@@ -109,4 +109,8 @@ export class UsersService {
 
     return action[0];
   }
+
+  async userAutoComplete(search: string, pageSize: number = 10) {
+    return this.repository.userAutoComplete(search, pageSize);
+  }
 }

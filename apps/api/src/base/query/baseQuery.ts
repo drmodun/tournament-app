@@ -50,6 +50,11 @@ export abstract class BaseQuery<TResponseType extends string = string>
   @IsPositive()
   @Max(100)
   pageSize?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  search?: string;
 }
 
 export class PaginationOnly implements Partial<PaginationInstance> {

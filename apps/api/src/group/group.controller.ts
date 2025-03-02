@@ -72,6 +72,19 @@ export class GroupController {
     return await this.groupService.groupAutoComplete(search, query.pageSize);
   }
 
+  @Get('for-roster/:tournamentId')
+  @UseGuards(JwtAuthGuard, GroupAdminGuard)
+  @ApiOkResponse({ type: [MiniGroupResponseWithLogo] })
+  async getGroupsEligibleForRosterCreation(
+    @Param('tournamentId', ParseIntPipe) tournamentId: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.groupService.getGroupsEligibleForRosterCreation(
+      tournamentId,
+      user.id,
+    );
+  }
+
   @Get()
   @ApiOkResponse({
     content: {

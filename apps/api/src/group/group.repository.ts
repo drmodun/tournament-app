@@ -8,6 +8,7 @@ import {
   asc,
   sql,
   ilike,
+  or,
 } from 'drizzle-orm';
 import {
   group,
@@ -387,5 +388,36 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       .offset(offset);
 
     return results;
+  }
+
+  async getGroupsEligibleForRosterCreation(
+    tournamentId: number,
+    userId: number,
+  ) {
+    const groups: IMiniGroupResponseWithLogo[] = await db
+      .select({
+        id: group.id,
+        name: group.name,
+        abbreviation: group.abbreviation,
+        locationId: group.locationId,
+        logo: group.logo,
+      })
+      .from(participation)
+      .leftJoin(group, eq(participation.groupId, group.id))
+      .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
+      .where(
+        and(
+          eq(participation.tournamentId, tournamentId),
+          and(
+            or(
+              eq(groupToUser.role, groupRoleEnum.ADMIN),
+              eq(groupToUser.role, groupRoleEnum.OWNER),
+            ),
+            eq(groupToUser.userId, userId),
+          ),
+        ),
+      );
+
+    return groups;
   }
 }

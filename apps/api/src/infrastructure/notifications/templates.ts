@@ -18,7 +18,7 @@ export const templates: Record<TemplatesEnum, string> = {
   [TemplatesEnum.TEST_TEMPLATE]: `Hello, this is a test template`,
   [TemplatesEnum.WELCOME]: `Hello {{username}}, welcome to the app`,
   [TemplatesEnum.RESET_PASSWORD]: `Hello {{username}}, click this link to reset your password: {{resetLink}}`,
-  [TemplatesEnum.VERIFY_EMAIL]: `Hello {{username}}, your verification code is: {{otpCode}}`,
+  [TemplatesEnum.EMAIL_CONFIRMATION]: `Hello {{username}}, click this link to confirm your email: {{link}}`,
   [TemplatesEnum.NOTIFICATION_OF_BAN]: `Hello {{username}}, you have been banned for the following reason: {{reason}}`,
 };
 

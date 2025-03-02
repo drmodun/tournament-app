@@ -1,0 +1,1 @@
+ALTER TABLE "user" DROP COLUMN IF EXISTS "email_confirmation_token_expires_at";

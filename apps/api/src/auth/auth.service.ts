@@ -13,6 +13,7 @@ import {
   userRoleEnumType,
 } from '@tournament-app/types';
 import { UserDtosEnum } from 'src/users/types';
+import { PasswordResetTokenDto, SseTokenDto } from './dto/validatedUser.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -90,5 +91,43 @@ export class AuthService {
     const user = await this.userService.findOne(payload.id);
     if (!user) throw new UnauthorizedException();
     return user;
+  }
+
+  async passwordResetRequest(email: string) {
+    const user: PasswordResetTokenDto = await this.userService.findOneByEmail(
+      email,
+      UserDtosEnum.PASSWORD_RESET_TOKEN,
+    );
+
+    if (!user) throw new NotFoundException();
+
+    await this.userService.setPasswordResetTokenAndSendEmail(email);
+  }
+
+  async passwordReset(token: string, password: string) {
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    const result = await this.userService.resetPassword(
+      token,
+      encryptedPassword,
+    );
+
+    if (!result) throw new UnauthorizedException();
+  }
+
+  async emailConfirmation(token: string) {
+    const result = await this.userService.confirmUserEmail(token);
+    if (!result) throw new UnauthorizedException();
+  }
+
+  async getSseToken(userId: number) {
+    const user: SseTokenDto = await this.userService.findOne(
+      userId,
+      UserDtosEnum.SSE_TOKEN,
+    );
+
+    if (!user) throw new NotFoundException();
+
+    return user.sseToken;
   }
 }

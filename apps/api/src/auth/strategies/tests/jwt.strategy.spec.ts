@@ -5,6 +5,7 @@ import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { userRoleEnum } from '@tournament-app/types';
 import { AccessTokenStrategy } from '../accessToken.strategy';
 import { UserDrizzleRepository } from 'src/users/user.repository';
+import { EmailModule } from 'src/infrastructure/email/email.module';
 
 describe('AccessTokenStrategy', () => {
   let jwtStrategy: AccessTokenStrategy;
@@ -16,6 +17,7 @@ describe('AccessTokenStrategy', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [UsersService, AccessTokenStrategy, UserDrizzleRepository],
+      imports: [EmailModule],
     }).compile();
 
     jwtStrategy = module.get<AccessTokenStrategy>(AccessTokenStrategy);

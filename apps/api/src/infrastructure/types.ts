@@ -8,7 +8,7 @@ export interface EmailGenerationData {
 export enum TemplatesEnum {
   WELCOME = 'welcome',
   RESET_PASSWORD = 'reset-password',
-  VERIFY_EMAIL = 'verify-email',
+  EMAIL_CONFIRMATION = 'email-confirmation',
   NOTIFICATION_OF_BAN = 'notification-of-ban',
   BET_OUTCOME = 'bet-outcome',
   TOURNAMENT_REMINDER = 'tournament-reminder',
@@ -29,14 +29,16 @@ class WelcomeInfo {
   username: string;
 }
 
-class ResetPasswordInfo {
+export class ResetPasswordInfo {
   username: string;
   resetLink: string;
+  email: string;
 }
 
-class VerifyEmailInfo {
+export class VerifyEmailInfo {
+  link: string;
+  email: string;
   username: string;
-  otpCode: string;
 }
 
 class NotificationOfBanInfo {
@@ -115,7 +117,7 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   'tournament-end': TournamentEndInfo,
   'tournament-reminder': TournamentReminderInfo,
   'tournament-start': TournamentStartInfo,
-  'verify-email': VerifyEmailInfo,
+  'email-confirmation': VerifyEmailInfo,
   'test-template': {},
 };
 

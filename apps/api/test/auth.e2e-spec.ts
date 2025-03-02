@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { AuthModule } from '../src/auth/auth.module';
 import { UsersService } from '../src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IUserLoginResponse } from '@tournament-app/types';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -67,10 +67,7 @@ describe('AuthController (e2e)', () => {
     });
 
     it('should return 401 when credentials are invalid', () => {
-      jest
-        .spyOn(bcrypt, 'compare')
-        .mockImplementation(() => Promise.resolve(false));
-
+      bcrypt.compare.mockResolvedValue(false);
       return request(app.getHttpServer())
         .post('/auth/login')
         .send(loginDto)

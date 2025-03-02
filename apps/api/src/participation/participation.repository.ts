@@ -27,6 +27,7 @@ import {
   PgColumn,
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
+import { db } from 'src/db/db';
 
 @Injectable()
 export class ParticipationDrizzleRepository extends PrimaryRepository<

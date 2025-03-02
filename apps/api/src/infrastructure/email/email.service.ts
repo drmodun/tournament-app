@@ -14,6 +14,7 @@ import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { cwd } from 'process';
 import { join } from 'path';
+import 'form-data';
 
 @Injectable()
 export class EmailService {
@@ -122,5 +123,10 @@ export class EmailService {
       this.logger.error('Error sending email', error.stack);
       throw new InternalServerErrorException('Error sending email');
     }
+  }
+
+  async generateAndSendEmail(sendObject: EmailGenerationData) {
+    const emailData = await this.generateMailgunMessageData(sendObject);
+    await this.sendMail(emailData);
   }
 }

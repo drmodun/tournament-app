@@ -197,6 +197,20 @@
       "when": 1740872469064,
       "tag": "0027_married_fallen_one",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1740919938761,
+      "tag": "0028_fearless_misty_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1740943832845,
+      "tag": "0029_dizzy_miss_america",
+      "breakpoints": true
     }
   ]
 }

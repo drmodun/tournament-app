@@ -53,7 +53,7 @@ export const useCreatorUserGroups = () => {
   const { data } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: ["group", "me", data?.id?.toString() ?? "guest"],
+    queryKey: [data?.id?.toString() ?? "guest", "me"],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       getCreatorUserGroups(data?.id, pageParam),
     staleTime: Infinity,

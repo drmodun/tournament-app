@@ -35,7 +35,7 @@ export const getLocations = async (pageParam?: number) =>
 
 export const useGetLocations = () => {
   return useInfiniteQuery({
-    queryKey: ["locations"],
+    queryKey: ["location"],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       getLocations(pageParam),
     staleTime: Infinity,

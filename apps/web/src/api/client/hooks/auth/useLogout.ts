@@ -8,7 +8,9 @@ export const useLogout = () => {
 
   return () => {
     clearAuthTokens();
-    queryClient.invalidateQueries({ queryKey: ["me"] });
+    queryClient.invalidateQueries({
+      predicate: (query) => query.queryKey.includes("me"),
+    });
     queryClient.setQueryData(["me"], null);
   };
 };

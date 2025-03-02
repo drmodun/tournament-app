@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   clientApi,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
@@ -25,14 +25,17 @@ export const editCompetition = async (
 
 export const useEditCompetition = () => {
   const toast = useToastContext();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["me"],
     mutationFn: editCompetition,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     onSuccess: async (data) => {
       toast.addToast("successfully updated competition", "success");
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("competition"),
+      });
     },
     onError: (error: any) => {
       toast.addToast(

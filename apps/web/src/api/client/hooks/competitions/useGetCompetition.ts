@@ -21,13 +21,13 @@ export const getCompetition = async (competitionId: number | undefined) =>
   clientApi
     .get<
       never,
-      AxiosResponse<IBaseQueryResponse<IExtendedTournamentResponse>>
+      AxiosResponse<IExtendedTournamentResponse>
     >(`/tournaments/${competitionId}`, { params: { id: competitionId, responseType: TournamentResponsesEnum.EXTENDED } })
     .then((res) => res.data);
 
 export const useGetCompetition = (competitionId: number) => {
   return useQuery({
-    queryKey: ["competition"],
+    queryKey: [competitionId, "competition"],
     queryFn: () => getCompetition(competitionId),
     staleTime: Infinity,
     retryDelay: SMALL_QUERY_RETRY_DELAY,

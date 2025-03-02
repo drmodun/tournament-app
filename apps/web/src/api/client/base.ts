@@ -76,7 +76,7 @@ clientApi.interceptors.response.use(
     }
 
     try {
-      const response = await clientApi.post<any>("/auth/refresh", null, {
+      const response = await clientApi.get<any>("/auth/refresh", {
         headers: {
           Authorization: `Bearer ${refreshToken}`,
         },

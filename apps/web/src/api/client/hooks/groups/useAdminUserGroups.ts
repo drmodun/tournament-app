@@ -53,7 +53,7 @@ export const useAdminUserGroups = () => {
   const { data } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: ["group", "me", data?.id?.toString() ?? "guest"],
+    queryKey: ["group", "me", data?.id],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       getAdminUserGroups(data?.id, pageParam),
     staleTime: Infinity,

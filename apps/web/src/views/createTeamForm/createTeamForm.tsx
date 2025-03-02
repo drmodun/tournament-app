@@ -17,6 +17,7 @@ import SlideButton from "components/slideButton";
 import CheckboxGroup from "components/checkboxGroup";
 import {
   ICreateGroupRequest,
+  ILFPResponse,
   tournamentLocationEnum,
 } from "@tournament-app/types";
 import RichEditor from "components/richEditor";
@@ -28,6 +29,7 @@ import { COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
 import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { UseMutationResult } from "@tanstack/react-query";
+import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
 
 type LocationType = "offline" | "online" | "hybrid";
 
@@ -40,19 +42,42 @@ export default function CreateTeamForm({
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
   const [placeId, setPlaceId] = useState<string>();
+  const [locationId, setLocationId] = useState<number>();
+  const [finalLocationName, setFinalLocationName] = useState<string>();
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
+  const createLocationMutation = useCreateLocation();
+  const [logo, setLogo] = useState<string>();
 
   const addMethods = useForm<ICreateGroupRequest>();
   const onAddSubmit: SubmitHandler<ICreateGroupRequest> = (data) => {
+    data.locationId = locationId;
+    if (logo) data.logo = logo;
     console.log(data);
     mutation.mutate(data);
   };
 
-  const handleAutocomplete = (
+  const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
+    placeName?: string,
   ) => {
     listener && google.maps.event.removeListener(listener);
-    setPlaceId(autocomplete.getPlace().place_id);
+
+    const place = autocomplete.getPlace();
+
+    console.log(!place.geometry?.location, !placeName, !place.place_id);
+    if (!place.geometry?.location || !placeName || !place.place_id) return;
+
+    const res = await createLocationMutation.mutateAsync({
+      lat: place.geometry?.location?.lat(),
+      lng: place.geometry?.location?.lng(),
+      name: placeName,
+      apiId: place.place_id,
+    });
+
+    console.log(res);
+
+    setLocationId(res.id);
+    setFinalLocationName(placeName);
   };
 
   useEffect(() => {
@@ -75,7 +100,7 @@ export default function CreateTeamForm({
             name="name"
             reactFormHookProps={{
               pattern: {
-                value: /^\S{6,32}$/i,
+                value: /^.{6,32}/i,
                 message: "group name must be between 6 and 32 characters",
               },
             }}
@@ -126,6 +151,7 @@ export default function CreateTeamForm({
               variant={textColorTheme}
               className={styles.imagePicker}
               required={true}
+              onChange={setLogo}
             />
           ) : (
             <ImageDrop
@@ -193,8 +219,6 @@ export default function CreateTeamForm({
             doesSearch={true}
             label="country"
             placeholder="select group country"
-            name="country"
-            isReactHookForm={true}
             required={true}
             variant={textColorTheme}
             innerWrapperClassName={styles.dropdown}
@@ -220,14 +244,13 @@ export default function CreateTeamForm({
               fetchAutocomplete(e.target).then((autocomplete) => {
                 const tempListener = autocomplete.addListener(
                   "place_changed",
-                  () => handleAutocomplete(autocomplete),
+                  () => handleAutocomplete(autocomplete, e.target.value),
                 );
                 setListener(tempListener);
               });
             }}
           />
-
-          {addMethods.formState.errors.location?.type === "required" && (
+          {!locationId && (
             <p className={styles.error}>this field is required!</p>
           )}
         </div>

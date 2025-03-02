@@ -10,6 +10,7 @@ import {
   inverseTextColor,
 } from "types/styleTypes";
 import { clsx } from "clsx";
+import { useFormContext } from "react-hook-form";
 
 interface MultilineInputProps {
   style?: React.CSSProperties;
@@ -20,6 +21,11 @@ interface MultilineInputProps {
   variant?: Variants;
   labelVariant?: TextVariants;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+  isReactFormHook?: boolean;
+  reactFormHookProps?: Object;
+  required?: boolean;
+  name?: string;
+  defaultValue?: string;
 }
 
 export default function Input({
@@ -31,7 +37,13 @@ export default function Input({
   variant = "light",
   labelVariant,
   onChange = () => {},
+  isReactFormHook = false,
+  reactFormHookProps,
+  required = false,
+  name,
+  defaultValue,
 }: MultilineInputProps) {
+  const methods = useFormContext();
   return (
     <div>
       {label && (
@@ -45,18 +57,39 @@ export default function Input({
           {label}
         </p>
       )}
-      <textarea
-        onChange={onChange}
-        placeholder={placeholder}
-        className={clsx(
-          className,
-          styles.input,
-          variant == "light" && styles.lightPlaceholder,
-          globals[`${variant}BackgroundColorDynamic`],
-          globals[`${textColor(variant)}Color`],
-        )}
-        style={style}
-      />
+      {isReactFormHook ? (
+        <textarea
+          placeholder={placeholder}
+          className={clsx(
+            className,
+            styles.input,
+            variant == "light" && styles.lightPlaceholder,
+            globals[`${variant}BackgroundColorDynamic`],
+            globals[`${textColor(variant)}Color`],
+          )}
+          style={style}
+          {...methods.register(name ?? "", {
+            required: required,
+            onChange: onChange,
+            ...reactFormHookProps,
+          })}
+          defaultValue={defaultValue}
+        />
+      ) : (
+        <textarea
+          placeholder={placeholder}
+          className={clsx(
+            className,
+            styles.input,
+            variant == "light" && styles.lightPlaceholder,
+            globals[`${variant}BackgroundColorDynamic`],
+            globals[`${textColor(variant)}Color`],
+          )}
+          style={style}
+          onChange={onChange}
+          name={name}
+        />
+      )}
     </div>
   );
 }

@@ -22,6 +22,7 @@ import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import Link from "next/link";
 import { useRemoveUserFromGroup } from "api/client/hooks/groups/useRemoveUserFromGroup";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import Button from "components/button";
 
 type UserCardProps = {
   id: number;
@@ -81,7 +82,7 @@ const UserCard = ({
             )}
             title={username}
           >
-            <b className={styles.userCardText}>{username} </b>
+            <b className={styles.userCardText}>{username}</b>
             <p className={styles.userCardText}>
               {country &&
                 getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[country] ?? "ZZ")}
@@ -111,8 +112,30 @@ const UserCard = ({
 export default function ManageTeamMembers({ teamId }: { teamId: number }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const { data: groupMembers, isLoading: groupMembersIsLoading } =
-    useGetGroupMembers(teamId);
+  const {
+    data: groupMembers,
+    isLoading: groupMembersIsLoading,
+    fetchNextPage,
+    isFetchNextPageError,
+    isFetchingNextPage,
+  } = useGetGroupMembers(teamId);
+  const [activePage, setActivePage] = useState<number>(0);
+  const [fetchLimit, setFetchLimit] = useState<number>(-1);
+
+  useEffect(() => {
+    console.log("diwoa", groupMembers);
+  }, [groupMembers]);
+
+  const forward = async () => {
+    if (activePage == fetchLimit) return;
+    const nextPage = await fetchNextPage();
+    if (nextPage.data?.pages[activePage]?.members?.length == 0) {
+      setFetchLimit(activePage);
+      return;
+    }
+
+    setActivePage((prev) => prev + 1);
+  };
 
   return (
     <div className={clsx(styles.wrapper)}>
@@ -122,20 +145,33 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
         <>
           <p className={styles.title}>
             <b className={globals[`${textColorTheme}Color`]}>team members</b>
+            <Button
+              onClick={forward}
+              disabled={
+                activePage == fetchLimit ||
+                isFetchNextPageError ||
+                isFetchingNextPage
+              }
+              variant={textColorTheme}
+              label="load more"
+              className={styles.loadMoreButton}
+            />
           </p>
           <div className={styles.groupMembers}>
-            {groupMembers?.members?.length == 0 || !groupMembers ? (
+            {groupMembers?.pages[0].members?.length == 0 || !groupMembers ? (
               <p>there are no team members!</p>
             ) : (
-              groupMembers?.members?.map(
-                (member: {
-                  id: number;
-                  username: string;
-                  profilePicture: string;
-                  country: string;
-                  createdAt: string;
-                  role: groupRoleEnumType;
-                }) => <UserCard {...member} groupId={teamId} />,
+              groupMembers?.pages.flatMap((e) =>
+                e?.members?.flatMap(
+                  (member: {
+                    id: number;
+                    username: string;
+                    profilePicture: string;
+                    country: string;
+                    createdAt: string;
+                    role: groupRoleEnumType;
+                  }) => <UserCard {...member} groupId={teamId} />,
+                ),
               )
             )}
           </div>

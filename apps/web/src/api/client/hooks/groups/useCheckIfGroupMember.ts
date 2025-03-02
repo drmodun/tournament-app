@@ -40,7 +40,7 @@ export const useCheckIfGroupMember = (groupId?: number) => {
   const { data } = useAuth();
 
   return useQuery({
-    queryKey: ["group", "me"],
+    queryKey: ["group", "me", groupId],
     queryFn: () => checkIfGroupMember(data?.id, groupId),
     staleTime: Infinity,
     retryDelay: SMALL_QUERY_RETRY_DELAY,

@@ -26,7 +26,7 @@ export const getGroup = async (groupId: number) =>
 
 export const useGetGroup = (groupId: number) => {
   return useQuery({
-    queryKey: ["group", "me"],
+    queryKey: ["group", groupId ?? ""],
     queryFn: () => getGroup(groupId),
     staleTime: Infinity,
     retryDelay: SMALL_QUERY_RETRY_DELAY,

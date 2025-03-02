@@ -25,32 +25,6 @@ import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 
-type CompetitionInputs = {
-  name: string;
-  category: string;
-  type: string;
-  teamCompetition: boolean;
-  public: boolean;
-  eloConstraint: boolean;
-  location: "online" | "offline" | "hybrid";
-  locationDetails?: string;
-  eloRange?: [number, number];
-  leagueFormat?: boolean;
-};
-
-type EditCompetitionInputs = {
-  name?: string;
-  category?: string;
-  type?: string;
-  teamCompetition?: boolean;
-  public?: boolean;
-  eloConstraint?: boolean;
-  location?: "online" | "offline" | "hybrid";
-  locationDetails?: string;
-  eloRange?: [number, number];
-  leagueFormat?: boolean;
-};
-
 export default function ManageCompetitions({
   user,
 }: {

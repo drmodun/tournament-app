@@ -62,6 +62,7 @@ export default function RegisterForm() {
                       ? "danger"
                       : textColorTheme
                   }
+                  labelVariant={textColorTheme}
                   label="username"
                   placeholder="enter your username"
                   name="username"
@@ -101,6 +102,7 @@ export default function RegisterForm() {
                     methods.formState.errors.email ? "danger" : textColorTheme
                   }
                   label="email"
+                  labelVariant={textColorTheme}
                   placeholder="enter your email address"
                   name="email"
                   required={true}
@@ -141,6 +143,7 @@ export default function RegisterForm() {
                       ? "danger"
                       : textColorTheme
                   }
+                  labelVariant={textColorTheme}
                   label="password"
                   placeholder="enter your password"
                   name="password"
@@ -183,6 +186,7 @@ export default function RegisterForm() {
                   variant={
                     methods.formState.errors.name ? "danger" : textColorTheme
                   }
+                  labelVariant={textColorTheme}
                   label="full name"
                   placeholder="enter your full name"
                   name="name"
@@ -230,6 +234,7 @@ export default function RegisterForm() {
                   })}
                   searchPlaceholder="search..."
                   doesSearch={true}
+                  labelVariant={textColorTheme}
                   label="nationality"
                   placeholder="select your nationality"
                   name="country"
@@ -259,6 +264,7 @@ export default function RegisterForm() {
                       ? "danger"
                       : textColorTheme
                   }
+                  labelVariant={textColorTheme}
                   label="date of birth"
                   placeholder="enter your date of birth"
                   name="dateOfBirth"

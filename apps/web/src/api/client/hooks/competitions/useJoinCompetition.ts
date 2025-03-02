@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
@@ -15,13 +15,16 @@ export const joinCompetition = async (
 export const useJoinCompetition = (competitionId: number) => {
   const toast = useToastContext();
   const { data } = useAuth();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["me"],
     mutationFn: () => joinCompetition(competitionId, data?.id),
     retryDelay: 10000,
     onSuccess: async (data) => {
       toast.addToast("successfully joined competition", "success");
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("competition"),
+      });
     },
     onError: (error: any) => {
       toast.addToast(

@@ -21,13 +21,12 @@ export const getCompetitions = async (page?: number) =>
       AxiosResponse<IBaseQueryResponse<IExtendedTournamentResponse>>
     >(`/tournaments`, { params: { responseType: TournamentResponsesEnum.EXTENDED, page: page ?? 1, pageSize: 10 } })
     .then((res) => {
-      console.log("DATA", res.data);
       return res.data;
     });
 
 export const useGetCompetitions = () => {
   return useInfiniteQuery({
-    queryKey: [],
+    queryKey: ["competition"],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       getCompetitions(pageParam),
     staleTime: Infinity,

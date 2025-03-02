@@ -103,13 +103,6 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
 
     const place = autocomplete.getPlace();
 
-    console.log({
-      lat: place.geometry?.location?.lat(),
-      lng: place.geometry?.location?.lng(),
-      name: placeName,
-      apiId: place.place_id,
-    });
-
     if (!place.geometry?.location || !placeName || !place.place_id) return;
 
     const res = await createLocationMutation.mutateAsync({

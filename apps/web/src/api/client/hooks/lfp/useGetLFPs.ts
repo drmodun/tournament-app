@@ -1,9 +1,12 @@
-"use server";
+"use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  GroupResponsesEnum,
   IExtendedUserResponse,
-  UserResponsesEnum,
+  IGetLFPRequest,
+  IGroupResponseExtended,
+  ILFPResponse,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -14,20 +17,18 @@ import {
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-export const getUser = async (userId: number) =>
+export const getLFPs = async (groupId: number, query?: IGetLFPRequest) =>
   clientApi
-    .get<never, AxiosResponse<IExtendedUserResponse>>(`/users/${userId}`, {
-      params: {
-        id: userId,
-        responseType: UserResponsesEnum.EXTENDED,
-      },
-    })
+    .get<
+      never,
+      AxiosResponse<ILFPResponse[]>
+    >(`/lfp/${groupId}`, { params: query })
     .then((res) => res.data);
 
-export const useGetUser = (userId: number) => {
+export const useGetLFPs = (groupId: number, query?: IGetLFPRequest) => {
   return useQuery({
-    queryKey: ["userId", "me"],
-    queryFn: () => getUser(userId),
+    queryKey: [groupId, query, "lfp"],
+    queryFn: () => getLFPs(groupId, query),
     staleTime: Infinity,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,

@@ -123,7 +123,7 @@ export class GroupInviteDrizzleRepository extends CompositeRepository<
             return eq(groupInvite.userId, value as number);
           case 'groupId':
             return eq(groupInvite.groupId, value as number);
-          case 'relatedLFTId':
+          case 'relatedLFGId':
             return eq(groupInvite.relatedLFGId, value as number);
           default: // TODO: fix the G into a T
             return undefined;

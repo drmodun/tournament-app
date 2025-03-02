@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   clientApi,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
@@ -21,14 +21,17 @@ export const createSoloParticipation = async (id: number) => {
 
 export const useCreateSoloParticipation = () => {
   const toast = useToastContext();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["me"],
     mutationFn: createSoloParticipation,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     onSuccess: async (data) => {
       toast.addToast("successfully joined competition", "success");
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("participation"),
+      });
     },
     onError: (error: any) => {
       toast.addToast("an error occurred...", "error");

@@ -34,7 +34,7 @@ export const getGroupTournaments = async (groupId: number | undefined) =>
 
 export const useGetGroupTournaments = (groupId: number | undefined) => {
   return useQuery({
-    queryKey: ["group", "me"],
+    queryKey: ["group", groupId],
     queryFn: () => getGroupTournaments(groupId),
     staleTime: Infinity,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,

@@ -251,3 +251,15 @@
   flex-direction: column;
   gap: $halfPadding;
 }
+
+.lfpEditButton,
+.lfpDeleteButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.actionButtons {
+  display: flex;
+  gap: $halfPadding;
+}

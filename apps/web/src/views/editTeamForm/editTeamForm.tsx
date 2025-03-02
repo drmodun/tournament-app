@@ -30,38 +30,54 @@ import ProgressWheel from "components/progressWheel";
 import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
 import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
 import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
+import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
 
-type LocationType = "offline" | "online" | "hybrid";
-
-type CreateTeamFormProps = {
+type EditTeamFormProps = {
   mutation: UseMutationResult<any, any, Partial<ICreateGroupRequest>, void>;
   groupId: number;
 };
 
-export default function CreateTeamForm({
-  mutation,
-  groupId,
-}: CreateTeamFormProps) {
+export default function EditTeamForm({ mutation, groupId }: EditTeamFormProps) {
   const { theme } = useThemeContext();
   const { data, isLoading, isError } = useGetGroup(groupId);
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
   const [placeId, setPlaceId] = useState<string>();
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
+  const [locationId, setLocationId] = useState<number>();
+  const [finalLocationName, setFinalLocationName] = useState<string>();
+  const [logo, setLogo] = useState<string>();
 
   const deleteGroupMutation = useDeleteGroup();
 
   const editMethods = useForm<Partial<ICreateGroupRequest>>();
   const onEditSubmit: SubmitHandler<Partial<ICreateGroupRequest>> = (data) => {
-    console.log(data);
+    data.locationId = locationId;
+    if (logo) data.logo = logo;
     mutation.mutate(data);
   };
 
-  const handleAutocomplete = (
+  const createLocationMutation = useCreateLocation();
+
+  const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
+    placeName?: string,
   ) => {
     listener && google.maps.event.removeListener(listener);
-    setPlaceId(autocomplete.getPlace().place_id);
+
+    const place = autocomplete.getPlace();
+
+    if (!place.geometry?.location || !placeName || !place.place_id) return;
+
+    const res = await createLocationMutation.mutateAsync({
+      lat: place.geometry?.location?.lat(),
+      lng: place.geometry?.location?.lng(),
+      name: placeName,
+      apiId: place.place_id,
+    });
+
+    setLocationId(res.id);
+    setFinalLocationName(placeName);
   };
 
   useEffect(() => {
@@ -148,6 +164,7 @@ export default function CreateTeamForm({
                 variant={textColorTheme}
                 className={styles.imagePicker}
                 required={true}
+                onChange={setLogo}
               />
               <Button
                 variant="danger"
@@ -257,7 +274,7 @@ export default function CreateTeamForm({
               fetchAutocomplete(e.target).then((autocomplete) => {
                 const tempListener = autocomplete.addListener(
                   "place_changed",
-                  () => handleAutocomplete(autocomplete),
+                  () => handleAutocomplete(autocomplete, e.target.value),
                 );
                 setListener(tempListener);
               });

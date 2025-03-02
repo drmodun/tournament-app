@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginRequest } from './dto/requests.dto';
 import {
@@ -13,11 +13,41 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { RefreshToken } from 'src/base/decorators/refreshToken.decorator';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from './dto/validatedUser.dto';
+import { PasswordResetRequest } from './dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('password-reset-request/:email')
+  async passwordResetRequest(@Param('email') email: string) {
+    await this.authService.passwordResetRequest(email);
+  }
+
+  @Post('password-reset/:token')
+  async passwordReset(
+    @Param('token') token: string,
+    @Body() passwordResetRequest: PasswordResetRequest,
+  ) {
+    return await this.authService.passwordReset(
+      token,
+      passwordResetRequest.password,
+    );
+  }
+
+  @Get('email-confirmation/:token')
+  async emailConfirmation(@Param('token') token: string) {
+    await this.authService.emailConfirmation(token);
+  }
+
+  @Get('sse-token')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getSseToken(@CurrentUser() user: ValidatedUserDto) {
+    return await this.authService.getSseToken(user.id);
+  }
 
   @Post('login')
   @ApiOkResponse({

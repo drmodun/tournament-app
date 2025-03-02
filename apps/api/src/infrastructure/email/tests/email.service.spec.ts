@@ -7,10 +7,11 @@ import Mailgun from 'mailgun.js';
 import FormData from 'form-data';
 import { EmailGenerationData, TemplatesEnum } from '../../types';
 import Handlebars from 'handlebars';
+import 'reflect-metadata';
 import * as fs from 'fs/promises';
 
-jest.mock('form-data');
 jest.mock('handlebars');
+jest.mock('fs/promises');
 
 describe('EmailService', () => {
   let service: EmailService;
@@ -77,6 +78,10 @@ describe('EmailService', () => {
 
   it('should throw an error if the template is not found', async () => {
     jest.spyOn(logger, 'error').mockImplementation(() => {});
+
+    jest
+      .spyOn(fs, 'readFile')
+      .mockRejectedValue(new Error('Template not found'));
 
     await expect(
       service.getTemplate('some-template' as TemplatesEnum),

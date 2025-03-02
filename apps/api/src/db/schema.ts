@@ -165,9 +165,12 @@ export const user = pgTable(
     email: text('email').notNull().unique(),
     password: text('password'), //hashed password
     role: userRole('role').default('user'),
-    code: text('code')
-      .$defaultFn(() => Math.random().toString(36).slice(8))
-      .unique(),
+    passwordResetToken: text('password_reset_token'),
+    passwordResetTokenExpiresAt: timestamp('password_reset_token_expires_at', {
+      withTimezone: true,
+    }),
+    emailConfirmationToken: text('email_confirmation_token'),
+    sseToken: text('sse_token').$defaultFn(() => crypto.randomUUID()),
     isFake: boolean('is_fake').default(false), // TODO: make sure all the filters only use the real users
     isEmailVerified: boolean('is_email_verified').default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -186,7 +189,7 @@ export const user = pgTable(
     // For gdpr sake we will not store location, just use geolocation in query params
   },
   (t) => ({
-    usernameIndex: index('username_index').using('gin', t.username),
+    usernameIndex: index('username_index').using('btree', t.username),
   }),
 );
 
@@ -379,7 +382,7 @@ export const tournament = pgTable(
       .$onUpdate(() => new Date()),
   },
   (t) => ({
-    nameIndex: index('tournament_name_index').using('gin', t.name),
+    nameIndex: index('tournament_name_index').using('btree', t.name),
   }),
 );
 
@@ -512,7 +515,7 @@ export const group = pgTable(
     //TODO: if needed create a separate settings entity
   },
   (t) => ({
-    nameIndex: index('group_name_index').using('gin', t.name),
+    nameIndex: index('group_name_index').using('btree', t.name),
   }),
 );
 
@@ -639,7 +642,7 @@ export const category = pgTable(
       .$onUpdate(() => new Date()),
   },
   (t) => ({
-    nameIndex: index('category_name_index').using('gin', t.name),
+    nameIndex: index('category_name_index').using('btree', t.name),
   }),
 );
 

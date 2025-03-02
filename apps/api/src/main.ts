@@ -8,6 +8,8 @@ import * as fs from 'fs';
 import * as yaml from 'yaml';
 import { env } from 'process';
 
+process.env.TZ = 'UTC'; // TODO: if this is not set, the date will be off by 2 hours, maybe fix that later with a special lib
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

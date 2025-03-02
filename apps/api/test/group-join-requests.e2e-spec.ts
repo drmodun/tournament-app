@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
 import { groupFocusEnum, groupTypeEnum } from '@tournament-app/types';

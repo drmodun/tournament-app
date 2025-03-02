@@ -123,6 +123,7 @@ describe('StageController', () => {
     const updateDto: UpdateStageRequest = {
       name: 'Updated Stage',
       description: 'Updated Description',
+      tournamentId: 1,
     };
 
     it('should update a stage', async () => {

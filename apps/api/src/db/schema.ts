@@ -784,6 +784,11 @@ export const matchup = pgTable('matchup', {
       onDelete: 'cascade',
     })
     .notNull(),
+  roundId: integer('round_id')
+    .references(() => stageRound.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
   matchupType: matchupType('matchup_type').default('one_vs_one'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
@@ -865,9 +870,20 @@ export const tournamentRelations = relations(tournament, ({ one, many }) => ({
   participation: many(participation),
 }));
 
-export const round = pgTable('round', {
+export const score = pgTable('score', {
   id: serial('id').primaryKey(),
   matchupId: integer('matchup_id'),
+  roundNumber: integer('round_number').default(1),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const stageRound = pgTable('stage_round', {
+  id: serial('id').primaryKey(),
+  stageId: integer('stage_id')
+    .references(() => stage.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
   roundNumber: integer('round_number').default(1),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
@@ -881,7 +897,7 @@ export const rosterToRound = pgTable(
       })
       .notNull(),
     roundId: integer('round_id')
-      .references(() => round.id, {
+      .references(() => stageRound.id, {
         onDelete: 'cascade',
       })
       .notNull(),

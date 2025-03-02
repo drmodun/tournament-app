@@ -1,4 +1,4 @@
-import { ICareerCategoryResponse, IRosterCareerResponse } from "src/career";
+import { ICareerCategoryResponse } from "src/career";
 import { IMiniGroupResponseWithLogo } from "src/group";
 import {
   IMiniUserResponseWithCountry,
@@ -17,6 +17,11 @@ export interface IRosterPlayer {
   user: IMiniUserResponseWithCountry;
   isSubstitute: boolean;
   career: ICareerCategoryResponse[];
+}
+
+export interface IRosterPlayerWithoutCareer {
+  user: IMiniUserResponseWithCountry;
+  isSubstitute: boolean;
 }
 
 export interface IRosterResponse extends IMiniRosterResponse {

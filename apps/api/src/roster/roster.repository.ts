@@ -7,8 +7,8 @@ import {
   RosterResponsesEnum,
   RosterSortingEnum,
   RosterResponseEnumType,
-  IRosterPlayer,
   ICreateRosterRequest,
+  IRosterPlayerWithoutCareer,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -200,7 +200,9 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     return result;
   }
 
-  async getOnlyPlayers(rosterId: number): Promise<IRosterPlayer[]> {
+  async getOnlyPlayers(
+    rosterId: number,
+  ): Promise<IRosterPlayerWithoutCareer[]> {
     return await db
       .select({
         user: {

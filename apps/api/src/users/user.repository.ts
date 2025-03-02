@@ -153,7 +153,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
     [UserSortingEnum.TOURNAMENT_PARTICIPATION]: countDistinct(
       participation.tournamentId,
     ),
-    [UserSortingEnum.SEARCH]: user.username,
   };
 
   getValidWhereClause(query: UserQuery): SQL[] {

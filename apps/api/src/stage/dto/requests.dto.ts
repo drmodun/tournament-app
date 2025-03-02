@@ -194,7 +194,7 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @ApiPropertyOptional()
   maxSubstitutes?: number;
 
-  tournmaentId?: number;
+  tournamentId?: number;
 }
 
 export class StageQuery extends BaseQuery {

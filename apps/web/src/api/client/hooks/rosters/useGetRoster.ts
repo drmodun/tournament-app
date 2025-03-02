@@ -3,11 +3,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   GroupResponsesEnum,
-  IBaseQueryResponse,
+  IExtendedRosterResponse,
   IExtendedUserResponse,
   IGroupResponseExtended,
-  IParticipationResponse,
-  ParticipationResponsesEnum,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -18,29 +16,19 @@ import {
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-export const checkIfUserIsParticipating = async (data: {
-  tournamentId?: number;
-  userId?: number;
-}) =>
+export const getRoster = async (rosterId: number) =>
   clientApi
-    .get<never, AxiosResponse<IBaseQueryResponse<IParticipationResponse>>>(
-      `/participations`,
-      {
-        params: {
-          responseType: ParticipationResponsesEnum.BASE,
-          ...data,
-        },
+    .get<never, AxiosResponse<IExtendedRosterResponse>>(`/roster/${rosterId}`, {
+      params: {
+        responseType: GroupResponsesEnum.EXTENDED,
       },
-    )
+    })
     .then((res) => res.data);
 
-export const useCheckIfUserIsParticipating = (
-  tournamentId?: number,
-  userId?: number,
-) => {
+export const useGetRoster = (rosterId: number) => {
   return useQuery({
-    queryKey: ["competition", "me", tournamentId, userId],
-    queryFn: () => checkIfUserIsParticipating({ tournamentId, userId }),
+    queryKey: ["roster", rosterId ?? ""],
+    queryFn: () => getRoster(rosterId),
     staleTime: Infinity,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,

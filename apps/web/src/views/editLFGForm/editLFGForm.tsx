@@ -49,9 +49,12 @@ export default function EditLFGForm({ lfg }: { lfg?: ILFGResponse }) {
 
   const returnIdsFromIndexes = () => {
     if (!values) return [];
-    return data?.results.map((elem, i) => {
-      return values[i] ? elem.id : -1;
+    const arr: number[] = [];
+    data?.results.map((elem, i) => {
+      console.log(values[i], elem.id);
+      if (values[i]) arr.push(elem.id);
     });
+    return arr;
   };
 
   const methods = useForm<IUpdateLFGRequest & { id: number }>();
@@ -80,9 +83,20 @@ export default function EditLFGForm({ lfg }: { lfg?: ILFGResponse }) {
           className={styles.input}
           label="message"
           defaultValue={lfg?.message}
+          reactFormHookProps={{
+            pattern: {
+              value: /^.{10,}$/gm,
+              message: "message length must be longer then or equal 10 ",
+            },
+          }}
         />
         {methods.formState.errors.message?.type === "required" && (
           <p className={styles.error}>this field is required!</p>
+        )}
+        {methods.formState.errors.message?.type === "pattern" && (
+          <p className={clsx(styles.error, globals[`${textColorTheme}Color`])}>
+            {methods.formState.errors.message.message}
+          </p>
         )}
         <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
           highlight your interests
@@ -99,7 +113,7 @@ export default function EditLFGForm({ lfg }: { lfg?: ILFGResponse }) {
             })}
             isReactHookForm={true}
             checkboxes={
-              data?.results?.flatMap((elem, i) => {
+              data?.results?.map((elem, i) => {
                 return {
                   label: `${elem.name}`,
                   value: elem.id,
@@ -108,9 +122,9 @@ export default function EditLFGForm({ lfg }: { lfg?: ILFGResponse }) {
                   onSelect: () => {
                     setValues((prev) => {
                       if (!prev) return [];
-                      prev[i] = !prev[i];
-                      console.log("PREV", prev);
-                      return prev;
+                      return prev.map((value, index) =>
+                        index === i ? !value : value,
+                      );
                     });
                   },
                 };

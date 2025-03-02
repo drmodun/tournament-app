@@ -6,7 +6,12 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreateStageRequest } from '../dto/requests.dto';
-import { StageResponsesEnum, stageTypeEnum } from '@tournament-app/types';
+import {
+  StageResponsesEnum,
+  StageSortingEnum,
+  stageTypeEnum,
+} from '@tournament-app/types';
+import { StagesWithDates } from '../types';
 
 describe('StageService', () => {
   let service: StageService;
@@ -31,6 +36,7 @@ describe('StageService', () => {
       getSingleQuery: jest.fn(),
       updateEntity: jest.fn(),
       deleteEntity: jest.fn(),
+      getAllTournamentStagesSortedByStartDate: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -153,6 +159,102 @@ describe('StageService', () => {
       repository.deleteEntity.mockResolvedValue([]);
 
       await expect(service.remove(1)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getFirstStage', () => {
+    const tournamentId = 1;
+    const expectedQuery = {
+      responseType: StageResponsesEnum.MINI,
+      field: StageSortingEnum.START_DATE,
+      order: 'asc',
+      tournamentId,
+    };
+
+    it('should return the first stage of a tournament', async () => {
+      repository.getQuery.mockResolvedValue([mockStage]);
+
+      const result = await service.getFirstStage(tournamentId);
+
+      expect(result).toEqual(mockStage);
+      expect(repository.getQuery).toHaveBeenCalledWith(expectedQuery);
+    });
+
+    it('should return undefined if no stages exist', async () => {
+      repository.getQuery.mockResolvedValue([]);
+
+      const result = await service.getFirstStage(tournamentId);
+
+      expect(result).toBeUndefined();
+      expect(repository.getQuery).toHaveBeenCalledWith(expectedQuery);
+    });
+  });
+
+  describe('isFirstStage', () => {
+    const tournamentId = 1;
+    const stageId = 1;
+
+    it('should return true if the stage is the first stage', async () => {
+      const firstStage = { ...mockStage, id: stageId };
+      repository.getQuery.mockResolvedValue([firstStage]);
+
+      const result = await service.isFirstStage(stageId, tournamentId);
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false if the stage is not the first stage', async () => {
+      const firstStage = { ...mockStage, id: 2 }; // Different ID
+      repository.getQuery.mockResolvedValue([firstStage]);
+
+      const result = await service.isFirstStage(stageId, tournamentId);
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('getStagesSortedByStartDate', () => {
+    const tournamentId = 1;
+    const mockStagesWithDates: StagesWithDates[] = [
+      {
+        id: 1,
+        startDate: new Date('2023-01-01'),
+        endDate: new Date('2023-01-10'),
+      },
+      {
+        id: 2,
+        startDate: new Date('2023-01-11'),
+        endDate: new Date('2023-01-20'),
+      },
+      {
+        id: 3,
+        startDate: new Date('2023-01-21'),
+        endDate: undefined,
+      },
+    ];
+
+    it('should return stages sorted by start date', async () => {
+      repository.getAllTournamentStagesSortedByStartDate.mockResolvedValue(
+        mockStagesWithDates,
+      );
+
+      const result = await service.getStagesSortedByStartDate(tournamentId);
+
+      expect(result).toEqual(mockStagesWithDates);
+      expect(
+        repository.getAllTournamentStagesSortedByStartDate,
+      ).toHaveBeenCalledWith(tournamentId);
+    });
+
+    it('should return an empty array if no stages exist', async () => {
+      repository.getAllTournamentStagesSortedByStartDate.mockResolvedValue([]);
+
+      const result = await service.getStagesSortedByStartDate(tournamentId);
+
+      expect(result).toEqual([]);
+      expect(
+        repository.getAllTournamentStagesSortedByStartDate,
+      ).toHaveBeenCalledWith(tournamentId);
     });
   });
 });

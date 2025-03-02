@@ -1,11 +1,14 @@
 import {
   BaseUserUpdateRequest,
+  ICareerUserResponse,
+  IMiniCareerResponse,
   UserResponsesEnum,
   UserSortingEnum,
   UserSortingEnumType,
 } from '@tournament-app/types';
 import {
   category,
+  categoryCareer,
   follower,
   groupToUser,
   groupUserBlockList,
@@ -22,7 +25,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { and, countDistinct, eq, sql, SQL } from 'drizzle-orm';
+import { and, countDistinct, eq, inArray, sql, SQL } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { UserQuery } from './dto/requests.dto';
@@ -280,6 +283,34 @@ export class UserDrizzleRepository extends PrimaryRepository<
       .limit(pageSize)
       .offset((page - 1) * pageSize)
       .groupBy(category.id);
+  }
+
+  async getMultipleCareers(
+    userIds: number[],
+    categoryId: number,
+  ): Promise<ICareerUserResponse[]> {
+    // TODO: move this to the career repository if we decide to create it
+    return await db
+      .select({
+        userId: categoryCareer.userId,
+        categoryId: categoryCareer.categoryId,
+        elo: categoryCareer.elo,
+        createdAt: categoryCareer.createdAt,
+        user: {
+          id: user.id,
+          isFake: user.isFake,
+          username: user.username,
+          profilePicture: user.profilePicture,
+          country: user.country,
+        },
+      })
+      .from(categoryCareer)
+      .where(
+        and(
+          inArray(categoryCareer.userId, userIds),
+          eq(categoryCareer.categoryId, categoryId),
+        ),
+      );
   }
 
   getBlockedUsers(groupId: number, page: number, pageSize: number) {

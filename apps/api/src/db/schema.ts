@@ -25,7 +25,7 @@ import {
   stageTypeEnum,
   stageStatusEnum,
 } from '@tournament-app/types';
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
   serial,
   text,
@@ -183,6 +183,13 @@ export const user = pgTable('user', {
 
   // For gdpr sake we will not store location, just use geolocation in query params
 });
+
+export const userRelations = relations(user, ({ many }) => ({
+  userToRoster: many(userToRoster),
+  career: many(categoryCareer),
+}));
+
+export const userSingleRelations = relations(user, ({ one }) => ({}));
 
 export const userNotificationSettings = pgTable('user_notification_settings', {
   userId: integer('user_id')
@@ -699,6 +706,7 @@ export const stage = pgTable('stage', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   minPlayersPerTeam: integer('min_players_per_team').default(1),
   maxPlayersPerTeam: integer('max_players_per_team'),
+  maxSubstitutes: integer('max_substitutes'),
   maxChanges: integer('max_changes'),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
@@ -779,6 +787,56 @@ export const rosterToMatchup = pgTable(
     pk: primaryKey({ columns: [t.rosterId, t.matchupId] }),
   }),
 ); //TODO: see how to implement detailed results for series matches
+
+export const rosterRelations = relations(roster, ({ many, one }) => ({
+  players: many(userToRoster),
+  participation: one(participation, {
+    fields: [roster.participationId],
+    references: [participation.id],
+  }),
+  stage: one(stage, {
+    fields: [roster.stageId],
+    references: [stage.id],
+  }),
+}));
+
+export const userToRosterRelations = relations(userToRoster, ({ one }) => ({
+  roster: one(roster, {
+    fields: [userToRoster.rosterId],
+    references: [roster.id],
+  }),
+  user: one(user, {
+    fields: [userToRoster.userId],
+    references: [user.id],
+  }),
+}));
+
+export const participationRelations = relations(
+  participation,
+  ({ one, many }) => ({
+    group: one(group, {
+      fields: [participation.groupId],
+      references: [group.id],
+    }),
+    tournament: one(tournament, {
+      fields: [participation.tournamentId],
+      references: [tournament.id],
+    }),
+    user: one(user, {
+      fields: [participation.userId],
+      references: [user.id],
+    }),
+    roster: many(roster),
+  }),
+);
+
+export const tournamentRelations = relations(tournament, ({ one, many }) => ({
+  category: one(category, {
+    fields: [tournament.categoryId],
+    references: [category.id],
+  }),
+  participation: many(participation),
+}));
 
 export const round = pgTable('round', {
   id: serial('id').primaryKey(),
@@ -897,6 +955,21 @@ export const categoryCareer = pgTable(
     pk: primaryKey({ columns: [t.categoryId, t.userId] }),
   }),
 );
+
+export const careerSingleRelations = relations(categoryCareer, ({ one }) => ({
+  user: one(user, {
+    fields: [categoryCareer.userId],
+    references: [user.id],
+  }),
+  category: one(category, {
+    fields: [categoryCareer.categoryId],
+    references: [category.id],
+  }),
+}));
+
+export const categoryRelations = relations(category, ({ many }) => ({
+  career: many(categoryCareer),
+}));
 
 export const notification = pgTable('notification', {
   id: serial('id').primaryKey(),

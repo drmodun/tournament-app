@@ -24,7 +24,7 @@ import { LocationModule } from './location/location.module';
 import { GroupRequirementsModule } from './group/requirements/group-requirements.module';
 import { LFPModule } from './lfp/lfp.module';
 import { RosterModule } from './roster/roster.module';
-import { RosterMembersModule } from './roster-members/roster-members.module';
+import { CareerModule } from './career/career.module';
 @Module({
   imports: [
     UsersModule,
@@ -50,7 +50,7 @@ import { RosterMembersModule } from './roster-members/roster-members.module';
     LocationModule,
     GroupRequirementsModule,
     RosterModule,
-    RosterMembersModule,
+    CareerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

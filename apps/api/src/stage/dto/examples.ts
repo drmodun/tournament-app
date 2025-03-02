@@ -101,6 +101,7 @@ export const extendedStageExample: ExtendedStageResponse = {
   startDate: new Date('2025-02-01T10:00:00Z'),
   minPlayersPerTeam: 1,
   maxPlayersPerTeam: 1,
+  maxSubstitutes: 1,
   maxChanges: 1,
 };
 

@@ -1,18 +1,27 @@
+import { ICareerCategoryResponse, IRosterCareerResponse } from "src/career";
 import { IMiniGroupResponseWithLogo } from "src/group";
-import { IMiniUserResponseWithCountry } from "src/user";
+import {
+  IMiniUserResponseWithCountry,
+  IMiniUserResponseWithProfilePicture,
+} from "src/user";
 
 export interface IMiniRosterResponse {
   id: number;
   stageId: number;
   participationId: number;
   group?: IMiniGroupResponseWithLogo;
-  user?: IMiniGroupResponseWithLogo;
+  user?: IMiniUserResponseWithProfilePicture;
+}
+
+export interface IRosterPlayer {
+  user: IMiniUserResponseWithCountry;
+  isSubstitute: boolean;
+  career: ICareerCategoryResponse[];
 }
 
 export interface IRosterResponse extends IMiniRosterResponse {
-  player: IMiniUserResponseWithCountry;
+  players: IRosterPlayer[];
   createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface IExtendedRosterResponse extends IRosterResponse {
@@ -32,7 +41,6 @@ export enum RosterResponsesEnum {
 
 export enum RosterSortingEnum {
   CREATED_AT = "createdAt",
-  UPDATED_AT = "updatedAt",
   GROUP_NAME = "group.name",
   USER_NAME = "player.name",
   RESULT = "result", // TODO: implement later

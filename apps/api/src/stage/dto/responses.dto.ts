@@ -83,10 +83,13 @@ export class ExtendedStageResponse
   minPlayersPerTeam: number;
 
   @ApiResponseProperty()
-  maxPlayersPerTeam: number;
+  maxPlayersPerTeam?: number;
 
   @ApiResponseProperty()
-  maxChanges: number;
+  maxChanges?: number;
+
+  @ApiResponseProperty()
+  maxSubstitutes?: number;
 }
 
 export class ExtendedStageResponseWithTournament

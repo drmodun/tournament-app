@@ -30,8 +30,12 @@ import {
   asc,
   countDistinct,
   eq,
+  gte,
   ilike,
   inArray,
+  InferInsertModel,
+  lt,
+  lte,
   sql,
   SQL,
 } from 'drizzle-orm';
@@ -117,7 +121,10 @@ export class UserDrizzleRepository extends PrimaryRepository<
           ...this.getMappingObject(UserResponsesEnum.EXTENDED),
           password: user.password,
           role: user.role,
-          code: user.code,
+          passwordResetToken: user.passwordResetToken,
+          passwordResetTokenExpiresAt: user.passwordResetTokenExpiresAt,
+          emailConfirmationToken: user.emailConfirmationToken,
+          sseToken: user.sseToken,
         };
       case UserDtosEnum.VALIDATED:
         return {
@@ -133,9 +140,85 @@ export class UserDrizzleRepository extends PrimaryRepository<
           email: user.email,
           password: user.password,
         };
+      case UserDtosEnum.PASSWORD_RESET_TOKEN:
+        return {
+          passwordResetToken: user.passwordResetToken,
+          passwordResetTokenExpiresAt: user.passwordResetTokenExpiresAt,
+          email: user.email,
+          username: user.username,
+        };
+      case UserDtosEnum.EMAIL_CONFIRMATION_TOKEN:
+        return {
+          emailConfirmationToken: user.emailConfirmationToken,
+          email: user.email,
+          username: user.username,
+        };
+      case UserDtosEnum.SSE_TOKEN:
+        return {
+          sseToken: user.sseToken,
+        };
       default:
-        return {};
+        return null;
     }
+  }
+
+  public confirmUserEmail(token: string) {
+    return db
+      .update(user)
+      .set({ isEmailVerified: true } as Partial<InferInsertModel<typeof user>>)
+      .where(eq(user.emailConfirmationToken, token))
+      .returning({
+        isEmailVerified: user.isEmailVerified,
+      });
+  }
+
+  public insertPaswordResetToken(
+    token: string,
+    email: string,
+    expiresAt: Date,
+  ) {
+    return db
+      .update(user)
+      .set({
+        passwordResetToken: token,
+        passwordResetTokenExpiresAt: expiresAt,
+      } as Partial<InferInsertModel<typeof user>>)
+      .where(eq(user.email, email))
+      .returning({
+        passwordResetToken: user.passwordResetToken,
+        passwordResetTokenExpiresAt: user.passwordResetTokenExpiresAt,
+        email: user.email,
+        username: user.username,
+      });
+  }
+
+  public resetPassword(token: string, password: string) {
+    return db
+      .update(user)
+      .set({ password: password } as Partial<InferInsertModel<typeof user>>)
+      .where(
+        and(
+          eq(user.passwordResetToken, token),
+          gte(user.passwordResetTokenExpiresAt, new Date()),
+        ),
+      )
+      .returning({
+        password: user.password,
+      });
+  }
+
+  public insertEmailConfirmationToken(token: string, userId: number) {
+    return db
+      .update(user)
+      .set({
+        emailConfirmationToken: token,
+      } as Partial<InferInsertModel<typeof user>>)
+      .where(eq(user.id, userId))
+      .returning({
+        email: user.email,
+        username: user.username,
+        emailConfirmationToken: user.emailConfirmationToken,
+      });
   }
 
   public sortRecord: Record<UserSortingEnumType, PgColumn | SQL<number>> = {

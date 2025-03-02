@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Confirmation</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        line-height: 1.5;
+        color: #333;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #007bff; /* Or any primary color you prefer */
+      }
+
+      p {
+        margin-bottom: 15px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #007bff;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
+        border: 1px solid #007bff;
+      }
+      .button:hover {
+        color: #fff;
+        background-color: #0056b3;
+        border: 1px solid #0056b3;
+      }
+
+      .footer {
+        margin-top: 30px;
+        text-align: center;
+        color: #777;
+        font-size: 0.8em;
+      }
+      .highlight {
+        font-weight: bold;
+      }
+
+      /* Responsive Styles */
+      @media screen and (max-width: 600px) {
+        .container {
+          width: 90%;
+          margin: 10px auto;
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Email Confirmation</h1>
+      <p>Hello <span class="highlight">{{username}}</span>,</p>
+      <p>
+        Thank you for signing up to winning.sh! To complete your registration
+        and start using our service, please confirm your email address (<span
+          class="highlight"
+          >{{email}}</span
+        >) by clicking the button below:
+      </p>
+      <p>
+        <a href="{{link}}" class="button">Confirm Email Address</a>
+      </p>
+      <p>If you didn't create an account, you can safely ignore this email.</p>
+      <p>
+        If the button above doesn't work, you can copy and paste the following
+        link into your browser:
+      </p>
+      <p><a href="{{link}}">{{link}}</a></p>
+      <div class="footer">
+        <p>This is an automated email, please do not reply.</p>
+      </div>
+    </div>
+  </body>
+</html>

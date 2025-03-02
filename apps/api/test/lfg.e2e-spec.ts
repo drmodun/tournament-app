@@ -4,7 +4,7 @@ import {
   ClassSerializerInterceptor,
   ValidationPipe,
 } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { CreateLFGRequest, UpdateLFGRequest } from '../src/lfg/dto/requests';
 import { NoValuesToSetExceptionFilter } from 'src/base/exception/noValuesToSetExceptionFilter';

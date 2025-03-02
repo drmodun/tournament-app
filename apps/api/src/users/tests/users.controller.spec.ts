@@ -9,7 +9,7 @@ import {
   UserQuery,
 } from '../dto/requests.dto';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-
+import { EmailModule } from 'src/infrastructure/email/email.module';
 describe('UsersController', () => {
   let controller: UsersController;
 
@@ -19,6 +19,7 @@ describe('UsersController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
       providers: [UsersService, UserDrizzleRepository],
+      imports: [EmailModule],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);

@@ -69,7 +69,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
   async getForGroup(groupId: number, query: QueryRosterDto) {
     const [ids] = await this.getRosterIdsForGroup(groupId);
 
-    if (!ids.roster.length) {
+    if (!ids?.roster?.length) {
       return [];
     }
 

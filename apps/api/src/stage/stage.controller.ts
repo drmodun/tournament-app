@@ -164,9 +164,13 @@ export class StageController {
   })
   async update(
     @Param('stageId', ParseIntPipe) id: number,
+    @Param('tournamentId', ParseIntPipe) tournamentId: number,
     @Body() updateStageDto: UpdateStageRequest,
   ) {
-    return await this.stageService.update(id, updateStageDto);
+    return await this.stageService.update(id, {
+      ...updateStageDto,
+      tournamentId,
+    });
   }
 
   @Delete(':tournamentId/:stageId')

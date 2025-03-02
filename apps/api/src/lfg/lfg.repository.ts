@@ -338,13 +338,19 @@ export class LFGDrizzleRepository extends PrimaryRepository<
       }
 
       const categoryIds = updateRequest.categoryIds;
-      await tx.delete(categoryToLFG).where(eq(categoryToLFG.lfgId, lfg[0].id));
-      await tx.insert(categoryToLFG).values(
-        categoryIds.map((categoryId) => ({
-          categoryId,
-          lfgId: lfg[0].id,
-        })),
-      );
+
+      categoryIds.length > 0 &&
+        (await tx
+          .delete(categoryToLFG)
+          .where(eq(categoryToLFG.lfgId, lfg[0].id)));
+
+      categoryIds.length > 0 &&
+        (await tx.insert(categoryToLFG).values(
+          categoryIds.map((categoryId) => ({
+            categoryId,
+            lfgId: lfg[0].id,
+          })),
+        ));
     });
     return transaction;
   }

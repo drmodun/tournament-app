@@ -129,7 +129,7 @@ describe('StageController', () => {
       const updatedStage = { ...mockStage, ...updateDto };
       service.update.mockResolvedValue(updatedStage);
 
-      const result = await controller.update(1, updateDto);
+      const result = await controller.update(1, 1, updateDto);
 
       expect(result).toEqual(updatedStage);
       expect(service.update).toHaveBeenCalledWith(1, updateDto);

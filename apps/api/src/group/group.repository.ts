@@ -149,6 +149,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           description: createGroupDto.description,
           type: createGroupDto.type,
           focus: createGroupDto.focus,
+          locationId: createGroupDto.locationId,
           logo: createGroupDto.logo,
           country: createGroupDto.country,
         } as InferInsertModel<typeof group>)

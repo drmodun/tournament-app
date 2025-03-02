@@ -34,7 +34,7 @@ export class LfgController {
   @ApiResponse({
     status: 200,
     description: 'Returns all LFG posts by the current user',
-    type: LFGResponse,
+    type: [LFGResponse],
   })
   async findMyLFG(@CurrentUser() user: ValidatedUserDto) {
     return await this.lfgService.findMyLfg(user.id);

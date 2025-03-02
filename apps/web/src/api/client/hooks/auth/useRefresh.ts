@@ -15,7 +15,6 @@ export const refreshUser = async () =>
       },
     })
     .then((res) => res.data);
-// TODO: make google login later
 
 export const useRefresh = () => {
   const toast = useToastContext();
@@ -25,7 +24,7 @@ export const useRefresh = () => {
   return useMutation({
     mutationFn: refreshUser,
     onSuccess: async (data) => {
-      setAuthTokens(data.accessToken, data.refreshToken);
+      setAuthTokens(data, data.refreshToken);
       await refetch();
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("me"),

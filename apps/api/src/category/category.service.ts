@@ -74,4 +74,12 @@ export class CategoryService {
 
     return action[0];
   }
+
+  async categoryAutoComplete(
+    search: string,
+    pageSize: number = 10,
+    page: number = 1,
+  ) {
+    return await this.repository.categoryAutoComplete(search, pageSize, page);
+  }
 }

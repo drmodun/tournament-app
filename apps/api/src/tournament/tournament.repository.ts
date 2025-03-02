@@ -9,7 +9,7 @@ import {
 } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { aliasedTable, eq, gte, lte, SQL } from 'drizzle-orm';
+import { aliasedTable, eq, gte, ilike, lte, SQL } from 'drizzle-orm';
 import {
   IUpdateTournamentRequest,
   TournamentResponseEnumType,
@@ -115,6 +115,8 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           return lte(tournament.maxParticipants, value as number);
         case 'isPublic':
           return eq(tournament.isPublic, value as boolean);
+        case 'search':
+          return ilike(tournament.name, `%${value}%`);
         default:
           return;
       }

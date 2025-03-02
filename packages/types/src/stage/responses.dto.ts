@@ -29,7 +29,9 @@ export interface IStageResponseWithTournament extends IStageResponse {
 
 export interface IExtendedStageResponse extends IStageResponse {
   minPlayersPerTeam: number;
-  maxPlayersPerTeam: number;
+  maxPlayersPerTeam?: number;
+  maxSubstitutes?: number;
+  maxChanges?: number;
 }
 
 export interface IExtendedStageResponseWithTournament

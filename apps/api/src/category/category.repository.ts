@@ -3,10 +3,11 @@ import { category, tournament } from '../db/schema';
 import { IUpdateCategoryRequest } from '@tournament-app/types/src/category';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { and, eq, gte, lte, SQL } from 'drizzle-orm';
+import { and, asc, eq, gte, ilike, lte, sql, SQL } from 'drizzle-orm';
 import {
   CategoryResponsesEnum,
   CategorySortingEnum,
+  ICategoryMiniResponseWithLogo,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -43,6 +44,8 @@ export class CategoryDrizzleRepository extends PrimaryRepository<
           return eq(category.name, value as string);
         case 'type':
           return eq(category.type, value as string);
+        case 'search':
+          return ilike(category.name, `${value}%`);
         default:
           return;
       }
@@ -58,6 +61,27 @@ export class CategoryDrizzleRepository extends PrimaryRepository<
       eq(tournament.categoryId, category.id),
     ),
   };
+
+  async categoryAutoComplete(
+    search: string,
+    pageSize: number = 10,
+    page: number = 1,
+  ): Promise<ICategoryMiniResponseWithLogo[]> {
+    return (await db
+      .select({
+        ...this.getMappingObject(CategoryResponsesEnum.MINI_WITH_LOGO),
+      })
+      .from(category)
+      .where(ilike(category.name, `${search}%`))
+      .orderBy(
+        sql<number>`CASE WHEN ${category.name} = ${search} THEN 0 ELSE 1 END`,
+        asc(category.name),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as ICategoryMiniResponseWithLogo[];
+  }
 
   getMappingObject(responseEnum: CategoryResponsesEnum) {
     switch (responseEnum) {

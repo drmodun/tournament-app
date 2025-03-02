@@ -51,6 +51,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('users')
 @Controller('users')
@@ -83,6 +84,15 @@ export class UsersController {
     BaseQueryResponse,
     ...actualClassList,
   )
+  @Get('auto-complete/:search')
+  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
+  async userAutoComplete(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.usersService.userAutoComplete(search, query.pageSize);
+  }
+
   @Post()
   @ApiCreatedResponse({ type: ActionResponsePrimary })
   async create(@Body() createUserDto: CreateUserRequest) {

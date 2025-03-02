@@ -108,13 +108,6 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @Type(() => Number)
   @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
-  tournamentId?: number;
-
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
   conversionRuleId?: number;
 
   @IsOptional()
@@ -184,6 +177,24 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   maxPlayersPerTeam?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  @Transform(({ value }) => parseInt(value))
+  @ApiPropertyOptional()
+  maxChanges?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  @Transform(({ value }) => parseInt(value))
+  @ApiPropertyOptional()
+  maxSubstitutes?: number;
+
+  tournmaentId?: number;
 }
 
 export class StageQuery extends BaseQuery {

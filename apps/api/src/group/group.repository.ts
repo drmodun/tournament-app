@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import {
   eq,
   SQL,
-  sql,
   countDistinct,
   InferInsertModel,
   and,
+  asc,
+  sql,
+  ilike,
 } from 'drizzle-orm';
 import {
   group,
@@ -24,6 +26,8 @@ import {
   GroupSortingEnum,
   GroupSortingEnumType,
   groupRoleEnum,
+  ICategoryMiniResponseWithLogo,
+  IMiniGroupResponseWithLogo,
 } from '@tournament-app/types';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { GroupQuery } from './dto/requests.dto';
@@ -34,7 +38,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from 'src/db/db';
-import { BaseQuery } from 'src/base/query/baseQuery';
+import { BaseQuery, PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class GroupDrizzleRepository extends PrimaryRepository<
@@ -145,6 +149,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           description: createGroupDto.description,
           type: createGroupDto.type,
           focus: createGroupDto.focus,
+          locationId: createGroupDto.locationId,
           logo: createGroupDto.logo,
           country: createGroupDto.country,
         } as InferInsertModel<typeof group>)
@@ -197,10 +202,33 @@ export class GroupDrizzleRepository extends PrimaryRepository<
           return eq(group.focus, parsed);
         case 'country':
           return eq(group.country, parsed);
+        case 'search':
+          return ilike(group.name, `${parsed}%`);
         default:
           return;
       }
     });
+  }
+
+  async groupAutoComplete(
+    search: string,
+    pageSize: number = 10,
+    page: number = 1,
+  ): Promise<IMiniGroupResponseWithLogo[]> {
+    return (await db
+      .select({
+        ...this.getMappingObject(GroupResponsesEnum.MINI_WITH_LOGO),
+      })
+      .from(group)
+      .where(ilike(group.name, `${search}%`))
+      .orderBy(
+        sql<number>`CASE WHEN ${group.name} = ${search} THEN 0 ELSE 1 END`,
+        asc(group.name),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniGroupResponseWithLogo[];
   }
 
   async getGroupTournaments(groupId: number) {
@@ -275,6 +303,37 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       .limit(pageSize)
       .offset((page - 1) * pageSize)
       .groupBy(group.id);
+  }
+
+  async searchBlockedGroups(
+    search: string,
+    userId: number,
+    { pageSize = 10, page = 1 }: PaginationOnly,
+  ) {
+    return (await db
+      .select({
+        id: group.id,
+        name: group.name,
+        abbreviation: group.abbreviation,
+        country: group.country,
+        logo: group.logo,
+      })
+      .from(userGroupBlockList)
+      .rightJoin(group, eq(group.id, userGroupBlockList.blockedGroupId))
+      .where(
+        and(
+          ilike(group.name, `${search}%`),
+          eq(userGroupBlockList.userId, userId),
+        ),
+      )
+      .orderBy(
+        sql<number>`CASE WHEN ${group.name} = ${search} THEN 0 ELSE 1 END`,
+        asc(group.name),
+      )
+      .limit(pageSize)
+      .offset(
+        page ? (page - 1) * pageSize : 0,
+      )) as IMiniGroupResponseWithLogo[];
   }
 
   async checkIfGroupInterestExists(groupId: number, categoryId: number) {

@@ -8,6 +8,7 @@ import { GroupMembershipModule } from 'src/group-membership/group-membership.mod
 @Module({
   controllers: [StageController],
   providers: [StageService, StageDrizzleRepository],
+  exports: [StageService, StageDrizzleRepository],
   imports: [TournamentModule, GroupMembershipModule],
 })
 export class StageModule {}

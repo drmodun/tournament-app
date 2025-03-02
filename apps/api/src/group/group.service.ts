@@ -153,4 +153,14 @@ export class GroupService {
       followers,
     };
   }
+
+  async getGroupsEligibleForRosterCreation(
+    tournamentId: number,
+    userId: number,
+  ) {
+    return await this.repository.getGroupsEligibleForRosterCreation(
+      tournamentId,
+      userId,
+    );
+  }
 }

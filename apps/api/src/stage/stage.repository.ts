@@ -214,6 +214,10 @@ export class StageDrizzleRepository extends PrimaryRepository<
           ...this.getMappingObject(StageResponsesEnum.BASE),
           createdAt: stage.createdAt,
           updatedAt: stage.updatedAt,
+          minPlayersPerTeam: stage.minPlayersPerTeam,
+          maxPlayersPerTeam: stage.maxPlayersPerTeam,
+          maxSubstitutes: stage.maxSubstitutes,
+          maxChanges: stage.maxChanges,
         };
       case StageResponsesEnum.WITH_EXTENDED_TOURNAMENT:
         return {
@@ -232,6 +236,10 @@ export class StageDrizzleRepository extends PrimaryRepository<
               apiId: location.apiId,
               coordinates: location.coordinates,
             }, // TODO: check if this is correct
+            minPlayersPerTeam: stage.minPlayersPerTeam,
+            maxPlayersPerTeam: stage.maxPlayersPerTeam,
+            maxSubstitutes: stage.maxSubstitutes,
+            maxChanges: stage.maxChanges,
           },
         };
       default:

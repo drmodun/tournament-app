@@ -1,12 +1,10 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   GroupJoinRequestResponsesEnum,
   IBaseQueryResponse,
-  IGroupJoinRequestQuery,
   IGroupJoinRequestWithMiniUserResponse,
-  IGroupJoinRequestWithUserResponse,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -43,7 +41,8 @@ export const useGroupJoinRequests = (groupId: number | undefined) => {
     retryDelay: LARGE_QUERY_RETRY_DELAY,
     retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (page, pages) => pages.length + 1, // TODO: promjeni kada je dodan fullCount
+    getNextPageParam: (page, pages) =>
+      page.results.length < 5 ? undefined : pages.length + 1, // TODO: promjeni kada je dodan fullCount
     initialPageParam: 1,
   });
 };

@@ -24,7 +24,7 @@ export const useLogin = () => {
   const toast = useToastContext();
   const navigate = useRouter();
   const queryClient = useQueryClient();
-  const { refetch, isSuccess } = useAuth();
+  const { refetch } = useAuth();
 
   return useMutation({
     mutationFn: loginUser,
@@ -36,7 +36,7 @@ export const useLogin = () => {
       toast.addToast("successfully logged in", "success"); //TODO: make this an object for easier and more consistent usage
       await refetch();
 
-      setTimeout(() => navigate.push("/"), 1000);
+      setTimeout(() => navigate.push("/main"), 1000);
     },
     onError: (error: any) => {
       toast.addToast("invalid credentials", "error"); //TODO: maybe make this show the server error message, or just log it

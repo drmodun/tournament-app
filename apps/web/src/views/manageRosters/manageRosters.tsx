@@ -1,45 +1,22 @@
 "use client";
 
-import styles from "./manageRosters.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import Dialog from "components/dialog";
-import Button from "components/button";
-import { useEffect, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import GroupIcon from "@mui/icons-material/Group";
 import AddIcon from "@mui/icons-material/Add";
-import InboxIcon from "@mui/icons-material/Inbox";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  groupRoleEnum,
-  IGroupMembershipResponse,
-  ILFGResponse,
-  IMiniGroupResponse,
-} from "@tournament-app/types";
-import {
-  calculateBestPastDateFormat,
-  COUNTRY_NAMES_TO_CODES,
-  formatDate,
-} from "utils/mixins/formatting";
-import AddLFPForm from "views/addLFPForm";
-import ViewLFP from "views/viewLFP";
-import ManageTeamMembers from "views/manageTeamMembers";
-import EditTeamForm from "views/editTeamForm";
-import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
-import GroupJoinRequests from "views/groupJoinRequests";
-import { useGetLFPs } from "api/client/hooks/lfp/useGetLFPs";
-import { useGetUserLFGs } from "api/client/hooks/lfg/useGetUserLFGs";
-import ProgressWheel from "components/progressWheel";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Chip from "components/chip";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeleteLFG } from "api/client/hooks/lfg/useDeleteLFG";
-import AddLFGForm from "views/addLFGForm";
-import EditLFGForm from "views/editLFGForm";
+import EditIcon from "@mui/icons-material/Edit";
+import GroupIcon from "@mui/icons-material/Group";
+import InboxIcon from "@mui/icons-material/Inbox";
+import { IGroupMembershipResponse } from "@tournament-app/types";
 import { useGetGroupRosters } from "api/client/hooks/rosters/useGetGroupRosters";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Chip from "components/chip";
+import ProgressWheel from "components/progressWheel";
+import { useEffect } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { calculateBestPastDateFormat } from "utils/mixins/formatting";
+import styles from "./manageRosters.module.scss";
 
 export default function ManageRosters({
   group,
@@ -56,11 +33,6 @@ export default function ManageRosters({
     isFetchingNextPage,
     isFetchNextPageError,
   } = useGetGroupRosters(group?.groupId);
-
-  useEffect(() => {
-    console.log("RPSTER GRUOP", group);
-    console.log("ROSTER DATAAAA", data);
-  }, [data]);
 
   return (
     <div
@@ -151,7 +123,7 @@ export default function ManageRosters({
                               </p>
                             </div>
                             <div className={styles.careers}>
-                              {e?.user.career?.map((career) => {
+                              {e?.career?.map((career) => {
                                 console.log(career);
                                 return (
                                   <Chip

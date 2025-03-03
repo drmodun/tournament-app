@@ -1,32 +1,23 @@
 "use client";
 
-import styles from "./userEditForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { useEffect, useRef, useState } from "react";
-import Input from "components/input";
-import Chip from "components/chip";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import {
-  IExtendedUserResponse,
-  IGroupMembershipResponseWithDates,
-  IUpdateUserInfo,
-} from "@tournament-app/types";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import ImageDrop from "components/imageDrop";
-import ImagePicker from "components/imagePicker";
-import RichEditor from "components/richEditor";
-import {
-  leaveUserGroups,
-  useLeaveUserGroups,
-} from "api/client/hooks/groups/useLeaveUserGroups";
+import { IExtendedUserResponse, IUpdateUserInfo } from "@tournament-app/types";
 import { useUpdateUser } from "api/client/hooks/user/useUpdateUser";
 import Button from "components/button";
-import { formatDateHTMLInput } from "utils/mixins/formatting";
 import Dropdown from "components/dropdown";
+import ImageDrop from "components/imageDrop";
+import ImagePicker from "components/imagePicker";
+import Input from "components/input";
+import RichEditor from "components/richEditor";
 import { countries } from "country-flag-icons";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { toBase64 } from "utils/mixins/helpers";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { formatDateHTMLInput } from "utils/mixins/formatting";
+import styles from "./userEditForm.module.scss";
+import { imageUrlToFile } from "utils/mixins/helpers";
 
 export default function userEditForm({
   data,
@@ -49,7 +40,7 @@ export default function userEditForm({
 
   useEffect(() => {
     if (data?.profilePicture) {
-      setFile(data.profilePicture);
+      imageUrlToFile(data.profilePicture).then((f) => setFile(f));
     }
   }, [data]);
 

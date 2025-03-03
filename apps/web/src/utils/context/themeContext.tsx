@@ -1,11 +1,12 @@
 "use client";
 
-import React, { createContext, ReactNode, useState, useEffect } from "react";
-import { TextVariants } from "types/styleTypes";
+import React, { ReactNode, useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
+import { TextVariants } from "types/styleTypes";
 
 export const ThemeContext = React.createContext<{
   theme: TextVariants;
+  // eslint-disable-next-line no-unused-vars
   setTheme: (val: TextVariants) => void;
 }>({
   theme: "light",

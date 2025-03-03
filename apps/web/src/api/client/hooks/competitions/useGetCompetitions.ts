@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   IBaseQueryResponse,
   IExtendedTournamentResponse,
@@ -6,7 +6,6 @@ import {
   TournamentResponsesEnum,
 } from "@tournament-app/types";
 import {
-  baseApiUrl,
   clientApi,
   getAccessToken,
   LARGE_QUERY_RETRY_ATTEMPTS,

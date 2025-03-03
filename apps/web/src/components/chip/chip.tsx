@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, MouseEventHandler } from "react";
-import styles from "./chip.module.scss";
+import { clsx } from "clsx";
+import { MouseEventHandler } from "react";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
-import { clsx } from "clsx";
+import styles from "./chip.module.scss";
 
 interface ChipProps {
   children?: React.ReactNode;
@@ -22,13 +22,10 @@ export default function Chip({
   className,
   label,
   variant = "light",
-  activeBorderVariant,
   onClick,
 }: ChipProps) {
-  const [isSelected, setIsSelected] = useState<boolean>(false);
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onClick && onClick(e);
-    setIsSelected((prev) => !prev);
   };
 
   return (

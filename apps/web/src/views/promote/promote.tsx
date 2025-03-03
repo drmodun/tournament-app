@@ -1,12 +1,12 @@
 "use client";
 
-import styles from "./promote.module.scss";
-import globals from "styles/globals.module.scss";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { clsx } from "clsx";
 import Link from "next/link";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { useThemeContext } from "utils/hooks/useThemeContext";
+import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./promote.module.scss";
 
 export default function Promote() {
   const { theme } = useThemeContext();

@@ -1,30 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./index.module.scss";
-import globals from "styles/globals.module.scss";
-import Navbar from "views/navbar";
-import ManageUser from "views/manageUser";
-import { clsx } from "clsx";
-import Button from "components/button";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
+import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ManageTeams from "views/manageTeams";
-import AddIcon from "@mui/icons-material/Add";
-import { useRouter } from "next/navigation";
-import Dialog from "components/dialog";
-import CreateTeamForm from "views/createTeamForm";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
+import { useEffect, useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import CreateTeamForm from "views/createTeamForm";
+import ManageTeams from "views/manageTeams";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default function Teams() {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activePage, setActivePage] = useState<number>(0);
   const { theme } = useThemeContext();
-  const router = useRouter();
   const [dialogActive, setDialogActive] = useState<boolean>(false);
   const textColorTheme = textColor(theme);
   const [fetchLimit, setFetchLimit] = useState<number>(-1);
@@ -32,7 +29,6 @@ export default function Teams() {
   const {
     data,
     isLoading,
-    isSuccess,
     fetchNextPage,
     fetchPreviousPage,
     isFetchNextPageError,
@@ -153,9 +149,11 @@ export default function Teams() {
             </button>
           </div>
 
-          <ManageTeams
-            team={data?.pages[Math.floor(activePage)]?.results[activeTab]}
-          />
+          {data?.pages[Math.floor(activePage)]?.results[activeTab] && (
+            <ManageTeams
+              team={data.pages[Math.floor(activePage)].results[activeTab]}
+            />
+          )}
         </div>
       ) : (
         <div className={styles.noTeams}>

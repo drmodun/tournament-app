@@ -1,20 +1,12 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ICreateGroupInviteDto,
-  ICreateGroupRequest,
-  ICreateLFGRequest,
-  ILFGResponse,
-} from "@tournament-app/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   clientApi,
-  getAccessToken,
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const createUserInterest = async (categoryId?: number) => {
@@ -34,7 +26,7 @@ export const useCreateUserInterest = () => {
     mutationFn: createUserInterest,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async (data, variables) => {
+    onSuccess: async () => {
       toast.addToast("successfully created interest", "success");
       await queryClient.invalidateQueries({
         queryKey: ["interest", "lfg"],
@@ -42,22 +34,12 @@ export const useCreateUserInterest = () => {
       return true;
     },
     onError: (error: any) => {
-      if (error.response?.status === 409) {
-        toast.addToast(
-          "you have already invited this user to this group",
-          "error",
-        );
-      } else {
-        toast.addToast(
-          "an error occurred while creating the group invite..",
-          "error",
-        );
-      }
+      toast.addToast("an error occurred..", "error");
       console.error(error);
       return false;
     },
     onMutate: () => {
-      toast.addToast("creating group invite...", "info");
+      toast.addToast("creating interest...", "info");
     },
   });
 };

@@ -1,23 +1,23 @@
 "use client";
 
+import FlagIcon from "@mui/icons-material/Flag";
+import ArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import PeopleIcon from "@mui/icons-material/People";
+import PlaceIcon from "@mui/icons-material/Place";
+import PublicIcon from "@mui/icons-material/Public";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { clsx } from "clsx";
+import Chip from "components/chip";
+import { useRouter } from "next/navigation";
 import { MouseEventHandler } from "react";
-import styles from "./cardExpanded.module.scss";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
-import { clsx } from "clsx";
-import PeopleIcon from "@mui/icons-material/People";
-import ArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   calculateBestFutureDateFormat,
   calculateBestValueFormat,
   formatDate,
 } from "utils/mixins/formatting";
-import Chip from "components/chip";
-import FlagIcon from "@mui/icons-material/Flag";
-import PublicIcon from "@mui/icons-material/Public";
-import PlaceIcon from "@mui/icons-material/Place";
-import { useRouter } from "next/navigation";
+import styles from "./cardExpanded.module.scss";
 
 export interface CardExpandedProps {
   children?: React.ReactNode;

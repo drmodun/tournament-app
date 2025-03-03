@@ -2,28 +2,16 @@
 
 // TODO: Actually implement
 
-import { useEffect, useState } from "react";
-import styles from "./editLFPForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
-import {
-  ICreateGroupRequest,
-  ICreateLFPRequest,
-  ILFPResponse,
-  tournamentLocationEnum,
-} from "@tournament-app/types";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { FormProvider, useForm } from "react-hook-form";
-import Input from "components/input";
-import RichEditor from "components/richEditor";
-import CheckboxGroup from "components/checkboxGroup";
-import Dropdown from "components/dropdown";
-import Button from "components/button";
-import { useCreateLFP } from "api/client/hooks/lfp/useCreateLFP";
-import { clsx } from "clsx";
-import MultilineInput from "components/multilineInput";
+import { ILFPResponse } from "@tournament-app/types";
 import { useEditLFP } from "api/client/hooks/lfp/useEditLFP";
+import { clsx } from "clsx";
+import Button from "components/button";
+import MultilineInput from "components/multilineInput";
+import { FormProvider, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./editLFPForm.module.scss";
 
 export default function EditLFPForm({ lfp }: { lfp?: ILFPResponse }) {
   const { theme } = useThemeContext();

@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-import styles from "./table.module.scss";
-import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
+import React from "react";
+import { Variants } from "types/styleTypes";
+import styles from "./table.module.scss";
 
 interface TableProps {
   children?: React.ReactNode;

@@ -1,16 +1,15 @@
 "use client";
 
-import React from "react";
-import styles from "./index.module.scss";
+import { clsx } from "clsx";
 import globals from "styles/globals.module.scss";
-import Hero from "views/hero";
-import Navbar from "views/navbar";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 import AboutWinning from "views/aboutWinning";
 import Contact from "views/contact";
-import Promote from "views/promote";
+import Hero from "views/hero";
+import Navbar from "views/navbar";
 import ProfileAchievements from "views/profileAchievements";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { clsx } from "clsx";
+import Promote from "views/promote";
+import styles from "./index.module.scss";
 
 export default function LandingPage() {
   const { theme } = useThemeContext();

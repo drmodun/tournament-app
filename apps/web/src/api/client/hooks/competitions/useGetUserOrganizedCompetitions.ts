@@ -2,15 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  groupRoleEnumType,
   IBaseQueryResponse,
   IExtendedTournamentResponse,
-  IMiniGroupResponseWithCountry,
-  TournamentResponseEnumType,
   TournamentResponsesEnum,
 } from "@tournament-app/types";
 import {
-  baseApiUrl,
   clientApi,
   getAccessToken,
   MEDIUM_QUERY_RETRY_ATTEMPTS,

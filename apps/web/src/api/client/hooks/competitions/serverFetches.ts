@@ -8,4 +8,8 @@ export const fetchCompetition = async (competitionId: number | undefined) =>
     {
       headers: { "Content-Type": "application/json" },
     },
-  ).then((res) => res.json().then((res) => res));
+  ).then((res) =>
+    res.json().then((res) => {
+      return res;
+    }),
+  );

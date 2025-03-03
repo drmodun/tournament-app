@@ -56,3 +56,17 @@ export type RosterResponseEnumType =
 
 export type RosterSortingEnumType =
   (typeof RosterSortingEnum)[keyof typeof RosterSortingEnum];
+
+export interface IMiniRosterResponse {
+  id: number;
+  stageId: number;
+  participationId: number;
+  group?: IMiniGroupResponseWithLogo;
+  user?: IMiniUserResponseWithProfilePicture;
+  participation?: {
+    id: number;
+    tournament: {
+      categoryId: number;
+    };
+  };
+}

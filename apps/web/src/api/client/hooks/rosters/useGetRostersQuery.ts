@@ -1,12 +1,9 @@
 "use client";
 
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  GroupResponsesEnum,
   IBaseQueryResponse,
   IExtendedRosterResponse,
-  IExtendedUserResponse,
-  IGroupResponseExtended,
   IQueryRosterRequest,
   RosterResponsesEnum,
 } from "@tournament-app/types";
@@ -15,11 +12,8 @@ import {
   getAccessToken,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 export const getRostersQuery = async (
   page: number,

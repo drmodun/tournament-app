@@ -2,12 +2,6 @@ import { AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { DARK, LIGHT } from "./constants";
 
-const MAP_MARKER_COLOR = {
-  background: "#21262c",
-  glyph: "#59c3c3",
-  border: "#197bbd",
-};
-
 export type PoiType = "programming" | "sports" | "other";
 
 export type Poi = {
@@ -19,6 +13,7 @@ export type Poi = {
 };
 
 export type MarkerLocation = {
+  id?: number;
   location: google.maps.LatLngLiteral;
   pois: Poi[];
 };
@@ -29,6 +24,7 @@ const handleMarkerClick = (location: MarkerLocation) => {
 
 export const PoiMarkers = (props: {
   locations: MarkerLocation[];
+  // eslint-disable-next-line no-unused-vars
   onMarkerClick?: (location: MarkerLocation) => void;
 }) => {
   const { theme } = useThemeContext();

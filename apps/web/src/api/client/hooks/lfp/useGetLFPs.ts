@@ -1,13 +1,7 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  GroupResponsesEnum,
-  IExtendedUserResponse,
-  IGetLFPRequest,
-  IGroupResponseExtended,
-  ILFPResponse,
-} from "@tournament-app/types";
+import { useQuery } from "@tanstack/react-query";
+import { IGetLFPRequest, ILFPResponse } from "@tournament-app/types";
 import {
   clientApi,
   getAccessToken,
@@ -15,7 +9,6 @@ import {
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 export const getLFPs = async (groupId: number, query?: IGetLFPRequest) =>
   clientApi

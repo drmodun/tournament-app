@@ -14,6 +14,7 @@ export interface SlideButtonProps {
   variant?: Variants;
   className?: string;
   labelClassName?: string;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (val: string) => void;
   disabled?: boolean;
   options: string[];

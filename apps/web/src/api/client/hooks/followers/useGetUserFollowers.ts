@@ -1,13 +1,10 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   FollowerResponsesEnum,
-  GroupJoinRequestResponsesEnum,
   IBaseQueryResponse,
-  IFollowerMiniResponse,
   IFollowerResponse,
-  IGroupJoinRequestWithUserResponse,
 } from "@tournament-app/types";
 import {
   clientApi,

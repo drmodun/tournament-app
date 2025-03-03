@@ -17,3 +17,24 @@
 .input {
   width: 100%;
 }
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+
+.pfp {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.userCardWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $padding;
+}

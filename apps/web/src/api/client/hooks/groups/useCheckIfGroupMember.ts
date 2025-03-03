@@ -2,11 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  BaseGroupMembershipResponseType,
-  GroupJoinRequestResponsesEnum,
   GroupMembershipResponsesEnum,
-  IFollowerMiniResponse,
-  IGroupJoinRequestWithUserResponse,
   IGroupMembershipQueryRequest,
   IGroupMembershipResponse,
 } from "@tournament-app/types";

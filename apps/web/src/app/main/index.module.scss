@@ -34,6 +34,7 @@
   position: fixed;
   left: 60%;
   top: 0;
+  z-index: 0;
 
   @media screen and (max-width: $desktopBreakpoint) {
     display: none;

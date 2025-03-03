@@ -1,17 +1,17 @@
 "use client";
 
-import styles from "./toast.module.scss";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { clsx } from "clsx";
+import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
+import { ANIMATION_DURATION } from "types/styleTypes";
 import {
   AUTO_CLOSE,
   AUTO_CLOSE_DURATION,
   TOAST_TYPE_COLOR_MAP,
+  ToastProps,
 } from "types/toastTypes";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { ToastProps } from "types/toastTypes";
-import { clsx } from "clsx";
-import { useEffect, useState } from "react";
-import { ANIMATION_DURATION } from "types/styleTypes";
+import styles from "./toast.module.scss";
 
 export default function Toast({
   style,

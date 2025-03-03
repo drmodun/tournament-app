@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, HTMLInputTypeAttribute, ChangeEventHandler } from "react";
-import styles from "./input.module.scss";
+import { clsx } from "clsx";
+import { ChangeEventHandler, HTMLInputTypeAttribute, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import {
-  Variants,
   TextVariants,
-  textColor,
+  Variants,
   inverseTextColor,
+  textColor,
 } from "types/styleTypes";
-import { clsx } from "clsx";
-import { Controller, useFormContext } from "react-hook-form";
+import styles from "./input.module.scss";
 
 interface InputProps {
   style?: React.CSSProperties;

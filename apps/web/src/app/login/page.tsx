@@ -1,11 +1,9 @@
 "use client";
 
-import React from "react";
-import styles from "./index.module.scss";
-import Navbar from "views/navbar";
-import LoginForm from "views/loginForm";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
+import LoginForm from "views/loginForm";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default function LoginPage() {
   const { theme } = useThemeContext();

@@ -1,25 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./index.module.scss";
-import globals from "styles/globals.module.scss";
-import Navbar from "views/navbar";
-import ManageUser from "views/manageUser";
+import { useAuth } from "api/client/hooks/auth/useAuth";
 import { clsx } from "clsx";
 import Button from "components/button";
-import ManageSettings from "views/manageSettings";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import { useAuth } from "api/client/hooks/auth/useAuth";
-import { useRouter } from "next/navigation";
 import ProgressWheel from "components/progressWheel";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import ManageSettings from "views/manageSettings";
+import ManageUser from "views/manageUser";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default function User() {
   const [activeTab, setActiveTab] = useState<number>(0);
   const { theme } = useThemeContext();
   const router = useRouter();
 
-  const { data, isLoading, isSuccess, isError } = useAuth();
+  const { data, isLoading, isError } = useAuth();
 
   const tabs: { component: JSX.Element; name: string }[] = [
     { component: <ManageUser data={data} />, name: "manage user" },

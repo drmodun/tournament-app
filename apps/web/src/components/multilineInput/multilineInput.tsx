@@ -1,16 +1,16 @@
 "use client";
 
+import { clsx } from "clsx";
 import { ChangeEventHandler } from "react";
-import styles from "./multilineInput.module.scss";
+import { useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import {
-  Variants,
   TextVariants,
-  textColor,
+  Variants,
   inverseTextColor,
+  textColor,
 } from "types/styleTypes";
-import { clsx } from "clsx";
-import { useFormContext } from "react-hook-form";
+import styles from "./multilineInput.module.scss";
 
 interface MultilineInputProps {
   style?: React.CSSProperties;

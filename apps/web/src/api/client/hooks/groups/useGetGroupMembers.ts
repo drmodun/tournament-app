@@ -1,12 +1,9 @@
 "use client";
 
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   groupRoleEnumType,
-  ICreateGroupRequest,
   IMiniGroupResponseWithCountry,
-  IMiniUserResponseWithCountry,
-  userRoleEnumType,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -15,8 +12,6 @@ import {
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 type GroupMembersType = {
   group: IMiniGroupResponseWithCountry;
@@ -30,7 +25,7 @@ type GroupMembersType = {
   }[];
 };
 
-export const getGroupMembers = async (page?: number, groupId?: number) =>
+export const getGroupMembers = async (groupId?: number) =>
   clientApi
     .get<
       never,
@@ -39,15 +34,12 @@ export const getGroupMembers = async (page?: number, groupId?: number) =>
     .then((res) => res.data);
 
 export const useGetGroupMembers = (groupId: number | undefined) => {
-  return useInfiniteQuery({
+  return useQuery({
     queryKey: ["group", groupId],
-    queryFn: ({ pageParam }: { pageParam?: number }) =>
-      getGroupMembers(pageParam, groupId),
+    queryFn: () => getGroupMembers(groupId),
     staleTime: Infinity,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (lastPage, allPages) => allPages.length + 1,
-    initialPageParam: 1,
   });
 };

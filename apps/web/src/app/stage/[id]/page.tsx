@@ -1,11 +1,7 @@
-import { fetchUser } from "api/client/hooks/user/serverFetches";
-import styles from "./index.module.scss";
-import Navbar from "views/navbar";
-import UserProfile from "views/userProfile";
-import { fetchCompetition } from "api/client/hooks/competitions/serverFetches";
-import ManageStages from "views/manageStages";
 import { fetchStage } from "api/client/hooks/stages/serverFetches";
 import ManageStage from "views/manageStage";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default async function Stages({
   params,

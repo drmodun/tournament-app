@@ -1,45 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./editStageForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Button from "components/button";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor, TextVariants } from "types/styleTypes";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Input from "components/input";
-import Dropdown from "components/dropdown";
-import SlideButton from "components/slideButton";
-import CheckboxGroup from "components/checkboxGroup";
+import { UseMutationResult } from "@tanstack/react-query";
 import {
-  ICreateGroupRequest,
-  IGroupMembershipResponse,
   IStageResponseWithTournament,
   IUpdateStageDto,
   stageStatusEnum,
   stageTypeEnum,
 } from "@tournament-app/types";
-import RichEditor from "components/richEditor";
-import { countries } from "country-flag-icons";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
+import { fetchAutocomplete } from "api/googleMapsAPI/places";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dropdown from "components/dropdown";
 import ImageDrop from "components/imageDrop";
 import ImagePicker from "components/imagePicker";
-import {
-  COUNTRY_CODE,
-  COUNTRY_CODES_TO_NAMES,
-  formatDateTimeHTMLInput,
-} from "utils/mixins/formatting";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
-import ProgressWheel from "components/progressWheel";
+import Input from "components/input";
+import RichEditor from "components/richEditor";
+import SlideButton from "components/slideButton";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { formatDateTimeHTMLInput } from "utils/mixins/formatting";
 import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
-import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
-import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
-import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
-import { useStepContext } from "@mui/material";
+import styles from "./editStageForm.module.scss";
 
 type EditStageFormProps = {
   mutation: UseMutationResult<
@@ -60,10 +45,8 @@ export default function EditStageForm({ mutation, stage }: EditStageFormProps) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
-  const [placeId, setPlaceId] = useState<string>();
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
   const [locationId, setLocationId] = useState<number>();
-  const [finalLocationName, setFinalLocationName] = useState<string>();
 
   const editMethods = useForm<IUpdateStageDto>();
   const onEditSubmit: SubmitHandler<IUpdateStageDto> = (data) => {
@@ -92,7 +75,6 @@ export default function EditStageForm({ mutation, stage }: EditStageFormProps) {
     });
 
     setLocationId(res.id);
-    setFinalLocationName(placeName);
   };
 
   useEffect(() => {
@@ -292,7 +274,6 @@ export default function EditStageForm({ mutation, stage }: EditStageFormProps) {
             isReactFormHook={true}
             defaultValue={stage?.location?.name}
             onChange={(e) => {
-              setPlaceId(undefined);
               fetchAutocomplete(e.target).then((autocomplete) => {
                 const tempListener = autocomplete.addListener(
                   "place_changed",

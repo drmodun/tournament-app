@@ -1,8 +1,8 @@
-import { MouseEventHandler, MouseEvent } from "react";
-import Toast from "../toast/toast";
+import { MouseEvent, MouseEventHandler } from "react";
 import { ToastProps } from "types/toastTypes";
-import styles from "./toastList.module.scss";
 import { useToastContext } from "utils/hooks/useToastContext";
+import Toast from "../toast/toast";
+import styles from "./toastList.module.scss";
 
 export default function ToastList({ style }: { style?: React.CSSProperties }) {
   const toastContext = useToastContext();

@@ -1,28 +1,20 @@
 "use client";
 
-import styles from "./manageTeamMembers.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import {
-  groupRoleEnumType,
-  IGroupMembershipResponse,
-  IGroupMembershipResponseWithDates,
-  IMiniUserResponseWithCountry,
-  userRoleEnumType,
-} from "@tournament-app/types";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
-import AddLFPForm from "views/addLFPForm";
-import ViewLFP from "views/viewLFP";
-import ProgressWheel from "components/progressWheel";
-import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
-import Link from "next/link";
-import { useRemoveUserFromGroup } from "api/client/hooks/groups/useRemoveUserFromGroup";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import { groupRoleEnumType } from "@tournament-app/types";
+import { useGetGroupMembersQuery } from "api/client/hooks/groups/useGetGroupMembersQuery";
+import { useRemoveUserFromGroup } from "api/client/hooks/groups/useRemoveUserFromGroup";
+import { clsx } from "clsx";
 import Button from "components/button";
+import ProgressWheel from "components/progressWheel";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { COUNTRY_NAMES_TO_CODES } from "utils/mixins/formatting";
+import styles from "./manageTeamMembers.module.scss";
 
 type UserCardProps = {
   id: number;
@@ -118,18 +110,14 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
     fetchNextPage,
     isFetchNextPageError,
     isFetchingNextPage,
-  } = useGetGroupMembers(teamId);
+  } = useGetGroupMembersQuery(teamId);
   const [activePage, setActivePage] = useState<number>(0);
   const [fetchLimit, setFetchLimit] = useState<number>(-1);
-
-  useEffect(() => {
-    console.log("diwoa", groupMembers);
-  }, [groupMembers]);
 
   const forward = async () => {
     if (activePage == fetchLimit) return;
     const nextPage = await fetchNextPage();
-    if (nextPage.data?.pages[activePage]?.members?.length == 0) {
+    if (nextPage.data?.pages[activePage]?.results?.length == 0) {
       setFetchLimit(activePage);
       return;
     }
@@ -158,20 +146,22 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
             />
           </p>
           <div className={styles.groupMembers}>
-            {groupMembers?.pages[0].members?.length == 0 || !groupMembers ? (
+            {groupMembers?.pages[0]?.results.length === 0 || !groupMembers ? (
               <p>there are no team members!</p>
             ) : (
-              groupMembers?.pages.flatMap((e) =>
-                e?.members?.flatMap(
-                  (member: {
-                    id: number;
-                    username: string;
-                    profilePicture: string;
-                    country: string;
-                    createdAt: string;
-                    role: groupRoleEnumType;
-                  }) => <UserCard {...member} groupId={teamId} />,
-                ),
+              groupMembers?.pages.flatMap(
+                (page) =>
+                  page.results?.map((member) => {
+                    return member.members.map((member) => {
+                      return (
+                        <UserCard
+                          key={member.id}
+                          {...member}
+                          groupId={teamId}
+                        />
+                      );
+                    });
+                  }) || [],
               )
             )}
           </div>

@@ -1,21 +1,12 @@
 "use client";
 
-import {
-  InfiniteData,
-  QueryFunction,
-  useInfiniteQuery,
-  useQuery,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   GroupMembershipResponsesEnum,
-  GroupMembershipReturnTypesEnumType,
   groupRoleEnum,
   IBaseQueryResponse,
-  IExtendedUserResponse,
   IGroupMembershipQueryRequest,
   IGroupMembershipResponse,
-  IGroupMembershipResponseWithDates,
-  userRoleEnum,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -24,7 +15,6 @@ import {
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 
 export const getAdminUserGroups = async (
@@ -61,7 +51,7 @@ export const useAdminUserGroups = () => {
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null && !!data?.id,
     getNextPageParam: (lastPage, pages) =>
-      lastPage.metadata.pagination.page + 1,
+      lastPage.results.length < 10 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

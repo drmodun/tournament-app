@@ -1,25 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./addLFPForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
-import {
-  ICreateGroupRequest,
-  ICreateLFPRequest,
-  tournamentLocationEnum,
-} from "@tournament-app/types";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { FormProvider, useForm } from "react-hook-form";
-import Input from "components/input";
-import RichEditor from "components/richEditor";
-import CheckboxGroup from "components/checkboxGroup";
-import Dropdown from "components/dropdown";
-import Button from "components/button";
+import { ICreateLFPRequest } from "@tournament-app/types";
 import { useCreateLFP } from "api/client/hooks/lfp/useCreateLFP";
 import { clsx } from "clsx";
+import Button from "components/button";
 import MultilineInput from "components/multilineInput";
+import { FormProvider, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./addLFPForm.module.scss";
 
 export default function AddLFPForm({ groupId }: { groupId?: number }) {
   const { theme } = useThemeContext();

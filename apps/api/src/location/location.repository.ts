@@ -96,7 +96,7 @@ export class LocationDrizzleRepository extends PrimaryRepository<
           createdAt: location.createdAt,
         };
       default:
-        return {}; // TODO: check if there are more of these potentially problematic empty objects
+        return null;
     }
   }
 

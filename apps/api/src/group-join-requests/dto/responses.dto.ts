@@ -42,8 +42,6 @@ export class GroupJoinRequestWithGroupResponse
 
   @ApiProperty()
   message: string;
-
-  //TODO: after adding LFP add more response types and fields
 }
 
 export class GroupJoinRequestWithMiniGroupResponse

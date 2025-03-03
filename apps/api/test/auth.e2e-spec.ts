@@ -134,6 +134,4 @@ describe('AuthController (e2e)', () => {
         .expect(401);
     });
   });
-
-  //TODO: test google auth when frontend done
 });

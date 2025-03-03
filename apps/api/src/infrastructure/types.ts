@@ -22,7 +22,6 @@ export enum TemplatesEnum {
   GROUP_ADMIN_PROMOTION = 'group-admin-promotion',
   GROUP_ADMIN_DEMOTION = 'group-admin-demotion',
   TEST_TEMPLATE = 'test-template',
-  //TODO: add other needed emails and notifs
 }
 
 class WelcomeInfo {
@@ -120,5 +119,3 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   'email-confirmation': VerifyEmailInfo,
   'test-template': {},
 };
-
-//TODO: implement the email templates and other email template bodies

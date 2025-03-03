@@ -196,9 +196,6 @@ export class ParticipationController {
     });
   }
 
-  // TODO: see if a put / patch is even necessary
-  // TODO: check if other functions in other controllers are puts or patches and standardize
-
   @UseGuards(JwtAuthGuard, CanCancelParticipationGuard)
   @ApiBearerAuth()
   @Delete(':participationId')

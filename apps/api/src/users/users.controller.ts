@@ -69,10 +69,10 @@ export class UsersController {
     return await this.usersService.create({
       ...createUserDto,
       isFake: true,
-      email: crypto.randomUUID(), // to make logins effectively impossible and satisfy the unique constraint
-      dateOfBirth: new Date(), // Does not matter for fake users
+      email: crypto.randomUUID(),
+      dateOfBirth: new Date(),
     });
-  } // TODO: test fake functions if time allows it
+  }
 
   @ApiExtraModels(
     MiniUserResponse,
@@ -166,8 +166,6 @@ export class UsersController {
     @Query('responseType')
     responseType?: UserResponseEnumType,
   ) {
-    // TODO: implement guards for admin access stuff
-
     return await this.usersService.findOne(id, responseType);
   }
 

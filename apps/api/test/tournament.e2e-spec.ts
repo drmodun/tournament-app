@@ -19,8 +19,6 @@ import {
   UpdateTournamentRequest,
 } from '../src/tournament/dto/requests.dto';
 
-//TODO: remove temporary comments on test files
-
 describe('TournamentController (e2e)', () => {
   let app: INestApplication;
   let superAdminToken: string;

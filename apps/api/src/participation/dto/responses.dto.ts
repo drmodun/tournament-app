@@ -55,6 +55,4 @@ export class MiniParticipationWithGroup
 }
 
 export class ExtendedParticipationResponse
-  implements IExtendedParticipationResponse {
-  // TODO: add roster and match data later here
-}
+  implements IExtendedParticipationResponse {}

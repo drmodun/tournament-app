@@ -30,7 +30,6 @@ export interface IGroupResponseExtended extends IGroupResponse {
   createdAt: string;
   tournamentCount: number;
   subscriberCount: number;
-  //TODO: add whatever else aggregated is needed here
 }
 
 export type BaseGroupResponse =
@@ -63,4 +62,3 @@ export type GroupReturnTypesEnumType =
 export type GroupSortingEnumType =
   (typeof GroupSortingEnum)[keyof typeof GroupSortingEnum];
 
-//TODO: maybe add another one for groups and categories

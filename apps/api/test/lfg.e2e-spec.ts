@@ -125,7 +125,6 @@ describe('LFGController (e2e)', () => {
         expect(player).toHaveProperty('user');
         expect(player).toHaveProperty('message');
         expect(player).toHaveProperty('careers');
-        //TODO: extensively test this later
         expect(player.careers.length).toBeGreaterThan(0);
       }
     });

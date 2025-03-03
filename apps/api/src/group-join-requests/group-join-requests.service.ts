@@ -51,8 +51,6 @@ export class GroupJoinRequestsService {
     }
 
     if (group.type == groupTypeEnum.PRIVATE) {
-      //TODO: after LFP addition make sure to check if user is in LFP
-      //TODO: also implement checks if the LFP is related in actuality
       console.log(relatedLFPId);
 
       throw new BadRequestException(
@@ -150,5 +148,5 @@ export class GroupJoinRequestsService {
     }
 
     await this.remove(groupId, userId);
-  } // TODO: add notifications later
+  }
 }

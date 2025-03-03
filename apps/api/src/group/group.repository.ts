@@ -187,8 +187,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       if (!field) return;
       const parsed = value as string;
 
-      // TODO: implement full text search for title fields (and potentially vector search)
-
       switch (key) {
         case 'name':
           return eq(group.name, parsed);

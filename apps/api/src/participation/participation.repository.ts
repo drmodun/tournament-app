@@ -111,7 +111,6 @@ export class ParticipationDrizzleRepository extends PrimaryRepository<
       case ParticipationResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(ParticipationResponsesEnum.MINI),
-          // TODO: Add roster and match data when implemented
         };
       case ParticipationResponsesEnum.PARTICIPANT:
         return {
@@ -133,8 +132,8 @@ export class ParticipationDrizzleRepository extends PrimaryRepository<
   > = {
     [ParticipationSortingEnum.CREATED_AT]: participation.createdAt,
     [ParticipationSortingEnum.NAME]: sql`COALESCE("user"."username", "group"."name")`,
-    [ParticipationSortingEnum.IS_FAKE]: sql`COALESCE("user"."isFake", "group"."isFake")`, // hopefully works
-    [ParticipationSortingEnum.PLACEMENT]: participation.id, // TODO later
+    [ParticipationSortingEnum.IS_FAKE]: sql`COALESCE("user"."isFake", "group"."isFake")`,
+    [ParticipationSortingEnum.PLACEMENT]: participation.id,
   };
 
   conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(

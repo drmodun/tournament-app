@@ -32,7 +32,7 @@ export const useGetCompetitions = () => {
     retryDelay: LARGE_QUERY_RETRY_DELAY,
     retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (page, pages) => pages.length + 1, // TODO: implementiraj kada bude fullCount implementiran
+    getNextPageParam: (page, pages) => pages.length + 1,
     initialPageParam: 1,
   });
 };

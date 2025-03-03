@@ -42,7 +42,7 @@ export const useGroupJoinRequests = (groupId: number | undefined) => {
     retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (page, pages) =>
-      page.results.length < 5 ? undefined : pages.length + 1, // TODO: promjeni kada je dodan fullCount
+      page.results.length < 5 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

@@ -7,8 +7,7 @@ export interface ICreateCategoryRequest {
 
 export interface IUploadCategoryLogoRequest {
   logo: string;
-} // TODO. after implementing the upload endpoint maybe remove this or merge it with the update request
-
+}
 export interface IUpdateCategoryRequest {
   name?: string;
   description?: string;

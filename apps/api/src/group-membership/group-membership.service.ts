@@ -98,9 +98,6 @@ export class GroupMembershipService {
     return results[0] || null;
   }
 
-  //TODO: maybe in future composite queries make the composite objesct paramaters intead of using each
-  //one as a function a argument
-
   async update(
     groupId: number,
     userId: number,

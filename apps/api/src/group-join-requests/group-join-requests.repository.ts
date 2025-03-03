@@ -102,7 +102,7 @@ export class GroupJoinRequestDrizzleRepository extends CompositeRepository<
         };
       default:
         return this.getMappingObject(GroupJoinRequestResponsesEnum.WITH_USER);
-    } // TODO: maybe make this use the other repositories
+    }
   }
 
   public sortRecord: Record<

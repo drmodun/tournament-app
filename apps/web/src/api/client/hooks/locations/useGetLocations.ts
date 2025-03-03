@@ -24,7 +24,7 @@ export const getLocations = async (pageParam?: number) =>
           page: pageParam ?? 1,
           returnType: LocationResponsesEnum.EXTENDED,
         },
-      },
+      }
     )
     .then((res) => res.data);
 
@@ -37,7 +37,7 @@ export const useGetLocations = () => {
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     getNextPageParam: (page, pages) =>
-      page.results.length < 20 ? undefined : pages.length + 1, // todo: implementiraj kada bude fullCount implementiran
+      page.results.length < 20 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

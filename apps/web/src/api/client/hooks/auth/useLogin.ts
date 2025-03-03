@@ -18,7 +18,6 @@ export const loginUser = async (data: IEmailPasswordLoginRequest) =>
       AxiosResponse<IUserLoginResponse>
     >("/auth/login", data)
     .then((res) => res.data);
-// TODO: make google login later
 
 export const useLogin = () => {
   const toast = useToastContext();
@@ -33,13 +32,13 @@ export const useLogin = () => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("me"),
       });
-      toast.addToast("successfully logged in", "success"); //TODO: make this an object for easier and more consistent usage
+      toast.addToast("successfully logged in", "success");
       await refetch();
 
       setTimeout(() => navigate.push("/main"), 1000);
     },
     onError: (error: any) => {
-      toast.addToast("invalid credentials", "error"); //TODO: maybe make this show the server error message, or just log it
+      toast.addToast("invalid credentials", "error");
       console.error(error);
     },
     onMutate: () => {

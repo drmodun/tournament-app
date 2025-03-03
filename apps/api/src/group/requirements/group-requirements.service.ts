@@ -18,7 +18,7 @@ export class GroupRequirementsService {
     return await this.groupRequirementsRepository.createRequirements(
       groupId,
       data,
-    ); // TODO: so far it makes sense to return the whole requirements for preview and stuff, but later maybe do the id strategy
+    );
   }
 
   async updateRequirements(

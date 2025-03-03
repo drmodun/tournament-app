@@ -87,6 +87,4 @@ export class BlobService {
       throw new InternalServerErrorException('Failed to retrieve file');
     }
   }
-
-  //TODO: add other funcs later like multipart upload, etc
 }

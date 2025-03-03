@@ -17,7 +17,7 @@ import { AxiosResponse } from "axios";
 export const getGroupJoinRequestsLFP = async (
   page: number | undefined,
 
-  data?: IGroupJoinRequestQuery,
+  data?: IGroupJoinRequestQuery
 ) =>
   clientApi
     .get<
@@ -42,7 +42,7 @@ export const useGroupJoinRequestsLFP = (data?: IGroupJoinRequestQuery) => {
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (page, pages) =>
-      page.results.length < 10 ? undefined : pages.length + 1, // TODO: promjeni kada je dodan fullCount
+      page.results.length < 10 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

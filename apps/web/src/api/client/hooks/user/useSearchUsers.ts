@@ -32,7 +32,7 @@ export const useSearchUsers = (search?: string) => {
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (page, pages) =>
-      (page?.length ?? -1) < 10 ? undefined : pages.length + 1, // todo: implementiraj kada bude fullCount implementiran
+      (page?.length ?? -1) < 10 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

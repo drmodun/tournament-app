@@ -143,8 +143,7 @@ export class GroupService {
       group,
       tournaments,
     };
-  } //TODO. remove this when those entities are created
-
+  }
   async getGroupFollowers(id: number) {
     const group = await this.findOne(id);
     const followers = await this.repository.getGroupFollowers(id);

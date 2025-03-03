@@ -15,7 +15,7 @@ import { AxiosResponse } from "axios";
 
 export const getCompetitionsQuery = async (
   page?: number,
-  locationId?: number,
+  locationId?: number
 ) => {
   if (!locationId) return;
   console.log("LOCATION ID", locationId);
@@ -39,7 +39,7 @@ export const useGetCompetitionsQuery = (locationId?: number) => {
     retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (page, pages) =>
-      (page?.results?.length ?? -1) < 10 ? undefined : pages.length + 1, // TODO: implementiraj kada bude fullCount implementiran
+      (page?.results?.length ?? -1) < 10 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

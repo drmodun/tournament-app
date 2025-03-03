@@ -110,8 +110,6 @@ export class GroupInvitesController {
     );
   }
 
-  //TODO : think if it is necessary to verify the user getting as admin of group or the invited users
-
   @Get(':groupId/:userId')
   @ApiOkResponse({
     content: {
@@ -144,7 +142,7 @@ export class GroupInvitesController {
     );
   }
 
-  @Delete(':groupId/:userId') // TODO: think if somehow we can extract the current group out of this
+  @Delete(':groupId/:userId')
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
   @ApiBearerAuth()
   async remove(

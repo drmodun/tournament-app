@@ -224,7 +224,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           parentTournamentId: tournament.parentTournamentId,
         };
       default:
-        return {}; // TODO: if this messes up the return type remove it and replace it with null
+        return null;
     }
   }
 

@@ -29,7 +29,7 @@ type GroupMembersType = {
 
 export const getGroupMembersQuery = async (
   groupId: number | undefined,
-  page: number | undefined,
+  page: number | undefined
 ) =>
   clientApi
     .get<never, AxiosResponse<IBaseQueryResponse<GroupMembersType>>>(
@@ -41,7 +41,7 @@ export const getGroupMembersQuery = async (
           page: page ?? 1,
           pageSize: 15,
         },
-      },
+      }
     )
     .then((res) => res.data);
 
@@ -55,7 +55,7 @@ export const useGetGroupMembersQuery = (groupId: number | undefined) => {
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (page, pages) =>
-      page.results.length < 15 ? undefined : pages.length + 1, // TODO: promjeni kada je dodan fullCount
+      page.results.length < 15 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

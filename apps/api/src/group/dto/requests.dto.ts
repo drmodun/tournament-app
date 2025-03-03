@@ -98,7 +98,7 @@ export class UpdateGroupRequest implements IUpdateGroupRequest {
   @IsOptional()
   @IsInt()
   @ApiPropertyOptional()
-  locationId?: number; // TODO: add special location specific stuff later
+  locationId?: number;
 
   @IsOptional()
   @IsString()

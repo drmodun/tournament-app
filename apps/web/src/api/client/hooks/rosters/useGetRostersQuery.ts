@@ -17,7 +17,7 @@ import { AxiosResponse } from "axios";
 
 export const getRostersQuery = async (
   page: number,
-  query?: IQueryRosterRequest,
+  query?: IQueryRosterRequest
 ) =>
   clientApi
     .get<
@@ -42,7 +42,7 @@ export const useGetRostersQuery = (query?: IQueryRosterRequest) => {
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (page, pages) =>
-      page.results.length < 15 ? undefined : pages.length + 1, // todo: implementiraj kada bude fullCount implementiran
+      page.results.length < 15 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

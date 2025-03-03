@@ -16,8 +16,6 @@ export class MetadataMaker {
     return metadata;
   }
 
-  //TODO: fix MetadataMaker to produce valid queries
-
   static makeLinks<TQuery extends BaseQuery>(url: string, query: TQuery) {
     const defaultSign = url.includes('?') ? '&' : '?';
 
@@ -31,7 +29,7 @@ export class MetadataMaker {
       next: url.includes('pagination')
         ? url.replace(/page=\d+/, `page=${query?.page + 1}`)
         : `${url}${defaultSign}page=${(query?.page || 1) + 1}`,
-    }; // TODO: potentially check wether next link exists
+    };
 
     return links;
   }

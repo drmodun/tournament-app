@@ -3,9 +3,13 @@ import {
   IMiniParticipationResponse,
   IParticipationResponse,
   IExtendedParticipationResponse,
+  IMiniParticipationResponseWithGroup,
 } from '@tournament-app/types';
 import { MiniTournamentResponse } from 'src/tournament/dto/responses.dto';
-import { MiniGroupResponse } from 'src/group/dto/responses.dto';
+import {
+  MiniGroupResponse,
+  MiniGroupResponseWithLogo,
+} from 'src/group/dto/responses.dto';
 import { MiniUserResponse } from 'src/users/dto/responses.dto';
 
 export class MiniParticipationResponse implements IMiniParticipationResponse {
@@ -40,6 +44,14 @@ export class ParticipationResponse
 
   @ApiProperty()
   updatedAt: Date;
+}
+
+export class MiniParticipationWithGroup
+  extends MiniParticipationResponse
+  implements IMiniParticipationResponseWithGroup
+{
+  @ApiProperty()
+  group: MiniGroupResponseWithLogo;
 }
 
 export class ExtendedParticipationResponse

@@ -41,6 +41,16 @@ export class ParticipationService {
     return action[0];
   }
 
+  async getManagedParticipationsForPlayer(
+    tournamentId: number,
+    playerId: number,
+  ) {
+    return await this.participationRepository.getManagedParticipationsForPlayer(
+      tournamentId,
+      playerId,
+    );
+  }
+
   async findAll<TResponseType extends BaseParticipationResponseType>(
     query: QueryParticipationDto,
   ): Promise<TResponseType[]> {

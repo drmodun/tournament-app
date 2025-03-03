@@ -20,6 +20,7 @@ import { QueryParticipationDto } from './dto/requests.dto';
 import {
   ExtendedParticipationResponse,
   MiniParticipationResponse,
+  MiniParticipationWithGroup,
   ParticipationResponse,
 } from './dto/responses.dto';
 import {
@@ -109,6 +110,22 @@ export class ParticipationController {
     return await this.participationService.create(tournamentId, {
       userId: user.id,
     });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('/managed-for-player/:tournamentId')
+  @ApiOkResponse({
+    type: [MiniParticipationWithGroup],
+  })
+  async getManagedParticipationsForPlayer(
+    @Param('tournamentId', ParseIntPipe) tournamentId: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.participationService.getManagedParticipationsForPlayer(
+      tournamentId,
+      user.id,
+    );
   }
 
   @UseGuards(

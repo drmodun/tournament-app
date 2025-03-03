@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { participation, group, user, tournament } from 'src/db/schema';
+import {
+  participation,
+  group,
+  user,
+  tournament,
+  groupToUser,
+} from 'src/db/schema';
 import {
   GroupResponsesEnum,
   UserResponsesEnum,
@@ -8,16 +14,19 @@ import {
   ParticipationResponsesEnum,
   ParticipationResponseEnumType,
   ParticipationSortingEnum,
+  groupRoleEnum,
 } from '@tournament-app/types';
 import { UserDrizzleRepository } from 'src/users/user.repository';
 import { GroupDrizzleRepository } from 'src/group/group.repository';
 import { TournamentDrizzleRepository } from 'src/tournament/tournament.repository';
 import {
+  and,
   ColumnBaseConfig,
   ColumnDataType,
   eq,
   gte,
   InferSelectModel,
+  or,
   sql,
   SQL,
 } from 'drizzle-orm';
@@ -41,6 +50,31 @@ export class ParticipationDrizzleRepository extends PrimaryRepository<
     private readonly tournamentDrizzleRepository: TournamentDrizzleRepository,
   ) {
     super(participation);
+  }
+
+  getManagedParticipationsForPlayer(tournamentId: number, playerId: number) {
+    return db
+      .select({
+        id: participation.id,
+        tournamentId: participation.tournamentId,
+        groupId: participation.groupId,
+        userId: participation.userId,
+        group: this.groupDrizzleRepository.getMappingObject(
+          GroupResponsesEnum.MINI_WITH_LOGO,
+        ),
+      })
+      .from(participation)
+      .leftJoin(groupToUser, eq(groupToUser.groupId, participation.groupId))
+      .where(
+        and(
+          eq(participation.tournamentId, tournamentId),
+          eq(groupToUser.userId, playerId),
+          or(
+            eq(groupToUser.role, groupRoleEnum.ADMIN),
+            eq(groupToUser.role, groupRoleEnum.OWNER),
+          ),
+        ),
+      );
   }
 
   getMappingObject(responseType: ParticipationResponseEnumType) {

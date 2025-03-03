@@ -1,12 +1,26 @@
 import { IMiniUserResponse, IUserResponse } from "../user/responses.dto";
 import { IMiniTournamentResponse } from "../tournament/responses.dto";
-import { IGroupResponse, IMiniGroupResponse } from "src/group";
+import {
+  IGroupResponse,
+  IMiniGroupResponse,
+  IMiniGroupResponseWithLogo,
+} from "src/group";
 
 export interface IMiniParticipationResponse {
   id: number;
   userId?: number;
   groupId?: number;
   tournamentId: number;
+}
+
+export interface IMiniParticipationResponseWithGroup
+  extends IMiniParticipationResponse {
+  group: IMiniGroupResponseWithLogo;
+}
+
+export interface IMiniParticipationResponseWithUser
+  extends IMiniParticipationResponse {
+  user: IMiniUserResponse;
 }
 
 export interface IParticipationResponse extends IMiniParticipationResponse {

@@ -11,7 +11,7 @@ import {
   IFreeForAllOptions,
 } from "./index";
 
-export interface ICreateTournamentRequest {
+export interface ICreateChallongeTournamentRequest {
   data: {
     type: "tournament";
     attributes: {
@@ -40,7 +40,8 @@ export interface ICreateTournamentRequest {
   };
 }
 
-export interface IUpdateTournamentRequest extends ICreateTournamentRequest {}
+export interface IUpdateChallongeTournamentRequest
+  extends ICreateChallongeTournamentRequest {}
 
 export interface ITournamentStateRequest {
   data: {
@@ -60,7 +61,7 @@ export interface ITournamentStateRequest {
   };
 }
 
-export interface ICreateParticipantRequest {
+export interface ICreateChallongeParticipantRequest {
   data: {
     type: "participant";
     attributes: {
@@ -73,7 +74,8 @@ export interface ICreateParticipantRequest {
   };
 }
 
-export interface IUpdateParticipantRequest extends ICreateParticipantRequest {}
+export interface IUpdateParticipantRequest
+  extends ICreateChallongeParticipantRequest {}
 
 export interface IBulkCreateParticipantsRequest {
   data: {

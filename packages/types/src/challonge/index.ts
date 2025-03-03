@@ -105,3 +105,6 @@ export interface IRelationship {
 export interface ILinks {
   self: string;
 }
+
+export * from "./requests.dto";
+export * from "./responses.dto";

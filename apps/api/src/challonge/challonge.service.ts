@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from './types';
+import { ICreateChallongeTournamentRequest } from '@tournament-app/types';
 
 @Injectable()
 export class ChallongeService {
@@ -39,4 +40,11 @@ export class ChallongeService {
       this.logger.error(error);
     }
   }
+
+  async createTournament(
+    createTournamentDto: ICreateChallongeTournamentRequest,
+  ) {
+    const response = await this.httpService.axiosRef.post(
+      'https://api.challonge.com/v1/tournaments.json',
+
 }

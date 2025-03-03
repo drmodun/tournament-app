@@ -1,0 +1,126 @@
+@import "../../styles/";
+
+.screen {
+  padding-top: $doublePadding * 6;
+  padding-bottom: $doublePadding * 2;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-left: $horizontalMargin;
+  padding-right: $horizontalMargin;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+  }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+    height: 100%;
+  }
+
+  padding-bottom: $doublePadding * 2;
+}
+
+.navbar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+.tabs {
+  width: 100%;
+  display: flex;
+  gap: $halfPadding;
+  padding-left: $padding;
+  padding-right: $padding;
+  border-radius: $borderRadius;
+  margin-bottom: $doublePadding;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    height: 3 * $baseComponentHeight + 3 * $padding;
+  }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 2 * $baseComponentHeight + 2.5 * $padding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    height: 2 * $baseComponentHeight + 2.5 * $padding;
+  }
+}
+
+.teamsWrapper:nth-of-type(1n + 15) {
+  display: none;
+}
+
+.tab {
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lightFill > * {
+  fill: $light;
+}
+
+.darkFill > * {
+  fill: $dark;
+}
+
+.button {
+  border: 0;
+  background-color: transparent;
+  width: $baseComponentHeight;
+  cursor: pointer;
+}
+
+.teamsWrapper {
+  width: 100%;
+  display: flex;
+  margin-bottom: $doublePadding;
+  gap: $halfPadding;
+  padding-top: $padding;
+  padding-bottom: $padding;
+  height: $baseComponentHeight;
+  @media screen and (max-width: $desktopBreakpoint) {
+    flex-wrap: wrap;
+  }
+}
+
+.dialog {
+  width: 75%;
+  overflow-y: auto;
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.progressWheelWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noTeams {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -77,9 +77,20 @@ export default function AddLFGForm() {
           required={true}
           className={styles.input}
           label="message"
+          reactFormHookProps={{
+            pattern: {
+              value: /^.{10,}$/gm,
+              message: "message length must be longer then or equal 10 ",
+            },
+          }}
         />
         {methods.formState.errors.message?.type === "required" && (
           <p className={styles.error}>this field is required!</p>
+        )}
+        {methods.formState.errors.message?.type === "pattern" && (
+          <p className={clsx(styles.error, globals[`${textColorTheme}Color`])}>
+            {methods.formState.errors.message.message}
+          </p>
         )}
         <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
           highlight your interests

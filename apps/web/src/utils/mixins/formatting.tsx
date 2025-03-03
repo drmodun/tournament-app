@@ -24,6 +24,13 @@ const TIME_SPANS: { duration: number; name: String }[] = [
 ///
 /// Example: if the video was uploaded 50 hours ago it will be simplified / rounded to 2 days ago
 export const calculateBestPastDateFormat = (targetDate: Date) => {
+  if (!targetDate) return "unknown";
+  try {
+    targetDate.getTime();
+  } catch {
+    return "unknown";
+  }
+
   // dateDifference is in milliseconds, so we have to convert it to a nicer format
   const dateDifference = Date.now() - targetDate.getTime();
 

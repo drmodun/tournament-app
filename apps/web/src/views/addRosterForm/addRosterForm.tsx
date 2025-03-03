@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "./addLFPForm.module.scss";
+import styles from "./addRosterForm.module.scss";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
 import {
@@ -21,7 +21,7 @@ import { useCreateLFP } from "api/client/hooks/lfp/useCreateLFP";
 import { clsx } from "clsx";
 import MultilineInput from "components/multilineInput";
 
-export default function AddLFPForm({ groupId }: { groupId?: number }) {
+export default function AddRosterForm({ groupId }: { groupId?: number }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const createLFPMutation = useCreateLFP();

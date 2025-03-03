@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./navbar.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import { textColor, TextVariants, Variants } from "types/styleTypes";
-import Button from "components/button";
-import Link from "next/link";
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useAuth } from "api/client/hooks/auth/useAuth";
+import { useLogout } from "api/client/hooks/auth/useLogout";
+import { clsx } from "clsx";
+import Button from "components/button";
+import ProgressWheel from "components/progressWheel";
+import Link from "next/link";
+import globals from "styles/globals.module.scss";
+import { textColor, TextVariants, Variants } from "types/styleTypes";
 import { useDrawerContext } from "utils/hooks/useDrawerContext";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { useAuth } from "api/client/hooks/auth/useAuth";
-import ProgressWheel from "components/progressWheel";
-import { useLogout } from "api/client/hooks/auth/useLogout";
+import styles from "./navbar.module.scss";
 
 export interface NavbarProps {
   style?: React.CSSProperties;

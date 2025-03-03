@@ -1,26 +1,21 @@
 "use client";
 
-import styles from "./manageStages.module.scss";
-import globals from "styles/globals.module.scss";
+import AddIcon from "@mui/icons-material/Add";
+import { useGetTournamentStages } from "api/client/hooks/stages/useGetTournamentStages";
 import { clsx } from "clsx";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import Dialog from "components/dialog";
 import Button from "components/button";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import { useGetUserGroupInvites } from "api/client/hooks/groupInvites/useGetUserGroupInvites";
+import Dialog from "components/dialog";
+import ProgressWheel from "components/progressWheel";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { useAcceptGroupInvite } from "api/client/hooks/groupInvites/useAcceptGroupInvite";
-import { useDeclineGroupInvite } from "api/client/hooks/groupInvites/useDeclineGroupInvite";
-import ProgressWheel from "components/progressWheel";
-import { useGetTournamentStages } from "api/client/hooks/stages/useGetTournamentStages";
-import { ITournamentResponse } from "@tournament-app/types";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTime } from "utils/mixins/formatting";
-import Link from "next/link";
-import AddIcon from "@mui/icons-material/Add";
 import AddStageForm from "views/addStageForm";
+import styles from "./manageStages.module.scss";
 
 export default function ManageStages({
   tournamentId,

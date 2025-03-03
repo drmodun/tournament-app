@@ -1,38 +1,28 @@
 "use client";
 
-import styles from "./manageStage.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import Dialog from "components/dialog";
-import Button from "components/button";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import { useGetUserGroupInvites } from "api/client/hooks/groupInvites/useGetUserGroupInvites";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import { useAcceptGroupInvite } from "api/client/hooks/groupInvites/useAcceptGroupInvite";
-import { useDeclineGroupInvite } from "api/client/hooks/groupInvites/useDeclineGroupInvite";
-import ProgressWheel from "components/progressWheel";
-import { useGetTournamentStages } from "api/client/hooks/stages/useGetTournamentStages";
 import {
   groupRoleEnum,
   IExtendedStageResponseWithTournament,
-  IStageResponseWithTournament,
-  ITournamentResponse,
 } from "@tournament-app/types";
-import { formatDateTime } from "utils/mixins/formatting";
-import { useUpdateStage } from "api/client/hooks/stages/useUpdateStage";
-import EditStageForm from "views/editStageForm";
-import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
-import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
-import { useGetContestParticipatingGroups } from "api/client/hooks/groups/useGetContestParticipatingGroups";
-import ViewRoster from "views/viewRoster";
-import Chip from "components/chip";
-import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 import { useGetManagedForPlayer } from "api/client/hooks/participations/useGetManagedForPlayer";
+import { useUpdateStage } from "api/client/hooks/stages/useUpdateStage";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Chip from "components/chip";
+import Dialog from "components/dialog";
+import ProgressWheel from "components/progressWheel";
+import { useState } from "react";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { formatDateTime } from "utils/mixins/formatting";
+import EditStageForm from "views/editStageForm";
+import ViewRoster from "views/viewRoster";
+import styles from "./manageStage.module.scss";
 
 export type GroupParticipationType = {
   id: number;

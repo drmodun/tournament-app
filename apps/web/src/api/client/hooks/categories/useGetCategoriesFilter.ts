@@ -1,20 +1,18 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   CategoryResponsesEnum,
   IBaseQueryResponse,
   ICategoryResponse,
 } from "@tournament-app/types";
 import {
-  baseApiUrl,
   clientApi,
   getAccessToken,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useAuth } from "../auth/useAuth";
 
 export const getCategoriesFilter = async (pageParam: number, name?: string) =>
   clientApi
@@ -34,7 +32,7 @@ export const useGetCategoriesFilter = (name?: string) => {
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
     getNextPageParam: (lastPage, pages) =>
-      lastPage.metadata.pagination.page + 1,
+      lastPage.results.length < 20 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

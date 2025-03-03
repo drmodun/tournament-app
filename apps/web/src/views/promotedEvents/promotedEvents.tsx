@@ -1,7 +1,7 @@
-import styles from "./promotedEvents.module.scss";
-import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Card from "components/cardExpanded/cardExpanded";
+import globals from "styles/globals.module.scss";
+import styles from "./promotedEvents.module.scss";
 
 export default function PromotedEvents() {
   const propEvents = [

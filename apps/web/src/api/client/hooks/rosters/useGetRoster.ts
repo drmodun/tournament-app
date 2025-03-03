@@ -1,11 +1,8 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
-  GroupResponsesEnum,
   IExtendedRosterResponse,
-  IExtendedUserResponse,
-  IGroupResponseExtended,
   RosterResponsesEnum,
 } from "@tournament-app/types";
 import {
@@ -15,7 +12,6 @@ import {
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 export const getRoster = async (rosterId: number) =>
   clientApi

@@ -1,32 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./addRosterForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
-import {
-  ICreateGroupRequest,
-  ICreateLFPRequest,
-  IExtendedStageResponseWithTournament,
-  IMiniGroupResponseWithLogo,
-  IStageResponseWithTournament,
-  tournamentLocationEnum,
-} from "@tournament-app/types";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { FormProvider, useForm } from "react-hook-form";
-import Input from "components/input";
-import RichEditor from "components/richEditor";
-import CheckboxGroup from "components/checkboxGroup";
-import Dropdown from "components/dropdown";
-import Button from "components/button";
-import { useCreateLFP } from "api/client/hooks/lfp/useCreateLFP";
-import { clsx } from "clsx";
-import MultilineInput from "components/multilineInput";
+import { IExtendedStageResponseWithTournament } from "@tournament-app/types";
 import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import { useCreateRoster } from "api/client/hooks/rosters/useCreateRoster";
-import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
+import { clsx } from "clsx";
+import Button from "components/button";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 import { GroupParticipationType } from "views/manageStage/manageStage";
+import styles from "./addRosterForm.module.scss";
 
 export default function AddRosterForm({
   stage,
@@ -36,13 +19,11 @@ export default function AddRosterForm({
   stage?: IExtendedStageResponseWithTournament;
 }) {
   const { theme } = useThemeContext();
-  const textColorTheme = textColor(theme);
-  const createLFPMutation = useCreateLFP();
 
   const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
   const [selectedSubstitutes, setSelectedSubstitutes] = useState<number[]>([]);
 
-  const { data, isLoading } = useGetGroupMembers(group?.groupId);
+  const { data } = useGetGroupMembers(group?.groupId);
 
   const createRosterMutation = useCreateRoster();
   const onSubmit = () => {

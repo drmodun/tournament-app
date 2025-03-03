@@ -1,40 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import styles from "./search.module.scss";
-import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
-import {
-  ICreateGroupRequest,
-  ICreateLFGRequest,
-  ICreateLFPRequest,
-  tournamentLocationEnum,
-} from "@tournament-app/types";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { FormProvider, useForm } from "react-hook-form";
-import Input from "components/input";
-import RichEditor from "components/richEditor";
-import CheckboxGroup from "components/checkboxGroup";
-import Dropdown from "components/dropdown";
-import Button from "components/button";
-import { useCreateLFP } from "api/client/hooks/lfp/useCreateLFP";
-import { clsx } from "clsx";
-import MultilineInput from "components/multilineInput";
-import { useCreateLFG } from "api/client/hooks/lfg/useCreateLFG";
-import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
-import { useGetCategoriesFilter } from "api/client/hooks/categories/useGetCategoriesFilter";
-import { useGetCategoriesInfinite } from "api/client/hooks/categories/useGetCategoriesInfinite";
-import { useVerifyUser } from "api/client/hooks/auth/useVerifyUser";
-import ProgressWheel from "components/progressWheel";
-import { useRouter } from "next/navigation";
-import { useResetPassword } from "api/client/hooks/auth/useResetPassword";
-import { useToastContext } from "utils/hooks/useToastContext";
-import { useRequestPasswordReset } from "api/client/hooks/auth/useRequestPasswordReset";
-import { useAuth } from "api/client/hooks/auth/useAuth";
-import useDebounce from "utils/hooks/useDebounce";
 import { useSearchUsers } from "api/client/hooks/user/useSearchUsers";
+import { clsx } from "clsx";
+import Input from "components/input";
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import useDebounce from "utils/hooks/useDebounce";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./search.module.scss";
 
 export default function Search() {
   const { theme } = useThemeContext();
@@ -42,7 +17,7 @@ export default function Search() {
   const [debouncedValue, setDebouncedValue] = useState<string>("");
   const textColorTheme = textColor(theme);
 
-  const { data: userData } = useSearchUsers(searchTerm);
+  const { data: userData } = useSearchUsers(debouncedValue);
 
   const debouncedSetValue = useDebounce((value: string) => {
     setDebouncedValue(value);
@@ -53,14 +28,6 @@ export default function Search() {
     setSearchTerm(value);
     debouncedSetValue(value);
   };
-
-  useEffect(() => {
-    console.log(searchTerm);
-  }, [searchTerm]);
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   return (
     <div className={styles.wrapper}>

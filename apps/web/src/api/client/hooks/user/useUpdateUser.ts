@@ -1,14 +1,11 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IExtendedUserResponse, IUpdateUserInfo } from "@tournament-app/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { IUpdateUserInfo } from "@tournament-app/types";
 import {
   clientApi,
-  getAccessToken,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
@@ -27,7 +24,7 @@ export const useUpdateUser = () => {
     mutationFn: updateUser,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully updated user", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("me"),

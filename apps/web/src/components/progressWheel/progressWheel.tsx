@@ -1,14 +1,14 @@
 "use client";
 
-import styles from "./progressWheel.module.scss";
-import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
+import globals from "styles/globals.module.scss";
 import {
   inverseTextColor,
   textColor,
   TextVariants,
   Variants,
 } from "types/styleTypes";
+import styles from "./progressWheel.module.scss";
 
 interface ProgressWheelProps {
   style?: React.CSSProperties;

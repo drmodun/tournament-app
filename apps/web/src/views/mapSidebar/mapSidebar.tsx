@@ -1,19 +1,19 @@
 "use client";
 
-import styles from "./mapSidebar.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import { MarkerLocation, Poi } from "utils/mixins/maps";
-import PlaceIcon from "@mui/icons-material/Place";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import Chip from "components/chip";
-import Link from "next/link";
-import MapElement from "components/map";
+import PlaceIcon from "@mui/icons-material/Place";
 import { useGetLocations } from "api/client/hooks/locations/useGetLocations";
+import { clsx } from "clsx";
+import Chip from "components/chip";
+import MapElement from "components/map";
 import ProgressWheel from "components/progressWheel";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { MarkerLocation, Poi } from "utils/mixins/maps";
+import styles from "./mapSidebar.module.scss";
 
 export default function ManageCompetitions() {
   const [selectedLocation, setSelectedLocation] = useState<MarkerLocation>();
@@ -21,7 +21,7 @@ export default function ManageCompetitions() {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  const { data, isLoading, isError, fetchNextPage } = useGetLocations();
+  const { data, isLoading } = useGetLocations();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +40,9 @@ export default function ManageCompetitions() {
           ) : (
             <>
               <MapElement
-                onMarkerClick={(location) => setSelectedLocation(location)}
+                onMarkerClick={(location: MarkerLocation) => {
+                  setSelectedLocation(location);
+                }}
                 className={styles.mapElement}
                 locations={
                   data &&

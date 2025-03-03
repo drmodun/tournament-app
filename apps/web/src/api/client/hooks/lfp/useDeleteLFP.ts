@@ -1,19 +1,12 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ICreateGroupRequest,
-  ICreateLFPRequest,
-  ILFPResponse,
-} from "@tournament-app/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   clientApi,
-  getAccessToken,
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const deleteLFP = async (data: { groupId?: number; id?: number }) =>
@@ -34,7 +27,7 @@ export const useDeleteLFP = () => {
     mutationFn: deleteLFP,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully deleted LFP", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("lfp"),

@@ -1,10 +1,9 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICreateGroupRequest } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const editGroup = async (
@@ -23,7 +22,7 @@ export const useEditGroup = (groupId: number) => {
     mutationFn: (data: Partial<ICreateGroupRequest>) =>
       editGroup(data, groupId),
     retryDelay: 10000,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully updated group", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("group"),

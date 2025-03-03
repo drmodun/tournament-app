@@ -1,14 +1,14 @@
 "use client";
 
+import ArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import PeopleIcon from "@mui/icons-material/People";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { clsx } from "clsx";
 import { MouseEventHandler } from "react";
-import styles from "./card.module.scss";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
-import { clsx } from "clsx";
-import PeopleIcon from "@mui/icons-material/People";
-import ArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { calculateBestValueFormat } from "utils/mixins/formatting";
+import styles from "./card.module.scss";
 
 export interface CardProps {
   children?: React.ReactNode;

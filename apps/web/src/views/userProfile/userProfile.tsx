@@ -7,16 +7,15 @@ import { useFollowUser } from "api/client/hooks/followers/useFollowUser";
 import { useUnfollowUser } from "api/client/hooks/followers/useUnfollowUser";
 import { clsx } from "clsx";
 import Button from "components/button";
-import RichEditor from "components/richEditor";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import styles from "./userProfile.module.scss";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 
 export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
   const { theme } = useThemeContext();

@@ -1,10 +1,10 @@
 "use client";
 
-import styles from "./tooltip.module.scss";
-import globals from "styles/globals.module.scss";
-import { useState } from "react";
-import { ANIMATION_DURATION, textColor, Variants } from "types/styleTypes";
 import clsx from "clsx";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { ANIMATION_DURATION, textColor, Variants } from "types/styleTypes";
+import styles from "./tooltip.module.scss";
 
 interface TooltipProps {
   style?: React.CSSProperties;

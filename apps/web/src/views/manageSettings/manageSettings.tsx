@@ -1,14 +1,14 @@
 "use client";
 
-import styles from "./manageSettings.module.scss";
-import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Button from "components/button";
-import { useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import CheckboxGroup from "components/checkboxGroup";
 import { CheckboxProps } from "components/checkbox/checkbox";
+import CheckboxGroup from "components/checkboxGroup";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./manageSettings.module.scss";
 
 export default function ManageSettings() {
   const { theme, setTheme } = useThemeContext();

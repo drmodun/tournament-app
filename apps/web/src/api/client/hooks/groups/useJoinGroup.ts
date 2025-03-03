@@ -1,10 +1,8 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ICreateGroupRequest } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const joinGroup = async (data: { groupId?: number; userId?: number }) =>
@@ -22,7 +20,7 @@ export const useJoinGroup = () => {
   return useMutation({
     mutationFn: joinGroup,
     retryDelay: 5000,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully joined the group", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("group"),

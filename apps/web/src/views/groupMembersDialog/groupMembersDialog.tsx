@@ -1,18 +1,15 @@
 "use client";
 
-import styles from "./groupMembersDialog.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { clsx } from "clsx";
 import ProgressWheel from "components/progressWheel";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import Link from "next/link";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { COUNTRY_NAMES_TO_CODES } from "utils/mixins/formatting";
+import styles from "./groupMembersDialog.module.scss";
 
 export default function GroupMembersDialog({
   groupId,

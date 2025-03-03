@@ -1,23 +1,13 @@
 "use client";
 
-import {
-  useState,
-  HTMLInputTypeAttribute,
-  ChangeEventHandler,
-  useRef,
-} from "react";
-import styles from "./imageDrop.module.scss";
-import globals from "styles/globals.module.scss";
-import {
-  Variants,
-  TextVariants,
-  textColor,
-  inverseTextColor,
-} from "types/styleTypes";
-import { clsx } from "clsx";
 import AddIcon from "@mui/icons-material/Add";
-import { toBase64 } from "utils/mixins/helpers";
+import { clsx } from "clsx";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { TextVariants, Variants, textColor } from "types/styleTypes";
+import { toBase64 } from "utils/mixins/helpers";
+import styles from "./imageDrop.module.scss";
 
 interface ImageDropProps {
   style?: React.CSSProperties;
@@ -35,10 +25,8 @@ interface ImageDropProps {
 export default function ImageDrop({
   style,
   variant = "light",
-  labelVariant,
   name = "",
   isReactFormHook = false,
-  reactFormHookProps = {},
   required = false,
   className,
   onFile = () => {},

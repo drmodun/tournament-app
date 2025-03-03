@@ -10,7 +10,6 @@ export const fetchCompetition = async (competitionId: number | undefined) =>
     },
   ).then((res) =>
     res.json().then((res) => {
-      console.log("RES", res);
       return res;
     }),
   );

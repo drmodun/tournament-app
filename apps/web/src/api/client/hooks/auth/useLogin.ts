@@ -24,7 +24,7 @@ export const useLogin = () => {
   const toast = useToastContext();
   const navigate = useRouter();
   const queryClient = useQueryClient();
-  const { refetch, isSuccess } = useAuth();
+  const { refetch } = useAuth();
 
   return useMutation({
     mutationFn: loginUser,

@@ -1,10 +1,10 @@
 "use client";
 
-import { MouseEventHandler } from "react";
-import styles from "./checkbox.module.scss";
-import globals from "styles/globals.module.scss";
-import { Variants, TextVariants, textColor } from "types/styleTypes";
 import { clsx } from "clsx";
+import { MouseEventHandler } from "react";
+import globals from "styles/globals.module.scss";
+import { TextVariants, Variants, textColor } from "types/styleTypes";
+import styles from "./checkbox.module.scss";
 
 export interface CheckboxProps {
   style?: React.CSSProperties;

@@ -1,8 +1,11 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IExtendedUserResponse, IUpdateUserInfo } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  clientApi,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
+} from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
 import { useToastContext } from "utils/hooks/useToastContext";
@@ -20,9 +23,9 @@ export const useDeleteUser = (id: number | undefined) => {
 
   return useMutation({
     mutationFn: () => deleteUser(id),
-    retryDelay: 10000,
-    retry: 3,
-    onSuccess: async (data) => {
+    retryDelay: SMALL_QUERY_RETRY_DELAY,
+    retry: SMALL_QUERY_RETRY_ATTEMPTS,
+    onSuccess: async () => {
       toast.addToast("successfully deleted user", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("user"),

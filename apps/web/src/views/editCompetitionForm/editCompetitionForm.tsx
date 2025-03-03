@@ -1,41 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./editCompetitionForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Button from "components/button";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor, TextVariants } from "types/styleTypes";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Input from "components/input";
-import Dropdown from "components/dropdown";
-import SlideButton from "components/slideButton";
-import CheckboxGroup from "components/checkboxGroup";
 import {
-  ICreateGroupRequest,
   IExtendedTournamentResponse,
-  IGroupMembershipResponse,
-  ITournamentResponse,
   IUpdateTournamentRequest,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
 } from "@tournament-app/types";
-import { useEditCompetition } from "api/client/hooks/competitions/useEditCompetition";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import RichEditor from "components/richEditor";
 import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
+import { useEditCompetition } from "api/client/hooks/competitions/useEditCompetition";
 import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
+import { fetchAutocomplete } from "api/googleMapsAPI/places";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dropdown from "components/dropdown";
+import Input from "components/input";
+import ProgressWheel from "components/progressWheel";
+import RichEditor from "components/richEditor";
+import SlideButton from "components/slideButton";
+import { countries } from "country-flag-icons";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 import { useToastContext } from "utils/hooks/useToastContext";
 import {
   COUNTRY_CODES_TO_NAMES,
   COUNTRY_NAMES_TO_CODES,
   formatDateTimeHTMLInput,
 } from "utils/mixins/formatting";
-import { countries } from "country-flag-icons";
-import ProgressWheel from "components/progressWheel";
-import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
+import styles from "./editCompetitionForm.module.scss";
 
 export default function EditCompetitionForm({
   competition,

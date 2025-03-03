@@ -1,20 +1,11 @@
 "use client";
 
 import {
-  ICreateUserRequest,
-  IEmailPasswordLoginRequest,
-  IUserLoginResponse,
-} from "@tournament-app/types";
-import {
   clientApi,
-  setAuthTokens,
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useToastContext } from "utils/hooks/useToastContext";
-import { useRouter } from "next/navigation";
-import { useAuth } from "./useAuth";
+import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
 export const verifyUser = async (token?: string) =>

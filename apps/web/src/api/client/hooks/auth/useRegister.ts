@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  ICreateUserRequest,
-  IEmailPasswordLoginRequest,
-  IUserLoginResponse,
-} from "@tournament-app/types";
-import { clientApi, setAuthTokens } from "api/client/base";
+import { ICreateUserRequest } from "@tournament-app/types";
+import { clientApi } from "api/client/base";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
-import { useAuth } from "./useAuth";
 import { AxiosResponse } from "axios";
 
 export const registerUser = async (data: ICreateUserRequest) =>
@@ -24,7 +19,7 @@ export const useRegister = () => {
 
   return useMutation({
     mutationFn: registerUser,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast(
         "verification email sent! verify your account then login.",
         "success",

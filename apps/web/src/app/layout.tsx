@@ -1,7 +1,7 @@
-import "./globals.scss";
 import { ClientProviders } from "utils/providers/ClientProviders";
 import QueryProvider from "utils/providers/QueryProvider";
 import Drawer from "views/drawer";
+import "./globals.scss";
 
 export default function RootLayout({
   children,

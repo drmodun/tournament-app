@@ -7,14 +7,12 @@ import {
   ICategoryResponse,
 } from "@tournament-app/types";
 import {
-  baseApiUrl,
   clientApi,
   getAccessToken,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useAuth } from "../auth/useAuth";
 
 export const getCategories = async () =>
   clientApi

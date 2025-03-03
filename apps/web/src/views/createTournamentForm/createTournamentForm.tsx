@@ -1,40 +1,35 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import styles from "./createTournamentForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Input from "components/input";
-import { textColor, TextVariants } from "types/styleTypes";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Button from "components/button";
-import { useLogin } from "api/client/hooks/auth/useLogin";
-import { useThemeContext } from "utils/hooks/useThemeContext";
 import {
   ICreateTournamentRequest,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
 } from "@tournament-app/types";
+import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
+import { useCreateCompetition } from "api/client/hooks/competitions/useCreateCompetition";
+import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
+import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
+import { fetchAutocomplete } from "api/googleMapsAPI/places";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dropdown from "components/dropdown";
+import Input from "components/input";
+import ProgressWheel from "components/progressWheel";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
-import Dropdown from "components/dropdown";
-import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
-import ProgressWheel from "components/progressWheel";
 import { countries } from "country-flag-icons";
+import { useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { useToastContext } from "utils/hooks/useToastContext";
 import {
   COUNTRY_CODES_TO_NAMES,
   COUNTRY_NAMES_TO_CODES,
-  formatDateHTMLInput,
 } from "utils/mixins/formatting";
-import { useToastContext } from "utils/hooks/useToastContext";
-import {
-  createCompetitionFetch,
-  useCreateCompetition,
-} from "api/client/hooks/competitions/useCreateCompetition";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
-import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
+import styles from "./createTournamentForm.module.scss";
 
 export default function CreateTournamentForm({ userId }: { userId: number }) {
   const { theme } = useThemeContext();

@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import styles from "./contact.module.scss";
-import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
 import Button from "components/button";
 import MultilineInput from "components/multilineInput";
-import { useThemeContext } from "utils/hooks/useThemeContext";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./contact.module.scss";
 
 export default function Contact() {
   const [inquiry, setInquiry] = useState<string>("");

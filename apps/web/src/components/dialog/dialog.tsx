@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
-import styles from "./dialog.module.scss";
-import globals from "styles/globals.module.scss";
-import { Variants, textColor } from "types/styleTypes";
-import { clsx } from "clsx";
 import {
+  clearAllBodyScrollLocks,
   disableBodyScroll,
   enableBodyScroll,
-  clearAllBodyScrollLocks,
 } from "body-scroll-lock";
+import { clsx } from "clsx";
+import { useEffect } from "react";
+import globals from "styles/globals.module.scss";
+import { Variants, textColor } from "types/styleTypes";
+import styles from "./dialog.module.scss";
 
 interface DialogProps {
   children?: React.ReactNode;
@@ -60,7 +60,7 @@ export default function Dialog({
   return (
     <div
       className={styles.dialogWrapper}
-      onClick={(e) => {
+      onClick={() => {
         onClose && onClose();
       }}
     >

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./checkboxGroup.module.scss";
 import Checkbox from "components/checkbox";
 import { CheckboxProps } from "components/checkbox/checkbox";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import styles from "./checkboxGroup.module.scss";
 
 interface CheckboxGroupProps {
   style?: React.CSSProperties;
@@ -24,7 +24,6 @@ export default function CheckboxGroup({
   checkboxes,
   name,
   isReactHookForm = false,
-  reactFormHookProps,
   defaultValues,
 }: CheckboxGroupProps) {
   const [indexes, setIndexes] = useState<number[]>([]);

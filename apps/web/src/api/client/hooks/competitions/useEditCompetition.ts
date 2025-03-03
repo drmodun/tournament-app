@@ -11,10 +11,12 @@ import { useToastContext } from "utils/hooks/useToastContext";
 import { IUpdateTournamentRequest } from "@tournament-app/types";
 
 export const editCompetition = async (
-  data: IUpdateTournamentRequest & { id?: number },
+  data: IUpdateTournamentRequest & { id?: number; categoryId?: number },
 ) => {
   const { id, categoryId, ..._data } = data;
-  if (categoryId != -1) _data.categoryId = categoryId;
+  if (categoryId != -1 && categoryId !== undefined) {
+    (_data as any).categoryId = categoryId;
+  }
   return clientApi
     .patch<
       IUpdateTournamentRequest,
@@ -31,7 +33,7 @@ export const useEditCompetition = () => {
     mutationFn: editCompetition,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully updated competition", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("competition"),

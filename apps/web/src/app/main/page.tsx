@@ -1,10 +1,8 @@
-import React from "react";
-import styles from "./index.module.scss";
+import Events from "views/events";
+import MapSidebar from "views/mapSidebar";
 import Navbar from "views/navbar";
 import PromotedEvents from "views/promotedEvents";
-import MapSidebar from "views/mapSidebar";
-import { IUserResponse } from "@tournament-app/types";
-import Events from "views/events";
+import styles from "./index.module.scss";
 
 export default function LandingPage() {
   return (

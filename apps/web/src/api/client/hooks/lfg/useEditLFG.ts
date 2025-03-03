@@ -1,19 +1,13 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ICreateGroupRequest,
-  IUpdateLFGRequest,
-  ILFGResponse,
-} from "@tournament-app/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { IUpdateLFGRequest } from "@tournament-app/types";
 import {
   clientApi,
-  getAccessToken,
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const UpdateLFG = async (data: {
@@ -35,7 +29,7 @@ export const useUpdateLFG = () => {
     mutationFn: UpdateLFG,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully updated LFG", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("lfg"),

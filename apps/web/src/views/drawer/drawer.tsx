@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
-import styles from "./drawer.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import { textColor, TextVariants, Variants } from "types/styleTypes";
-import { useDrawerContext } from "utils/hooks/useDrawerContext";
-import DrawerElement from "views/drawerElement";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ContactSupportIcon from "@mui/icons-material/ContactSupport";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import HelpIcon from "@mui/icons-material/Help";
+import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import InfoIcon from "@mui/icons-material/Info";
-import ContactSupportIcon from "@mui/icons-material/ContactSupport";
-import HelpIcon from "@mui/icons-material/Help";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useThemeContext } from "utils/hooks/useThemeContext";
 import { useAuth } from "api/client/hooks/auth/useAuth";
+import { clsx } from "clsx";
+import React, { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { TextVariants, Variants } from "types/styleTypes";
+import { useDrawerContext } from "utils/hooks/useDrawerContext";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import DrawerElement from "views/drawerElement";
+import styles from "./drawer.module.scss";
 export interface DrawerProps {
   style?: React.CSSProperties;
   variant?: TextVariants;
@@ -29,7 +29,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
 
   const colorTheme: Variants = variant ?? theme;
 
-  const { data, isSuccess, isLoading } = useAuth();
+  const { data, isSuccess } = useAuth();
 
   return (
     <div

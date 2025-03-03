@@ -1,37 +1,36 @@
 "use client";
 
-import styles from "./manageTeams.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import Dialog from "components/dialog";
-import Button from "components/button";
-import { useEffect, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import GroupIcon from "@mui/icons-material/Group";
 import AddIcon from "@mui/icons-material/Add";
-import InboxIcon from "@mui/icons-material/Inbox";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import GroupIcon from "@mui/icons-material/Group";
+import InboxIcon from "@mui/icons-material/Inbox";
+import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import {
   groupRoleEnum,
   IGroupMembershipResponse,
   ILFPResponse,
 } from "@tournament-app/types";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
-import AddLFPForm from "views/addLFPForm";
-import ViewLFP from "views/viewLFP";
-import ManageTeamMembers from "views/manageTeamMembers";
-import EditTeamForm from "views/editTeamForm";
 import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
-import GroupJoinRequests from "views/groupJoinRequests";
+import { useDeleteLFP } from "api/client/hooks/lfp/useDeleteLFP";
 import { useGetLFPs } from "api/client/hooks/lfp/useGetLFPs";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dialog from "components/dialog";
 import Link from "next/link";
-import EditLFPForm from "views/editLFPForm";
-import DeleteIcon from "@mui/icons-material/Delete";
-import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-import { deleteLFP, useDeleteLFP } from "api/client/hooks/lfp/useDeleteLFP";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { formatDate } from "utils/mixins/formatting";
+import AddLFPForm from "views/addLFPForm";
 import BrowseTeamLFG from "views/browseTeamLFG";
+import EditLFPForm from "views/editLFPForm";
+import EditTeamForm from "views/editTeamForm";
+import GroupJoinRequests from "views/groupJoinRequests";
+import ManageTeamMembers from "views/manageTeamMembers";
+import styles from "./manageTeams.module.scss";
 
 export default function ManageTeams({
   team,
@@ -51,7 +50,7 @@ export default function ManageTeams({
     useState<boolean>(false);
   const [editTeamModalActive, setEditTeamModalActive] =
     useState<boolean>(false);
-  const { data, isLoading } = useGetLFPs(team?.groupId);
+  const { data } = useGetLFPs(team?.groupId);
   const deleteLFPMutation = useDeleteLFP();
 
   if (!team)

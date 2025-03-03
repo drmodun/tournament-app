@@ -1,12 +1,9 @@
 "use client";
 
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   groupRoleEnumType,
-  ICreateGroupRequest,
   IMiniGroupResponseWithCountry,
-  IMiniUserResponseWithCountry,
-  userRoleEnumType,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -15,8 +12,6 @@ import {
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 type GroupMembersType = {
   group: IMiniGroupResponseWithCountry;

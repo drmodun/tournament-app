@@ -1,23 +1,12 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import {
-  FollowerResponsesEnum,
-  GroupJoinRequestResponsesEnum,
-  IBaseQueryResponse,
-  IFollowerMiniResponse,
-  IFollowerResponse,
-  IGroupJoinRequestWithUserResponse,
-  ILocationResponse,
-  LocationResponsesEnum,
-} from "@tournament-app/types";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { IBaseQueryResponse, ILocationResponse } from "@tournament-app/types";
 import {
   clientApi,
-  getAccessToken,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { useAuth } from "../auth/useAuth";
 import { AxiosResponse } from "axios";
 
 export const getLocations = async (pageParam?: number) =>
@@ -41,7 +30,8 @@ export const useGetLocations = () => {
     staleTime: Infinity,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    getNextPageParam: (page, pages) => pages.length + 1, // todo: implementiraj kada bude fullCount implementiran
+    getNextPageParam: (page, pages) =>
+      page.results.length < 20 ? undefined : pages.length + 1, // todo: implementiraj kada bude fullCount implementiran
     initialPageParam: 1,
   });
 };

@@ -1,44 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./addStageForm.module.scss";
-import globals from "styles/globals.module.scss";
-import Navbar from "views/navbar";
-import ManageUser from "views/manageUser";
-import { clsx } from "clsx";
-import Button from "components/button";
-import ManageSettings from "views/manageSettings";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor, TextVariants } from "types/styleTypes";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Input from "components/input";
-import Dropdown from "components/dropdown";
-import SlideButton from "components/slideButton";
-import CheckboxGroup from "components/checkboxGroup";
 import {
-  ICreateGroupRequest,
   ICreateStageDto,
-  ILFPResponse,
   stageStatusEnum,
   stageTypeEnum,
   tournamentLocationEnum,
 } from "@tournament-app/types";
-import RichEditor from "components/richEditor";
-import { countries } from "country-flag-icons";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import ImageDrop from "components/imageDrop";
-import ImagePicker from "components/imagePicker";
-import {
-  COUNTRY_CODES_TO_NAMES,
-  formatDateTimeHTMLInput,
-} from "utils/mixins/formatting";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
-import { UseMutationResult } from "@tanstack/react-query";
 import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
 import { useCreateStage } from "api/client/hooks/stages/useCreateStage";
-
-type LocationType = "offline" | "online" | "hybrid";
+import { fetchAutocomplete } from "api/googleMapsAPI/places";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dropdown from "components/dropdown";
+import ImageDrop from "components/imageDrop";
+import ImagePicker from "components/imagePicker";
+import Input from "components/input";
+import RichEditor from "components/richEditor";
+import SlideButton from "components/slideButton";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./addStageForm.module.scss";
 
 export default function AddStageForm({
   tournamentId,
@@ -48,9 +32,7 @@ export default function AddStageForm({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
-  const [placeId, setPlaceId] = useState<string>();
   const [locationId, setLocationId] = useState<number>();
-  const [finalLocationName, setFinalLocationName] = useState<string>();
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
   const createLocationMutation = useCreateLocation();
   const [logo, setLogo] = useState<string>();
@@ -62,8 +44,8 @@ export default function AddStageForm({
     if (logo) data.logo = logo;
     data.locationId = locationId;
     data.tournamentId = tournamentId ?? -1;
-    data.minPlayersPerTeam = parseInt(data?.minPlayersPerTeam ?? "0");
-    data.maxPlayersPerTeam = parseInt(data?.maxPlayersPerTeam ?? "0");
+    data.minPlayersPerTeam = parseInt(String(data?.minPlayersPerTeam) || "0");
+    data.maxPlayersPerTeam = parseInt(String(data?.maxPlayersPerTeam) || "0");
     console.log(data);
     mutation.mutate(data);
   };
@@ -89,7 +71,6 @@ export default function AddStageForm({
     console.log(res);
 
     setLocationId(res.id);
-    setFinalLocationName(placeName);
   };
 
   useEffect(() => {
@@ -244,7 +225,6 @@ export default function AddStageForm({
               className={styles.input}
               isReactFormHook={true}
               onChange={(e) => {
-                setPlaceId(undefined);
                 fetchAutocomplete(e.target).then((autocomplete) => {
                   const tempListener = autocomplete.addListener(
                     "place_changed",

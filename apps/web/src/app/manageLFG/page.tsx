@@ -1,8 +1,6 @@
-import { fetchUser } from "api/client/hooks/user/serverFetches";
-import styles from "./index.module.scss";
-import Navbar from "views/navbar";
-import UserProfile from "views/userProfile";
 import ManageLFG from "views/manageLFG";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default async function User() {
   return (

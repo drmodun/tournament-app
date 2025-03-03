@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  IEmailPasswordLoginRequest,
-  IResetPasswordRequest,
-  IUserLoginResponse,
-} from "@tournament-app/types";
-import { clientApi, setAuthTokens } from "api/client/base";
+import { IResetPasswordRequest } from "@tournament-app/types";
+import { clientApi } from "api/client/base";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
-import { useAuth } from "./useAuth";
 import { AxiosResponse } from "axios";
 
 export const resetPassword = async (token?: string, password?: string) =>
@@ -27,7 +22,7 @@ export const useResetPassword = (token?: string) => {
 
   return useMutation({
     mutationFn: (password?: string) => resetPassword(token, password),
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("me"),
       });

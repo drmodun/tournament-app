@@ -1,19 +1,17 @@
 "use client";
 
-import styles from "./events.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
 import { useGetCompetitions } from "api/client/hooks/competitions/useGetCompetitions";
-import ProgressWheel from "components/progressWheel";
-import { useEffect, useState } from "react";
-import CardExpanded from "components/cardExpanded";
+import { clsx } from "clsx";
 import Button from "components/button";
+import CardExpanded from "components/cardExpanded";
+import ProgressWheel from "components/progressWheel";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./events.module.scss";
 
 export default function Events() {
   const { theme } = useThemeContext();
-  const textColorTheme = textColor(theme);
   const {
     data,
     isLoading,

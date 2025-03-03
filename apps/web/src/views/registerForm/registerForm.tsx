@@ -1,26 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import styles from "./registerForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Input from "components/input";
-import { textColor, TextVariants } from "types/styleTypes";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Button from "components/button";
 import { ICreateUserRequest } from "@tournament-app/types";
 import { useRegister } from "api/client/hooks/auth/useRegister";
-import SlideButton from "components/slideButton";
+import { clsx } from "clsx";
+import Button from "components/button";
 import Dropdown from "components/dropdown";
+import ImageDrop from "components/imageDrop";
+import ImagePicker from "components/imagePicker";
+import Input from "components/input";
+import RichEditor from "components/richEditor";
 import { countries } from "country-flag-icons";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import RichEditor from "components/richEditor";
+import { useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import ImagePicker from "components/imagePicker";
-import ImageDrop from "components/imageDrop";
-import { toBase64 } from "utils/mixins/helpers";
 import { formatDateHTMLInput } from "utils/mixins/formatting";
+import styles from "./registerForm.module.scss";
 
 export default function RegisterForm() {
   const { theme } = useThemeContext();

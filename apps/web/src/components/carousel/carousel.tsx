@@ -1,12 +1,12 @@
 "use client";
 
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { clsx } from "clsx";
 import { useState } from "react";
-import styles from "./carousel.module.scss";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIosNew";
-import { clsx } from "clsx";
+import styles from "./carousel.module.scss";
 
 interface CarouselElement {
   title: string;

@@ -1,36 +1,27 @@
 "use client";
 
-import styles from "./group.module.scss";
-import globals from "styles/globals.module.scss";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
+import { IGroupResponseExtended } from "@tournament-app/types";
+import { useAuth } from "api/client/hooks/auth/useAuth";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
+import { useCreateGroupJoinRequest } from "api/client/hooks/groups/useCreateGroupJoinRequest";
+import { useLeaveUserGroup } from "api/client/hooks/groups/useLeaveUserGroup";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Chip from "components/chip";
-import {
-  COUNTRY_NAMES_TO_CODES,
-  formatDate,
-  formatDateTime,
-} from "utils/mixins/formatting";
-import Markdown from "react-markdown";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import {
-  IExtendedTournamentResponse,
-  IGroupResponseExtended,
-} from "@tournament-app/types";
-import { useAuth } from "api/client/hooks/auth/useAuth";
-import { useRouter } from "next/navigation";
-import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
-import ProgressWheel from "components/progressWheel";
 import Dialog from "components/dialog";
-import GroupMembersDialog from "views/groupMembersDialog";
-import { useState } from "react";
-import GroupCompetitionsDialog from "views/groupCompetitionsDialog";
-import rehypeRaw from "rehype-raw";
-import { useLeaveUserGroup } from "api/client/hooks/groups/useLeaveUserGroup";
-import { useCreateGroupJoinRequest } from "api/client/hooks/groups/useCreateGroupJoinRequest";
+import ProgressWheel from "components/progressWheel";
 import RichEditor from "components/richEditor";
+import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { formatDate } from "utils/mixins/formatting";
+import GroupCompetitionsDialog from "views/groupCompetitionsDialog";
+import GroupMembersDialog from "views/groupMembersDialog";
+import styles from "./group.module.scss";
 
 type SidebarSectionProps = {
   name: string;
@@ -136,7 +127,7 @@ export default function Group({ group }: { group: IGroupResponseExtended }) {
             ></Chip>
           </SidebarSection>
           <SidebarSection name="location">
-            <Chip label={group?.location} variant={textColorTheme}></Chip>
+            <Chip label={group?.location?.name} variant={textColorTheme}></Chip>
           </SidebarSection>
           <SidebarSection name={`members (${group?.memberCount})`}>
             <Chip

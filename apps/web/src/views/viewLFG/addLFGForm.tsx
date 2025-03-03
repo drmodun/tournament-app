@@ -2,33 +2,22 @@
 
 // TODO: Actually implement
 
-import { useEffect, useState } from "react";
-import styles from "./addLFPForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
-import {
-  ICreateGroupRequest,
-  ICreateLFGRequest,
-  ICreateLFPRequest,
-  tournamentLocationEnum,
-} from "@tournament-app/types";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { FormProvider, useForm } from "react-hook-form";
-import Input from "components/input";
-import RichEditor from "components/richEditor";
-import CheckboxGroup from "components/checkboxGroup";
-import Dropdown from "components/dropdown";
-import Button from "components/button";
-import { useCreateLFP } from "api/client/hooks/lfp/useCreateLFP";
-import { clsx } from "clsx";
-import MultilineInput from "components/multilineInput";
-import { useCreateLFG } from "api/client/hooks/lfg/useCreateLFG";
-import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
+import { ICreateLFGRequest } from "@tournament-app/types";
 import { useGetCategoriesFilter } from "api/client/hooks/categories/useGetCategoriesFilter";
 import { useGetCategoriesInfinite } from "api/client/hooks/categories/useGetCategoriesInfinite";
+import { useCreateLFG } from "api/client/hooks/lfg/useCreateLFG";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dropdown from "components/dropdown";
+import MultilineInput from "components/multilineInput";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./addLFPForm.module.scss";
 
-export default function AddLFGForm({ userId }: { userId?: number }) {
+export default function AddLFGForm() {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 

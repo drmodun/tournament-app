@@ -1,5 +1,5 @@
 import * as schema from '../../db/schema';
-import { eq, and, desc, sql, isNull, InferInsertModel, InferSelectModel } from 'drizzle-orm';
+import { eq, and, sql, InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { CronJob } from 'cron';
 import { db } from 'src/db/db';
 

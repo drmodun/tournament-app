@@ -20,3 +20,4 @@ export * from "./location";
 export * from "./groupRequirements";
 export * from "./lfp";
 export * from "./roster";
+export * from "./match";

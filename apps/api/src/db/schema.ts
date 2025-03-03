@@ -874,6 +874,15 @@ export const tournamentRelations = relations(tournament, ({ one, many }) => ({
   participation: many(participation),
 }));
 
+export const scoreToRoster = pgTable('score_to_roster', {
+  id: serial('id').primaryKey(),
+  scoreId: integer('score_id').references(() => score.id),
+  rosterId: integer('roster_id').references(() => roster.id),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  points: integer('points').default(0),
+  isWinner: boolean('is_winner').default(false),
+});
+
 export const score = pgTable('score', {
   id: serial('id').primaryKey(),
   matchupId: integer('matchup_id'),

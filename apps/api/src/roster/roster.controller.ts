@@ -231,14 +231,6 @@ export class RosterController {
   @UseGuards(JwtAuthGuard, CanRosterBeUsedGuard, CanCreateRosterGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new roster' })
-  @ApiCreatedResponse({
-    description: 'The roster has been successfully created',
-    content: {
-      'application/json': {
-        example: rosterResponses[RosterResponsesEnum.BASE].value,
-      },
-    },
-  })
   async create(
     @Body() createRosterDto: CreateRosterDto,
     @Param('participationId', ParseIntPipe) participationId: number,

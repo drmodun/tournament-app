@@ -1,26 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMatchDto } from './dto/create-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
+import { EndMatchupRequestDto } from './dto/requests';
+import { MatchesDrizzleRepository } from './matches.repository';
 
 @Injectable()
 export class MatchesService {
-  create(createMatchDto: CreateMatchDto) {
-    return 'This action adds a new match';
+  constructor(private readonly matchesRepository: MatchesDrizzleRepository) {}
+
+  async createScore(createScoreDto: EndMatchupRequestDto, matchupId: number) {
+    await this.matchesRepository.insertMatchScore(matchupId, createScoreDto);
   }
 
-  findAll() {
-    return `This action returns all matches`;
+  async deleteScore(scoreId: number) {
+    await this.matchesRepository.deleteScore(scoreId);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} match`;
+  async updateScore(matchupId: number, updateScoreDto: EndMatchupRequestDto) {
+    await this.matchesRepository.updateMatchScore(matchupId, updateScoreDto);
   }
 
-  update(id: number, updateMatchDto: UpdateMatchDto) {
-    return `This action updates a #${id} match`;
+  async isMatchupInTournament(matchupId: number, tournamentId: number) {
+    return this.matchesRepository.isMatchupInTournament(
+      matchupId,
+      tournamentId,
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} match`;
+  async deleteMatchScore(matchupId: number) {
+    return this.matchesRepository.deleteMatchScore(matchupId);
   }
 }

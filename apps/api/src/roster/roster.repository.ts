@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { roster, user, group, participation, userToRoster } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { eq, SQL, desc, asc, inArray } from 'drizzle-orm';
+import { eq, SQL, desc, asc, inArray, and } from 'drizzle-orm';
 import {
   RosterResponsesEnum,
   RosterSortingEnum,
   RosterResponseEnumType,
   ICreateRosterRequest,
   IRosterPlayerWithoutCareer,
+  IRosterResponse,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -79,17 +80,14 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     });
   }
 
-  async getForParticipation(participationId: number, query: QueryRosterDto) {
-    const ids = await this.getRosterIdsForParticipation(participationId);
-
-    if (!ids.length) {
-      return [];
-    }
-
-    return this.getWithPlayers({ ...query, ids: ids.map((id) => id.id) });
+  async getForParticipation(
+    participationId: number,
+    query: QueryRosterDto = {},
+  ) {
+    return await this.getWithPlayers({ ...query, participationId });
   }
 
-  async getForTournament(tournamentId: number, query: QueryRosterDto) {
+  async getForTournament(tournamentId: number, query: QueryRosterDto = {}) {
     const ids = await this.getRosterIdsForTournament(tournamentId);
 
     if (!ids.length) {
@@ -102,21 +100,24 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     });
   }
 
-  async getForStage(stageId: number, query: QueryRosterDto) {
-    const ids = await this.getRosterIdsForStage(stageId);
-
-    if (!ids.length) {
-      return [];
-    }
-
-    return this.getWithPlayers({ ...query, ids: ids.map((id) => id.id) });
+  async getForStage(stageId: number, query: QueryRosterDto = {}) {
+    return (await this.getWithPlayers({
+      ...query,
+      stageId,
+    })) as unknown as IRosterResponse[]; // Drizzle mapping cannot keep up with such deep relations
   }
 
   async getWithPlayers(query: QueryRosterDto & { ids?: number[] }) {
     const isCorrectLimit = !!query.page && !!query.pageSize;
 
     const result = await db.query.roster.findMany({
-      where: query.ids?.length ? inArray(roster.id, query.ids) : undefined,
+      where: and(
+        query.ids?.length ? inArray(roster.id, query.ids) : undefined,
+        query.stageId ? eq(roster.stageId, query.stageId) : undefined,
+        query.participationId
+          ? eq(roster.participationId, query.participationId)
+          : undefined,
+      ),
       limit: isCorrectLimit ? query.pageSize : 12,
       offset: isCorrectLimit ? query.pageSize * (query.page - 1) : 0,
       orderBy: query.field
@@ -297,24 +298,6 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     });
   }
 
-  getRosterIdsForStage(stageId: number) {
-    return db.query.roster.findMany({
-      where: eq(roster.stageId, stageId),
-      columns: {
-        id: true,
-      },
-    });
-  }
-
-  getRosterIdsForParticipation(participationId: number) {
-    return db.query.roster.findMany({
-      where: eq(roster.participationId, participationId),
-      columns: {
-        id: true,
-      },
-    });
-  }
-
   getValidWhereClause(query: BaseQuery): SQL[] {
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
@@ -326,14 +309,6 @@ export class RosterDrizzleRepository extends PrimaryRepository<
           return eq(roster.stageId, value as number);
         case 'participationId':
           return eq(roster.participationId, value as number);
-        case 'groupId':
-          return eq(participation.groupId, value as number);
-        case 'rosterId':
-          return eq(roster.id, value as number);
-        case 'userId':
-          return eq(participation.userId, value as number);
-        case 'memberId':
-          return eq(userToRoster.userId, value as number);
         default:
           return;
       }

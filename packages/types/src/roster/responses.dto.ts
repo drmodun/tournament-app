@@ -1,5 +1,6 @@
 import { ICareerCategoryResponse } from "src/career";
 import { IMiniGroupResponseWithLogo } from "src/group";
+import { IMiniParticipationResponse } from "src/participation";
 import {
   IMiniUserResponseWithCountry,
   IMiniUserResponseWithProfilePicture,
@@ -11,6 +12,12 @@ export interface IMiniRosterResponse {
   participationId: number;
   group?: IMiniGroupResponseWithLogo;
   user?: IMiniUserResponseWithProfilePicture;
+  participation?: {
+    id: number;
+    tournament: {
+      categoryId: number;
+    };
+  };
 }
 
 export interface IRosterPlayer {

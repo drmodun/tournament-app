@@ -795,6 +795,7 @@ export const matchup = pgTable('matchup', {
   matchupType: matchupType('matchup_type').default('one_vs_one'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
+  parentMatchupId: integer('parent_matchup_id').references(() => matchup.id),
   isFinished: boolean('is_finished').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
@@ -815,6 +816,7 @@ export const rosterToMatchup = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
+    parentMatchupId: integer('parent_matchup_id').references(() => matchup.id),
     isWinner: boolean('is_winner').default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
@@ -910,26 +912,6 @@ export const rosterToRound = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.rosterId, t.roundId] }),
-  }),
-);
-
-export const matchupToParentMatchup = pgTable(
-  'matchup_parent_matchup',
-  {
-    matchupId: integer('matchup_id')
-      .references(() => matchup.id, {
-        onDelete: 'cascade',
-      })
-      .notNull(),
-    parentMatchupId: integer('parent_matchup_id')
-      .references(() => matchup.id, {
-        onDelete: 'cascade',
-      })
-      .notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  },
-  (t) => ({
-    pk: primaryKey({ columns: [t.matchupId, t.parentMatchupId] }),
   }),
 );
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'src/db/db';
+import { matchup, stageRound } from 'src/db/schema';
 import { RosterDrizzleRepository } from 'src/roster/roster.repository';
 
 export interface IInitialRosterOptions {
@@ -45,7 +46,115 @@ export class BracketGenerator {
     return sortedRosters;
   }
 
-  async generateInitialRosters(stageId: number) {
+  createOptimalSeeding(teamCount: number, bracketSize: number): number[] {
+    if (bracketSize < teamCount) {
+      throw new Error(
+        'Bracket size must be greater than or equal to team count',
+      );
+    }
+    if ((bracketSize & (bracketSize - 1)) !== 0) {
+      throw new Error('Bracket size must be a power of 2');
+    }
+
+    const seeds: number[] = [];
+    for (let i = 0; i < bracketSize; i++) {
+      seeds.push(i);
+    }
+
+    // Reorder seeds to create optimal matchups (1 vs 16, 8 vs 9, etc.)
+    const optimizedSeeds: number[] = [];
+
+    function assignSeeds(start: number, end: number, seedsLeft: number) {
+      if (seedsLeft === 0) return;
+      if (seedsLeft === 1) {
+        optimizedSeeds.push(start);
+        return;
+      }
+
+      optimizedSeeds.push(start);
+      optimizedSeeds.push(end);
+
+      assignSeeds(start + 1, end - 1, seedsLeft - 2);
+    }
+
+    assignSeeds(0, bracketSize - 1, bracketSize);
+    return optimizedSeeds;
+  }
+
+  // --- Example Usage (Self-Contained) ---
+
+  // Helper function to find the next power of 2
+  nextPowerOf2(n: number): number {
+    let power = 1;
+    while (power < n) {
+      power *= 2;
+    }
+    return power;
+  }
+
+  async fischerYatesShuffle(array: any[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  async generateInitialRosters(
+    stageId: number,
+    options?: IInitialRosterOptions,
+  ) {
     const rosters = await this.rostersSortedByElo(stageId);
+
+    const bracketSize = this.nextPowerOf2(rosters.length);
+    const roundAmount = Math.log2(bracketSize);
+
+    const byeMatchesToCreate = bracketSize - rosters.length;
+
+    this.createEmptyMatchup(null, 1, 1, roundAmount);
+  }
+
+  async createEmptyMatchup(
+    parentMatchupId: number,
+    currentRound: number,
+    roundId: number,
+    rounds: number,
+    startDate: Date = new Date(),
+  ) {
+    if (currentRound === rounds) {
+      return;
+    }
+
+    const createdMatchups = await db
+      .insert(matchup)
+      .values([
+        {
+          parentMatchupId,
+          roundId,
+          matchupType: 'one_vs_one',
+          startDate: new Date(
+            startDate.getTime() +
+              currentRound * 1000 * 60 * 60 * 24 +
+              1000 * 60 * 60, // Add 1 day for each round, and an hour for the matchup
+          ),
+        },
+        {
+          parentMatchupId,
+          roundId,
+          matchupType: 'one_vs_one',
+          startDate: new Date(
+            startDate.getTime() +
+              currentRound * 1000 * 60 * 60 * 24 +
+              1000 * 60 * 60, // Add 1 day for each round, and an hour for the matchup
+          ),
+        },
+      ])
+      .returning();
+
+    createdMatchups.forEach((matchup) => {
+      this.createEmptyMatchup(matchup.id, currentRound + 1, roundId, rounds);
+    });
+
+    return createdMatchups;
   }
 }

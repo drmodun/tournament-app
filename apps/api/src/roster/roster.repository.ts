@@ -396,6 +396,11 @@ export class RosterDrizzleRepository extends PrimaryRepository<
           },
           createdAt: roster.createdAt,
         };
+      case RosterResponsesEnum.MINI_WITH_CHALLONGE_ID:
+        return {
+          ...this.getMappingObject(RosterResponsesEnum.MINI),
+          challongeId: roster.challongeId,
+        };
       case RosterResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(RosterResponsesEnum.BASE),

@@ -189,26 +189,26 @@ export class ChallongeService {
     );
   }
 
-  async deleteTournamentFunction(id: number) {
+  async deleteTournamentFunction(id: string) {
     await this.httpService.axiosRef.delete(
       `https://api.challonge.com/v2/tournaments/${id}.json`,
       this.injectHeaders(),
     );
   }
 
-  async deleteTournament(id: number) {
+  async deleteTournament(id: string) {
     return this.executeFunctionWithRetry(() =>
       this.deleteTournamentFunction(id),
     );
   }
 
-  async deleteParticipant(id: number) {
+  async deleteParticipant(id: string) {
     return this.executeFunctionWithRetry(() =>
       this.deleteParticipantFunction(id),
     );
   }
 
-  async deleteParticipantFunction(id: number) {
+  async deleteParticipantFunction(id: string) {
     await this.httpService.axiosRef.delete(
       `https://api.challonge.com/v2/participants/${id}.json`,
       this.injectHeaders(),

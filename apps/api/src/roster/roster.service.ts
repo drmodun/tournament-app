@@ -11,6 +11,7 @@ import {
   IExtendedTournamentResponse,
   TournamentResponsesEnum,
   IMiniRosterResponse,
+  IMiniRosterResponseWithChallongeId,
 } from '@tournament-app/types';
 import { CreateRosterDto, QueryRosterDto } from './dto/requests';
 import { StageDrizzleRepository } from 'src/stage/stage.repository';
@@ -150,9 +151,20 @@ export class RosterService {
       throw new NotFoundException(`Roster with ID ${id} not found`);
     }
 
-    await this.challongeService.deleteParticipant(id);
-
     return action[0];
+  }
+
+  async removeFromChallonge(id: number) {
+    const roster: IMiniRosterResponseWithChallongeId = await this.findOne(
+      id,
+      RosterResponsesEnum.MINI_WITH_CHALLONGE_ID,
+    );
+
+    if (!roster) {
+      throw new NotFoundException(`Roster with ID ${id} not found`);
+    }
+
+    await this.challongeService.deleteParticipant(roster.challongeId);
   }
 
   async isEachMemberTournamentEligible(

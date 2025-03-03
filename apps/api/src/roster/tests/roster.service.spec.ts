@@ -89,6 +89,11 @@ describe('RosterService', () => {
       getMultipleCareers: jest.fn(),
     };
 
+    const mockChallongeService = {
+      createChallongeParticipantFromRoster: jest.fn(),
+      deleteParticipant: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         RosterService,
@@ -107,6 +112,10 @@ describe('RosterService', () => {
         {
           provide: CareerService,
           useValue: mockCareerService,
+        },
+        {
+          provide: ChallongeService,
+          useValue: mockChallongeService,
         },
       ],
     }).compile();

@@ -11,6 +11,17 @@ export interface IMiniRosterResponse {
   participationId: number;
   group?: IMiniGroupResponseWithLogo;
   user?: IMiniUserResponseWithProfilePicture;
+  participation?: {
+    id: number;
+    tournament: {
+      categoryId: number;
+    };
+  };
+}
+
+export interface IMiniRosterResponseWithChallongeId
+  extends IMiniRosterResponse {
+  challongeId: string;
 }
 
 export interface IRosterPlayer {
@@ -36,12 +47,14 @@ export interface IExtendedRosterResponse extends IRosterResponse {
 export type BaseRosterResponse =
   | IMiniRosterResponse
   | IRosterResponse
-  | IExtendedRosterResponse;
+  | IExtendedRosterResponse
+  | IMiniRosterResponseWithChallongeId;
 
 export enum RosterResponsesEnum {
   MINI = "mini",
   BASE = "base",
   EXTENDED = "extended",
+  MINI_WITH_CHALLONGE_ID = "miniWithChallongeId",
 }
 
 export enum RosterSortingEnum {

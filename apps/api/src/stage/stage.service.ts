@@ -85,9 +85,7 @@ export class StageService {
       StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
     );
 
-    await this.challongeService.deleteTournament(
-      parseInt(stage.challongeTournamentId),
-    );
+    await this.challongeService.deleteTournament(stage.challongeTournamentId);
 
     await this.update(stageId, { challongeTournamentId: null });
   }

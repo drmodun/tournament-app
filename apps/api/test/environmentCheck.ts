@@ -1,4 +1,7 @@
-import { IChallongeParticipant, IChallongeTournament } from '@tournament-app/types';
+import {
+  IChallongeParticipant,
+  IChallongeTournament,
+} from '@tournament-app/types';
 
 // Ensure we're in test mode
 beforeAll(async () => {

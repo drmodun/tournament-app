@@ -33,7 +33,7 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
   return (
     <div className={clsx(styles.wrapper, className)} style={style}>
       <div className={styles.navLeft}>
-        <Link href="/">
+        <Link href={data?.id ? "/main" : "/"}>
           <EmojiEventsOutlinedIcon
             style={{ fill: textColorTheme === "dark" ? "#21262c" : "#f2f2f2" }}
             className={clsx(globals.darkFill, styles.logo)}
@@ -48,16 +48,17 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
             <>
               <Link href="/manageCompetitions">manage competitions</Link>
               <Link href="/manageTeams">manage teams</Link>
+              <Link href="/manageLFG">manage lfgs</Link>
               <Link href="/" onClick={logout}>
                 logout
               </Link>
             </>
           ) : (
             <>
-              <Link href="/landingPage2#aboutWinning">what is winning.sh?</Link>
-              <Link href="/landingPage2#promote">promote</Link>
-              <Link href="/landingPage2#contact">contact</Link>
-              <Link href="/landingPage2#profileAchievements">achievements</Link>
+              <Link href="/#aboutWinning">what is winning.sh?</Link>
+              <Link href="/#promote">promote</Link>
+              <Link href="/#contact">contact</Link>
+              <Link href="/#profileAchievements">achievements</Link>
             </>
           )}
         </div>

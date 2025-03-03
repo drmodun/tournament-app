@@ -85,6 +85,10 @@ export default function AddLFGForm() {
         </p>
         {isLoading ? (
           <ProgressWheel variant={textColorTheme} />
+        ) : data?.results.length == 0 ? (
+          <p className={globals[`${textColorTheme}Color`]}>
+            you have no interests!
+          </p>
         ) : (
           <CheckboxGroup
             name="interests"

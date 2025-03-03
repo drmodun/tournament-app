@@ -32,7 +32,7 @@ export default function Group({ group }: { group: IGroupResponseExtended }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { data: userData } = useAuth();
-  const { data, isLoading, isError } = useCheckIfGroupMember(group?.id);
+  const { isLoading, isError } = useCheckIfGroupMember(group?.id);
 
   const [groupMembersDialogActive, setGroupMembersDialogActive] =
     useState<boolean>(false);
@@ -46,14 +46,10 @@ export default function Group({ group }: { group: IGroupResponseExtended }) {
   const onSubmit: SubmitHandler<{ message: string }> = async (data) => {
     if (isLoading || !isError) return;
 
-    console.log(data);
-
     groupJoinRequestMutation.mutate({
       groupId: group?.id,
       message: data?.message,
     });
-
-    //location.reload();
   };
 
   const handleLeave = async () => {
@@ -174,6 +170,8 @@ export default function Group({ group }: { group: IGroupResponseExtended }) {
                   name="message"
                   isReactHookForm={true}
                   mobile={true}
+                  editable={true}
+                  required={true}
                 />
                 <Button
                   label="send join invite"

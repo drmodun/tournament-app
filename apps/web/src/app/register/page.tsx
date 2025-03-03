@@ -1,8 +1,8 @@
-import Navbar from "views/navbar";
 import RegisterForm from "views/registerForm";
 import styles from "./index.module.scss";
+import Navbar from "views/navbar";
 
-export default async function User() {
+export default async function Register() {
   return (
     <div className={styles.wrapper}>
       <Navbar className={styles.navbar} />

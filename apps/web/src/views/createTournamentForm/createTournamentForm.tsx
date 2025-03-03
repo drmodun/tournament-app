@@ -454,51 +454,6 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
             <p className={styles.error}>dsadsadsa this field is required!</p>
           )}
         </div>
-        <div className={styles.inputWrapper}>
-          {!isGroupLoading && (
-            <div>
-              <Dropdown
-                options={groupData?.pages.flatMap((page) =>
-                  page.results.map((res) => ({
-                    label: res.group.name,
-                    value: res.group.id,
-                  })),
-                )}
-                searchPlaceholder="search..."
-                doesSearch={true}
-                label="affiliated group"
-                placeholder="select affiliated group"
-                name="affiliatedGroupId"
-                isReactHookForm={true}
-                variant={textColorTheme}
-                className={styles.dropdown}
-                innerWrapperClassName={styles.dropdown}
-                optionsClassName={styles.dropdown}
-                style={{ width: "100%" }}
-                searchClassName={styles.search}
-                onSelect={(val) => {
-                  setAffiliatedGroupId(
-                    groupData?.pages.flatMap((page) =>
-                      page.results.map((res) => ({
-                        label: res.group.name,
-                        value: res.group.id,
-                      })),
-                    )[val].value,
-                  );
-                }}
-              ></Dropdown>
-              <button
-                type="button"
-                onClick={() => fetchNextPage()}
-                disabled={
-                  isFetching || isFetchNextPageError || isFetchingNextPage
-                }
-              >
-                load more
-              </button>
-            </div>
-          )}
-        </div>
 
         <Button
           label="create competition"

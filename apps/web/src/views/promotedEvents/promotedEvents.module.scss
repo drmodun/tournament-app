@@ -42,3 +42,21 @@
   overflow: hidden;
   overflow-x: visible;
 }
+
+.lightHeader {
+  -webkit-text-fill-color: $light;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $dark,
+    $num-steps: 32
+  );
+}
+
+.darkHeader {
+  -webkit-text-fill-color: $dark;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $light,
+    $num-steps: 32
+  );
+}

@@ -14,8 +14,9 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { MarkerLocation, Poi } from "utils/mixins/maps";
 import styles from "./mapSidebar.module.scss";
+import { useGetCompetitionsQuery } from "api/client/hooks/competitions/useGetCompetitionsQuery";
 
-export default function ManageCompetitions() {
+export default function MapSidebar() {
   const [selectedLocation, setSelectedLocation] = useState<MarkerLocation>();
 
   const { theme } = useThemeContext();
@@ -24,6 +25,9 @@ export default function ManageCompetitions() {
   const { data, isLoading } = useGetLocations();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const { data: competitionsData, isLoading: competitionsIsLoading } =
+    useGetCompetitionsQuery(selectedLocation?.id);
 
   useEffect(() => {
     sidebarRef?.current?.addEventListener("wheel", (e) => {
@@ -41,13 +45,17 @@ export default function ManageCompetitions() {
             <>
               <MapElement
                 onMarkerClick={(location: MarkerLocation) => {
-                  setSelectedLocation(location);
+                  setSelectedLocation({
+                    ...location,
+                    id: location.id,
+                  });
                 }}
                 className={styles.mapElement}
                 locations={
                   data &&
                   data.pages[0]?.results?.map((poi) => {
                     return {
+                      id: poi?.id,
                       location: {
                         lat: (poi?.coordinates ?? [0, 0])[1],
                         lng: (poi?.coordinates ?? [0, 0])[0],
@@ -70,11 +78,31 @@ export default function ManageCompetitions() {
               />
               <div className={styles.locationInfos} ref={sidebarRef}>
                 {selectedLocation &&
-                  selectedLocation.pois.map((poi) => (
-                    <div className={styles.locationInfoWrapper} key={poi.id}>
-                      <LocationInfo poi={poi} />
-                    </div>
-                  ))}
+                  selectedLocation.pois.map((poi) => {
+                    return (
+                      <>
+                        <div
+                          className={styles.locationInfoWrapper}
+                          key={poi.id}
+                        >
+                          <LocationInfo poi={poi} />
+                        </div>
+                        <div className={styles.competitionsWrapper}>
+                          {competitionsData?.pages.map((page) => {
+                            return page?.results?.map((item) => {
+                              return (
+                                <div key={item.id}>
+                                  <p>{item.name}</p>
+                                  <p>{item.logo}</p>
+                                </div>
+                              );
+                            });
+                          })}
+                        </div>
+                      </>
+                    );
+                  })}
+                <div className={styles.pagination}></div>
               </div>
             </>
           )}

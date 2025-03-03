@@ -192,7 +192,12 @@ export default function ManageUser({
           label="view followers"
           variant="secondary"
           onClick={() => setUserFollowersDialog(true)}
-        ></Button>
+        />
+        <Button
+          label="change password"
+          variant="warning"
+          onClick={() => (location.href = "/requestPasswordReset")}
+        />
         <Button
           label="delete user"
           variant="danger"

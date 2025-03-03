@@ -13,7 +13,7 @@ export const createGroupJoinRequest = async (data: {
     .post<
       never,
       AxiosResponse
-    >(`/group-join-requests/${data?.groupId}`, { params: { groupId: data?.groupId }, body: { message: data?.message } })
+    >(`/group-join-requests/${data?.groupId}`, { params: { groupId: data?.groupId }, message: data?.message })
     .then((res) => res.data);
 
 export const useCreateGroupJoinRequest = () => {
@@ -23,7 +23,7 @@ export const useCreateGroupJoinRequest = () => {
   return useMutation({
     mutationFn: createGroupJoinRequest,
     retryDelay: 5000,
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       toast.addToast("successfully created a group join request", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("gjr"),
@@ -31,7 +31,7 @@ export const useCreateGroupJoinRequest = () => {
       return true;
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred..", "error");
+      toast.addToast("an error occurred...", "error");
       console.error(error);
       return false;
     },

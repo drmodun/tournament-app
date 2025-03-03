@@ -13,6 +13,7 @@ export type Poi = {
 };
 
 export type MarkerLocation = {
+  id?: number;
   location: google.maps.LatLngLiteral;
   pois: Poi[];
 };

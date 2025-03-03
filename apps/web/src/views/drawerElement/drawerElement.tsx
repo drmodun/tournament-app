@@ -18,6 +18,7 @@ export interface DrawerElementProps {
   icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
   label?: string;
   href?: string;
+  onClick?: () => void;
 }
 
 export default function DrawerElement({
@@ -27,11 +28,15 @@ export default function DrawerElement({
   icon,
   label = "",
   href = "/",
+  onClick,
 }: DrawerElementProps) {
   const drawerContext = useDrawerContext();
   const { theme } = useThemeContext();
 
-  const handleClick = () => drawerContext.setDrawerOpen(false);
+  const handleClick = () => {
+    drawerContext.setDrawerOpen(false);
+    onClick && onClick();
+  };
 
   const colorTheme: Variants = variant ?? theme;
   const textColorTheme = textColor(colorTheme);

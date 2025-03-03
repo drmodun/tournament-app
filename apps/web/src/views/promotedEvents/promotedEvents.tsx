@@ -1,7 +1,10 @@
+"use client";
+
 import { clsx } from "clsx";
 import Card from "components/cardExpanded/cardExpanded";
 import globals from "styles/globals.module.scss";
 import styles from "./promotedEvents.module.scss";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 
 export default function PromotedEvents() {
   const propEvents = [
@@ -61,9 +64,18 @@ export default function PromotedEvents() {
         "https://www.worldarchery.sport/sites/default/files/styles/style_teaser/https/photos.smugmug.com/photos/i-HFmbnGC/0/X5/i-HFmbnGC-X5.jpg?h=2dcc2c0c&itok=qx4LnO9c",
     },
   ];
+
+  const { theme } = useThemeContext();
+
   return (
     <div className={styles.wrapper}>
-      <h1 className={clsx(globals.largeText, styles.header)}>
+      <h1
+        className={clsx(
+          globals.largeText,
+          styles.header,
+          styles[`${theme}Header`],
+        )}
+      >
         promoted events
       </h1>
       <div className={clsx(styles.events)}>

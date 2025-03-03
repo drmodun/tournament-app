@@ -1,7 +1,12 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { IBaseQueryResponse, ILocationResponse } from "@tournament-app/types";
+import {
+  IBaseQueryResponse,
+  IExtendedLocationResponse,
+  ILocationResponse,
+  LocationResponsesEnum,
+} from "@tournament-app/types";
 import {
   clientApi,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
@@ -11,12 +16,13 @@ import { AxiosResponse } from "axios";
 
 export const getLocations = async (pageParam?: number) =>
   clientApi
-    .get<never, AxiosResponse<IBaseQueryResponse<ILocationResponse>>>(
+    .get<never, AxiosResponse<IBaseQueryResponse<IExtendedLocationResponse>>>(
       `/locations`,
       {
         params: {
           pageSize: 20,
           page: pageParam ?? 1,
+          returnType: LocationResponsesEnum.EXTENDED,
         },
       },
     )

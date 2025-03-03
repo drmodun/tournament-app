@@ -6,6 +6,7 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import HelpIcon from "@mui/icons-material/Help";
 import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
+import PublicIcon from "@mui/icons-material/Public";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { clsx } from "clsx";
@@ -16,6 +17,7 @@ import { useDrawerContext } from "utils/hooks/useDrawerContext";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import DrawerElement from "views/drawerElement";
 import styles from "./drawer.module.scss";
+import { useLogout } from "api/client/hooks/auth/useLogout";
 export interface DrawerProps {
   style?: React.CSSProperties;
   variant?: TextVariants;
@@ -30,6 +32,8 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
   const colorTheme: Variants = variant ?? theme;
 
   const { data, isSuccess } = useAuth();
+
+  const logout = useLogout();
 
   return (
     <div
@@ -70,28 +74,35 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
               label="manage teams"
               href="/manageTeams"
             />
+            <DrawerElement
+              icon={PublicIcon}
+              label="manage lfgs"
+              href="/manageLFG"
+            />
+            <DrawerElement
+              icon={HelpIcon}
+              label="manage teams"
+              href="/logout"
+              onClick={logout}
+            />
           </>
         ) : (
           <>
             <DrawerElement
               icon={FormatListBulletedIcon}
               label="what is winning.sh?"
-              href="/landingPage2#aboutWinning"
+              href="/#aboutWinning"
             />
-            <DrawerElement
-              icon={HelpIcon}
-              label="promote"
-              href="/landingPage2#promote"
-            />
+            <DrawerElement icon={HelpIcon} label="promote" href="/#promote" />
             <DrawerElement
               icon={ContactSupportIcon}
               label="contact"
-              href="/landingPage2#contact"
+              href="/#contact"
             />
             <DrawerElement
               icon={InfoIcon}
               label="achievements"
-              href="/landingPage2#profileAchievements"
+              href="/#profileAchievements"
             />
             <DrawerElement icon={LoginIcon} label="login" href="/login" />
             <DrawerElement

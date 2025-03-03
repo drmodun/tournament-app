@@ -69,14 +69,16 @@ export default function ManageLFG() {
         <EditLFGForm lfg={active} />
       </Dialog>
       <div className={styles.header}>
-        <h3 className={globals[`${theme}Color`]}>
-          your looking for groups campaigns
-        </h3>
+        <p>
+          <b className={globals[`${theme}Color`]}>
+            your looking for groups campaigns
+          </b>
+        </p>
         <button
           className={styles.addButton}
           onClick={() => setAddDialogOpen(true)}
         >
-          <AddIcon className={styles[`${theme}Fill`]} />
+          <AddIcon className={globals[`${theme}FillChildren`]} />
         </button>
       </div>
       <div>
@@ -97,15 +99,17 @@ export default function ManageLFG() {
                 >
                   <p>{item?.message}</p>
                   <div className={styles.bottomWrapper}>
-                    <div className={styles.careers}>
-                      {item?.careers.map((career) => (
-                        <Chip
-                          label={career.category.name}
-                          variant={textColorTheme}
-                          className={styles.career}
-                        />
-                      ))}
-                    </div>
+                    {item?.careers[0] && (
+                      <div className={styles.careers}>
+                        {item?.careers.map((career) => (
+                          <Chip
+                            label={career.category.name}
+                            variant={textColorTheme}
+                            className={styles.career}
+                          />
+                        ))}
+                      </div>
+                    )}
                     <div className={styles.bottom}>
                       <Chip
                         label={calculateBestPastDateFormat(

@@ -299,6 +299,7 @@ export default function RegisterForm() {
                     name="bio"
                     isReactHookForm={true}
                     required={true}
+                    isSSR={true}
                   />
                 </div>
 

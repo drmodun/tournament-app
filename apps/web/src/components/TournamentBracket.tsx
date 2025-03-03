@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bracket, IRoundProps, Seed, SeedItem, SeedTeam } from "react-brackets";
+import { Bracket, Seed, SeedItem } from "react-brackets";
 import "../styles/bracket.css";
 import { clientApi } from "api/client/base";
 
@@ -10,6 +10,7 @@ interface TournamentBracketProps {
 interface ReactBracketsTeam {
   id?: number;
   name: string;
+  score?: string;
 }
 
 interface ReactBracketsSeed {
@@ -17,6 +18,7 @@ interface ReactBracketsSeed {
   date: string;
   teams: [ReactBracketsTeam, ReactBracketsTeam];
   winner?: number;
+  score?: string;
 }
 
 interface ReactBracketsRound {
@@ -30,50 +32,6 @@ interface ReactBracketsData {
   rounds: ReactBracketsRound[];
 }
 
-const CustomSeed = ({
-  seed,
-  breakpoint,
-  roundIndex,
-  seedIndex,
-}: {
-  seed: ReactBracketsSeed;
-  breakpoint: string;
-  roundIndex: number;
-  seedIndex: number;
-}) => {
-  return (
-    <Seed mobileBreakpoint={breakpoint}>
-      <SeedItem>
-        <div className="match-wrapper">
-          <div className="match">
-            <div className="match-header">
-              <div className="match-title">Match {seed.id}</div>
-              <div className="match-date">
-                {new Date(seed.date).toLocaleDateString()}
-              </div>
-            </div>
-            <div className="match-participants">
-              {seed.teams.map((team, idx) => (
-                <div
-                  key={idx}
-                  className={`participant ${
-                    seed.winner === team.id ? "winner" : ""
-                  }`}
-                >
-                  <div className="participant-name">{team.name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </SeedItem>
-    </Seed>
-  );
-};
-
-/**
- * Component for displaying a tournament bracket for a specific stage
- */
 const TournamentBracket = ({ stageId }: TournamentBracketProps) => {
   const [bracketData, setBracketData] = useState<ReactBracketsData | null>(
     null
@@ -88,7 +46,39 @@ const TournamentBracket = ({ stageId }: TournamentBracketProps) => {
         const response = await clientApi.get<ReactBracketsData>(
           `/matches/stage/${stageId}/bracket/react`
         );
-        setBracketData(response.data);
+
+        // Transform the data to format dates and add scores
+        const formattedData: ReactBracketsData = {
+          ...response.data,
+          rounds: response.data.rounds.map((round, roundIndex) => ({
+            title:
+              roundIndex === 0
+                ? "First Round"
+                : roundIndex === response.data.rounds.length - 1
+                  ? "Finals"
+                  : roundIndex === response.data.rounds.length - 2
+                    ? "Semi Finals"
+                    : roundIndex === response.data.rounds.length - 3
+                      ? "Quarter Finals"
+                      : `Round ${roundIndex + 1}`,
+            seeds: round.seeds.map((seed) => ({
+              ...seed,
+              date: new Date(seed.date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              }),
+              teams: [
+                seed.teams[0] || { name: "TBD" },
+                seed.teams[1] || { name: "TBD" },
+              ] as [ReactBracketsTeam, ReactBracketsTeam],
+            })),
+          })),
+        };
+
+        setBracketData(formattedData);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"
@@ -131,15 +121,15 @@ const TournamentBracket = ({ stageId }: TournamentBracketProps) => {
 
   return (
     <div className="tournament-bracket-container">
-      <h2 className="bracket-title">{bracketData.stageName} Bracket</h2>
+      <h2 className="bracket-title">{bracketData.stageName}</h2>
       <div className="bracket-view">
         <Bracket
           rounds={bracketData.rounds}
-          renderSeed={CustomSeed}
           mobileBreakpoint={768}
-          roundTitleComponent={(title: string, roundIndex: number) => (
-            <div className="round-title">{title}</div>
-          )}
+          swipeableProps={{
+            enableMouseEvents: true,
+            animateHeight: true,
+          }}
         />
       </div>
     </div>

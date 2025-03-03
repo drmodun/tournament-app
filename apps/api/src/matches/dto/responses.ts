@@ -78,6 +78,12 @@ export class ReactBracketsTeamDto {
 
   @ApiProperty({ description: 'Team name' })
   name: string;
+
+  @ApiProperty({
+    description: 'Team score (e.g., "2" for 2 wins)',
+    required: false,
+  })
+  score?: string;
 }
 
 export class ReactBracketsSeedDto {
@@ -95,6 +101,9 @@ export class ReactBracketsSeedDto {
 
   @ApiProperty({ description: 'Winner team ID', required: false })
   winner?: number;
+
+  @ApiProperty({ description: 'Match score (e.g., "2-1")', required: false })
+  score?: string;
 }
 
 export class ReactBracketsRoundDto {

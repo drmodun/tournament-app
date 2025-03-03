@@ -392,9 +392,22 @@ export class MatchesService {
                   if (user) name = user.username;
                 }
 
+                // Calculate score for this roster
+                const rosterScores = stageData.scoreDetails
+                  .filter((sd) => sd.rosterId === rm.rosterId)
+                  .filter((sd) =>
+                    stageData.scores.some(
+                      (s) => s.id === sd.scoreId && s.matchupId === matchup.id,
+                    ),
+                  );
+
+                const wins = rosterScores.filter((s) => s.isWinner).length;
+                const score = wins > 0 ? wins.toString() : undefined;
+
                 return {
                   id: roster.id,
                   name,
+                  score,
                 };
               });
 
@@ -415,12 +428,18 @@ export class MatchesService {
               }
             }
 
+            // Calculate overall match score
+            const score = matchup.isFinished
+              ? `${teams[0].score}-${teams[1].score}`
+              : undefined;
+
             return {
               id: matchup.id,
               date:
                 matchup.startDate?.toISOString() || new Date().toISOString(),
               teams,
               winner,
+              score,
             };
           }),
         };

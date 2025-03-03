@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { roster, user, group, participation, userToRoster } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
-import { BaseQuery } from 'src/base/query/baseQuery';
+import { BaseQuery } from '../base/query/baseQuery';
 import { eq, SQL, desc, asc, inArray, and } from 'drizzle-orm';
 import {
   RosterResponsesEnum,
@@ -16,7 +16,7 @@ import {
   PgColumn,
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
-import { db } from 'src/db/db';
+import { db } from '../db/db';
 import { QueryRosterDto } from './dto/requests';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { db } from 'src/db/db';
-import { matchup, rosterToMatchup, stageRound } from 'src/db/schema';
-import { RosterDrizzleRepository } from 'src/roster/roster.repository';
+import { db } from '../db/db';
+import { matchup, rosterToMatchup, stageRound } from '../db/schema';
+import { RosterDrizzleRepository } from '../roster/roster.repository';
 
 export interface IInitialRosterOptions {
   isShuffled: boolean;
@@ -21,7 +21,7 @@ export class BracketGenerator {
         players: roster.players.map((player) => {
           return {
             id: player.user.id,
-            elo: player.career.filter(
+            elo: player.career?.filter(
               (c) =>
                 c.categoryId === roster.participation.tournament.categoryId,
             )?.[0]?.elo,
@@ -113,6 +113,10 @@ export class BracketGenerator {
 
     const byeMatchesToCreate = bracketSize - rosters.length;
 
+    if (roundAmount < 1) {
+      return;
+    }
+
     const rounds = await db
       .insert(stageRound)
       .values(
@@ -149,6 +153,7 @@ export class BracketGenerator {
 
     for (const round of roundsToCreate) {
       // Create all other matches
+
       const matches = await db
         .insert(matchup)
         .values(
@@ -175,30 +180,33 @@ export class BracketGenerator {
     const byeMatches = lastRoundMatches.slice(0, byeMatchesToCreate);
     const teamsForBye = rosters.slice(0, byeMatchesToCreate);
 
-    await db.insert(rosterToMatchup).values(
-      byeMatches
-        .map((match, i) => {
-          return [
-            {
-              matchupId: match.id,
-              rosterId: teamsForBye[i].id,
-              isWinner: true, // Bye means the match is automatically won by the team
-            },
-            {
-              matchupId: match.parentMatchupId,
-              rosterId: teamsForBye[i].id, // Automatically progress the team to the next round
-            },
-          ];
-        })
-        .flat(),
-    );
+    byeMatches.length > 0 &&
+      (await db.insert(rosterToMatchup).values(
+        byeMatches
+          .map((match, i) => {
+            return [
+              {
+                matchupId: match.id,
+                rosterId: teamsForBye[i].id,
+                isWinner: true, // Bye means the match is automatically won by the team
+              },
+              {
+                matchupId: match.parentMatchupId,
+                rosterId: teamsForBye[i].id, // Automatically progress the team to the next round
+              },
+            ];
+          })
+          .flat(),
+      ));
 
-    const others = lastRoundMatches.slice(byeMatchesToCreate);
+    const others = byeMatches.length
+      ? lastRoundMatches.slice(byeMatchesToCreate)
+      : lastRoundMatches;
     // Get the optimal seeding for the remaining teams
     const remainingTeams = rosters.slice(byeMatchesToCreate);
     const seedingOrder = this.createOptimalSeeding(
       remainingTeams.length,
-      others.length * 2,
+      byeMatches.length ? others.length * 2 : bracketSize,
     );
 
     // Map the seeding order to the actual roster IDs
@@ -216,14 +224,14 @@ export class BracketGenerator {
       if (team1Index < seededTeams.length) {
         matchAssignments.push({
           matchupId: others[i].id,
-          rosterId: seededTeams[team1Index].id,
+          rosterId: seededTeams[team1Index]?.id,
         });
       }
 
       if (team2Index < seededTeams.length) {
         matchAssignments.push({
           matchupId: others[i].id,
-          rosterId: seededTeams[team2Index].id,
+          rosterId: seededTeams[team2Index]?.id,
         });
       }
     }

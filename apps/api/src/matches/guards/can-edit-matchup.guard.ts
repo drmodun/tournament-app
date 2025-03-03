@@ -20,22 +20,29 @@ export class CanEditMatchupGuard implements CanActivate {
       throw new ForbiddenException('Invalid matchup or tournament ID');
     }
 
-    const result = await this.matchesService.isMatchupInTournament(
+    // Check if the matchup exists and belongs to the tournament
+    const belongsToTournament = await this.matchesService.isMatchupInTournament(
       matchupId,
       tournamentId,
     );
 
-    if (!result.exists) {
-      throw new NotFoundException(`Matchup with ID ${matchupId} not found`);
-    }
-
-    if (!result.belongsToTournament) {
+    if (!belongsToTournament) {
       throw new ForbiddenException(
         `Matchup with ID ${matchupId} does not belong to tournament with ID ${tournamentId}`,
       );
     }
 
-    request.matchup = result.matchup;
+    // Get the matchup for later use
+    try {
+      const matchup = await this.matchesService.getMatchupById(matchupId);
+      request.matchup = matchup;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      // If there's another error, we've already verified the matchup exists,
+      // so we can continue without storing it in the request
+    }
 
     return true;
   }

@@ -1,7 +1,7 @@
 import { db } from './db';
 import * as tables from './schema';
 import { faker } from '@faker-js/faker';
-import { InferInsertModel, sql } from 'drizzle-orm';
+import { InferInsertModel, sql, eq, asc } from 'drizzle-orm';
 import { CreateUserRequest } from 'src/users/dto/requests.dto';
 import {
   groupFocusEnum,
@@ -18,6 +18,8 @@ import {
 } from '@tournament-app/types';
 import { stageTypeEnum, stageStatusEnum } from '@tournament-app/types';
 import { LocationHelper } from '../base/static/locationHelper';
+import { BracketGenerator } from '../matches/bracket.generator';
+import { RosterDrizzleRepository } from '../roster/roster.repository';
 
 async function teardown() {
   console.log('Teardown database...');
@@ -26,6 +28,11 @@ async function teardown() {
     // Delete tables in order of dependencies (child tables first)
     const tableDeleteOrder = [
       // Relationship tables first
+      tables.scoreToRoster,
+      tables.score,
+      tables.rosterToMatchup,
+      tables.matchup,
+      tables.stageRound,
       tables.categoryToLFP,
       tables.categoryToLFG,
       tables.categoryCareer,
@@ -574,12 +581,9 @@ async function createStages() {
         to: tournament.endDate,
       });
 
-      const minPlayersPerTeam = faker.number.int({ min: 1, max: 10 });
-
-      const maxPlayersPerTeam = Math.max(
-        faker.number.int({ min: 1, max: 10 }),
-        minPlayersPerTeam + faker.number.int({ min: 1, max: 5 }),
-      );
+      const minPlayersPerTeam = faker.number.int({ min: 1, max: 5 });
+      const maxPlayersPerTeam =
+        minPlayersPerTeam + faker.number.int({ min: 0, max: 2 });
 
       stages.push({
         id: stages.length + 1,
@@ -596,6 +600,7 @@ async function createStages() {
         maxChanges: faker.number.int({ min: 0, max: 10 }),
         minPlayersPerTeam,
         maxPlayersPerTeam,
+        maxSubstitutes: faker.number.int({ min: 1, max: 3 }),
         tournamentId: tournament.id,
       });
     }
@@ -608,12 +613,252 @@ async function createStages() {
       String(stages.length + 1),
     )}`,
   );
+
+  return stages;
+}
+
+async function createStageRounds() {
+  const stages = await db.select().from(tables.stage);
+  const rounds = [];
+
+  for (const stage of stages) {
+    // For knockout stages, create rounds based on the number of teams (8 teams = 3 rounds, 16 teams = 4 rounds)
+    if (stage.stageType === stageTypeEnum.KNOCKOUT) {
+      // Calculate number of rounds needed based on tournament maxParticipants
+      const tournament = await db
+        .select()
+        .from(tables.tournament)
+        .where(eq(tables.tournament.id, stage.tournamentId))
+        .limit(1);
+
+      const maxParticipants = tournament[0].maxParticipants;
+      const numRounds = Math.ceil(Math.log2(maxParticipants));
+
+      for (let i = 0; i < numRounds; i++) {
+        rounds.push({
+          id: rounds.length + 1,
+          stageId: stage.id,
+          roundNumber: i + 1,
+          createdAt: new Date(),
+        });
+      }
+    }
+    // For round-robin stages, create a single round
+    else {
+      rounds.push({
+        id: rounds.length + 1,
+        stageId: stage.id,
+        roundNumber: 1,
+        createdAt: new Date(),
+      });
+    }
+  }
+
+  await db.insert(tables.stageRound).values(rounds);
+
+  await db.execute(
+    sql<string>`ALTER SEQUENCE stage_round_id_seq RESTART WITH ${sql.raw(
+      String(rounds.length + 1),
+    )}`,
+  );
+
+  return rounds;
+}
+
+async function createMatchups() {
+  const BATCH_SIZE = 50;
+  let totalMatchups = 0;
+  const stages = await db.select().from(tables.stage);
+
+  for (const stage of stages) {
+    const matchupBatch = [];
+
+    // Get the tournament to determine max participants
+    const tournament = await db
+      .select()
+      .from(tables.tournament)
+      .where(eq(tables.tournament.id, stage.tournamentId))
+      .limit(1);
+
+    if (!tournament.length) continue;
+
+    // Get rounds for this stage
+    const stageRounds = await db
+      .select()
+      .from(tables.stageRound)
+      .where(eq(tables.stageRound.stageId, stage.id))
+      .orderBy(asc(tables.stageRound.roundNumber));
+
+    if (stage.stageType === stageTypeEnum.KNOCKOUT) {
+      const maxParticipants = tournament[0].maxParticipants;
+      const numRounds = Math.ceil(Math.log2(maxParticipants));
+      const matchupsByRound = new Map<number, number[]>();
+
+      // Create matchups from final to first round
+      for (let roundIdx = numRounds - 1; roundIdx >= 0; roundIdx--) {
+        const round = stageRounds[roundIdx];
+        if (!round) continue;
+
+        const matchupsInRound = Math.pow(2, roundIdx);
+        const roundMatchupIds: number[] = [];
+
+        for (let matchIdx = 0; matchIdx < matchupsInRound; matchIdx++) {
+          totalMatchups++;
+          roundMatchupIds.push(totalMatchups);
+
+          // For non-final rounds, get the parent matchup ID from the next round
+          const parentMatchupId =
+            roundIdx < numRounds - 1
+              ? matchupsByRound.get(roundIdx + 1)?.[Math.floor(matchIdx / 2)]
+              : null;
+
+          matchupBatch.push({
+            id: totalMatchups,
+            stageId: stage.id,
+            roundId: round.id,
+            parentMatchupId,
+            startDate: faker.date.between({
+              from: stage.startDate,
+              to: stage.endDate,
+            }),
+            endDate: null,
+            isFinished: false,
+            matchupType: 'one_vs_one',
+            createdAt: new Date(),
+          });
+
+          // Insert batch if we've reached the batch size
+          if (matchupBatch.length >= BATCH_SIZE) {
+            await db.insert(tables.matchup).values(matchupBatch);
+            matchupBatch.length = 0;
+          }
+        }
+
+        matchupsByRound.set(roundIdx, roundMatchupIds);
+      }
+    } else if (stage.stageType === stageTypeEnum.ROUND_ROBIN) {
+      const round = stageRounds[0];
+      if (!round) continue;
+
+      const numTeams = tournament[0].maxParticipants;
+      const numMatchups = (numTeams * (numTeams - 1)) / 2;
+
+      for (let i = 0; i < numMatchups; i++) {
+        totalMatchups++;
+
+        matchupBatch.push({
+          id: totalMatchups,
+          stageId: stage.id,
+          roundId: round.id,
+          parentMatchupId: null,
+          startDate: faker.date.between({
+            from: stage.startDate,
+            to: stage.endDate,
+          }),
+          endDate: null,
+          isFinished: false,
+          matchupType: 'one_vs_one',
+          createdAt: new Date(),
+        });
+
+        // Insert batch if we've reached the batch size
+        if (matchupBatch.length >= BATCH_SIZE) {
+          await db.insert(tables.matchup).values(matchupBatch);
+          matchupBatch.length = 0;
+        }
+      }
+    }
+
+    // Insert any remaining matchups in the batch
+    if (matchupBatch.length > 0) {
+      await db.insert(tables.matchup).values(matchupBatch);
+      matchupBatch.length = 0;
+    }
+  }
+
+  // Reset the sequence
+  if (totalMatchups > 0) {
+    await db.execute(
+      sql`ALTER SEQUENCE matchup_id_seq RESTART WITH ${sql.raw(
+        String(totalMatchups + 1),
+      )}`,
+    );
+  }
+
+  return totalMatchups;
+}
+
+async function assignRostersToMatchups() {
+  const matchups = await db.select().from(tables.matchup);
+  const stages = await db.select().from(tables.stage);
+  const rosters = await db.select().from(tables.roster);
+  const rosterAssignments = [];
+
+  for (const stage of stages) {
+    const stageMatchups = matchups.filter((m) => m.stageId === stage.id);
+    const stageRosters = rosters.filter((r) => r.stageId === stage.id);
+
+    if (stage.stageType === stageTypeEnum.KNOCKOUT) {
+      // For knockout stages, assign rosters to first round matchups only
+      const firstRoundMatchups = stageMatchups.filter(
+        (m) => !stageMatchups.some((om) => om.parentMatchupId === m.id),
+      );
+
+      // Randomly assign rosters to first round matchups
+      const shuffledRosters = [...stageRosters].sort(() => 0.5 - Math.random());
+
+      for (let i = 0; i < firstRoundMatchups.length; i++) {
+        const matchup = firstRoundMatchups[i];
+        // Assign two rosters to each matchup
+        for (let j = 0; j < 2; j++) {
+          const rosterIndex = i * 2 + j;
+          if (rosterIndex < shuffledRosters.length) {
+            rosterAssignments.push({
+              rosterId: shuffledRosters[rosterIndex].id,
+              matchupId: matchup.id,
+              isWinner: false,
+              createdAt: new Date(),
+            });
+          }
+        }
+      }
+    } else {
+      // For round-robin stages, create matchups between all teams
+      for (let i = 0; i < stageRosters.length; i++) {
+        for (let j = i + 1; j < stageRosters.length; j++) {
+          const matchup = stageMatchups.shift();
+          if (matchup) {
+            rosterAssignments.push(
+              {
+                rosterId: stageRosters[i].id,
+                matchupId: matchup.id,
+                isWinner: false,
+                createdAt: new Date(),
+              },
+              {
+                rosterId: stageRosters[j].id,
+                matchupId: matchup.id,
+                isWinner: false,
+                createdAt: new Date(),
+              },
+            );
+          }
+        }
+      }
+    }
+  }
+
+  if (rosterAssignments.length > 0) {
+    await db.insert(tables.rosterToMatchup).values(rosterAssignments);
+  }
+
+  return rosterAssignments;
 }
 
 async function createParticipations() {
   const NUM_PARTICIPATIONS_TO_CREATE = process.env.SEED_PARTICIPATIONS_COUNT
     ? parseInt(process.env.SEED_PARTICIPATIONS_COUNT, 10)
-    : 1000;
+    : 100;
 
   const participations = [];
   const tournaments = await db.select().from(tables.tournament);
@@ -807,6 +1052,17 @@ async function createCareers() {
   await db.insert(tables.categoryCareer).values(careers);
 }
 
+async function createMatches() {
+  const stages = await db.select().from(tables.stage);
+
+  for (const stage of stages) {
+    const bracketGenerator = new BracketGenerator(
+      new RosterDrizzleRepository(),
+    );
+    await bracketGenerator.generateInitialRosters(stage.id);
+  }
+}
+
 async function createLFG() {
   const users = await db.select().from(tables.user);
   const lfgEntries = [];
@@ -870,54 +1126,6 @@ async function createBlockedUsers() {
   }
 
   await db.insert(tables.groupUserBlockList).values(blockedUsers);
-}
-
-async function createLFP() {
-  const groups = await db.select().from(tables.group);
-  const categories = await db.select().from(tables.category);
-  const lfpEntries = [];
-  const categoryConnections = [];
-
-  // Create LFP entries for about 30% of groups
-  for (const group of groups) {
-    if (Math.random() < 0.3) {
-      const lfpEntry = {
-        id: lfpEntries.length + 1,
-        groupId: group.id,
-        message: faker.lorem.paragraph(),
-        createdAt: faker.date.recent(),
-      };
-      lfpEntries.push(lfpEntry);
-
-      // Connect each LFP entry to 1-3 categories
-      const numCategories = faker.number.int({ min: 1, max: 3 });
-      const shuffledCategories = [...categories].sort(
-        () => 0.5 - Math.random(),
-      );
-      const selectedCategories = shuffledCategories.slice(0, numCategories);
-
-      for (const category of selectedCategories) {
-        categoryConnections.push({
-          lfpId: lfpEntry.id,
-          categoryId: category.id,
-          createdAt: faker.date.recent(),
-        });
-      }
-    }
-  }
-
-  if (lfpEntries.length > 0) {
-    await db.insert(tables.lookingForPlayers).values(lfpEntries);
-    await db.execute(
-      sql<string>`ALTER SEQUENCE looking_for_players_id_seq RESTART WITH ${sql.raw(
-        String(lfpEntries.length + 1),
-      )}`,
-    );
-  }
-
-  if (categoryConnections.length > 0) {
-    await db.insert(tables.categoryToLFP).values(categoryConnections);
-  }
 }
 
 async function createUserGroupBlockList() {
@@ -1065,6 +1273,55 @@ async function createRosterMembers() {
 
   return rosterMembers;
 }
+
+async function createLFP() {
+  const groups = await db.select().from(tables.group);
+  const categories = await db.select().from(tables.category);
+  const lfpEntries = [];
+  const categoryConnections = [];
+
+  // Create LFP entries for about 30% of groups
+  for (const group of groups) {
+    if (Math.random() < 0.3) {
+      const lfpEntry = {
+        id: lfpEntries.length + 1,
+        groupId: group.id,
+        message: faker.lorem.paragraph(),
+        createdAt: faker.date.recent(),
+      };
+      lfpEntries.push(lfpEntry);
+
+      // Connect each LFP entry to 1-3 categories
+      const numCategories = faker.number.int({ min: 1, max: 3 });
+      const shuffledCategories = [...categories].sort(
+        () => 0.5 - Math.random(),
+      );
+      const selectedCategories = shuffledCategories.slice(0, numCategories);
+
+      for (const category of selectedCategories) {
+        categoryConnections.push({
+          lfpId: lfpEntry.id,
+          categoryId: category.id,
+          createdAt: faker.date.recent(),
+        });
+      }
+    }
+  }
+
+  if (lfpEntries.length > 0) {
+    await db.insert(tables.lookingForPlayers).values(lfpEntries);
+    await db.execute(
+      sql<string>`ALTER SEQUENCE looking_for_players_id_seq RESTART WITH ${sql.raw(
+        String(lfpEntries.length + 1),
+      )}`,
+    );
+  }
+
+  if (categoryConnections.length > 0) {
+    await db.insert(tables.categoryToLFP).values(categoryConnections);
+  }
+}
+
 // TODO: Add other seed tables when developing other endpoints
 
 export async function seed() {
@@ -1087,10 +1344,14 @@ export async function seed() {
   await createLFP();
   await createTournaments();
   await createStages();
+  await createStageRounds();
   await createParticipations();
   await createInterests();
   await createGroupInterests();
   await createGroupRequirements();
   await createRosters();
   await createRosterMembers();
+  console.log('Creating matches...');
+  await createMatches();
+  await assignRostersToMatchups();
 }

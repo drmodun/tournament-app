@@ -1,14 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IEndMatchupRequest } from '@tournament-app/types';
 import {
+  group,
+  matchup,
+  participation,
+  roster,
+  rosterToMatchup,
   score,
   scoreToRoster,
-  matchup,
-  rosterToMatchup,
   stage,
+  stageRound,
+  user,
 } from 'src/db/schema';
 import { db } from 'src/db/db';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, sql, asc, inArray } from 'drizzle-orm';
+import { CreateScoreDto } from './dto/create-score.dto';
+import { UpdateScoreDto } from './dto/update-score.dto';
 
 @Injectable()
 export class MatchesDrizzleRepository {
@@ -397,5 +404,257 @@ export class MatchesDrizzleRepository {
       belongsToTournament: matchupWithStage[0].tournamentId === tournamentId,
       matchup: matchupWithStage[0],
     };
+  }
+
+  /**
+   * Get all matchups for a stage with their rosters and scores
+   * This is used for bracket visualization
+   */
+  async getBracketDataForStage(stageId: number) {
+    // Get stage information
+    const stageInfo = await db
+      .select({
+        id: stage.id,
+        name: stage.name,
+        stageType: stage.stageType,
+        tournamentId: stage.tournamentId,
+      })
+      .from(stage)
+      .leftJoin(matchup, eq(matchup.stageId, stage.id))
+      .leftJoin(rosterToMatchup, eq(rosterToMatchup.matchupId, matchup.id))
+      .where(eq(stage.id, stageId))
+      .limit(1);
+
+    if (stageInfo.length === 0) {
+      return null;
+    }
+
+    // Get all matchups for this stage
+    const matchups = await db
+      .select({
+        id: matchup.id,
+        stageId: matchup.stageId,
+        roundId: matchup.roundId,
+        parentMatchupId: matchup.parentMatchupId,
+        startDate: matchup.startDate,
+        endDate: matchup.endDate,
+        isFinished: matchup.isFinished,
+        roundNumber: stageRound.roundNumber,
+      })
+      .from(matchup)
+      .innerJoin(stageRound, eq(matchup.roundId, stageRound.id))
+      .where(eq(matchup.stageId, stageId))
+      .orderBy(asc(stageRound.roundNumber));
+
+    // Get all rosters for these matchups
+    const rosterMatchups = await db
+      .select({
+        matchupId: rosterToMatchup.matchupId,
+        rosterId: rosterToMatchup.rosterId,
+        isWinner: rosterToMatchup.isWinner,
+        rosterName: roster.id, // We'll replace this with actual names later
+      })
+      .from(rosterToMatchup)
+      .innerJoin(roster, eq(rosterToMatchup.rosterId, roster.id))
+      .where(
+        inArray(
+          rosterToMatchup.matchupId,
+          matchups.map((m) => m.id),
+        ),
+      );
+
+    // Get all scores for these matchups
+    const scores = await db
+      .select({
+        id: score.id,
+        matchupId: score.matchupId,
+        roundNumber: score.roundNumber,
+      })
+      .from(score)
+      .where(
+        inArray(
+          score.matchupId,
+          matchups.map((m) => m.id),
+        ),
+      );
+
+    // Get score details for each roster
+    const scoreDetails = await db
+      .select({
+        scoreId: scoreToRoster.scoreId,
+        rosterId: scoreToRoster.rosterId,
+        points: scoreToRoster.points,
+        isWinner: scoreToRoster.isWinner,
+      })
+      .from(scoreToRoster)
+      .where(
+        inArray(
+          scoreToRoster.scoreId,
+          scores.map((s) => s.id),
+        ),
+      );
+
+    // Get roster names and details
+    const rosterIds = [...new Set(rosterMatchups.map((rm) => rm.rosterId))];
+    const rosterDetails = await db
+      .select({
+        id: roster.id,
+        participationId: roster.participationId,
+      })
+      .from(roster)
+      .where(inArray(roster.id, rosterIds));
+
+    // Get group names for rosters
+    const participationIds = [
+      ...new Set(rosterDetails.map((r) => r.participationId)),
+    ];
+    const participationDetails = await db
+      .select({
+        id: participation.id,
+        groupId: participation.groupId,
+        userId: participation.userId,
+      })
+      .from(participation)
+      .where(inArray(participation.id, participationIds));
+
+    // Get group names
+    const groupIds = participationDetails
+      .filter((p) => p.groupId !== null)
+      .map((p) => p.groupId);
+
+    const groupDetails =
+      groupIds.length > 0
+        ? await db
+            .select({
+              id: group.id,
+              name: group.name,
+              logo: group.logo,
+            })
+            .from(group)
+            .where(inArray(group.id, groupIds))
+        : [];
+
+    // Get user names for solo participants
+    const userIds = participationDetails
+      .filter((p) => p.userId !== null)
+      .map((p) => p.userId);
+
+    const userDetails =
+      userIds.length > 0
+        ? await db
+            .select({
+              id: user.id,
+              username: user.username,
+              profilePicture: user.profilePicture,
+            })
+            .from(user)
+            .where(inArray(user.id, userIds))
+        : [];
+
+    // Count wins for each roster
+    const rosterWins = rosterMatchups.reduce((acc, rm) => {
+      if (rm.isWinner) {
+        acc[rm.rosterId] = (acc[rm.rosterId] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    return {
+      stage: stageInfo[0],
+      matchups,
+      rosterMatchups,
+      scores,
+      scoreDetails,
+      rosterDetails,
+      participationDetails,
+      groupDetails,
+      userDetails,
+      rosterWins,
+    };
+  }
+
+  async createScore(createScoreDto: CreateScoreDto) {
+    const { matchupId, rosterId, score: scoreValue, isWinner } = createScoreDto;
+
+    // Check if the matchup exists
+    const matchupRecord = await db.query.matchup.findFirst({
+      where: eq(matchup.id, matchupId),
+    });
+
+    if (!matchupRecord) {
+      throw new NotFoundException(`Matchup with ID ${matchupId} not found`);
+    }
+
+    // Check if the roster exists and is part of the matchup
+    const rosterMatchup = await db.query.rosterToMatchup.findFirst({
+      where: and(
+        eq(rosterToMatchup.matchupId, matchupId),
+        eq(rosterToMatchup.rosterId, rosterId),
+      ),
+    });
+
+    if (!rosterMatchup) {
+      throw new NotFoundException(
+        `Roster with ID ${rosterId} is not part of matchup with ID ${matchupId}`,
+      );
+    }
+
+    // Insert the score
+    const [newScore] = await db
+      .insert(score)
+      .values({
+        matchupId,
+        rosterId,
+        score: scoreValue,
+        isWinner: isWinner || false,
+      })
+      .returning();
+
+    return newScore;
+  }
+
+  async updateScore(id: number, updateScoreDto: UpdateScoreDto) {
+    const { score: scoreValue, isWinner } = updateScoreDto;
+
+    // Check if the score exists
+    const existingScore = await db.query.scoreToRoster.findFirst({
+      where: eq(scoreToRoster.scoreId, id),
+    });
+
+    if (!existingScore) {
+      throw new NotFoundException(`Score with ID ${id} not found`);
+    }
+
+    // Update the score
+    const [updatedScore] = await db
+      .update(score)
+      .set({
+        points: scoreValue !== undefined ? scoreValue : existingScore.points,
+        isWinner: isWinner !== undefined ? isWinner : existingScore.isWinner,
+      })
+      .where(eq(score.id, id))
+      .returning();
+
+    return updatedScore;
+  }
+
+  async getMatchupById(matchupId: number) {
+    const matchupRecord = await db.query.matchup.findFirst({
+      where: eq(matchup.id, matchupId),
+      with: {
+        rosterToMatchup: {
+          with: {
+            roster: true,
+          },
+        },
+        score: true,
+      },
+    });
+
+    if (!matchupRecord) {
+      throw new NotFoundException(`Matchup with ID ${matchupId} not found`);
+    }
+
+    return matchupRecord;
   }
 }

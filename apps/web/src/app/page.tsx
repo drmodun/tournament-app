@@ -26,6 +26,8 @@ import SlideButton from "components/slideButton";
 import ImagePicker from "components/imagePicker";
 import AddIcon from "@mui/icons-material/Add";
 import ImageDrop from "components/imageDrop";
+import { useGetBracket } from "api/client/hooks/bracket/useGetBracket";
+import TournamentBracket from "components/TournamentBracket";
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
@@ -40,6 +42,8 @@ export default function Web() {
     setResponse(null);
     setError(undefined);
   }, [name, toastContext]);
+
+  const { data, isLoading } = useGetBracket(5);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     setName(e.target.value);
@@ -82,13 +86,15 @@ export default function Web() {
           toastContext.addToast("DIRTY DEEDSSSS DONE DIRT CHEAP!!!!", "warning")
         }
       />
+      <TournamentBracket stageId={16} />
+
       <Button
         label="hi guys"
         variant="light"
         onClick={() =>
           toastContext.addToast(
             "DIRTY DEEDSSSS DONE DIRT CHEAPPPPPPPPPPPPPPPPPPPPPPPPPp!!!!",
-            "success",
+            "success"
           )
         }
       />

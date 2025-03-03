@@ -211,6 +211,13 @@
       "when": 1740943832845,
       "tag": "0029_dizzy_miss_america",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1740992511480,
+      "tag": "0030_giant_diamondback",
+      "breakpoints": true
     }
   ]
 }

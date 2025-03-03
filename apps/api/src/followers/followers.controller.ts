@@ -36,6 +36,7 @@ export class FollowersController {
 
   @Get('auto-complete/followers/:search')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
   async autoCompleteFollowers(
     @Param('search') search: string,
@@ -51,6 +52,7 @@ export class FollowersController {
 
   @Get('auto-complete/following/:search')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
   async autoCompleteFollowing(
     @Param('search') search: string,

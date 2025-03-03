@@ -408,13 +408,11 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       .where(
         and(
           eq(participation.tournamentId, tournamentId),
-          and(
-            or(
-              eq(groupToUser.role, groupRoleEnum.ADMIN),
-              eq(groupToUser.role, groupRoleEnum.OWNER),
-            ),
-            eq(groupToUser.userId, userId),
+          or(
+            eq(groupToUser.role, groupRoleEnum.ADMIN),
+            eq(groupToUser.role, groupRoleEnum.OWNER),
           ),
+          eq(groupToUser.userId, userId),
         ),
       );
 

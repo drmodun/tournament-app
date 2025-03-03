@@ -73,7 +73,8 @@ export class GroupController {
   }
 
   @Get('for-roster/:tournamentId')
-  @UseGuards(JwtAuthGuard, GroupAdminGuard)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: [MiniGroupResponseWithLogo] })
   async getGroupsEligibleForRosterCreation(
     @Param('tournamentId', ParseIntPipe) tournamentId: number,

@@ -37,7 +37,7 @@ export class AuthController {
     );
   }
 
-  @Get('email-confirmation/:token')
+  @Post('email-confirmation/:token')
   async emailConfirmation(@Param('token') token: string) {
     await this.authService.emailConfirmation(token);
   }

@@ -4,11 +4,12 @@ import { StageController } from './stage.controller';
 import { StageDrizzleRepository } from './stage.repository';
 import { TournamentModule } from 'src/tournament/tournament.module';
 import { GroupMembershipModule } from 'src/group-membership/group-membership.module';
+import { ChallongeModule } from 'src/challonge/challonge.module';
 
 @Module({
   controllers: [StageController],
   providers: [StageService, StageDrizzleRepository],
   exports: [StageService, StageDrizzleRepository],
-  imports: [TournamentModule, GroupMembershipModule],
+  imports: [TournamentModule, GroupMembershipModule, ChallongeModule],
 })
 export class StageModule {}

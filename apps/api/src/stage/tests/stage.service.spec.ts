@@ -10,6 +10,7 @@ import {
   StageResponsesEnum,
   StageSortingEnum,
   stageTypeEnum,
+  IChallongeTournament,
 } from '@tournament-app/types';
 import { StagesWithDates } from '../types';
 
@@ -51,6 +52,18 @@ describe('StageService', () => {
 
     service = module.get<StageService>(StageService);
     repository = module.get(StageDrizzleRepository);
+
+    service.createChallongeTournament = jest.fn();
+    service.updateChallongeTournament = jest.fn();
+    service.deleteChallongeTournament = jest.fn();
+
+    jest.spyOn(service, 'createChallongeTournament').mockResolvedValue({
+      id: '1',
+    } as IChallongeTournament);
+
+    jest.spyOn(service, 'updateChallongeTournament').mockResolvedValue();
+
+    jest.spyOn(service, 'deleteChallongeTournament').mockResolvedValue();
   });
 
   describe('create', () => {

@@ -10,14 +10,19 @@ import {
   BaseStageResponseType,
   IStageResponse,
   StageSortingEnum,
+  stageToUpdateTournamentRequest,
 } from '@tournament-app/types';
 import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
-import { StagesWithDates } from './types';
+import { IStageWithChallongeTournament, StagesWithDates } from './types';
+import { ChallongeService } from 'src/challonge/challonge.service';
 
 @Injectable()
 export class StageService {
-  constructor(private readonly repository: StageDrizzleRepository) {}
+  constructor(
+    private readonly repository: StageDrizzleRepository,
+    private readonly challongeService: ChallongeService,
+  ) {}
 
   async create(createStageDto: ICreateStageDto) {
     const stage = await this.repository.createEntity({
@@ -27,6 +32,8 @@ export class StageService {
     if (!stage[0]) {
       throw new UnprocessableEntityException('Stage creation failed');
     }
+
+    await this.createChallongeTournament(stage[0].id as number);
 
     return stage[0];
   }
@@ -44,6 +51,47 @@ export class StageService {
     return results as TResponseType[];
   }
 
+  async createChallongeTournament(stageId: number) {
+    const stage: IStageResponse = await this.findOne(
+      stageId,
+      StageResponsesEnum.BASE,
+    );
+
+    const data =
+      await this.challongeService.createChallongeTournamentFromStage(stage);
+
+    await this.update(stageId, {
+      challongeTournamentId: data.id,
+    });
+
+    return data;
+  }
+
+  async updateChallongeTournament(stageId: number) {
+    const stage: IStageWithChallongeTournament = await this.findOne(
+      stageId,
+      StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+    );
+
+    await this.challongeService.updateTournament(
+      stage.challongeTournamentId,
+      stageToUpdateTournamentRequest(stage),
+    );
+  }
+
+  async deleteChallongeTournament(stageId: number) {
+    const stage: IStageWithChallongeTournament = await this.findOne(
+      stageId,
+      StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+    );
+
+    await this.challongeService.deleteTournament(
+      parseInt(stage.challongeTournamentId),
+    );
+
+    await this.update(stageId, { challongeTournamentId: null });
+  }
+
   async findOne<TResponseType extends BaseStageResponseType>(
     id: number,
     responseType: StageResponsesEnum = StageResponsesEnum.BASE,
@@ -57,17 +105,25 @@ export class StageService {
     return results[0] as TResponseType;
   }
 
-  async update(id: number, updateStageDto: IUpdateStageDto) {
+  async update(
+    id: number,
+    updateStageDto: IUpdateStageDto & {
+      challongeTournamentId?: string;
+    },
+  ) {
     const stage = await this.repository.updateEntity(id, updateStageDto);
 
     if (!stage[0]) {
       throw new NotFoundException(`Stage with ID ${id} not found`);
     }
 
+    await this.updateChallongeTournament(id);
+
     return stage[0];
   }
 
   async remove(id: number) {
+    await this.deleteChallongeTournament(id);
     const action = await this.repository.deleteEntity(id);
 
     if (!action[0]) {

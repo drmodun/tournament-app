@@ -12,11 +12,8 @@ import {
   IRosterResponse,
   IUpdateChallongeTournamentRequest,
   IUpdateParticipantRequest,
-  rosterToChallongeParticipant,
   rosterToCreateParticipantRequest,
-  stageToChallongeTournament,
   stageToCreateTournamentRequest,
-  rosterToUpdateParticipantRequest,
 } from '@tournament-app/types';
 
 @Injectable()
@@ -86,14 +83,14 @@ export class ChallongeService {
 
   async createTournament(
     createTournamentDto: ICreateChallongeTournamentRequest,
-  ) {
+  ): Promise<IChallongeTournament> {
     return this.executeFunctionWithRetry(() =>
       this.createTournamentFunction(createTournamentDto),
     );
   }
 
   async updateTournamentFunction(
-    id: number,
+    id: string,
     updateTournamentDto: IUpdateChallongeTournamentRequest,
   ) {
     const response: AxiosResponse<IChallongeTournament> =
@@ -107,7 +104,7 @@ export class ChallongeService {
   }
 
   async updateTournament(
-    id: number,
+    id: string,
     updateTournamentDto: IUpdateChallongeTournamentRequest,
   ) {
     return this.executeFunctionWithRetry(() =>

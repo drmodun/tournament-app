@@ -209,6 +209,11 @@ export class StageDrizzleRepository extends PrimaryRepository<
             },
           },
         };
+      case StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT:
+        return {
+          ...this.getMappingObject(StageResponsesEnum.BASE),
+          challongeTournamentId: stage.challongeTournamentId,
+        };
       case StageResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(StageResponsesEnum.BASE),

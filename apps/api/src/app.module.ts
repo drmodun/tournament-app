@@ -25,6 +25,7 @@ import { GroupRequirementsModule } from './group/requirements/group-requirements
 import { LFPModule } from './lfp/lfp.module';
 import { RosterModule } from './roster/roster.module';
 import { CareerModule } from './career/career.module';
+import { ChallongeModule } from './challonge/challonge.module';
 @Module({
   imports: [
     UsersModule,
@@ -51,6 +52,7 @@ import { CareerModule } from './career/career.module';
     GroupRequirementsModule,
     RosterModule,
     CareerModule,
+    ChallongeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

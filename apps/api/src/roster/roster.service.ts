@@ -197,4 +197,13 @@ export class RosterService {
 
     return changeAmount;
   }
+
+  async getManagedRostersForPlayer(stageId: number, playerId: number) {
+    const results = await this.repository.getManagedRostersForPlayer(
+      stageId,
+      playerId,
+    );
+
+    return results;
+  }
 }

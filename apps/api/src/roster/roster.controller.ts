@@ -34,6 +34,8 @@ import { RosterResponsesEnum, IQueryMetadata } from '@tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { MiniUserResponseWithCountry } from 'src/users/dto/responses.dto';
 import { MiniGroupResponseWithLogo } from 'src/group/dto/responses.dto';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 
 @ApiTags('roster')
 @ApiExtraModels(
@@ -46,6 +48,20 @@ import { MiniGroupResponseWithLogo } from 'src/group/dto/responses.dto';
 @Controller('roster')
 export class RosterController {
   constructor(private readonly rosterService: RosterService) {}
+
+  @Get('managed-by-user/:stageId')
+  @ApiOperation({ summary: 'Get all managed rosters for a specific user' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getManagedRostersForStage(
+    @Param('stageId', ParseIntPipe) stageId: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.rosterService.getManagedRostersForPlayer(
+      stageId,
+      user.id,
+    );
+  }
 
   @Get()
   @ApiOperation({ summary: 'Get all rosters with optional filtering' })

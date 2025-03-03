@@ -1,8 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { roster, user, group, participation, userToRoster } from '../db/schema';
+import {
+  roster,
+  user,
+  group,
+  participation,
+  userToRoster,
+  rosterToRound,
+  stageRound,
+  stage,
+  groupToUser,
+} from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { eq, SQL, desc, asc, inArray, and } from 'drizzle-orm';
+import { eq, SQL, desc, asc, inArray, and, or } from 'drizzle-orm';
 import {
   RosterResponsesEnum,
   RosterSortingEnum,
@@ -10,6 +20,7 @@ import {
   ICreateRosterRequest,
   IRosterPlayerWithoutCareer,
   IRosterResponse,
+  groupRoleEnum,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -77,6 +88,33 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     return this.getWithPlayers({
       ...query,
       ids: ids.roster.map((id) => id.id),
+    });
+  }
+
+  async getManagedRostersForPlayerIds(stageId: number, playerId: number) {
+    return await db
+      .select({ id: roster.id })
+      .from(roster)
+      .leftJoin(stage, eq(stage.id, roster.stageId))
+      .leftJoin(participation, eq(participation.id, roster.participationId))
+      .leftJoin(groupToUser, eq(groupToUser.groupId, participation.groupId))
+      .where(
+        and(
+          eq(stage.id, stageId),
+          eq(groupToUser.userId, playerId),
+          or(
+            eq(groupToUser.role, groupRoleEnum.ADMIN),
+            eq(groupToUser.role, groupRoleEnum.OWNER),
+          ),
+        ),
+      );
+  }
+
+  async getManagedRostersForPlayer(stageId: number, playerId: number) {
+    const ids = await this.getManagedRostersForPlayerIds(stageId, playerId);
+
+    return this.getWithPlayers({
+      ids: ids.map((id) => id.id),
     });
   }
 

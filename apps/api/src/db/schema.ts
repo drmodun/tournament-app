@@ -816,7 +816,6 @@ export const rosterToMatchup = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    parentMatchupId: integer('parent_matchup_id').references(() => matchup.id),
     isWinner: boolean('is_winner').default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },

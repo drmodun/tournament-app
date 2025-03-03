@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'src/db/db';
-import { matchup, stageRound } from 'src/db/schema';
+import { matchup, roster, stageRound } from 'src/db/schema';
 import { RosterDrizzleRepository } from 'src/roster/roster.repository';
 
 export interface IInitialRosterOptions {
@@ -111,50 +111,16 @@ export class BracketGenerator {
 
     const byeMatchesToCreate = bracketSize - rosters.length;
 
-    this.createEmptyMatchup(null, 1, 1, roundAmount);
-  }
-
-  async createEmptyMatchup(
-    parentMatchupId: number,
-    currentRound: number,
-    roundId: number,
-    rounds: number,
-    startDate: Date = new Date(),
-  ) {
-    if (currentRound === rounds) {
-      return;
-    }
-
-    const createdMatchups = await db
-      .insert(matchup)
-      .values([
-        {
-          parentMatchupId,
-          roundId,
-          matchupType: 'one_vs_one',
-          startDate: new Date(
-            startDate.getTime() +
-              currentRound * 1000 * 60 * 60 * 24 +
-              1000 * 60 * 60, // Add 1 day for each round, and an hour for the matchup
-          ),
-        },
-        {
-          parentMatchupId,
-          roundId,
-          matchupType: 'one_vs_one',
-          startDate: new Date(
-            startDate.getTime() +
-              currentRound * 1000 * 60 * 60 * 24 +
-              1000 * 60 * 60, // Add 1 day for each round, and an hour for the matchup
-          ),
-        },
-      ])
+    const rounds = await db
+      .insert(stageRound)
+      .values(
+        Array.from({ length: roundAmount }, (_, i) => ({
+          stageId,
+          roundNumber: i + 1,
+        })),
+      )
       .returning();
 
-    createdMatchups.forEach((matchup) => {
-      this.createEmptyMatchup(matchup.id, currentRound + 1, roundId, rounds);
-    });
-
-    return createdMatchups;
+    const sortedRounds = rounds.sort((a, b) => a.roundNumber - b.roundNumber);
   }
 }

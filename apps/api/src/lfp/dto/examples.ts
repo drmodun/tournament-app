@@ -4,12 +4,8 @@ import {
   SwaggerExamples,
 } from 'src/base/swagger/example.generator';
 import { CreateLFPDto, UpdateLFPDto, LFPQueryDto } from './requests';
-import {
-  categoryMiniExample,
-  withLogoExample,
-} from 'src/category/dto/examples';
 import { groupRequirementsResponseExample } from 'src/group/requirements/dto/examples';
-import { baseExample, baseResponseExample } from 'src/group/dto/examples';
+import { baseResponseExample } from 'src/group/dto/examples';
 // Base example
 const miniExample: MiniLFPResponse = {
   id: 1,
@@ -63,7 +59,7 @@ export const lfpRequests = {
 
 export const lfpQueryResponses = generateQueryExamples<
   LFPResponse | MiniLFPResponse,
-  {}
+  object
 >({
   examples: lfpResponses,
   baseUrl: '/lfp',

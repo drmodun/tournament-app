@@ -27,7 +27,6 @@ import {
   GroupSortingEnum,
   GroupSortingEnumType,
   groupRoleEnum,
-  ICategoryMiniResponseWithLogo,
   IMiniGroupResponseWithLogo,
 } from '@tournament-app/types';
 import { PrimaryRepository } from '../base/repository/primaryRepository';

@@ -9,7 +9,6 @@ import {
 import { UserDrizzleRepository } from 'src/users/user.repository';
 import {
   FollowerResponsesEnum,
-  IMiniUserResponse,
   IMiniUserResponseWithProfilePicture,
   UserResponsesEnum,
 } from '@tournament-app/types';

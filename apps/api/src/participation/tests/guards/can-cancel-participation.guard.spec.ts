@@ -4,7 +4,6 @@ import { CanCancelParticipationGuard } from '../../guards/can-cancel-participati
 import { ParticipationService } from '../../participation.service';
 import { GroupMembershipService } from 'src/group-membership/group-membership.service';
 import {
-  ParticipationResponsesEnum,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,

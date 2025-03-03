@@ -11,7 +11,6 @@ import {
 } from 'src/base/swagger/example.generator';
 import {
   miniUserResponseExample,
-  miniUserResponseWithCountryExample,
   userResponseExamples,
 } from 'src/users/dto/examples';
 import { BaseLFGResponseType, LFGResponsesEnum } from '@tournament-app/types';
@@ -82,14 +81,15 @@ export const lfgRequests = {
   updateLFGExample,
 };
 
-export const lfgQueryResponses = generateQueryExamples<BaseLFGResponseType, {}>(
-  {
-    examples: lfgResponses,
-    baseUrl: '/lfg',
-    defaultQuery: {
-      page: 1,
-      pageSize: 10,
-      userId: 1,
-    },
+export const lfgQueryResponses = generateQueryExamples<
+  BaseLFGResponseType,
+  object
+>({
+  examples: lfgResponses,
+  baseUrl: '/lfg',
+  defaultQuery: {
+    page: 1,
+    pageSize: 10,
+    userId: 1,
   },
-);
+});

@@ -4,6 +4,7 @@ import { QueryParticipationDto } from '../../dto/requests.dto';
 import { ParticipationResponsesEnum } from '@tournament-app/types';
 
 describe('QueryParticipationDto', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let dto: QueryParticipationDto;
 
   beforeEach(() => {

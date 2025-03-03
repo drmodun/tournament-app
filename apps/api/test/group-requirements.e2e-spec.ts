@@ -23,6 +23,7 @@ describe('GroupRequirementsController (e2e)', () => {
   let app: INestApplication;
   let adminAuthToken: string;
   let memberAuthToken: string;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let nonMemberAuthToken: string;
   let testGroupId: number;
   let testCategoryId: number;

@@ -5,7 +5,6 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { PostgresError } from 'postgres';
 import { CreateUserRequest, UpdateUserInfo } from '../dto/requests.dto';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/infrastructure/email/email.service';
@@ -15,6 +14,7 @@ jest.mock('bcrypt');
 
 describe('UsersService', () => {
   let service: UsersService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let repository: UserDrizzleRepository;
 
   const mockUserRepository = {

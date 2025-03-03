@@ -34,8 +34,6 @@ import {
   ilike,
   inArray,
   InferInsertModel,
-  lt,
-  lte,
   sql,
   SQL,
 } from 'drizzle-orm';

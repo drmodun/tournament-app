@@ -5,8 +5,6 @@ import {
   group,
   participation,
   userToRoster,
-  rosterToRound,
-  stageRound,
   stage,
   groupToUser,
 } from '../db/schema';
@@ -337,6 +335,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {

@@ -31,7 +31,6 @@ import {
 } from '@nestjs/swagger';
 import { tournamentQueryExamples, tournamentResponses } from './dto/examples';
 import { TournamentResponsesEnum, IQueryMetadata } from '@tournament-app/types';
-import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { ConditionalAdminGuard } from './guards/conditional-admin.guard';

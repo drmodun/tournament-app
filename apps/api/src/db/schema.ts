@@ -198,8 +198,6 @@ export const userRelations = relations(user, ({ many }) => ({
   career: many(categoryCareer),
 }));
 
-export const userSingleRelations = relations(user, ({ one }) => ({}));
-
 export const userNotificationSettings = pgTable('user_notification_settings', {
   userId: integer('user_id')
     .references(() => user.id, {

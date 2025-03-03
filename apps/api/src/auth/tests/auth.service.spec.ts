@@ -10,8 +10,11 @@ jest.mock('bcrypt');
 
 describe('AuthService', () => {
   let service: AuthService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let usersService: UsersService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let jwtService: JwtService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let mailService: EmailService;
 
   const mockUsersService = {
@@ -66,7 +69,7 @@ describe('AuthService', () => {
     mailService = module.get<EmailService>(EmailService);
 
     // Default mock implementations
-    (bcrypt.compare as jest.Mock).mockImplementation((password, hash) => {
+    (bcrypt.compare as jest.Mock).mockImplementation((password) => {
       return password === 'correctPassword';
     });
 

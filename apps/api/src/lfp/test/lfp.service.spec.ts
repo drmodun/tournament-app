@@ -6,6 +6,7 @@ import { NotFoundException } from '@nestjs/common';
 
 describe('LFPService', () => {
   let service: LFPService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let repository: LFPDrizzleRepository;
 
   const mockRepository = {

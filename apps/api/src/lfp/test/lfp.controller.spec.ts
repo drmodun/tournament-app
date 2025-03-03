@@ -7,6 +7,7 @@ import { userRoleEnum } from '@tournament-app/types';
 
 describe('LFPController', () => {
   let controller: LFPController;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let service: LFPService;
 
   const mockService = {

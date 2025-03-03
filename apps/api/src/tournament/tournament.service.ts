@@ -8,7 +8,6 @@ import {
   IUpdateTournamentRequest,
   TournamentResponsesEnum,
   BaseTournamentResponseType,
-  IMiniTournamentResponse,
   IMiniTournamentResponseWithLogo,
 } from '@tournament-app/types';
 import { TournamentDrizzleRepository } from './tournament.repository';

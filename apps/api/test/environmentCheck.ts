@@ -1,11 +1,7 @@
-import { EmailService } from 'src/infrastructure/email/email.service';
-
-// Ensure we're in test mode
 beforeAll(async () => {
   expect(process.env.MODE).toBe('test');
 });
 
-// Mock the EmailService module
 jest.mock('src/infrastructure/email/email.service', () => {
   const mockSendMail = jest.fn().mockResolvedValue(null);
   const mockGenerateAndSendEmail = jest.fn().mockResolvedValue(null);

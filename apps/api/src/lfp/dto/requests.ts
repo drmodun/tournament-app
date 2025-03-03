@@ -2,14 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ICreateLFPRequest, IUpdateLFPRequest } from '@tournament-app/types';
 import { Transform, Type } from 'class-transformer';
 import {
-  IsArray,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
-  ValidateNested,
 } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
 

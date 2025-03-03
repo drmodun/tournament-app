@@ -1,12 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { BaseQuery } from 'src/base/query/baseQuery';
 import {
-  user,
   category,
   categoryToLFP,
   lookingForPlayers,
   groupToUser,
-  groupUserBlockList,
   groupRequirements,
   group,
   eloRequirement,
@@ -38,7 +36,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from 'src/db/db';
-import { LFPQueryDto, UpdateLFPDto } from './dto/requests';
+import { LFPQueryDto } from './dto/requests';
 import { LocationDrizzleRepository } from 'src/location/location.repository';
 import { LocationHelper } from 'src/base/static/locationHelper';
 
@@ -98,6 +96,7 @@ export class LFPDrizzleRepository extends PrimaryRepository<
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {

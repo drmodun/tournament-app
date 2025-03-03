@@ -17,7 +17,7 @@ import { AxiosResponse } from "axios";
 export const getGroupJoinRequestsLFP = async (
   page: number | undefined,
 
-  data?: IGroupJoinRequestQuery
+  data?: IGroupJoinRequestQuery,
 ) =>
   clientApi
     .get<

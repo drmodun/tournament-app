@@ -10,11 +10,13 @@ import {
   IExtendedStageResponse,
   IExtendedTournamentResponse,
   TournamentResponsesEnum,
+  IMiniRosterResponse,
 } from '@tournament-app/types';
 import { CreateRosterDto, QueryRosterDto } from './dto/requests';
 import { StageDrizzleRepository } from 'src/stage/stage.repository';
 import { TournamentService } from 'src/tournament/tournament.service';
 import { CareerService } from '../career/career.service';
+import { ChallongeService } from 'src/challonge/challonge.service';
 @Injectable()
 export class RosterService {
   constructor(
@@ -22,6 +24,7 @@ export class RosterService {
     private readonly stageRepository: StageDrizzleRepository,
     private readonly tournamentService: TournamentService,
     private readonly careerService: CareerService,
+    private readonly challongeService: ChallongeService,
   ) {}
 
   async create(
@@ -39,7 +42,25 @@ export class RosterService {
       throw new UnprocessableEntityException('Failed to create roster');
     }
 
+    const challongeId = await this.createChallongeParticipant(roster.rosterId);
+
+    await this.update(roster.rosterId, {
+      challongeId: challongeId,
+    });
+
     return { id: roster.rosterId };
+  }
+
+  async createChallongeParticipant(rosterId: number) {
+    const roster: IMiniRosterResponse = await this.findOne(
+      rosterId,
+      RosterResponsesEnum.MINI,
+    );
+
+    const response =
+      await this.challongeService.createChallongeParticipantFromRoster(roster);
+
+    return response;
   }
 
   async findAll<TResponseType extends BaseRosterResponse>(
@@ -128,6 +149,8 @@ export class RosterService {
     if (!action[0]) {
       throw new NotFoundException(`Roster with ID ${id} not found`);
     }
+
+    await this.challongeService.deleteParticipant(id);
 
     return action[0];
   }

@@ -1,4 +1,4 @@
-import { IChallongeTournament } from '@tournament-app/types';
+import { IChallongeParticipant, IChallongeTournament } from '@tournament-app/types';
 
 // Ensure we're in test mode
 beforeAll(async () => {
@@ -46,6 +46,12 @@ jest.mock('src/infrastructure/email/email.service', () => {
       createTournamentFunction: jest.fn().mockResolvedValue({
         id: '1',
       } as IChallongeTournament),
+      deleteParticipantFunction: jest.fn().mockResolvedValue({
+        status: 200,
+      }),
+      createParticipantFunction: jest.fn().mockResolvedValue({
+        id: '1',
+      } as IChallongeParticipant),
     })),
   };
 });

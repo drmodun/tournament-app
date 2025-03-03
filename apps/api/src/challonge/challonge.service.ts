@@ -14,6 +14,7 @@ import {
   IUpdateParticipantRequest,
   rosterToCreateParticipantRequest,
   stageToCreateTournamentRequest,
+  IMiniRosterResponse,
 } from '@tournament-app/types';
 
 @Injectable()
@@ -201,6 +202,19 @@ export class ChallongeService {
     );
   }
 
+  async deleteParticipant(id: number) {
+    return this.executeFunctionWithRetry(() =>
+      this.deleteParticipantFunction(id),
+    );
+  }
+
+  async deleteParticipantFunction(id: number) {
+    await this.httpService.axiosRef.delete(
+      `https://api.challonge.com/v2/participants/${id}.json`,
+      this.injectHeaders(),
+    );
+  }
+
   async createChallongeTournamentFromStage(stage: IStageResponse) {
     const challongeTournament = stageToCreateTournamentRequest({
       id: stage.id,
@@ -212,7 +226,7 @@ export class ChallongeService {
     return this.createTournament(challongeTournament);
   }
 
-  async createChallongeParticipantFromRoster(roster: IRosterResponse) {
+  async createChallongeParticipantFromRoster(roster: IMiniRosterResponse) {
     const challongeParticipant = rosterToCreateParticipantRequest({
       id: roster.id,
     });

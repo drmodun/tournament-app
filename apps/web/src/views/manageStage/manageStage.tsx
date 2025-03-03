@@ -18,6 +18,7 @@ import ProgressWheel from "components/progressWheel";
 import { useGetTournamentStages } from "api/client/hooks/stages/useGetTournamentStages";
 import {
   groupRoleEnum,
+  IExtendedStageResponseWithTournament,
   IStageResponseWithTournament,
   ITournamentResponse,
 } from "@tournament-app/types";
@@ -30,9 +31,25 @@ import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetiti
 import { useGetContestParticipatingGroups } from "api/client/hooks/groups/useGetContestParticipatingGroups";
 import ViewRoster from "views/viewRoster";
 import Chip from "components/chip";
+import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
+import { useGetManagedForPlayer } from "api/client/hooks/participations/useGetManagedForPlayer";
+
+export type GroupParticipationType = {
+  id: number;
+  tournamentId: number;
+  groupId: number;
+  userId: number;
+  group: {
+    id: number;
+    name: string;
+    abbreviation: string;
+    locationId: number;
+    logo: string;
+  };
+};
 
 export default function ManageStages(stage?: {
-  stage?: IStageResponseWithTournament;
+  stage?: IExtendedStageResponseWithTournament;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -40,7 +57,7 @@ export default function ManageStages(stage?: {
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
   const editMutation = useUpdateStage(stage?.stage?.tournamentId);
 
-  const { data: groupData } = useGetContestParticipatingGroups(
+  const { data: participationData } = useGetManagedForPlayer(
     stage?.stage?.tournamentId,
   );
 
@@ -48,14 +65,6 @@ export default function ManageStages(stage?: {
   const { data, isLoading } = useCheckIfGroupMember(
     (tData && tData.affiliatedGroup?.id) ?? -1,
   );
-
-  useEffect(() => {
-    console.log(
-      "PARTICIPAIRIASJODSA GROUPS",
-      groupData,
-      stage?.stage?.tournamentId,
-    );
-  }, [groupData]);
 
   return (
     <div
@@ -135,17 +144,14 @@ export default function ManageStages(stage?: {
           )
         )}
       </div>
-      {(groupData?.length ?? -1) > 0 && (
+      {(participationData?.length ?? -1) > 0 && (
         <div>
           <h3>manage rosters</h3>
-          {groupData?.map((group) => {
-            console.log(
-              `\nGROUP: ${group.name}, ${group.id}, ${stage?.stage?.id}`,
-            );
+          {participationData?.map((group: GroupParticipationType) => {
             return (
               <div className={styles.stageGroupRosterCard}>
-                <Chip label={group.name} variant="secondary" />
-                <ViewRoster groupId={group.id} stageId={stage?.stage?.id} />
+                <Chip label={group.group.name} variant="secondary" />
+                <ViewRoster group={group} stage={stage?.stage} />
               </div>
             );
           })}

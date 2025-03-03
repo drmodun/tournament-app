@@ -1,0 +1,34 @@
+@import "../../styles/";
+
+.searchInput {
+  width: 100%;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.pfp {
+  width: $baseComponentHeight;
+  width: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+  border-radius: $borderRadius;
+  padding: $padding;
+}
+
+.usersSearch {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}

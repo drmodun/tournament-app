@@ -27,6 +27,7 @@
     "@tournament-app/types": "*",
     "@types/body-scroll-lock": "^3.1.2",
     "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.17.16",
     "@types/react-avatar-editor": "^13.0.3",
     "@vis.gl/react-google-maps": "^1.4.2",
     "axios": "^1.7.9",

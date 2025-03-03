@@ -48,7 +48,7 @@ export const getTournamentStages = async (
 
 export const useGetTournamentStages = (tournamentId?: number) => {
   return useInfiniteQuery({
-    queryKey: ["stage", "tournament", tournamentId ?? ""],
+    queryKey: ["stage", "tournament", tournamentId ?? "", "tournaments"],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
       getTournamentStages(tournamentId, pageParam),
     staleTime: Infinity,

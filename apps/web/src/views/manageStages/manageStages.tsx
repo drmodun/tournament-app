@@ -19,10 +19,18 @@ import { useGetTournamentStages } from "api/client/hooks/stages/useGetTournament
 import { ITournamentResponse } from "@tournament-app/types";
 import { formatDateTime } from "utils/mixins/formatting";
 import Link from "next/link";
+import AddIcon from "@mui/icons-material/Add";
+import AddStageForm from "views/addStageForm";
 
-export default function ManageStages(tournament?: ITournamentResponse) {
+export default function ManageStages({
+  tournamentId,
+}: {
+  tournamentId?: number;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const {
     data,
@@ -31,10 +39,10 @@ export default function ManageStages(tournament?: ITournamentResponse) {
     isFetchNextPageError,
     isFetching,
     hasNextPage,
-  } = useGetTournamentStages(tournament?.id);
+  } = useGetTournamentStages(tournamentId);
 
   useEffect(() => {
-    console.log(data);
+    console.log("stages", data);
   }, [data]);
 
   return (
@@ -45,8 +53,21 @@ export default function ManageStages(tournament?: ITournamentResponse) {
         globals[`${theme}Color`],
       )}
     >
+      <Dialog
+        variant={theme}
+        active={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+      >
+        <AddStageForm tournamentId={tournamentId} />
+      </Dialog>
       <div className={styles.header}>
-        <h3 className={globals[`${theme}Color`]}>manage your group stages</h3>
+        <h3 className={globals[`${theme}Color`]}>manage your stages</h3>
+        <button
+          className={styles.addIconButton}
+          onClick={() => setDialogOpen(true)}
+        >
+          <AddIcon className={globals[`${theme}FillChildren`]} />
+        </button>
       </div>
 
       <div className={styles.pagination}>
@@ -54,87 +75,95 @@ export default function ManageStages(tournament?: ITournamentResponse) {
           <ProgressWheel variant={textColorTheme} />
         ) : (
           <div>
-            {data?.pages.map((page, i) => (
-              <div
-                key={i}
-                className={clsx(
-                  styles.stagesContainer,
-                  styles[`${theme}Color`],
-                )}
-              >
-                {page.results.map((stage) => (
-                  <Link
-                    key={stage.id}
-                    className={clsx(
-                      styles.stageItem,
-                      globals[`${textColorTheme}MutedBackgroundColor`],
-                      styles[`${theme}Color`],
-                    )}
-                    href={`/stage/${stage.id}`}
-                  >
-                    <h4 className={styles.title}>
-                      {stage.name}{" "}
-                      <span className={globals.label}>
-                        ({formatDateTime(stage.startDate)} -{" "}
-                        {formatDateTime(stage.endDate)})
-                      </span>
-                    </h4>
-                    {stage.minPlayersPerTeam && (
+            {data?.pages[0].results.length == 0 ? (
+              <p>you have no stages!</p>
+            ) : (
+              data?.pages.map((page, i) => (
+                <div
+                  key={i}
+                  className={clsx(
+                    styles.stagesContainer,
+                    styles[`${theme}Color`],
+                  )}
+                >
+                  {page.results.map((stage) => (
+                    <Link
+                      key={stage.id}
+                      className={clsx(
+                        styles.stageItem,
+                        globals[`${textColorTheme}MutedBackgroundColor`],
+                        styles[`${theme}Color`],
+                      )}
+                      href={`/stage/${stage.id}`}
+                    >
+                      <h4 className={styles.title}>
+                        {stage.name}{" "}
+                        <span className={globals.label}>
+                          ({formatDateTime(stage.startDate)} -{" "}
+                          {formatDateTime(stage.endDate)})
+                        </span>
+                      </h4>
+                      {stage.minPlayersPerTeam && (
+                        <p className={globals.label}>
+                          minimum players per team{" "}
+                          <b className={styles.info}>
+                            {" "}
+                            {stage.minPlayersPerTeam}
+                          </b>
+                        </p>
+                      )}
+                      {stage.maxPlayersPerTeam && (
+                        <p className={globals.label}>
+                          minimum players per team{" "}
+                          <b className={styles.info}>
+                            {" "}
+                            {stage.maxPlayersPerTeam}
+                          </b>
+                        </p>
+                      )}
                       <p className={globals.label}>
-                        minimum players per team{" "}
+                        status{" "}
+                        <b className={styles.info}> {stage.stageStatus}</b>
+                      </p>
+                      {stage?.location?.name && (
+                        <p className={globals.label}>
+                          location{" "}
+                          <b className={styles.info}>
+                            {" "}
+                            {stage?.location?.name}
+                          </b>
+                        </p>
+                      )}
+                      <p className={globals.label}>
+                        stage type{" "}
+                        <b className={styles.info}> {stage.stageType}</b>
+                      </p>
+                      <p className={globals.label}>
+                        rosters participating{" "}
                         <b className={styles.info}>
                           {" "}
-                          {stage.minPlayersPerTeam}
+                          {stage.rostersParticipating}
                         </b>
                       </p>
-                    )}
-                    {stage.maxPlayersPerTeam && (
-                      <p className={globals.label}>
-                        minimum players per team{" "}
-                        <b className={styles.info}>
-                          {" "}
-                          {stage.maxPlayersPerTeam}
-                        </b>
-                      </p>
-                    )}
-                    <p className={globals.label}>
-                      status <b className={styles.info}> {stage.stageStatus}</b>
-                    </p>
-                    {stage?.location?.name && (
-                      <p className={globals.label}>
-                        location{" "}
-                        <b className={styles.info}> {stage?.location?.name}</b>
-                      </p>
-                    )}
-                    <p className={globals.label}>
-                      stage type{" "}
-                      <b className={styles.info}> {stage.stageType}</b>
-                    </p>
-                    <p className={globals.label}>
-                      rosters participating{" "}
-                      <b className={styles.info}>
-                        {" "}
-                        {stage.rostersParticipating}
-                      </b>
-                    </p>
 
-                    <div>
-                      <p className={globals.label}>description</p>
-                      <Markdown
-                        className={clsx(
-                          globals[`${textColorTheme}Color`],
-                          globals[`${theme}BackgroundColor`],
-                          styles.description,
-                        )}
-                        rehypePlugins={[rehypeRaw]}
-                      >
-                        {stage.description}
-                      </Markdown>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ))}
+                      <div>
+                        <p className={globals.label}>description</p>
+                        <Markdown
+                          className={clsx(
+                            globals[`${textColorTheme}Color`],
+                            globals[`${theme}BackgroundColor`],
+                            styles.description,
+                          )}
+                          rehypePlugins={[rehypeRaw]}
+                        >
+                          {stage.description}
+                        </Markdown>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ))
+            )}
           </div>
         )}
         <Button

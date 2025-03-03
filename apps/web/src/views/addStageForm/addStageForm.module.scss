@@ -38,3 +38,17 @@
   flex-wrap: wrap;
   gap: $padding;
 }
+
+.submitButton {
+  width: 100%;
+  margin-top: $padding;
+}
+
+.playerBoundariesInputs {
+  display: flex;
+  gap: $halfPadding;
+}
+
+.dialogOption + .dialogOption {
+  margin-top: $halfPadding;
+}

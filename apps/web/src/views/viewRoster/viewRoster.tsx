@@ -8,6 +8,9 @@ import {
   ICreateGroupRequest,
   ICreateLFGRequest,
   ICreateLFPRequest,
+  IExtendedStageResponseWithTournament,
+  IMiniGroupResponseWithLogo,
+  IStageResponseWithTournament,
   tournamentLocationEnum,
 } from "@tournament-app/types";
 import { UseMutationResult } from "@tanstack/react-query";
@@ -30,13 +33,17 @@ import {
   useGetRostersQuery,
 } from "api/client/hooks/rosters/useGetRostersQuery";
 import Chip from "components/chip";
+import { useGetGroupRostersQuery } from "api/client/hooks/rosters/useGetGroupRostersQuery";
+import Dialog from "components/dialog";
+import AddRosterForm from "views/addRosterForm";
+import { GroupParticipationType } from "views/manageStage/manageStage";
 
 export default function ViewRoster({
-  stageId,
-  groupId,
+  stage,
+  group,
 }: {
-  groupId?: number;
-  stageId?: number;
+  group?: GroupParticipationType;
+  stage?: IExtendedStageResponseWithTournament;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -47,11 +54,12 @@ export default function ViewRoster({
     fetchNextPage,
     isFetchNextPageError,
     isFetchingNextPage,
-  } = useGetRostersQuery({ stageId, groupId });
+  } = useGetGroupRostersQuery({
+    stageId: stage?.id,
+    groupId: group?.group?.id,
+  });
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   return (
     <div
@@ -61,21 +69,35 @@ export default function ViewRoster({
         styles.card,
       )}
     >
-      {data?.pages[0].results[0].players.map((player) => (
+      <Dialog active={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <AddRosterForm stage={stage} group={group} />
+      </Dialog>
+      {(data?.pages[0]?.results?.length ?? -1) <= 0 ? (
         <div>
-          <Chip label={player.user.username} variant={textColorTheme} />
-          {player?.career?.map((career) => {
-            return (
-              <Chip label={career.category.name} variant="secondary">
-                {career.elo}
-              </Chip>
-            );
-          })}
-          {player.isSubstitute && (
-            <p className={globals.warningColor}>substitute player</p>
-          )}
+          <Button
+            variant={textColorTheme}
+            className={styles.actionButton}
+            label="create roster"
+            onClick={() => setDialogOpen(true)}
+          />
         </div>
-      ))}
+      ) : (
+        data?.pages[0]?.results[0]?.players?.map((player) => (
+          <div>
+            <Chip label={player.user.username} variant={textColorTheme} />
+            {player?.career?.map((career) => {
+              return (
+                <Chip label={career.category.name} variant="secondary">
+                  {career.elo}
+                </Chip>
+              );
+            })}
+            {player.isSubstitute && (
+              <p className={globals.warningColor}>substitute player</p>
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 }

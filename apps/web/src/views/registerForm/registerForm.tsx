@@ -156,7 +156,7 @@ export default function RegisterForm() {
                       value:
                         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])\S{8,32}$/,
                       message:
-                        "password must contain at least 1 uppercase letter, 1 number and be at least 8 characters long",
+                        "password must contain at least 1 uppercase letter, 1 special character, 1 number and be at least 8 characters long",
                     },
                   }}
                 />

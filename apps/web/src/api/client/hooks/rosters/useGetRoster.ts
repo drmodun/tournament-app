@@ -6,6 +6,7 @@ import {
   IExtendedRosterResponse,
   IExtendedUserResponse,
   IGroupResponseExtended,
+  RosterResponsesEnum,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -20,7 +21,7 @@ export const getRoster = async (rosterId: number) =>
   clientApi
     .get<never, AxiosResponse<IExtendedRosterResponse>>(`/roster/${rosterId}`, {
       params: {
-        responseType: GroupResponsesEnum.EXTENDED,
+        responseType: RosterResponsesEnum.EXTENDED,
       },
     })
     .then((res) => res.data);

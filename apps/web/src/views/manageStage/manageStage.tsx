@@ -27,6 +27,9 @@ import EditStageForm from "views/editStageForm";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
+import { useGetContestParticipatingGroups } from "api/client/hooks/groups/useGetContestParticipatingGroups";
+import ViewRoster from "views/viewRoster";
+import Chip from "components/chip";
 
 export default function ManageStages(stage?: {
   stage?: IStageResponseWithTournament;
@@ -37,10 +40,22 @@ export default function ManageStages(stage?: {
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
   const editMutation = useUpdateStage(stage?.stage?.tournamentId);
 
+  const { data: groupData } = useGetContestParticipatingGroups(
+    stage?.stage?.tournamentId,
+  );
+
   const { data: tData } = useGetCompetition(stage?.stage?.tournament?.id ?? -1);
   const { data, isLoading } = useCheckIfGroupMember(
     (tData && tData.affiliatedGroup?.id) ?? -1,
   );
+
+  useEffect(() => {
+    console.log(
+      "PARTICIPAIRIASJODSA GROUPS",
+      groupData,
+      stage?.stage?.tournamentId,
+    );
+  }, [groupData]);
 
   return (
     <div
@@ -120,6 +135,22 @@ export default function ManageStages(stage?: {
           )
         )}
       </div>
+      {(groupData?.length ?? -1) > 0 && (
+        <div>
+          <h3>manage rosters</h3>
+          {groupData?.map((group) => {
+            console.log(
+              `\nGROUP: ${group.name}, ${group.id}, ${stage?.stage?.id}`,
+            );
+            return (
+              <div className={styles.stageGroupRosterCard}>
+                <Chip label={group.name} variant="secondary" />
+                <ViewRoster groupId={group.id} stageId={stage?.stage?.id} />
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

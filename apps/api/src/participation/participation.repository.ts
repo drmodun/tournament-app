@@ -65,6 +65,7 @@ export class ParticipationDrizzleRepository extends PrimaryRepository<
       })
       .from(participation)
       .leftJoin(groupToUser, eq(groupToUser.groupId, participation.groupId))
+      .leftJoin(group, eq(groupToUser.groupId, group.id))
       .where(
         and(
           eq(participation.tournamentId, tournamentId),

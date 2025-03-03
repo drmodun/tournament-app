@@ -798,6 +798,7 @@ export const matchup = pgTable('matchup', {
   challongeMatchupId: text('challonge_matchup_id'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
+  parentMatchupId: integer('parent_matchup_id').references(() => matchup.id),
   isFinished: boolean('is_finished').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
@@ -876,6 +877,15 @@ export const tournamentRelations = relations(tournament, ({ one, many }) => ({
   participation: many(participation),
 }));
 
+export const scoreToRoster = pgTable('score_to_roster', {
+  id: serial('id').primaryKey(),
+  scoreId: integer('score_id').references(() => score.id),
+  rosterId: integer('roster_id').references(() => roster.id),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  points: integer('points').default(0),
+  isWinner: boolean('is_winner').default(false),
+});
+
 export const score = pgTable('score', {
   id: serial('id').primaryKey(),
   matchupId: integer('matchup_id'),
@@ -914,26 +924,6 @@ export const rosterToRound = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.rosterId, t.roundId] }),
-  }),
-);
-
-export const matchupToParentMatchup = pgTable(
-  'matchup_parent_matchup',
-  {
-    matchupId: integer('matchup_id')
-      .references(() => matchup.id, {
-        onDelete: 'cascade',
-      })
-      .notNull(),
-    parentMatchupId: integer('parent_matchup_id')
-      .references(() => matchup.id, {
-        onDelete: 'cascade',
-      })
-      .notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  },
-  (t) => ({
-    pk: primaryKey({ columns: [t.matchupId, t.parentMatchupId] }),
   }),
 );
 

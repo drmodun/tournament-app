@@ -27,7 +27,7 @@ import {
   PgColumn,
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
-import { db } from 'src/db/db';
+import { db } from '../db/db';
 import { QueryRosterDto } from './dto/requests';
 
 @Injectable()
@@ -399,7 +399,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       case RosterResponsesEnum.MINI_WITH_CHALLONGE_ID:
         return {
           ...this.getMappingObject(RosterResponsesEnum.MINI),
-          challongeId: roster.challongeId,
+          challongeId: roster.challongeParticipantId,
         };
       case RosterResponsesEnum.EXTENDED:
         return {

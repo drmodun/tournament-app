@@ -1,0 +1,166 @@
+/* Tournament Bracket Styles */
+
+.tournament-bracket-container {
+  width: 100%;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.bracket-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.bracket-view {
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+/* Round Styles */
+.round-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Match Styles */
+.match-wrapper {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  margin: 5px;
+  overflow: hidden;
+}
+
+.match {
+  display: flex;
+  flex-direction: column;
+}
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.match-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #444;
+}
+
+.match-date {
+  font-size: 12px;
+  color: #666;
+}
+
+.match-participants {
+  padding: 8px 0;
+}
+
+.participant {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+.participant:last-child {
+  border-bottom: none;
+}
+
+.participant.winner {
+  background-color: #e8f5e9;
+}
+
+.participant.winner .participant-name {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.participant-name {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Loading State */
+.bracket-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error State */
+.bracket-error {
+  text-align: center;
+  padding: 40px;
+  color: #d32f2f;
+}
+
+.bracket-error button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bracket-error button:hover {
+  background-color: #d32f2f;
+}
+
+/* Empty State */
+.bracket-empty {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .match-wrapper {
+    width: 160px;
+  }
+
+  .match-title {
+    font-size: 12px;
+  }
+
+  .participant-name {
+    font-size: 12px;
+  }
+} 

@@ -21,3 +21,4 @@ export * from "./groupRequirements";
 export * from "./lfp";
 export * from "./roster";
 export * from "./challonge";
+export * from "./match";

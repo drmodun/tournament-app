@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@g-loot/react-tournament-brackets": "^1.0.31-rc",
     "@googlemaps/markerclusterer": "^2.5.3",
     "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.21",
@@ -40,12 +41,15 @@
     "next": "^15.0.0-rc.0",
     "react": "^19.0.0-rc-34d0c5e357-20240607",
     "react-avatar-editor": "^13.0.2",
+    "react-brackets": "^0.4.7",
     "react-dom": "^19.0.0-rc-34d0c5e357-20240607",
     "react-hook-form": "^7.53.1",
     "react-markdown": "^9.0.3",
     "react-material-symbols": "^4.4.0",
+    "react-svg-pan-zoom": "^3.13.1",
     "rehype-raw": "^7.0.0",
     "sharp": "^0.33.5",
+    "styled-components": "^6.1.15",
     "tiptap-markdown": "^0.8.10"
   },
   "devDependencies": {

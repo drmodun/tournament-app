@@ -8,6 +8,8 @@ import { UsersModule } from 'src/users/users.module';
 import { CareerModule } from 'src/career/career.module';
 import { StageModule } from 'src/stage/stage.module';
 import { TournamentModule } from 'src/tournament/tournament.module';
+import { MatchesModule } from 'src/matches/matches.module';
+import { ChallongeModule } from 'src/challonge/challonge.module';
 @Module({
   controllers: [RosterController],
   providers: [RosterService, RosterDrizzleRepository],
@@ -19,6 +21,8 @@ import { TournamentModule } from 'src/tournament/tournament.module';
     CareerModule,
     StageModule,
     TournamentModule,
+    MatchesModule,
+    ChallongeModule,
   ],
 })
 export class RosterModule {}

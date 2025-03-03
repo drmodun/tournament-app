@@ -26,6 +26,8 @@ import { LFPModule } from './lfp/lfp.module';
 import { RosterModule } from './roster/roster.module';
 import { CareerModule } from './career/career.module';
 import { ChallongeModule } from './challonge/challonge.module';
+import { MatchesModule } from './matches/matches.module';
+
 @Module({
   imports: [
     UsersModule,
@@ -53,6 +55,7 @@ import { ChallongeModule } from './challonge/challonge.module';
     RosterModule,
     CareerModule,
     ChallongeModule,
+    MatchesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

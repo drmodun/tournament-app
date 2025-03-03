@@ -67,3 +67,7 @@
   margin-top: $padding;
   width: 100%;
 }
+
+.stageGroupRosterCard + .stageGroupRosterCard {
+  margin-top: $padding;
+}

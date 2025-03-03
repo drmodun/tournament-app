@@ -729,6 +729,7 @@ export const stage = pgTable('stage', {
   locationId: integer('location_id').references(() => location.id, {
     onDelete: 'cascade',
   }),
+  challongeTournamentId: text('challonge_tournament_id'),
   description: text('description'),
   logo: text('logo'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
@@ -755,6 +756,7 @@ export const roster = pgTable('roster', {
       onDelete: 'cascade',
     })
     .notNull(),
+  challongeParticipantId: text('challonge_participant_id'),
   points: integer('points').default(0), //See how to implement placements for mor complex brackets
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
@@ -793,6 +795,7 @@ export const matchup = pgTable('matchup', {
     })
     .notNull(),
   matchupType: matchupType('matchup_type').default('one_vs_one'),
+  challongeMatchupId: text('challonge_matchup_id'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   endDate: timestamp('end_date', { withTimezone: true }),
   isFinished: boolean('is_finished').default(false),
@@ -888,6 +891,7 @@ export const stageRound = pgTable('stage_round', {
     })
     .notNull(),
   roundNumber: integer('round_number').default(1),
+  challongeRoundId: text('challonge_round_id'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 

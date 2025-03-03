@@ -9,7 +9,7 @@ import {
 } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { aliasedTable, eq, gte, ilike, lte, SQL } from 'drizzle-orm';
+import { aliasedTable, asc, eq, gte, ilike, sql, lte, SQL } from 'drizzle-orm';
 import {
   IUpdateTournamentRequest,
   TournamentResponseEnumType,
@@ -116,7 +116,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
         case 'isPublic':
           return eq(tournament.isPublic, value as boolean);
         case 'search':
-          return ilike(tournament.name, `%${value}%`);
+          return ilike(tournament.name, `${value}%`);
         default:
           return;
       }
@@ -226,5 +226,32 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
       default:
         return {}; // TODO: if this messes up the return type remove it and replace it with null
     }
+  }
+
+  async getAutoComplete(
+    search: string,
+    pageSize: number = 10,
+    page: number = 1,
+  ) {
+    const results = await db
+      .select({
+        id: tournament.id,
+        name: tournament.name,
+        type: tournament.tournamentType,
+        location: tournament.tournamentLocation,
+        country: tournament.country,
+        logo: tournament.logo,
+        startDate: tournament.startDate,
+      })
+      .from(tournament)
+      .where(ilike(tournament.name, `${search}%`))
+      .orderBy(
+        sql<number>`CASE WHEN ${tournament.name} = ${search} THEN 0 ELSE 1 END`,
+        asc(tournament.name),
+      )
+      .limit(pageSize)
+      .offset((page - 1) * pageSize);
+
+    return results;
   }
 }

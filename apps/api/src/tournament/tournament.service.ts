@@ -8,6 +8,8 @@ import {
   IUpdateTournamentRequest,
   TournamentResponsesEnum,
   BaseTournamentResponseType,
+  IMiniTournamentResponse,
+  IMiniTournamentResponseWithLogo,
 } from '@tournament-app/types';
 import { TournamentDrizzleRepository } from './tournament.repository';
 import { TournamentQuery } from './dto/requests.dto';
@@ -15,6 +17,7 @@ import {
   AnyTournamentReturnType,
   TournamentReturnTypesEnumType,
 } from './types';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class TournamentService {
@@ -80,5 +83,18 @@ export class TournamentService {
     }
 
     return action[0];
+  }
+
+  async autoComplete(
+    search: string,
+    query?: PaginationOnly,
+  ): Promise<IMiniTournamentResponseWithLogo[]> {
+    const results = await this.repository.getAutoComplete(
+      search,
+      query?.pageSize,
+      query?.page,
+    );
+
+    return results as IMiniTournamentResponseWithLogo[];
   }
 }

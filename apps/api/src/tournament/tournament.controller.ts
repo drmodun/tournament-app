@@ -39,6 +39,7 @@ import { TournamentAdminGuard } from './guards/tournament-admin.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('tournaments')
 @ApiExtraModels(
@@ -50,6 +51,17 @@ import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 @Controller('tournaments')
 export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}
+
+  @Get('auto-complete/:search')
+  @ApiOkResponse({
+    description: 'Returns a list of tournaments that can be auto-completed',
+  })
+  async autoComplete(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.tournamentService.autoComplete(search, query);
+  }
 
   @Get()
   @ApiOkResponse({

@@ -63,7 +63,10 @@ describe('RosterController', () => {
           id: 1,
           username: 'testuser',
           isFake: false,
+          country: 'US',
+          profilePicture: 'test.jpg',
         },
+        career: [],
       },
     ],
   };

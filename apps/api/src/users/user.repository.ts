@@ -264,7 +264,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
           const today = new Date();
           const age = today.getFullYear() - (parsed as number);
           const dateOfBirth = new Date(age);
-
           return eq(user.dateOfBirth, dateOfBirth);
         default:
           return;

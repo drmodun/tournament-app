@@ -1,10 +1,10 @@
 "use client";
 
-import { MouseEventHandler } from "react";
-import styles from "./radioButton.module.scss";
-import globals from "styles/globals.module.scss";
-import { Variants, TextVariants } from "types/styleTypes";
 import { clsx } from "clsx";
+import { MouseEventHandler } from "react";
+import globals from "styles/globals.module.scss";
+import { TextVariants, Variants } from "types/styleTypes";
+import styles from "./radioButton.module.scss";
 
 export interface RadioButtonProps {
   style?: React.CSSProperties;

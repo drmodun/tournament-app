@@ -1,36 +1,32 @@
 "use client";
 
-import styles from "./competition.module.scss";
-import globals from "styles/globals.module.scss";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import { clsx } from "clsx";
-import Button from "components/button";
-import Chip from "components/chip";
-import {
-  COUNTRY_NAMES_TO_CODES,
-  formatDateTime,
-} from "utils/mixins/formatting";
-import Markdown from "react-markdown";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import {
   groupRoleEnum,
   IExtendedTournamentResponse,
   tournamentTeamTypeEnum,
 } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
-import { useRouter } from "next/navigation";
-import rehypeRaw from "rehype-raw";
-import { useEffect, useState } from "react";
-import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
-import ProgressWheel from "components/progressWheel";
-import EditCompetitionForm from "views/editCompetitionForm";
-import Dialog from "components/dialog";
 import { useDeleteCompetition } from "api/client/hooks/competitions/useDeleteCompetition";
-import { useCreateSoloParticipation } from "api/client/hooks/participations/useCreateSoloParticipation";
-import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
-import GroupSelectDialog from "views/groupSelectDialog";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
+import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
+import { useCreateSoloParticipation } from "api/client/hooks/participations/useCreateSoloParticipation";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Chip from "components/chip";
+import Dialog from "components/dialog";
+import ProgressWheel from "components/progressWheel";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { useEffect, useState } from "react";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { formatDateTime } from "utils/mixins/formatting";
+import EditCompetitionForm from "views/editCompetitionForm";
+import GroupSelectDialog from "views/groupSelectDialog";
+import styles from "./competition.module.scss";
 
 type SidebarSectionProps = {
   name: string;
@@ -42,14 +38,11 @@ export default function Competition({
 }: {
   competition: IExtendedTournamentResponse;
 }) {
-  const { data, isLoading, isSuccess } = useAuth();
+  const { data, isLoading } = useAuth();
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const {
-    data: groupMembershipData,
-    isLoading: groupMembershipIsLoading,
-    isError,
-  } = useCheckIfGroupMember(competition?.affiliatedGroup?.id);
+  const { data: groupMembershipData, isLoading: groupMembershipIsLoading } =
+    useCheckIfGroupMember(competition?.affiliatedGroup?.id);
 
   const deleteCompetitionMutation = useDeleteCompetition();
   const soloJoinCompetitionMutation = useCreateSoloParticipation();

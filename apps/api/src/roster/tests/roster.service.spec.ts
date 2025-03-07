@@ -38,6 +38,7 @@ describe('RosterService', () => {
       id: 1,
       tournament: {
         id: 1,
+        categoryId: 1,
       },
     },
     participationId: 1,
@@ -315,22 +316,6 @@ describe('RosterService', () => {
     };
 
     it('should successfully update a roster', async () => {
-      const updatedRoster = {
-        ...mockRosterWithPlayers,
-        players: [
-          {
-            id: 2,
-            userId: 2,
-            rosterId: 1,
-            isSubstitute: true,
-            user: {
-              id: 2,
-              username: 'testuser2',
-              isFake: false,
-            },
-          },
-        ],
-      };
       repository.updateWithPlayers.mockResolvedValue();
 
       await service.update(1, updateDto);

@@ -5,8 +5,6 @@ import { NoValuesToSetException } from '../exception/custom/noValuesToSetExcepti
 import { BaseDrizzleRepository } from './baseRepository';
 import { BaseQuery } from '../query/baseQuery';
 
-// TODO: try to make this nicer
-
 export abstract class CompositeRepository<
   TTable extends PgTable<TableConfig>,
   TQueryRequest extends BaseQuery,
@@ -93,6 +91,4 @@ export abstract class CompositeRepository<
       .execute()
       .then((res) => res.length > 0);
   }
-
-  // TODO: think about making a child class or refactoring for composite keys, maybe just make those repositories override this one
 }

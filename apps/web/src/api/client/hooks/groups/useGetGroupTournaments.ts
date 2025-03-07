@@ -1,18 +1,10 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
-  BaseQueryType,
-  BaseTournamentResponseType,
-  groupRoleEnumType,
   IBaseQueryResponse,
-  ICreateGroupRequest,
-  IMiniGroupResponseWithCountry,
-  IMiniTournamentResponse,
   IMiniTournamentResponseWithLogo,
-  IMiniUserResponseWithCountry,
   TournamentResponsesEnum,
-  userRoleEnumType,
 } from "@tournament-app/types";
 import {
   clientApi,
@@ -21,8 +13,6 @@ import {
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 export const getGroupTournaments = async (groupId: number | undefined) =>
   clientApi

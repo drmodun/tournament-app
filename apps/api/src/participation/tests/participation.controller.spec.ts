@@ -17,8 +17,11 @@ import { GroupModule } from 'src/group/group.module';
 describe('ParticipationController', () => {
   let controller: ParticipationController;
   let service: jest.Mocked<ParticipationService>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let tournamentService: jest.Mocked<TournamentService>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let groupMembershipService: jest.Mocked<GroupMembershipService>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let userService: jest.Mocked<UsersService>;
 
   const mockParticipation = {

@@ -104,7 +104,7 @@ export function stageToUpdateTournamentRequest(stage: {
 
 // Convert Stage Status to Tournament State Request
 export function stageStatusToTournamentStateRequest(
-  status: stageStatusEnum
+  status: stageStatusEnum,
 ): ITournamentStateRequest {
   const stateMap: Record<
     stageStatusEnum,
@@ -243,12 +243,12 @@ export function challongeTournamentToStage(tournament: IChallongeTournament): {
   const stageType =
     (Object.entries(stageTypeToChallongeType).find(
       ([_, challongeType]) =>
-        challongeType === tournament.attributes.tournament_type
+        challongeType === tournament.attributes.tournament_type,
     )?.[0] as stageTypeEnum) || "group";
 
   const stageStatus =
     (Object.entries(stageStatusToChallongeState).find(
-      ([_, challongeState]) => challongeState === tournament.attributes.state
+      ([_, challongeState]) => challongeState === tournament.attributes.state,
     )?.[0] as stageStatusEnum) || "upcoming";
 
   return {
@@ -267,7 +267,7 @@ export function challongeTournamentToStage(tournament: IChallongeTournament): {
 
 // Convert Challonge Participant to Roster
 export function challongeParticipantToRoster(
-  participant: IChallongeParticipant
+  participant: IChallongeParticipant,
 ): {
   challongeParticipantId: string;
   points: number;

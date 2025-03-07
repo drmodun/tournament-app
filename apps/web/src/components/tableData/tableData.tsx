@@ -1,9 +1,9 @@
 "use client";
 
-import styles from "./tableData.module.scss";
+import { clsx } from "clsx";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
-import { clsx } from "clsx";
+import styles from "./tableData.module.scss";
 
 interface TableDataProps {
   children?: React.ReactNode;

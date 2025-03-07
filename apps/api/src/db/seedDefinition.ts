@@ -278,8 +278,6 @@ async function createGroups() {
     } satisfies CreateGroupRequest & { id: number });
   }
 
-  //TODO: if needed add a few more set seeds for testing
-
   await db.insert(tables.group).values(groupData).execute();
 
   await db.execute(
@@ -969,7 +967,7 @@ async function createLocations() {
 
   await db.execute(
     sql<string>`ALTER SEQUENCE location_id_seq RESTART WITH ${sql.raw(
-      String(NUM_OF_LOCATIONS + 1), // TODO: check if this screws up indexes
+      String(NUM_OF_LOCATIONS + 1),
     )}`,
   );
 }

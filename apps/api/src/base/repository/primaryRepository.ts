@@ -60,7 +60,6 @@ export abstract class PrimaryRepository<
       if (e.message === 'No values to set') {
         throw new NoValuesToSetException();
       }
-      // TODO: potentially improve this
       throw e;
     }
   }
@@ -81,7 +80,4 @@ export abstract class PrimaryRepository<
       })
       .from(sql`dual`);
   }
-
-  // TODO: think about making a child class or refactoring for composite keys, maybe just make those repositories override this one
-  // TODO: fix return full count operation
 }

@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   IBaseQueryResponse,
   IExtendedTournamentResponse,
@@ -6,7 +6,6 @@ import {
   TournamentResponsesEnum,
 } from "@tournament-app/types";
 import {
-  baseApiUrl,
   clientApi,
   getAccessToken,
   LARGE_QUERY_RETRY_ATTEMPTS,
@@ -33,7 +32,7 @@ export const useGetCompetitions = () => {
     retryDelay: LARGE_QUERY_RETRY_DELAY,
     retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (page, pages) => pages.length + 1, // TODO: implementiraj kada bude fullCount implementiran
+    getNextPageParam: (page, pages) => pages.length + 1,
     initialPageParam: 1,
   });
 };

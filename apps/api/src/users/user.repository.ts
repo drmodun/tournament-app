@@ -34,8 +34,6 @@ import {
   ilike,
   inArray,
   InferInsertModel,
-  lt,
-  lte,
   sql,
   SQL,
 } from 'drizzle-orm';
@@ -79,9 +77,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     }
   }
 
-  public getMappingObject(
-    responseEnum: UserReturnTypesEnumType, //TODO: add dtos as seperate mapping types
-  ) {
+  public getMappingObject(responseEnum: UserReturnTypesEnumType) {
     switch (responseEnum) {
       case UserResponsesEnum.MINI:
         return {
@@ -106,7 +102,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
           email: user.email,
           level: user.level,
           name: user.name,
-          age: sql<number>`EXTRACT(YEAR FROM AGE(CURRENT_DATE, ${user.dateOfBirth}))::INT`, // Check if this is correct
+          age: sql<number>`EXTRACT(YEAR FROM AGE(CURRENT_DATE, ${user.dateOfBirth}))::INT`,
           updatedAt: user.updatedAt,
           followers: db.$count(follower, eq(follower.userId, user.id)),
         };
@@ -230,7 +226,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     [UserSortingEnum.GROUP_JOIN_DATE]: groupToUser.createdAt,
     [UserSortingEnum.TOURNAMENTS_MODERATED]: countDistinct(tournament.id),
     [UserSortingEnum.TOURNAMENTS_WON]: countDistinct(
-      participation.tournamentId, // TODO: add calculation later or scrap allTogether
+      participation.tournamentId,
     ),
     [UserSortingEnum.UPDATED_AT]: user.createdAt,
     [UserSortingEnum.TOURNAMENT_PARTICIPATION]: countDistinct(
@@ -247,8 +243,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
       if (!field) return;
       const parsed = value;
 
-      // TODO: some type fixes
-
       switch (key) {
         case 'name':
           return eq(user.name, parsed);
@@ -264,7 +258,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
           const today = new Date();
           const age = today.getFullYear() - (parsed as number);
           const dateOfBirth = new Date(age);
-
           return eq(user.dateOfBirth, dateOfBirth);
         default:
           return;
@@ -433,7 +426,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
     userIds: number[],
     categoryId: number,
   ): Promise<ICareerUserResponse[]> {
-    // TODO: move this to the career repository if we decide to create it
     return await db
       .select({
         userId: categoryCareer.userId,

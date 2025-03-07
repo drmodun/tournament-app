@@ -13,7 +13,7 @@ import { BaseUserResponseType, UserResponsesEnum } from '@tournament-app/types';
 export const miniUserResponseExample = {
   id: 1,
   username: 'john_doe',
-  isFake: false, // TODO: think if this is useless or problematic
+  isFake: false,
 } satisfies MiniUserResponse;
 
 export const miniUserResponseWithProfilePictureExample = {
@@ -111,6 +111,3 @@ for (const responseType in userResponseExamples) {
   userQuerySchemaList.push(response);
   userQueryResponses[responseType] = { value: response };
 }
-
-//TODO: extract this to a helper function, test it and do the same for schemas
-//TODO: fix schema generation for nested objects

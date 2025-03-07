@@ -1,42 +1,18 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
-import styles from "./viewLFP.module.scss";
-import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
-import { clsx } from "clsx";
-import Button from "components/button";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import PersonIcon from "@mui/icons-material/Person";
-import RichEditor from "components/richEditor";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import {
-  IGroupJoinRequestWithMiniUserResponse,
-  IGroupMembershipResponse,
-  IGroupMembershipResponseWithDates,
-} from "@tournament-app/types";
-import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinRequests";
-import {
-  calculateBestPastDateFormat,
-  COUNTRY_NAMES_TO_CODES,
-  formatDate,
-} from "utils/mixins/formatting";
+import { IGroupJoinRequestWithMiniUserResponse } from "@tournament-app/types";
 import { useGroupJoinRequestsLFP } from "api/client/hooks/groups/useGetGroupJoinRequestsLFP";
-import { useGetLFPs } from "api/client/hooks/lfp/useGetLFPs";
-import Chip from "components/chip";
-import Link from "next/link";
 import { useDeleteLFP } from "api/client/hooks/lfp/useDeleteLFP";
-
-type Item = {
-  name: string;
-  id: string;
-};
-
-type Category = Item & {
-  active: boolean;
-};
+import { clsx } from "clsx";
+import Button from "components/button";
+import Link from "next/link";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./viewLFP.module.scss";
 
 export default function ViewLFP({
   lfpID,
@@ -54,8 +30,6 @@ export default function ViewLFP({
 
   const {
     data,
-    isLoading,
-    isError,
     fetchNextPage,
     fetchPreviousPage,
     isFetching,

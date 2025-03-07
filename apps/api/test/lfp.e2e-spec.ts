@@ -11,11 +11,7 @@ import { NoValuesToSetExceptionFilter } from 'src/base/exception/noValuesToSetEx
 import { PostgresExceptionFilter } from 'src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { AuthModule } from 'src/auth/auth.module';
-import {
-  groupFocusEnum,
-  groupRoleEnum,
-  groupTypeEnum,
-} from '@tournament-app/types';
+import { groupFocusEnum, groupTypeEnum } from '@tournament-app/types';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
 
 describe('LFPController (e2e)', () => {

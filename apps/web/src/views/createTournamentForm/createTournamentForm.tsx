@@ -1,40 +1,35 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import styles from "./createTournamentForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Input from "components/input";
-import { textColor, TextVariants } from "types/styleTypes";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Button from "components/button";
-import { useLogin } from "api/client/hooks/auth/useLogin";
-import { useThemeContext } from "utils/hooks/useThemeContext";
 import {
   ICreateTournamentRequest,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
 } from "@tournament-app/types";
+import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
+import { useCreateCompetition } from "api/client/hooks/competitions/useCreateCompetition";
+import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
+import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
+import { fetchAutocomplete } from "api/googleMapsAPI/places";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Dropdown from "components/dropdown";
+import Input from "components/input";
+import ProgressWheel from "components/progressWheel";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
-import Dropdown from "components/dropdown";
-import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
-import ProgressWheel from "components/progressWheel";
 import { countries } from "country-flag-icons";
+import { useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { useToastContext } from "utils/hooks/useToastContext";
 import {
   COUNTRY_CODES_TO_NAMES,
   COUNTRY_NAMES_TO_CODES,
-  formatDateHTMLInput,
 } from "utils/mixins/formatting";
-import { useToastContext } from "utils/hooks/useToastContext";
-import {
-  createCompetitionFetch,
-  useCreateCompetition,
-} from "api/client/hooks/competitions/useCreateCompetition";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
-import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
+import styles from "./createTournamentForm.module.scss";
 
 export default function CreateTournamentForm({ userId }: { userId: number }) {
   const { theme } = useThemeContext();
@@ -457,51 +452,6 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
           )}
           {methods.formState.errors.categoryId?.type === "required" && (
             <p className={styles.error}>dsadsadsa this field is required!</p>
-          )}
-        </div>
-        <div className={styles.inputWrapper}>
-          {!isGroupLoading && (
-            <div>
-              <Dropdown
-                options={groupData?.pages.flatMap((page) =>
-                  page.results.map((res) => ({
-                    label: res.group.name,
-                    value: res.group.id,
-                  })),
-                )}
-                searchPlaceholder="search..."
-                doesSearch={true}
-                label="affiliated group"
-                placeholder="select affiliated group"
-                name="affiliatedGroupId"
-                isReactHookForm={true}
-                variant={textColorTheme}
-                className={styles.dropdown}
-                innerWrapperClassName={styles.dropdown}
-                optionsClassName={styles.dropdown}
-                style={{ width: "100%" }}
-                searchClassName={styles.search}
-                onSelect={(val) => {
-                  setAffiliatedGroupId(
-                    groupData?.pages.flatMap((page) =>
-                      page.results.map((res) => ({
-                        label: res.group.name,
-                        value: res.group.id,
-                      })),
-                    )[val].value,
-                  );
-                }}
-              ></Dropdown>
-              <button
-                type="button"
-                onClick={() => fetchNextPage()}
-                disabled={
-                  isFetching || isFetchNextPageError || isFetchingNextPage
-                }
-              >
-                load more
-              </button>
-            </div>
           )}
         </div>
 

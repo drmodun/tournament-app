@@ -171,13 +171,13 @@ export const user = pgTable(
     }),
     emailConfirmationToken: text('email_confirmation_token'),
     sseToken: text('sse_token').$defaultFn(() => crypto.randomUUID()),
-    isFake: boolean('is_fake').default(false), // TODO: make sure all the filters only use the real users
+    isFake: boolean('is_fake').default(false),
     isEmailVerified: boolean('is_email_verified').default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .defaultNow()
-      .$onUpdate(() => new Date()), //TODO: see if there is a better alternative
-    country: text('country'), //TODO: possibly setup enum
+      .$onUpdate(() => new Date()),
+    country: text('country'),
     stripeCustomerId: text('stripe_customer_id'),
     bettingPoints: integer('betting_points').default(100),
     customerId: text('customer_id'),
@@ -197,8 +197,6 @@ export const userRelations = relations(user, ({ many }) => ({
   userToRoster: many(userToRoster),
   career: many(categoryCareer),
 }));
-
-export const userSingleRelations = relations(user, ({ one }) => ({}));
 
 export const userNotificationSettings = pgTable('user_notification_settings', {
   userId: integer('user_id')
@@ -242,11 +240,11 @@ export const location = pgTable(
 export const subscription = pgTable('subscription', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
-  enum: userSubscription('enum'), //TODO: potentially remove
+  enum: userSubscription('enum'),
   description: text('description'),
   benefits: text('benefits'),
   stripeProductId: text('stripe_product_id'),
-  price: integer('price').notNull(), //price in cents euro
+  price: integer('price').notNull(),
   autoRenewal: boolean('auto_renewal').default(true),
   nextPaymentDate: timestamp('next_payment_date', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -344,14 +342,14 @@ export const tournament = pgTable(
     startDate: timestamp('start_date', { withTimezone: true }).notNull(),
     endDate: timestamp('end_date', { withTimezone: true }),
     isPublic: boolean('is_public').default(true),
-    links: text('links'), //TODO: potentially remove or  replace with a fully fledged entity
+    links: text('links'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     tournamentType: tournamentType('tournament_type').default('league'),
-    minimumMMR: integer('minimum_mmr').default(0), // TODO: change this to elo, purely naming sake
-    maximumMMR: integer('maximum_mmr').default(999999), //TODO: roster
+    minimumMMR: integer('minimum_mmr').default(0),
+    maximumMMR: integer('maximum_mmr').default(999999),
     locationId: integer('location_id').references(() => location.id, {
       onDelete: 'cascade',
-    }), // TODO: consider making a seperate rules entity if this has too many properties
+    }),
     isMultipleTeamsPerGroupAllowed: boolean(
       'is_multiple_teams_per_group_allowed',
     ).default(false),
@@ -376,7 +374,7 @@ export const tournament = pgTable(
       {
         onDelete: 'cascade',
       },
-    ), // TODO:  consider if there can be multiple groups
+    ),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date()),
@@ -385,8 +383,6 @@ export const tournament = pgTable(
     nameIndex: index('tournament_name_index').using('btree', t.name),
   }),
 );
-
-//TODO: add rewards
 
 export const chatRoom = pgTable('chat_room', {
   id: serial('id').primaryKey(),
@@ -512,7 +508,6 @@ export const group = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date()),
-    //TODO: if needed create a separate settings entity
   },
   (t) => ({
     nameIndex: index('group_name_index').using('btree', t.name),
@@ -622,7 +617,7 @@ export const groupJoinRequest = pgTable(
     relatedLFPId: integer('related_lfp_id').references(
       () => lookingForPlayers.id,
     ),
-  }, // TODO: the response to this is literally creating another group membership or just straight up deleting the join request
+  },
   (t) => ({
     pk: primaryKey({ columns: [t.groupId, t.userId] }),
   }),
@@ -722,7 +717,7 @@ export const stage = pgTable('stage', {
   conversionRuleId: integer('conversion_rule_id').references(
     () => pointConversionRule.id,
   ),
-  stageStatus: stageStatus('stage_status').default('upcoming'), //TODO: maybe run a cron job to update this
+  stageStatus: stageStatus('stage_status').default('upcoming'),
   stageType: stageType('stage_type').default('group'),
   name: text('name').notNull(),
   stageLocation: tournamentLocation('stage_location').default('online'),
@@ -825,7 +820,7 @@ export const rosterToMatchup = pgTable(
   (t) => ({
     pk: primaryKey({ columns: [t.rosterId, t.matchupId] }),
   }),
-); //TODO: see how to implement detailed results for series matches
+);
 
 export const rosterRelations = relations(roster, ({ many, one }) => ({
   players: many(userToRoster),
@@ -987,8 +982,8 @@ export const categoryCareer = pgTable(
       .references(() => user.id, {
         onDelete: 'cascade',
       })
-      .notNull(), // TODO: consider the fastest twa to get total played matches
-    elo: integer('elo').default(1000), // TODO: implement anon records for deleted users
+      .notNull(),
+    elo: integer('elo').default(1000),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
   (t) => ({
@@ -1324,7 +1319,7 @@ export const contestAllowedLanguage = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
-    language: text('language').notNull(), // TODO: make this into an enum
+    language: text('language').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     // Primary key
   },
@@ -1436,6 +1431,3 @@ export const submissionTestcase = pgTable(
     pk: primaryKey({ columns: [t.submissionId, t.testClusterId] }),
   }),
 );
-
-//TODO: add country table
-//TODO: check if making roster for one player even makes sense or should it be switched with userId

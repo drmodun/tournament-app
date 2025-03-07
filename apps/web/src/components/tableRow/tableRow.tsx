@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
-import styles from "./tableRow.module.scss";
-import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
 import TableData from "components/tableData";
+import React from "react";
+import { Variants } from "types/styleTypes";
+import styles from "./tableRow.module.scss";
 
 interface TableRowProps {
   children: React.ReactNode;

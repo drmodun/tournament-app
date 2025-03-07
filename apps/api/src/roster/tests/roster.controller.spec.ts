@@ -9,33 +9,11 @@ import { StageService } from 'src/stage/stage.service';
 import { CareerService } from 'src/career/career.service';
 import { CanRosterBeUsedGuard } from '../guards/roster-check.guard';
 import { CanCreateRosterGuard } from '../guards/can-create-roster.guard';
-import { ExecutionContext } from '@nestjs/common';
 
 describe('RosterController', () => {
   let controller: RosterController;
   let service: jest.Mocked<RosterService>;
-  let participationService: jest.Mocked<ParticipationService>;
-  let rosterService: jest.Mocked<RosterService>;
-  let stageService: jest.Mocked<StageService>;
-  let groupMembershipService: jest.Mocked<GroupMembershipService>;
-  let careerService: jest.Mocked<CareerService>;
-  let guard: jest.Mocked<CanRosterBeUsedGuard>;
-  let canCreateRosterGuard: jest.Mocked<CanCreateRosterGuard>;
-
-  const createMockExecutionContext = (
-    participationId?: number,
-    stageId?: number,
-    members?: any[],
-    stage?: any,
-  ): ExecutionContext =>
-    ({
-      switchToHttp: () => ({
-        getRequest: () => ({
-          params: { participationId, stageId },
-          stage: stage || { id: stageId },
-        }),
-      }),
-    }) as ExecutionContext;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const mockRoster = {
     id: 1,
@@ -47,6 +25,7 @@ describe('RosterController', () => {
       id: 1,
       tournament: {
         id: 1,
+        categoryId: 1,
       },
     },
   };
@@ -63,7 +42,11 @@ describe('RosterController', () => {
           id: 1,
           username: 'testuser',
           isFake: false,
+          country: 'US',
+          profilePicture: 'test.jpg',
+          career: [],
         },
+        career: [],
       },
     ],
   };

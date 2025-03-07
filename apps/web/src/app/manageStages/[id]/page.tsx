@@ -1,9 +1,7 @@
-import { fetchUser } from "api/client/hooks/user/serverFetches";
-import styles from "./index.module.scss";
-import Navbar from "views/navbar";
-import UserProfile from "views/userProfile";
 import { fetchCompetition } from "api/client/hooks/competitions/serverFetches";
 import ManageStages from "views/manageStages";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default async function Stages({
   params,
@@ -13,11 +11,13 @@ export default async function Stages({
   const id = (await params).id;
   const res = await fetchCompetition(id);
 
+  console.log(res);
+
   return (
     <div className={styles.wrapper}>
       <Navbar className={styles.navbar} />
       <div className={styles.screen}>
-        <ManageStages tournament={res} />
+        <ManageStages tournamentId={id} />
       </div>
     </div>
   );

@@ -1,25 +1,20 @@
 "use client";
 
-import styles from "./groupSelectDialog.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
-import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ProgressWheel from "components/progressWheel";
-import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
+import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useAdminUserGroups } from "api/client/hooks/groups/useAdminUserGroups";
 import { useCreatorUserGroups } from "api/client/hooks/groups/useCreatorUserGroups";
-import Button from "components/button";
-import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
 import { useCheckIfGroupIsParticipating } from "api/client/hooks/participations/useCheckIfGroupIsParticipating";
-import { useAuth } from "api/client/hooks/auth/useAuth";
+import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
+import { clsx } from "clsx";
+import Button from "components/button";
+import ProgressWheel from "components/progressWheel";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./groupSelectDialog.module.scss";
 
 export default function GroupSelectDialog({
   competitionId,
@@ -130,14 +125,15 @@ export default function GroupSelectDialog({
         <ProgressWheel variant={textColorTheme} />
       ) : (
         <div className={styles.groupsWrapper}>
-          <ArrowBackIcon
-            onClick={backward}
-            className={clsx(
-              styles.arrow,
-              creatorPage == 0 ? styles.disabled : styles.enabled,
-              globals[`${textColorTheme}FillChildren`],
-            )}
-          />
+          <button onClick={() => backward()}>
+            <ArrowBackIcon
+              className={clsx(
+                styles.arrow,
+                creatorPage == 0 ? styles.disabled : styles.enabled,
+                globals[`${textColorTheme}FillChildren`],
+              )}
+            />
+          </button>
           <div className={styles.groupsInnerWrapper}>
             {creatorIsFetchingNextPage ? (
               <ProgressWheel variant={textColorTheme} />
@@ -178,14 +174,15 @@ export default function GroupSelectDialog({
               })
             )}
           </div>
-          <ArrowForwardIcon
-            onClick={forward}
-            className={clsx(
-              styles.arrow,
-              adminPage == 0 ? styles.disabled : styles.enabled,
-              globals[`${textColorTheme}FillChildren`],
-            )}
-          />
+          <button className={styles.paginationButton} onClick={() => forward()}>
+            <ArrowForwardIcon
+              className={clsx(
+                styles.arrow,
+                adminPage == 0 ? styles.disabled : styles.enabled,
+                globals[`${textColorTheme}FillChildren`],
+              )}
+            />
+          </button>
         </div>
       )}
       <p className={styles.secondTitle}>

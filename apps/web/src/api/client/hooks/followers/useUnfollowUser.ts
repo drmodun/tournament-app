@@ -1,8 +1,7 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IExtendedUserResponse } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
@@ -18,7 +17,7 @@ export const useUnfollowUser = () => {
   return useMutation({
     mutationFn: unfollowUser,
     retryDelay: 10000,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully unfollowed user", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("follower"),

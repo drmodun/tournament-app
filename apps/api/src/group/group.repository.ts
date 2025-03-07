@@ -27,7 +27,6 @@ import {
   GroupSortingEnum,
   GroupSortingEnumType,
   groupRoleEnum,
-  ICategoryMiniResponseWithLogo,
   IMiniGroupResponseWithLogo,
 } from '@tournament-app/types';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
@@ -187,8 +186,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       const field = group[key];
       if (!field) return;
       const parsed = value as string;
-
-      // TODO: implement full text search for title fields (and potentially vector search)
 
       switch (key) {
         case 'name':

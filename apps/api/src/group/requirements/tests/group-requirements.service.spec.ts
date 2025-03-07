@@ -2,11 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GroupRequirementsService } from '../group-requirements.service';
 import { GroupRequirementsRepository } from '../group-requirements.repository';
 import { GroupDrizzleRepository } from '../../group.repository';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { groupRoleEnum } from '@tournament-app/types';
 
 describe('GroupRequirementsService', () => {
   let service: GroupRequirementsService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let groupRequirementsRepository: GroupRequirementsRepository;
 
   const mockGroupRequirementsRepository = {

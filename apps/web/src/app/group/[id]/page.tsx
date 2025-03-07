@@ -1,9 +1,8 @@
-import styles from "./index.module.scss";
-import Navbar from "views/navbar";
-import { clsx } from "clsx";
-import Competition from "views/competition";
 import { fetchGroup } from "api/client/hooks/groups/serverFetches";
+import { clsx } from "clsx";
 import Group from "views/group";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default async function GroupPage({
   params,

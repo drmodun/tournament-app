@@ -1,10 +1,10 @@
 "use client";
 
-import styles from "./aboutWinning.module.scss";
-import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import { useThemeContext } from "utils/hooks/useThemeContext";
+import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./aboutWinning.module.scss";
 
 export default function AboutWinning() {
   const { theme } = useThemeContext();

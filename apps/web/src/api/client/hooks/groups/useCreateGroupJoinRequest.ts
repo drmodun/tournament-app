@@ -1,10 +1,8 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ICreateGroupRequest } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const createGroupJoinRequest = async (data: {
@@ -15,7 +13,7 @@ export const createGroupJoinRequest = async (data: {
     .post<
       never,
       AxiosResponse
-    >(`/group-join-requests/${data?.groupId}`, { params: { groupId: data?.groupId }, body: { message: data?.message } })
+    >(`/group-join-requests/${data?.groupId}`, { params: { groupId: data?.groupId }, message: data?.message })
     .then((res) => res.data);
 
 export const useCreateGroupJoinRequest = () => {
@@ -33,7 +31,7 @@ export const useCreateGroupJoinRequest = () => {
       return true;
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred..", "error");
+      toast.addToast("an error occurred...", "error");
       console.error(error);
       return false;
     },

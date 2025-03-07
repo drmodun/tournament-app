@@ -118,7 +118,7 @@ export class GroupMembershipController {
     const metadata: IQueryMetadata = MetadataMaker.makeMetadataFromQuery(
       query,
       results,
-      req.url, //TODO: maybe make a url extractor
+      req.url,
     );
 
     return {

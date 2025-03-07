@@ -24,7 +24,7 @@ export const useRefresh = () => {
   return useMutation({
     mutationFn: refreshUser,
     onSuccess: async (data) => {
-      setAuthTokens(data, data.refreshToken);
+      setAuthTokens(data.accessToken, data.refreshToken);
       await refetch();
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("me"),

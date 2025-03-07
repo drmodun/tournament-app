@@ -86,5 +86,3 @@ export class FollowersService {
     });
   }
 }
-
-//TODO: later add notifications for this kinda stuff

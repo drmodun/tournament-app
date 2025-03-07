@@ -27,7 +27,7 @@ export interface UserQueryType {
   email?: string;
   country?: string;
   age?: number;
-} // TODO: potentially add checks for this as well
+}
 
 export interface ICreateFakeUserRequest {
   username: string;

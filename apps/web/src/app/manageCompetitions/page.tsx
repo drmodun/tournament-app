@@ -1,15 +1,15 @@
 "use client";
 
-import styles from "./index.module.scss";
-import Navbar from "views/navbar";
-import { clsx } from "clsx";
-import ManageCompetitions from "views/manageCompetitions";
 import { useAuth } from "api/client/hooks/auth/useAuth";
+import { clsx } from "clsx";
 import ProgressWheel from "components/progressWheel";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import ManageCompetitions from "views/manageCompetitions";
+import Navbar from "views/navbar";
+import styles from "./index.module.scss";
 
 export default function Competitions() {
   const { data, isLoading, isError } = useAuth();

@@ -5,8 +5,6 @@ import {
   group,
   participation,
   userToRoster,
-  rosterToRound,
-  stageRound,
   stage,
   groupToUser,
 } from '../db/schema';
@@ -34,7 +32,7 @@ import { QueryRosterDto } from './dto/requests';
 export class RosterDrizzleRepository extends PrimaryRepository<
   typeof roster,
   BaseQuery,
-  any // TODO: Add proper update type
+  any
 > {
   constructor() {
     super(roster);
@@ -337,6 +335,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {
@@ -358,7 +357,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
 
     [RosterSortingEnum.GROUP_NAME]: group.name,
     [RosterSortingEnum.USER_NAME]: user.username,
-    [RosterSortingEnum.RESULT]: roster.id, // TODO: Implement proper result sorting
+    [RosterSortingEnum.RESULT]: roster.id,
   };
 
   getMappingObject(responseEnum: RosterResponseEnumType) {
@@ -404,10 +403,9 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       case RosterResponsesEnum.EXTENDED:
         return {
           ...this.getMappingObject(RosterResponsesEnum.BASE),
-          // TODO: Add roster results when implemented
         };
       default:
-        return {};
+        return null;
     }
   }
 }

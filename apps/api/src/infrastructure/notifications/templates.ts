@@ -84,5 +84,3 @@ export class NotificationTemplatesFiller {
     return template(data);
   }
 }
-
-//TODO: maybe use handlebar.js for template rendering, feels a bit overkill for now

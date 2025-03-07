@@ -1,18 +1,14 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  GroupJoinRequestResponsesEnum,
   IBaseQueryResponse,
   IGroupJoinRequestQuery,
   IGroupJoinRequestWithMiniUserResponse,
-  IGroupJoinRequestWithUserResponse,
 } from "@tournament-app/types";
 import {
   clientApi,
   getAccessToken,
-  LARGE_QUERY_RETRY_ATTEMPTS,
-  LARGE_QUERY_RETRY_DELAY,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
@@ -21,7 +17,7 @@ import { AxiosResponse } from "axios";
 export const getGroupJoinRequestsLFP = async (
   page: number | undefined,
 
-  data?: IGroupJoinRequestQuery,
+  data?: IGroupJoinRequestQuery
 ) =>
   clientApi
     .get<
@@ -45,7 +41,8 @@ export const useGroupJoinRequestsLFP = (data?: IGroupJoinRequestQuery) => {
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (page, pages) => pages.length + 1, // TODO: promjeni kada je dodan fullCount
+    getNextPageParam: (page, pages) =>
+      page.results.length < 10 ? undefined : pages.length + 1,
     initialPageParam: 1,
   });
 };

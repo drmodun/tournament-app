@@ -1,14 +1,13 @@
 "use client";
 
-import React from "react";
-import styles from "./loginForm.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Input from "components/input";
-import { textColor, TextVariants } from "types/styleTypes";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Button from "components/button";
 import { useLogin } from "api/client/hooks/auth/useLogin";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Input from "components/input";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import globals from "styles/globals.module.scss";
+import { textColor, TextVariants } from "types/styleTypes";
+import styles from "./loginForm.module.scss";
 
 type LoginInputs = {
   email: "string";

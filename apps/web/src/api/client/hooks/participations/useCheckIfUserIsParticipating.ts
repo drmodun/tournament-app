@@ -1,11 +1,8 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
-  GroupResponsesEnum,
   IBaseQueryResponse,
-  IExtendedUserResponse,
-  IGroupResponseExtended,
   IParticipationResponse,
   ParticipationResponsesEnum,
 } from "@tournament-app/types";
@@ -16,7 +13,6 @@ import {
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 export const checkIfUserIsParticipating = async (data: {
   tournamentId?: number;

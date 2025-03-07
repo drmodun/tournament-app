@@ -1,43 +1,24 @@
 "use client";
 
-import styles from "./manageLFG.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import Dialog from "components/dialog";
-import Button from "components/button";
-import { useEffect, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import GroupIcon from "@mui/icons-material/Group";
 import AddIcon from "@mui/icons-material/Add";
-import InboxIcon from "@mui/icons-material/Inbox";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  groupRoleEnum,
-  IGroupMembershipResponse,
-  ILFGResponse,
-} from "@tournament-app/types";
-import {
-  calculateBestPastDateFormat,
-  COUNTRY_NAMES_TO_CODES,
-  formatDate,
-} from "utils/mixins/formatting";
-import AddLFPForm from "views/addLFPForm";
-import ViewLFP from "views/viewLFP";
-import ManageTeamMembers from "views/manageTeamMembers";
-import EditTeamForm from "views/editTeamForm";
-import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
-import GroupJoinRequests from "views/groupJoinRequests";
-import { useGetLFPs } from "api/client/hooks/lfp/useGetLFPs";
-import { useGetUserLFGs } from "api/client/hooks/lfg/useGetUserLFGs";
-import ProgressWheel from "components/progressWheel";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Chip from "components/chip";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { ILFGResponse } from "@tournament-app/types";
 import { useDeleteLFG } from "api/client/hooks/lfg/useDeleteLFG";
+import { useGetUserLFGs } from "api/client/hooks/lfg/useGetUserLFGs";
+import { clsx } from "clsx";
+import Button from "components/button";
+import Chip from "components/chip";
+import Dialog from "components/dialog";
+import ProgressWheel from "components/progressWheel";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { calculateBestPastDateFormat } from "utils/mixins/formatting";
 import AddLFGForm from "views/addLFGForm";
 import EditLFGForm from "views/editLFGForm";
+import styles from "./manageLFG.module.scss";
 
 export default function ManageLFG() {
   const { theme } = useThemeContext();
@@ -88,14 +69,16 @@ export default function ManageLFG() {
         <EditLFGForm lfg={active} />
       </Dialog>
       <div className={styles.header}>
-        <h3 className={globals[`${theme}Color`]}>
-          your looking for groups campaigns
-        </h3>
+        <p>
+          <b className={globals[`${theme}Color`]}>
+            your looking for groups campaigns
+          </b>
+        </p>
         <button
           className={styles.addButton}
           onClick={() => setAddDialogOpen(true)}
         >
-          <AddIcon className={styles[`${theme}Fill`]} />
+          <AddIcon className={globals[`${theme}FillChildren`]} />
         </button>
       </div>
       <div>
@@ -116,15 +99,17 @@ export default function ManageLFG() {
                 >
                   <p>{item?.message}</p>
                   <div className={styles.bottomWrapper}>
-                    <div className={styles.careers}>
-                      {item?.careers.map((career) => (
-                        <Chip
-                          label={career.category.name}
-                          variant={textColorTheme}
-                          className={styles.career}
-                        />
-                      ))}
-                    </div>
+                    {item?.careers[0] && (
+                      <div className={styles.careers}>
+                        {item?.careers.map((career) => (
+                          <Chip
+                            label={career.category.name}
+                            variant={textColorTheme}
+                            className={styles.career}
+                          />
+                        ))}
+                      </div>
+                    )}
                     <div className={styles.bottom}>
                       <Chip
                         label={calculateBestPastDateFormat(

@@ -111,7 +111,7 @@ export class UpdatePasswordRequest {
 
   @IsString()
   currentPassword: string;
-} // TODO: possibly move to auth
+}
 
 export class UpdateEmailRequest implements IUpdateEmailRequest {
   @IsEmail()
@@ -157,5 +157,3 @@ export class UserQuery
   @IsNumber()
   age?: number;
 }
-
-//TODO: test query params more carefully and see if more transformations have to be done

@@ -51,7 +51,6 @@ export enum notificationTypeEnum {
   GROUP_ADMIN_DEMOTION = "group-admin-demotion",
   TEST = "test-template",
 }
-//TODO: add more types
 
 export type OrganizerRoleEnumType =
   (typeof OrganizerRoleEnum)[keyof typeof OrganizerRoleEnum];
@@ -168,7 +167,7 @@ export enum tournamentTeamTypeEnum {
   SOLO = "solo",
   TEAM = "team",
   MIXED = "mixed",
-} //TODO: decide if team type should be decided on tournament or event basis
+}
 
 export type matchupTypeEnumType =
   (typeof matchupTypeEnum)[keyof typeof matchupTypeEnum];
@@ -260,13 +259,11 @@ export type pointConversionTypeEnumType =
 export enum pointConversionStrategyEnum {
   QUALIFICATION = "qualification",
   RANKING = "ranking",
-  ELIMINATION = "elimination", // eliminate teams under certain point threshold
+  ELIMINATION = "elimination",
   HYBRID = "hybrid",
   SEED = "seed",
   TIE_BREAKER = "tie_breaker",
   QUALIFICATION_WITH_LCQ = "qualification_with_lcq",
-
-  // TODO: add more if needed
 }
 
 export type pointConversionStrategyEnumType =

@@ -1,29 +1,20 @@
 "use client";
 
-import styles from "./manageCompetitions.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Dialog from "components/dialog";
-import Input from "components/input";
-import { useEffect, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import CheckboxGroup from "components/checkboxGroup";
-import { textColor } from "types/styleTypes";
 import AddIcon from "@mui/icons-material/Add";
-import Dropdown from "components/dropdown";
-import { CardExpandedProps } from "components/cardExpanded/cardExpanded";
-import CardExpanded from "components/cardExpanded";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import Button from "components/button";
-import SlideButton from "components/slideButton";
-import { IExtendedUserResponse, IUserResponse } from "@tournament-app/types";
-import { useGetUserOrganizedCompetitions } from "api/client/hooks/competitions/useGetUserOrganizedCompetitions";
-import ProgressWheel from "components/progressWheel";
-import CreateTournamentForm from "views/createTournamentForm";
-import { useRouter } from "next/navigation";
+import { IExtendedUserResponse } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
-import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
-import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
+import { useGetUserOrganizedCompetitions } from "api/client/hooks/competitions/useGetUserOrganizedCompetitions";
+import { clsx } from "clsx";
+import CardExpanded from "components/cardExpanded";
+import Dialog from "components/dialog";
+import ProgressWheel from "components/progressWheel";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import CreateTournamentForm from "views/createTournamentForm";
+import styles from "./manageCompetitions.module.scss";
 
 export default function ManageCompetitions({
   user,

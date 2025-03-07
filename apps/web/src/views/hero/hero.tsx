@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
-import styles from "./hero.module.scss";
-import globals from "styles/globals.module.scss";
 import { clsx } from "clsx";
-import { useThemeContext } from "utils/hooks/useThemeContext";
+import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./hero.module.scss";
 
 export default function Hero() {
   const { theme } = useThemeContext();

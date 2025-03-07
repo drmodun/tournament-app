@@ -61,11 +61,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       username: name.givenName,
       profilePicture: photos[0].value,
       country: 'None',
-      dateOfBirth: new Date(), // TODO: make the user choose their date of birth post registration
+      dateOfBirth: new Date(),
       isFake: false,
       name: name.givenName,
       password: crypto.randomUUID(),
-    }); //TODO: remind the user to change their country and loacation
+    });
 
     return user?.id as number;
   }

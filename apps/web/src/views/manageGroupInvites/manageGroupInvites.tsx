@@ -1,48 +1,18 @@
 "use client";
 
-import styles from "./manageGroupInvites.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import Dialog from "components/dialog";
-import Button from "components/button";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import GroupIcon from "@mui/icons-material/Group";
-import AddIcon from "@mui/icons-material/Add";
-import InboxIcon from "@mui/icons-material/Inbox";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  groupRoleEnum,
-  IGroupMembershipResponse,
-  ILFGResponse,
-} from "@tournament-app/types";
-import {
-  calculateBestPastDateFormat,
-  COUNTRY_NAMES_TO_CODES,
-  formatDate,
-} from "utils/mixins/formatting";
-import AddLFPForm from "views/addLFPForm";
-import ViewLFP from "views/viewLFP";
-import ManageTeamMembers from "views/manageTeamMembers";
-import EditTeamForm from "views/editTeamForm";
-import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
-import GroupJoinRequests from "views/groupJoinRequests";
-import { useGetLFPs } from "api/client/hooks/lfp/useGetLFPs";
-import { useGetUserLFGs } from "api/client/hooks/lfg/useGetUserLFGs";
-import ProgressWheel from "components/progressWheel";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Chip from "components/chip";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeleteLFG } from "api/client/hooks/lfg/useDeleteLFG";
-import AddLFGForm from "views/addLFGForm";
-import EditLFGForm from "views/editLFGForm";
-import { useGetUserGroupInvites } from "api/client/hooks/groupInvites/useGetUserGroupInvites";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { useAcceptGroupInvite } from "api/client/hooks/groupInvites/useAcceptGroupInvite";
 import { useDeclineGroupInvite } from "api/client/hooks/groupInvites/useDeclineGroupInvite";
+import { useGetUserGroupInvites } from "api/client/hooks/groupInvites/useGetUserGroupInvites";
+import { clsx } from "clsx";
+import Button from "components/button";
+import ProgressWheel from "components/progressWheel";
+import { useEffect, useRef } from "react";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./manageGroupInvites.module.scss";
 
 export default function ManageGroupInvites() {
   const { theme } = useThemeContext();

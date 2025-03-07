@@ -39,8 +39,6 @@ export class NotificationsService {
       .from(userToNotificationTokens)
       .where(eq(userToNotificationTokens.userId, userId));
 
-    // TODO: replace and cache when userToNotifications endpoint is created
-
     const parsedTokens = tokens.map((t) => t.token);
 
     // Works up to 500 tokens for single user

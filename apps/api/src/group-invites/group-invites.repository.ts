@@ -125,7 +125,7 @@ export class GroupInviteDrizzleRepository extends CompositeRepository<
             return eq(groupInvite.groupId, value as number);
           case 'relatedLFGId':
             return eq(groupInvite.relatedLFGId, value as number);
-          default: // TODO: fix the G into a T
+          default:
             return undefined;
         }
       })

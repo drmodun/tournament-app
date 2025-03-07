@@ -55,7 +55,7 @@ export class LFGDrizzleRepository extends PrimaryRepository<
     private readonly categoryDrizzleRepository: CategoryDrizzleRepository,
   ) {
     super(lookingForGroup);
-  } // TODO: refactor this code
+  }
 
   insertCategory(categoryId: number, lfgId: number) {
     return db

@@ -55,9 +55,7 @@ export const participationGroupResponseExample: ParticipationResponse = {
   updatedAt: new Date(),
 };
 
-export const extendedParticipationExample: ExtendedParticipationResponse = {
-  // TODO: add roster and match data when implemented
-};
+export const extendedParticipationExample: ExtendedParticipationResponse = {};
 
 export const participationResponseSchema = {
   anyOf: refs(

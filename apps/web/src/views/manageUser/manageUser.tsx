@@ -1,41 +1,27 @@
 "use client";
 
-import styles from "./manageUser.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import Dialog from "components/dialog";
-import Input from "components/input";
-import Chip from "components/chip";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
 import LaunchIcon from "@mui/icons-material/Launch";
-import {
-  GroupMembershipResponsesEnum,
-  IBaseQueryResponse,
-  IExtendedUserResponse,
-  IGroupMembershipResponse,
-  IGroupMembershipResponseWithDates,
-  IUpdateUserInfo,
-} from "@tournament-app/types";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import ImageDrop from "components/imageDrop";
-import ImagePicker from "components/imagePicker";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
-import RichEditor from "components/richEditor";
-import { leaveUserGroups } from "api/client/hooks/groups/useLeaveUserGroups";
+import { IExtendedUserResponse } from "@tournament-app/types";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
-import UserEditForm from "views/userEditForm";
+import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
+import { clsx } from "clsx";
 import Button from "components/button";
+import Chip from "components/chip";
+import Dialog from "components/dialog";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
+import UserEditForm from "views/userEditForm";
 import UserFollowersDialog from "views/userFollowersModal";
+import styles from "./manageUser.module.scss";
 
 export default function ManageUser({
   data,
@@ -76,7 +62,7 @@ export default function ManageUser({
         variant={theme}
         className={styles.dialog}
       >
-        <UserFollowersDialog userId={data?.id} />
+        <UserFollowersDialog />
       </Dialog>
       <div className={styles.profileEdit}>
         <button
@@ -160,21 +146,20 @@ export default function ManageUser({
               }
             }}
           >
-            {groupData?.pages.map(
-              (page: IBaseQueryResponse<GroupMembershipResponsesEnum>) =>
-                page.results.map((team: GroupMembershipResponsesEnum) => (
-                  <div
+            {groupData?.pages.map((page) =>
+              page.results.map((team) => (
+                <div
+                  className={styles.team}
+                  onClick={() => router.push(`/group/${team?.groupId}`)}
+                >
+                  <Chip
+                    key={team?.groupId}
+                    label={team?.group?.name}
+                    variant={textColorTheme}
                     className={styles.team}
-                    onClick={() => router.push(`/group/${team?.id}`)}
-                  >
-                    <Chip
-                      key={team?.id}
-                      label={team?.name}
-                      variant={textColorTheme}
-                      className={styles.team}
-                    />
-                  </div>
-                )),
+                  />
+                </div>
+              )),
             )}
             {groupData?.pages[0].results.length === 0
               ? "no teams yet."
@@ -207,7 +192,12 @@ export default function ManageUser({
           label="view followers"
           variant="secondary"
           onClick={() => setUserFollowersDialog(true)}
-        ></Button>
+        />
+        <Button
+          label="change password"
+          variant="warning"
+          onClick={() => (location.href = "/requestPasswordReset")}
+        />
         <Button
           label="delete user"
           variant="danger"

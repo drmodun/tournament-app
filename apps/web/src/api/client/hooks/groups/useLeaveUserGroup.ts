@@ -1,8 +1,7 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IExtendedUserResponse } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
@@ -18,7 +17,7 @@ export const useLeaveUserGroup = () => {
   return useMutation({
     mutationFn: leaveUserGroup,
     retryDelay: 5000,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully left group", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("group"),

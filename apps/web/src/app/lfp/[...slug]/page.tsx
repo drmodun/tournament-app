@@ -1,10 +1,7 @@
-import styles from "./index.module.scss";
-import Navbar from "views/navbar";
 import { clsx } from "clsx";
-import Competition from "views/competition";
-import { fetchCompetition } from "api/client/hooks/competitions/serverFetches";
-import { useToastContext } from "utils/hooks/useToastContext";
+import Navbar from "views/navbar";
 import ViewLFP from "views/viewLFP";
+import styles from "./index.module.scss";
 
 export default async function LFP({
   params,

@@ -26,7 +26,6 @@ import {
   StageSortingEnum,
   stageTypeEnum,
   tournamentLocationEnum,
-  IStageResponse,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -239,7 +238,11 @@ export class StageDrizzleRepository extends PrimaryRepository<
               name: location.name,
               apiId: location.apiId,
               coordinates: location.coordinates,
-            }, // TODO: check if this is correct
+            },
+            minPlayersPerTeam: stage.minPlayersPerTeam,
+            maxPlayersPerTeam: stage.maxPlayersPerTeam,
+            maxSubstitutes: stage.maxSubstitutes,
+            maxChanges: stage.maxChanges,
           },
         };
       default:

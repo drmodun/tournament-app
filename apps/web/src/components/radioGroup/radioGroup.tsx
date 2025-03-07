@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import styles from "./radioGroup.module.scss";
 import RadioButton, {
   RadioButtonProps,
 } from "components/radioButton/radioButton";
+import { useState } from "react";
+import styles from "./radioGroup.module.scss";
 
 interface RadioGroupProps {
   style?: React.CSSProperties;

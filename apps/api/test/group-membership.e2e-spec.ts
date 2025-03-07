@@ -17,8 +17,6 @@ import {
 import { GroupMembershipUpdateRequest } from 'src/group-membership/dto/requests.dto';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
 
-// TODO: tidy up this
-
 describe('GroupMembershipController (e2e)', () => {
   let app: INestApplication;
   let authToken: string;
@@ -310,8 +308,6 @@ describe('GroupMembershipController (e2e)', () => {
 
   describe('DELETE /group-membership/:groupId/leave', () => {
     it('should allow user to leave a group', async () => {
-      const groupId = 2;
-
       const myGroupResponse = await request(app.getHttpServer())
         .get(`/group-membership?userId=3`)
         .set('Authorization', `Bearer ${authToken}`)

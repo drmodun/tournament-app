@@ -9,8 +9,6 @@ import {
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 type Interest = {
   id: number;

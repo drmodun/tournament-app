@@ -1,15 +1,13 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   IBaseQueryResponse,
-  ICreateGroupRequest,
   IParticipationResponse,
   ParticipationResponsesEnum,
 } from "@tournament-app/types";
-import { clientApi, getAccessToken } from "api/client/base";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useEffect } from "react";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const checkIfGroupIsParticipating = async (data: {
@@ -37,7 +35,6 @@ export const useCheckIfGroupIsParticipating = () => {
     mutationFn: checkIfGroupIsParticipating,
     retryDelay: 5000,
     onSuccess: async (data) => {
-      console.log("on success data", data);
       if (data?.results?.length ?? -1 > 0) {
         toast.addToast("group is already participating!", "error");
         return false;

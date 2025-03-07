@@ -3,10 +3,10 @@
 import ToastList from "components/toastList";
 import { createContext, ReactNode, useState } from "react";
 import {
-  ToastProps,
-  ToastVariants,
   AUTO_CLOSE,
   AUTO_CLOSE_DURATION,
+  ToastProps,
+  ToastVariants,
 } from "types/toastTypes";
 
 export const ToastContext = createContext({

@@ -1,24 +1,21 @@
 "use client";
 
-import styles from "./groupJoinRequests.module.scss";
-import globals from "styles/globals.module.scss";
-import { clsx } from "clsx";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { useThemeContext } from "utils/hooks/useThemeContext";
-import { textColor } from "types/styleTypes";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
-import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ProgressWheel from "components/progressWheel";
-import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinRequests";
-import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useRejectGroupJoinRequest } from "api/client/hooks/groups/useRejectGroupJoinRequest";
+import DoneIcon from "@mui/icons-material/Done";
 import { useAcceptGroupJoinRequest } from "api/client/hooks/groups/useAcceptGroupJoinRequest";
+import { useGroupJoinRequests } from "api/client/hooks/groups/useGroupJoinRequests";
+import { useRejectGroupJoinRequest } from "api/client/hooks/groups/useRejectGroupJoinRequest";
+import { clsx } from "clsx";
 import Button from "components/button";
+import ProgressWheel from "components/progressWheel";
+import Link from "next/link";
+import { useState } from "react";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import styles from "./groupJoinRequests.module.scss";
 
 export default function GroupMembersDialog({
   groupId,

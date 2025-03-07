@@ -65,7 +65,7 @@ export class RosterService {
   }
 
   async findAll<TResponseType extends BaseRosterResponse>(
-    query: QueryRosterDto, // TODO: Add proper query type
+    query: QueryRosterDto,
   ): Promise<TResponseType[]> {
     const { responseType = RosterResponsesEnum.BASE, ...queryParams } = query;
     const queryFunction =
@@ -75,7 +75,7 @@ export class RosterService {
             responseType,
           })
         : this.repository.getWithPlayers({
-            ...queryParams, // TODO: when I add matchups change this
+            ...queryParams,
           });
 
     const results = await queryFunction;

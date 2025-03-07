@@ -1,20 +1,20 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
-import styles from "./dropdown.module.scss";
-import { ButtonProps } from "components/button/button";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import clsx from "clsx";
-import globals from "styles/globals.module.scss";
 import Button from "components/button";
+import { ButtonProps } from "components/button/button";
+import Input from "components/input";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import globals from "styles/globals.module.scss";
 import {
   inverseTextColor,
   textColor,
   TextVariants,
   Variants,
 } from "types/styleTypes";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import Input from "components/input";
-import { useFormContext } from "react-hook-form";
+import styles from "./dropdown.module.scss";
 
 interface DropdownProps {
   style?: React.CSSProperties;
@@ -46,7 +46,7 @@ interface DropdownProps {
   className?: string;
   defaultValue?: string;
   searchExternally?: boolean;
-  onSearch?: (search: string) => void;
+  onSearch?: () => void;
 }
 
 export default function Dropdown({
@@ -71,7 +71,6 @@ export default function Dropdown({
   searchClassName,
   name,
   isReactHookForm = false,
-  reactFormHookProps,
   required = false,
   optionsClassName,
   innerWrapperClassName,

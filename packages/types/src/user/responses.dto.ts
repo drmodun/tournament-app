@@ -59,7 +59,7 @@ export enum UserSortingEnum {
   COUNTRY = "country",
   BETTING_POINTS = "betting-points",
   TOURNAMENT_PARTICIPATION = "tournament-participation",
-  TOURNAMENTS_WON = "tournaments-won", // TODO: This has to be custom sqled
+  TOURNAMENTS_WON = "tournaments-won",
   TOURNAMENTS_MODERATED = "tournaments-moderated",
   GROUP_JOIN_DATE = "group-join-date",
 }
@@ -69,5 +69,3 @@ export type UserResponseEnumType =
 
 export type UserSortingEnumType =
   (typeof UserSortingEnum)[keyof typeof UserSortingEnum];
-
-//TODO: potentially add more content

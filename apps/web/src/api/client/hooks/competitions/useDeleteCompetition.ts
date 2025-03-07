@@ -27,7 +27,7 @@ export const useDeleteCompetition = () => {
     mutationFn: deleteCompetition,
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully deleted competition", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("competition"),

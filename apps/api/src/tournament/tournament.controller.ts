@@ -31,7 +31,6 @@ import {
 } from '@nestjs/swagger';
 import { tournamentQueryExamples, tournamentResponses } from './dto/examples';
 import { TournamentResponsesEnum, IQueryMetadata } from '@tournament-app/types';
-import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { ConditionalAdminGuard } from './guards/conditional-admin.guard';
@@ -39,6 +38,7 @@ import { TournamentAdminGuard } from './guards/tournament-admin.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('tournaments')
 @ApiExtraModels(
@@ -50,6 +50,17 @@ import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 @Controller('tournaments')
 export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}
+
+  @Get('auto-complete/:search')
+  @ApiOkResponse({
+    description: 'Returns a list of tournaments that can be auto-completed',
+  })
+  async autoComplete(
+    @Param('search') search: string,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.tournamentService.autoComplete(search, query);
+  }
 
   @Get()
   @ApiOkResponse({

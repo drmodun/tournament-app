@@ -27,7 +27,7 @@ export enum LFGSortingEnum {
   UPDATED_AT = "updated_at",
   USER_USERNAME = "user_username",
   CATEGORIES = "categories",
-} // TODO: implement special sorting algo, kinda useless for now
+}
 
 export enum LFGResponsesEnum {
   MINI = "mini",

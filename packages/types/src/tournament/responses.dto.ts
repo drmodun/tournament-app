@@ -43,7 +43,7 @@ export interface IExtendedTournamentResponse extends ITournamentResponse {
   isMultipleTeamsPerGroupAllowed: boolean;
   isFakePlayersAllowed: boolean;
   parentTournament?: IMiniTournamentResponseWithLogo;
-  conversionRuleId: number; // TODO: replace with a conversion rule entity later
+  conversionRuleId: number; 
   isRanked: boolean;
   maximumMMR?: number;
   minimumMMR?: number;
@@ -78,7 +78,6 @@ export enum TournamentSortingEnum {
   TOURNAMENT_LOCATION = "tournamentLocation",
   COUNTRY = "country",
 
-  // TODO: think of more stuff later
 }
 
 export interface TournamentQueryType {

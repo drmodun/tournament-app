@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
-import styles from "./imagePicker.module.scss";
+import { clsx } from "clsx";
+import Input from "components/input";
+import { useRef, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
+import { useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
-import { clsx } from "clsx";
-import AvatarEditor from "react-avatar-editor";
-import Input from "components/input";
-import { useFormContext } from "react-hook-form";
+import styles from "./imagePicker.module.scss";
 
 interface ImagePickerProps {
   style?: React.CSSProperties;
@@ -19,7 +19,7 @@ interface ImagePickerProps {
   className?: string;
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: string) => void;
-  file?: File;
+  file?: File | string;
 }
 
 export default function ImagePicker({
@@ -27,7 +27,6 @@ export default function ImagePicker({
   variant = "light",
   name = "",
   isReactFormHook = false,
-  reactFormHookProps = {},
   required = false,
   className,
   onChange = () => {},

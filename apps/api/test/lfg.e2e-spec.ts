@@ -14,6 +14,7 @@ import { Reflector } from '@nestjs/core';
 describe('LFGController (e2e)', () => {
   let app: INestApplication;
   let authToken: string;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let userId: number;
 
   beforeAll(async () => {
@@ -124,7 +125,6 @@ describe('LFGController (e2e)', () => {
         expect(player).toHaveProperty('user');
         expect(player).toHaveProperty('message');
         expect(player).toHaveProperty('careers');
-        //TODO: extensively test this later
         expect(player.careers.length).toBeGreaterThan(0);
       }
     });

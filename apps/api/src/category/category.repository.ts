@@ -122,7 +122,7 @@ export class CategoryDrizzleRepository extends PrimaryRepository<
           createdAt: category.createdAt,
         };
       default:
-        return {};
+        return null;
     }
   }
 }

@@ -1,26 +1,26 @@
 "use client";
 
-import styles from "./richEditor.module.scss";
-import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import { clsx } from "clsx";
-import Heading from "@tiptap/extension-heading";
 import FormatBoldIcon from "@mui/icons-material/FormatBold";
 import FormatItalicIcon from "@mui/icons-material/FormatItalic";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import FormatStrikethroughIcon from "@mui/icons-material/FormatStrikethrough";
 import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import RedoIcon from "@mui/icons-material/Redo";
 import TitleIcon from "@mui/icons-material/Title";
 import UndoIcon from "@mui/icons-material/Undo";
-import RedoIcon from "@mui/icons-material/Redo";
-import { Markdown } from "tiptap-markdown";
+import { Color } from "@tiptap/extension-color";
+import Heading from "@tiptap/extension-heading";
+import TextStyle from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { clsx } from "clsx";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { Color } from "@tiptap/extension-color";
-import TextStyle from "@tiptap/extension-text-style";
+import globals from "styles/globals.module.scss";
+import { Markdown } from "tiptap-markdown";
+import { textColor, TextVariants } from "types/styleTypes";
+import styles from "./richEditor.module.scss";
 
 interface RichEditorProps {
   style?: React.CSSProperties;

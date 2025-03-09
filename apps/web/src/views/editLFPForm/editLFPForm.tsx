@@ -13,17 +13,24 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./editLFPForm.module.scss";
 
-export default function EditLFPForm({ lfp }: { lfp?: ILFPResponse }) {
+export default function EditLFPForm({
+  lfp,
+  onClose,
+}: {
+  lfp?: ILFPResponse;
+  onClose?: () => void;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const editLFPMutation = useEditLFP();
   const methods = useForm<{ message: string }>();
-  const onSubmit = (data: { message: string }) => {
-    editLFPMutation.mutate({
+  const onSubmit = async (data: { message: string }) => {
+    await editLFPMutation.mutateAsync({
       groupId: lfp?.groupId,
       id: lfp?.id,
       message: data.message,
     });
+    if (editLFPMutation.isError == false) onClose && onClose();
   };
   return (
     <FormProvider {...methods}>

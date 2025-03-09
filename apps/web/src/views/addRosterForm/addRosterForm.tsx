@@ -15,21 +15,25 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { GroupParticipationType } from "views/manageStage/manageStage";
 import styles from "./addRosterForm.module.scss";
 
+type Participation = {
+  id: number;
+  tournament: {
+    categoryId: number;
+  };
+  group: IMiniGroupResponse;
+  user: IMiniGroupResponse;
+};
+
 export default function AddRosterForm({
   stage,
   group,
   participation,
+  onClose,
 }: {
   group?: GroupParticipationType | IMiniGroupResponse;
   stage?: IExtendedStageResponseWithTournament;
-  participation?: {
-    id: number;
-    tournament: {
-      categoryId: number;
-    };
-    group: IMiniGroupResponse;
-    user: IMiniGroupResponse;
-  };
+  participation?: Participation;
+  onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -40,20 +44,21 @@ export default function AddRosterForm({
   const { data } = useGetGroupMembers(group?.id ?? group?.groupId);
 
   const createRosterMutation = useCreateRoster();
-  const onSubmit = () => {
-    stage?.id &&
-      createRosterMutation.mutate({
-        stageId: stage?.id,
-        participationId: participation?.id,
-        members: [
-          ...selectedMembers.map((member) => {
-            return { userId: member, isSubstitute: false };
-          }),
-          ...selectedSubstitutes.map((member) => {
-            return { userId: member, isSubstitute: true };
-          }),
-        ],
-      });
+  const onSubmit = async () => {
+    if (!stage?.id) return;
+    await createRosterMutation.mutateAsync({
+      stageId: stage?.id,
+      participationId: participation?.id,
+      members: [
+        ...selectedMembers.map((member) => {
+          return { userId: member, isSubstitute: false };
+        }),
+        ...selectedSubstitutes.map((member) => {
+          return { userId: member, isSubstitute: true };
+        }),
+      ],
+    });
+    if (createRosterMutation.isError == false) onClose && onClose();
   };
 
   const addMember = (member: any) => {

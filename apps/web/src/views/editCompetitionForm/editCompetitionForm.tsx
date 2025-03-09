@@ -33,8 +33,10 @@ import styles from "./editCompetitionForm.module.scss";
 
 export default function EditCompetitionForm({
   competition,
+  onClose,
 }: {
   competition?: IExtendedTournamentResponse;
+  onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -62,9 +64,9 @@ export default function EditCompetitionForm({
     // @ts-ignore
     if (data.maximumMMR == "") data.maximumMMR = "10000";
 
-    console.log(data);
+    await updateCompetitionMutation.mutateAsync(data);
 
-    updateCompetitionMutation.mutate(data);
+    if (updateCompetitionMutation.isError == false) onClose && onClose();
   };
 
   const [isRanked, setIsRanked] = useState<boolean>(false);

@@ -26,8 +26,10 @@ import styles from "./addStageForm.module.scss";
 
 export default function AddStageForm({
   tournamentId,
+  onClose,
 }: {
   tournamentId?: number;
+  onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -39,15 +41,16 @@ export default function AddStageForm({
   const mutation = useCreateStage();
 
   const addMethods = useForm<ICreateStageDto>();
-  const onAddSubmit: SubmitHandler<ICreateStageDto> = (data) => {
+  const onAddSubmit: SubmitHandler<ICreateStageDto> = async (data) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
     data.locationId = locationId;
     data.tournamentId = tournamentId ?? -1;
     data.minPlayersPerTeam = parseInt(String(data?.minPlayersPerTeam) || "0");
     data.maxPlayersPerTeam = parseInt(String(data?.maxPlayersPerTeam) || "0");
-    console.log(data);
-    mutation.mutate(data);
+
+    await mutation.mutateAsync(data);
+    if (mutation.isError == false) onClose && onClose();
   };
 
   const handleAutocomplete = async (

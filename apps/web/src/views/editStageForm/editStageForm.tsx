@@ -39,9 +39,14 @@ type EditStageFormProps = {
     void
   >;
   stage?: IStageResponseWithTournament;
+  onClose?: () => void;
 };
 
-export default function EditStageForm({ mutation, stage }: EditStageFormProps) {
+export default function EditStageForm({
+  mutation,
+  stage,
+  onClose,
+}: EditStageFormProps) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
@@ -49,10 +54,12 @@ export default function EditStageForm({ mutation, stage }: EditStageFormProps) {
   const [locationId, setLocationId] = useState<number>();
 
   const editMethods = useForm<IUpdateStageDto>();
-  const onEditSubmit: SubmitHandler<IUpdateStageDto> = (data) => {
+  const onEditSubmit: SubmitHandler<IUpdateStageDto> = async (data) => {
     data.locationId = locationId;
     console.log(data);
-    mutation.mutate({ data, stageId: stage?.id ?? -1 });
+    await mutation.mutateAsync({ data, stageId: stage?.id ?? -1 });
+
+    if (mutation.isError == false) onClose && onClose();
   };
 
   const createLocationMutation = useCreateLocation();

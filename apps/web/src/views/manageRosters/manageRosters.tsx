@@ -97,6 +97,7 @@ function RosterCard({
           stage={stage}
           group={roster?.participation?.group}
           participation={roster.participation}
+          onClose={() => setDialogOpen(false)}
         />
       </Dialog>
 

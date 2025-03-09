@@ -17,7 +17,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./addLFGForm.module.scss";
 
-export default function AddLFGForm() {
+export default function AddLFGForm({ onClose }: { onClose?: () => void }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
@@ -43,9 +43,11 @@ export default function AddLFGForm() {
   };
 
   const methods = useForm<ICreateLFGRequest>();
-  const onSubmit = (_data: ICreateLFGRequest) => {
+  const onSubmit = async (_data: ICreateLFGRequest) => {
     _data.categoryIds = returnIdsFromIndexes();
-    createLFGMutation.mutate(_data);
+    const a = await createLFGMutation.mutateAsync(_data);
+    console.log(a, "AAAA", createLFGMutation);
+    if (createLFGMutation.isError == false) onClose && onClose();
   };
 
   return (

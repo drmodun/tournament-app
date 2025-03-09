@@ -40,7 +40,11 @@ export default function ViewRoster({
       )}
     >
       <Dialog active={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <AddRosterForm stage={stage} group={group} />
+        <AddRosterForm
+          stage={stage}
+          group={group}
+          onClose={() => setDialogOpen(false)}
+        />
       </Dialog>
       {(data?.pages[0]?.results?.length ?? -1) <= 0 ? (
         <div>

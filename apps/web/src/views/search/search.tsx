@@ -11,6 +11,7 @@ import { textColor } from "types/styleTypes";
 import useDebounce from "utils/hooks/useDebounce";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./search.module.scss";
+import { useSearchCompetitions } from "api/client/hooks/competitions/useSearchCompetitions";
 
 export default function Search() {
   const { theme } = useThemeContext();
@@ -20,6 +21,7 @@ export default function Search() {
 
   const { data: userData } = useSearchUsers(debouncedValue);
   const { data: groupData } = useSearchGroups(debouncedValue);
+  const { data: tournamentData } = useSearchCompetitions(debouncedValue);
 
   const debouncedSetValue = useDebounce((value: string) => {
     setDebouncedValue(value);
@@ -42,7 +44,7 @@ export default function Search() {
       <div className={styles.scrollSection}>
         <h3 className={globals[`${textColorTheme}Color`]}>user results</h3>
         <div className={styles.usersSearch}>
-          {!userData ? (
+          {!userData || userData.pages[0].length == 0 ? (
             <p className={globals[`${textColorTheme}Color`]}>no results</p>
           ) : (
             userData?.pages?.map((page) => {
@@ -79,7 +81,7 @@ export default function Search() {
       <div className={styles.scrollSection}>
         <h3 className={globals[`${textColorTheme}Color`]}>group results</h3>
         <div className={styles.usersSearch}>
-          {!groupData ? (
+          {!groupData || groupData.pages[0].length == 0 ? (
             <p className={globals[`${textColorTheme}Color`]}>no results</p>
           ) : (
             groupData?.pages?.map((page) => {
@@ -115,8 +117,36 @@ export default function Search() {
         <h3 className={globals[`${textColorTheme}Color`]}>
           tournament results
         </h3>
-        <div className={styles.tournamentsSearch}>
-          <p className={globals[`${textColorTheme}Color`]}>no results</p>
+        <div className={styles.usersSearch}>
+          {!tournamentData || tournamentData.pages[0].length == 0 ? (
+            <p className={globals[`${textColorTheme}Color`]}>no results</p>
+          ) : (
+            tournamentData?.pages?.map((page) => {
+              return page?.map((result) => {
+                return (
+                  <Link
+                    href={`/contest/${result.id}`}
+                    className={clsx(styles.link)}
+                  >
+                    <div
+                      className={clsx(
+                        globals[`${theme}Color`],
+                        globals[`${textColorTheme}BackgroundColor`],
+                        styles.userCard,
+                      )}
+                    >
+                      <img
+                        src={result.logo}
+                        onError={(e) => (e.currentTarget.src = "/noimg.jpg")}
+                        className={styles.pfp}
+                      />
+                      <p>{result.name}</p>
+                    </div>
+                  </Link>
+                );
+              });
+            })
+          )}
         </div>
       </div>
     </div>

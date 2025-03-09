@@ -28,9 +28,14 @@ import styles from "./editTeamForm.module.scss";
 type EditTeamFormProps = {
   mutation: UseMutationResult<any, any, Partial<ICreateGroupRequest>, void>;
   groupId: number;
+  onClose?: () => void;
 };
 
-export default function EditTeamForm({ mutation, groupId }: EditTeamFormProps) {
+export default function EditTeamForm({
+  mutation,
+  groupId,
+  onClose,
+}: EditTeamFormProps) {
   const { theme } = useThemeContext();
   const { data, isLoading, isError } = useGetGroup(groupId);
   const textColorTheme = textColor(theme);
@@ -42,10 +47,13 @@ export default function EditTeamForm({ mutation, groupId }: EditTeamFormProps) {
   const deleteGroupMutation = useDeleteGroup();
 
   const editMethods = useForm<Partial<ICreateGroupRequest>>();
-  const onEditSubmit: SubmitHandler<Partial<ICreateGroupRequest>> = (data) => {
+  const onEditSubmit: SubmitHandler<Partial<ICreateGroupRequest>> = async (
+    data,
+  ) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
-    mutation.mutate(data);
+    await mutation.mutateAsync(data);
+    if (mutation.isError == false) onClose && onClose();
   };
 
   const createLocationMutation = useCreateLocation();
@@ -71,7 +79,6 @@ export default function EditTeamForm({ mutation, groupId }: EditTeamFormProps) {
   };
 
   useEffect(() => {
-    console.log(data, "DATAAAA");
     editMethods.register("logo", { required: true });
     imageUrlToFile(data?.logo).then((file) => {
       setFile(file);

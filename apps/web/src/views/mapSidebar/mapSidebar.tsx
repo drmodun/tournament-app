@@ -15,6 +15,8 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { MarkerLocation, Poi } from "utils/mixins/maps";
 import styles from "./mapSidebar.module.scss";
 import { useGetCompetitionsQuery } from "api/client/hooks/competitions/useGetCompetitionsQuery";
+import CardExpanded from "components/cardExpanded";
+import { formatDateTimeHTMLInput } from "utils/mixins/formatting";
 
 export default function MapSidebar() {
   const [selectedLocation, setSelectedLocation] = useState<MarkerLocation>();
@@ -89,12 +91,26 @@ export default function MapSidebar() {
                         </div>
                         <div className={styles.competitionsWrapper}>
                           {competitionsData?.pages.map((page) => {
-                            return page?.results?.map((item) => {
+                            return page?.results?.map((item, index) => {
                               return (
-                                <div key={item.id}>
-                                  <p>{item.name}</p>
-                                  <p>{item.logo}</p>
-                                </div>
+                                <CardExpanded
+                                  key={index}
+                                  label={item.name}
+                                  startDate={new Date(
+                                    item?.startDate.toString(),
+                                  ).getTime()}
+                                  endDate={new Date(
+                                    item?.endDate.toString(),
+                                  ).getTime()}
+                                  category={item.category.name}
+                                  participants={item.currentParticipants}
+                                  location={item?.location}
+                                  locationDetails={item.location}
+                                  variant={theme}
+                                  id={item.id}
+                                  className={styles.tournamentCard}
+                                  image={item.logo ?? `/${theme}.png`}
+                                />
                               );
                             });
                           })}

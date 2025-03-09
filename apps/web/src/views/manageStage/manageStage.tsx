@@ -146,6 +146,13 @@ export default function ManageStages(stage?: {
           label="manage rosters"
         />
       </Link>
+      <Link href={`/stage/${stage?.stage?.id}/bracket`}>
+        <Button
+          variant={theme}
+          className={styles.actionButton}
+          label="view bracket"
+        />
+      </Link>
     </div>
   );
 }

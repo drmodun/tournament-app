@@ -43,6 +43,10 @@ export const useCreateGroupInvite = () => {
       await queryClient.invalidateQueries({
         queryKey: ["lfg", "team", variables.groupId],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["me", "lfg", variables.groupId],
+      });
+
       return true;
     },
     onError: (error: any) => {

@@ -23,8 +23,10 @@ import styles from "./createTeamForm.module.scss";
 
 export default function CreateTeamForm({
   mutation,
+  onClose,
 }: {
   mutation: UseMutationResult<any, any, ICreateGroupRequest, void>;
+  onClose: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -35,11 +37,12 @@ export default function CreateTeamForm({
   const [logo, setLogo] = useState<string>();
 
   const addMethods = useForm<ICreateGroupRequest>();
-  const onAddSubmit: SubmitHandler<ICreateGroupRequest> = (data) => {
+  const onAddSubmit: SubmitHandler<ICreateGroupRequest> = async (data) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
     console.log(data);
-    mutation.mutate(data);
+    await mutation.mutateAsync(data);
+    if (mutation.isError == false) onClose && onClose();
   };
 
   const handleAutocomplete = async (

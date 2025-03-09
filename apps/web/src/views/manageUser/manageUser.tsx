@@ -54,7 +54,7 @@ export default function ManageUser({
         variant={theme}
         className={styles.dialog}
       >
-        <UserEditForm data={data} />
+        <UserEditForm data={data} onClose={() => setDialogActive(false)} />
       </Dialog>
       <Dialog
         active={userFollowersDialog}

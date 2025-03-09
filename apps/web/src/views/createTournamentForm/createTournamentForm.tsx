@@ -31,7 +31,13 @@ import {
 } from "utils/mixins/formatting";
 import styles from "./createTournamentForm.module.scss";
 
-export default function CreateTournamentForm({ userId }: { userId: number }) {
+export default function CreateTournamentForm({
+  userId,
+  onClose,
+}: {
+  userId: number;
+  onClose?: () => void;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { data, isLoading } = useGetCategories();
@@ -73,7 +79,9 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
 
     console.log(data);
 
-    createCompetitionMutation.mutate(data);
+    await createCompetitionMutation.mutateAsync(data);
+
+    if (createCompetitionMutation.isError == false) onClose && onClose();
   };
 
   const [isRanked, setIsRanked] = useState<boolean>(false);

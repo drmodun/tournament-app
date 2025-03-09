@@ -70,7 +70,11 @@ export default function ManageStages(stage?: {
         onClose={() => setEditDialogOpen(false)}
         variant={theme}
       >
-        <EditStageForm mutation={editMutation} stage={stage?.stage} />
+        <EditStageForm
+          mutation={editMutation}
+          stage={stage?.stage}
+          onClose={() => setEditDialogOpen(false)}
+        />
       </Dialog>
       <div className={styles.header}>
         <h3 className={globals[`${theme}Color`]}>

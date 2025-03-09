@@ -21,8 +21,10 @@ import { imageUrlToFile } from "utils/mixins/helpers";
 
 export default function userEditForm({
   data,
+  onClose,
 }: {
   data: IExtendedUserResponse | undefined;
+  onClose?: () => void;
 }) {
   const updateUser = useUpdateUser();
 
@@ -35,7 +37,9 @@ export default function userEditForm({
   const onSubmit: SubmitHandler<IUpdateUserInfo> = async (_data) => {
     if (!data) return;
     _data.country = _data.country?.split(" ")[0];
-    updateUser.mutate(_data);
+    await updateUser.mutateAsync(_data);
+
+    if (updateUser.isError == false) onClose && onClose();
   };
 
   useEffect(() => {

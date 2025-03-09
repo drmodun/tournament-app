@@ -11,13 +11,23 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./addLFPForm.module.scss";
 
-export default function AddLFPForm({ groupId }: { groupId?: number }) {
+export default function AddLFPForm({
+  groupId,
+  onClose,
+}: {
+  groupId?: number;
+  onClose?: () => void;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const createLFPMutation = useCreateLFP();
   const methods = useForm<ICreateLFPRequest>();
-  const onSubmit = (data: any) => {
-    createLFPMutation.mutate({ groupId: groupId, message: data.message });
+  const onSubmit = async (data: any) => {
+    await createLFPMutation.mutateAsync({
+      groupId: groupId,
+      message: data.message,
+    });
+    if (createLFPMutation.isError == false) onClose && onClose();
   };
   return (
     <FormProvider {...methods}>

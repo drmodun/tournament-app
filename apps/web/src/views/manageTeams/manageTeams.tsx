@@ -97,7 +97,10 @@ export default function ManageTeams({
         variant={theme}
         className={styles.lfpDialogWrapper}
       >
-        <AddLFPForm groupId={team?.groupId} />
+        <AddLFPForm
+          groupId={team?.groupId}
+          onClose={() => setAddLfpModalActive(false)}
+        />
       </Dialog>
       <Dialog
         active={editLfpModalActive}
@@ -108,7 +111,10 @@ export default function ManageTeams({
         variant={theme}
         className={styles.lfpDialogWrapper}
       >
-        <EditLFPForm lfp={activeLfp} />
+        <EditLFPForm
+          lfp={activeLfp}
+          onClose={() => setEditLfpModalActive(false)}
+        />
       </Dialog>
       <Dialog
         active={membersModalActive}

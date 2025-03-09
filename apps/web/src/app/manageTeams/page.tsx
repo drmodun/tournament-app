@@ -77,7 +77,10 @@ export default function Teams() {
         variant={theme}
         className={styles.dialog}
       >
-        <CreateTeamForm mutation={createGroupMutation} />
+        <CreateTeamForm
+          mutation={createGroupMutation}
+          onClose={() => setDialogActive(false)}
+        />
       </Dialog>
       <Navbar className={styles.navbar} />
       {isLoading ? (

@@ -64,7 +64,7 @@ export default function ManageTeams({
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <Dialog
@@ -129,7 +129,7 @@ export default function ManageTeams({
             className={clsx(
               styles.teamName,
               globals[`${theme}Color`],
-              styles.keepInLine,
+              styles.keepInLine
             )}
           >
             <div>
@@ -155,7 +155,7 @@ export default function ManageTeams({
             <GroupIcon
               className={clsx(
                 styles[`${textColorTheme}Fill`],
-                styles.buttonIconPadding,
+                styles.buttonIconPadding
               )}
             />
           </Button>
@@ -172,7 +172,7 @@ export default function ManageTeams({
                 <EditIcon
                   className={clsx(
                     styles[`${textColorTheme}Fill`],
-                    styles.buttonIconPadding,
+                    styles.buttonIconPadding
                   )}
                 />
               </Button>
@@ -185,7 +185,7 @@ export default function ManageTeams({
                 <InboxIcon
                   className={clsx(
                     styles[`${textColorTheme}Fill`],
-                    styles.buttonIconPadding,
+                    styles.buttonIconPadding
                   )}
                 />
               </Button>
@@ -198,7 +198,7 @@ export default function ManageTeams({
                 <TravelExploreIcon
                   className={clsx(
                     styles[`${textColorTheme}Fill`],
-                    styles.buttonIconPadding,
+                    styles.buttonIconPadding
                   )}
                 />
               </Button>
@@ -212,7 +212,7 @@ export default function ManageTeams({
             styles.lfpTopWrapper,
             team?.role !== groupRoleEnum.ADMIN &&
               team?.role !== groupRoleEnum.OWNER &&
-              styles.verticalPadding,
+              styles.verticalPadding
           )}
         >
           <b className={clsx(globals[`${theme}Color`])}>
@@ -223,7 +223,7 @@ export default function ManageTeams({
               styles.lfpButton,
               team?.role !== groupRoleEnum.ADMIN &&
                 team?.role !== groupRoleEnum.OWNER &&
-                globals.hidden,
+                globals.hidden
             )}
             onClick={() => setAddLfpModalActive(true)}
           >
@@ -241,14 +241,19 @@ export default function ManageTeams({
                       styles.campaign,
                       globals[`${theme}BackgroundColor`],
                       globals.paddingHorizontal,
-                      globals.doublePaddingVertical,
+                      globals.doublePaddingVertical
                     )}
-                    href={`/lfp/${campaign.id}/${campaign.groupId}`}
+                    href={
+                      team?.role !== groupRoleEnum.ADMIN &&
+                      team?.role !== groupRoleEnum.OWNER
+                        ? "#"
+                        : `/lfp/${campaign.id}/${campaign.groupId}`
+                    }
                   >
                     <p
                       className={clsx(
                         styles.campaignTitle,
-                        globals[`${textColorTheme}Color`],
+                        globals[`${textColorTheme}Color`]
                       )}
                     >
                       {campaign.message}
@@ -258,7 +263,7 @@ export default function ManageTeams({
                         styles.actionButtons,
                         team?.role !== groupRoleEnum.ADMIN &&
                           team?.role !== groupRoleEnum.OWNER &&
-                          globals.hidden,
+                          globals.hidden
                       )}
                     >
                       <button

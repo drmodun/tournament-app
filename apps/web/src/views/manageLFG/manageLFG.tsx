@@ -11,7 +11,7 @@ import Button from "components/button";
 import Chip from "components/chip";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -49,7 +49,7 @@ export default function ManageLFG() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <Dialog
@@ -94,7 +94,7 @@ export default function ManageLFG() {
                   className={clsx(
                     globals[`${theme}BackgroundColor`],
                     globals[`${textColorTheme}Color`],
-                    styles.card,
+                    styles.card
                   )}
                 >
                   <p>{item?.message}</p>
@@ -118,7 +118,7 @@ export default function ManageLFG() {
                     <div className={styles.bottom}>
                       <Chip
                         label={calculateBestPastDateFormat(
-                          new Date(item.createdAt),
+                          new Date(item.createdAt)
                         )}
                         variant="primary"
                       ></Chip>
@@ -131,7 +131,7 @@ export default function ManageLFG() {
                           <EditIcon
                             className={clsx(
                               globals.darkFillChildren,
-                              styles.actionIcon,
+                              styles.actionIcon
                             )}
                           />
                         </Button>
@@ -145,7 +145,7 @@ export default function ManageLFG() {
                           <DeleteIcon
                             className={clsx(
                               globals.lightFillChildren,
-                              styles.actionIcon,
+                              styles.actionIcon
                             )}
                           />
                         </Button>

@@ -28,7 +28,6 @@ import { useToastContext } from "utils/hooks/useToastContext";
 import {
   COUNTRY_CODES_TO_NAMES,
   COUNTRY_NAMES_TO_CODES,
-  formatDateTimeHTMLInput,
 } from "utils/mixins/formatting";
 import styles from "./editCompetitionForm.module.scss";
 
@@ -78,12 +77,11 @@ export default function EditCompetitionForm({
   const [categoryId, setCategoryId] = useState<number>(-1);
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
   const [locationId, setLocationId] = useState<number>();
-  const [affiliatedGroupId, setAffiliatedGroupId] = useState<number>();
   const [finalLocationName, setFinalLocationName] = useState<string>();
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
+    placeName?: string
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -175,9 +173,15 @@ export default function EditCompetitionForm({
             min={new Date()
               .toISOString()
               .slice(0, new Date().toISOString().lastIndexOf(":"))}
-            defaultValue={competition?.startDate
-              .toISOString()
-              .slice(0, new Date().toISOString().lastIndexOf(":"))}
+            defaultValue={
+              competition?.startDate
+                ? new Date(competition.startDate)
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+                : new Date()
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+            }
           />
           {methods.formState.errors.startDate?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
@@ -196,9 +200,15 @@ export default function EditCompetitionForm({
             min={new Date()
               .toISOString()
               .slice(0, new Date().toISOString().lastIndexOf(":"))}
-            defaultValue={competition?.endDate
-              .toISOString()
-              .slice(0, new Date().toISOString().lastIndexOf(":"))}
+            defaultValue={
+              competition?.endDate
+                ? new Date(competition.endDate)
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+                : new Date()
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+            }
           />
           {methods.formState.errors.endDate?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
@@ -255,7 +265,7 @@ export default function EditCompetitionForm({
                   "place_changed",
                   () => {
                     return handleAutocomplete(autocomplete, e.target.value);
-                  },
+                  }
                 );
                 setListener(tempListener);
               });

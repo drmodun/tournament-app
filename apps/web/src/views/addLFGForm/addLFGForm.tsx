@@ -29,7 +29,7 @@ export default function AddLFGForm({ onClose }: { onClose?: () => void }) {
     setValues(
       data?.results.map(() => {
         return false;
-      }) ?? [],
+      }) ?? []
     );
   }, [data]);
 
@@ -98,7 +98,7 @@ export default function AddLFGForm({ onClose }: { onClose?: () => void }) {
             checkboxes={
               data?.results?.flatMap((elem) => {
                 return {
-                  label: `${elem.name} ${elem.type}`,
+                  label: `${elem.name} - ${elem.type}`,
                   value: elem.id,
                   variant: textColorTheme,
                   labelVariant: textColorTheme,
@@ -106,7 +106,7 @@ export default function AddLFGForm({ onClose }: { onClose?: () => void }) {
                     setValues(
                       (values ?? []).map((e, i) => {
                         return i === elem.id ? !e : e;
-                      }),
+                      })
                     );
                   },
                 };

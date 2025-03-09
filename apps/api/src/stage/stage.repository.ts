@@ -121,6 +121,8 @@ export class StageDrizzleRepository extends PrimaryRepository<
   ): Promise<boolean> {
     const isGivenExcludeRosterIds = excludeRosterIds?.length > 0;
 
+    console.log(memberIds, stageId, excludeRosterIds, isGivenExcludeRosterIds);
+
     const check = await db
       .select()
       .from(stage)
@@ -135,6 +137,8 @@ export class StageDrizzleRepository extends PrimaryRepository<
             : undefined,
         ),
       );
+
+    console.log('this da check', check);
 
     return check.length > 0;
   }

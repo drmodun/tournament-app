@@ -1,189 +1,125 @@
 "use client";
 
-import AddIcon from "@mui/icons-material/Add";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import EditIcon from "@mui/icons-material/Edit";
-import GroupIcon from "@mui/icons-material/Group";
-import InboxIcon from "@mui/icons-material/Inbox";
-import { IGroupMembershipResponse } from "@tournament-app/types";
-import { useGetGroupRosters } from "api/client/hooks/rosters/useGetGroupRosters";
+import {
+  IExtendedStageResponseWithTournament,
+  IMiniGroupResponseWithLogo,
+  IRosterResponse,
+} from "@tournament-app/types";
+import { useGetStageRostersManagedByUser } from "api/client/hooks/rosters/useGetStageRostersManagedByUser";
 import { clsx } from "clsx";
-import Button from "components/button";
 import Chip from "components/chip";
-import ProgressWheel from "components/progressWheel";
-import { useEffect } from "react";
+import Dialog from "components/dialog";
+import Dropdown from "components/dropdown";
+import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { calculateBestPastDateFormat } from "utils/mixins/formatting";
+import { extractUniqueGroupsFromRosters } from "utils/mixins/helpers";
+import AddRosterForm from "views/addRosterForm";
 import styles from "./manageRosters.module.scss";
 
 export default function ManageRosters({
-  group,
+  stage,
 }: {
-  group?: IGroupMembershipResponse;
+  stage: IExtendedStageResponseWithTournament;
+}) {
+  const { data: rosters, isLoading } = useGetStageRostersManagedByUser(
+    stage.id,
+  );
+  const { theme } = useThemeContext();
+  const textColorTheme = textColor(theme);
+  const [groups, setGroups] = useState<IMiniGroupResponseWithLogo[]>([]);
+  const [activeGroup, setActiveGroup] = useState<number>(-1);
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (rosters) {
+      const _groups = extractUniqueGroupsFromRosters(rosters);
+      setGroups(_groups);
+    }
+  }, [rosters, isLoading]);
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.rosters}>
+        <Dropdown
+          options={[
+            ...groups.map((group) => {
+              return { label: group.name, id: group.id };
+            }),
+            { label: "all" },
+          ]}
+          placeholder="select group"
+          onSelect={(index: number) => {
+            if (index == groups.length) setActiveGroup(-1);
+            else setActiveGroup(index);
+          }}
+          doesSearch={true}
+          searchPlaceholder="search..."
+        />
+        {activeGroup == -1
+          ? rosters?.map((roster) => (
+              <RosterCard roster={roster} stage={stage} />
+            ))
+          : rosters
+              ?.filter(
+                (roster) =>
+                  roster.participation?.group?.id == groups[activeGroup].id,
+              )
+              .map((roster) => <RosterCard roster={roster} stage={stage} />)}
+      </div>
+    </div>
+  );
+}
+
+function RosterCard({
+  roster,
+  stage,
+}: {
+  roster: IRosterResponse;
+  stage: IExtendedStageResponseWithTournament;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    isFetchingNextPage,
-    isFetchNextPageError,
-  } = useGetGroupRosters(group?.groupId);
-
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   return (
     <div
       className={clsx(
-        styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
+        globals[`${theme}Color`],
+        styles.card,
       )}
+      onClick={() => setDialogOpen(true)}
     >
-      {/*
-      <Dialog
-        active={addDialogOpen}
-        onClose={() => setAddDialogOpen(false)}
-        variant={theme}
-        className={styles.editTeamDialogWrapper}
-      >
-        <AddLFGForm />
+      <Dialog active={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <AddRosterForm
+          stage={stage}
+          group={roster?.participation?.group}
+          participation={roster.participation}
+        />
       </Dialog>
-      <Dialog
-        active={editDialogOpen}
-        onClose={() => setEditDialogOpen(false)}
-        variant={theme}
-        className={styles.editTeamDialogWrapper}
-      >
-        <EditLFGForm lfg={active} />
-      </Dialog>
-      */}
-      <div className={styles.header}>
-        <h3 className={globals[`${theme}Color`]}>
-          {group?.group?.name}'s rosters
-        </h3>
-        <button
-          className={styles.addButton}
-          //onClick={() => setAddDialogOpen(true)}
+
+      {roster.players?.map((player) => (
+        <div
+          className={clsx(
+            styles.playerCard,
+            globals[`${theme}BackgroundColor`],
+          )}
         >
-          <AddIcon className={styles[`${theme}Fill`]} />
-        </button>
-      </div>
-      <div className={styles.infiniteLoad}>
-        {isLoading ? (
-          <div className={styles.loadingContainer}>
-            <ProgressWheel />
-          </div>
-        ) : data?.pages.length === 0 ||
-          data?.pages[0]?.results?.length === 0 ? (
-          <div className={styles.emptyState}>
-            <InboxIcon className={styles.emptyIcon} />
-            <p className={globals[`${theme}Color`]}>
-              No rosters have been created yet
-            </p>
-          </div>
-        ) : (
-          <>
-            {data?.pages.map((page, pageIndex) => (
-              <div key={pageIndex} className={styles.rostersContainer}>
-                {page.results.map((roster) => (
-                  <div key={roster?.id} className={styles.rosterItem}>
-                    <Chip
-                      label={`roster id ${roster?.id}`}
-                      variant={theme}
-                      className={styles.rosterName}
-                    />
-                    <div className={styles.rosterInfo}>
-                      <div
-                        className={clsx(
-                          globals[`${theme}Color`],
-                          styles.cardWrapper,
-                        )}
-                      >
-                        {roster?.players.map((e) => (
-                          <div
-                            className={clsx(
-                              styles.card,
-                              globals[`${theme}BackgroundColor`],
-                              globals[`${textColorTheme}Color`],
-                            )}
-                          >
-                            <div className={styles.cardTop}>
-                              <img
-                                src={e.user.profilePicture}
-                                alt="profile picture"
-                                className={styles.profilePicture}
-                                onError={(e) =>
-                                  (e.currentTarget.src = "/profilePicture.png")
-                                }
-                              />
-                              <p className={styles.username}>
-                                {e?.user?.username}
-                              </p>
-                            </div>
-                            <div className={styles.careers}>
-                              {e?.career?.map((career) => {
-                                console.log(career);
-                                return (
-                                  <Chip
-                                    className={styles.chip}
-                                    variant={textColorTheme}
-                                    label={career.category.name}
-                                  >
-                                    <p className={globals[`${theme}Color`]}>
-                                      {career.elo}
-                                    </p>
-                                  </Chip>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <p className={styles.rosterDescription}>
-                        {roster?.participationId}
-                      </p>
-                      <div className={styles.rosterMeta}>
-                        <span>
-                          Created:{" "}
-                          {calculateBestPastDateFormat(roster?.createdAt)}
-                        </span>
-                        <span>stage_id: {roster?.stageId}</span>
-                      </div>
-                    </div>
-                    <div className={styles.rosterActions}>
-                      <Button variant="warning">
-                        <EditIcon /> Edit
-                      </Button>
-                      <Button variant="secondary">
-                        <GroupIcon /> Manage
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-            {
-              <div className={styles.loadMoreContainer}>
-                <Button
-                  onClick={() => fetchNextPage()}
-                  disabled={isFetchingNextPage || isFetchNextPageError}
-                  variant="secondary"
-                >
-                  {isFetchingNextPage ? (
-                    <ProgressWheel />
-                  ) : (
-                    <>
-                      Load more <ArrowForwardIcon fontSize="small" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            }
-          </>
-        )}
-      </div>
+          <Chip label={player.user.username} variant={textColorTheme} />
+          {player?.career?.map((career) => {
+            return (
+              <Chip label={career.category.name} variant="secondary">
+                {career.category.name}
+              </Chip>
+            );
+          })}
+          {player.isSubstitute && (
+            <p className={globals.warningColor}>substitute player</p>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

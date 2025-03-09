@@ -20,6 +20,7 @@ export class CanCreateRosterGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('AAAAAAAAAAA CAN ACTIVEEE 321893289');
     const request = context.switchToHttp().getRequest();
     const participationId =
       request.params?.participationId ||
@@ -34,6 +35,7 @@ export class CanCreateRosterGuard implements CanActivate {
       null;
 
     await this.checkIfRosterAlreadyExists(participationId, stageId);
+    console.log('AAAAAAAAAAA CAN ACTIVEEE 1');
 
     if (!stageId) {
       throw new BadRequestException('Stage ID is required');
@@ -61,6 +63,7 @@ export class CanCreateRosterGuard implements CanActivate {
         'You cannot create a roster for a non-initial stage',
       );
     }
+    console.log('AAAAAAAAAAA CAN ACTIVEEE DONE EEEEEE ');
 
     return true;
   }

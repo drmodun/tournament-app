@@ -1,23 +1,9 @@
 import { ICareerCategoryResponse } from "src/career";
-import { IMiniGroupResponseWithLogo } from "src/group";
+import { IMiniGroupResponse, IMiniGroupResponseWithLogo } from "src/group";
 import {
   IMiniUserResponseWithCountry,
   IMiniUserResponseWithProfilePicture,
 } from "src/user";
-
-export interface IMiniRosterResponse {
-  id: number;
-  stageId: number;
-  participationId: number;
-  group?: IMiniGroupResponseWithLogo;
-  user?: IMiniUserResponseWithProfilePicture;
-  participation?: {
-    id: number;
-    tournament: {
-      categoryId: number;
-    };
-  };
-}
 
 export interface IMiniRosterResponseWithChallongeId
   extends IMiniRosterResponse {
@@ -81,5 +67,7 @@ export interface IMiniRosterResponse {
     tournament: {
       categoryId: number;
     };
+    group: IMiniGroupResponse;
+    user: IMiniGroupResponse;
   };
 }

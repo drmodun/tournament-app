@@ -73,6 +73,10 @@
   width: 100%;
   display: flex;
   gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+  }
 }
 
 .actionButton {

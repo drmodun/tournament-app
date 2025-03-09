@@ -71,6 +71,7 @@ export default function EditTeamForm({ mutation, groupId }: EditTeamFormProps) {
   };
 
   useEffect(() => {
+    console.log(data, "DATAAAA");
     editMethods.register("logo", { required: true });
     imageUrlToFile(data?.logo).then((file) => {
       setFile(file);

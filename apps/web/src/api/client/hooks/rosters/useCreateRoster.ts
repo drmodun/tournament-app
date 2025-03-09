@@ -15,6 +15,7 @@ export const createRoster = async (data: {
   stageId?: number;
   members?: { userId?: number; isSubstitute?: boolean }[];
 }) => {
+  console.log(data, "SEND DATA");
   return clientApi
     .post<
       ICreateRosterRequest,

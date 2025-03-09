@@ -57,15 +57,6 @@ export default function Competition({
 
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(
-      "groupMembershipData",
-      groupMembershipData,
-      participationData?.results,
-      !competition?.isPublic,
-    );
-  }, [groupMembershipData, competition, participationData]);
-
   return (
     <div className={clsx(styles.wrapper)}>
       <Dialog

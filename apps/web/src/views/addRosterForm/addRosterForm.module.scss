@@ -38,3 +38,14 @@
   flex-wrap: wrap;
   gap: $padding;
 }
+
+.selectedRoster {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.substitutesTitle {
+  margin-top: $padding;
+}

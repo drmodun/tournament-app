@@ -207,12 +207,24 @@ export default function ManageTeams({
         </div>
       </div>
       <div className={styles.right}>
-        <div className={styles.lfpTopWrapper}>
+        <div
+          className={clsx(
+            styles.lfpTopWrapper,
+            team?.role !== groupRoleEnum.ADMIN &&
+              team?.role !== groupRoleEnum.OWNER &&
+              styles.verticalPadding,
+          )}
+        >
           <b className={clsx(globals[`${theme}Color`])}>
             looking for players campaigns
           </b>
           <button
-            className={styles.lfpButton}
+            className={clsx(
+              styles.lfpButton,
+              team?.role !== groupRoleEnum.ADMIN &&
+                team?.role !== groupRoleEnum.OWNER &&
+                globals.hidden,
+            )}
             onClick={() => setAddLfpModalActive(true)}
           >
             <AddIcon className={styles[`${theme}Fill`]} />
@@ -241,7 +253,14 @@ export default function ManageTeams({
                     >
                       {campaign.message}
                     </p>
-                    <div className={styles.actionButtons}>
+                    <div
+                      className={clsx(
+                        styles.actionButtons,
+                        team?.role !== groupRoleEnum.ADMIN &&
+                          team?.role !== groupRoleEnum.OWNER &&
+                          globals.hidden,
+                      )}
+                    >
                       <button
                         className={styles.lfpDeleteButton}
                         onClick={(e) => {

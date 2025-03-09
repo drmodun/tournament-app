@@ -11,7 +11,7 @@ import Button from "components/button";
 import Chip from "components/chip";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -101,13 +101,18 @@ export default function ManageLFG() {
                   <div className={styles.bottomWrapper}>
                     {item?.careers[0] && (
                       <div className={styles.careers}>
-                        {item?.careers.map((career) => (
-                          <Chip
-                            label={career.category.name}
-                            variant={textColorTheme}
-                            className={styles.career}
-                          />
-                        ))}
+                        {item?.careers
+                          .filter((item) => {
+                            console.log(item?.category?.id);
+                            return item?.category?.id != undefined;
+                          })
+                          .map((career) => (
+                            <Chip
+                              label={career.category.name}
+                              variant={textColorTheme}
+                              className={styles.career}
+                            />
+                          ))}
                       </div>
                     )}
                     <div className={styles.bottom}>

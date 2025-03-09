@@ -17,21 +17,5 @@
     flex-direction: column;
     gap: $doublePadding;
   }
-}
-
-.dropdown {
-  width: 100%;
-}
-
-.card {
-  padding: $padding;
-  border-radius: $borderRadius;
-}
-
-.playerCard {
-  height: $baseComponentHeight;
-  display: flex;
-  align-items: center;
-  padding: $padding;
-  border-radius: $borderRadius;
+  overflow: auto;
 }

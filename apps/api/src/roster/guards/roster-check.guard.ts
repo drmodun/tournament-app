@@ -116,6 +116,8 @@ export class CanRosterBeUsedGuard implements CanActivate {
 
     const memberIds = members?.map((member) => member.userId);
 
+    console.log('CHECKKKKK GUARDDDD');
+
     const isAnyMemberInAnotherRoster =
       await this.rosterService.isAnyMemberInAnotherRoster(
         memberIds,
@@ -123,14 +125,19 @@ export class CanRosterBeUsedGuard implements CanActivate {
         rosterId && [rosterId],
       );
 
+    console.log('CHECKKKKK GUARDDDD DONEEEEEEEEEE');
+
     if (isAnyMemberInAnotherRoster) {
       throw new ForbiddenException(
         'One or more of the selected players are already in another roster',
       );
     }
+    console.log('CHECKKKKK GUARDDDD DONEEEEEEEEEE 2222222');
 
     const isEachMemberTournamentEligible =
       await this.rosterService.isEachMemberTournamentEligible(memberIds, stage);
+
+    console.log('CHECKKKKK GUARDDDD DONEEEEEEEEEE 333333');
 
     if (!isEachMemberTournamentEligible) {
       throw new ForbiddenException(
@@ -138,6 +145,7 @@ export class CanRosterBeUsedGuard implements CanActivate {
       );
     }
 
+    console.log('CHECKKKKK GUARDDDD DONEEEEEEEEEE 44444');
     return true;
   }
 

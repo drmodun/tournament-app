@@ -61,6 +61,7 @@
     minmax(5 * $baseComponentHeight, 1fr)
   );
   gap: $padding;
+  height: 100%;
 }
 
 .title {

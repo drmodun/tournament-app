@@ -119,7 +119,7 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
             {groupMembers?.members?.length === 0 || !groupMembers ? (
               <p>there are no team members!</p>
             ) : (
-              groupMembers?.members.map((member) => {
+              groupMembers?.members?.map((member) => {
                 return (
                   <UserCard key={member.id} {...member} groupId={teamId} />
                 );

@@ -45,11 +45,20 @@ export class RosterService {
       throw new UnprocessableEntityException('Failed to create roster');
     }
 
-    const challongeId = await this.createChallongeParticipant(roster.rosterId);
+    try {
+      const challongeId = await this.createChallongeParticipant(
+        roster.rosterId,
+      );
 
-    await this.update(roster.rosterId, {
-      challongeId: challongeId,
-    });
+      await this.update(roster.rosterId, {
+        challongeId: challongeId,
+      });
+    } catch (error) {
+      console.error(
+        'Failed to create challonge participant, check api key',
+        error,
+      );
+    }
 
     return { id: roster.rosterId };
   }

@@ -536,6 +536,8 @@ async function createTournaments() {
       isMultipleTeamsPerGroupAllowed: faker.datatype.boolean(),
       isFakePlayersAllowed: faker.datatype.boolean(),
       isRanked: faker.datatype.boolean(),
+      logo: faker.image.url(),
+      locationId: faker.number.int({ min: 1, max: 100 }),
       maxParticipants: faker.helpers.arrayElement([8, 16, 32, 64, 128]),
       tournamentTeamType: faker.helpers.arrayElement(
         Object.values(tournamentTeamTypeEnum),

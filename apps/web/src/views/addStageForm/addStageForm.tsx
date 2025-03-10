@@ -2,7 +2,6 @@
 
 import {
   ICreateStageDto,
-  stageStatusEnum,
   stageTypeEnum,
   tournamentLocationEnum,
 } from "@tournament-app/types";
@@ -55,7 +54,7 @@ export default function AddStageForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
+    placeName?: string
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -148,7 +147,7 @@ export default function AddStageForm({
         </div>
         <div className={styles.dialogOption}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            group logo
+            stage logo
           </p>
           {file ? (
             <ImagePicker
@@ -157,7 +156,7 @@ export default function AddStageForm({
               isReactFormHook={true}
               variant={textColorTheme}
               className={styles.imagePicker}
-              required={true}
+              required={false}
               onChange={setLogo}
             />
           ) : (
@@ -165,7 +164,7 @@ export default function AddStageForm({
               onFile={setFile}
               variant={textColorTheme}
               className={styles.imageDrop}
-              required={true}
+              required={false}
               name="logo"
               isReactFormHook={true}
             />
@@ -189,17 +188,6 @@ export default function AddStageForm({
           {addMethods.formState.errors.description?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            focus
-          </p>
-          <SlideButton
-            options={["participation", "organization", "hybrid"]}
-            isReactFormHook={true}
-            name="focus"
-            variant={textColorTheme}
-          />
         </div>
         <div className={styles.dialogOption}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
@@ -231,7 +219,7 @@ export default function AddStageForm({
                 fetchAutocomplete(e.target).then((autocomplete) => {
                   const tempListener = autocomplete.addListener(
                     "place_changed",
-                    () => handleAutocomplete(autocomplete, e.target.value),
+                    () => handleAutocomplete(autocomplete, e.target.value)
                   );
                   setListener(tempListener);
                 });
@@ -279,33 +267,6 @@ export default function AddStageForm({
           )}
         </div>
         <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            type
-          </p>
-          <SlideButton
-            options={["private", "public"]}
-            isReactFormHook={true}
-            name="type"
-            variant={textColorTheme}
-          />
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            status
-          </p>
-          <SlideButton
-            options={[
-              stageStatusEnum.UPCOMING,
-              stageStatusEnum.ONGOING,
-              stageStatusEnum.FINISHED,
-              stageStatusEnum.CANCELLED,
-            ]}
-            isReactFormHook={true}
-            name="stageStatus"
-            variant={textColorTheme}
-          />
-        </div>
-        <div className={styles.dialogOption}>
           <Dropdown
             options={Object.values(stageTypeEnum).map((type) => ({
               label: type,
@@ -330,7 +291,7 @@ export default function AddStageForm({
         <Button
           variant={"primary"}
           submit={true}
-          label="create competition"
+          label="create stage"
           className={styles.submitButton}
         />
       </form>

@@ -17,14 +17,15 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { extractUniqueGroupsFromRosters } from "utils/mixins/helpers";
 import AddRosterForm from "views/addRosterForm";
 import styles from "./manageRosters.module.scss";
-
+import { useGetManagedForPlayer } from "api/client/hooks/participations/useGetManagedForPlayer";
+import Button from "components/button";
 export default function ManageRosters({
   stage,
 }: {
   stage: IExtendedStageResponseWithTournament;
 }) {
   const { data: rosters, isLoading } = useGetStageRostersManagedByUser(
-    stage.id,
+    stage.id
   );
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -64,7 +65,7 @@ export default function ManageRosters({
           : rosters
               ?.filter(
                 (roster) =>
-                  roster.participation?.group?.id == groups[activeGroup].id,
+                  roster.participation?.group?.id == groups[activeGroup].id
               )
               .map((roster) => <RosterCard roster={roster} stage={stage} />)}
       </div>
@@ -88,7 +89,7 @@ function RosterCard({
       className={clsx(
         globals[`${textColorTheme}BackgroundColor`],
         globals[`${theme}Color`],
-        styles.card,
+        styles.card
       )}
       onClick={() => setDialogOpen(true)}
     >
@@ -105,7 +106,7 @@ function RosterCard({
         <div
           className={clsx(
             styles.playerCard,
-            globals[`${theme}BackgroundColor`],
+            globals[`${theme}BackgroundColor`]
           )}
         >
           <Chip label={player.user.username} variant={textColorTheme} />
@@ -121,6 +122,29 @@ function RosterCard({
           )}
         </div>
       ))}
+    </div>
+  );
+}
+
+export function AddRosterButton({
+  stage,
+}: {
+  stage: IExtendedStageResponseWithTournament;
+}) {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const { data: participations } = useGetManagedForPlayer(stage.tournamentId);
+
+  return (
+    <div className={styles.addRosterButton}>
+      <Button variant={"primary"} label="add roster" />
+      <Dialog active={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <AddRosterForm
+          group={participations?.managedGroups?.[0]}
+          participation={participations?.managedGroups?.[0].participations?.[0]}
+          stage={stage}
+          onClose={() => setDialogOpen(false)}
+        />
+      </Dialog>
     </div>
   );
 }

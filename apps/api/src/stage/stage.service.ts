@@ -33,7 +33,20 @@ export class StageService {
       throw new UnprocessableEntityException('Stage creation failed');
     }
 
-    await this.createChallongeTournament(stage[0].id as number);
+    try {
+      const stageId = await this.createChallongeTournament(
+        stage[0].id as number,
+      );
+
+      await this.update(stage[0].id as number, {
+        challongeTournamentId: stageId.id,
+      });
+    } catch (error) {
+      console.error(
+        'Failed to create challonge tournament, check api key',
+        error,
+      );
+    }
 
     return stage[0];
   }

@@ -2,6 +2,7 @@
 
 import {
   IExtendedStageResponseWithTournament,
+  IMiniGroupResponse,
   IMiniGroupResponseWithLogo,
   IRosterResponse,
 } from "@tournament-app/types";
@@ -29,7 +30,7 @@ export default function ManageRosters({
   );
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const [groups, setGroups] = useState<IMiniGroupResponseWithLogo[]>([]);
+  const [groups, setGroups] = useState<IMiniGroupResponse[]>([]);
   const [activeGroup, setActiveGroup] = useState<number>(-1);
 
   useEffect(() => {

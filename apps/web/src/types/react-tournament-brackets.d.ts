@@ -13,7 +13,7 @@ declare module "@g-loot/react-tournament-brackets" {
   export interface Match {
     id: string;
     name: string;
-    nextMatchId: string | null;
+    nextMatchId: string | undefined;
     tournamentRoundText: string;
     startTime: string;
     state: "SCHEDULED" | "ACTIVE" | "DONE";

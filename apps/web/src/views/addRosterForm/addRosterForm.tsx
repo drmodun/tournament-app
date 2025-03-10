@@ -41,7 +41,7 @@ export default function AddRosterForm({
   const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
   const [selectedSubstitutes, setSelectedSubstitutes] = useState<number[]>([]);
 
-  const { data } = useGetGroupMembers(group?.id ?? group?.groupId);
+  const { data } = useGetGroupMembers(group?.id ?? group?.id);
 
   const createRosterMutation = useCreateRoster();
   const onSubmit = async () => {

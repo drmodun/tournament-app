@@ -41,7 +41,7 @@ export interface BracketData {
  * @returns The transformed data for the bracket visualization
  */
 export const transformBracketData = (bracketData: BracketData): Match[] => {
-  return bracketData.matches.map((match) => ({
+  return bracketData?.matches?.map((match) => ({
     id: match.id,
     name: match.name,
     nextMatchId: match.nextMatchId,
@@ -52,8 +52,8 @@ export const transformBracketData = (bracketData: BracketData): Match[] => {
       id: participant.id.toString(),
       name: participant.name,
       isWinner: participant.isWinner,
-      status: participant.status || null,
-      resultText: participant.resultText || null,
+      status: participant.status || undefined,
+      resultText: participant.resultText || undefined,
     })),
   }));
 };
@@ -105,9 +105,9 @@ export const renderSingleEliminationBracket = (
             <div className="match-participants">
               <div
                 className={`participant ${topWon ? "winner" : ""} ${topHovered ? "hovered" : ""}`}
-                onClick={() => onParticipantClick(topParticipant, topWon)}
-                onMouseEnter={() => onMouseEnter(topParticipant, topWon)}
-                onMouseLeave={() => onMouseLeave(topParticipant, topWon)}
+                onClick={() => onParticipantClick && topParticipant && onParticipantClick(topParticipant, topWon)}
+                onMouseEnter={() => onMouseEnter && topParticipant && onMouseEnter(topParticipant, topWon)}
+                onMouseLeave={() => onMouseLeave && topParticipant && onMouseLeave(topParticipant, topWon)}
               >
                 <div className="participant-name">
                   {topParticipant?.name || "TBD"}
@@ -116,9 +116,9 @@ export const renderSingleEliminationBracket = (
               </div>
               <div
                 className={`participant ${bottomWon ? "winner" : ""} ${bottomHovered ? "hovered" : ""}`}
-                onClick={() => onParticipantClick(bottomParticipant, bottomWon)}
-                onMouseEnter={() => onMouseEnter(bottomParticipant, bottomWon)}
-                onMouseLeave={() => onMouseLeave(bottomParticipant, bottomWon)}
+                onClick={() => onParticipantClick && bottomParticipant && onParticipantClick(bottomParticipant, bottomWon)}
+                onMouseEnter={() => onMouseEnter && bottomParticipant && onMouseEnter(bottomParticipant, bottomWon)}
+                onMouseLeave={() => onMouseLeave && bottomParticipant && onMouseLeave(bottomParticipant, bottomWon)}
               >
                 <div className="participant-name">
                   {bottomParticipant?.name || "TBD"}
@@ -133,8 +133,6 @@ export const renderSingleEliminationBracket = (
       )}
       svgWrapper={({ children, ...props }) => (
         <SVGViewer
-          width={width}
-          height={height}
           className={svgWrapperClassName}
           {...props}
         >

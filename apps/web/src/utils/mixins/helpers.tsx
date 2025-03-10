@@ -1,6 +1,6 @@
 import {
   IExtendedRosterResponse,
-  IMiniGroupResponseWithLogo,
+  IMiniGroupResponse,
 } from "@tournament-app/types";
 
 export const toBase64 = async (file: File) => {
@@ -24,7 +24,7 @@ export const imageUrlToFile = async (image: string | undefined) => {
 export const extractUniqueGroupsFromRosters = (
   rosters: IExtendedRosterResponse[],
 ) => {
-  const groups: IMiniGroupResponseWithLogo[] = [];
+  const groups: IMiniGroupResponse[] = [];
   const ids: number[] = [];
 
   for (let roster of rosters) {

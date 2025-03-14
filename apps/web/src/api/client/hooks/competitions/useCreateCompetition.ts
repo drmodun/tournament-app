@@ -30,11 +30,10 @@ export const useCreateCompetition = () => {
     },
     onError: (error: any) => {
       toast.addToast(
-        "an error occurred while creating the competition..",
+        error.message ?? "an error occured...",
         "error",
       );
       console.error(error);
-      console.log(error.message);
     },
     onMutate: () => {
       toast.addToast("creating competition...", "info");

@@ -139,13 +139,6 @@ export default function ManageStages(stage?: {
           )
         )}
       </div>
-      <Link href={`/manageRosters/${stage?.stage?.id}`}>
-        <Button
-          variant="warning"
-          className={styles.actionButton}
-          label="manage rosters"
-        />
-      </Link>
       <Link href={`/stage/${stage?.stage?.id}/bracket`}>
         <Button
           variant={theme}

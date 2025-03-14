@@ -56,7 +56,6 @@ export default function EditStageForm({
   const editMethods = useForm<IUpdateStageDto>();
   const onEditSubmit: SubmitHandler<IUpdateStageDto> = async (data) => {
     data.locationId = locationId;
-    console.log(data);
     await mutation.mutateAsync({ data, stageId: stage?.id ?? -1 });
 
     if (mutation.isError == false) onClose && onClose();

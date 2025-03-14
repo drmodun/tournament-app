@@ -104,7 +104,6 @@ export default function ManageLFG() {
                       <div className={styles.careers}>
                         {item?.careers
                           .filter((item) => {
-                            console.log(item?.category?.id);
                             return item?.category?.id != undefined;
                           })
                           .map((career) => (

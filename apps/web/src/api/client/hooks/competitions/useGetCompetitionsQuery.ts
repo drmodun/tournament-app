@@ -18,7 +18,6 @@ export const getCompetitionsQuery = async (
   locationId?: number
 ) => {
   if (!locationId) return;
-  console.log("LOCATION ID", locationId);
   return clientApi
     .get<
       TournamentQueryType,

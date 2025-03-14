@@ -41,7 +41,6 @@ export default function EditLFGForm({
     if (!values) return [];
     const arr: number[] = [];
     data?.results.map((elem, i) => {
-      console.log(values[i], elem.id);
       if (values[i]) arr.push(elem.id);
     });
     return arr;
@@ -51,7 +50,6 @@ export default function EditLFGForm({
   const onSubmit = async (_data: IUpdateLFGRequest & { id: number }) => {
     _data.categoryIds = returnIdsFromIndexes();
     _data.id = lfg?.id ?? -1;
-    console.log(_data);
     await editLFGMutation.mutateAsync(_data);
     if (editLFGMutation.isError == false) onClose && onClose();
   };

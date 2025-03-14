@@ -1,69 +1,125 @@
-# Turborepo Docker starter
+# Tournament App
 
-This is an official Docker starter Turborepo.
+A comprehensive tournament management application built with NestJS (API) and Next.js (Web frontend).
 
-## Using this example
+## Project Structure
 
-Run the following command:
+This is a monorepo project with the following structure:
 
-```sh
-npx create-turbo@latest -e with-docker
+- `apps/api`: NestJS backend API
+- `apps/web`: Next.js frontend application
+- `packages`: Shared packages and types
+- `docs`: Documentation (currently dormant, will be used later as a standalone docs site)
+- `admin`: Admin panel (not currently used, will be used later for superadmins only, now they just act as all privileges enabled users)
+
+## Prerequisites
+
+- Node.js (v16+)
+- Yarn package manager
+- PostgreSQL database
+- Environment variables (see below)
+
+## Environment Variables
+
+**IMPORTANT:** This project requires specific environment variables to run properly. Without these environment files, it will be impossible to run the application.
+
+You'll need to create the following files based on the examples provided in the project:
+- `.env.local` in the root directory
+- `.env.local` in the `apps/web` directory - for the gmaps keys
+
+The required variables include database connection strings, JWT secrets, and third-party API keys (Challonge, Firebase, Google, etc.).
+
+The approximate structure of the env files is present in the `env.` files.
+
+## Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+yarn install
 ```
 
-## What's inside?
+**Note:** If you encounter issues with the hawk dependency, use:
 
-This Turborepo includes the following:
-
-### Apps and Packages
-
-- `web`: a [Next.js](https://nextjs.org/) app
-- `api`: an [Express](https://expressjs.com/) server
-- `@repo/ui`: a React component library
-- `@repo/logger`: Isomorphic logger (a small wrapper around console.log)
-- `@repo/eslint-config`: ESLint presets
-- `@repo/typescript-config`: tsconfig.json's used throughout the monorepo
-- `@repo/jest-presets`: Jest configurations
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Docker
-
-This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
-
-```
-# Create a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
-docker network create app_network
-
-# Build prod using new BuildKit engine
-COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml build
-
-# Start prod in detached mode
-docker-compose -f docker-compose.yml up -d
+```bash
+yarn install --ignore-engines
 ```
 
-Open http://localhost:3000.
+## Database Setup
 
-To shutdown all running containers:
+1. Create a PostgreSQL database for the application
+2. Navigate to the API directory:
 
+```bash
+cd apps/api
 ```
-# Stop all running containers
-docker kill $(docker ps -q) && docker rm $(docker ps -a -q)
+
+3. Run migrations to set up the database schema:
+
+```bash
+yarn migrate
 ```
 
-### Remote Caching
+4. Seed the database with initial data:
 
-This example includes optional remote caching. In the Dockerfiles of the apps, uncomment the build arguments for `TURBO_TEAM` and `TURBO_TOKEN`. Then, pass these build arguments to your Docker build.
+```bash
+yarn seed
+```
 
-You can test this behavior using a command like:
+## Building and Running the Application
 
-`docker build -f apps/web/Dockerfile . --build-arg TURBO_TEAM=“your-team-name” --build-arg TURBO_TOKEN=“your-token“ --no-cache`
+1. From the root directory, build all packages and applications:
 
-### Utilities
+```bash
+yarn build
+```
 
-This Turborepo has some additional tools already setup for you:
+2. Start the development servers:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Jest](https://jestjs.io) test runner for all things JavaScript
-- [Prettier](https://prettier.io) for code formatting
+```bash
+yarn dev
+```
+
+This will start both the API server and the web application.
+
+- API: http://localhost:5000 (or the port specified in your environment variables)
+- Web: http://localhost:3000
+
+## Testing
+
+Please note that all the tests require a special .env.test.local file to run properly and for it to be filled with the same structure as the .env.local file (and be set to the test mode).
+
+For unit tests (the api project):
+
+```bash
+yarn test
+```
+
+For end-to-end tests:
+
+```bash
+yarn test:e2e
+```
+
+## Features
+
+- Tournament creation and management
+- Group/team management
+- User registration and authentication
+- LFP and LFG search 
+- Bracket generation and visualization (single elim only as of right now)
+- Location-based services (using Google Maps API)
+- Email notifications
+- Many more tournament features are coming
+
+## Troubleshooting
+
+- If you encounter issues with dependencies, particularly the hawk dependency, use `yarn install --ignore-engines`
+- Make sure your PostgreSQL database is running before attempting to run migrations or start the API
+- Check that all environment variables are properly set according to the examples
+- Docker will be implemented later to containerize the application and ease the setup process (although the environment variables would still be required)
+
+## License
+
+[MIT](LICENSE)

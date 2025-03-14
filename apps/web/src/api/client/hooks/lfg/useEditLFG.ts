@@ -37,7 +37,7 @@ export const useUpdateLFG = () => {
       return true;
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred while updating the LFG..", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
       return false;
     },

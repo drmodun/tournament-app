@@ -48,9 +48,6 @@ export default function ManageUser({
   } = useUserGroups(true);
   const deleteUserMutation = useDeleteUser(data?.id);
 
-  useEffect(() => {
-    console.log("JEBEM PAIGGIAJOICIJU", groupData);
-  }, [groupData]);
   return (
     <div className={styles.wrapper}>
       <Dialog

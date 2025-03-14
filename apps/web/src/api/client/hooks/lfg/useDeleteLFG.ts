@@ -30,7 +30,7 @@ export const useDeleteLFG = () => {
       return true;
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred while deleting the LFG..", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
       return false;
     },

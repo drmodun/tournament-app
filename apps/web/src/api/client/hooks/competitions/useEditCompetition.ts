@@ -41,7 +41,7 @@ export const useEditCompetition = () => {
     },
     onError: (error: any) => {
       toast.addToast(
-        "an error occurred while updating the competition..",
+        error.message ?? "an error occured...",
         "error",
       );
       console.error(error);

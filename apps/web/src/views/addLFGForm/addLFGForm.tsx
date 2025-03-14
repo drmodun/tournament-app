@@ -46,7 +46,6 @@ export default function AddLFGForm({ onClose }: { onClose?: () => void }) {
   const onSubmit = async (_data: ICreateLFGRequest) => {
     _data.categoryIds = returnIdsFromIndexes();
     const a = await createLFGMutation.mutateAsync(_data);
-    console.log(a, "AAAA", createLFGMutation);
     if (createLFGMutation.isError == false) onClose && onClose();
   };
 

@@ -70,14 +70,17 @@ export class StageService {
       StageResponsesEnum.BASE,
     );
 
-    const data =
-      await this.challongeService.createChallongeTournamentFromStage(stage);
+    try {
+      const data =
+        await this.challongeService.createChallongeTournamentFromStage(stage);
+        await this.update(stageId, {
+          challongeTournamentId: data.id,
+        });
+        return data;
+    } catch {
+      console.error('Challonge issue');
+    }
 
-    await this.update(stageId, {
-      challongeTournamentId: data.id,
-    });
-
-    return data;
   }
 
   async updateChallongeTournament(stageId: number) {
@@ -86,10 +89,15 @@ export class StageService {
       StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
     );
 
+    try{
     await this.challongeService.updateTournament(
       stage.challongeTournamentId,
       stageToUpdateTournamentRequest(stage),
     );
+    
+  } catch {
+      console.error('Challonge issue');
+    }
   }
 
   async deleteChallongeTournament(stageId: number) {
@@ -98,7 +106,11 @@ export class StageService {
       StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
     );
 
-    await this.challongeService.deleteTournament(stage.challongeTournamentId);
+    try{ 
+      await this.challongeService.deleteTournament(stage.challongeTournamentId);
+    } catch {
+      console.error("Challonge issue ")
+    }
 
     await this.update(stageId, { challongeTournamentId: null });
   }

@@ -252,7 +252,6 @@ export class RosterController {
     @Param('participationId', ParseIntPipe) participationId: number,
     @Param('stageId', ParseIntPipe) stageId: number,
   ) {
-    console.log('we creatinggg!!!! \n\n');
     return await this.rosterService.create(
       createRosterDto,
       participationId,

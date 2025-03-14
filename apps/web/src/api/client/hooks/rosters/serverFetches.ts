@@ -10,7 +10,6 @@ export const fetchRosters = async (stageId?: number, page?: number) => {
     },
   ).then((res) =>
     res.json().then((res) => {
-      console.log(res);
       return res;
     }),
   );

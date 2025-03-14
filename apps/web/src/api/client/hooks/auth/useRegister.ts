@@ -37,7 +37,7 @@ export const useRegister = () => {
         return;
       }
 
-      toast.addToast("an error occurred...", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
     },
     onMutate: () => {

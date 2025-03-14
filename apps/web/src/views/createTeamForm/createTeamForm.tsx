@@ -40,7 +40,6 @@ export default function CreateTeamForm({
   const onAddSubmit: SubmitHandler<ICreateGroupRequest> = async (data) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
-    console.log(data);
     await mutation.mutateAsync(data);
     if (mutation.isError == false) onClose && onClose();
   };
@@ -53,7 +52,6 @@ export default function CreateTeamForm({
 
     const place = autocomplete.getPlace();
 
-    console.log(!place.geometry?.location, !placeName, !place.place_id);
     if (!place.geometry?.location || !placeName || !place.place_id) return;
 
     const res = await createLocationMutation.mutateAsync({
@@ -62,8 +60,6 @@ export default function CreateTeamForm({
       name: placeName,
       apiId: place.place_id,
     });
-
-    console.log(res);
 
     setLocationId(res.id);
   };

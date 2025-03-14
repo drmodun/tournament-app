@@ -1,7 +1,7 @@
 "use client";
 
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import { groupRoleEnumType } from "@tournament-app/types";
+import { groupRoleEnum, groupRoleEnumType } from "@tournament-app/types";
 import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import { useRemoveUserFromGroup } from "api/client/hooks/groups/useRemoveUserFromGroup";
 import { clsx } from "clsx";
@@ -14,6 +14,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_NAMES_TO_CODES } from "utils/mixins/formatting";
 import styles from "./manageTeamMembers.module.scss";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 
 type UserCardProps = {
   id: number;
@@ -22,6 +23,7 @@ type UserCardProps = {
   country: string;
   role: groupRoleEnumType;
   groupId: number;
+  membership: any;
 };
 
 const UserCard = ({
@@ -31,12 +33,13 @@ const UserCard = ({
   country,
   role,
   groupId,
+  membership
 }: UserCardProps) => {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const removeUserMutation = useRemoveUserFromGroup();
   const [isVisible, setIsVisible] = useState<boolean>(true);
-
+  
   const handleRemove = () => {
     removeUserMutation.mutate({ userId: id, groupId: groupId });
   };
@@ -82,7 +85,10 @@ const UserCard = ({
           </div>
         </div>
       </Link>
-      <button
+      {
+        membership?.role === groupRoleEnum.ADMIN ||
+        membership?.role === groupRoleEnum.OWNER &&
+        <button
         onClick={handleRemove}
         className={clsx(
           styles.userCardRemoveButton,
@@ -96,6 +102,8 @@ const UserCard = ({
           )}
         />
       </button>
+      }
+      
     </div>
   );
 };
@@ -105,6 +113,7 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
   const textColorTheme = textColor(theme);
   const { data: groupMembers, isLoading: groupMembersIsLoading } =
     useGetGroupMembers(teamId);
+  const {data: membershipData} = useCheckIfGroupMember(teamId);
 
   return (
     <div className={clsx(styles.wrapper)}>
@@ -121,7 +130,7 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
             ) : (
               groupMembers?.members?.map((member) => {
                 return (
-                  <UserCard key={member.id} {...member} groupId={teamId} />
+                  <UserCard membership={membershipData} key={member.id} {...member} groupId={teamId} />
                 );
               })
             )}

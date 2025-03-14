@@ -15,7 +15,7 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { formatDateHTMLInput } from "utils/mixins/formatting";
+import { COUNTRY_NAMES_TO_CODES, formatDateHTMLInput } from "utils/mixins/formatting";
 import styles from "./userEditForm.module.scss";
 import { imageUrlToFile } from "utils/mixins/helpers";
 
@@ -168,7 +168,7 @@ export default function userEditForm({
             doesSearch={true}
             searchPlaceholder="search..."
             isReactHookForm={true}
-            defaultValue={`${data?.country} ${getUnicodeFlagIcon(data?.country ?? "ZZ")}`}
+            defaultValue={`${COUNTRY_NAMES_TO_CODES[data?.country ?? ""] ?? data?.country} ${getUnicodeFlagIcon(data?.country ?? "ZZ")}`}
             options={countries.map((country) => {
               return {
                 label: `${country} ${getUnicodeFlagIcon(country)}`,

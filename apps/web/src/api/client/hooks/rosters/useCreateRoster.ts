@@ -15,7 +15,6 @@ export const createRoster = async (data: {
   stageId?: number;
   members?: { userId?: number; isSubstitute?: boolean }[];
 }) => {
-  console.log(data, "SEND DATA");
   return clientApi
     .post<
       ICreateRosterRequest,
@@ -39,7 +38,7 @@ export const useCreateRoster = () => {
       });
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred...", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
       console.log(error.message);
     },

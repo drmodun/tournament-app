@@ -7,6 +7,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99999;
 }
 
 .hidden {
@@ -38,6 +39,7 @@
   padding: $padding;
   padding-right: $horizontalMargin + $padding;
   animation: slide 1s forwards;
+  z-index: 99999;
 
   @media screen and (max-width: $tabletBreakpoint) {
     padding-right: $doublePadding + $padding;

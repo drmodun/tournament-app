@@ -42,7 +42,7 @@ export const useCreatedBlockedUser = () => {
       return true;
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred while blocking the user..", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
       return false;
     },

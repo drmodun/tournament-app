@@ -36,7 +36,7 @@ export const useDeleteCompetition = () => {
     },
     onError: (error: any) => {
       toast.addToast(
-        "an error occurred while deleting the competition..",
+        error.message ?? "an error occured...",
         "error",
       );
       console.error(error);

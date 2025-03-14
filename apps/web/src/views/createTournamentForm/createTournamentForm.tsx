@@ -77,8 +77,6 @@ export default function CreateTournamentForm({
     // @ts-ignore
     if (data.maximumMMR == "") data.maximumMMR = "10000";
 
-    console.log(data);
-
     await createCompetitionMutation.mutateAsync(data);
 
     if (createCompetitionMutation.isError == false) onClose && onClose();
@@ -138,15 +136,11 @@ export default function CreateTournamentForm({
 
   const handleLoadMore = async () => {
     const page = await fetchNextPage();
-    console.log(
-      page.data?.pages[page.data?.pages.length - 1]?.results?.length ?? -1,
-    );
     if (
       isFetchNextPageError ||
       (page.data?.pages[page.data?.pages.length - 1]?.results?.length ?? -1) ==
         0
     ) {
-      console.log("LIMIT");
       setReachedLimit(true);
       return;
     }

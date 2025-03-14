@@ -78,6 +78,10 @@ export class StageDrizzleRepository extends PrimaryRepository<
             tournamentLocationAlias,
             eq(tournament.locationId, tournamentLocationAlias.id),
           );
+      case StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT:
+        return query
+          .leftJoin(tournament, eq(stage.tournamentId, tournament.id))
+          .leftJoin(location, eq(stage.locationId, location.id))
       default:
         return query;
     }
@@ -137,8 +141,6 @@ export class StageDrizzleRepository extends PrimaryRepository<
             : undefined,
         ),
       );
-
-    console.log('this da check', check);
 
     return check.length > 0;
   }

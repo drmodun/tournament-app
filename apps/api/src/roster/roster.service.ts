@@ -33,13 +33,11 @@ export class RosterService {
     participationId: number,
     stageId: number,
   ) {
-    console.log('CREATING ROSTER');
     const roster = await this.repository.createWithPlayers(
       createRosterDto,
       participationId,
       stageId,
     );
-    console.log('MADE ROSTER', roster);
 
     if (!roster?.rosterId) {
       throw new UnprocessableEntityException('Failed to create roster');
@@ -148,7 +146,6 @@ export class RosterService {
     stageId: number,
     excludeRosterIds?: number[],
   ): Promise<boolean> {
-    console.log('CHECKKKKK');
     return await this.stageRepository.isAnyMemberInAnotherRoster(
       memberIds,
       stageId,
@@ -183,29 +180,21 @@ export class RosterService {
     memberIds: number[],
     stage: IExtendedStageResponse,
   ) {
-    console.log('CHECKKKKK ELIGIBILITY 12312312321');
     const tournament: IExtendedTournamentResponse =
       await this.tournamentService.findOne(
         stage.tournamentId,
         TournamentResponsesEnum.EXTENDED,
       );
 
-    console.log('CHECKKKKK ELIGIBILITY 12312312321321321312');
 
     const careers = await this.careerService.getMultipleCareers(
       memberIds,
       tournament.category?.id,
     );
 
-    console.log('CHECKKKKK ELIGIBILITY 12312312331231231231232132131221');
-
     if (memberIds.length !== careers.length) {
       return false;
     }
-
-    console.log(
-      'CHECKKKKK ELIGIBILITY 1231231323213213123213123213123123122321',
-    );
 
     const playersWithInvalidElo = careers.filter(
       (career) =>
@@ -225,7 +214,6 @@ export class RosterService {
     if (fakePlayers.length > 0) {
       return false;
     }
-    console.log('CHECKKKKK ELIGIBILITY end');
   }
 
   async getOnlyPlayers(rosterId: number) {

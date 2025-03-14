@@ -60,7 +60,6 @@ export default function AddStageForm({
 
     const place = autocomplete.getPlace();
 
-    console.log(!place.geometry?.location, !placeName, !place.place_id);
     if (!place.geometry?.location || !placeName || !place.place_id) return;
 
     const res = await createLocationMutation.mutateAsync({
@@ -69,8 +68,6 @@ export default function AddStageForm({
       name: placeName,
       apiId: place.place_id,
     });
-
-    console.log(res);
 
     setLocationId(res.id);
   };

@@ -13,6 +13,7 @@ import {
   IChallongeTournament,
 } from '@tournament-app/types';
 import { StagesWithDates } from '../types';
+import { ChallongeService } from 'src/challonge/challonge.service';
 
 describe('StageService', () => {
   let service: StageService;
@@ -40,6 +41,13 @@ describe('StageService', () => {
       getAllTournamentStagesSortedByStartDate: jest.fn(),
     };
 
+    const mockChallongeService = {
+      createChallongeTournament: jest.fn(),
+      createChallongeTournamentFromStage: jest.fn(),
+      updateTournament: jest.fn(),
+      deleteTournament: jest.fn(),
+    }
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         StageService,
@@ -47,6 +55,10 @@ describe('StageService', () => {
           provide: StageDrizzleRepository,
           useValue: mockRepository,
         },
+        {
+          provide: ChallongeService,
+          useValue: mockChallongeService,
+        }
       ],
     }).compile();
 

@@ -40,6 +40,8 @@ describe('RosterService', () => {
         id: 1,
         categoryId: 1,
       },
+      group: null,
+      user: null
     },
     participationId: 1,
     players: [

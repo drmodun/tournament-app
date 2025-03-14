@@ -28,7 +28,7 @@ export const useJoinGroup = () => {
       return true;
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred while joining the group..", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
       return false;
     },

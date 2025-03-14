@@ -72,7 +72,6 @@ export default function Events() {
         <div className={styles.outerEventsWrapper}>
           {data?.pages?.map((page) =>
             page?.results?.map((event) => {
-              console.log(event);
               return (
                 <CardExpanded
                   variant={theme}

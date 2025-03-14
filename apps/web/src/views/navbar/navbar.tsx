@@ -95,7 +95,6 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
           className={styles.mobileNavButton}
           onClick={() => {
             drawerContext.setDrawerOpen(!drawerContext.drawerOpen);
-            console.log(drawerContext.drawerOpen);
           }}
         >
           <MenuIcon

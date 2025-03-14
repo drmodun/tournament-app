@@ -36,10 +36,6 @@ export default function ManageStages({
     hasNextPage,
   } = useGetTournamentStages(tournamentId);
 
-  useEffect(() => {
-    console.log("stages", data);
-  }, [data]);
-
   return (
     <div
       className={clsx(

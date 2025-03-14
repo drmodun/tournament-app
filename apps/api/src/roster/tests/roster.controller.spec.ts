@@ -23,6 +23,8 @@ describe('RosterController', () => {
     updatedAt: new Date(),
     participation: {
       id: 1,
+      group: null,
+      user: null,
       tournament: {
         id: 1,
         categoryId: 1,

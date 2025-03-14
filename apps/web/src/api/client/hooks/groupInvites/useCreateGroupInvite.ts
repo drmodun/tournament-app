@@ -57,7 +57,7 @@ export const useCreateGroupInvite = () => {
         );
       } else {
         toast.addToast(
-          "an error occurred while creating the group invite..",
+          error.message ?? "an error occured...",
           "error",
         );
       }

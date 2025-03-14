@@ -35,7 +35,7 @@ export const useRequestPasswordReset = () => {
     },
     onError: (error: any) => {
       toast.addToast(
-        "an error occurred while sending the reset password email...",
+       error.message ?? "an error occured...",
         "error",
       );
       console.error(error);

@@ -37,8 +37,6 @@ export default function ManageSettings() {
       curr[index] = !curr[index];
       return curr;
     });
-    console.log(activeCheckboxes[index]);
-    console.log(checkboxes[index].label);
   };
 
   const setLightTheme = () => setTheme("light");

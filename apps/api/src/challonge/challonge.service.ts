@@ -24,14 +24,6 @@ export class ChallongeService {
   private token: string;
 
   constructor(private readonly httpService: HttpService) {
-    if (
-      !process.env.CHALLONGE_CLIENT_ID ||
-      !process.env.CHALLONGE_CLIENT_SECRET
-    ) {
-      throw new Error(
-        'CHALLONGE_CLIENT_ID and CHALLONGE_CLIENT_SECRET must be set',
-      );
-    }
 
     this.getChallongeToken();
 
@@ -45,8 +37,8 @@ export class ChallongeService {
           'https://api.challonge.com/oauth/token',
           {
             grant_type: 'client_credentials',
-            client_id: process.env.CHALLONGE_CLIENT_ID,
-            client_secret: process.env.CHALLONGE_CLIENT_SECRET,
+            client_id: process.env.CHALLONGE_CLIENT_ID || '',
+            client_secret: process.env.CHALLONGE_CLIENT_SECRET || '',
           },
         );
 

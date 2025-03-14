@@ -27,7 +27,7 @@ export class EmailService {
     }
 
     this.mailgunClient = this.createMailgunClient(
-      FormData, 
+      FormData,
       process.env.EMAIL_KEY,
     );
   }

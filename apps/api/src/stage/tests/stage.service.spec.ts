@@ -46,7 +46,7 @@ describe('StageService', () => {
       createChallongeTournamentFromStage: jest.fn(),
       updateTournament: jest.fn(),
       deleteTournament: jest.fn(),
-    }
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -58,7 +58,7 @@ describe('StageService', () => {
         {
           provide: ChallongeService,
           useValue: mockChallongeService,
-        }
+        },
       ],
     }).compile();
 

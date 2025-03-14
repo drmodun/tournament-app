@@ -116,7 +116,6 @@ export class CanRosterBeUsedGuard implements CanActivate {
 
     const memberIds = members?.map((member) => member.userId);
 
-
     const isAnyMemberInAnotherRoster =
       await this.rosterService.isAnyMemberInAnotherRoster(
         memberIds,
@@ -132,7 +131,6 @@ export class CanRosterBeUsedGuard implements CanActivate {
 
     const isEachMemberTournamentEligible =
       await this.rosterService.isEachMemberTournamentEligible(memberIds, stage);
-
 
     if (!isEachMemberTournamentEligible) {
       throw new ForbiddenException(

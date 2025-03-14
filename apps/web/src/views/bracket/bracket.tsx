@@ -51,12 +51,15 @@ export default function BracketView({
         globals[`${textColorTheme}BackgroundColor`],
       )}
     >
-      {bracket?.rounds?.length > 0 ? <Bracket
-        rounds={bracket.rounds}
-        roundClassName={`${theme}Matchup`}
-        bracketClassName={globals[`${theme}Color`]}
-      /> : <p className={`${globals[`${theme}Color`]}`}>No bracket data</p>}
-      
+      {bracket?.rounds?.length > 0 ? (
+        <Bracket
+          rounds={bracket.rounds}
+          roundClassName={`${theme}Matchup`}
+          bracketClassName={globals[`${theme}Color`]}
+        />
+      ) : (
+        <p className={`${globals[`${theme}Color`]}`}>No bracket data</p>
+      )}
     </div>
   );
 }

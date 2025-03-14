@@ -15,7 +15,10 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { COUNTRY_NAMES_TO_CODES, formatDateHTMLInput } from "utils/mixins/formatting";
+import {
+  COUNTRY_NAMES_TO_CODES,
+  formatDateHTMLInput,
+} from "utils/mixins/formatting";
 import styles from "./userEditForm.module.scss";
 import { imageUrlToFile } from "utils/mixins/helpers";
 

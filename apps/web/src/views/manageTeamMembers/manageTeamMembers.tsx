@@ -33,13 +33,13 @@ const UserCard = ({
   country,
   role,
   groupId,
-  membership
+  membership,
 }: UserCardProps) => {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const removeUserMutation = useRemoveUserFromGroup();
   const [isVisible, setIsVisible] = useState<boolean>(true);
-  
+
   const handleRemove = () => {
     removeUserMutation.mutate({ userId: id, groupId: groupId });
   };
@@ -85,25 +85,23 @@ const UserCard = ({
           </div>
         </div>
       </Link>
-      {
-        membership?.role === groupRoleEnum.ADMIN ||
-        membership?.role === groupRoleEnum.OWNER &&
-        <button
-        onClick={handleRemove}
-        className={clsx(
-          styles.userCardRemoveButton,
-          globals.dangerBackgroundColor,
-        )}
-      >
-        <PersonRemoveIcon
-          className={clsx(
-            globals.lightFillChildren,
-            styles.userCardCloseButton,
-          )}
-        />
-      </button>
-      }
-      
+      {membership?.role === groupRoleEnum.ADMIN ||
+        (membership?.role === groupRoleEnum.OWNER && (
+          <button
+            onClick={handleRemove}
+            className={clsx(
+              styles.userCardRemoveButton,
+              globals.dangerBackgroundColor,
+            )}
+          >
+            <PersonRemoveIcon
+              className={clsx(
+                globals.lightFillChildren,
+                styles.userCardCloseButton,
+              )}
+            />
+          </button>
+        ))}
     </div>
   );
 };
@@ -113,7 +111,7 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
   const textColorTheme = textColor(theme);
   const { data: groupMembers, isLoading: groupMembersIsLoading } =
     useGetGroupMembers(teamId);
-  const {data: membershipData} = useCheckIfGroupMember(teamId);
+  const { data: membershipData } = useCheckIfGroupMember(teamId);
 
   return (
     <div className={clsx(styles.wrapper)}>
@@ -130,7 +128,12 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
             ) : (
               groupMembers?.members?.map((member) => {
                 return (
-                  <UserCard membership={membershipData} key={member.id} {...member} groupId={teamId} />
+                  <UserCard
+                    membership={membershipData}
+                    key={member.id}
+                    {...member}
+                    groupId={teamId}
+                  />
                 );
               })
             )}

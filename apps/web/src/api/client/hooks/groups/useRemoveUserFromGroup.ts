@@ -27,10 +27,7 @@ export const useRemoveUserFromGroup = () => {
       });
     },
     onError: (error: any) => {
-      toast.addToast(
-        error.message ?? "an error occured...",
-        "error",
-      );
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
     },
     onMutate: () => {

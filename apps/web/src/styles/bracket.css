@@ -57,7 +57,9 @@
   margin: 8px;
   overflow: hidden;
   border: 1px solid var(--match-border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .match-wrapper:hover {
@@ -201,8 +203,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Error State */
@@ -289,4 +295,4 @@
   .react-brackets {
     gap: 20px;
   }
-} 
+}

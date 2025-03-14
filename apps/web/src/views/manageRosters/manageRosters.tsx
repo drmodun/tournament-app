@@ -26,7 +26,7 @@ export default function ManageRosters({
   stage: IExtendedStageResponseWithTournament;
 }) {
   const { data: rosters, isLoading } = useGetStageRostersManagedByUser(
-    stage.id
+    stage.id,
   );
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -66,7 +66,7 @@ export default function ManageRosters({
           : rosters
               ?.filter(
                 (roster) =>
-                  roster.participation?.group?.id == groups[activeGroup].id
+                  roster.participation?.group?.id == groups[activeGroup].id,
               )
               .map((roster) => <RosterCard roster={roster} stage={stage} />)}
       </div>
@@ -90,7 +90,7 @@ function RosterCard({
       className={clsx(
         globals[`${textColorTheme}BackgroundColor`],
         globals[`${theme}Color`],
-        styles.card
+        styles.card,
       )}
       onClick={() => setDialogOpen(true)}
     >
@@ -107,7 +107,7 @@ function RosterCard({
         <div
           className={clsx(
             styles.playerCard,
-            globals[`${theme}BackgroundColor`]
+            globals[`${theme}BackgroundColor`],
           )}
         >
           <Chip label={player.user.username} variant={textColorTheme} />

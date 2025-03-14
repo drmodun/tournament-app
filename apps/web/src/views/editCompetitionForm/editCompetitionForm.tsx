@@ -83,7 +83,7 @@ export default function EditCompetitionForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string
+    placeName?: string,
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -267,7 +267,7 @@ export default function EditCompetitionForm({
                   "place_changed",
                   () => {
                     return handleAutocomplete(autocomplete, e.target.value);
-                  }
+                  },
                 );
                 setListener(tempListener);
               });

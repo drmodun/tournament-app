@@ -73,8 +73,11 @@ export default function LoginForm({
                 submit={true}
                 className={styles.submitButton}
               />
-  
-              <Link href={`/requestPasswordReset`} className={styles.submitButton}>
+
+              <Link
+                href={`/requestPasswordReset`}
+                className={styles.submitButton}
+              >
                 <Button
                   label="reset password"
                   variant="warning"

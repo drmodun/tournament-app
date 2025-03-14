@@ -49,7 +49,8 @@ yarn install --ignore-engines
 ## Database Setup
 
 1. Create a PostgreSQL database for the application
-2. Navigate to the API directory:
+2. Make sure you have the postgis extension installed, you can do this by running `CREATE EXTENSION postgis;` in the database or if you do not have the package, you can install it by running `apt install postgresql-15-postgis-3` (for ubuntu, assuming version 15, adjust accordingly to the version and the OS)
+3. Navigate to the API directory:
 
 ```bash
 cd apps/api

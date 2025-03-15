@@ -24,7 +24,6 @@ export class ChallongeService {
   private token: string;
 
   constructor(private readonly httpService: HttpService) {
-
     this.getChallongeToken();
 
     this.logger.log('ChallongeService constructor');

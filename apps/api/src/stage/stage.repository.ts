@@ -81,7 +81,7 @@ export class StageDrizzleRepository extends PrimaryRepository<
       case StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT:
         return query
           .leftJoin(tournament, eq(stage.tournamentId, tournament.id))
-          .leftJoin(location, eq(stage.locationId, location.id))
+          .leftJoin(location, eq(stage.locationId, location.id));
       default:
         return query;
     }

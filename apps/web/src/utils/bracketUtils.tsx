@@ -70,7 +70,7 @@ export const renderSingleEliminationBracket = (
     width?: number;
     height?: number;
     svgWrapperClassName?: string;
-  } = {}
+  } = {},
 ) => {
   const {
     width = 1000,
@@ -105,9 +105,21 @@ export const renderSingleEliminationBracket = (
             <div className="match-participants">
               <div
                 className={`participant ${topWon ? "winner" : ""} ${topHovered ? "hovered" : ""}`}
-                onClick={() => onParticipantClick && topParticipant && onParticipantClick(topParticipant, topWon)}
-                onMouseEnter={() => onMouseEnter && topParticipant && onMouseEnter(topParticipant, topWon)}
-                onMouseLeave={() => onMouseLeave && topParticipant && onMouseLeave(topParticipant, topWon)}
+                onClick={() =>
+                  onParticipantClick &&
+                  topParticipant &&
+                  onParticipantClick(topParticipant, topWon)
+                }
+                onMouseEnter={() =>
+                  onMouseEnter &&
+                  topParticipant &&
+                  onMouseEnter(topParticipant, topWon)
+                }
+                onMouseLeave={() =>
+                  onMouseLeave &&
+                  topParticipant &&
+                  onMouseLeave(topParticipant, topWon)
+                }
               >
                 <div className="participant-name">
                   {topParticipant?.name || "TBD"}
@@ -116,9 +128,21 @@ export const renderSingleEliminationBracket = (
               </div>
               <div
                 className={`participant ${bottomWon ? "winner" : ""} ${bottomHovered ? "hovered" : ""}`}
-                onClick={() => onParticipantClick && bottomParticipant && onParticipantClick(bottomParticipant, bottomWon)}
-                onMouseEnter={() => onMouseEnter && bottomParticipant && onMouseEnter(bottomParticipant, bottomWon)}
-                onMouseLeave={() => onMouseLeave && bottomParticipant && onMouseLeave(bottomParticipant, bottomWon)}
+                onClick={() =>
+                  onParticipantClick &&
+                  bottomParticipant &&
+                  onParticipantClick(bottomParticipant, bottomWon)
+                }
+                onMouseEnter={() =>
+                  onMouseEnter &&
+                  bottomParticipant &&
+                  onMouseEnter(bottomParticipant, bottomWon)
+                }
+                onMouseLeave={() =>
+                  onMouseLeave &&
+                  bottomParticipant &&
+                  onMouseLeave(bottomParticipant, bottomWon)
+                }
               >
                 <div className="participant-name">
                   {bottomParticipant?.name || "TBD"}
@@ -132,10 +156,7 @@ export const renderSingleEliminationBracket = (
         </div>
       )}
       svgWrapper={({ children, ...props }) => (
-        <SVGViewer
-          className={svgWrapperClassName}
-          {...props}
-        >
+        <SVGViewer className={svgWrapperClassName} {...props}>
           {children}
         </SVGViewer>
       )}
@@ -149,7 +170,7 @@ export const renderSingleEliminationBracket = (
  * @returns The bracket data
  */
 export const fetchBracketData = async (
-  stageId: number
+  stageId: number,
 ): Promise<BracketData> => {
   const response = await fetch(`/api/matches/stage/${stageId}/bracket`);
   if (!response.ok) {

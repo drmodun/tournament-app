@@ -24,7 +24,12 @@ export default function RequestPasswordReset() {
       <h3 className={globals[`${textColorTheme}Color`]}>
         send reset password request
       </h3>
-      <Input onChange={(e)=>setEmail(e.target.value)} label={"email"} placeholder="enter email..." variant={textColorTheme}/> 
+      <Input
+        onChange={(e) => setEmail(e.target.value)}
+        label={"email"}
+        placeholder="enter email..."
+        variant={textColorTheme}
+      />
       <Button
         label="send"
         variant="warning"

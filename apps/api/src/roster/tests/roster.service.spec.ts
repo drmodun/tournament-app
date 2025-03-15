@@ -41,7 +41,7 @@ describe('RosterService', () => {
         categoryId: 1,
       },
       group: null,
-      user: null
+      user: null,
     },
     participationId: 1,
     players: [

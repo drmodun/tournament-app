@@ -186,7 +186,6 @@ export class RosterService {
         TournamentResponsesEnum.EXTENDED,
       );
 
-
     const careers = await this.careerService.getMultipleCareers(
       memberIds,
       tournament.category?.id,

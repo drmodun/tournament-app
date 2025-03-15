@@ -605,9 +605,9 @@ export class LFGDrizzleRepository extends PrimaryRepository<
         playerMap.get(row.user.id).careers.push({
           ...row.careers,
           category: {
-            id: row.category.id,
-            name: row.category.name,
-            logo: row.category.logo,
+            id: row.category?.id,
+            name: row.category?.name,
+            logo: row.category?.logo,
           },
         });
       }

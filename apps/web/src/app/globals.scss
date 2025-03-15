@@ -16,6 +16,14 @@ ul {
   padding-left: $doublePadding;
 }
 
+html,
+* {
+  scrollbar-width: none !important;
+}
+::-webkit-scrollbar {
+  width: 0px !important;
+}
+
 // google maps styles
 .pac-container {
   border-radius: $borderRadius;
@@ -57,10 +65,44 @@ ul {
   }
 }
 
-html,
-* {
-  scrollbar-width: none !important;
+// react-brackets styles
+.dWYBbN {
+  border-radius: $borderRadius !important;
+  padding: $padding !important;
 }
-::-webkit-scrollbar {
-  width: 0px !important;
+
+.lightMatchup {
+  .dWYBbN {
+    background-color: $light !important;
+    color: $dark;
+  }
+  .dWYBbN:hover {
+    background-color: $lightMuted !important;
+  }
+  .kuuoXx,
+  .fAcBiM {
+    color: $light;
+  }
+}
+
+.darkMatchup {
+  .dWYBbN {
+    background-color: $dark !important;
+    color: $light;
+  }
+  .dWYBbN:hover {
+    background-color: $darkMuted !important;
+  }
+  .kuuoXx,
+  .fAcBiM {
+    color: $dark;
+  }
+}
+
+.jknkFS::after {
+  display: none;
+}
+
+.jknkFS::before {
+  display: none;
 }

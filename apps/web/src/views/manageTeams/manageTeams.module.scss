@@ -50,6 +50,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-decoration: none;
 }
 
 .left {
@@ -262,4 +263,8 @@
 .actionButtons {
   display: flex;
   gap: $halfPadding;
+}
+
+.verticalPadding {
+  margin-bottom: $padding;
 }

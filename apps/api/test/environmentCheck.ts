@@ -1,3 +1,9 @@
+import {
+  IChallongeParticipant,
+  IChallongeTournament,
+} from '@tournament-app/types';
+
+// Ensure we're in test mode
 beforeAll(async () => {
   expect(process.env.MODE).toBe('test');
 });
@@ -37,6 +43,17 @@ jest.mock('src/infrastructure/email/email.service', () => {
           create: jest.fn().mockResolvedValue({ status: 200 }),
         },
       }),
+    })),
+    ChallongeService: jest.fn().mockImplementation(() => ({
+      createTournamentFunction: jest.fn().mockResolvedValue({
+        id: '1',
+      } as IChallongeTournament),
+      deleteParticipantFunction: jest.fn().mockResolvedValue({
+        status: 200,
+      }),
+      createParticipantFunction: jest.fn().mockResolvedValue({
+        id: '1',
+      } as IChallongeParticipant),
     })),
   };
 });

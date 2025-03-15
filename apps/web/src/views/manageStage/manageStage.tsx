@@ -23,6 +23,7 @@ import { formatDateTime } from "utils/mixins/formatting";
 import EditStageForm from "views/editStageForm";
 import ViewRoster from "views/viewRoster";
 import styles from "./manageStage.module.scss";
+import Link from "next/link";
 
 export type GroupParticipationType = {
   id: number;
@@ -69,7 +70,11 @@ export default function ManageStages(stage?: {
         onClose={() => setEditDialogOpen(false)}
         variant={theme}
       >
-        <EditStageForm mutation={editMutation} stage={stage?.stage} />
+        <EditStageForm
+          mutation={editMutation}
+          stage={stage?.stage}
+          onClose={() => setEditDialogOpen(false)}
+        />
       </Dialog>
       <div className={styles.header}>
         <h3 className={globals[`${theme}Color`]}>
@@ -134,19 +139,13 @@ export default function ManageStages(stage?: {
           )
         )}
       </div>
-      {(participationData?.length ?? -1) > 0 && (
-        <div>
-          <h3>manage rosters</h3>
-          {participationData?.map((group: GroupParticipationType) => {
-            return (
-              <div className={styles.stageGroupRosterCard}>
-                <Chip label={group.group.name} variant="secondary" />
-                <ViewRoster group={group} stage={stage?.stage} />
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <Link href={`/stage/${stage?.stage?.id}/bracket`}>
+        <Button
+          variant={theme}
+          className={styles.actionButton}
+          label="view bracket"
+        />
+      </Link>
     </div>
   );
 }

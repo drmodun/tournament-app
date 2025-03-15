@@ -28,7 +28,6 @@ export default function RegisterForm() {
   const methods = useForm<ICreateUserRequest>();
   const onSubmit: SubmitHandler<ICreateUserRequest> = async (data) => {
     data.country = data.country.split(" ")[0];
-    console.log(data.profilePicture);
     await mutateAsync(data);
   };
 
@@ -335,7 +334,7 @@ export default function RegisterForm() {
                       name="profilePicture"
                       isReactFormHook={true}
                       className={styles.imagePicker}
-                      required={true}
+                      required={false}
                     />
                   ) : (
                     <ImageDrop
@@ -346,7 +345,7 @@ export default function RegisterForm() {
                           : textColorTheme
                       }
                       className={styles.imageDrop}
-                      required={true}
+                      required={false}
                       name="profilePicture"
                       isReactFormHook={true}
                     />

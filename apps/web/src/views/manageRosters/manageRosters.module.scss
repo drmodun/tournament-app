@@ -19,103 +19,19 @@
   }
 }
 
-.addButton {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.header {
-  display: flex;
-  gap: $padding;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: $padding;
+.dropdown {
+  width: 100%;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  gap: $padding;
   padding: $padding;
   border-radius: $borderRadius;
-  cursor: pointer;
-  width: 100%;
 }
 
-.bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.bottomWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: $halfPadding;
-}
-
-.cardWrapper {
-  display: flex;
-}
-
-.actionButtons {
-  display: flex;
-  height: 100% !important;
-  margin-left: $padding;
-}
-
-.actionButton {
-  padding: $halfPadding;
-  height: calc(1rem + $padding) !important;
-}
-
-.actionButton + .actionButton {
-  margin-left: $halfPadding;
-}
-
-.cards {
-  display: grid;
-  width: 100%;
-  grid-template-columns: 1fr 1fr;
-  gap: $halfPadding;
-
-  @media screen and (max-width: $desktopBreakpoint) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.careers {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: $halfPadding;
-}
-.career {
-  flex-grow: 0;
-}
-.profilePicture {
+.playerCard {
   height: $baseComponentHeight;
-  width: $baseComponentHeight;
-  object-fit: cover;
-  border-radius: $borderRadius;
-}
-
-.cardTop {
   display: flex;
   align-items: center;
-  gap: $halfPadding;
-}
-
-.rosterName {
-  margin-bottom: $halfPadding;
-}
-
-.cardWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: $halfPadding;
+  padding: $padding;
+  border-radius: $borderRadius;
 }

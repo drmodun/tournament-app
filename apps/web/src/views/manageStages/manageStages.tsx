@@ -36,10 +36,6 @@ export default function ManageStages({
     hasNextPage,
   } = useGetTournamentStages(tournamentId);
 
-  useEffect(() => {
-    console.log("stages", data);
-  }, [data]);
-
   return (
     <div
       className={clsx(
@@ -53,7 +49,10 @@ export default function ManageStages({
         active={dialogOpen}
         onClose={() => setDialogOpen(false)}
       >
-        <AddStageForm tournamentId={tournamentId} />
+        <AddStageForm
+          tournamentId={tournamentId}
+          onClose={() => setDialogOpen(false)}
+        />
       </Dialog>
       <div className={styles.header}>
         <h3 className={globals[`${theme}Color`]}>manage your stages</h3>

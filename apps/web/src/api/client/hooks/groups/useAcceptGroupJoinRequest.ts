@@ -30,7 +30,7 @@ export const useAcceptGroupJoinRequest = () => {
       });
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred..", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
     },
     onMutate: () => {

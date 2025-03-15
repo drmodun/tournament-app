@@ -39,12 +39,17 @@ export interface IExtendedStageResponseWithTournament
   tournament: ITournamentResponse;
 }
 
+export interface IStageResponseWithChallongeTournament extends IStageResponse {
+  challongeTournamentId: string;
+}
+
 export type BaseStageResponseType =
   | IMiniStageResponse
   | IStageResponse
   | IExtendedStageResponse
   | IStageResponseWithTournament
-  | IExtendedStageResponseWithTournament;
+  | IExtendedStageResponseWithTournament
+  | IStageResponseWithChallongeTournament;
 
 export enum StageResponsesEnum {
   MINI = "mini",
@@ -52,6 +57,7 @@ export enum StageResponsesEnum {
   EXTENDED = "extended",
   WITH_TOURNAMENT = "withTournament",
   WITH_EXTENDED_TOURNAMENT = "withExtendedTournament",
+  WITH_CHALLONGE_TOURNAMENT = "withChallongeTournament",
 }
 
 export enum StageSortingEnum {

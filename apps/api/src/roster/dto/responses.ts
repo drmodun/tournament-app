@@ -13,7 +13,6 @@ import { MiniUserResponseWithCountry } from 'src/users/dto/responses.dto';
 import { MiniGroupResponseWithLogo } from 'src/group/dto/responses.dto';
 import { MiniUserResponseWithProfilePicture } from 'src/users/dto/responses.dto';
 import { CareerCategoryResponse } from 'src/lfg/dto/responses';
-
 export class MiniRosterDto implements IMiniRosterResponse {
   @ApiResponseProperty()
   id: number;
@@ -31,6 +30,8 @@ export class MiniRosterDto implements IMiniRosterResponse {
   @ApiResponseProperty()
   @Type(() => MiniUserResponseWithProfilePicture)
   user: IMiniUserResponseWithProfilePicture;
+
+  // TODO: maybe add the participation to swagger
 }
 
 export class PlayerDto implements IRosterPlayer {

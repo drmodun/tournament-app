@@ -10,11 +10,14 @@ import {
   IExtendedStageResponse,
   IExtendedTournamentResponse,
   TournamentResponsesEnum,
+  IMiniRosterResponse,
+  IMiniRosterResponseWithChallongeId,
 } from '@tournament-app/types';
 import { CreateRosterDto, QueryRosterDto } from './dto/requests';
 import { StageDrizzleRepository } from 'src/stage/stage.repository';
 import { TournamentService } from 'src/tournament/tournament.service';
 import { CareerService } from '../career/career.service';
+import { ChallongeService } from 'src/challonge/challonge.service';
 @Injectable()
 export class RosterService {
   constructor(
@@ -22,6 +25,7 @@ export class RosterService {
     private readonly stageRepository: StageDrizzleRepository,
     private readonly tournamentService: TournamentService,
     private readonly careerService: CareerService,
+    private readonly challongeService: ChallongeService,
   ) {}
 
   async create(
@@ -39,7 +43,34 @@ export class RosterService {
       throw new UnprocessableEntityException('Failed to create roster');
     }
 
+    try {
+      const challongeId = await this.createChallongeParticipant(
+        roster.rosterId,
+      );
+
+      await this.update(roster.rosterId, {
+        challongeId: challongeId,
+      });
+    } catch (error) {
+      console.error(
+        'Failed to create challonge participant, check api key',
+        error,
+      );
+    }
+
     return { id: roster.rosterId };
+  }
+
+  async createChallongeParticipant(rosterId: number) {
+    const roster: IMiniRosterResponse = await this.findOne(
+      rosterId,
+      RosterResponsesEnum.MINI,
+    );
+
+    const response =
+      await this.challongeService.createChallongeParticipantFromRoster(roster);
+
+    return response;
   }
 
   async findAll<TResponseType extends BaseRosterResponse>(
@@ -130,6 +161,19 @@ export class RosterService {
     }
 
     return action[0];
+  }
+
+  async removeFromChallonge(id: number) {
+    const roster: IMiniRosterResponseWithChallongeId = await this.findOne(
+      id,
+      RosterResponsesEnum.MINI_WITH_CHALLONGE_ID,
+    );
+
+    if (!roster) {
+      throw new NotFoundException(`Roster with ID ${id} not found`);
+    }
+
+    await this.challongeService.deleteParticipant(roster.challongeId);
   }
 
   async isEachMemberTournamentEligible(

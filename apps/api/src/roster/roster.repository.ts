@@ -25,7 +25,7 @@ import {
   PgColumn,
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
-import { db } from 'src/db/db';
+import { db } from '../db/db';
 import { QueryRosterDto } from './dto/requests';
 
 @Injectable()
@@ -110,6 +110,8 @@ export class RosterDrizzleRepository extends PrimaryRepository<
 
   async getManagedRostersForPlayer(stageId: number, playerId: number) {
     const ids = await this.getManagedRostersForPlayerIds(stageId, playerId);
+
+    if (ids.length == 0) return [];
 
     return this.getWithPlayers({
       ids: ids.map((id) => id.id),
@@ -279,7 +281,6 @@ export class RosterDrizzleRepository extends PrimaryRepository<
 
       return { rosterId: rosterId?.[0]?.id };
     });
-
     return transaction;
   }
 
@@ -394,6 +395,11 @@ export class RosterDrizzleRepository extends PrimaryRepository<
             country: user.country,
           },
           createdAt: roster.createdAt,
+        };
+      case RosterResponsesEnum.MINI_WITH_CHALLONGE_ID:
+        return {
+          ...this.getMappingObject(RosterResponsesEnum.MINI),
+          challongeId: roster.challongeParticipantId,
         };
       case RosterResponsesEnum.EXTENDED:
         return {

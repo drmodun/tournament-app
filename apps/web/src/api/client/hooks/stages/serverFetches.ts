@@ -10,7 +10,6 @@ export const fetchStage = async (stageId: number | undefined) => {
     },
   ).then((res) =>
     res.json().then((res) => {
-      console.log(res);
       return res;
     }),
   );

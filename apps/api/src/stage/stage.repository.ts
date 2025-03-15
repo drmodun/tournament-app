@@ -78,6 +78,10 @@ export class StageDrizzleRepository extends PrimaryRepository<
             tournamentLocationAlias,
             eq(tournament.locationId, tournamentLocationAlias.id),
           );
+      case StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT:
+        return query
+          .leftJoin(tournament, eq(stage.tournamentId, tournament.id))
+          .leftJoin(location, eq(stage.locationId, location.id));
       default:
         return query;
     }
@@ -120,6 +124,8 @@ export class StageDrizzleRepository extends PrimaryRepository<
     excludeRosterIds?: number[],
   ): Promise<boolean> {
     const isGivenExcludeRosterIds = excludeRosterIds?.length > 0;
+
+    console.log(memberIds, stageId, excludeRosterIds, isGivenExcludeRosterIds);
 
     const check = await db
       .select()
@@ -206,6 +212,11 @@ export class StageDrizzleRepository extends PrimaryRepository<
               apiId: location.apiId,
             },
           },
+        };
+      case StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT:
+        return {
+          ...this.getMappingObject(StageResponsesEnum.BASE),
+          challongeTournamentId: stage.challongeTournamentId,
         };
       case StageResponsesEnum.EXTENDED:
         return {

@@ -34,10 +34,7 @@ export const useRequestPasswordReset = () => {
       setTimeout(() => navigate.push("/login"), 1000);
     },
     onError: (error: any) => {
-      toast.addToast(
-        "an error occurred while sending the reset password email...",
-        "error",
-      );
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
     },
     onMutate: () => {

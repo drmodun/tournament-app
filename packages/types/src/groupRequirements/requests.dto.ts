@@ -17,6 +17,3 @@ export interface IUpdateGroupRequirementsRequest {
   isSameCountry?: boolean;
   eloRequirements?: IEloRequirement[];
 }
-
-
-

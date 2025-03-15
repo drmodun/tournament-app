@@ -40,10 +40,7 @@ export const useDeclineGroupInvite = () => {
       if (error.response?.status === 409) {
         toast.addToast("you have already rejected this group", "error");
       } else {
-        toast.addToast(
-          "an error occurred while rejecting the group invite..",
-          "error",
-        );
+        toast.addToast(error.message ?? "an error occured...", "error");
       }
       console.error(error);
       return false;

@@ -1,16 +1,13 @@
 import { ICareerCategoryResponse } from "src/career";
-import { IMiniGroupResponseWithLogo } from "src/group";
+import { IMiniGroupResponse, IMiniGroupResponseWithLogo } from "src/group";
 import {
   IMiniUserResponseWithCountry,
   IMiniUserResponseWithProfilePicture,
 } from "src/user";
 
-export interface IMiniRosterResponse {
-  id: number;
-  stageId: number;
-  participationId: number;
-  group?: IMiniGroupResponseWithLogo;
-  user?: IMiniUserResponseWithProfilePicture;
+export interface IMiniRosterResponseWithChallongeId
+  extends IMiniRosterResponse {
+  challongeId: string;
 }
 
 export interface IRosterPlayer {
@@ -36,12 +33,14 @@ export interface IExtendedRosterResponse extends IRosterResponse {
 export type BaseRosterResponse =
   | IMiniRosterResponse
   | IRosterResponse
-  | IExtendedRosterResponse;
+  | IExtendedRosterResponse
+  | IMiniRosterResponseWithChallongeId;
 
 export enum RosterResponsesEnum {
   MINI = "mini",
   BASE = "base",
   EXTENDED = "extended",
+  MINI_WITH_CHALLONGE_ID = "miniWithChallongeId",
 }
 
 export enum RosterSortingEnum {
@@ -68,5 +67,7 @@ export interface IMiniRosterResponse {
     tournament: {
       categoryId: number;
     };
+    group: IMiniGroupResponse;
+    user: IMiniGroupResponse;
   };
 }

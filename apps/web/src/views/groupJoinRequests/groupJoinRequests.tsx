@@ -52,15 +52,15 @@ export default function GroupMembersDialog({
   const forward = async () => {
     const nextPage = await fetchNextPage();
 
+    setPage((curr) => curr + 1);
+
     if (
       isFetchNextPageError ||
-      (nextPage.data?.pages[page + 1]?.results?.length ?? -1) == 0
+      (nextPage.data?.pages[page + 1]?.results?.length ?? -1) < 5
     ) {
-      setFetchLimit(page);
+      setFetchLimit(page + 1);
       return;
     }
-
-    setPage((curr) => curr + 1);
   };
 
   const handleRemove = (id: number) => {

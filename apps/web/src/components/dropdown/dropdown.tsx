@@ -132,6 +132,10 @@ export default function Dropdown({
     }
   }, []);
 
+  useEffect(() => {
+    setOptionsActive(new Array(options.length).fill(true));
+  }, [options]);
+
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const search: string = event.target.value.toLowerCase();
     for (let option of options) {

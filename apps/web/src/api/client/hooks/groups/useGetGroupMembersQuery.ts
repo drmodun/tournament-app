@@ -29,7 +29,7 @@ type GroupMembersType = {
 
 export const getGroupMembersQuery = async (
   groupId: number | undefined,
-  page: number | undefined
+  page: number | undefined,
 ) =>
   clientApi
     .get<never, AxiosResponse<IBaseQueryResponse<GroupMembersType>>>(
@@ -41,7 +41,7 @@ export const getGroupMembersQuery = async (
           page: page ?? 1,
           pageSize: 15,
         },
-      }
+      },
     )
     .then((res) => res.data);
 

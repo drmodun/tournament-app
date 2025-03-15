@@ -45,7 +45,10 @@ export default function ManageCompetitions({
         onClose={() => setIsAddDialogOpen(false)}
         className={styles.dialog}
       >
-        <CreateTournamentForm userId={user?.id} />
+        <CreateTournamentForm
+          userId={user?.id}
+          onClose={() => setIsAddDialogOpen(false)}
+        />
       </Dialog>
       <div className={styles.competitionsTitle}>
         <b className={clsx(globals[`${theme}Color`])}>your competitions</b>

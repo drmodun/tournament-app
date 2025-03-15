@@ -11,8 +11,6 @@ export default async function Stages({
   const id = (await params).id;
   const res = await fetchCompetition(id);
 
-  console.log(res);
-
   return (
     <div className={styles.wrapper}>
       <Navbar className={styles.navbar} />

@@ -15,7 +15,13 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./editLFGForm.module.scss";
 
-export default function EditLFGForm({ lfg }: { lfg?: ILFGResponse }) {
+export default function EditLFGForm({
+  lfg,
+  onClose,
+}: {
+  lfg?: ILFGResponse;
+  onClose?: () => void;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
@@ -35,18 +41,17 @@ export default function EditLFGForm({ lfg }: { lfg?: ILFGResponse }) {
     if (!values) return [];
     const arr: number[] = [];
     data?.results.map((elem, i) => {
-      console.log(values[i], elem.id);
       if (values[i]) arr.push(elem.id);
     });
     return arr;
   };
 
   const methods = useForm<IUpdateLFGRequest & { id: number }>();
-  const onSubmit = (_data: IUpdateLFGRequest & { id: number }) => {
+  const onSubmit = async (_data: IUpdateLFGRequest & { id: number }) => {
     _data.categoryIds = returnIdsFromIndexes();
     _data.id = lfg?.id ?? -1;
-    console.log(_data);
-    editLFGMutation.mutate(_data);
+    await editLFGMutation.mutateAsync(_data);
+    if (editLFGMutation.isError == false) onClose && onClose();
   };
 
   return (

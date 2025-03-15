@@ -36,7 +36,7 @@ export const useDeleteUser = (id: number | undefined) => {
       router.push("/");
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred while deleting the user", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
     },
     onMutate: () => {

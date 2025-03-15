@@ -2,7 +2,6 @@
 
 import {
   ICreateStageDto,
-  stageStatusEnum,
   stageTypeEnum,
   tournamentLocationEnum,
 } from "@tournament-app/types";
@@ -26,8 +25,10 @@ import styles from "./addStageForm.module.scss";
 
 export default function AddStageForm({
   tournamentId,
+  onClose,
 }: {
   tournamentId?: number;
+  onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -39,15 +40,16 @@ export default function AddStageForm({
   const mutation = useCreateStage();
 
   const addMethods = useForm<ICreateStageDto>();
-  const onAddSubmit: SubmitHandler<ICreateStageDto> = (data) => {
+  const onAddSubmit: SubmitHandler<ICreateStageDto> = async (data) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
     data.locationId = locationId;
     data.tournamentId = tournamentId ?? -1;
     data.minPlayersPerTeam = parseInt(String(data?.minPlayersPerTeam) || "0");
     data.maxPlayersPerTeam = parseInt(String(data?.maxPlayersPerTeam) || "0");
-    console.log(data);
-    mutation.mutate(data);
+
+    await mutation.mutateAsync(data);
+    if (mutation.isError == false) onClose && onClose();
   };
 
   const handleAutocomplete = async (
@@ -58,7 +60,6 @@ export default function AddStageForm({
 
     const place = autocomplete.getPlace();
 
-    console.log(!place.geometry?.location, !placeName, !place.place_id);
     if (!place.geometry?.location || !placeName || !place.place_id) return;
 
     const res = await createLocationMutation.mutateAsync({
@@ -67,8 +68,6 @@ export default function AddStageForm({
       name: placeName,
       apiId: place.place_id,
     });
-
-    console.log(res);
 
     setLocationId(res.id);
   };
@@ -145,7 +144,7 @@ export default function AddStageForm({
         </div>
         <div className={styles.dialogOption}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            group logo
+            stage logo
           </p>
           {file ? (
             <ImagePicker
@@ -154,7 +153,7 @@ export default function AddStageForm({
               isReactFormHook={true}
               variant={textColorTheme}
               className={styles.imagePicker}
-              required={true}
+              required={false}
               onChange={setLogo}
             />
           ) : (
@@ -162,7 +161,7 @@ export default function AddStageForm({
               onFile={setFile}
               variant={textColorTheme}
               className={styles.imageDrop}
-              required={true}
+              required={false}
               name="logo"
               isReactFormHook={true}
             />
@@ -186,17 +185,6 @@ export default function AddStageForm({
           {addMethods.formState.errors.description?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            focus
-          </p>
-          <SlideButton
-            options={["participation", "organization", "hybrid"]}
-            isReactFormHook={true}
-            name="focus"
-            variant={textColorTheme}
-          />
         </div>
         <div className={styles.dialogOption}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
@@ -276,33 +264,6 @@ export default function AddStageForm({
           )}
         </div>
         <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            type
-          </p>
-          <SlideButton
-            options={["private", "public"]}
-            isReactFormHook={true}
-            name="type"
-            variant={textColorTheme}
-          />
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            status
-          </p>
-          <SlideButton
-            options={[
-              stageStatusEnum.UPCOMING,
-              stageStatusEnum.ONGOING,
-              stageStatusEnum.FINISHED,
-              stageStatusEnum.CANCELLED,
-            ]}
-            isReactFormHook={true}
-            name="stageStatus"
-            variant={textColorTheme}
-          />
-        </div>
-        <div className={styles.dialogOption}>
           <Dropdown
             options={Object.values(stageTypeEnum).map((type) => ({
               label: type,
@@ -327,7 +288,7 @@ export default function AddStageForm({
         <Button
           variant={"primary"}
           submit={true}
-          label="create competition"
+          label="create stage"
           className={styles.submitButton}
         />
       </form>

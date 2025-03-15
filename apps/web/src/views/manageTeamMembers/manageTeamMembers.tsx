@@ -1,11 +1,10 @@
 "use client";
 
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import { groupRoleEnumType } from "@tournament-app/types";
-import { useGetGroupMembersQuery } from "api/client/hooks/groups/useGetGroupMembersQuery";
+import { groupRoleEnum, groupRoleEnumType } from "@tournament-app/types";
+import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import { useRemoveUserFromGroup } from "api/client/hooks/groups/useRemoveUserFromGroup";
 import { clsx } from "clsx";
-import Button from "components/button";
 import ProgressWheel from "components/progressWheel";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import Link from "next/link";
@@ -15,6 +14,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_NAMES_TO_CODES } from "utils/mixins/formatting";
 import styles from "./manageTeamMembers.module.scss";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 
 type UserCardProps = {
   id: number;
@@ -23,6 +23,7 @@ type UserCardProps = {
   country: string;
   role: groupRoleEnumType;
   groupId: number;
+  membership: any;
 };
 
 const UserCard = ({
@@ -32,6 +33,7 @@ const UserCard = ({
   country,
   role,
   groupId,
+  membership,
 }: UserCardProps) => {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -83,20 +85,23 @@ const UserCard = ({
           </div>
         </div>
       </Link>
-      <button
-        onClick={handleRemove}
-        className={clsx(
-          styles.userCardRemoveButton,
-          globals.dangerBackgroundColor,
-        )}
-      >
-        <PersonRemoveIcon
-          className={clsx(
-            globals.lightFillChildren,
-            styles.userCardCloseButton,
-          )}
-        />
-      </button>
+      {membership?.role === groupRoleEnum.ADMIN ||
+        (membership?.role === groupRoleEnum.OWNER && (
+          <button
+            onClick={handleRemove}
+            className={clsx(
+              styles.userCardRemoveButton,
+              globals.dangerBackgroundColor,
+            )}
+          >
+            <PersonRemoveIcon
+              className={clsx(
+                globals.lightFillChildren,
+                styles.userCardCloseButton,
+              )}
+            />
+          </button>
+        ))}
     </div>
   );
 };
@@ -104,26 +109,9 @@ const UserCard = ({
 export default function ManageTeamMembers({ teamId }: { teamId: number }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const {
-    data: groupMembers,
-    isLoading: groupMembersIsLoading,
-    fetchNextPage,
-    isFetchNextPageError,
-    isFetchingNextPage,
-  } = useGetGroupMembersQuery(teamId);
-  const [activePage, setActivePage] = useState<number>(0);
-  const [fetchLimit, setFetchLimit] = useState<number>(-1);
-
-  const forward = async () => {
-    if (activePage == fetchLimit) return;
-    const nextPage = await fetchNextPage();
-    if (nextPage.data?.pages[activePage]?.results?.length == 0) {
-      setFetchLimit(activePage);
-      return;
-    }
-
-    setActivePage((prev) => prev + 1);
-  };
+  const { data: groupMembers, isLoading: groupMembersIsLoading } =
+    useGetGroupMembers(teamId);
+  const { data: membershipData } = useCheckIfGroupMember(teamId);
 
   return (
     <div className={clsx(styles.wrapper)}>
@@ -133,36 +121,21 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
         <>
           <p className={styles.title}>
             <b className={globals[`${textColorTheme}Color`]}>team members</b>
-            <Button
-              onClick={forward}
-              disabled={
-                activePage == fetchLimit ||
-                isFetchNextPageError ||
-                isFetchingNextPage
-              }
-              variant={textColorTheme}
-              label="load more"
-              className={styles.loadMoreButton}
-            />
           </p>
           <div className={styles.groupMembers}>
-            {groupMembers?.pages[0]?.results.length === 0 || !groupMembers ? (
+            {groupMembers?.members?.length === 0 || !groupMembers ? (
               <p>there are no team members!</p>
             ) : (
-              groupMembers?.pages.flatMap(
-                (page) =>
-                  page.results?.map((member) => {
-                    return member.members.map((member) => {
-                      return (
-                        <UserCard
-                          key={member.id}
-                          {...member}
-                          groupId={teamId}
-                        />
-                      );
-                    });
-                  }) || [],
-              )
+              groupMembers?.members?.map((member) => {
+                return (
+                  <UserCard
+                    membership={membershipData}
+                    key={member.id}
+                    {...member}
+                    groupId={teamId}
+                  />
+                );
+              })
             )}
           </div>
         </>

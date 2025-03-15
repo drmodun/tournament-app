@@ -31,7 +31,7 @@ export default function GroupMembersDialog({
           </p>
           <div>
             <div className={styles.userCardWrapper}>
-              {data?.members.map((user) => {
+              {data?.members?.map((user) => {
                 return (
                   <Link
                     href={`/user/${user?.id}`}

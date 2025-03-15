@@ -27,6 +27,7 @@ import { formatDateTime } from "utils/mixins/formatting";
 import EditCompetitionForm from "views/editCompetitionForm";
 import GroupSelectDialog from "views/groupSelectDialog";
 import styles from "./competition.module.scss";
+import Link from "next/link";
 
 type SidebarSectionProps = {
   name: string;
@@ -57,15 +58,6 @@ export default function Competition({
 
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(
-      "groupMembershipData",
-      groupMembershipData,
-      participationData?.results,
-      !competition?.isPublic,
-    );
-  }, [groupMembershipData, competition, participationData]);
-
   return (
     <div className={clsx(styles.wrapper)}>
       <Dialog
@@ -74,7 +66,10 @@ export default function Competition({
         variant={theme}
         className={styles.dialog}
       >
-        <EditCompetitionForm competition={competition} />
+        <EditCompetitionForm
+          competition={competition}
+          onClose={() => setEditModalOpen(false)}
+        />
       </Dialog>
       <Dialog
         active={groupSelectModalOpen}
@@ -181,10 +176,17 @@ export default function Competition({
                 label="delete competition"
                 onClick={() => deleteCompetitionMutation.mutate(competition.id)}
               />
+              <Link href={`/manageStages/${competition?.id}`}>
+                <Button variant={textColorTheme} label="view stages" />
+              </Link>
             </div>
           ) : (participationData?.results?.length ?? -1) > 0 ||
             !competition?.isPublic ? (
-            <></>
+            <div className={styles.manageCompetitionButtonsWrapper}>
+              <Link href={`/manageStages/${competition?.id}`}>
+                <Button variant={textColorTheme} label="view stages" />
+              </Link>
+            </div>
           ) : (
             <div className={styles.manageCompetitionButtonsWrapper}>
               {competition.teamType !== tournamentTeamTypeEnum.TEAM && (
@@ -203,6 +205,9 @@ export default function Competition({
                   onClick={() => setGroupSelectModalOpen(true)}
                 />
               )}
+              <Link href={`/manageStages/${competition?.id}`}>
+                <Button variant={textColorTheme} label="view stages" />
+              </Link>
             </div>
           ))
         )}

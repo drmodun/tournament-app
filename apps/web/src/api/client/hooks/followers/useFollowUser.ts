@@ -24,7 +24,7 @@ export const useFollowUser = () => {
       });
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred while following the user..", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
     },
     onMutate: () => {

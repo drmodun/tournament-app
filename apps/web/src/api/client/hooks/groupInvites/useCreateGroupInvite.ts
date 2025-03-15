@@ -43,6 +43,10 @@ export const useCreateGroupInvite = () => {
       await queryClient.invalidateQueries({
         queryKey: ["lfg", "team", variables.groupId],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["me", "lfg", variables.groupId],
+      });
+
       return true;
     },
     onError: (error: any) => {
@@ -52,10 +56,7 @@ export const useCreateGroupInvite = () => {
           "error",
         );
       } else {
-        toast.addToast(
-          "an error occurred while creating the group invite..",
-          "error",
-        );
+        toast.addToast(error.message ?? "an error occured...", "error");
       }
       console.error(error);
       return false;

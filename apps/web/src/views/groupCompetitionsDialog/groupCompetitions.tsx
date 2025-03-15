@@ -25,7 +25,7 @@ export default function GroupMembersDialog({
         <b className={globals[`${textColorTheme}Color`]}>competitions</b>
       </p>
       <div className={styles.userCardWrapper}>
-        {data?.results.length == 0 ? (
+        {data?.results?.length == 0 ? (
           <p className={globals[`${textColorTheme}Color`]}>
             no competitions found!
           </p>

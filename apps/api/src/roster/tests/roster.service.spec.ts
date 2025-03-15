@@ -14,6 +14,7 @@ import {
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
 } from '@tournament-app/types';
+import { ChallongeService } from 'src/challonge/challonge.service';
 
 describe('RosterService', () => {
   let service: RosterService;
@@ -21,6 +22,7 @@ describe('RosterService', () => {
   let stageRepository: jest.Mocked<StageDrizzleRepository>;
   let tournamentService: jest.Mocked<TournamentService>;
   let careerService: jest.Mocked<CareerService>;
+  let challongeService: jest.Mocked<ChallongeService>;
 
   const mockRoster = {
     id: 1,
@@ -38,6 +40,8 @@ describe('RosterService', () => {
         id: 1,
         categoryId: 1,
       },
+      group: null,
+      user: null,
     },
     participationId: 1,
     players: [
@@ -50,9 +54,9 @@ describe('RosterService', () => {
           id: 1,
           username: 'testuser',
           isFake: false,
+          career: [],
           country: 'US',
           profilePicture: 'test.jpg',
-          career: [],
         },
         career: [],
       },
@@ -88,6 +92,11 @@ describe('RosterService', () => {
       getMultipleCareers: jest.fn(),
     };
 
+    const mockChallongeService = {
+      createChallongeParticipantFromRoster: jest.fn(),
+      deleteParticipant: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         RosterService,
@@ -107,6 +116,10 @@ describe('RosterService', () => {
           provide: CareerService,
           useValue: mockCareerService,
         },
+        {
+          provide: ChallongeService,
+          useValue: mockChallongeService,
+        },
       ],
     }).compile();
 
@@ -115,6 +128,11 @@ describe('RosterService', () => {
     stageRepository = module.get(StageDrizzleRepository);
     tournamentService = module.get(TournamentService);
     careerService = module.get(CareerService);
+    challongeService = module.get(ChallongeService);
+
+    jest.mock('src/challonge/challonge.service');
+    service.createChallongeParticipant = jest.fn();
+    challongeService.deleteParticipant = jest.fn();
   });
 
   describe('create', () => {

@@ -25,7 +25,7 @@ export const useUnfollowUser = () => {
       return true;
     },
     onError: (error: any) => {
-      toast.addToast("an error occurred while unfollowing the user..", "error");
+      toast.addToast(error.message ?? "an error occured...", "error");
       console.error(error);
     },
     onMutate: () => {

@@ -8,6 +8,7 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
 import styles from "./loginForm.module.scss";
+import Link from "next/link";
 
 type LoginInputs = {
   email: "string";
@@ -72,6 +73,18 @@ export default function LoginForm({
                 submit={true}
                 className={styles.submitButton}
               />
+
+              <Link
+                href={`/requestPasswordReset`}
+                className={styles.submitButton}
+              >
+                <Button
+                  label="reset password"
+                  variant="warning"
+                  submit={false}
+                  className={styles.submitButton}
+                />
+              </Link>
             </form>
           </FormProvider>
         </div>

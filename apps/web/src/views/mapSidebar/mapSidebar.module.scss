@@ -62,8 +62,8 @@
   width: 100%;
 }
 
-.locationInfoWrapper + .locationInfoWrapper {
-  padding-top: $halfPadding;
+.locationInfoWrapper {
+  padding: $padding 0;
 }
 
 .map {
@@ -72,13 +72,20 @@
 }
 
 .locationInfos {
-  height: 50%;
+  height: 100%;
   width: 100%;
   scrollbar-width: none;
   overflow-y: auto;
-  padding-bottom: $doublePadding;
 }
 
 .mapElement > * {
   border-radius: $borderRadius;
+}
+
+.tournamentCard {
+  width: 100%;
+}
+
+.tournamentCard + .tournamentCard {
+  margin-top: $padding;
 }

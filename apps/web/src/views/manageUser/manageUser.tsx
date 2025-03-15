@@ -22,6 +22,7 @@ import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import UserEditForm from "views/userEditForm";
 import UserFollowersDialog from "views/userFollowersModal";
 import styles from "./manageUser.module.scss";
+import { useEffect } from "react";
 
 export default function ManageUser({
   data,
@@ -46,6 +47,7 @@ export default function ManageUser({
     isFetching,
   } = useUserGroups(true);
   const deleteUserMutation = useDeleteUser(data?.id);
+
   return (
     <div className={styles.wrapper}>
       <Dialog
@@ -54,7 +56,7 @@ export default function ManageUser({
         variant={theme}
         className={styles.dialog}
       >
-        <UserEditForm data={data} />
+        <UserEditForm data={data} onClose={() => setDialogActive(false)} />
       </Dialog>
       <Dialog
         active={userFollowersDialog}
@@ -129,51 +131,6 @@ export default function ManageUser({
               {data?.bio ?? "no bio yet."}
             </Markdown>
           </p>
-        </div>
-
-        <div className={styles.teamsEdit}>
-          <b
-            className={clsx(styles.teamText, globals[`${textColorTheme}Color`])}
-          >
-            teams
-          </b>
-          <div
-            className={styles.teams}
-            ref={scrollRefTeams}
-            onWheel={(e) => {
-              if (scrollRefTeams?.current) {
-                scrollRefTeams.current.scrollLeft += e.deltaY > 0 ? 50 : -50;
-              }
-            }}
-          >
-            {groupData?.pages.map((page) =>
-              page.results.map((team) => (
-                <div
-                  className={styles.team}
-                  onClick={() => router.push(`/group/${team?.groupId}`)}
-                >
-                  <Chip
-                    key={team?.groupId}
-                    label={team?.group?.name}
-                    variant={textColorTheme}
-                    className={styles.team}
-                  />
-                </div>
-              )),
-            )}
-            {groupData?.pages[0].results.length === 0
-              ? "no teams yet."
-              : isFetchNextPageError ||
-                isFetchingNextPage ||
-                (isFetching && (
-                  <Chip
-                    key={"load team button"}
-                    label="load more"
-                    variant="secondary"
-                    onClick={() => fetchNextPage()}
-                  ></Chip>
-                ))}
-          </div>
         </div>
         <Link href="/manageTeams">
           <div className={styles.manageTeamsWrapper}>

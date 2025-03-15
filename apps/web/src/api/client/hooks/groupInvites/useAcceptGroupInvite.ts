@@ -40,10 +40,7 @@ export const useAcceptGroupInvite = () => {
       if (error.response?.status === 409) {
         toast.addToast("you have already accepted this group", "error");
       } else {
-        toast.addToast(
-          "an error occurred while accepting the group invite..",
-          "error",
-        );
+        toast.addToast(error.message ?? "an error occured...", "error");
       }
       console.error(error);
       return false;

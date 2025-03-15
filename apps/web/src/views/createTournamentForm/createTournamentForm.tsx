@@ -31,7 +31,13 @@ import {
 } from "utils/mixins/formatting";
 import styles from "./createTournamentForm.module.scss";
 
-export default function CreateTournamentForm({ userId }: { userId: number }) {
+export default function CreateTournamentForm({
+  userId,
+  onClose,
+}: {
+  userId: number;
+  onClose?: () => void;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { data, isLoading } = useGetCategories();
@@ -71,9 +77,9 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
     // @ts-ignore
     if (data.maximumMMR == "") data.maximumMMR = "10000";
 
-    console.log(data);
+    await createCompetitionMutation.mutateAsync(data);
 
-    createCompetitionMutation.mutate(data);
+    if (createCompetitionMutation.isError == false) onClose && onClose();
   };
 
   const [isRanked, setIsRanked] = useState<boolean>(false);
@@ -130,15 +136,11 @@ export default function CreateTournamentForm({ userId }: { userId: number }) {
 
   const handleLoadMore = async () => {
     const page = await fetchNextPage();
-    console.log(
-      page.data?.pages[page.data?.pages.length - 1]?.results?.length ?? -1,
-    );
     if (
       isFetchNextPageError ||
       (page.data?.pages[page.data?.pages.length - 1]?.results?.length ?? -1) ==
         0
     ) {
-      console.log("LIMIT");
       setReachedLimit(true);
       return;
     }

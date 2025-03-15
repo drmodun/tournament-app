@@ -441,6 +441,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
         },
       })
       .from(categoryCareer)
+      .innerJoin(user, eq(categoryCareer.userId, user.id))
       .where(
         and(
           inArray(categoryCareer.userId, userIds),

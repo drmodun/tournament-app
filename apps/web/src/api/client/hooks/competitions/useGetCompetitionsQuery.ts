@@ -15,10 +15,9 @@ import { AxiosResponse } from "axios";
 
 export const getCompetitionsQuery = async (
   page?: number,
-  locationId?: number
+  locationId?: number,
 ) => {
   if (!locationId) return;
-  console.log("LOCATION ID", locationId);
   return clientApi
     .get<
       TournamentQueryType,

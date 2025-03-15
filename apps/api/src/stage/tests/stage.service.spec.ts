@@ -10,8 +10,10 @@ import {
   StageResponsesEnum,
   StageSortingEnum,
   stageTypeEnum,
+  IChallongeTournament,
 } from '@tournament-app/types';
 import { StagesWithDates } from '../types';
+import { ChallongeService } from 'src/challonge/challonge.service';
 
 describe('StageService', () => {
   let service: StageService;
@@ -39,6 +41,13 @@ describe('StageService', () => {
       getAllTournamentStagesSortedByStartDate: jest.fn(),
     };
 
+    const mockChallongeService = {
+      createChallongeTournament: jest.fn(),
+      createChallongeTournamentFromStage: jest.fn(),
+      updateTournament: jest.fn(),
+      deleteTournament: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         StageService,
@@ -46,11 +55,27 @@ describe('StageService', () => {
           provide: StageDrizzleRepository,
           useValue: mockRepository,
         },
+        {
+          provide: ChallongeService,
+          useValue: mockChallongeService,
+        },
       ],
     }).compile();
 
     service = module.get<StageService>(StageService);
     repository = module.get(StageDrizzleRepository);
+
+    service.createChallongeTournament = jest.fn();
+    service.updateChallongeTournament = jest.fn();
+    service.deleteChallongeTournament = jest.fn();
+
+    jest.spyOn(service, 'createChallongeTournament').mockResolvedValue({
+      id: '1',
+    } as IChallongeTournament);
+
+    jest.spyOn(service, 'updateChallongeTournament').mockResolvedValue();
+
+    jest.spyOn(service, 'deleteChallongeTournament').mockResolvedValue();
   });
 
   describe('create', () => {

@@ -28,14 +28,15 @@ import { useToastContext } from "utils/hooks/useToastContext";
 import {
   COUNTRY_CODES_TO_NAMES,
   COUNTRY_NAMES_TO_CODES,
-  formatDateTimeHTMLInput,
 } from "utils/mixins/formatting";
 import styles from "./editCompetitionForm.module.scss";
 
 export default function EditCompetitionForm({
   competition,
+  onClose,
 }: {
   competition?: IExtendedTournamentResponse;
+  onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -63,9 +64,9 @@ export default function EditCompetitionForm({
     // @ts-ignore
     if (data.maximumMMR == "") data.maximumMMR = "10000";
 
-    console.log(data);
+    await updateCompetitionMutation.mutateAsync(data);
 
-    updateCompetitionMutation.mutate(data);
+    if (updateCompetitionMutation.isError == false) onClose && onClose();
   };
 
   const [isRanked, setIsRanked] = useState<boolean>(false);
@@ -78,6 +79,7 @@ export default function EditCompetitionForm({
   const [categoryId, setCategoryId] = useState<number>(-1);
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
   const [locationId, setLocationId] = useState<number>();
+  const [finalLocationName, setFinalLocationName] = useState<string>();
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
@@ -97,6 +99,7 @@ export default function EditCompetitionForm({
     });
 
     setLocationId(res.id);
+    setFinalLocationName(placeName);
   };
 
   const handleAddLink = (val: string) => {
@@ -116,14 +119,9 @@ export default function EditCompetitionForm({
     setLinks((links) => [...links, val]);
   };
 
-  const handleRemoveLink = (val: string) => {
-    const index = links.indexOf(val);
-    if (index > -1) setLinks((prev) => prev.splice(index, 1));
-  };
-
   useEffect(() => {
-    setLinks(competition?.links.split(",") ?? []);
-  }, []);
+    setLinks(competition?.links?.split(",") ?? []);
+  }, [competition]);
 
   return (
     <FormProvider {...methods}>
@@ -137,10 +135,14 @@ export default function EditCompetitionForm({
             label="name"
             placeholder="enter the tournament's name"
             name="name"
+            required={true}
             className={styles.input}
             isReactFormHook={true}
             defaultValue={competition?.name}
           />
+          {methods.formState.errors.name?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={styles.inputWrapper}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
@@ -151,8 +153,14 @@ export default function EditCompetitionForm({
             isReactHookForm={true}
             name="description"
             variant={textColorTheme}
+            required={true}
             startingContent={competition?.description}
           />
+          {methods.formState.errors.description?.type === "required" && (
+            <p className={clsx(styles.error, styles.errorSpacing)}>
+              this field is required!
+            </p>
+          )}
         </div>
         <div className={styles.inputWrapper}>
           <Input
@@ -160,16 +168,26 @@ export default function EditCompetitionForm({
             label="starting time"
             placeholder="enter the tournament's starting time"
             name="startDate"
+            required={true}
             className={styles.input}
             isReactFormHook={true}
             type="datetime-local"
             min={new Date()
               .toISOString()
               .slice(0, new Date().toISOString().lastIndexOf(":"))}
-            defaultValue={formatDateTimeHTMLInput(
-              competition?.startDate ?? new Date(),
-            )}
+            defaultValue={
+              competition?.startDate
+                ? new Date(competition.startDate)
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+                : new Date()
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+            }
           />
+          {methods.formState.errors.startDate?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={styles.inputWrapper}>
           <Input
@@ -177,16 +195,26 @@ export default function EditCompetitionForm({
             label="ending time"
             placeholder="enter the tournament's ending time"
             name="endDate"
+            required={true}
             className={styles.input}
             isReactFormHook={true}
             type="datetime-local"
             min={new Date()
               .toISOString()
               .slice(0, new Date().toISOString().lastIndexOf(":"))}
-            defaultValue={formatDateTimeHTMLInput(
-              competition?.endDate ?? new Date(),
-            )}
+            defaultValue={
+              competition?.endDate
+                ? new Date(competition.endDate)
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+                : new Date()
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+            }
           />
+          {methods.formState.errors.endDate?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={styles.inputWrapper}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
@@ -207,7 +235,7 @@ export default function EditCompetitionForm({
               name="maximumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
-              defaultValue={competition?.maximumMMR?.toString()}
+              defaultValue={competition?.minimumMMR?.toString()}
             />
           </div>
         </div>
@@ -217,10 +245,15 @@ export default function EditCompetitionForm({
             label="maximum number of participants"
             placeholder="enter the maximum number of participants"
             name="maxParticipants"
+            required={true}
             isReactFormHook={true}
             type="number"
+            min="1"
             defaultValue={competition?.maxParticipants?.toString()}
           />
+          {methods.formState.errors.maxParticipants?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={clsx(styles.inputWrapper)}>
           <Input
@@ -241,6 +274,9 @@ export default function EditCompetitionForm({
             }}
             defaultValue={competition?.actualLocation?.name}
           />
+          {methods.formState.errors.location?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={clsx(styles.inputWrapper, styles.linksWrapper)}>
           <Input
@@ -253,16 +289,7 @@ export default function EditCompetitionForm({
           />
           <ul className={clsx(globals[`${textColorTheme}Color`], styles.links)}>
             {links.map((link) => (
-              <li>
-                {link}{" "}
-                <button
-                  className={styles.linkRemoveButton}
-                  onClick={() => handleRemoveLink(link)}
-                  type="button"
-                >
-                  x
-                </button>
-              </li>
+              <li>{link}</li>
             ))}
           </ul>
         </div>
@@ -401,19 +428,19 @@ export default function EditCompetitionForm({
             placeholder="select tournament country"
             name="country"
             isReactHookForm={true}
+            required={true}
             variant={textColorTheme}
             className={styles.dropdown}
-            searchClassName={styles.dropdown}
             innerWrapperClassName={styles.dropdown}
             optionsClassName={styles.dropdown}
-            defaultValue={
-              competition?.country
-                ? COUNTRY_CODES_TO_NAMES[
-                    competition.country as keyof typeof COUNTRY_CODES_TO_NAMES
-                  ]
-                : undefined
-            }
+            style={{ width: "100%" }}
+            searchClassName={styles.search}
+            defaultValue={competition?.country}
           />
+
+          {methods.formState.errors.country?.type === "required" && (
+            <p className={styles.error}>this field is required!</p>
+          )}
         </div>
         <div className={styles.inputWrapper}>
           {isLoading ? (
@@ -424,22 +451,26 @@ export default function EditCompetitionForm({
               placeholder="select tournament category"
               name="categoryId"
               isReactHookForm={true}
+              required={true}
               variant={textColorTheme}
               options={
                 data?.results.map((category) => {
                   return { label: category.name };
                 }) ?? []
               }
-              defaultValue={competition?.category?.name}
               onSelect={(index: number) =>
                 setCategoryId(data?.results[index].id ?? -1)
               }
+              defaultValue={competition?.category?.name}
             />
+          )}
+          {methods.formState.errors.categoryId?.type === "required" && (
+            <p className={styles.error}>dsadsadsa this field is required!</p>
           )}
         </div>
 
         <Button
-          label="update competition"
+          label="edit competition"
           variant="warning"
           submit={true}
           className={styles.submitButton}

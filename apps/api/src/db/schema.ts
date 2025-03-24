@@ -1016,6 +1016,8 @@ export const notification = pgTable('notification', {
     })
     .notNull(),
   message: text('message').notNull(),
+  link: text('link'),
+  image: text('image'),
   type: text('type').default('test-template'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   read: boolean('read').default(false),

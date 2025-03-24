@@ -232,6 +232,13 @@
       "when": 1741994833807,
       "tag": "0032_busy_madame_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1742810154682,
+      "tag": "0033_giant_madrox",
+      "breakpoints": true
     }
   ]
 }

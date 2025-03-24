@@ -1,2 +1,7 @@
-// Empty for now, do not see the reason to have request types for notifications in this way
-export default {};
+import { notificationTypeEnumType } from "src/enums";
+
+export interface INotificationQueryDto {
+  isRead?: boolean;
+  userId?: number;
+  type: notificationTypeEnumType;
+}

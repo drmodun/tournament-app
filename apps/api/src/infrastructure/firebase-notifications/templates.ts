@@ -5,21 +5,21 @@ type CompiledTemplate = (data: Record<string, string>) => string;
 
 export const templates: Record<TemplatesEnum, string> = {
   [TemplatesEnum.BET_OUTCOME]: `Hello {{username}}, your bet {{bet}} has been {{outcome}}`,
-  [TemplatesEnum.TOURNAMENT_REMINDER]: `Hello {{username}}, your tournament {{tournament}} is about to start`,
-  [TemplatesEnum.TOURNAMENT_START]: `Hello {{username}}, your tournament {{tournament}} has started`,
-  [TemplatesEnum.TOURNAMENT_END]: `Hello {{username}}, your tournament {{tournament}} has ended`,
-  [TemplatesEnum.GROUP_INVITATION]: `Hello {{username}}, you have been invited to join the group {{group}}`,
-  [TemplatesEnum.GROUP_JOIN_REQUEST]: `Hello {{username}}, you have a new join request for the group {{group}}`,
-  [TemplatesEnum.GROUP_JOIN_APPROVAL]: `Hello {{username}}, your join request for the group {{group}} has been approved`,
-  [TemplatesEnum.GROUP_JOIN_REJECTION]: `Hello {{username}}, your join request for the group {{group}} has been rejected`,
-  [TemplatesEnum.GROUP_REMOVAL]: `Hello {{username}}, you have been removed from the group {{group}}`,
-  [TemplatesEnum.GROUP_ADMIN_PROMOTION]: `Hello {{username}}, you have been promoted to admin in the group {{group}}`,
-  [TemplatesEnum.GROUP_ADMIN_DEMOTION]: `Hello {{username}}, you have been demoted from admin in the group {{group}}`,
+  [TemplatesEnum.TOURNAMENT_REMINDER]: `Heads up {{username}}, your tournament {{tournament}} is about to start`,
+  [TemplatesEnum.TOURNAMENT_START]: `Heads up {{username}}, your tournament {{tournament}} has started`,
+  [TemplatesEnum.TOURNAMENT_END]: `Heads up {{username}}, your tournament {{tournament}} has ended`,
+  [TemplatesEnum.GROUP_INVITATION]: `{{username}}, you have been invited to join the group {{group}}`,
+  [TemplatesEnum.GROUP_JOIN_REQUEST]: `{{username}}, you have a new join request for the group {{group}}`,
+  [TemplatesEnum.GROUP_JOIN_APPROVAL]: `{{username}}, your join request for the group {{group}} has been approved`,
+  [TemplatesEnum.GROUP_JOIN_REJECTION]: `Your join request for the group {{group}} has been rejected`,
+  [TemplatesEnum.GROUP_REMOVAL]: `{{username}}, you have been removed from the group {{group}}`,
+  [TemplatesEnum.GROUP_ADMIN_PROMOTION]: `{{username}}, you have been promoted to admin in the group {{group}}`,
+  [TemplatesEnum.GROUP_ADMIN_DEMOTION]: `{{username}}, you have been demoted from admin in the group {{group}}`,
   [TemplatesEnum.TEST_TEMPLATE]: `Hello, this is a test template`,
   [TemplatesEnum.WELCOME]: `Hello {{username}}, welcome to the app`,
-  [TemplatesEnum.RESET_PASSWORD]: `Hello {{username}}, click this link to reset your password: {{resetLink}}`,
-  [TemplatesEnum.EMAIL_CONFIRMATION]: `Hello {{username}}, click this link to confirm your email: {{link}}`,
-  [TemplatesEnum.NOTIFICATION_OF_BAN]: `Hello {{username}}, you have been banned for the following reason: {{reason}}`,
+  [TemplatesEnum.RESET_PASSWORD]: `{{username}}, click this link to reset your password: {{resetLink}}`,
+  [TemplatesEnum.EMAIL_CONFIRMATION]: `{{username}}, click this link to confirm your email: {{link}}`,
+  [TemplatesEnum.NOTIFICATION_OF_BAN]: `{{username}}, you have been banned for the following reason: {{reason}}`,
 };
 
 @Injectable()
@@ -77,7 +77,7 @@ export class NotificationTemplatesFiller {
     }
   }
 
-  fill(templateName: string, data: Record<string, string>): string {
+  public fill(templateName: string, data: Record<string, string>): string {
     const template = this.getTemplate(templateName);
     this.checkCorrectFill(templateName, data);
 

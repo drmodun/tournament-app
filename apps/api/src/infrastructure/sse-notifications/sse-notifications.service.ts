@@ -1,11 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateSseNotificationDto } from './dto/create-sse-notification.dto';
-import { UpdateSseNotificationDto } from './dto/update-sse-notification.dto';
 import { Observable, Subject, interval } from 'rxjs';
 import { db } from 'src/db/db';
 import { notification } from 'src/db/schema';
 import { eq } from 'drizzle-orm';
-import { NotificationResponseDto } from '@tournament-app/types';
 
 @Injectable()
 export class SseNotificationsService {
@@ -48,7 +45,7 @@ export class SseNotificationsService {
     if (!this.notificationSubjects.has(userId)) {
       const subject = new Subject<MessageEvent<NotificationResponseDto>>();
       this.notificationSubjects.set(userId, subject);
-      
+
       // Set up polling for new notifications
       this.setupNotificationPolling(userId, subject);
     }

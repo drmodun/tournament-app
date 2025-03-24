@@ -1,3 +1,5 @@
+import { notificationTypeEnumType } from '@tournament-app/types';
+
 export interface EmailGenerationData {
   to: string;
   subject: string;
@@ -119,3 +121,12 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   'email-confirmation': VerifyEmailInfo,
   'test-template': {},
 };
+
+export interface NotificationCreateDto {
+  type: notificationTypeEnumType;
+  userId: number;
+  message: string;
+  link?: string;
+  image?: string;
+  read?: boolean;
+}

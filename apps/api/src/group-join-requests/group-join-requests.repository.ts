@@ -100,6 +100,15 @@ export class GroupJoinRequestDrizzleRepository extends CompositeRepository<
           ),
           createdAt: groupJoinRequest.createdAt,
         };
+      case GroupJoinRequestResponsesEnum.FOR_NOTIFICATION:
+        return {
+          user: this.userDrizzleRepository.getMappingObject(
+            UserResponsesEnum.MINI_WITH_PFP,
+          ),
+          group: this.groupDrizzleRepository.getMappingObject(
+            GroupResponsesEnum.MINI_WITH_LOGO,
+          ),
+        };
       default:
         return this.getMappingObject(GroupJoinRequestResponsesEnum.WITH_USER);
     }

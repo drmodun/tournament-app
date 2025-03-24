@@ -10,10 +10,10 @@ import { useGetManagedForPlayer } from "api/client/hooks/participations/useGetMa
 import { useUpdateStage } from "api/client/hooks/stages/useUpdateStage";
 import { clsx } from "clsx";
 import Button from "components/button";
-import Chip from "components/chip";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -21,9 +21,8 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTime } from "utils/mixins/formatting";
 import EditStageForm from "views/editStageForm";
-import ViewRoster from "views/viewRoster";
+import EditStageRostersModal from "views/editStageRostersModal";
 import styles from "./manageStage.module.scss";
-import Link from "next/link";
 
 export type GroupParticipationType = {
   id: number;
@@ -48,14 +47,20 @@ export default function ManageStages(stage?: {
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
   const editMutation = useUpdateStage(stage?.stage?.tournamentId);
 
-  const { data: participationData } = useGetManagedForPlayer(
-    stage?.stage?.tournamentId,
-  );
+  const [editRostersDialogOpen, setEditRostersDialogOpen] =
+    useState<boolean>(false);
+
+  const { data: participationData, isLoading: isParticipationDataLoading } =
+    useGetManagedForPlayer(stage?.stage?.tournamentId);
 
   const { data: tData } = useGetCompetition(stage?.stage?.tournament?.id ?? -1);
   const { data, isLoading } = useCheckIfGroupMember(
     (tData && tData.affiliatedGroup?.id) ?? -1,
   );
+
+  useEffect(() => {
+    console.log(data, tData, participationData, stage?.stage?.tournamentId);
+  }, [data, tData, participationData]);
 
   return (
     <div
@@ -72,6 +77,16 @@ export default function ManageStages(stage?: {
       >
         <EditStageForm
           mutation={editMutation}
+          stage={stage?.stage}
+          onClose={() => setEditDialogOpen(false)}
+        />
+      </Dialog>
+      <Dialog
+        onClose={() => setEditRostersDialogOpen(false)}
+        active={editRostersDialogOpen}
+        variant={theme}
+      >
+        <EditStageRostersModal
           stage={stage?.stage}
           onClose={() => setEditDialogOpen(false)}
         />
@@ -124,22 +139,35 @@ export default function ManageStages(stage?: {
         </div>
       </div>
       <div className={styles.actionButtons}>
-        {isLoading ? (
+        {isLoading || isParticipationDataLoading ? (
           <ProgressWheel variant={textColorTheme} />
         ) : (
-          data &&
-          (data.role == groupRoleEnum.ADMIN ||
-            data.role == groupRoleEnum.OWNER) && (
-            <Button
-              variant="warning"
-              onClick={() => setEditDialogOpen(true)}
-              className={styles.actionButton}
-              label="edit stage"
-            />
-          )
+          <>
+            {data &&
+              (data.role == groupRoleEnum.ADMIN ||
+                data.role == groupRoleEnum.OWNER) && (
+                <Button
+                  variant="warning"
+                  onClick={() => setEditDialogOpen(true)}
+                  className={styles.actionButton}
+                  label="edit stage"
+                />
+              )}
+            {participationData && participationData?.length > 0 && (
+              <Button
+                variant="warning"
+                onClick={() => setEditRostersDialogOpen(true)}
+                className={styles.actionButton}
+                label="manage rosters"
+              />
+            )}
+          </>
         )}
       </div>
-      <Link href={`/stage/${stage?.stage?.id}/bracket`}>
+      <Link
+        href={`/stage/${stage?.stage?.id}/bracket`}
+        className={styles.actionButton}
+      >
         <Button
           variant={theme}
           className={styles.actionButton}

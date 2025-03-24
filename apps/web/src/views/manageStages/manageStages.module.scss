@@ -38,17 +38,21 @@
 }
 
 .stagesContainer {
-  display: flex;
-  flex-direction: column;
-  gap: $doublePadding;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax($baseComponentHeight * 8, 1fr)
+  );
+  gap: $padding;
 }
 
 .stageItem {
-  padding: $padding;
-  border-radius: $borderRadius;
-  display: flex;
-  flex-direction: column;
-  gap: $halfPadding;
+  text-decoration: none;
+  width: 100%;
+}
+
+.stageItem > * {
+  width: 100%;
 }
 
 .description {

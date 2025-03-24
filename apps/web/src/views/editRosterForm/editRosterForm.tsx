@@ -3,37 +3,28 @@
 import {
   IExtendedStageResponseWithTournament,
   IMiniGroupResponse,
+  IRosterResponse,
+  IStageResponse,
 } from "@tournament-app/types";
 import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import { useCreateRoster } from "api/client/hooks/rosters/useCreateRoster";
 import { clsx } from "clsx";
 import Button from "components/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { GroupParticipationType } from "views/manageStage/manageStage";
-import styles from "./addRosterForm.module.scss";
+import styles from "./editRosterForm.module.scss";
+import { useEditRoster } from "api/client/hooks/rosters/useUpdateRoster";
 
-type Participation = {
-  id: number;
-  tournament: {
-    categoryId: number;
-  };
-  group: IMiniGroupResponse;
-  user: IMiniGroupResponse;
-};
-
-export default function AddRosterForm({
-  stage,
-  group,
-  participation,
+export default function EditRosterForm({
+  roster,
   onClose,
+  stage,
 }: {
-  group?: GroupParticipationType | IMiniGroupResponse;
-  stage?: IExtendedStageResponseWithTournament;
-  participation?: Participation;
+  roster?: IRosterResponse;
   onClose?: () => void;
+  stage?: IExtendedStageResponseWithTournament;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -41,14 +32,12 @@ export default function AddRosterForm({
   const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
   const [selectedSubstitutes, setSelectedSubstitutes] = useState<number[]>([]);
 
-  const { data } = useGetGroupMembers(group?.id ?? group?.id);
+  const { data } = useGetGroupMembers(roster?.participation?.group?.id);
 
-  const createRosterMutation = useCreateRoster();
+  const updateRosterMutation = useEditRoster();
   const onSubmit = async () => {
-    if (!stage?.id) return;
-    await createRosterMutation.mutateAsync({
-      stageId: stage?.id,
-      participationId: participation?.id,
+    await updateRosterMutation.mutateAsync({
+      id: roster?.id,
       members: [
         ...selectedMembers.map((member) => {
           return { userId: member, isSubstitute: false };
@@ -58,17 +47,36 @@ export default function AddRosterForm({
         }),
       ],
     });
-    if (createRosterMutation.isError == false) onClose && onClose();
+    if (updateRosterMutation.isError == false) onClose && onClose();
   };
 
+  useEffect(() => {
+    const members = [];
+    const substitutes = [];
+
+    for (const player of roster?.players ?? []) {
+      console.log(player.user, "PLAYER");
+      if (player.isSubstitute) {
+        substitutes.push(player.user.id);
+        continue;
+      }
+
+      members.push(player.user.id);
+    }
+
+    setSelectedMembers(members);
+    setSelectedSubstitutes(substitutes);
+  }, []);
+
   const addMember = (member: any) => {
-    setSelectedMembers((prev) =>
-      prev.includes(member.id)
+    setSelectedMembers((prev) => {
+      console.log(prev, member.id);
+      return prev.includes(member.id)
         ? prev.filter((id) => id !== member.id)
         : prev.length < (stage?.maxPlayersPerTeam ?? 99)
           ? [...prev, member.id]
-          : prev,
-    );
+          : prev;
+    });
   };
 
   const addSubstitute = (member: any): void => {
@@ -83,7 +91,7 @@ export default function AddRosterForm({
 
   return (
     <div>
-      <h3 className={clsx(globals[`${theme}Color`], styles.title)}>
+      <h3 className={clsx(globals[`${textColorTheme}Color`], styles.title)}>
         select members for roster
         {stage?.maxPlayersPerTeam &&
           ` (max ${stage.maxPlayersPerTeam}, min ${stage.minPlayersPerTeam})`}
@@ -100,12 +108,11 @@ export default function AddRosterForm({
 
                 selectedMembers.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${theme}Color`],
+                  : globals[`${textColorTheme}Color`],
               )}
             >
               <img
                 src={member.profilePicture}
-                alt="profile picture"
                 onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                 className={styles.pfp}
               />
@@ -114,7 +121,7 @@ export default function AddRosterForm({
           );
         })}
       </div>
-      <h3 className={clsx(globals[`${theme}Color`], styles.title)}>
+      <h3 className={clsx(globals[`${textColorTheme}Color`], styles.title)}>
         select members for roster substitutes
         {stage?.maxSubstitutes && ` (max is ${stage.maxSubstitutes})`}
       </h3>
@@ -128,12 +135,11 @@ export default function AddRosterForm({
                 styles.userCard,
                 selectedSubstitutes.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${theme}Color`],
+                  : globals[`${textColorTheme}Color`],
               )}
             >
               <img
                 src={member.profilePicture}
-                alt="profile picture"
                 onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                 className={styles.pfp}
               />
@@ -144,12 +150,14 @@ export default function AddRosterForm({
       </div>
 
       <div>
-        <h3 className={clsx(globals[`${theme}Color`], styles.title)}>
+        <h3 className={clsx(globals[`${textColorTheme}Color`], styles.title)}>
           current roster
         </h3>
         <div className={styles.selectedRoster}>
           {selectedMembers.length === 0 ? (
-            <p className={globals[`${theme}Color`]}>no members selected!</p>
+            <p className={globals[`${textColorTheme}Color`]}>
+              no members selected!
+            </p>
           ) : (
             data?.members
               ?.filter((member) => selectedMembers.includes(member.id))
@@ -176,12 +184,19 @@ export default function AddRosterForm({
               })
           )}
         </div>
-        <h3 className={clsx(globals[`${theme}Color`], styles.substitutesTitle)}>
+        <h3
+          className={clsx(
+            globals[`${textColorTheme}Color`],
+            styles.substitutesTitle,
+          )}
+        >
           substitutes
         </h3>
         <div className={styles.selectedRoster}>
           {selectedSubstitutes.length === 0 ? (
-            <p className={globals[`${theme}Color`]}>no substitutes selected!</p>
+            <p className={globals[`${textColorTheme}Color`]}>
+              no substitutes selected!
+            </p>
           ) : (
             data?.members
               ?.filter((member) => selectedSubstitutes.includes(member.id))
@@ -211,11 +226,12 @@ export default function AddRosterForm({
       </div>
 
       <Button
-        variant="primary"
-        label="create roster"
+        variant="warning"
+        label="edit roster"
         className={styles.submitLfpButton}
         submit={true}
         onClick={onSubmit}
+        disabled={!stage || stage?.minPlayersPerTeam > selectedMembers.length}
       />
     </div>
   );

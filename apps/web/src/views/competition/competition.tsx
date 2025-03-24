@@ -176,14 +176,20 @@ export default function Competition({
                 label="delete competition"
                 onClick={() => deleteCompetitionMutation.mutate(competition.id)}
               />
-              <Link href={`/manageStages/${competition?.id}`}>
+              <Link
+                href={`/manageStages/${competition?.id}`}
+                className={styles.linkStage}
+              >
                 <Button variant={textColorTheme} label="view stages" />
               </Link>
             </div>
           ) : (participationData?.results?.length ?? -1) > 0 ||
             !competition?.isPublic ? (
             <div className={styles.manageCompetitionButtonsWrapper}>
-              <Link href={`/manageStages/${competition?.id}`}>
+              <Link
+                href={`/manageStages/${competition?.id}`}
+                className={styles.linkStage}
+              >
                 <Button variant={textColorTheme} label="view stages" />
               </Link>
             </div>

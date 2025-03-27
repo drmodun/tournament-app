@@ -21,6 +21,8 @@ import { GroupMembershipService } from '../group-membership/group-membership.ser
 import { GroupService } from 'src/group/group.service';
 import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
 import { NotificationCreateDto, TemplatesEnum } from 'src/infrastructure/types';
+import { NotificationsService } from 'src/infrastructure/firebase-notifications/notifications.service';
+import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
 
 @Injectable()
 export class GroupJoinRequestsService {
@@ -28,6 +30,7 @@ export class GroupJoinRequestsService {
     private readonly groupJoinRequestRepository: GroupJoinRequestDrizzleRepository,
     private readonly groupMembershipService: GroupMembershipService,
     private readonly notificationTemplateFiller: NotificationTemplatesFiller,
+    private readonly notificationService: SseNotificationsService,
     private readonly groupService: GroupService,
   ) {}
 
@@ -143,6 +146,13 @@ export class GroupJoinRequestsService {
     await this.groupMembershipService.create(groupId, userId);
 
     await this.remove(groupId, userId);
+
+    const notification = await this.createNotificationBodyForApprovedJoin(
+      groupId,
+      userId,
+    );
+
+    await this.notificationService.createWithUsers(notification, [userId]);
   }
 
   async getDataForNotification(groupId: number, userId: number) {
@@ -161,7 +171,6 @@ export class GroupJoinRequestsService {
 
     const notificationDto: NotificationCreateDto = {
       type: notificationTypeEnum.GROUP_JOIN_APPROVAL,
-      userId,
       message: this.notificationTemplateFiller.fill(
         TemplatesEnum.GROUP_JOIN_APPROVAL,
         {
@@ -176,12 +185,25 @@ export class GroupJoinRequestsService {
     return notificationDto;
   }
 
+  async saveAndEmitNotificationsForNewRequest(groupId: number, userId: number) {
+    const notification = await this.createNotificationBodyForNewRequest(
+      groupId,
+      userId,
+    );
+
+    const admins = await this.groupMembershipService.getAllAdmins(groupId);
+
+    await this.notificationService.createWithUsers(
+      notification,
+      admins.map((a) => a.id),
+    );
+  }
+
   async createNotificationBodyForRejectedJoin(groupId: number, userId: number) {
     const information = await this.getDataForNotification(groupId, userId);
 
     const notificationDto: NotificationCreateDto = {
       type: notificationTypeEnum.GROUP_JOIN_REJECTION,
-      userId,
       message: this.notificationTemplateFiller.fill(
         TemplatesEnum.GROUP_JOIN_REJECTION,
         {
@@ -196,6 +218,25 @@ export class GroupJoinRequestsService {
     return notificationDto;
   }
 
+  async createNotificationBodyForNewRequest(groupId: number, userId: number) {
+    const information = await this.getDataForNotification(groupId, userId);
+
+    const notificationDto: NotificationCreateDto = {
+      type: notificationTypeEnum.GROUP_JOIN_REQUEST,
+      message: this.notificationTemplateFiller.fill(
+        TemplatesEnum.GROUP_JOIN_REQUEST,
+        {
+          username: information.user?.username,
+          group: information.group?.name,
+        },
+      ),
+      image: information.group?.logo,
+      link: `/user/${userId}`,
+    };
+
+    return notificationDto;
+  }
+
   async reject(groupId: number, userId: number) {
     const exists = await this.exists(groupId, userId);
 
@@ -204,5 +245,12 @@ export class GroupJoinRequestsService {
     }
 
     await this.remove(groupId, userId);
+
+    const notification = await this.createNotificationBodyForRejectedJoin(
+      groupId,
+      userId,
+    );
+
+    await this.notificationService.createWithUsers(notification, [userId]);
   }
 }

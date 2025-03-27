@@ -161,6 +161,13 @@ export class GroupMembershipService {
     return !!results;
   }
 
+  async getAllAdmins(groupId: number) {
+    return await this.groupMembershipRepository.getUnpaginatedUsersInfoOnly({
+      groupId,
+      role: groupRoleEnum.ADMIN,
+    });
+  }
+
   async isOwner(groupId: number, userId: number): Promise<boolean> {
     const results = await this.findOneWithoutThrow(
       groupId,

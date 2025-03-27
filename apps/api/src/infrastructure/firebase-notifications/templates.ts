@@ -9,7 +9,7 @@ export const templates: Record<TemplatesEnum, string> = {
   [TemplatesEnum.TOURNAMENT_START]: `Heads up {{username}}, your tournament {{tournament}} has started`,
   [TemplatesEnum.TOURNAMENT_END]: `Heads up {{username}}, your tournament {{tournament}} has ended`,
   [TemplatesEnum.GROUP_INVITATION]: `{{username}}, you have been invited to join the group {{group}}`,
-  [TemplatesEnum.GROUP_JOIN_REQUEST]: `{{username}}, you have a new join request for the group {{group}}`,
+  [TemplatesEnum.GROUP_JOIN_REQUEST]: `There is a new join request for the group {{group}} made by the user {{username}}`,
   [TemplatesEnum.GROUP_JOIN_APPROVAL]: `{{username}}, your join request for the group {{group}} has been approved`,
   [TemplatesEnum.GROUP_JOIN_REJECTION]: `Your join request for the group {{group}} has been rejected`,
   [TemplatesEnum.GROUP_REMOVAL]: `{{username}}, you have been removed from the group {{group}}`,

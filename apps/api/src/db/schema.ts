@@ -1010,17 +1010,26 @@ export const categoryRelations = relations(category, ({ many }) => ({
 
 export const notification = pgTable('notification', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id')
-    .references(() => user.id, {
-      onDelete: 'cascade',
-    })
-    .notNull(),
   message: text('message').notNull(),
   link: text('link'),
   image: text('image'),
   type: text('type').default('test-template'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  read: boolean('read').default(false),
+});
+
+export const notificationToUser = pgTable('notification_to_user', {
+  notificationId: integer('notification_id')
+    .references(() => notification.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  read: boolean('read').default(false), // TODO: consider if a read time is necessary
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
 export const reports = pgTable('reports', {

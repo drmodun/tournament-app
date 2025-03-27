@@ -3,29 +3,48 @@ import { Observable, Subject, interval } from 'rxjs';
 import { db } from 'src/db/db';
 import { notification } from 'src/db/schema';
 import { eq } from 'drizzle-orm';
+import { NotificationQueryDto } from './dto/requests';
+import { NotificationCreateDto } from '../types';
+import { SseNotificationRepository } from './sse-notification.repository';
 
 @Injectable()
 export class SseNotificationsService {
   private notificationSubjects: Map<number, Subject<MessageEvent>> = new Map();
 
-  create(dto: CreateSseNotificationDto) {
-    return 'This action adds a new sseNotification';
+  constructor(
+    private readonly sseNotificationRepository: SseNotificationRepository,
+  ) {}
+
+  findAllForUser(query: NotificationQueryDto) {
+    return this.sseNotificationRepository.getReadTimeSorted(query);
   }
 
-  findAll() {
-    return `This action returns all sseNotifications`;
+  async createWithUsers(
+    notification: NotificationCreateDto,
+    users: number[],
+  ): Promise<void> {
+    return await this.sseNotificationRepository.createWithUsers(
+      notification,
+      users,
+    );
+
+    // TODO: emit logic here
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sseNotification`;
+  async setAsRead(id: number) {
+    await this.sseNotificationRepository.updateToRead(id);
   }
 
-  update(id: number, dto: UpdateSseNotificationDto) {
-    return `This action updates a #${id} sseNotification`;
+  async setAllAsReadForUser(userId: number) {
+    await this.sseNotificationRepository.updateAllToReadForUser(userId);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} sseNotification`;
+  async setBulkAsRead(ids: number[]) {
+    await this.sseNotificationRepository.updateBulkToRead(ids);
+  }
+
+  async remove(id: number) {
+    await this.sseNotificationRepository.deleteEntity(id);
   }
 
   /**
@@ -158,5 +177,12 @@ export class SseNotificationsService {
         lastEventId: insertedNotification.id.toString(),
       } as MessageEvent);
     }
+  }
+
+  async createNotificationAndLinkToUsers(
+    notification: NotificationCreateDto,
+    userIds: number[],
+  ) {
+    await this.sseNotificationRepository.createWithUsers(notification, userIds);
   }
 }

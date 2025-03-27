@@ -124,7 +124,6 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
 
 export interface NotificationCreateDto {
   type: notificationTypeEnumType;
-  userId: number;
   message: string;
   link?: string;
   image?: string;

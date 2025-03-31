@@ -43,63 +43,51 @@ export class VerifyEmailInfo {
 }
 
 class NotificationOfBanInfo {
-  username: string;
   reason: string;
 }
 
 class BetOutcomeInfo {
-  username: string;
   bet: string;
   outcome: string;
 }
 
 class TournamentReminderInfo {
-  username: string;
   tournament: string;
 }
 
 class TournamentStartInfo {
-  username: string;
   tournament: string;
 }
 
 class TournamentEndInfo {
-  username: string;
   tournament: string;
 }
 
 class GroupInvitationInfo {
-  username: string;
   group: string;
 }
 
 class GroupJoinRequestInfo {
-  username: string;
   group: string;
 }
 
 class GroupJoinApprovalInfo {
-  username: string;
   group: string;
 }
 
 class GroupJoinRejectionInfo {
-  username: string;
   group: string;
 }
 
 class GroupRemovalInfo {
-  username: string;
   group: string;
 }
 
 class GroupAdminPromotionInfo {
-  username: string;
   group: string;
 }
 
 class GroupAdminDemotionInfo {
-  username: string;
   group: string;
 }
 

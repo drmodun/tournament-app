@@ -21,7 +21,6 @@ import { GroupMembershipService } from '../group-membership/group-membership.ser
 import { GroupService } from 'src/group/group.service';
 import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
 import { NotificationCreateDto, TemplatesEnum } from 'src/infrastructure/types';
-import { NotificationsService } from 'src/infrastructure/firebase-notifications/notifications.service';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
 
 @Injectable()

@@ -10,7 +10,7 @@ import {
   InferSelectModel,
   SQL,
 } from 'drizzle-orm';
-import { notification, notificationToUser } from 'src/db/schema';
+import { notification, notificationToUser, user } from 'src/db/schema';
 import { PrimaryRepository } from 'src/base/repository/primaryRepository';
 import { NotificationQueryDto } from './dto/requests';
 import {
@@ -110,8 +110,32 @@ export class SseNotificationRepository extends PrimaryRepository<
       .update(notificationToUser)
       .set({
         read: true,
-      })
+      } as Partial<InferSelectModel<typeof notificationToUser>>)
       .where(eq(notificationToUser.notificationId, id));
+  }
+
+  async updateUserToken(userId: number, token: string) {
+    const updatedUser = await db
+      .update(user)
+      .set({
+        sseToken: token,
+      } as Partial<InferSelectModel<typeof user>>)
+      .where(eq(user.id, userId))
+      .returning({
+        id: user.id,
+        sseToken: user.sseToken,
+      });
+
+    return updatedUser[0];
+  }
+
+  async getUserByToken(token: string) {
+    return await db
+      .select({ id: user.id })
+      .from(user)
+      .where(eq(user.sseToken, token))
+      .limit(1)
+      .$dynamic();
   }
 
   async updateAllToReadForUser(userId: number) {
@@ -119,7 +143,7 @@ export class SseNotificationRepository extends PrimaryRepository<
       .update(notificationToUser)
       .set({
         read: true,
-      })
+      } as Partial<InferSelectModel<typeof notificationToUser>>)
       .where(eq(notificationToUser.userId, userId));
   }
 
@@ -128,7 +152,7 @@ export class SseNotificationRepository extends PrimaryRepository<
       .update(notificationToUser)
       .set({
         read: true,
-      })
+      } as Partial<InferSelectModel<typeof notificationToUser>>)
       .where(inArray(notificationToUser.notificationId, ids));
   }
 

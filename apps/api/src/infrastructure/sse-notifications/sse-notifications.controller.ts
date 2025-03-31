@@ -11,57 +11,91 @@ import {
   Patch,
   HttpStatus,
   HttpCode,
+  UseGuards,
+  ParseIntPipe,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { SseNotificationsService } from './sse-notifications.service';
-import { CreateSseNotificationDto } from './dto/create-sse-notification.dto';
-import { UpdateSseNotificationDto } from './dto/update-sse-notification.dto';
 import { Observable } from 'rxjs';
-
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { NotificationQueryDto } from './dto/requests';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { ApiBearerAuth, ApiExtraModels, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { NotificationsResponse } from './dto/responses';
+@ApiTags('SSE Notifications')
 @Controller('notifications')
 export class SseNotificationsController {
   constructor(
     private readonly sseNotificationsService: SseNotificationsService,
   ) {}
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() createSseNotificationDto: CreateSseNotificationDto) {
-    return this.sseNotificationsService.create(createSseNotificationDto);
-  }
-
+  @ApiExtraModels(NotificationsResponse)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get()
-  findAll() {
-    return this.sseNotificationsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sseNotificationsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateSseNotificationDto: UpdateSseNotificationDto,
+  @ApiOkResponse({
+    type: NotificationsResponse,
+    isArray: true,
+  })
+  findAll(
+    @CurrentUser() user: ValidatedUserDto,
+    @Query() query: NotificationQueryDto,
   ) {
-    return this.sseNotificationsService.update(+id, updateSseNotificationDto);
+    return this.sseNotificationsService.findAllForUser({
+      ...query,
+      userId: user.id,
+    });
   }
 
-  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @Post('token')
+  @ApiBearerAuth()
+  async requestNewToken(@CurrentUser() user: ValidatedUserDto) {
+    return this.sseNotificationsService.requestNewToken(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/read')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
-    return this.sseNotificationsService.remove(+id);
+  @ApiBearerAuth()
+  async markAsRead(@Param('id', ParseIntPipe) id: number) {
+    return this.sseNotificationsService.setAsRead(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('read/all')
+  @ApiBearerAuth()
+  async markAllAsRead(@CurrentUser() user: ValidatedUserDto) {
+    return this.sseNotificationsService.setAllAsReadForUser(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('read/bulk')
+  @ApiBearerAuth()
+  async markBulkAsRead(
+    @Body('ids', new ParseArrayPipe({ items: Number })) ids: number[],
+  ) {
+    return await this.sseNotificationsService.setBulkAsRead(ids);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  @ApiBearerAuth()
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.sseNotificationsService.remove(id);
   }
 
   @Sse('stream')
-  getNotificationStream(
+  async getNotificationStream(
     @Query('token') token: string,
-  ): Observable<MessageEvent> {
+  ): Promise<Observable<MessageEvent>> {
     if (!token) {
       throw new UnauthorizedException('Authentication token is required');
     }
 
-    // The service will validate the token and return an Observable of notifications
-    return this.sseNotificationsService.getNotificationStream(token);
+    const userId = await this.sseNotificationsService.getUserIdByToken(token);
+
+    return this.sseNotificationsService.getNotificationStream(userId);
   }
 }

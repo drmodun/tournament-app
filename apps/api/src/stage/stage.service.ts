@@ -33,6 +33,8 @@ export class StageService {
       throw new UnprocessableEntityException('Stage creation failed');
     }
 
+    console.log(stage[0]);
+
     try {
       const stageId = await this.createChallongeTournament(
         stage[0].id as number,

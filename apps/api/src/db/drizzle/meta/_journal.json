@@ -232,6 +232,20 @@
       "when": 1741994833807,
       "tag": "0032_busy_madame_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1743516460808,
+      "tag": "0033_amusing_the_executioner",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1743520136890,
+      "tag": "0034_fair_prism",
+      "breakpoints": true
     }
   ]
 }

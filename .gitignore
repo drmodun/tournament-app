@@ -36,3 +36,4 @@ yarn-error.log*
 .turbo
 
 *storybook.log
+.qodo

@@ -9,12 +9,12 @@ import {
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-export const createBlockedUser = async (data: {
+export const deleteBlockedUser = async (data: {
   groupId?: number;
   userId?: number;
 }) => {
   return clientApi
-    .post<never, AxiosResponse>(
+    .delete<never, AxiosResponse>(
       `/blocked-users/${data?.groupId}/${data?.userId}`,
       {
         params: {
@@ -25,16 +25,16 @@ export const createBlockedUser = async (data: {
     )
     .then((res) => res.data);
 };
-export const useCreateBlockedUser = () => {
+export const useDeleteBlockedUser = () => {
   const toast = useToastContext();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createBlockedUser,
+    mutationFn: deleteBlockedUser,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
     onSuccess: async () => {
-      toast.addToast("successfully blocked user", "success");
+      toast.addToast("successfully unblocked user", "success");
       await queryClient.invalidateQueries({
         queryKey: ["lfg"],
       });
@@ -53,7 +53,7 @@ export const useCreateBlockedUser = () => {
       return false;
     },
     onMutate: () => {
-      toast.addToast("blocking user...", "info");
+      toast.addToast("unblocking user...", "info");
     },
   });
 };

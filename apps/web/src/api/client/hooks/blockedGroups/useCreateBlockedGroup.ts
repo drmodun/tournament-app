@@ -9,32 +9,21 @@ import {
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-export const createBlockedUser = async (data: {
-  groupId?: number;
-  userId?: number;
-}) => {
+export const createBlockedGroup = async (groupId?: number) => {
   return clientApi
-    .post<never, AxiosResponse>(
-      `/blocked-users/${data?.groupId}/${data?.userId}`,
-      {
-        params: {
-          groupId: data?.groupId,
-          userId: data?.userId,
-        },
-      },
-    )
+    .post<never, AxiosResponse>(`/blocked-groups/${groupId}`)
     .then((res) => res.data);
 };
-export const useCreateBlockedUser = () => {
+export const useCreateBlockedGroup = () => {
   const toast = useToastContext();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createBlockedUser,
+    mutationFn: createBlockedGroup,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
     onSuccess: async () => {
-      toast.addToast("successfully blocked user", "success");
+      toast.addToast("successfully blocked group", "success");
       await queryClient.invalidateQueries({
         queryKey: ["lfg"],
       });
@@ -42,7 +31,7 @@ export const useCreateBlockedUser = () => {
         queryKey: ["group"],
       });
       await queryClient.invalidateQueries({
-        queryKey: ["blocked-users"],
+        queryKey: ["blocked-groups"],
       });
 
       return true;
@@ -53,7 +42,7 @@ export const useCreateBlockedUser = () => {
       return false;
     },
     onMutate: () => {
-      toast.addToast("blocking user...", "info");
+      toast.addToast("blocking group...", "info");
     },
   });
 };

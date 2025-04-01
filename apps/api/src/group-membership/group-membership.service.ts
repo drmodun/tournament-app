@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  forwardRef,
+  Inject,
+} from '@nestjs/common';
 import { GroupMembershipDrizzleRepository } from './group-membership.repository';
 import {
   GroupMembershipQuery,
@@ -11,11 +16,21 @@ import {
 } from '@tournament-app/types';
 import { GroupMembershipResponse } from './dto/responses.dto';
 import { PaginationOnly } from 'src/base/query/baseQuery';
+import { SseNotificationsService } from '../infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from '../infrastructure/firebase-notifications/templates';
+import { TemplatesEnum } from '../infrastructure/types';
+import { notificationTypeEnum } from '@tournament-app/types';
+import { GroupService } from 'src/group/group.service';
 
 @Injectable()
 export class GroupMembershipService {
   constructor(
     private readonly groupMembershipRepository: GroupMembershipDrizzleRepository,
+    private readonly sseNotificationsService: SseNotificationsService,
+    private readonly templatesFiller: NotificationTemplatesFiller,
+
+    @Inject(forwardRef(() => GroupService))
+    private readonly groupService: GroupService,
   ) {}
 
   async create(groupId: number, userId: number) {
@@ -107,6 +122,12 @@ export class GroupMembershipService {
       throw new NotFoundException('Group membership not found');
     }
 
+    const currentMembership = await this.findOneWithoutThrow(
+      groupId,
+      userId,
+      GroupMembershipResponsesEnum.MINI,
+    );
+
     const action = this.groupMembershipRepository.updateEntity(
       {
         groupId,
@@ -116,6 +137,62 @@ export class GroupMembershipService {
     );
 
     await action;
+
+    if (
+      currentMembership?.role !== groupRoleEnum.ADMIN &&
+      updateGroupMembershipDto.role === groupRoleEnum.ADMIN
+    ) {
+      await this.sendNotificationAboutPromotion(groupId, userId);
+    }
+
+    if (
+      currentMembership?.role === groupRoleEnum.ADMIN &&
+      updateGroupMembershipDto.role === groupRoleEnum.MEMBER
+    ) {
+      await this.sendNotificationAboutDemotion(groupId, userId);
+    }
+  }
+
+  async sendNotificationAboutPromotion(groupId: number, userId: number) {
+    const group = await this.groupService.findOne(groupId);
+
+    const message = this.templatesFiller.fill(
+      TemplatesEnum.GROUP_ADMIN_PROMOTION,
+      {
+        group: group.name,
+      },
+    );
+
+    await this.sseNotificationsService.createWithUsers(
+      {
+        type: notificationTypeEnum.GROUP_ADMIN_PROMOTION,
+        message,
+        link: `/groups/${groupId}`,
+        image: null,
+      },
+      [userId],
+    );
+  }
+
+  async sendNotificationAboutDemotion(groupId: number, userId: number) {
+    const group = await this.groupService.findOne(groupId);
+
+    const message = this.templatesFiller.fill(
+      TemplatesEnum.GROUP_ADMIN_DEMOTION,
+      {
+        group: group.name,
+      },
+    );
+
+    await this.sseNotificationsService.createWithUsers(
+      {
+        type: notificationTypeEnum.GROUP_ADMIN_DEMOTION,
+        message,
+        link: `/groups/${groupId}`,
+        image: null,
+      },
+      [userId],
+    );
   }
 
   async entityExists(groupId: number, userId: number): Promise<boolean> {
@@ -136,6 +213,22 @@ export class GroupMembershipService {
       groupId,
       userId,
     });
+
+    const group = await this.groupService.findOne(groupId);
+
+    const message = this.templatesFiller.fill(TemplatesEnum.GROUP_REMOVAL, {
+      group: group.name,
+    });
+
+    await this.sseNotificationsService.createWithUsers(
+      {
+        type: notificationTypeEnum.GROUP_REMOVAL,
+        message,
+        link: `/groups`,
+        image: null,
+      },
+      [userId],
+    );
   }
 
   async isAdmin(groupId: number, userId: number): Promise<boolean> {

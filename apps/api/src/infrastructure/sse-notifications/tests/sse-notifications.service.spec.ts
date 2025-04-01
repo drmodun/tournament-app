@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { SseNotificationsService } from '../sse-notifications.service';
 import { SseNotificationRepository } from '../sse-notification.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { createMock } from '@golevelup/ts-jest';
 import { NotificationCreateDto } from '../../types';
 import { BadRequestException } from '@nestjs/common';
 import { notificationTypeEnum } from '@tournament-app/types';
@@ -80,7 +79,9 @@ describe('SseNotificationsService', () => {
   describe('createWithUsers', () => {
     it('should create notifications and publish them to users', async () => {
       jest.spyOn(repository, 'createWithUsers').mockResolvedValue(undefined);
-      jest.spyOn(eventEmitter, 'emitAsync').mockResolvedValue(true);
+      jest
+        .spyOn(eventEmitter, 'emitAsync')
+        .mockResolvedValue(Promise.resolve([]));
 
       await service.createWithUsers(mockNotification, mockUserIds);
 
@@ -132,7 +133,9 @@ describe('SseNotificationsService', () => {
 
   describe('publishNotification', () => {
     it('should emit notification to user', async () => {
-      jest.spyOn(eventEmitter, 'emitAsync').mockResolvedValue(true);
+      jest
+        .spyOn(eventEmitter, 'emitAsync')
+        .mockResolvedValue(Promise.resolve([]));
 
       await service.publishNotification(mockUserId, mockNotification);
 

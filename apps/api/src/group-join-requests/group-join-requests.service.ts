@@ -48,6 +48,8 @@ export class GroupJoinRequestsService {
     });
 
     await action;
+
+    await this.saveAndEmitNotificationsForNewRequest(groupId, userId);
   }
 
   async checkIfGroupIsPublic(groupId: number, relatedLFPId?: number) {
@@ -243,12 +245,12 @@ export class GroupJoinRequestsService {
       throw new NotFoundException('Group join request not found');
     }
 
-    await this.remove(groupId, userId);
-
     const notification = await this.createNotificationBodyForRejectedJoin(
       groupId,
       userId,
     );
+
+    await this.remove(groupId, userId);
 
     await this.notificationService.createWithUsers(notification, [userId]);
   }

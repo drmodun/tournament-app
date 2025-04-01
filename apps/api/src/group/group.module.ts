@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { GroupController } from './group.controller';
 import { GroupDrizzleRepository } from './group.repository';
@@ -7,7 +7,8 @@ import { GroupMembershipModule } from 'src/group-membership/group-membership.mod
 import { GroupAdminGuard } from './guards/group-admin.guard';
 import { GroupMemberGuard } from './guards/group-member.guard';
 import { GroupOwnerGuard } from './guards/group-owner.guard';
-
+import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
+import { RosterModule } from 'src/roster/roster.module';
 @Module({
   controllers: [GroupController],
   providers: [
@@ -18,7 +19,7 @@ import { GroupOwnerGuard } from './guards/group-owner.guard';
     GroupMemberGuard,
     GroupOwnerGuard,
   ],
-  imports: [GroupMembershipModule],
+  imports: [forwardRef(() => GroupMembershipModule), SseNotificationsModule],
   exports: [
     GroupService,
     GroupDrizzleRepository,

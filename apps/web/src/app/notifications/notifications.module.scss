@@ -1,0 +1,57 @@
+@import "styles/variables.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: $phoneBreakpoint) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+}
+
+.notificationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+  font-size: 1.1rem;
+  color: $secondary;
+  text-align: center;
+  border: 1px dashed $lightMuted;
+  border-radius: 8px;
+  padding: 2rem;
+}

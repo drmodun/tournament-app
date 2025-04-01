@@ -24,6 +24,7 @@ export enum TemplatesEnum {
   GROUP_ADMIN_PROMOTION = 'group-admin-promotion',
   GROUP_ADMIN_DEMOTION = 'group-admin-demotion',
   TEST_TEMPLATE = 'test-template',
+  // new follower notif add
 }
 
 class WelcomeInfo {

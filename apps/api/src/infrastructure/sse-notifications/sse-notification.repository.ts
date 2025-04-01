@@ -89,8 +89,6 @@ export class SseNotificationRepository extends PrimaryRepository<
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {
-      const field = notification[key];
-      if (!field) return;
       const parsed = value;
       switch (key) {
         case 'userId':
@@ -162,7 +160,7 @@ export class SseNotificationRepository extends PrimaryRepository<
       isRead: boolean;
     }[]
   > {
-    return db
+    return await db
       .select({
         notification: this.getMappingObject('base'),
         isRead: notificationToUser.read,

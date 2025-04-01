@@ -27,6 +27,7 @@ import { RosterModule } from './roster/roster.module';
 import { CareerModule } from './career/career.module';
 import { ChallongeModule } from './challonge/challonge.module';
 import { MatchesModule } from './matches/matches.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { MatchesModule } from './matches/matches.module';
     CareerModule,
     ChallongeModule,
     MatchesModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

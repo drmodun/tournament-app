@@ -16,12 +16,19 @@ import {
 } from '@tournament-app/types';
 import { GroupInviteWithUserResponseDto } from './dto/responses.dto';
 import { GroupService } from 'src/group/group.service';
+import { SseNotificationsService } from '../infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from '../infrastructure/firebase-notifications/templates';
+import { TemplatesEnum } from '../infrastructure/types';
+import { notificationTypeEnum } from '@tournament-app/types';
+
 @Injectable()
 export class GroupInvitesService {
   constructor(
     private readonly repository: GroupInviteDrizzleRepository,
     private readonly groupMembershipService: GroupMembershipService,
     private readonly groupService: GroupService,
+    private readonly sseNotificationsService: SseNotificationsService,
+    private readonly templatesFiller: NotificationTemplatesFiller,
   ) {}
 
   async create(groupId: number, userId: number, dto: CreateGroupInviteDto) {
@@ -34,6 +41,26 @@ export class GroupInvitesService {
       userId,
       ...dto,
     });
+
+    await this.sendNotificationToInvitedUser(groupId, userId);
+  }
+
+  async sendNotificationToInvitedUser(groupId: number, userId: number) {
+    const group = await this.groupService.findOne(groupId);
+
+    const message = this.templatesFiller.fill(TemplatesEnum.GROUP_INVITATION, {
+      group: group.name,
+    });
+
+    await this.sseNotificationsService.createWithUsers(
+      {
+        type: notificationTypeEnum.GROUP_INVITATION,
+        message,
+        link: `/groups/${groupId}/invites`,
+        image: null,
+      },
+      [userId],
+    );
   }
 
   async checkIfUserIsAlreadyMember(groupId: number, userId: number) {
@@ -109,11 +136,56 @@ export class GroupInvitesService {
 
     await this.groupMembershipService.create(groupId, userId);
     await this.remove(groupId, userId);
+
+    await this.sendNotificationAboutAcceptance(groupId, userId);
+  }
+
+  async sendNotificationAboutRejection(groupId: number, userId: number) {
+    const group = await this.groupService.findOne(groupId);
+
+    const message = this.templatesFiller.fill(
+      TemplatesEnum.GROUP_JOIN_REJECTION,
+      {
+        group: group.name,
+      },
+    );
+
+    await this.sseNotificationsService.createWithUsers(
+      {
+        type: notificationTypeEnum.GROUP_JOIN_REJECTION,
+        message,
+        link: `/groups`,
+        image: null,
+      },
+      [userId],
+    );
+  }
+
+  async sendNotificationAboutAcceptance(groupId: number, userId: number) {
+    const group = await this.groupService.findOne(groupId);
+
+    const message = this.templatesFiller.fill(
+      TemplatesEnum.GROUP_JOIN_APPROVAL,
+      {
+        group: group.name,
+      },
+    );
+
+    await this.sseNotificationsService.createWithUsers(
+      {
+        type: notificationTypeEnum.GROUP_JOIN_APPROVAL,
+        message,
+        link: `/groups`,
+        image: null,
+      },
+      [userId],
+    );
   }
 
   async reject(groupId: number, userId: number) {
     await this.findOne(groupId, userId);
 
     await this.repository.deleteEntity({ groupId, userId });
+    await this.sendNotificationAboutRejection(groupId, userId);
   }
 }

@@ -145,7 +145,9 @@ describe('SseNotificationsController', () => {
       jest.spyOn(service, 'getUserIdByToken').mockResolvedValue(mockUser.id);
       jest
         .spyOn(service, 'getNotificationStream')
-        .mockReturnValue(mockObservable);
+        .mockReturnValue(
+          mockObservable as unknown as Promise<Observable<MessageEvent>>,
+        );
 
       const result = await controller.getNotificationStream(mockToken);
 

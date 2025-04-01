@@ -60,6 +60,10 @@ export class GroupJoinRequestDrizzleRepository extends CompositeRepository<
         return query.leftJoin(user, eq(groupJoinRequest.userId, user.id));
       case GroupJoinRequestResponsesEnum.WITH_MINI_GROUP:
         return query.leftJoin(group, eq(groupJoinRequest.groupId, group.id));
+      case GroupJoinRequestResponsesEnum.FOR_NOTIFICATION:
+        return query
+          .leftJoin(user, eq(groupJoinRequest.userId, user.id))
+          .leftJoin(group, eq(groupJoinRequest.groupId, group.id));
       default:
         return this.conditionallyJoin(
           query,

@@ -77,6 +77,10 @@ export default function ManageGroupInvites() {
       <div className={styles.infiniteLoad}>
         {isLoading ? (
           <ProgressWheel variant={textColorTheme} />
+        ) : data?.pages[0].results.length === 0 ? (
+          <div className={styles.noInvites}>
+            <p className={globals[`${theme}Color`]}>you have no invites!</p>
+          </div>
         ) : (
           <>
             {data?.pages.map((page, i) => (

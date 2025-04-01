@@ -22,3 +22,15 @@
 .rosterEditForm {
   margin-top: $doublePadding;
 }
+
+.manageRostersTitle {
+  margin-bottom: $halfPadding;
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
+}
+
+.addButton {
+  border: none;
+  background: none;
+}

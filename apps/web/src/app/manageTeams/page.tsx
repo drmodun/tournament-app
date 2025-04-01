@@ -3,15 +3,20 @@
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import SearchIcon from "@mui/icons-material/Search";
+import { IMiniGroupResponseWithLogo } from "@tournament-app/types";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
+import { useSearchUserGroups } from "api/client/hooks/groups/useSearchUserGroups";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dialog from "components/dialog";
+import Input from "components/input";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
+import useDebounce from "utils/hooks/useDebounce";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CreateTeamForm from "views/createTeamForm";
 import ManageTeams from "views/manageTeams";
@@ -21,9 +26,12 @@ import styles from "./index.module.scss";
 export default function Teams() {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activePage, setActivePage] = useState<number>(0);
-  const { theme } = useThemeContext();
+
   const [dialogActive, setDialogActive] = useState<boolean>(false);
+
+  const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+
   const [fetchLimit, setFetchLimit] = useState<number>(-1);
 
   const {
@@ -38,6 +46,14 @@ export default function Teams() {
     isFetchPreviousPageError,
   } = useUserGroups();
   const createGroupMutation = useCreateGroup();
+
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [searchVal, setSearchVal] = useState<string>();
+  const debouncedSetSearchVal = useDebounce((value: string) => {
+    setSearchVal(value);
+  }, 1000);
+
+  const { data: searchData } = useSearchUserGroups(searchVal);
 
   useEffect(() => {
     createGroupMutation.isSuccess && setDialogActive(false);
@@ -87,7 +103,29 @@ export default function Teams() {
         <div className={styles.progressWheelWrapper}>
           <ProgressWheel variant={textColorTheme} />
         </div>
-      ) : (data?.pages[0]?.results?.length ?? 0) > 0 ? (
+      ) : isSearching ? (
+        <div className={clsx(styles.screen)}>
+          <SearchBar
+            data={searchData}
+            setSearchVal={debouncedSetSearchVal}
+            setDialogActive={setDialogActive}
+            setIsSearching={setIsSearching}
+          />
+
+          {data?.pages[Math.floor(activePage)]?.results[activeTab] && (
+            <ManageTeams team={searchData?.[activeTab]} />
+          )}
+        </div>
+      ) : data?.pages?.[0]?.results?.length === 0 ? (
+        <div className={styles.noTeams}>
+          <h1 className={globals[`${textColorTheme}Color`]}>no teams found</h1>
+          <Button
+            label="create team"
+            onClick={() => setDialogActive(true)}
+            variant="primary"
+          />
+        </div>
+      ) : (
         <div className={clsx(styles.screen)}>
           <div
             className={clsx(
@@ -150,6 +188,13 @@ export default function Teams() {
             >
               <AddIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
+            <button
+              className={clsx(styles.button, styles.addButton)}
+              title="toggle search"
+              onClick={() => setIsSearching((prev) => !prev)}
+            >
+              <SearchIcon className={clsx(styles[`${theme}Fill`])} />
+            </button>
           </div>
 
           {data?.pages[Math.floor(activePage)]?.results[activeTab] && (
@@ -158,18 +203,94 @@ export default function Teams() {
             />
           )}
         </div>
-      ) : (
-        <div className={styles.noTeams}>
-          <p
-            className={clsx(
-              globals[`${textColorTheme}Color`],
-              globals.largeText,
-            )}
-          >
-            you have no teams!
-          </p>
-        </div>
       )}
     </div>
   );
 }
+
+const SearchBar = ({
+  data,
+  setSearchVal,
+  setDialogActive,
+  setIsSearching,
+}: {
+  data?: IMiniGroupResponseWithLogo[];
+  // eslint-disable-next-line no-unused-vars
+  setSearchVal?: (val: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  setDialogActive?: (val: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
+  setIsSearching?: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const { theme } = useThemeContext();
+  const textColorTheme = textColor(theme);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  return (
+    <div
+      className={clsx(
+        styles.tabs,
+        globals[`${textColorTheme}BackgroundColor`],
+        styles.searchBar,
+      )}
+    >
+      <div className={styles.searchInputWrapper}>
+        <Input
+          onChange={(e) => {
+            setSearchVal && setSearchVal(e.currentTarget.value);
+          }}
+          variant={theme}
+          placeholder="search..."
+          fullClassName={styles.searchInput}
+        />
+      </div>
+      <div className={styles.searchPaginationWrapper}>
+        <button
+          className={clsx(styles.button)}
+          title="back"
+          onClick={() => setActiveIndex((prev) => prev - 1)}
+          disabled={activeIndex === 0}
+        >
+          <ArrowBackIcon className={clsx(styles[`${theme}Fill`])} />
+        </button>
+        <div className={styles.teamsWrapper}>
+          <Button
+            className={clsx(styles.tab, styles.active)}
+            label={data?.[activeIndex]?.name}
+            variant={"primary"}
+          />
+        </div>
+
+        <button
+          className={clsx(styles.button)}
+          title="forward"
+          onClick={() => setActiveIndex((prev) => prev + 1)}
+          disabled={!data || data.length <= activeIndex - 1}
+        >
+          <ArrowForwardIcon className={clsx(styles[`${theme}Fill`])} />
+        </button>
+        <button
+          className={clsx(styles.button, styles.addButton)}
+          title="create team"
+          onClick={() => setDialogActive && setDialogActive(true)}
+        >
+          <AddIcon className={clsx(styles[`${theme}Fill`])} />
+        </button>
+        <button
+          className={clsx(styles.button, styles.addButton)}
+          title="toggle search"
+          onClick={() =>
+            setIsSearching && setIsSearching((prev: boolean) => !prev)
+          }
+        >
+          <SearchIcon className={clsx(styles[`${theme}Fill`])} />
+        </button>
+      </div>
+    </div>
+  );
+};

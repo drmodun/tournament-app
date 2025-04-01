@@ -2,31 +2,30 @@
 
 import {
   IExtendedStageResponseWithTournament,
-  IMiniGroupResponse,
   IRosterResponse,
-  IStageResponse,
 } from "@tournament-app/types";
 import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
-import { useCreateRoster } from "api/client/hooks/rosters/useCreateRoster";
+import { useEditRoster } from "api/client/hooks/rosters/useUpdateRoster";
 import { clsx } from "clsx";
 import Button from "components/button";
 import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
-import { textColor } from "types/styleTypes";
+import { textColor, TextVariants } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./editRosterForm.module.scss";
-import { useEditRoster } from "api/client/hooks/rosters/useUpdateRoster";
 
 export default function EditRosterForm({
   roster,
   onClose,
   stage,
+  variant,
 }: {
   roster?: IRosterResponse;
   onClose?: () => void;
   stage?: IExtendedStageResponseWithTournament;
+  variant?: TextVariants;
 }) {
-  const { theme } = useThemeContext();
+  const theme = variant ?? useThemeContext().theme;
   const textColorTheme = textColor(theme);
 
   const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
@@ -123,7 +122,7 @@ export default function EditRosterForm({
       </div>
       <h3 className={clsx(globals[`${textColorTheme}Color`], styles.title)}>
         select members for roster substitutes
-        {stage?.maxSubstitutes && ` (max is ${stage.maxSubstitutes})`}
+        {stage?.maxSubstitutes && ` (max ${stage.maxSubstitutes})`}
       </h3>
       <div className={styles.userCardWrapper}>
         {data?.members?.map((member) => {

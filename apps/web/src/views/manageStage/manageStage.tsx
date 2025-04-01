@@ -154,12 +154,13 @@ export default function ManageStages(stage?: {
                 />
               )}
             {participationData && participationData?.length > 0 && (
-              <Button
-                variant="warning"
-                onClick={() => setEditRostersDialogOpen(true)}
-                className={styles.actionButton}
-                label="manage rosters"
-              />
+              <Link href={`/manageRosters/${stage?.stage?.id}`}>
+                <Button
+                  variant="warning"
+                  className={styles.actionButton}
+                  label="manage rosters"
+                />
+              </Link>
             )}
           </>
         )}

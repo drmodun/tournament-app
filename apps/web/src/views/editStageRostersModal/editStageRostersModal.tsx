@@ -1,4 +1,3 @@
-import { useGetParticipationRosters } from "api/client/hooks/rosters/useGetParticipationRoster";
 import styles from "./editStageRostersModal.module.scss";
 import globals from "styles/globals.module.scss";
 import { useEffect, useState } from "react";
@@ -9,6 +8,8 @@ import ProgressWheel from "components/progressWheel";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { clsx } from "clsx";
 import { textColor } from "types/styleTypes";
+import AddIcon from "@mui/icons-material/Add";
+import Dialog from "components/dialog";
 
 export default function EditStageRostersModal({
   stage,
@@ -22,13 +23,19 @@ export default function EditStageRostersModal({
   const { data, isLoading } = useGetStageRostersManagedByUser(stage?.id);
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
-
-  useEffect(() => {
-    console.log(stage, data, "test");
-  }, [data]);
+  const [addRosterModalActive, setAddRosterModalActive] =
+    useState<boolean>(false);
 
   return (
     <div className={styles.wrapper}>
+      <div className={styles.manageRostersTitle}>
+        <h3 className={clsx(globals[`${textColorTheme}Color`])}>
+          manage your rosters
+        </h3>
+        <button className={styles.addButton}>
+          <AddIcon className={clsx(globals[`${textColorTheme}FillChildren`])} />
+        </button>
+      </div>
       {isLoading ? (
         <ProgressWheel></ProgressWheel>
       ) : (data?.length ?? 0) > 0 ? (
@@ -40,7 +47,6 @@ export default function EditStageRostersModal({
             )}
           >
             {data?.map((elem, index) => {
-              console.log("element", elem.id);
               return (
                 <button
                   onClick={() => setActiveIndex(index)}
@@ -75,7 +81,9 @@ export default function EditStageRostersModal({
         </div>
       ) : (
         <div>
-          <p className={globals[`${theme}Color`]}>you have no rosters!</p>
+          <p className={globals[`${textColorTheme}Color`]}>
+            you have no rosters!
+          </p>
         </div>
       )}
     </div>

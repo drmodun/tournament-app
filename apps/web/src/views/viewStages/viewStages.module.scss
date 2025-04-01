@@ -1,0 +1,83 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  max-width: $desktopBreakpoint;
+  height: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+}
+
+.addButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  gap: $padding;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.stagesContainer {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax($baseComponentHeight * 8, 1fr)
+  );
+  gap: $padding;
+}
+
+.stageItem {
+  text-decoration: none;
+  width: 100%;
+}
+
+.stageItem > * {
+  width: 100%;
+}
+
+.description {
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+.info {
+  margin-left: $halfPadding;
+}
+
+.title {
+  margin-bottom: $halfPadding;
+}
+
+.loadMore {
+  margin-top: $padding;
+  width: 100%;
+}
+
+.stageItem {
+  text-decoration: none;
+  color: inherit !important;
+}
+
+.addIconButton {
+  background-color: transparent;
+  border: none;
+}

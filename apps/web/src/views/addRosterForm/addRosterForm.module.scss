@@ -49,3 +49,9 @@
 .substitutesTitle {
   margin-top: $padding;
 }
+
+.bottomTitles {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}

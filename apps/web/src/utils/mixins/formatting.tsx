@@ -72,7 +72,7 @@ export const calculateBestFutureDateFormat = (date: Date) => {
 
 export const formatDate = (date: Date) => {
   try {
-    const d: string = dateFormat(date, "mmm dS, 'yy");
+    const d: string = dateFormat(date, "mmm dS, 'yy").toLowerCase();
     return d;
   } catch {
     return "unknown";

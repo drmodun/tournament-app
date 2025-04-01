@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: Actually implement
-
 import { ICreateLFGRequest } from "@tournament-app/types";
 import { useGetUserInterests } from "api/client/hooks/interests/useGetUserInterests";
 import { useCreateLFG } from "api/client/hooks/lfg/useCreateLFG";

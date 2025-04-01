@@ -18,8 +18,10 @@ import styles from "./groupSelectDialog.module.scss";
 
 export default function GroupSelectDialog({
   competitionId,
+  onClose,
 }: {
   competitionId: number | undefined;
+  onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -113,6 +115,7 @@ export default function GroupSelectDialog({
         groupId: selectedGroup,
         userId: data!.id,
       });
+      onClose && onClose();
     }
   };
 
@@ -123,9 +126,12 @@ export default function GroupSelectDialog({
       </p>
       {creatorIsLoading ? (
         <ProgressWheel variant={textColorTheme} />
-      ) : (
+      ) : (creatorData?.pages?.[0].results.length ?? -1) > 0 ? (
         <div className={styles.groupsWrapper}>
-          <button onClick={() => backward()}>
+          <button
+            className={styles.paginationButton}
+            onClick={() => backward()}
+          >
             <ArrowBackIcon
               className={clsx(
                 styles.arrow,
@@ -183,6 +189,12 @@ export default function GroupSelectDialog({
               )}
             />
           </button>
+        </div>
+      ) : (
+        <div>
+          <p className={globals[`${textColorTheme}Color`]}>
+            you don't own any groups!
+          </p>
         </div>
       )}
       <p className={styles.secondTitle}>

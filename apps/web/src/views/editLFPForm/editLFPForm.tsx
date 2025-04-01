@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: Actually implement
-
 import { ILFPResponse } from "@tournament-app/types";
 import { useEditLFP } from "api/client/hooks/lfp/useEditLFP";
 import { clsx } from "clsx";

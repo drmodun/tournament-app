@@ -3,6 +3,8 @@
 import { StageResponsesEnum } from "@tournament-app/types";
 
 export const fetchStage = async (stageId: number | undefined) => {
+  if (!stageId) return [];
+
   return fetch(
     `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/stages/${stageId}?responseType=${StageResponsesEnum.WITH_EXTENDED_TOURNAMENT}`,
     {

@@ -83,6 +83,8 @@ export default function Dropdown({
   const [optionsActive, setOptionsActive] = useState<boolean[]>(
     new Array(options.length).fill(true),
   );
+  const [searchVal, setSearchVal] = useState<string>();
+
   const methods = useFormContext();
 
   if (isReactHookForm && name) {
@@ -105,6 +107,7 @@ export default function Dropdown({
           shouldValidate: true,
           shouldDirty: true,
         });
+      onSelect && onSelect(-1);
     } else {
       setSelected(index);
       isReactHookForm &&
@@ -113,9 +116,11 @@ export default function Dropdown({
           shouldValidate: true,
           shouldDirty: true,
         });
+      setSearchVal("");
+      onSelect && onSelect(index);
     }
+
     setIsDropped(false);
-    onSelect && onSelect(index);
   };
 
   useEffect(() => {
@@ -225,7 +230,11 @@ export default function Dropdown({
                 placeholder={searchPlaceholder}
                 variant={textColor(variant)}
                 className={clsx(searchClassName, styles.search)}
-                onChange={handleSearch}
+                onChange={(e) => {
+                  setSearchVal(e.currentTarget.value);
+                  handleSearch(e);
+                }}
+                controlledValue={searchVal}
               />
             )}
 

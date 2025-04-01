@@ -17,6 +17,7 @@ export const editRoster = async (data: {
   id?: number;
   members?: { userId?: number; isSubstitute?: boolean }[];
 }) => {
+  console.log(data);
   return clientApi
     .patch<
       ICreateRosterRequest,

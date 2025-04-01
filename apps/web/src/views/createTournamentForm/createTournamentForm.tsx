@@ -404,6 +404,12 @@ export default function CreateTournamentForm({
         </div>
         <div className={styles.inputWrapper}>
           <Dropdown
+            label="category"
+            placeholder="select tournament category"
+            name="categoryId"
+            isReactHookForm={true}
+            required={true}
+            variant={textColorTheme}
             options={countries.map((country) => {
               return {
                 label:
@@ -412,14 +418,11 @@ export default function CreateTournamentForm({
                   ] ?? "unknown",
               };
             })}
+            onSelect={(index: number) => {
+              setCategoryId(data?.results[index]?.id ?? -1);
+            }}
             searchPlaceholder="search..."
             doesSearch={true}
-            label="country"
-            placeholder="select tournament country"
-            name="country"
-            isReactHookForm={true}
-            required={true}
-            variant={textColorTheme}
             className={styles.dropdown}
             innerWrapperClassName={styles.dropdown}
             optionsClassName={styles.dropdown}

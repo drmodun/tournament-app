@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: Actually implement
-
 import { useResetPassword } from "api/client/hooks/auth/useResetPassword";
 import Button from "components/button";
 import Input from "components/input";

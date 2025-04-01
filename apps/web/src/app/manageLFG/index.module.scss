@@ -11,6 +11,7 @@
   padding-right: $horizontalMargin;
   padding-top: 4 * $doublePadding;
   padding-bottom: $doublePadding * 2;
+  gap: $padding;
 
   @media screen and (max-width: $tabletBreakpoint) {
     padding-left: $doublePadding;

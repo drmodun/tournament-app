@@ -184,6 +184,7 @@ export default function RichEditor({
           )}
         >
           <button
+            type="button"
             title="menu button"
             onClick={toggleBold}
             disabled={isBoldDisabled}
@@ -212,6 +213,7 @@ export default function RichEditor({
           </button>
 
           <button
+            type="button"
             title="menu button"
             onClick={toggleItalics}
             disabled={isItalicsDisabled}
@@ -240,6 +242,7 @@ export default function RichEditor({
             />
           </button>
           <button
+            type="button"
             title="menu button"
             onClick={toggleStrike}
             disabled={isStrikeDisabled}
@@ -268,6 +271,7 @@ export default function RichEditor({
             />
           </button>
           <button
+            type="button"
             title="menu button"
             onClick={toggleUnderline}
             disabled={isUnderlineDisabled}
@@ -298,6 +302,7 @@ export default function RichEditor({
         </div>
         <div className={clsx(styles.menuBarPart)}>
           <button
+            type="button"
             title="menu button"
             onClick={toggleBulletList}
             disabled={isBulletListDisabled}
@@ -326,6 +331,7 @@ export default function RichEditor({
             />
           </button>
           <button
+            type="button"
             title="menu button"
             onClick={toggleHeading}
             disabled={isHeadingDisabled}
@@ -354,6 +360,7 @@ export default function RichEditor({
             />
           </button>
           <button
+            type="button"
             title="menu button"
             onClick={undo}
             disabled={isUndoDisabled}
@@ -382,6 +389,7 @@ export default function RichEditor({
             />
           </button>
           <button
+            type="button"
             title="menu button"
             onClick={redo}
             disabled={isRedoDisabled}

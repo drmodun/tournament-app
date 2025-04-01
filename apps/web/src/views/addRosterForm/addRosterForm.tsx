@@ -3,6 +3,7 @@
 import {
   IExtendedStageResponseWithTournament,
   IMiniGroupResponse,
+  IMiniGroupResponseWithLogo,
 } from "@tournament-app/types";
 import { useGetGroupMembers } from "api/client/hooks/groups/useGetGroupMembers";
 import { useCreateRoster } from "api/client/hooks/rosters/useCreateRoster";
@@ -10,32 +11,28 @@ import { clsx } from "clsx";
 import Button from "components/button";
 import { useState } from "react";
 import globals from "styles/globals.module.scss";
-import { textColor } from "types/styleTypes";
+import { textColor, TextVariants } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { GroupParticipationType } from "views/manageStage/manageStage";
 import styles from "./addRosterForm.module.scss";
 
-type Participation = {
-  id: number;
-  tournament: {
-    categoryId: number;
-  };
-  group: IMiniGroupResponse;
-  user: IMiniGroupResponse;
-};
-
 export default function AddRosterForm({
   stage,
   group,
-  participation,
+  participationId,
   onClose,
+  variant,
 }: {
-  group?: GroupParticipationType | IMiniGroupResponse;
+  group?:
+    | GroupParticipationType
+    | IMiniGroupResponse
+    | IMiniGroupResponseWithLogo;
   stage?: IExtendedStageResponseWithTournament;
-  participation?: Participation;
+  participationId?: number;
   onClose?: () => void;
+  variant?: TextVariants;
 }) {
-  const { theme } = useThemeContext();
+  const theme = variant ?? useThemeContext().theme;
   const textColorTheme = textColor(theme);
 
   const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
@@ -48,7 +45,7 @@ export default function AddRosterForm({
     if (!stage?.id) return;
     await createRosterMutation.mutateAsync({
       stageId: stage?.id,
-      participationId: participation?.id,
+      participationId: participationId,
       members: [
         ...selectedMembers.map((member) => {
           return { userId: member, isSubstitute: false };
@@ -105,7 +102,6 @@ export default function AddRosterForm({
             >
               <img
                 src={member.profilePicture}
-                alt="profile picture"
                 onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                 className={styles.pfp}
               />
@@ -133,7 +129,6 @@ export default function AddRosterForm({
             >
               <img
                 src={member.profilePicture}
-                alt="profile picture"
                 onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                 className={styles.pfp}
               />
@@ -143,10 +138,8 @@ export default function AddRosterForm({
         })}
       </div>
 
-      <div>
-        <h3 className={clsx(globals[`${theme}Color`], styles.title)}>
-          current roster
-        </h3>
+      <div className={styles.bottomTitles}>
+        <h3 className={clsx(globals[`${theme}Color`])}>current roster</h3>
         <div className={styles.selectedRoster}>
           {selectedMembers.length === 0 ? (
             <p className={globals[`${theme}Color`]}>no members selected!</p>
@@ -164,7 +157,6 @@ export default function AddRosterForm({
                   >
                     <img
                       src={member.profilePicture}
-                      alt="profile picture"
                       onError={(e) =>
                         (e.currentTarget.src = "/profilePicture.png")
                       }
@@ -176,9 +168,7 @@ export default function AddRosterForm({
               })
           )}
         </div>
-        <h3 className={clsx(globals[`${theme}Color`], styles.substitutesTitle)}>
-          substitutes
-        </h3>
+        <h3 className={clsx(globals[`${theme}Color`])}>substitutes</h3>
         <div className={styles.selectedRoster}>
           {selectedSubstitutes.length === 0 ? (
             <p className={globals[`${theme}Color`]}>no substitutes selected!</p>
@@ -196,7 +186,6 @@ export default function AddRosterForm({
                   >
                     <img
                       src={member.profilePicture}
-                      alt="profile picture"
                       onError={(e) =>
                         (e.currentTarget.src = "/profilePicture.png")
                       }

@@ -29,12 +29,15 @@ export const useCreateUserInterest = () => {
     onSuccess: async () => {
       toast.addToast("successfully created interest", "success");
       await queryClient.invalidateQueries({
-        queryKey: ["interest", "lfg"],
+        queryKey: ["interest"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["lfg"],
       });
       return true;
     },
     onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occured...", "error");
+      toast.addToast(error.message ?? "an error occurred...", "error");
       console.error(error);
       return false;
     },

@@ -186,33 +186,37 @@ export class RosterService {
         TournamentResponsesEnum.EXTENDED,
       );
 
-    const careers = await this.careerService.getMultipleCareers(
-      memberIds,
-      tournament.category?.id,
-    );
+    if (tournament.minimumMMR !== 0 && tournament.maximumMMR !== 999999) {
+      const careers = await this.careerService.getMultipleCareers(
+        memberIds,
+        tournament.category?.id,
+      );
 
-    if (memberIds.length !== careers.length) {
-      return false;
+      if (memberIds.length !== careers.length) {
+        return false;
+      }
+
+      const playersWithInvalidElo = careers.filter(
+        (career) =>
+          career.elo &&
+          (career.elo <= tournament.minimumMMR ||
+            career.elo >= tournament.maximumMMR),
+      );
+
+      if (playersWithInvalidElo.length > 0) {
+        return false;
+      }
+
+      if (tournament.isFakePlayersAllowed) return true;
+
+      const fakePlayers = careers.filter((career) => career.user.isFake);
+
+      if (fakePlayers.length > 0) {
+        return false;
+      }
     }
 
-    const playersWithInvalidElo = careers.filter(
-      (career) =>
-        career.elo &&
-        (career.elo <= tournament.minimumMMR ||
-          career.elo >= tournament.maximumMMR),
-    );
-
-    if (playersWithInvalidElo.length > 0) {
-      return false;
-    }
-
-    if (tournament.isFakePlayersAllowed) return true;
-
-    const fakePlayers = careers.filter((career) => career.user.isFake);
-
-    if (fakePlayers.length > 0) {
-      return false;
-    }
+    return true;
   }
 
   async getOnlyPlayers(rosterId: number) {

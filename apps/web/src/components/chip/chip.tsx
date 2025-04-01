@@ -37,6 +37,7 @@ export default function Chip({
       )}
       style={style}
       onClick={handleClick}
+      type="button"
     >
       {children}
       <p className={clsx(styles.label, globals[`${textColor(variant)}Color`])}>

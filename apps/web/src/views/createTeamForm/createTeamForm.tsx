@@ -108,7 +108,7 @@ export default function CreateTeamForm({
             name="abbreviation"
             reactFormHookProps={{
               pattern: {
-                value: /^([A-Za-zŽžÀ-ÿ]){2,6}\w$/i,
+                value: /^(\S){2,6}\w$/i,
                 message:
                   "abbreviation must be between 3 and 5 characters without whitespaces",
               },
@@ -233,7 +233,7 @@ export default function CreateTeamForm({
               });
             }}
           />
-          {!locationId && (
+          {!locationId && addMethods.formState.submitCount > 0 && (
             <p className={styles.error}>this field is required!</p>
           )}
         </div>

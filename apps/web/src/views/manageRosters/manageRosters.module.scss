@@ -26,6 +26,8 @@
 .card {
   padding: $padding;
   border-radius: $borderRadius;
+  display: flex;
+  gap: $halfPadding;
 }
 
 .playerCard {
@@ -34,4 +36,42 @@
   align-items: center;
   padding: $padding;
   border-radius: $borderRadius;
+}
+
+.dialogWrapper {
+  width: 75%;
+  max-height: 75%;
+
+  @media screen and (max-width: $phoneBreakpoint) {
+    width: 100%;
+    max-height: 100%;
+  }
+}
+
+.dropdown,
+.title {
+  margin-bottom: $padding;
+}
+
+.actionButtonIcon {
+  width: $baseComponentHeight;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.playerCards {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+  width: 100%;
+}
+
+.rostersWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
 }

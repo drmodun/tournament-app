@@ -24,7 +24,7 @@ export enum TemplatesEnum {
   GROUP_ADMIN_PROMOTION = 'group-admin-promotion',
   GROUP_ADMIN_DEMOTION = 'group-admin-demotion',
   TEST_TEMPLATE = 'test-template',
-  // new follower notif add
+  NEW_FOLLOWER = 'new-follower',
 }
 
 class WelcomeInfo {
@@ -92,6 +92,12 @@ class GroupAdminDemotionInfo {
   group: string;
 }
 
+class NewFollowerInfo {
+  follower: string;
+}
+
+// TODO: remove some types which will never be email templates
+
 export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   welcome: WelcomeInfo,
   'bet-outcome': BetOutcomeInfo,
@@ -108,6 +114,7 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   'tournament-reminder': TournamentReminderInfo,
   'tournament-start': TournamentStartInfo,
   'email-confirmation': VerifyEmailInfo,
+  'new-follower': NewFollowerInfo,
   'test-template': {},
 };
 

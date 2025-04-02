@@ -9,7 +9,8 @@ import { useRedirect } from "utils/hooks/useRedirect";
 import Button from "components/button";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { TextVariants, Variants } from "types/styleTypes";
-import styles from "./notifications.module.scss";
+import styles from "./index.module.scss";
+import Navbar from "views/navbar";
 
 export default function NotificationsPage() {
   const {
@@ -53,37 +54,40 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Notifications</h1>
-        {notifications && notifications.length > 0 && (
-          <Button
-            label="Mark all as read"
-            variant={textColorTheme}
-            onClick={markAllAsRead}
-          />
+    <div className={styles.screen}>
+      <Navbar className={styles.navbar} />
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Notifications</h1>
+          {notifications && notifications.length > 0 && (
+            <Button
+              label="Mark all as read"
+              variant={textColorTheme}
+              onClick={markAllAsRead}
+            />
+          )}
+        </div>
+
+        {notificationsLoading ? (
+          <div className={styles.loadingContainer}>
+            <ProgressWheel variant={colorTheme} />
+          </div>
+        ) : notifications && notifications.length > 0 ? (
+          <div className={styles.notificationsList}>
+            {notifications.map((notification) => (
+              <NotificationItem
+                key={notification.notification.id}
+                notification={notification}
+                onClick={handleNotificationClick}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.emptyState}>
+            <p>You have no notifications</p>
+          </div>
         )}
       </div>
-
-      {notificationsLoading ? (
-        <div className={styles.loadingContainer}>
-          <ProgressWheel variant={colorTheme} />
-        </div>
-      ) : notifications && notifications.length > 0 ? (
-        <div className={styles.notificationsList}>
-          {notifications.map((notification) => (
-            <NotificationItem
-              key={notification.notification.id}
-              notification={notification}
-              onClick={handleNotificationClick}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className={styles.emptyState}>
-          <p>You have no notifications</p>
-        </div>
-      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { baseApiUrl } from "api/client/base";
-import { INotificationBase, INotificationEvent } from "./types";
+import { INotificationBase } from "./types";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 export const useSseNotifications = (token: string | null) => {
@@ -15,7 +15,6 @@ export const useSseNotifications = (token: string | null) => {
       try {
         const eventData: INotificationBase = JSON.parse(event.data);
         const notification = eventData;
-        console.log("notification", eventData);
 
         toast.addToast(notification.message, "info");
 

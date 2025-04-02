@@ -1,12 +1,47 @@
 @import "styles/variables.scss";
 
+.screen {
+  padding-top: $doublePadding * 4;
+  padding-bottom: $doublePadding * 2;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-left: $horizontalMargin;
+  padding-right: $horizontalMargin;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+  }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+    height: 100%;
+  }
+
+  padding-bottom: $doublePadding * 2;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+}
+
+.navbar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
 }
 
 .header {

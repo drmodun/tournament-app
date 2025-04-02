@@ -8,9 +8,11 @@
   justify-content: center;
 
   .icon {
-    font-size: 1.5rem;
+    width: 24px;
+    height: 24px;
     color: $secondary;
     transition: color 0.2s ease;
+    fill: currentColor;
 
     &:hover {
       color: $primary;

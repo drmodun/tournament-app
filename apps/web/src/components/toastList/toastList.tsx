@@ -11,10 +11,13 @@ export default function ToastList({ style }: { style?: React.CSSProperties }) {
     e: MouseEvent<HTMLButtonElement>,
     onClick: MouseEventHandler<HTMLButtonElement> | undefined,
     id: number | undefined,
+    href?: string,
   ) => {
     onClick && onClick(e);
     id && toastContext.removeToast(id);
+    if (href) window.location.href = href;
   };
+
   return (
     <div className={styles.toastList} style={style}>
       {toastContext.toasts.map((toast: ToastProps, i: number) => (
@@ -26,7 +29,7 @@ export default function ToastList({ style }: { style?: React.CSSProperties }) {
             key={i}
             message={toast.message}
             type={toast.type}
-            onClick={(e) => handleClick(e, toast.onClick, toast.id)}
+            onClick={(e) => handleClick(e, toast.onClick, toast.id, toast.href)}
           />
         </div>
       ))}

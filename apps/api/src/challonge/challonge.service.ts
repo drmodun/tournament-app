@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from './types';
 import {
@@ -9,7 +9,6 @@ import {
   ICreateChallongeTournamentRequest,
   IMatchScoreRequest,
   IStageResponse,
-  IRosterResponse,
   IUpdateChallongeTournamentRequest,
   IUpdateParticipantRequest,
   rosterToCreateParticipantRequest,
@@ -77,7 +76,7 @@ export class ChallongeService {
   async createTournament(
     createTournamentDto: ICreateChallongeTournamentRequest,
   ): Promise<IChallongeTournament> {
-    return this.executeFunctionWithRetry(() =>
+    return await this.executeFunctionWithRetry(() =>
       this.createTournamentFunction(createTournamentDto),
     );
   }
@@ -215,7 +214,7 @@ export class ChallongeService {
       stageType: stage.stageType,
       startDate: stage.startDate,
     });
-    return this.createTournament(challongeTournament);
+    return await this.createTournament(challongeTournament);
   }
 
   async createChallongeParticipantFromRoster(roster: IMiniRosterResponse) {

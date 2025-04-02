@@ -1273,12 +1273,51 @@ export const quiz = pgTable('quiz', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
-  endDate: timestamp('end_date', { withTimezone: true }),
+  timeLimitTotal: integer('time_limit_total'), // Time limit (in seconds)
   description: text('description'),
+  coverImage: text('cover_image'),
   isTest: boolean('is_test').default(false), //If it is a test, you can see all questions at once and move back and forth
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   matchupId: integer('matchup_id').references(() => matchup.id),
+  stageId: integer('stage_id').references(() => stage.id),
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  isAnonymousAllowed: boolean('is_anonymous_allowed').default(false),
+  isRandomizedQuestions: boolean('is_randomized_questions').default(false),
+  isRetakeable: boolean('is_retakeable').default(false),
+  endDate: timestamp('end_date', { withTimezone: true }),
+  passingScore: integer('passing_score'), // percantage
 });
+
+export const quizTags = pgTable('quiz_tags', {
+  quizId: integer('quiz_id')
+    .references(() => quiz.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  tagId: integer('tag_id')
+    .references(() => tags.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const tags = pgTable(
+  'tags',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    description: text('description'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    nameIndex: index('tags_name_index').using('btree', t.name),
+  }),
+);
 
 export const quizQuestion = pgTable('quiz_question', {
   id: serial('id').primaryKey(),
@@ -1287,11 +1326,45 @@ export const quizQuestion = pgTable('quiz_question', {
       onDelete: 'cascade',
     })
     .notNull(),
-  question: text('question').notNull(), //question should be saved as markdown
-  correctAnswer: text('correct_answer').notNull(),
+  question: text('question').notNull(), //question should be saved as markdownž
+  questionImage: text('question_image'),
+  correctAnswers: text('correct_answers').notNull(), // a csv of correct answers for non choice questions
   points: integer('points').default(5),
+  timeLimit: integer('time_limit'), // Generally only for quizzes
+  isImmediateFeedback: boolean('is_immediate_feedback').default(false),
   type: quizQuestionType('type').default('multiple_choice'),
+  explanation: text('explanation'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  order: integer('order').notNull(),
+});
+
+export const quizOption = pgTable('quiz_option', {
+  id: serial('id').primaryKey(),
+  quizQuestionId: integer('quiz_question_id')
+    .references(() => quizQuestion.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  option: text('option').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  isCorrect: boolean('is_correct').default(false),
+});
+
+export const quizAttempt = pgTable('quiz_attempt', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .references(() => user.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  quizId: integer('quiz_id')
+    .references(() => quiz.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  currentQuestion: integer('current_question').default(0),
+  endTime: timestamp('end_time', { withTimezone: true }),
 });
 
 export const quizAnswer = pgTable('quiz_answer', {
@@ -1301,14 +1374,26 @@ export const quizAnswer = pgTable('quiz_answer', {
       onDelete: 'cascade',
     })
     .notNull(),
+  quizAttemptId: integer('quiz_attempt_id')
+    .references(() => quizAttempt.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
   quizQuestionId: integer('quiz_question_id')
     .references(() => quizQuestion.id, {
       onDelete: 'cascade',
     })
     .notNull(),
   answer: text('answer').notNull(),
+  selectedOptionId: integer('selected_option_id').references(
+    // in case of a multiple choice test, will have different logic
+    () => quizOption.id,
+    {
+      onDelete: 'cascade',
+    },
+  ),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-});
+}); // TODO: implement partial points later (eg for multiple choice with multiple correct answers)
 
 export const competitiveProgrammingContest = pgTable(
   'competitive_programming_contest',

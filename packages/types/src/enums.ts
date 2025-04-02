@@ -198,6 +198,10 @@ export enum quizQuestionTypeEnum {
   MULTIPLE_CHOICE = "multiple_choice",
   TRUE_FALSE = "true_false",
   SHORT_ANSWER = "short_answer",
+  ORDER = "order",
+  HOTSPOT = "hotspot",
+  PROGRAMMING = "programming",
+  // Feature for later:  ESSAY = "essay",
 }
 
 export type quizQuestionTypeEnumType =
@@ -268,6 +272,15 @@ export enum pointConversionStrategyEnum {
 
 export type pointConversionStrategyEnumType =
   (typeof pointConversionStrategyEnum)[keyof typeof pointConversionStrategyEnum];
+
+export enum questionAnswerStateEnum {
+  NONE = "none",
+  ANSWERED = "answered",
+  DRAFT = "draft",
+}
+
+export type questionAnswerStateEnumType =
+  (typeof questionAnswerStateEnum)[keyof typeof questionAnswerStateEnum];
 
 export const exportEnumValues = (
   enumToExport: object

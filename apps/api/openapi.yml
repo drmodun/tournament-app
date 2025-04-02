@@ -204,7 +204,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2025-03-27T01:09:22.274Z
+                        updatedAt: &a2 2025-03-03T00:19:25.108Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -304,7 +304,7 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2025-03-27T01:09:22.274Z
+                        createdAt: 2025-03-03T00:19:25.108Z
                         following: 0
                         location: New York
           description: ""
@@ -362,7 +362,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2025-03-27T01:09:22.274Z
+                    updatedAt: &a3 2025-03-03T00:19:25.108Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -394,7 +394,7 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2025-03-27T01:09:22.274Z
+                    createdAt: 2025-03-03T00:19:25.108Z
                     following: 0
                     location: New York
           description: ""
@@ -758,7 +758,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-03-27T01:09:22.398Z
+                        updatedAt: 2025-03-03T00:19:25.328Z
                         memberCount: 50
                 extended:
                   value:
@@ -783,9 +783,9 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-03-27T01:09:22.398Z
+                        updatedAt: 2025-03-03T00:19:25.328Z
                         memberCount: 50
-                        createdAt: 2025-03-27T01:09:22.398Z
+                        createdAt: 2025-03-03T00:19:25.328Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -812,7 +812,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-03-27T01:09:22.398Z
+                updatedAt: 2025-03-03T00:19:25.328Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -865,7 +865,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-03-27T01:09:22.398Z
+                    updatedAt: 2025-03-03T00:19:25.328Z
                     memberCount: 50
                 extended:
                   value:
@@ -877,9 +877,9 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-03-27T01:09:22.398Z
+                    updatedAt: 2025-03-03T00:19:25.328Z
                     memberCount: 50
-                    createdAt: 2025-03-27T01:09:22.398Z
+                    createdAt: 2025-03-03T00:19:25.328Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -918,7 +918,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-03-27T01:09:22.398Z
+                updatedAt: 2025-03-03T00:19:25.328Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -982,7 +982,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-03-27T01:09:22.398Z
+                  updatedAt: 2025-03-03T00:19:25.328Z
                   memberCount: 50
                 members: []
           description: ""
@@ -1010,7 +1010,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-03-27T01:09:22.398Z
+                  updatedAt: 2025-03-03T00:19:25.328Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -1038,7 +1038,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-03-27T01:09:22.398Z
+                  updatedAt: 2025-03-03T00:19:25.328Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -1230,7 +1230,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-03-27T01:09:22.403Z
+                        createdAt: 2025-03-03T00:19:25.336Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1251,7 +1251,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-03-27T01:09:22.403Z
+                      - createdAt: 2025-03-03T00:19:25.336Z
                         isFake: false
                         role: member
                         country: country
@@ -1283,7 +1283,7 @@ paths:
                         role: member
                         user: *a7
                         group: *a8
-                        createdAt: 2025-03-27T01:09:22.403Z
+                        createdAt: 2025-03-03T00:19:25.336Z
                         country: country
                         name: name
                         logo: logo
@@ -1372,10 +1372,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-03-27T01:09:22.403Z
+                    createdAt: 2025-03-03T00:19:25.336Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-03-27T01:09:22.403Z
+                    createdAt: 2025-03-03T00:19:25.336Z
                     isFake: false
                     role: member
                     country: country
@@ -1389,7 +1389,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-03-27T01:09:22.403Z
+                    createdAt: 2025-03-03T00:19:25.336Z
                     country: country
                     name: name
                     logo: logo
@@ -1592,7 +1592,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-03-27T01:09:22.407Z
+                    createdAt: 2025-03-03T00:19:25.342Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1601,11 +1601,11 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-03-27T01:09:22.407Z
+                    updatedAt: 2025-03-03T00:19:25.342Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2025-03-27T01:09:22.407Z
+                    createdAt: 2025-03-03T00:19:25.342Z
                     id: 1
                     isFake: false
                     username: john_doe
@@ -1747,7 +1747,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2025-03-27T01:09:22.274Z
+                        updatedAt: 2025-03-03T00:19:25.108Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1769,7 +1769,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-03-27T01:09:22.410Z
+                        createdAt: 2025-03-03T00:19:25.353Z
                 with-group:
                   value:
                     metadata:
@@ -1793,7 +1793,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-03-27T01:09:22.398Z
+                        updatedAt: 2025-03-03T00:19:25.328Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1816,7 +1816,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-03-27T01:09:22.410Z
+                        createdAt: 2025-03-03T00:19:25.353Z
           description: ""
       tags: &a12
         - group-join-requests
@@ -1919,7 +1919,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2025-03-27T01:09:22.274Z
+                    updatedAt: 2025-03-03T00:19:25.108Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -1928,7 +1928,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-03-27T01:09:22.410Z
+                    createdAt: 2025-03-03T00:19:25.353Z
                 with-group:
                   value:
                     id: 1
@@ -1939,7 +1939,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-03-27T01:09:22.398Z
+                    updatedAt: 2025-03-03T00:19:25.328Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -1949,7 +1949,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-03-27T01:09:22.410Z
+                    createdAt: 2025-03-03T00:19:25.353Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -2082,7 +2082,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-03-27T01:09:22.414Z
+                        updatedAt: 2025-03-03T00:19:25.360Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2106,7 +2106,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-03-27T01:09:22.414Z
+                        createdAt: 2025-03-03T00:19:25.360Z
                         isFake: false
                 with-group:
                   value:
@@ -2137,7 +2137,7 @@ paths:
                         focus: Hybrid
                         locationId: 1
                         type: Public
-                        updatedAt: 3/27/2025
+                        updatedAt: 3/3/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -2159,7 +2159,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-03-27T01:09:22.414Z
+                        createdAt: 2025-03-03T00:19:25.360Z
           description: ""
       tags: &a15
         - group-invites
@@ -2254,7 +2254,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-03-27T01:09:22.414Z
+                    updatedAt: 2025-03-03T00:19:25.360Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2263,7 +2263,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-03-27T01:09:22.414Z
+                    createdAt: 2025-03-03T00:19:25.360Z
                     isFake: false
                 with-group:
                   value:
@@ -2279,14 +2279,14 @@ paths:
                     focus: Hybrid
                     locationId: 1
                     type: Public
-                    updatedAt: 3/27/2025
+                    updatedAt: 3/3/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-03-27T01:09:22.414Z
+                    createdAt: 2025-03-03T00:19:25.360Z
           description: ""
       tags: *a15
     patch:
@@ -2612,30 +2612,6 @@ paths:
       tags: *a16
       security:
         - bearer: []
-  /tournaments/auto-complete/{search}:
-    get:
-      operationId: TournamentController_autoComplete
-      parameters:
-        - name: search
-          required: true
-          in: path
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns a list of tournaments that can be auto-completed
-      tags: &a26
-        - tournaments
   /tournaments:
     get:
       operationId: TournamentController_findAll
@@ -2944,7 +2920,8 @@ paths:
                         maximumMMR: 2500
                         minimumMMR: 1500
           description: ""
-      tags: *a26
+      tags: &a26
+        - tournaments
     post:
       operationId: TournamentController_create
       parameters: []
@@ -3211,8 +3188,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a34 2025-03-27T01:09:22.437Z
-                    endDate: &a35 2025-03-27T01:09:22.437Z
+                    startDate: &a34 2025-03-03T00:19:25.385Z
+                    endDate: &a35 2025-03-03T00:19:25.385Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3354,8 +3331,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a40 2025-03-27T01:09:22.437Z
-                    endDate: &a41 2025-03-27T01:09:22.437Z
+                    startDate: &a40 2025-03-03T00:19:25.385Z
+                    endDate: &a41 2025-03-03T00:19:25.385Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3656,15 +3633,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-03-27T01:09:22.444Z
+                          startDate: 2025-03-03T00:19:25.395Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-03-27T01:09:22.444Z
-                        updatedAt: 2025-03-27T01:09:22.444Z
+                        createdAt: 2025-03-03T00:19:25.395Z
+                        updatedAt: 2025-03-03T00:19:25.395Z
                 base:
                   value:
                     metadata:
@@ -3767,15 +3744,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-03-27T01:09:22.444Z
+                          startDate: 2025-03-03T00:19:25.395Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-03-27T01:09:22.444Z
-                        updatedAt: 2025-03-27T01:09:22.444Z
+                        createdAt: 2025-03-03T00:19:25.395Z
+                        updatedAt: 2025-03-03T00:19:25.395Z
                 base:
                   value:
                     metadata:
@@ -3826,27 +3803,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a49
-      security:
-        - bearer: []
-  /participations/managed-for-player/{tournamentId}:
-    get:
-      operationId: ParticipationController_getManagedParticipationsForPlayer
-      parameters:
-        - name: tournamentId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MiniParticipationWithGroup"
       tags: *a49
       security:
         - bearer: []
@@ -4583,7 +4539,7 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2025-03-27T01:09:22.397Z
+                        createdAt: 2025-03-03T00:19:25.326Z
           description: ""
       tags: *a56
     post:
@@ -4644,7 +4600,7 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2025-03-27T01:09:22.397Z
+                      createdAt: 2025-03-03T00:19:25.326Z
       tags: *a56
     patch:
       operationId: LocationController_update
@@ -4760,23 +4716,6 @@ paths:
         "200":
           description: Requirements deleted successfully
       tags: *a57
-      security:
-        - bearer: []
-  /roster/managed-by-user/{stageId}:
-    get:
-      operationId: RosterController_getManagedRostersForStage
-      summary: Get all managed rosters for a specific user
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        "200":
-          description: ""
-      tags: &a63
-        - roster
       security:
         - bearer: []
   /roster:
@@ -4966,7 +4905,8 @@ paths:
                         createdAt: *a61
                         updatedAt: *a62
           description: ""
-      tags: *a63
+      tags: &a68
+        - roster
   /roster/{id}:
     get:
       operationId: RosterController_findOne
@@ -4993,12 +4933,12 @@ paths:
                     id: 1
                     stageId: 1
                     participationId: 1
-                    group: &a64
+                    group: &a63
                       id: 1
                       name: Team Alpha
                       logo: https://example.com/team-alpha-logo.png
                       abbreviation: TA
-                    user: &a65
+                    user: &a64
                       id: 1
                       username: player1
                       profilePicture: https://example.com/player1-avatar.png
@@ -5008,9 +4948,9 @@ paths:
                     id: 1
                     stageId: 1
                     participationId: 1
-                    group: *a64
-                    user: *a65
-                    players: &a66
+                    group: *a63
+                    user: *a64
+                    players: &a65
                       - user:
                           id: 1
                           username: player1
@@ -5043,23 +4983,23 @@ paths:
                             createdAt: 2023-01-15T12:00:00.000Z
                             userId: 2
                             categoryId: 1
-                    createdAt: &a67 2023-01-15T12:00:00.000Z
-                    updatedAt: &a68 2023-01-15T12:00:00.000Z
+                    createdAt: &a66 2023-01-15T12:00:00.000Z
+                    updatedAt: &a67 2023-01-15T12:00:00.000Z
                 extended:
                   value:
                     id: 1
                     stageId: 1
                     participationId: 1
-                    group: *a64
-                    user: *a65
-                    players: *a66
-                    createdAt: *a67
-                    updatedAt: *a68
+                    group: *a63
+                    user: *a64
+                    players: *a65
+                    createdAt: *a66
+                    updatedAt: *a67
               schema:
                 oneOf:
                   - $ref: "#/components/schemas/MiniRosterDto"
                   - $ref: "#/components/schemas/RosterDto"
-      tags: *a63
+      tags: *a68
     patch:
       operationId: RosterController_update
       summary: Update a roster
@@ -5129,7 +5069,7 @@ paths:
                         categoryId: 1
                 createdAt: 2023-01-15T12:00:00.000Z
                 updatedAt: 2023-01-15T12:00:00.000Z
-      tags: *a63
+      tags: *a68
       security:
         - bearer: []
   /roster/stage/{stageId}:
@@ -5324,7 +5264,7 @@ paths:
                         players: *a71
                         createdAt: *a72
                         updatedAt: *a73
-      tags: *a63
+      tags: *a68
   /roster/participation/{participationId}:
     get:
       operationId: RosterController_findByParticipation
@@ -5517,7 +5457,7 @@ paths:
                         players: *a76
                         createdAt: *a77
                         updatedAt: *a78
-      tags: *a63
+      tags: *a68
   /roster/user/{userId}:
     get:
       operationId: RosterController_findByUser
@@ -5710,7 +5650,7 @@ paths:
                         players: *a81
                         createdAt: *a82
                         updatedAt: *a83
-      tags: *a63
+      tags: *a68
   /roster/group/{groupId}:
     get:
       operationId: RosterController_findByGroup
@@ -5903,7 +5843,7 @@ paths:
                         players: *a86
                         createdAt: *a87
                         updatedAt: *a88
-      tags: *a63
+      tags: *a68
   /roster/{participationId}/{stageId}:
     post:
       operationId: RosterController_create
@@ -5927,145 +5867,61 @@ paths:
               $ref: "#/components/schemas/CreateRosterDto"
       responses:
         "201":
-          description: ""
-      tags: *a63
+          description: The roster has been successfully created
+          content:
+            application/json:
+              example:
+                id: 1
+                stageId: 1
+                participationId: 1
+                group:
+                  id: 1
+                  name: Team Alpha
+                  logo: https://example.com/team-alpha-logo.png
+                  abbreviation: TA
+                user:
+                  id: 1
+                  username: player1
+                  profilePicture: https://example.com/player1-avatar.png
+                  isFake: false
+                players:
+                  - user:
+                      id: 1
+                      username: player1
+                      country: US
+                      profilePicture: https://example.com/player1-avatar.png
+                      isFake: false
+                    isSubstitute: false
+                    career:
+                      - category:
+                          id: 1
+                          name: Category 1
+                          logo: https://example.com/category1-image.png
+                        elo: 1000
+                        createdAt: 2023-01-15T12:00:00.000Z
+                        userId: 1
+                        categoryId: 1
+                  - user:
+                      id: 2
+                      username: substitute1
+                      country: CA
+                      profilePicture: https://example.com/player2-avatar.png
+                      isFake: false
+                    isSubstitute: true
+                    career:
+                      - category:
+                          id: 1
+                          name: Category 1
+                          logo: https://example.com/category1-image.png
+                        elo: 1000
+                        createdAt: 2023-01-15T12:00:00.000Z
+                        userId: 2
+                        categoryId: 1
+                createdAt: 2023-01-15T12:00:00.000Z
+                updatedAt: 2023-01-15T12:00:00.000Z
+      tags: *a68
       security:
         - bearer: []
-  /matches/{tournamentId}/{matchupId}/score:
-    post:
-      operationId: MatchesController_createScore
-      summary: Create a score for a matchup
-      parameters:
-        - name: matchupId
-          required: true
-          in: path
-          description: Matchup ID
-          schema:
-            type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EndMatchupRequestDto"
-      responses:
-        "201":
-          description: ""
-      tags: &a89
-        - matches
-  /matches/{tournamentId}/{matchupId}/update-score:
-    post:
-      operationId: MatchesController_updateScore
-      summary: Update a score for a matchup
-      parameters:
-        - name: matchupId
-          required: true
-          in: path
-          description: Matchup ID
-          schema:
-            type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EndMatchupRequestDto"
-      responses:
-        "201":
-          description: ""
-      tags: *a89
-  /matches/{tournamentId}/{matchupId}/delete-score:
-    delete:
-      operationId: MatchesController_deleteMatchScore
-      summary: Delete all scores for a matchup
-      parameters:
-        - name: matchupId
-          required: true
-          in: path
-          description: Matchup ID
-          schema:
-            type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
-      responses:
-        "200":
-          description: ""
-      tags: *a89
-  /matches/stage/{stageId}/bracket:
-    get:
-      operationId: MatchesController_getBracketDataForStage
-      summary: Get bracket data for a stage
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data in the format required by
-            @g-loot/react-tournament-brackets
-      tags: *a89
-  /matches/stage/{stageId}/bracket/original:
-    get:
-      operationId: MatchesController_getOriginalBracketDataForStage
-      summary: Get bracket data for a stage in original format (without Challonge data)
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data in the original format for
-            @g-loot/react-tournament-brackets
-      tags: *a89
-  /matches/stage/{stageId}/bracket/react:
-    get:
-      operationId: MatchesController_getReactBracketDataForStage
-      summary: Get bracket data for a stage in react-brackets format
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data in the format required by react-brackets library
-      tags: *a89
-  /matches/stage/{stageId}/bracket/challonge:
-    get:
-      operationId: MatchesController_getChallongeBracketData
-      summary: Get bracket data directly from Challonge
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data from Challonge in react-brackets format
-      tags: *a89
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -7849,6 +7705,8 @@ components:
           type: number
         minimumMMR:
           type: number
+        creatorId:
+          type: number
         affiliatedGroupId:
           type: number
         links:
@@ -7868,6 +7726,7 @@ components:
         - isPublic
         - isRanked
         - categoryId
+        - creatorId
     UpdateTournamentRequest:
       type: object
       properties:
@@ -8371,23 +8230,6 @@ components:
     ExtendedParticipationResponse:
       type: object
       properties: {}
-    MiniParticipationWithGroup:
-      type: object
-      properties:
-        id:
-          type: number
-        userId:
-          type: number
-        groupId:
-          type: number
-        tournamentId:
-          type: number
-        group:
-          $ref: "#/components/schemas/MiniGroupResponseWithLogo"
-      required:
-        - id
-        - tournamentId
-        - group
     CareerCategoryResponse:
       type: object
       properties:
@@ -8650,61 +8492,3 @@ components:
             type: string
       required:
         - members
-    CreateTeamScoreDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        points:
-          type: number
-          description: The number of points scored
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - points
-        - isWinner
-    CreateScoreRequestDto:
-      type: object
-      properties:
-        roundNumber:
-          type: number
-          description: The round number
-        scores:
-          description: The scores for each team
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateTeamScoreDto"
-      required:
-        - roundNumber
-        - scores
-    SetTeamResultDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - isWinner
-    EndMatchupRequestDto:
-      type: object
-      properties:
-        scores:
-          description: The scores for each round
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateScoreRequestDto"
-        results:
-          description: The results for each team
-          type: array
-          items:
-            $ref: "#/components/schemas/SetTeamResultDto"
-      required:
-        - scores
-        - results

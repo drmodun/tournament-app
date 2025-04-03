@@ -16,7 +16,7 @@ export const useSseNotifications = (token: string | null) => {
         const eventData: INotificationBase = JSON.parse(event.data);
         const notification = eventData;
 
-        toast.addToast(notification.message, "info");
+        toast.addToast(notification.message, "info", "/notifications");
 
         const notificationEvent = new CustomEvent("new-notification", {
           detail: notification,

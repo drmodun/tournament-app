@@ -4,7 +4,7 @@ import {
   notificationTypeEnumType,
 } from '@tournament-app/types';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsInt, IsOptional } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
 
 export class NotificationQueryDto
@@ -13,7 +13,7 @@ export class NotificationQueryDto
 {
   @ApiPropertyOptional()
   @IsOptional()
-  @Transform(({ value }) => Boolean(value))
+  @Transform(({ value }) => (value ? value === 'true' : undefined))
   @IsBoolean()
   isRead?: boolean;
 
@@ -25,9 +25,9 @@ export class NotificationQueryDto
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
-  @IsInt()
-  type?: notificationTypeEnumType;
+  @IsString({ each: true })
+  @Transform(({ value }) => value.split(','))
+  types?: notificationTypeEnumType[];
 }
 
 export class NotificationResponseDto {

@@ -21,7 +21,12 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { NotificationQueryDto } from './dto/requests';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-import { ApiBearerAuth, ApiExtraModels, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { NotificationsResponse } from './dto/responses';
 @ApiTags('SSE Notifications')
 @Controller('notifications')
@@ -42,6 +47,7 @@ export class SseNotificationsController {
     @CurrentUser() user: ValidatedUserDto,
     @Query() query: NotificationQueryDto,
   ) {
+    console.log(query);
     return this.sseNotificationsService.findAllForUser({
       ...query,
       userId: user.id,

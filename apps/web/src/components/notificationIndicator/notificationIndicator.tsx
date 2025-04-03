@@ -6,6 +6,7 @@ import NotificationItem from "../notificationItem/notificationItem";
 import styles from "./notificationIndicator.module.scss";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
+import Link from "next/link";
 
 export default function NotificationIndicator() {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +51,10 @@ export default function NotificationIndicator() {
   const handleMarkAllAsRead = (e: React.MouseEvent) => {
     e.stopPropagation();
     markAllAsRead();
+  };
+
+  const handleSeeAllClick = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -101,6 +106,11 @@ export default function NotificationIndicator() {
             />
           ))
         )}
+        <div className={styles.seeAll}>
+          <Link href="/notifications" onClick={handleSeeAllClick}>
+            See all notifications
+          </Link>
+        </div>
       </div>
     </div>
   );

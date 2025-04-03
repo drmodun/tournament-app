@@ -27,7 +27,7 @@ export abstract class BaseQuery<TResponseType extends string = string>
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Transform(({ value }) => Boolean(value))
+  @Transform(({ value }) => (value ? value === 'true' : undefined))
   @IsBoolean()
   returnFullCount?: boolean;
 

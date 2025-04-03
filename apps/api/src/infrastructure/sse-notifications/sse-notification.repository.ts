@@ -86,15 +86,18 @@ export class SseNotificationRepository extends PrimaryRepository<
 
   getValidWhereClause(query: NotificationQueryDto): SQL[] {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const clauses = Object.entries(query).filter(([_, value]) => value);
+    const clauses = Object.entries(query).filter(
+      ([_, value]) => value !== undefined,
+    );
 
     return clauses.map(([key, value]) => {
       const parsed = value;
+      console.log(key, parsed);
       switch (key) {
         case 'userId':
           return eq(notificationToUser.userId, +parsed);
-        case 'type':
-          return eq(notification.type, parsed);
+        case 'types':
+          return inArray(notification.type, parsed);
         case 'isRead':
           return eq(notificationToUser.read, parsed);
         default:

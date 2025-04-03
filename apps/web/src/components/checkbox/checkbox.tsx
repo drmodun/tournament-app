@@ -3,7 +3,7 @@
 import { clsx } from "clsx";
 import { MouseEventHandler } from "react";
 import globals from "styles/globals.module.scss";
-import { TextVariants, Variants, textColor } from "types/styleTypes";
+import { Variants, textColor } from "types/styleTypes";
 import styles from "./checkbox.module.scss";
 
 export interface CheckboxProps {
@@ -11,11 +11,12 @@ export interface CheckboxProps {
   labelStyle?: React.CSSProperties;
   label?: string;
   variant?: Variants;
-  labelVariant?: TextVariants;
+  labelVariant?: Variants;
   onSelect?: MouseEventHandler<HTMLDivElement>;
   disabled?: boolean;
   id?: string;
   isSelected?: boolean;
+  mutable?: boolean;
 }
 
 export default function Checkbox({
@@ -27,6 +28,7 @@ export default function Checkbox({
   onSelect = () => {},
   disabled = false,
   isSelected = false,
+  mutable = true,
 }: CheckboxProps) {
   return (
     <div onClick={onSelect}>
@@ -49,7 +51,7 @@ export default function Checkbox({
           )}
           style={style}
           type="checkbox"
-          disabled={disabled}
+          disabled={disabled || !mutable}
         />
         {label && (
           <p

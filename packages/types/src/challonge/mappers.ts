@@ -14,21 +14,19 @@ import {
   ITournamentStateRequest,
 } from "./requests.dto";
 
-// Stage type to Challonge tournament type mapping
 export const stageTypeToChallongeType: Record<stageTypeEnum, TournamentType> = {
-  group: "single_elimination",
-  double_elimination: "double_elimination",
-  round_robin: "round_robin",
+  group: "single elimination",
+  double_elimination: "double elimination",
+  round_robin: "round robin",
   swiss: "swiss",
-  compass: "double_elimination",
-  knockout: "single_elimination",
-  fixture: "round_robin",
-  quiz: "round_robin",
-  evaluated_competition: "double_elimination",
-  triple_elimination: "double_elimination", // TODO: when we replace challonge or improve upon the current system we can use more types
+  compass: "double elimination",
+  knockout: "single elimination",
+  fixture: "round robin",
+  quiz: "round robin",
+  evaluated_competition: "double elimination",
+  triple_elimination: "double elimination",
 };
 
-// Stage status to Challonge tournament state mapping
 export const stageStatusToChallongeState: Record<
   stageStatusEnum,
   TournamentState
@@ -52,23 +50,19 @@ export function stageToChallongeTournament(stage: {
   return {
     type: "tournament",
     attributes: {
-      name: stage.name,
-      url: `stage-${stage.id}`,
+      name: sanitizeForChallonge(stage.name),
+      url: `stage_${stage.id}`,
       tournament_type: stageTypeToChallongeType[stage.stageType],
       state: stageStatusToChallongeState[stage.stageStatus],
-      description: stage.description,
+      description: stage.description
+        ? sanitizeForChallonge(stage.description)
+        : undefined,
       private: true,
-      timestamps: {
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        starts_at: stage.startDate.toISOString(),
-        completed_at: stage.endDate?.toISOString(),
-      },
+      starts_at: formatDateForChallonge(stage.startDate),
     },
   };
 }
 
-// Convert Stage to Challonge Tournament Create Request
 export function stageToCreateTournamentRequest(stage: {
   id: number;
   name: string;
@@ -80,18 +74,29 @@ export function stageToCreateTournamentRequest(stage: {
     data: {
       type: "tournament",
       attributes: {
-        name: stage.name,
-        url: `stage-${stage.id}`,
+        name: sanitizeForChallonge(stage.name),
+        url: `stage_${stage.id}`,
         tournament_type: stageTypeToChallongeType[stage.stageType],
-        description: stage.description,
+        description: stage.description
+          ? sanitizeForChallonge(stage.description)
+          : undefined,
         private: true,
-        starts_at: stage.startDate.toISOString(),
+        starts_at: formatDateForChallonge(stage.startDate),
       },
     },
   };
 }
 
-// Convert Stage to Challonge Tournament Update Request
+function sanitizeForChallonge(str: string): string {
+  if (!str) return str;
+  return str.replace(/-/g, "_").replace(/[^\w\s]/g, "");
+}
+
+function formatDateForChallonge(date: Date): string {
+  if (!date) return null;
+  return date.toLocaleTimeString();
+}
+
 export function stageToUpdateTournamentRequest(stage: {
   id: number;
   name: string;
@@ -99,12 +104,25 @@ export function stageToUpdateTournamentRequest(stage: {
   stageType: stageTypeEnum;
   startDate: Date;
 }): IUpdateChallongeTournamentRequest {
-  return stageToCreateTournamentRequest(stage);
+  return {
+    data: {
+      type: "tournament",
+      attributes: {
+        name: sanitizeForChallonge(stage.name),
+        url: `stage_${stage.id}`,
+        tournament_type: stageTypeToChallongeType[stage.stageType],
+        description: stage.description
+          ? sanitizeForChallonge(stage.description)
+          : undefined,
+        private: true,
+        starts_at: formatDateForChallonge(stage.startDate),
+      },
+    },
+  };
 }
 
-// Convert Stage Status to Tournament State Request
 export function stageStatusToTournamentStateRequest(
-  status: stageStatusEnum,
+  status: stageStatusEnum
 ): ITournamentStateRequest {
   const stateMap: Record<
     stageStatusEnum,
@@ -126,7 +144,6 @@ export function stageStatusToTournamentStateRequest(
   };
 }
 
-// Convert Roster to Challonge Participant
 export function rosterToChallongeParticipant(roster: {
   id: number;
   participationId: number;
@@ -141,7 +158,7 @@ export function rosterToChallongeParticipant(roster: {
     type: "participant",
     attributes: {
       name: `Roster-${roster.id}`,
-      seed: 0, // You might want to calculate this based on points or other criteria
+      seed: 0,
       group_id: roster.participation.groupId,
       tournament_id: roster.participationId,
       final_rank: undefined,
@@ -156,7 +173,6 @@ export function rosterToChallongeParticipant(roster: {
   };
 }
 
-// Convert Roster to Challonge Participant Create Request
 export function rosterToCreateParticipantRequest(roster: {
   id: number;
 }): ICreateChallongeParticipantRequest {
@@ -173,14 +189,12 @@ export function rosterToCreateParticipantRequest(roster: {
   };
 }
 
-// Convert Roster to Challonge Participant Update Request
 export function rosterToUpdateParticipantRequest(roster: {
   id: number;
 }): IUpdateParticipantRequest {
   return rosterToCreateParticipantRequest(roster);
 }
 
-// Convert Matchup to Challonge Match
 export function matchupToChallongeMatch(matchup: {
   id: number;
   stageId: number;
@@ -203,7 +217,7 @@ export function matchupToChallongeMatch(matchup: {
       round: matchup.roundId,
       identifier: `Match-${matchup.id}`,
       suggested_play_order: 0,
-      scores: "", // You'll need to implement score conversion logic
+      scores: "",
       score_in_sets: [],
       points_by_participant: [],
       timestamps: {
@@ -231,7 +245,6 @@ export function matchupToChallongeMatch(matchup: {
   };
 }
 
-// Convert Challonge Tournament to Stage
 export function challongeTournamentToStage(tournament: IChallongeTournament): {
   name: string;
   description?: string;
@@ -243,12 +256,12 @@ export function challongeTournamentToStage(tournament: IChallongeTournament): {
   const stageType =
     (Object.entries(stageTypeToChallongeType).find(
       ([_, challongeType]) =>
-        challongeType === tournament.attributes.tournament_type,
+        challongeType === tournament.attributes.tournament_type
     )?.[0] as stageTypeEnum) || "group";
 
   const stageStatus =
     (Object.entries(stageStatusToChallongeState).find(
-      ([_, challongeState]) => challongeState === tournament.attributes.state,
+      ([_, challongeState]) => challongeState === tournament.attributes.state
     )?.[0] as stageStatusEnum) || "upcoming";
 
   return {
@@ -265,20 +278,18 @@ export function challongeTournamentToStage(tournament: IChallongeTournament): {
   };
 }
 
-// Convert Challonge Participant to Roster
 export function challongeParticipantToRoster(
-  participant: IChallongeParticipant,
+  participant: IChallongeParticipant
 ): {
   challongeParticipantId: string;
   points: number;
 } {
   return {
     challongeParticipantId: participant.id,
-    points: 0, // You might want to calculate this based on final_rank or other attributes
+    points: 0,
   };
 }
 
-// Convert Challonge Match to Matchup
 export function challongeMatchToMatchup(match: IChallongeMatch): {
   isFinished: boolean;
   startDate: Date;

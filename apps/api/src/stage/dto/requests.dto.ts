@@ -22,9 +22,6 @@ import { BaseQuery } from '../../base/query/baseQuery';
 import { IsDateGreaterThan } from 'src/base/decorators/isDateGreaterThan';
 
 export class CreateStageRequest implements ICreateStageDto {
-  @IsInt()
-  @Type(() => Number)
-  @ApiProperty()
   tournamentId: number;
 
   @IsOptional()

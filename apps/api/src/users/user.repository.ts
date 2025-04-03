@@ -262,6 +262,8 @@ export class UserDrizzleRepository extends PrimaryRepository<
         default:
           return;
       }
+
+      // TODO: refactor notification code later
     });
   }
 

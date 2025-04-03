@@ -30,33 +30,45 @@ export class ChallongeService {
 
   async getChallongeToken() {
     try {
+      const params = new URLSearchParams();
+      params.append('grant_type', 'client_credentials');
+      params.append('client_id', process.env.CHALLONGE_CLIENT_ID || '');
+      params.append('client_secret', process.env.CHALLONGE_CLIENT_SECRET || '');
+
       const response: AxiosResponse<{ access_token: string }> =
         await this.httpService.axiosRef.post(
           'https://api.challonge.com/oauth/token',
+          params,
           {
-            grant_type: 'client_credentials',
-            client_id: process.env.CHALLONGE_CLIENT_ID || '',
-            client_secret: process.env.CHALLONGE_CLIENT_SECRET || '',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           },
         );
 
       this.token = response.data.access_token;
+      this.logger.log('Successfully retrieved Challonge token');
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error('Failed to get Challonge token:', error);
     }
   }
 
   async createTournamentFunction(
     createTournamentDto: ICreateChallongeTournamentRequest,
   ) {
-    const response: AxiosResponse<IChallongeTournament> =
-      await this.httpService.axiosRef.post(
-        'https://api.challonge.com/v2/tournaments.json',
-        createTournamentDto,
-        this.injectHeaders(),
-      );
+    try {
+      const response: AxiosResponse<{ data: IChallongeTournament }> =
+        await this.httpService.axiosRef.post(
+          'https://api.challonge.com/v2/application/tournaments.json',
+          createTournamentDto,
+          this.injectHeaders(),
+        );
 
-    return response.data;
+      return response.data.data;
+    } catch (error) {
+      this.logger.error('Failed to create tournament:', error);
+      throw error;
+    }
   }
 
   async executeFunctionWithRetry(fn: () => Promise<any>) {
@@ -87,7 +99,7 @@ export class ChallongeService {
   ) {
     const response: AxiosResponse<IChallongeTournament> =
       await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/tournaments/${id}.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}.json`,
         updateTournamentDto,
         this.injectHeaders(),
       );
@@ -105,10 +117,12 @@ export class ChallongeService {
   }
 
   injectHeaders() {
+    console.log(this.token);
     return {
       headers: {
-        'Content-Type': 'application/json',
-        AuthorizationType: 'v2',
+        'Authorization-Type': 'v2',
+        'Content-Type': 'application/vnd.api+json',
+        Accept: 'application/json',
         Authorization: `Bearer ${this.token}`,
       },
     };
@@ -118,7 +132,7 @@ export class ChallongeService {
   ) {
     const response: AxiosResponse<IChallongeParticipant> =
       await this.httpService.axiosRef.post(
-        'https://api.challonge.com/v2/participants.json',
+        'https://api.challonge.com/v2/application/participants.json',
         createParticipantDto,
         this.injectHeaders(),
       );
@@ -140,7 +154,7 @@ export class ChallongeService {
   ): Promise<IChallongeParticipant> {
     const response: AxiosResponse<IChallongeParticipant> =
       await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/participants/${id}.json`,
+        `https://api.challonge.com/v2/application/participants/${id}.json`,
         updateParticipantDto,
         this.injectHeaders(),
       );
@@ -163,7 +177,7 @@ export class ChallongeService {
   ): Promise<IChallongeMatch> {
     const response: AxiosResponse<IChallongeMatch> =
       await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/matchups/${id}.json`,
+        `https://api.challonge.com/v2/application/matchups/${id}.json`,
         updateMatchupDto,
         this.injectHeaders(),
       );
@@ -182,7 +196,7 @@ export class ChallongeService {
 
   async deleteTournamentFunction(id: string) {
     await this.httpService.axiosRef.delete(
-      `https://api.challonge.com/v2/tournaments/${id}.json`,
+      `https://api.challonge.com/v2/application/tournaments/${id}.json`,
       this.injectHeaders(),
     );
   }
@@ -201,20 +215,35 @@ export class ChallongeService {
 
   async deleteParticipantFunction(id: string) {
     await this.httpService.axiosRef.delete(
-      `https://api.challonge.com/v2/participants/${id}.json`,
+      `https://api.challonge.com/v2/application/participants/${id}.json`,
       this.injectHeaders(),
     );
   }
 
   async createChallongeTournamentFromStage(stage: IStageResponse) {
-    const challongeTournament = stageToCreateTournamentRequest({
-      id: stage.id,
-      name: stage.name,
-      description: stage.description,
-      stageType: stage.stageType,
-      startDate: stage.startDate,
-    });
-    return await this.createTournament(challongeTournament);
+    const stageName = stage.name
+      ? stage.name.replace(/-/g, '_').replace(/[^\w\s]/g, '')
+      : stage.name;
+    const stageDescription = stage.description
+      ? stage.description.replace(/-/g, '_').replace(/[^\w\s]/g, '')
+      : stage.description;
+
+    const stageType = stage.stageType.replace(/_/g, ' ') as any;
+
+    const challongeTournament: ICreateChallongeTournamentRequest = {
+      data: {
+        type: 'tournament',
+        attributes: {
+          name: stageName,
+          description: stageDescription,
+          url: `stage_${stage.id}`,
+          tournament_type: stageType,
+          starts_at: stage.startDate.toLocaleTimeString(),
+        },
+      },
+    } as any;
+
+    return await this.createTournament(stageToCreateTournamentRequest(stage));
   }
 
   async createChallongeParticipantFromRoster(roster: IMiniRosterResponse) {
@@ -227,7 +256,7 @@ export class ChallongeService {
   async getTournamentFunction(id: string): Promise<IChallongeTournament> {
     const response: AxiosResponse<IChallongeTournament> =
       await this.httpService.axiosRef.get(
-        `https://api.challonge.com/v2/tournaments/${id}.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}.json`,
         this.injectHeaders(),
       );
     return response.data;
@@ -242,7 +271,7 @@ export class ChallongeService {
   ): Promise<IChallongeParticipant[]> {
     const response: AxiosResponse<IChallongeParticipant[]> =
       await this.httpService.axiosRef.get(
-        `https://api.challonge.com/v2/tournaments/${id}/participants.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}/participants.json`,
         this.injectHeaders(),
       );
     return response.data;
@@ -259,7 +288,7 @@ export class ChallongeService {
   async getTournamentMatchesFunction(id: string): Promise<IChallongeMatch[]> {
     const response: AxiosResponse<IChallongeMatch[]> =
       await this.httpService.axiosRef.get(
-        `https://api.challonge.com/v2/tournaments/${id}/matches.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}/matches.json`,
         this.injectHeaders(),
       );
     return response.data;

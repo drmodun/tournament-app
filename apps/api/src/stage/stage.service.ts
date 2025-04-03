@@ -79,8 +79,8 @@ export class StageService {
         challongeTournamentId: data.id,
       });
       return data;
-    } catch {
-      console.error('Challonge issue');
+    } catch (error) {
+      console.error('Challonge issue', error);
     }
   }
 

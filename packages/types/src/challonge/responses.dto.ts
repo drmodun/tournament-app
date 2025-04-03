@@ -19,7 +19,7 @@ export interface IChallongeTournament {
     game_name?: string;
     private: boolean;
     description?: string;
-    timestamps: ITimestamps;
+    starts_at?: string;
   };
 }
 

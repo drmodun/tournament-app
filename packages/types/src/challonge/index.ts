@@ -1,11 +1,11 @@
 export type TournamentType =
-  | "single_elimination"
-  | "double_elimination"
-  | "round_robin"
+  | "single elimination"
+  | "double elimination"
+  | "round robin"
   | "swiss"
-  | "free_for_all"
-  | "time_trail"
-  | "grand_prix";
+  | "free for all"
+  | "time trail"
+  | "grand prix";
 export type TournamentState = "pending" | "in_progress" | "ended";
 export type MatchState = "pending" | "open" | "complete";
 export type RoundRobinRanking =
@@ -47,7 +47,7 @@ export interface IStationOptions {
 }
 
 export interface IGroupStageOptions {
-  stage_type: "round_robin" | "single_elimination" | "double_elimination";
+  stage_type: "round robin" | "single elimination" | "double elimination";
   group_size: number;
   participant_count_to_advance_per_group: number;
   rr_iterations: number;

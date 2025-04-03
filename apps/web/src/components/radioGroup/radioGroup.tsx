@@ -11,6 +11,7 @@ interface RadioGroupProps {
   buttonStyle?: React.CSSProperties;
   labelStyle?: React.CSSProperties;
   radioButtons: RadioButtonProps[];
+  disabled?: boolean;
 }
 
 export default function RadioGroup({
@@ -18,6 +19,7 @@ export default function RadioGroup({
   buttonStyle,
   labelStyle,
   radioButtons,
+  disabled = false,
 }: RadioGroupProps) {
   const [index, setIndex] = useState<number>(-1);
 
@@ -28,7 +30,7 @@ export default function RadioGroup({
           <div
             className={styles.radio}
             key={_index}
-            onClick={() => setIndex(_index)}
+            onClick={() => !disabled && setIndex(_index)}
           >
             <RadioButton
               style={buttonStyle}

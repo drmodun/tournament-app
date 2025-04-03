@@ -5,10 +5,11 @@ import { StageDrizzleRepository } from './stage.repository';
 import { TournamentModule } from 'src/tournament/tournament.module';
 import { GroupMembershipModule } from 'src/group-membership/group-membership.module';
 import { ChallongeModule } from 'src/challonge/challonge.module';
+import { StageAdminGuard } from './guards/stage-admin.guard';
 
 @Module({
   controllers: [StageController],
-  providers: [StageService, StageDrizzleRepository],
+  providers: [StageService, StageDrizzleRepository, StageAdminGuard],
   exports: [StageService, StageDrizzleRepository],
   imports: [TournamentModule, GroupMembershipModule, ChallongeModule],
 })

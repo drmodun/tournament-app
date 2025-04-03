@@ -19,6 +19,7 @@ import {
   IRosterPlayerWithoutCareer,
   IRosterResponse,
   groupRoleEnum,
+  IRosterInfoToCreateChallongeParticipant,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -408,5 +409,33 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       default:
         return null;
     }
+  }
+
+  async getRostersForChallongeParticipants(
+    stageId: number,
+  ): Promise<IRosterInfoToCreateChallongeParticipant[]> {
+    const rosters = await db
+      .select({
+        id: roster.id,
+        participationId: roster.participationId,
+        groupId: group.id,
+        groupName: group.name,
+        userId: user.id,
+        userName: user.username,
+      })
+      .from(roster)
+      .where(eq(roster.stageId, stageId))
+      .leftJoin(participation, eq(roster.participationId, participation.id))
+      .leftJoin(group, eq(participation.groupId, group.id))
+      .leftJoin(user, eq(participation.userId, user.id));
+
+    return rosters.map((rosterData) => ({
+      id: rosterData.id,
+      participationId: rosterData.participationId,
+      name:
+        rosterData.groupName ||
+        rosterData.userName ||
+        `Roster_${rosterData.id}`,
+    }));
   }
 }

@@ -12,7 +12,10 @@ import {
   IUpdateChallongeTournamentRequest,
   IUpdateParticipantRequest,
   ITournamentStateRequest,
+  IBulkCreateChallongeParticipantRequest,
+  IParticipantDetails,
 } from "./requests.dto";
+import { IRosterInfoToCreateChallongeParticipant } from "src/roster/responses.dto";
 
 export const stageTypeToChallongeType: Record<stageTypeEnum, TournamentType> = {
   group: "single elimination",
@@ -88,7 +91,11 @@ export function stageToCreateTournamentRequest(stage: {
 
 function sanitizeForChallonge(str: string): string {
   if (!str) return str;
-  return str.replace(/-/g, "_").replace(/[^\w\s]/g, "");
+  return str
+    .replace(/-/g, "_")
+    .replace(/[^\w\s]/g, "")
+    .replace(/\s+/g, "_")
+    .replace(/\./g, " ");
 }
 
 function formatDateForChallonge(date: Date): string {
@@ -157,7 +164,7 @@ export function rosterToChallongeParticipant(roster: {
     type: "participant",
     attributes: {
       name: `Roster-${roster.id}`,
-      seed: 0,
+      seed: 0, // TODO:
       group_id: roster.participation.groupId,
       tournament_id: roster.participationId,
       final_rank: undefined,
@@ -172,26 +179,54 @@ export function rosterToChallongeParticipant(roster: {
   };
 }
 
-export function rosterToCreateParticipantRequest(roster: {
-  id: number;
-}): ICreateChallongeParticipantRequest {
+export function rosterToBulkCreateParticipantRequest(
+  rosters: IRosterInfoToCreateChallongeParticipant[]
+): IBulkCreateChallongeParticipantRequest {
+  const rostersWithUniqueNames = checkAndHandleDuplicateChallongeTeams(rosters);
+
   return {
     data: {
-      type: "participant",
+      type: "Participants",
       attributes: {
-        name: `Roster-${roster.id}`,
-        misc: JSON.stringify({
-          rosterId: roster.id,
-        }),
+        participants: rostersWithUniqueNames.map(rosterToParticipantDetails),
       },
     },
   };
 }
 
-export function rosterToUpdateParticipantRequest(roster: {
+export function checkAndHandleDuplicateChallongeTeams(
+  rosters: IRosterInfoToCreateChallongeParticipant[]
+): IRosterInfoToCreateChallongeParticipant[] {
+  for (const roster of rosters) {
+    const duplicateRoster = rosters.find((r) => r.name === roster.name);
+    if (duplicateRoster) {
+      roster.name = `${roster.name}-${duplicateRoster.id}`;
+    }
+  }
+
+  return rosters;
+}
+
+function rosterToParticipantDetails(
+  roster: IRosterInfoToCreateChallongeParticipant
+): IParticipantDetails {
+  return {
+    name: sanitizeForChallonge(roster.name),
+    //TODO: add seed
+  };
+}
+
+export function rosterToCreateParticipantRequest(roster: {
   id: number;
-}): IUpdateParticipantRequest {
-  return rosterToCreateParticipantRequest(roster);
+  participationId: number;
+  name: string;
+}): ICreateChallongeParticipantRequest {
+  return {
+    data: {
+      type: "participant",
+      attributes: rosterToParticipantDetails(roster),
+    },
+  };
 }
 
 export function matchupToChallongeMatch(matchup: {
@@ -268,12 +303,7 @@ export function challongeTournamentToStage(tournament: IChallongeTournament): {
     description: tournament.attributes.description,
     stageType: stageType as stageTypeEnum,
     stageStatus: stageStatus as stageStatusEnum,
-    startDate: tournament.attributes.timestamps.starts_at
-      ? new Date(tournament.attributes.timestamps.starts_at)
-      : new Date(),
-    endDate: tournament.attributes.timestamps.completed_at
-      ? new Date(tournament.attributes.timestamps.completed_at)
-      : undefined,
+    startDate: new Date(tournament.attributes.starts_at),
   };
 }
 

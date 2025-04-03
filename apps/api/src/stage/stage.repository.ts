@@ -191,6 +191,7 @@ export class StageDrizzleRepository extends PrimaryRepository<
           description: stage.description,
           logo: stage.logo,
           startDate: stage.startDate,
+          challongeTournamentId: stage.challongeTournamentId,
           endDate: stage.endDate,
           rostersParticipating: db.$count(roster, eq(roster.stageId, stage.id)),
           location: {

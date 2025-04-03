@@ -74,6 +74,23 @@ export interface ICreateChallongeParticipantRequest {
   };
 }
 
+export interface IParticipantDetails {
+  name: string;
+  seed?: number;
+  misc?: string;
+  email?: string;
+  username?: string;
+}
+
+export interface IBulkCreateChallongeParticipantRequest {
+  data: {
+    type: "Participants";
+    attributes: {
+      participants: Array<IParticipantDetails>;
+    };
+  };
+}
+
 export interface IUpdateParticipantRequest
   extends ICreateChallongeParticipantRequest {}
 

@@ -192,4 +192,21 @@ describe('StageController', () => {
       );
     });
   });
+
+  describe('startStage', () => {
+    it('should start a stage', async () => {
+      const stageId = 1;
+      const updatedStage = {
+        ...mockStage,
+        stageStatus: stageStatusEnum.ONGOING,
+      };
+
+      service.startStage = jest.fn().mockResolvedValue(updatedStage);
+
+      const result = await controller.startStage(stageId);
+
+      expect(result).toEqual(updatedStage);
+      expect(service.startStage).toHaveBeenCalledWith(stageId);
+    });
+  });
 });

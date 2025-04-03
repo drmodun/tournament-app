@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ICreateStageDto,
@@ -11,18 +12,23 @@ import {
   IStageResponse,
   StageSortingEnum,
   stageToUpdateTournamentRequest,
+  stageStatusEnum,
+  rosterToBulkCreateParticipantRequest,
+  IBulkCreateChallongeParticipantRequest,
 } from '@tournament-app/types';
 import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
 import { IStageWithChallongeTournament, StagesWithDates } from './types';
 import { ChallongeService } from 'src/challonge/challonge.service';
 import { PaginationOnly } from 'src/base/query/baseQuery';
+import { RosterDrizzleRepository } from 'src/roster/roster.repository';
 
 @Injectable()
 export class StageService {
   constructor(
     private readonly repository: StageDrizzleRepository,
     private readonly challongeService: ChallongeService,
+    private readonly rosterRepository: RosterDrizzleRepository,
   ) {}
 
   async create(createStageDto: ICreateStageDto) {
@@ -188,5 +194,55 @@ export class StageService {
       );
 
     return stages;
+  }
+
+  async startStage(stageId: number) {
+    const stage: IStageWithChallongeTournament = await this.findOne(
+      stageId,
+      StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+    );
+
+    if (
+      stage.stageStatus === stageStatusEnum.ONGOING ||
+      stage.stageStatus === stageStatusEnum.FINISHED
+    ) {
+      throw new BadRequestException(
+        `Stage with ID ${stageId} is already ${stage.stageStatus}`,
+      );
+    }
+
+    if (!stage.challongeTournamentId) {
+      throw new BadRequestException(
+        `Stage with ID ${stageId} does not have an associated Challonge tournament`,
+      );
+    }
+
+    const rosters =
+      await this.rosterRepository.getRostersForChallongeParticipants(stageId);
+
+    if (rosters.length === 0) {
+      throw new BadRequestException(
+        `No rosters found for stage with ID ${stageId}`,
+      );
+    }
+
+    const bulkParticipantsRequest: IBulkCreateChallongeParticipantRequest =
+      rosterToBulkCreateParticipantRequest(rosters);
+
+    await this.challongeService.createBulkParticipants(
+      stage.challongeTournamentId,
+      bulkParticipantsRequest,
+    );
+
+    const updatedStage = await this.update(stageId, {
+      stageStatus: stageStatusEnum.ONGOING,
+    });
+
+    await this.challongeService.updateTournamentState(
+      stage.challongeTournamentId,
+      stageStatusEnum.ONGOING,
+    );
+
+    return updatedStage;
   }
 }

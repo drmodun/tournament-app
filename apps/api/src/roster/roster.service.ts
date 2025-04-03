@@ -10,7 +10,6 @@ import {
   IExtendedStageResponse,
   IExtendedTournamentResponse,
   TournamentResponsesEnum,
-  IMiniRosterResponse,
   IMiniRosterResponseWithChallongeId,
 } from '@tournament-app/types';
 import { CreateRosterDto, QueryRosterDto } from './dto/requests';
@@ -43,34 +42,7 @@ export class RosterService {
       throw new UnprocessableEntityException('Failed to create roster');
     }
 
-    try {
-      const challongeId = await this.createChallongeParticipant(
-        roster.rosterId,
-      );
-
-      await this.update(roster.rosterId, {
-        challongeId: challongeId,
-      });
-    } catch (error) {
-      console.error(
-        'Failed to create challonge participant, check api key',
-        error,
-      );
-    }
-
     return { id: roster.rosterId };
-  }
-
-  async createChallongeParticipant(rosterId: number) {
-    const roster: IMiniRosterResponse = await this.findOne(
-      rosterId,
-      RosterResponsesEnum.MINI,
-    );
-
-    const response =
-      await this.challongeService.createChallongeParticipantFromRoster(roster);
-
-    return response;
   }
 
   async findAll<TResponseType extends BaseRosterResponse>(

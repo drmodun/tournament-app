@@ -4,6 +4,7 @@ import { StageDrizzleRepository } from '../stage.repository';
 import {
   NotFoundException,
   UnprocessableEntityException,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateStageRequest } from '../dto/requests.dto';
 import {
@@ -11,6 +12,7 @@ import {
   StageSortingEnum,
   stageTypeEnum,
   IChallongeTournament,
+  stageStatusEnum,
 } from '@tournament-app/types';
 import { StagesWithDates } from '../types';
 import { ChallongeService } from 'src/challonge/challonge.service';
@@ -325,6 +327,123 @@ describe('StageService', () => {
       expect(repository.getManagedStages).toHaveBeenCalledWith(
         userId,
         undefined,
+      );
+    });
+  });
+
+  describe('startStage', () => {
+    const stageId = 1;
+    const mockRosters = [
+      {
+        id: 1,
+        participationId: 1,
+        name: 'Team Alpha',
+      },
+      {
+        id: 2,
+        participationId: 1,
+        name: 'Team Beta',
+      },
+    ];
+
+    const mockStageWithChallonge = {
+      ...mockStage,
+      challongeTournamentId: 'challonge-123',
+      stageStatus: stageStatusEnum.UPCOMING,
+    };
+
+    const mockBulkParticipantsRequest = {
+      data: {
+        type: 'Participants',
+        attributes: {
+          participants: mockRosters.map((roster) => ({
+            name: roster.name,
+            misc: JSON.stringify({
+              rosterId: roster.id,
+              participationId: roster.participationId,
+            }),
+          })),
+        },
+      },
+    };
+
+    beforeEach(() => {
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockStageWithChallonge);
+      jest.spyOn(service, 'update').mockResolvedValue({
+        ...mockStageWithChallonge,
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+
+      // @ts-ignore - Mock repositories that were not in the original setup
+      service.rosterRepository = {
+        getRostersForChallongeParticipants: jest
+          .fn()
+          .mockResolvedValue(mockRosters),
+      };
+
+      // @ts-ignore - Mock Challonge service that was not in the original setup
+      service.challongeService = {
+        createBulkParticipants: jest.fn().mockResolvedValue([]),
+        updateTournamentState: jest.fn().mockResolvedValue({}),
+      };
+    });
+
+    it('should successfully start a stage', async () => {
+      const result = await service.startStage(stageId);
+
+      expect(service.findOne).toHaveBeenCalledWith(
+        stageId,
+        StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+      );
+      expect(
+        service.rosterRepository.getRostersForChallongeParticipants,
+      ).toHaveBeenCalledWith(stageId);
+      expect(
+        service.challongeService.createBulkParticipants,
+      ).toHaveBeenCalled();
+      expect(service.update).toHaveBeenCalledWith(stageId, {
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+      expect(
+        service.challongeService.updateTournamentState,
+      ).toHaveBeenCalledWith(
+        mockStageWithChallonge.challongeTournamentId,
+        stageStatusEnum.ONGOING,
+      );
+
+      expect(result.stageStatus).toEqual(stageStatusEnum.ONGOING);
+    });
+
+    it('should throw BadRequestException if stage is already ongoing', async () => {
+      jest.spyOn(service, 'findOne').mockResolvedValueOnce({
+        ...mockStageWithChallonge,
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+
+      await expect(service.startStage(stageId)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw BadRequestException if no challonge tournament ID', async () => {
+      jest.spyOn(service, 'findOne').mockResolvedValueOnce({
+        ...mockStageWithChallonge,
+        challongeTournamentId: null,
+      });
+
+      await expect(service.startStage(stageId)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw BadRequestException if no rosters found', async () => {
+      // @ts-ignore
+      service.rosterRepository.getRostersForChallongeParticipants.mockResolvedValueOnce(
+        [],
+      );
+
+      await expect(service.startStage(stageId)).rejects.toThrow(
+        BadRequestException,
       );
     });
   });

@@ -71,3 +71,9 @@ export interface IMiniRosterResponse {
     user: IMiniGroupResponse;
   };
 }
+
+export interface IRosterInfoToCreateChallongeParticipant {
+  id: number;
+  participationId: number;
+  name: string;
+}

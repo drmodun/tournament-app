@@ -784,11 +784,9 @@ export const matchup = pgTable('matchup', {
       onDelete: 'cascade',
     })
     .notNull(),
-  roundId: integer('round_id')
-    .references(() => stageRound.id, {
-      onDelete: 'cascade',
-    })
-    .notNull(),
+  roundId: integer('round_id').references(() => stageRound.id, {
+    onDelete: 'cascade',
+  }),
   matchupType: matchupType('matchup_type').default('one_vs_one'),
   challongeMatchupId: text('challonge_matchup_id'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
@@ -886,7 +884,7 @@ export const scoreToRoster = pgTable('score_to_roster', {
 export const score = pgTable('score', {
   id: serial('id').primaryKey(),
   matchupId: integer('matchup_id'),
-  roundNumber: integer('round_number').default(1),
+  roundNumber: integer('round_number'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 

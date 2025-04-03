@@ -1,19 +1,21 @@
-import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { AxiosResponse } from './types';
+import { Injectable, Logger } from '@nestjs/common';
+import { AxiosResponse } from 'axios';
 import {
-  IChallongeMatch,
-  IChallongeParticipant,
   IChallongeTournament,
-  ICreateChallongeParticipantRequest,
+  IChallongeParticipant,
+  IChallongeMatch,
   ICreateChallongeTournamentRequest,
-  IMatchScoreRequest,
-  IStageResponse,
-  IUpdateChallongeTournamentRequest,
+  ICreateChallongeParticipantRequest,
   IUpdateParticipantRequest,
-  rosterToCreateParticipantRequest,
+  IMatchScoreRequest,
   stageToCreateTournamentRequest,
-  IMiniRosterResponse,
+  IBulkCreateChallongeParticipantRequest,
+  IUpdateChallongeTournamentRequest,
+  ITournamentStateRequest,
+  stageStatusToTournamentStateRequest,
+  stageStatusEnum,
+  IStageResponse,
 } from '@tournament-app/types';
 import { ReactBracketsResponseDto } from '../matches/dto/responses';
 
@@ -221,36 +223,49 @@ export class ChallongeService {
   }
 
   async createChallongeTournamentFromStage(stage: IStageResponse) {
-    const stageName = stage.name
-      ? stage.name.replace(/-/g, '_').replace(/[^\w\s]/g, '')
-      : stage.name;
-    const stageDescription = stage.description
-      ? stage.description.replace(/-/g, '_').replace(/[^\w\s]/g, '')
-      : stage.description;
-
-    const stageType = stage.stageType.replace(/_/g, ' ') as any;
-
-    const challongeTournament: ICreateChallongeTournamentRequest = {
-      data: {
-        type: 'tournament',
-        attributes: {
-          name: stageName,
-          description: stageDescription,
-          url: `stage_${stage.id}`,
-          tournament_type: stageType,
-          starts_at: stage.startDate.toLocaleTimeString(),
-        },
-      },
-    } as any;
-
     return await this.createTournament(stageToCreateTournamentRequest(stage));
   }
 
-  async createChallongeParticipantFromRoster(roster: IMiniRosterResponse) {
-    const challongeParticipant = rosterToCreateParticipantRequest({
-      id: roster.id,
-    });
-    return this.createParticipant(challongeParticipant);
+  async bulkAddParticipantsToTournament(
+    tournamentId: string,
+    participants: IBulkCreateChallongeParticipantRequest,
+  ) {
+    await this.httpService.axiosRef.post(
+      `https://api.challonge.com/v2/application/tournaments/${tournamentId}/participants/bulk_add.json`,
+      participants,
+      this.injectHeaders(),
+    );
+  }
+
+  async createBulkParticipants(
+    tournamentId: string,
+    participants: IBulkCreateChallongeParticipantRequest,
+  ) {
+    return this.executeFunctionWithRetry(() =>
+      this.createBulkParticipantsFunction(tournamentId, participants),
+    );
+  }
+
+  async createBulkParticipantsFunction(
+    tournamentId: string,
+    participants: IBulkCreateChallongeParticipantRequest,
+  ) {
+    try {
+      const response: AxiosResponse<IChallongeParticipant[]> =
+        await this.httpService.axiosRef.post(
+          `https://api.challonge.com/v2/application/tournaments/${tournamentId}/participants/bulk_add.json`,
+          participants,
+          this.injectHeaders(),
+        );
+      return response.data;
+    } catch (error) {
+      this.logger.error(
+        'Failed to create bulk participants:',
+        error.toString(),
+        participants,
+      );
+      throw error;
+    }
   }
 
   async getTournamentFunction(id: string): Promise<IChallongeTournament> {
@@ -367,5 +382,24 @@ export class ChallongeService {
           })),
         })),
     };
+  }
+
+  async updateTournamentStateFunction(
+    id: string,
+    stateRequest: ITournamentStateRequest,
+  ) {
+    const response: AxiosResponse<any> = await this.httpService.axiosRef.put(
+      `https://api.challonge.com/v2/application/tournaments/${id}/change_state.json`,
+      stateRequest,
+      this.injectHeaders(),
+    );
+    return response.data;
+  }
+
+  async updateTournamentState(id: string, stageStatus: stageStatusEnum) {
+    const stateRequest = stageStatusToTournamentStateRequest(stageStatus);
+    return this.executeFunctionWithRetry(() =>
+      this.updateTournamentStateFunction(id, stateRequest),
+    );
   }
 }

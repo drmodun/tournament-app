@@ -230,6 +230,7 @@ export default function CreateTournamentForm({
               name="minimumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
+              type="number"
             />
             <Input
               variant={textColorTheme}
@@ -237,6 +238,7 @@ export default function CreateTournamentForm({
               name="maximumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
+              type="number"
             />
           </div>
         </div>

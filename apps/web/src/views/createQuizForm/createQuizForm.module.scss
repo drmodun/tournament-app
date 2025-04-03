@@ -1,0 +1,24 @@
+@import "../../styles/";
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.iconButton {
+  width: $baseComponentHeight;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addQuestion {
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
+  flex-direction: row;
+}

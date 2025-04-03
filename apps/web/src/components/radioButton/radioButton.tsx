@@ -11,7 +11,7 @@ export interface RadioButtonProps {
   labelStyle?: React.CSSProperties;
   label?: string;
   variant?: Variants;
-  labelVariant?: TextVariants;
+  labelVariant?: Variants;
   onSelect?: MouseEventHandler<HTMLDivElement>;
   disabled?: boolean;
   id?: string;

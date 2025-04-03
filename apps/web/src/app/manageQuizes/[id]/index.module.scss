@@ -1,0 +1,35 @@
+@import "../../../styles/";
+
+.screen {
+  padding-top: $doublePadding * 6;
+  padding-bottom: $doublePadding * 2;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-left: $horizontalMargin;
+  padding-right: $horizontalMargin;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+  }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+    height: 100%;
+  }
+
+  padding-bottom: $doublePadding * 2;
+}
+
+.formWrapper {
+  overflow-y: auto;
+}

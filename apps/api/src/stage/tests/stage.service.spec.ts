@@ -282,4 +282,50 @@ describe('StageService', () => {
       ).toHaveBeenCalledWith(tournamentId);
     });
   });
+
+  describe('getManagedStages', () => {
+    const userId = 1;
+    const pagination = { page: 1, pageSize: 10 };
+    const mockManagedStages = [mockStage];
+
+    beforeEach(() => {
+      repository.getManagedStages = jest.fn();
+    });
+
+    it('should return stages managed by the user', async () => {
+      repository.getManagedStages.mockResolvedValue(mockManagedStages);
+
+      const result = await service.getManagedStages(userId, pagination);
+
+      expect(result).toEqual(mockManagedStages);
+      expect(repository.getManagedStages).toHaveBeenCalledWith(
+        userId,
+        pagination,
+      );
+    });
+
+    it('should return empty array when no stages are managed by the user', async () => {
+      repository.getManagedStages.mockResolvedValue([]);
+
+      const result = await service.getManagedStages(userId, pagination);
+
+      expect(result).toEqual([]);
+      expect(repository.getManagedStages).toHaveBeenCalledWith(
+        userId,
+        pagination,
+      );
+    });
+
+    it('should work without pagination parameter', async () => {
+      repository.getManagedStages.mockResolvedValue(mockManagedStages);
+
+      const result = await service.getManagedStages(userId);
+
+      expect(result).toEqual(mockManagedStages);
+      expect(repository.getManagedStages).toHaveBeenCalledWith(
+        userId,
+        undefined,
+      );
+    });
+  });
 });

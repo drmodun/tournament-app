@@ -37,7 +37,6 @@ export const stageStatusToChallongeState: Record<
   cancelled: "ended",
 };
 
-// Convert Stage to Challonge Tournament
 export function stageToChallongeTournament(stage: {
   id: number;
   name: string;
@@ -51,7 +50,7 @@ export function stageToChallongeTournament(stage: {
     type: "tournament",
     attributes: {
       name: sanitizeForChallonge(stage.name),
-      url: `stage_${stage.id}`,
+      url: `winning_stage_${stage.id}`,
       tournament_type: stageTypeToChallongeType[stage.stageType],
       state: stageStatusToChallongeState[stage.stageStatus],
       description: stage.description
@@ -75,7 +74,7 @@ export function stageToCreateTournamentRequest(stage: {
       type: "tournament",
       attributes: {
         name: sanitizeForChallonge(stage.name),
-        url: `stage_${stage.id}`,
+        url: `winning_stage_${stage.id}`,
         tournament_type: stageTypeToChallongeType[stage.stageType],
         description: stage.description
           ? sanitizeForChallonge(stage.description)
@@ -109,7 +108,7 @@ export function stageToUpdateTournamentRequest(stage: {
       type: "tournament",
       attributes: {
         name: sanitizeForChallonge(stage.name),
-        url: `stage_${stage.id}`,
+        url: `winning_stage_${stage.id}`,
         tournament_type: stageTypeToChallongeType[stage.stageType],
         description: stage.description
           ? sanitizeForChallonge(stage.description)

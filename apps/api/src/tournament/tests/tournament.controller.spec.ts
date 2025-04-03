@@ -176,6 +176,51 @@ describe('TournamentController', () => {
     });
   });
 
+  describe('getManagedTournaments', () => {
+    const paginationQuery = {
+      page: 1,
+      pageSize: 10,
+    };
+    const mockUser = {
+      id: 1,
+      username: 'testuser',
+      isFake: false,
+      email: 'test@example.com',
+      role: 'user',
+    };
+    const mockManagedTournaments = [mockTournament];
+
+    beforeEach(() => {
+      service.getManagedTournaments = jest.fn();
+    });
+
+    it('should return tournaments managed by the user', async () => {
+      service.getManagedTournaments.mockResolvedValue(mockManagedTournaments);
+
+      const result = await controller.getManagedTournaments(
+        mockUser,
+        paginationQuery,
+      );
+
+      expect(result).toEqual(mockManagedTournaments);
+      expect(service.getManagedTournaments).toHaveBeenCalledWith(
+        mockUser.id,
+        paginationQuery,
+      );
+    });
+
+    it('should pass the correct user ID to the service', async () => {
+      service.getManagedTournaments.mockResolvedValue([]);
+
+      await controller.getManagedTournaments(mockUser, paginationQuery);
+
+      expect(service.getManagedTournaments).toHaveBeenCalledWith(
+        1,
+        expect.any(Object),
+      );
+    });
+  });
+
   // Testing guard combinations
   describe('guard combinations', () => {
     let module: TestingModule;

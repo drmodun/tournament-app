@@ -147,4 +147,49 @@ describe('StageController', () => {
       expect(service.remove).toHaveBeenCalledWith(1);
     });
   });
+
+  describe('getManagedStages', () => {
+    const paginationQuery = {
+      page: 1,
+      pageSize: 10,
+    };
+    const mockUser = {
+      id: 1,
+      username: 'testuser',
+      isFake: false,
+      email: 'test@example.com',
+      role: 'user',
+    };
+    const mockManagedStages = [mockStage];
+
+    beforeEach(() => {
+      service.getManagedStages = jest.fn();
+    });
+
+    it('should return stages managed by the user', async () => {
+      service.getManagedStages.mockResolvedValue(mockManagedStages);
+
+      const result = await controller.getManagedStages(
+        mockUser,
+        paginationQuery,
+      );
+
+      expect(result).toEqual(mockManagedStages);
+      expect(service.getManagedStages).toHaveBeenCalledWith(
+        mockUser.id,
+        paginationQuery,
+      );
+    });
+
+    it('should pass the correct user ID to the service', async () => {
+      service.getManagedStages.mockResolvedValue([]);
+
+      await controller.getManagedStages(mockUser, paginationQuery);
+
+      expect(service.getManagedStages).toHaveBeenCalledWith(
+        1,
+        expect.any(Object),
+      );
+    });
+  });
 });

@@ -130,7 +130,7 @@ export default function Input({
             value={
               (controlledValue ?? value) == ""
                 ? defaultValue
-                : (controlledValue ?? value)
+                : controlledValue ?? value
             }
             placeholder={placeholder}
             className={clsx(

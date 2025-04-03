@@ -1,7 +1,12 @@
 "use client";
 
 import { clsx } from "clsx";
-import { ChangeEventHandler, HTMLInputTypeAttribute, useState } from "react";
+import {
+  ChangeEventHandler,
+  HTMLInputTypeAttribute,
+  useEffect,
+  useState,
+} from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import {
@@ -36,6 +41,8 @@ interface InputProps {
   defaultValue?: string;
   fullClassName?: string;
   doesSubmitReactHookForm?: boolean;
+  autocomplete?: string;
+  controlledValue?: string;
 }
 
 export default function Input({
@@ -62,6 +69,8 @@ export default function Input({
   defaultValue,
   fullClassName,
   doesSubmitReactHookForm = false,
+  autocomplete = "on",
+  controlledValue,
 }: InputProps) {
   const [value, setValue] = useState<string>("");
   const methods = useFormContext();
@@ -106,6 +115,7 @@ export default function Input({
                 max={max}
                 style={style}
                 step={step}
+                autoComplete={autocomplete}
                 {...methods.register(name, {
                   required: required,
                   onChange: handleChange,
@@ -117,7 +127,11 @@ export default function Input({
         ) : (
           <input
             type={type}
-            value={value == "" ? defaultValue : value}
+            value={
+              (controlledValue ?? value) == ""
+                ? defaultValue
+                : controlledValue ?? value
+            }
             placeholder={placeholder}
             className={clsx(
               type == "range" && styles.slider,
@@ -133,6 +147,7 @@ export default function Input({
             style={style}
             step={step}
             onChange={handleChange}
+            autoComplete={autocomplete}
           />
         )}
 

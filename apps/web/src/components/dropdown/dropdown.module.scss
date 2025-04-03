@@ -1,8 +1,5 @@
 @import "../../styles/";
 
-.select {
-}
-
 .optionsWrapper {
   position: absolute;
   overflow: auto;
@@ -10,7 +7,7 @@
 }
 
 .zIndex {
-  z-index: 97;
+  z-index: 105;
 }
 
 .options {
@@ -20,6 +17,7 @@
   @media screen and (max-width: $tabletBreakpoint) {
     margin-left: 0;
   }
+  z-index: 106 !important;
 }
 .wrapper {
   display: flex;
@@ -45,10 +43,22 @@
 
 .hiddenAnimation {
   animation: undrop $animationDuration $animationEasingFunction forwards;
+
+  .optionsWrapper {
+    display: none;
+  }
+
+  .option {
+    display: none;
+  }
 }
 
 .unhiddenAnimation {
   animation: drop $animationDuration $animationEasingFunction forwards;
+
+  .optionsWrapper {
+    display: block;
+  }
 }
 
 .hidden {
@@ -87,6 +97,7 @@
 
 @keyframes undrop {
   from {
+    z-index: 103 !important;
     opacity: 1;
     transform: translateY(0px);
   }
@@ -114,6 +125,7 @@
   to {
     opacity: 1;
     transform: translateY(0px);
+    z-index: 103 !important;
   }
 }
 
@@ -121,4 +133,9 @@
   height: $baseComponentHeight;
   white-space: nowrap;
   margin-bottom: $halfPadding;
+  z-index: 107 !important;
+}
+
+.option > * {
+  z-index: 108 !important;
 }

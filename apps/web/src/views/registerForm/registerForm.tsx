@@ -16,7 +16,10 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { formatDateHTMLInput } from "utils/mixins/formatting";
+import {
+  COUNTRY_CODES_TO_NAMES,
+  formatDateHTMLInput,
+} from "utils/mixins/formatting";
 import styles from "./registerForm.module.scss";
 
 export default function RegisterForm() {
@@ -27,7 +30,10 @@ export default function RegisterForm() {
 
   const methods = useForm<ICreateUserRequest>();
   const onSubmit: SubmitHandler<ICreateUserRequest> = async (data) => {
-    data.country = data.country.split(" ")[0];
+    const countryKey = data.country.split(
+      " ",
+    )[0] as keyof typeof COUNTRY_CODES_TO_NAMES;
+    data.country = COUNTRY_CODES_TO_NAMES[countryKey] ?? "Unknown";
     await mutateAsync(data);
   };
 
@@ -50,6 +56,7 @@ export default function RegisterForm() {
             <form
               onSubmit={methods.handleSubmit(onSubmit)}
               className={styles.innerFormWrapper}
+              autoComplete="off"
             >
               <div className={styles.inputWrapper}>
                 <Input
@@ -72,6 +79,7 @@ export default function RegisterForm() {
                         "username must be between 4 and 32 characters long and contain no whitespaces",
                     },
                   }}
+                  autocomplete="new-username"
                 />
                 {methods.formState.errors.username?.type === "required" && (
                   <p
@@ -110,6 +118,7 @@ export default function RegisterForm() {
                       message: "invalid email address",
                     },
                   }}
+                  autocomplete="new-email"
                 />
                 {methods.formState.errors.email?.type === "required" && (
                   <p
@@ -155,6 +164,7 @@ export default function RegisterForm() {
                         "password must contain at least 1 uppercase letter, 1 special character, 1 number and be at least 8 characters long",
                     },
                   }}
+                  autocomplete="new-password"
                 />
                 {methods.formState.errors.password?.type === "required" && (
                   <p
@@ -195,6 +205,7 @@ export default function RegisterForm() {
                       message: "full name must be a valid name!",
                     },
                   }}
+                  autocomplete="new-name"
                 />
 
                 {methods.formState.errors.name?.type === "required" && (
@@ -270,6 +281,7 @@ export default function RegisterForm() {
                   isReactFormHook={true}
                   min="1900-01-01"
                   max={formatDateHTMLInput(new Date())}
+                  autocomplete="new-dob"
                 />
                 {methods.formState.errors.dateOfBirth?.type === "required" && (
                   <p

@@ -6,10 +6,11 @@ import {
   enableBodyScroll,
 } from "body-scroll-lock";
 import { clsx } from "clsx";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
 import styles from "./dialog.module.scss";
+import { useSpring, animated, useTransition } from "@react-spring/web";
 
 interface DialogProps {
   children?: React.ReactNode;
@@ -55,6 +56,48 @@ export default function Dialog({
     };
   }, [active, onClose]);
 
+  const handleEscKey = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose?.();
+      }
+    },
+    [onClose],
+  );
+
+  const handlePopState = useCallback(
+    (event: PopStateEvent) => {
+      event.preventDefault();
+      onClose?.();
+    },
+    [onClose],
+  );
+
+  useEffect(() => {
+    document.addEventListener("keyup", handleEscKey, false);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      document.removeEventListener("keyup", handleEscKey, false);
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [handleEscKey, handlePopState]);
+
+  const transition = useTransition(active, {
+    from: {
+      scale: 0,
+      opacity: 0,
+    },
+    enter: {
+      scale: 1,
+      opacity: 1,
+    },
+    leave: {
+      scale: 0,
+      opacity: 0,
+    },
+  });
+
   if (!active) return null;
 
   return (
@@ -64,18 +107,24 @@ export default function Dialog({
         onClose && onClose();
       }}
     >
-      <div
-        className={clsx(
-          styles.dialog,
-          globals[`${variant}BackgroundColor`],
-          globals[`${textColor(variant)}TextColor`],
-          className,
-        )}
-        style={style}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {children}
-      </div>
+      {transition((_style, _active) => {
+        return (
+          _active && (
+            <animated.div
+              className={clsx(
+                styles.dialog,
+                globals[`${variant}BackgroundColor`],
+                globals[`${textColor(variant)}TextColor`],
+                className,
+              )}
+              style={{ ...style, ..._style }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {children}
+            </animated.div>
+          )
+        );
+      })}
     </div>
   );
 }

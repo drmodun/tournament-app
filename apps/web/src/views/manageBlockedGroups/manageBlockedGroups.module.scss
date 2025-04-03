@@ -1,0 +1,42 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+  flex-direction: column;
+}
+
+.userCard {
+  border-radius: $borderRadius;
+  display: flex;
+  align-items: center;
+  height: $baseComponentHeight + 2 * $padding;
+  padding: 0 $padding;
+}
+
+.pfp {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  border-radius: $borderRadius;
+  object-fit: cover;
+}
+
+.trashButton {
+  width: $baseComponentHeight;
+}
+
+.leftContent {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+  flex-grow: 1;
+}
+
+.blockedUsers {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}

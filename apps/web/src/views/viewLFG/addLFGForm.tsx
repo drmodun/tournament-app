@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: Actually implement
-
 import { ICreateLFGRequest } from "@tournament-app/types";
 import { useGetCategoriesFilter } from "api/client/hooks/categories/useGetCategoriesFilter";
 import { useGetCategoriesInfinite } from "api/client/hooks/categories/useGetCategoriesInfinite";

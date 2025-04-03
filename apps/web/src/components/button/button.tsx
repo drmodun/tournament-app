@@ -1,10 +1,10 @@
 "use client";
 
-import { MouseEventHandler } from "react";
-import styles from "./button.module.scss";
-import globals from "styles/globals.module.scss";
-import { Variants } from "types/styleTypes";
 import { clsx } from "clsx";
+import { MouseEventHandler } from "react";
+import globals from "styles/globals.module.scss";
+import { inverseTextColor, Variants } from "types/styleTypes";
+import styles from "./button.module.scss";
 
 export interface ButtonProps {
   children?: React.ReactNode;
@@ -37,7 +37,7 @@ export default function Button({
         styles.button,
         disabled && styles.disabled,
         disabled
-          ? globals.disabledBackgroundColor
+          ? globals[`${inverseTextColor(variant)}MutedBackgroundColor`]
           : globals[`${variant}BackgroundColorDynamic`],
 
         className,

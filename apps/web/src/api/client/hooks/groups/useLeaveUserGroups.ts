@@ -32,7 +32,7 @@ export const useLeaveUserGroups = () => {
       });
     },
     onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occured...", "error");
+      toast.addToast(error.message ?? "an error occurred...", "error");
       console.error(error);
     },
     onMutate: () => {

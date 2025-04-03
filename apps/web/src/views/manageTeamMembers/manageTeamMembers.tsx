@@ -60,6 +60,7 @@ const UserCard = ({
 
   useEffect(() => {
     if (removeUserMutation.isSuccess) setIsVisible(false);
+    console.log("role", membership?.role);
   }, [removeUserMutation.isSuccess]);
 
   return (
@@ -77,7 +78,6 @@ const UserCard = ({
         <div className={styles.userCardInnerWrapper}>
           <img
             src={profilePicture}
-            alt={`${username}'s profile picture`}
             className={styles.userCardProfilePicture}
             onError={(e) => {
               e.currentTarget.src = "/profilePicture.png";
@@ -150,7 +150,7 @@ const UserCard = ({
               />
             </button>
           )}
-        </div>
+        </div> 
       )}
     </div>
   );
@@ -161,11 +161,18 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
   const textColorTheme = textColor(theme);
   const { data: groupMembers, isLoading: groupMembersIsLoading } =
     useGetGroupMembers(teamId);
-  const { data: membershipData } = useCheckIfGroupMember(teamId);
+  const { data: membershipData, isLoading: membershipDataIsLoading } =
+    useCheckIfGroupMember(teamId);
+
+  const { data } = useAuth();
+
+  useEffect(() => {
+    console.log(membershipData, "data!");
+  }, [membershipData]);
 
   return (
     <div className={clsx(styles.wrapper)}>
-      {groupMembersIsLoading ? (
+      {groupMembersIsLoading || membershipDataIsLoading ? (
         <ProgressWheel variant={textColorTheme} />
       ) : (
         <>
@@ -177,6 +184,7 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
               <p>there are no team members!</p>
             ) : (
               groupMembers?.members?.map((member) => {
+                if (member.id == data?.id) return;
                 return (
                   <UserCard
                     membership={membershipData}

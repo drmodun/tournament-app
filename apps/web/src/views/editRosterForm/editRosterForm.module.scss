@@ -1,0 +1,51 @@
+@import "../../styles/";
+
+.error {
+  font-size: $fontSize * 0.875;
+  color: $danger;
+  margin-top: $halfPadding;
+}
+
+.submitLfpButton {
+  width: 100%;
+  margin-top: $padding;
+}
+
+.title {
+  margin-bottom: $padding;
+}
+.input {
+  width: 100%;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+
+.pfp {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.userCardWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $padding;
+}
+
+.selectedRoster {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.substitutesTitle {
+  margin-top: $padding;
+}

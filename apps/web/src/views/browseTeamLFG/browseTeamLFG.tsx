@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: Actually implement
-
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useCreatedBlockedUser } from "api/client/hooks/blockedUsers/useCreateBlockedUser";
@@ -11,7 +9,7 @@ import { clsx } from "clsx";
 import Button from "components/button";
 import Chip from "components/chip";
 import ProgressWheel from "components/progressWheel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -59,7 +57,6 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
               >
                 <img
                   src={data && data[index]?.user.profilePicture}
-                  alt="user profile picture"
                   onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                   className={styles.profilePicture}
                 />
@@ -89,31 +86,35 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                   </Markdown>
                 </div>
               </div>
-              <div className={styles.careers}>
-                <p className={styles.interests}>interests</p>
-                <div className={styles.careerWrapper}>
-                  {data &&
-                    data[index]?.careers.map((career) => (
-                      <Chip
-                        className={styles.careerChip}
-                        variant={textColorTheme}
-                      >
-                        <div
-                          className={clsx(
-                            styles.careerCategory,
-                            globals[`${theme}Color`],
-                          )}
-                        >
-                          {career.category.name}
-                        </div>
-                        <Chip
-                          label={`elo: ${career?.elo?.toString() ?? "0"}`}
-                          variant="primary"
-                        />
-                      </Chip>
-                    ))}
-                </div>
-              </div>
+              {data &&
+                data[index]?.careers.length > 0 &&
+                data[index]?.careers[0]?.category?.id !== undefined && (
+                  <div className={styles.careers}>
+                    <p className={styles.interests}>interests</p>
+                    <div className={styles.careerWrapper}>
+                      {data &&
+                        data[index]?.careers.map((career) => (
+                          <Chip
+                            className={styles.careerChip}
+                            variant={textColorTheme}
+                          >
+                            <div
+                              className={clsx(
+                                styles.careerCategory,
+                                globals[`${theme}Color`],
+                              )}
+                            >
+                              {career.category.name}
+                            </div>
+                            <Chip
+                              label={`elo: ${career?.elo?.toString() ?? "0"}`}
+                              variant="primary"
+                            />
+                          </Chip>
+                        ))}
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
           <div className={styles.actionButtons}>

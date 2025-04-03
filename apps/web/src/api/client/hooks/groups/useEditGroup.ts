@@ -36,7 +36,7 @@ export const useEditGroup = (groupId: number) => {
           "error",
         );
       } else {
-        toast.addToast(error.message ?? "an error occured...", "error");
+        toast.addToast(error.message ?? "an error occurred...", "error");
       }
       console.error(error);
       return false;

@@ -1,30 +1,27 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { IGetLFPRequest, ILFPResponse } from "@tournament-app/types";
+import { ILFPResponse } from "@tournament-app/types";
 import {
   clientApi,
   getAccessToken,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
+  LARGE_QUERY_RETRY_ATTEMPTS,
+  LARGE_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 
-export const getLFPs = async (groupId: number, query?: IGetLFPRequest) =>
+export const getLFPs = async () =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<ILFPResponse[]>
-    >(`/lfp/${groupId}`, { params: query })
+    .get<never, AxiosResponse<ILFPResponse[]>>(`/lfp/groups`)
     .then((res) => res.data);
 
-export const useGetLFPs = (groupId: number, query?: IGetLFPRequest) => {
+export const useGetLFPs = () => {
   return useQuery({
-    queryKey: [groupId, query, "lfp"],
-    queryFn: () => getLFPs(groupId, query),
+    queryKey: ["lfp", "user"],
+    queryFn: getLFPs,
     staleTime: Infinity,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
+    retryDelay: LARGE_QUERY_RETRY_DELAY,
+    retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
   });
 };

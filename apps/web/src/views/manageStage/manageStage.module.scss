@@ -71,3 +71,14 @@
 .stageGroupRosterCard + .stageGroupRosterCard {
   margin-top: $padding;
 }
+
+.actionButton {
+  width: 100%;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: $halfPadding;
+}

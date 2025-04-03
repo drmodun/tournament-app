@@ -1,3 +1,5 @@
+"use client";
+
 import Events from "views/events";
 import MapSidebar from "views/mapSidebar";
 import Navbar from "views/navbar";

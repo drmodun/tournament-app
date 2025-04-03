@@ -12,6 +12,7 @@ import {
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
+import { UseQueryResult } from "@tanstack/react-query";
 
 type GroupMembersType = {
   group: IMiniGroupResponseWithCountry;
@@ -27,13 +28,12 @@ type GroupMembersType = {
 
 export const getGroupMembers = async (groupId?: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<GroupMembersType>
-    >(`/groups/${groupId}/members`, { params: { groupId } })
+    .get<never, AxiosResponse<GroupMembersType>>(`/groups/${groupId}/members`)
     .then((res) => res.data);
 
-export const useGetGroupMembers = (groupId: number | undefined) => {
+export const useGetGroupMembers = (
+  groupId: number | undefined,
+): UseQueryResult<GroupMembersType, unknown> => {
   return useQuery({
     queryKey: ["group", groupId],
     queryFn: () => getGroupMembers(groupId),

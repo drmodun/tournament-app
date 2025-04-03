@@ -15,6 +15,12 @@
   padding: $halfPadding;
   border-radius: $borderRadius;
   justify-content: space-between;
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: unset;
+    width: calc(100vw - $doublePadding * 2);
+  }
 }
 
 .userCardInnerWrapper {
@@ -58,7 +64,7 @@
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(5 * $baseComponentHeight, 1fr)
+    minmax(10 * $baseComponentHeight, 1fr)
   );
   gap: $padding;
   height: 100%;
@@ -70,4 +76,11 @@
 
 .loadMoreButton {
   margin-left: $padding;
+}
+
+.actionButtons {
+  display: flex;
+  gap: $halfPadding;
+  align-items: center;
+  min-width: 0;
 }

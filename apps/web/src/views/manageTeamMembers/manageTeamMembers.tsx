@@ -150,7 +150,7 @@ const UserCard = ({
               />
             </button>
           )}
-        </div> 
+        </div>
       )}
     </div>
   );

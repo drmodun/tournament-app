@@ -44,6 +44,10 @@ import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TournamentAdminGuard } from '../tournament/guards/tournament-admin.guard';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { PaginationInstance } from 'src/base/query/baseResponse';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('stages')
 @ApiExtraModels(
@@ -94,6 +98,16 @@ export class StageController {
       results,
       metadata,
     };
+  }
+
+  @Get('managed')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getManagedStages(
+    @CurrentUser() user: ValidatedUserDto,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.stageService.getManagedStages(user.id, query);
   }
 
   @Get(':stageId')

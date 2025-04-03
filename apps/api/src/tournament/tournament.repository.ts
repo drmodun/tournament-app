@@ -2,21 +2,22 @@ import { Injectable } from '@nestjs/common';
 import {
   category,
   group,
+  groupToUser,
   location,
   participation,
   tournament,
   user,
 } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
-import { BaseQuery } from 'src/base/query/baseQuery';
-import { aliasedTable, asc, eq, gte, ilike, sql, lte, SQL } from 'drizzle-orm';
+import { BaseQuery, PaginationOnly } from 'src/base/query/baseQuery';
 import {
-  IUpdateTournamentRequest,
-  TournamentResponseEnumType,
   TournamentResponsesEnum,
   TournamentSortingEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
+  groupRoleEnum,
+  TournamentResponseEnumType,
+  IUpdateTournamentRequest,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -25,6 +26,18 @@ import {
 } from 'drizzle-orm/pg-core';
 import { db } from 'src/db/db';
 import { TournamentDtosEnum, TournamentReturnTypesEnumType } from './types';
+import {
+  aliasedTable,
+  and,
+  asc,
+  eq,
+  gte,
+  ilike,
+  lte,
+  or,
+  SQL,
+  sql,
+} from 'drizzle-orm';
 
 @Injectable()
 export class TournamentDrizzleRepository extends PrimaryRepository<
@@ -253,5 +266,31 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
       .offset((page - 1) * pageSize);
 
     return results;
+  }
+
+  async getManagedTournaments(userId: number, pagination?: PaginationOnly) {
+    const tournaments = await db
+      .selectDistinct(this.getMappingObject(TournamentResponsesEnum.BASE))
+      .from(tournament)
+      .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
+      .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
+      .leftJoin(user, eq(groupToUser.userId, user.id))
+      .leftJoin(location, eq(tournament.locationId, location.id))
+      .leftJoin(category, eq(tournament.categoryId, category.id))
+      .where(
+        and(
+          eq(user.id, userId),
+          or(
+            eq(user.id, tournament.creatorId),
+            eq(groupToUser.role, groupRoleEnum.ADMIN),
+            eq(groupToUser.role, groupRoleEnum.OWNER),
+          ),
+        ),
+      )
+      .orderBy(asc(tournament.startDate))
+      .limit(pagination.pageSize ?? 10)
+      .offset(pagination.pageSize * ((pagination.page ?? 1) - 1));
+
+    return tournaments;
   }
 }

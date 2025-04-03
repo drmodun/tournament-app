@@ -16,6 +16,7 @@ import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
 import { IStageWithChallongeTournament, StagesWithDates } from './types';
 import { ChallongeService } from 'src/challonge/challonge.service';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class StageService {
@@ -82,6 +83,11 @@ export class StageService {
     } catch (error) {
       console.error('Challonge issue', error);
     }
+  }
+
+  async getManagedStages(userId: number, pagination?: PaginationOnly) {
+    const stages = await this.repository.getManagedStages(userId, pagination);
+    return stages;
   }
 
   async updateChallongeTournament(stageId: number) {

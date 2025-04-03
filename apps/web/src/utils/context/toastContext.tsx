@@ -11,9 +11,10 @@ import {
 
 export const ToastContext = createContext({
   toasts: [] as ToastProps[],
-  addToast: (message: string, type: ToastVariants) => {
+  addToast: (message: string, type: ToastVariants, href?: string) => {
     message;
     type;
+    href;
   },
   removeToast: (id: number) => {
     id;
@@ -23,9 +24,14 @@ export const ToastContext = createContext({
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<ToastProps[]>([]);
 
-  const addToast = (message: string, type: ToastVariants, id?: number) => {
+  const addToast = (
+    message: string,
+    type: ToastVariants,
+    href?: string,
+    id?: number,
+  ) => {
     id = id ?? Date.now();
-    const newToasts = [...toasts, { message, type, id }];
+    const newToasts = [...toasts, { message, type, href, id }];
     setToasts(newToasts);
     if (AUTO_CLOSE) {
       setTimeout(() => {

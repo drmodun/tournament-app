@@ -123,9 +123,6 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @ApiPropertyOptional()
   minimumMMR?: number;
 
-  @IsInt()
-  @Transform(({ value }) => parseInt(value))
-  @ApiProperty()
   creatorId: number;
 
   @IsOptional()

@@ -15,7 +15,10 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_NAMES_TO_CODES } from "utils/mixins/formatting";
 import styles from "./manageTeamMembers.module.scss";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
-import { useAuth } from "api/client/hooks/auth/useAuth";
+import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import { usePromoteUser } from "api/client/hooks/groups/usePromoteUser";
+import { useDemoteUser } from "api/client/hooks/groups/useDemoteUser";
 
 type UserCardProps = {
   id: number;
@@ -39,10 +42,20 @@ const UserCard = ({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const removeUserMutation = useRemoveUserFromGroup();
+  const promoteUserMutation = usePromoteUser();
+  const demoteUserMutation = useDemoteUser();
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const handleRemove = () => {
     removeUserMutation.mutate({ userId: id, groupId: groupId });
+  };
+
+  const handlePromote = () => {
+    promoteUserMutation.mutate({ userId: id, groupId: groupId });
+  };
+
+  const handleDemote = () => {
+    demoteUserMutation.mutate({ userId: id, groupId: groupId });
   };
 
   useEffect(() => {
@@ -88,20 +101,56 @@ const UserCard = ({
       </Link>
       {(membership?.role === groupRoleEnum.ADMIN ||
         membership?.role === groupRoleEnum.OWNER) && (
-        <button
-          onClick={handleRemove}
-          className={clsx(
-            styles.userCardRemoveButton,
-            globals.dangerBackgroundColor,
+        <div className={styles.actionButtons}>
+          {role == groupRoleEnum.MEMBER && (
+            <button
+              onClick={handlePromote}
+              className={clsx(
+                styles.userCardRemoveButton,
+                globals.warningBackgroundColor,
+              )}
+            >
+              <KeyboardDoubleArrowUpIcon
+                className={clsx(
+                  globals.lightFillChildren,
+                  styles.userCardCloseButton,
+                )}
+              />
+            </button>
           )}
-        >
-          <PersonRemoveIcon
-            className={clsx(
-              globals.lightFillChildren,
-              styles.userCardCloseButton,
-            )}
-          />
-        </button>
+          {role == groupRoleEnum.ADMIN && (
+            <button
+              onClick={handleDemote}
+              className={clsx(
+                styles.userCardRemoveButton,
+                globals.warningBackgroundColor,
+              )}
+            >
+              <KeyboardDoubleArrowDownIcon
+                className={clsx(
+                  globals.lightFillChildren,
+                  styles.userCardCloseButton,
+                )}
+              />
+            </button>
+          )}
+          {role !== groupRoleEnum.OWNER && (
+            <button
+              onClick={handleRemove}
+              className={clsx(
+                styles.userCardRemoveButton,
+                globals.dangerBackgroundColor,
+              )}
+            >
+              <PersonRemoveIcon
+                className={clsx(
+                  globals.lightFillChildren,
+                  styles.userCardCloseButton,
+                )}
+              />
+            </button>
+          )}
+        </div> 
       )}
     </div>
   );

@@ -7,6 +7,7 @@ export interface ToastProps {
   style?: React.CSSProperties;
   message?: string;
   type?: ToastVariants;
+  href?: string;
   id?: number;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;

@@ -38,9 +38,9 @@ import { PaginationOnly } from 'src/base/query/baseQuery';
 import { QuizService } from './quiz.service';
 import { CanEditQuizGuard } from './guards/can-edit-quiz.guard';
 
-@ApiTags('quizzes')
+@ApiTags('quiz')
 @ApiExtraModels(QuizResponse, QuizResponseExtended)
-@Controller('quizzes')
+@Controller('quiz')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 

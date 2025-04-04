@@ -201,13 +201,27 @@ export class QuizDrizzleRepository extends PrimaryRepository<
 
       await tx.delete(quizQuestion).where(eq(quizQuestion.quizId, id));
 
-      await tx.insert(quizQuestion).values(
-        updateRequest.questions.map((question) => ({
-          ...question,
-          quizId: id,
-          correctAnswers: question.correctAnswers.join(','),
-        })),
-      );
+      for (const question of updateRequest.questions) {
+        const questionId = await tx
+          .insert(quizQuestion)
+          .values({
+            ...question,
+            quizId: id,
+            correctAnswers: question.correctAnswers.join(','),
+          })
+          .returning({ id: quizQuestion.id });
+
+        await tx
+          .delete(quizOption)
+          .where(eq(quizOption.quizQuestionId, questionId[0].id));
+
+        await tx.insert(quizOption).values(
+          question.options.map((option) => ({
+            ...option,
+            quizQuestionId: questionId[0].id,
+          })),
+        );
+      }
 
       const updatedQuiz = await tx
         .update(quiz)
@@ -229,14 +243,23 @@ export class QuizDrizzleRepository extends PrimaryRepository<
         })
         .returning({ id: quiz.id });
 
-      await tx.insert(quizQuestion).values(
-        createRequest.questions.map((question) => ({
-          ...question,
-          quizId: quizToCreate[0].id,
-          correctAnswers: question.correctAnswers.join(','),
-        })),
-      );
+      for (const question of createRequest.questions) {
+        const questionId = await tx
+          .insert(quizQuestion)
+          .values({
+            ...question,
+            quizId: quizToCreate[0].id,
+            correctAnswers: question.correctAnswers.join(','),
+          })
+          .returning({ id: quizQuestion.id });
 
+        await tx.insert(quizOption).values(
+          question.options.map((option) => ({
+            ...option,
+            quizQuestionId: questionId[0].id,
+          })),
+        );
+      }
       return quizToCreate[0];
     });
   }

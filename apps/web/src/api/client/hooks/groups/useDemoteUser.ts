@@ -12,7 +12,7 @@ export const demoteUser = async (data: { groupId: number; userId: number }) =>
       `/group-membership/${data.groupId}/${data.userId}`,
       {
         role: groupRoleEnum.MEMBER,
-      }
+      },
     )
     .then((res) => res.data);
 
@@ -34,7 +34,7 @@ export const useDemoteUser = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
     },

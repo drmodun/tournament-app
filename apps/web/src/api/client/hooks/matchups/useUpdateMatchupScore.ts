@@ -46,7 +46,7 @@ export const useCreateMatchupScore = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       console.log(error.message);

@@ -24,7 +24,7 @@ export const editLFP = async (data: {
           groupId: data?.groupId,
           id: data?.groupId,
         },
-      }
+      },
     )
     .then((res) => res.data);
 
@@ -48,7 +48,7 @@ export const useEditLFP = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       return false;

@@ -28,7 +28,7 @@ export const useRequestPasswordReset = () => {
       });
       toast.addToast(
         "successfully sent reset password request, check your email",
-        "success"
+        "success",
       );
 
       setTimeout(() => navigate.push("/login"), 1000);
@@ -38,7 +38,7 @@ export const useRequestPasswordReset = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
     },

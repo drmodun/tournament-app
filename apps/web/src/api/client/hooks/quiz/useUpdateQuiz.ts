@@ -41,7 +41,7 @@ export const useUpdateQuiz = () => {
       if (error.response?.status === 413) {
         toast.addToast(
           "Image too large, please select an image under 2MB",
-          "error"
+          "error",
         );
       } else {
         toast.addToast(error.message ?? "Failed to update quiz", "error");

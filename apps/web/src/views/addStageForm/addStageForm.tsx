@@ -49,7 +49,7 @@ export default function AddStageForm({
     data.maxPlayersPerTeam = parseInt(String(data?.maxPlayersPerTeam) || "0");
 
     await mutation.mutateAsync(data);
-    if (mutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   const handleAutocomplete = async (

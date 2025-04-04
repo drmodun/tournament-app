@@ -16,3 +16,18 @@ export const fetchStage = async (stageId: number | undefined) => {
     }),
   );
 };
+
+export const fetchStageWithChallonge = async (stageId: number | undefined) => {
+  if (!stageId) return [];
+
+  return fetch(
+    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/stages/${stageId}?responseType=${StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT}`,
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  ).then((res) =>
+    res.json().then((res) => {
+      return res;
+    }),
+  );
+};

@@ -102,16 +102,6 @@ export const formatDateTime = (date: Date) => {
   return dateFormat(date, "H:MM dd.mm 'yy").toLowerCase();
 };
 
-export const formatBracketDateTimes = (data: ReactBracketsData) => {
-  for (let round of data.rounds) {
-    for (let seed of round.seeds) {
-      seed.date = formatDateTime(new Date(seed.date));
-    }
-  }
-
-  return data;
-};
-
 export const calculateBestValueFormat = (targetValue: number) => {
   // value prefixes
   const valueNames = ["", "K", "M", "B", "T", "P", "E", "Z", "Y", "R", "Q"];

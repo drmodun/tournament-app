@@ -58,7 +58,7 @@ export default function EditStageForm({
     data.locationId = locationId;
     await mutation.mutateAsync({ data, stageId: stage?.id ?? -1 });
 
-    if (mutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   const createLocationMutation = useCreateLocation();

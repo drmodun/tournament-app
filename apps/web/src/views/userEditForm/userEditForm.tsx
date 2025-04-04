@@ -42,7 +42,7 @@ export default function userEditForm({
     _data.country = _data.country?.split(" ")[0];
     await updateUser.mutateAsync(_data);
 
-    if (updateUser.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   useEffect(() => {

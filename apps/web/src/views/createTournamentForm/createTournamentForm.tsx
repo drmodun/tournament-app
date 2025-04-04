@@ -6,14 +6,14 @@ import {
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
 } from "@tournament-app/types";
-import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
+import { useGetCategoriesInfinite } from "api/client/hooks/categories/useGetCategoriesInfinite";
 import { useCreateCompetition } from "api/client/hooks/competitions/useCreateCompetition";
-import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
 import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dropdown from "components/dropdown";
+import InfiniteDropdown from "components/infiniteDropdown";
 import Input from "components/input";
 import ProgressWheel from "components/progressWheel";
 import RichEditor from "components/richEditor";
@@ -40,18 +40,15 @@ export default function CreateTournamentForm({
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const { data, isLoading } = useGetCategories();
+  const {
+    data,
+    isLoading,
+    isFetching: categoriesIsFetching,
+    fetchNextPage: categoriesFetchNextPage,
+  } = useGetCategoriesInfinite();
   const toast = useToastContext();
   const createCompetitionMutation = useCreateCompetition();
   const createLocationMutation = useCreateLocation();
-  const {
-    isLoading: isGroupLoading,
-    data: groupData,
-    isFetchNextPageError,
-    isFetching,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useUserGroups(false, 20);
 
   const methods = useForm<ICreateTournamentRequest>();
   const onSubmit: SubmitHandler<ICreateTournamentRequest> = async (data) => {
@@ -79,7 +76,7 @@ export default function CreateTournamentForm({
 
     await createCompetitionMutation.mutateAsync(data);
 
-    if (createCompetitionMutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   const [isRanked, setIsRanked] = useState<boolean>(false);
@@ -92,9 +89,7 @@ export default function CreateTournamentForm({
   const [categoryId, setCategoryId] = useState<number>(-1);
   const [listener, setListener] = useState<google.maps.MapsEventListener>();
   const [locationId, setLocationId] = useState<number>();
-  const [affiliatedGroupId, setAffiliatedGroupId] = useState<number>();
   const [finalLocationName, setFinalLocationName] = useState<string>();
-  const [reachedLimit, setReachedLimit] = useState<boolean>(false);
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
@@ -132,18 +127,6 @@ export default function CreateTournamentForm({
     }
 
     setLinks((links) => [...links, val]);
-  };
-
-  const handleLoadMore = async () => {
-    const page = await fetchNextPage();
-    if (
-      isFetchNextPageError ||
-      (page.data?.pages[page.data?.pages.length - 1]?.results?.length ?? -1) ==
-        0
-    ) {
-      setReachedLimit(true);
-      return;
-    }
   };
 
   return (
@@ -230,6 +213,7 @@ export default function CreateTournamentForm({
               name="minimumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
+              type="number"
             />
             <Input
               variant={textColorTheme}
@@ -237,6 +221,7 @@ export default function CreateTournamentForm({
               name="maximumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
+              type="number"
             />
           </div>
         </div>
@@ -404,9 +389,9 @@ export default function CreateTournamentForm({
         </div>
         <div className={styles.inputWrapper}>
           <Dropdown
-            label="category"
-            placeholder="select tournament category"
-            name="categoryId"
+            label="country"
+            placeholder="select country"
+            name="country"
             isReactHookForm={true}
             required={true}
             variant={textColorTheme}
@@ -418,9 +403,6 @@ export default function CreateTournamentForm({
                   ] ?? "unknown",
               };
             })}
-            onSelect={(index: number) => {
-              setCategoryId(data?.results[index]?.id ?? -1);
-            }}
             searchPlaceholder="search..."
             doesSearch={true}
             className={styles.dropdown}
@@ -438,25 +420,39 @@ export default function CreateTournamentForm({
           {isLoading ? (
             <ProgressWheel variant={textColorTheme} />
           ) : (
-            <Dropdown
+            <InfiniteDropdown
+              isFetching={categoriesIsFetching}
+              loadMore={async () => {
+                await categoriesFetchNextPage();
+              }}
               label="category"
               placeholder="select tournament category"
               name="categoryId"
               isReactHookForm={true}
               required={true}
               variant={textColorTheme}
-              options={
-                data?.results.map((category) => {
-                  return { label: category.name };
-                }) ?? []
-              }
+              options={data?.pages?.flatMap((results) => {
+                return (
+                  results.results.flatMap((category) => {
+                    return { label: category.name, id: category.id };
+                  }) ?? []
+                );
+              })}
               onSelect={(index: number) =>
-                setCategoryId(data?.results[index].id ?? -1)
+                setCategoryId(
+                  data?.pages?.flatMap((results) => {
+                    return (
+                      results.results.flatMap((category) => {
+                        return { label: category.name, id: category.id };
+                      }) ?? []
+                    );
+                  })[index].id ?? -1,
+                )
               }
             />
           )}
           {methods.formState.errors.categoryId?.type === "required" && (
-            <p className={styles.error}>dsadsadsa this field is required!</p>
+            <p className={styles.error}>this field is required!</p>
           )}
         </div>
 

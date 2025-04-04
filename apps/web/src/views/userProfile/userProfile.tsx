@@ -16,6 +16,8 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import styles from "./userProfile.module.scss";
+import Dialog from "components/dialog";
+import InviteUserForm from "views/inviteUserForm";
 
 export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
   const { theme } = useThemeContext();
@@ -25,6 +27,8 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
   const textColorTheme = textColor(theme);
   const { data: authData } = useAuth();
   const [buttonFollowed, setButtonFollowed] = useState<boolean | null>(null);
+
+  const [inviteModalOpen, setInviteModalOpen] = useState<boolean>(false);
 
   const handleFollow = async () => {
     await followUserMutation.mutateAsync(user?.id);
@@ -38,6 +42,18 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
 
   return (
     <div className={clsx(styles.wrapper, globals[`${theme}BackgroundColor`])}>
+      <Dialog
+        active={inviteModalOpen}
+        onClose={() => setInviteModalOpen(false)}
+        className={styles.dialog}
+        variant={theme}
+      >
+        <InviteUserForm
+          userId={user.id}
+          onClose={() => setInviteModalOpen(false)}
+          variant={theme}
+        />
+      </Dialog>
       <div className={clsx(globals[`${textColorTheme}Color`], styles.top)}>
         <img
           src={user?.profilePicture}
@@ -127,6 +143,10 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
               className={styles.submitButton}
             />
           ))}
+        <Button
+          label="invite user to group"
+          onClick={() => setInviteModalOpen(true)}
+        />
       </div>
     </div>
   );

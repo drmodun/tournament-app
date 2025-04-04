@@ -19,6 +19,7 @@ import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import { usePromoteUser } from "api/client/hooks/groups/usePromoteUser";
 import { useDemoteUser } from "api/client/hooks/groups/useDemoteUser";
+import { useAuth } from "api/client/hooks/auth/useAuth";
 
 type UserCardProps = {
   id: number;
@@ -150,7 +151,7 @@ const UserCard = ({
               />
             </button>
           )}
-        </div> 
+        </div>
       )}
     </div>
   );

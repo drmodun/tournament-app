@@ -180,7 +180,7 @@ export default function Dropdown({
             variant={variant}
             label={
               selected !== null && selectionBased
-                ? options[selected].label
+                ? options?.[selected]?.label
                 : placeholder
             }
             onClick={changeDrop}

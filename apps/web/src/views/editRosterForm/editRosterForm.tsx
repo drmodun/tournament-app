@@ -46,7 +46,7 @@ export default function EditRosterForm({
         }),
       ],
     });
-    if (updateRosterMutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   useEffect(() => {

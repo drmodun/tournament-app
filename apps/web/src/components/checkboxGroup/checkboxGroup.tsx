@@ -15,6 +15,7 @@ interface CheckboxGroupProps {
   isReactHookForm?: boolean;
   reactFormHookProps?: Object;
   defaultValues?: boolean[];
+  disabled?: boolean;
 }
 
 export default function CheckboxGroup({
@@ -25,6 +26,7 @@ export default function CheckboxGroup({
   name,
   isReactHookForm = false,
   defaultValues,
+  disabled = false,
 }: CheckboxGroupProps) {
   const [indexes, setIndexes] = useState<number[]>([]);
   const methods = useFormContext();
@@ -39,6 +41,7 @@ export default function CheckboxGroup({
   };
 
   const handleClick = (_index: number) => {
+    if (disabled) return;
     if (indexes.includes(_index)) {
       setIndexes((prevIndexes) => {
         const elements = prevIndexes.filter((index) => index !== _index);

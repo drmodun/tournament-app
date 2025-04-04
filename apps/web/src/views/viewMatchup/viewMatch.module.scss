@@ -1,0 +1,99 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: clamp(0px, 100%, $tabletBreakpoint);
+  height: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.userPfp {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+  border-radius: $borderRadius;
+  padding: $padding;
+}
+
+.rosterWrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $padding;
+}
+
+.versusWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.matchupWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.infoWrapper {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.roster {
+  padding: $padding;
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  border-radius: $borderRadius;
+}
+
+.players {
+  padding: $halfPadding;
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.rostersWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}

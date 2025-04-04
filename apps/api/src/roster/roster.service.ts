@@ -100,7 +100,10 @@ export class RosterService {
     id: number,
     responseType: RosterResponsesEnum = RosterResponsesEnum.BASE,
   ): Promise<TResponseType> {
-    const results = await this.repository.getSingleQuery(id, responseType);
+    const results = await this.repository.getWithPlayers({
+      responseType,
+      rosterId: id,
+    });
 
     if (!results.length) {
       throw new NotFoundException(`Roster with ID ${id} not found`);

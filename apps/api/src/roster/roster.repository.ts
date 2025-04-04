@@ -153,6 +153,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       where: and(
         query.ids?.length ? inArray(roster.id, query.ids) : undefined,
         query.stageId ? eq(roster.stageId, query.stageId) : undefined,
+        query.rosterId ? eq(roster.id, query.rosterId) : undefined,
         query.participationId
           ? eq(roster.participationId, query.participationId)
           : undefined,
@@ -437,5 +438,19 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         rosterData.userName ||
         `Roster_${rosterData.id}`,
     }));
+  }
+
+  async getUsersInStageRosters(stageId: number) {
+    const users = await db
+      .selectDistinct({
+        id: user.id,
+        username: user.username,
+      })
+      .from(userToRoster)
+      .leftJoin(roster, eq(userToRoster.rosterId, roster.id))
+      .leftJoin(user, eq(userToRoster.userId, user.id))
+      .where(eq(roster.stageId, stageId));
+
+    return users;
   }
 }

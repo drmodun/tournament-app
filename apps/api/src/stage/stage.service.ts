@@ -15,6 +15,7 @@ import {
   stageStatusEnum,
   rosterToBulkCreateParticipantRequest,
   IBulkCreateChallongeParticipantRequest,
+  notificationTypeEnum,
 } from '@tournament-app/types';
 import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
@@ -22,6 +23,9 @@ import { IStageWithChallongeTournament, StagesWithDates } from './types';
 import { ChallongeService } from 'src/challonge/challonge.service';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { RosterDrizzleRepository } from 'src/roster/roster.repository';
+import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { TemplatesEnum } from 'src/infrastructure/types';
 
 @Injectable()
 export class StageService {
@@ -29,6 +33,8 @@ export class StageService {
     private readonly repository: StageDrizzleRepository,
     private readonly challongeService: ChallongeService,
     private readonly rosterRepository: RosterDrizzleRepository,
+    private readonly sseNotificationsService: SseNotificationsService,
+    private readonly notificationTemplateFiller: NotificationTemplatesFiller,
   ) {}
 
   async create(createStageDto: ICreateStageDto) {
@@ -196,6 +202,43 @@ export class StageService {
     return stages;
   }
 
+  async sendStageStartNotifications(stageId: number, stageName: string) {
+    try {
+      const rosteredUsers =
+        await this.rosterRepository.getUsersInStageRosters(stageId);
+
+      if (!rosteredUsers || rosteredUsers.length === 0) {
+        console.log(`No users found in rosters for stage ${stageId}`);
+        return;
+      }
+
+      const message = this.notificationTemplateFiller.fill(
+        TemplatesEnum.TOURNAMENT_START,
+        {
+          tournament: stageName,
+        },
+      );
+
+      await this.sseNotificationsService.createWithUsers(
+        {
+          type: notificationTypeEnum.TOURNAMENT_START,
+          message,
+          link: `/tournaments/stages/${stageId}`,
+          image: null,
+        },
+        rosteredUsers.map((user) => user.id),
+      );
+
+      console.log(
+        `Sent stage start notifications to ${rosteredUsers.length} users for stage ${stageId}`,
+      );
+    } catch (error) {
+      console.error(
+        `Failed to send stage start notifications: ${error.message}`,
+      );
+    }
+  }
+
   async startStage(stageId: number) {
     const stage: IStageWithChallongeTournament = await this.findOne(
       stageId,
@@ -242,6 +285,8 @@ export class StageService {
       stage.challongeTournamentId,
       stageStatusEnum.ONGOING,
     );
+
+    await this.sendStageStartNotifications(stageId, stage.name);
 
     return updatedStage;
   }

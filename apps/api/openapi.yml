@@ -204,7 +204,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2025-04-03T22:37:26.726Z
+                        updatedAt: &a2 2025-04-04T00:24:01.867Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -304,7 +304,7 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2025-04-03T22:37:26.726Z
+                        createdAt: 2025-04-04T00:24:01.867Z
                         following: 0
                         location: New York
           description: ""
@@ -362,7 +362,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2025-04-03T22:37:26.726Z
+                    updatedAt: &a3 2025-04-04T00:24:01.867Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -394,7 +394,7 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2025-04-03T22:37:26.726Z
+                    createdAt: 2025-04-04T00:24:01.867Z
                     following: 0
                     location: New York
           description: ""
@@ -758,7 +758,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-03T22:37:26.825Z
+                        updatedAt: 2025-04-04T00:24:01.985Z
                         memberCount: 50
                 extended:
                   value:
@@ -783,9 +783,9 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-03T22:37:26.825Z
+                        updatedAt: 2025-04-04T00:24:01.985Z
                         memberCount: 50
-                        createdAt: 2025-04-03T22:37:26.825Z
+                        createdAt: 2025-04-04T00:24:01.986Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -812,7 +812,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-03T22:37:26.825Z
+                updatedAt: 2025-04-04T00:24:01.985Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -865,7 +865,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-03T22:37:26.825Z
+                    updatedAt: 2025-04-04T00:24:01.985Z
                     memberCount: 50
                 extended:
                   value:
@@ -877,9 +877,9 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-03T22:37:26.825Z
+                    updatedAt: 2025-04-04T00:24:01.985Z
                     memberCount: 50
-                    createdAt: 2025-04-03T22:37:26.825Z
+                    createdAt: 2025-04-04T00:24:01.986Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -918,7 +918,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-03T22:37:26.825Z
+                updatedAt: 2025-04-04T00:24:01.985Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -982,7 +982,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-03T22:37:26.825Z
+                  updatedAt: 2025-04-04T00:24:01.985Z
                   memberCount: 50
                 members: []
           description: ""
@@ -1010,7 +1010,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-03T22:37:26.825Z
+                  updatedAt: 2025-04-04T00:24:01.985Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -1038,7 +1038,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-03T22:37:26.825Z
+                  updatedAt: 2025-04-04T00:24:01.985Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -1230,7 +1230,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-04-03T22:37:26.828Z
+                        createdAt: 2025-04-04T00:24:01.990Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1251,7 +1251,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-04-03T22:37:26.828Z
+                      - createdAt: 2025-04-04T00:24:01.990Z
                         isFake: false
                         role: member
                         country: country
@@ -1283,7 +1283,7 @@ paths:
                         role: member
                         user: *a7
                         group: *a8
-                        createdAt: 2025-04-03T22:37:26.828Z
+                        createdAt: 2025-04-04T00:24:01.990Z
                         country: country
                         name: name
                         logo: logo
@@ -1372,10 +1372,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-04-03T22:37:26.828Z
+                    createdAt: 2025-04-04T00:24:01.990Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-04-03T22:37:26.828Z
+                    createdAt: 2025-04-04T00:24:01.990Z
                     isFake: false
                     role: member
                     country: country
@@ -1389,7 +1389,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-04-03T22:37:26.828Z
+                    createdAt: 2025-04-04T00:24:01.990Z
                     country: country
                     name: name
                     logo: logo
@@ -1734,7 +1734,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-04-03T22:37:26.834Z
+                    createdAt: 2025-04-04T00:24:01.996Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1743,11 +1743,11 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-04-03T22:37:26.834Z
+                    updatedAt: 2025-04-04T00:24:01.996Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2025-04-03T22:37:26.834Z
+                    createdAt: 2025-04-04T00:24:01.996Z
                     id: 1
                     isFake: false
                     username: john_doe
@@ -1889,7 +1889,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2025-04-03T22:37:26.726Z
+                        updatedAt: 2025-04-04T00:24:01.867Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1911,7 +1911,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T22:37:26.837Z
+                        createdAt: 2025-04-04T00:24:02.000Z
                 with-group:
                   value:
                     metadata:
@@ -1935,7 +1935,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-03T22:37:26.825Z
+                        updatedAt: 2025-04-04T00:24:01.985Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1958,7 +1958,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-04-03T22:37:26.837Z
+                        createdAt: 2025-04-04T00:24:02.000Z
           description: ""
       tags: &a13
         - group-join-requests
@@ -2061,7 +2061,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2025-04-03T22:37:26.726Z
+                    updatedAt: 2025-04-04T00:24:01.867Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -2070,7 +2070,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-03T22:37:26.837Z
+                    createdAt: 2025-04-04T00:24:02.000Z
                 with-group:
                   value:
                     id: 1
@@ -2081,7 +2081,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-03T22:37:26.825Z
+                    updatedAt: 2025-04-04T00:24:01.985Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -2091,7 +2091,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-04-03T22:37:26.837Z
+                    createdAt: 2025-04-04T00:24:02.000Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -2224,7 +2224,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-04-03T22:37:26.841Z
+                        updatedAt: 2025-04-04T00:24:02.004Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2248,7 +2248,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T22:37:26.841Z
+                        createdAt: 2025-04-04T00:24:02.004Z
                         isFake: false
                 with-group:
                   value:
@@ -2301,7 +2301,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-04-03T22:37:26.841Z
+                        createdAt: 2025-04-04T00:24:02.005Z
           description: ""
       tags: &a16
         - group-invites
@@ -2396,7 +2396,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-04-03T22:37:26.841Z
+                    updatedAt: 2025-04-04T00:24:02.004Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2405,7 +2405,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-03T22:37:26.841Z
+                    createdAt: 2025-04-04T00:24:02.004Z
                     isFake: false
                 with-group:
                   value:
@@ -2428,7 +2428,7 @@ paths:
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-04-03T22:37:26.841Z
+                    createdAt: 2025-04-04T00:24:02.005Z
           description: ""
       tags: *a16
     patch:
@@ -2776,8 +2776,336 @@ paths:
       responses:
         "200":
           description: Returns a list of tournaments that can be auto-completed
-      tags: &a18
+      tags: &a27
         - tournaments
+  /tournaments:
+    get:
+      operationId: TournamentController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: location
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: locationId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: teamType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: isRanked
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: minimumMMR
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: maximumMMR
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isMultipleTeamsPerGroupAllowed
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: categoryId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: affiliatedGroupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: creatorId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: minParticipants
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: maxParticipants
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isPublic
+          required: false
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: &a18 2025-02-01T10:00:00.000Z
+                        endDate: &a19 2025-03-01T18:00:00.000Z
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: &a20 2025-02-01T10:00:00.000Z
+                mini-with-logo:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a18
+                        endDate: *a19
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: MINI-WITH-LOGO
+                    results:
+                      - &a26
+                        id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a20
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a18
+                        endDate: *a19
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a20
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                        description: International Chess Championship 2025
+                        teamType: solo
+                        creator: &a21
+                          id: 1
+                          username: chessmaster
+                          isFake: false
+                        affiliatedGroup: &a22
+                          id: 1
+                          name: Chess Club
+                          abbreviation: CC
+                        endDate: &a23 2025-03-01T18:00:00.000Z
+                        maxParticipants: 64
+                        currentParticipants: 32
+                        isPublic: true
+                        category: &a24
+                          id: 1
+                          name: Chess
+                          logo: https://example.com/chess-category-logo.jpg
+                        links: https://chess.com/tournament/123
+                        actualLocation: &a25
+                          id: 1
+                          name: Chess Club
+                          coordinates:
+                            - 12.345678
+                            - 12.345678
+                          apiId: chess-club
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /tournaments?page=1
+                        prev: /tournaments?page=0
+                        next: /tournaments?page=2
+                      query:
+                        name: Chess
+                        type: league
+                        location: online
+                        teamType: solo
+                        startDate: *a18
+                        endDate: *a19
+                        isRanked: true
+                        minimumMMR: 1500
+                        maximumMMR: 2500
+                        categoryId: 1
+                        minParticipants: 32
+                        maxParticipants: 128
+                        isPublic: true
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        name: Chess Championship 2025
+                        type: league
+                        startDate: *a20
+                        location: online
+                        logo: https://example.com/chess-tournament-logo.jpg
+                        country: DE
+                        description: International Chess Championship 2025
+                        teamType: solo
+                        creator: *a21
+                        affiliatedGroup: *a22
+                        endDate: *a23
+                        maxParticipants: 64
+                        currentParticipants: 32
+                        isPublic: true
+                        category: *a24
+                        links: https://chess.com/tournament/123
+                        actualLocation: *a25
+                        createdAt: 2025-01-01T00:00:00.000Z
+                        updatedAt: 2025-01-07T14:00:00.000Z
+                        isMultipleTeamsPerGroupAllowed: false
+                        isFakePlayersAllowed: false
+                        parentTournament: *a26
+                        conversionRuleId: 1
+                        isRanked: true
+                        maximumMMR: 2500
+                        minimumMMR: 1500
+          description: ""
+      tags: *a27
+    post:
+      operationId: TournamentController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTournamentRequest"
+      responses:
+        "200":
+          description: Creates a new tournament
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a27
+      security:
+        - bearer: []
   /tournaments/managed:
     get:
       operationId: TournamentController_getManagedTournaments
@@ -2795,7 +3123,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a18
+      tags: *a27
       security:
         - bearer: []
   /tournaments/{tournamentId}:
@@ -2824,13 +3152,13 @@ paths:
                       id: 1
                       name: Chess Championship 2025
                       type: league
-                      startDate: &a19 2025-02-01T10:00:00.000Z
+                      startDate: &a28 2025-02-01T10:00:00.000Z
                   mini-with-logo:
-                    value: &a25
+                    value: &a34
                       id: 1
                       name: Chess Championship 2025
                       type: league
-                      startDate: *a19
+                      startDate: *a28
                       location: online
                       logo: https://example.com/chess-tournament-logo.jpg
                       country: DE
@@ -2839,30 +3167,30 @@ paths:
                       id: 1
                       name: Chess Championship 2025
                       type: league
-                      startDate: *a19
+                      startDate: *a28
                       location: online
                       logo: https://example.com/chess-tournament-logo.jpg
                       country: DE
                       description: International Chess Championship 2025
                       teamType: solo
-                      creator: &a20
+                      creator: &a29
                         id: 1
                         username: chessmaster
                         isFake: false
-                      affiliatedGroup: &a21
+                      affiliatedGroup: &a30
                         id: 1
                         name: Chess Club
                         abbreviation: CC
-                      endDate: &a22 2025-03-01T18:00:00.000Z
+                      endDate: &a31 2025-03-01T18:00:00.000Z
                       maxParticipants: 64
                       currentParticipants: 32
                       isPublic: true
-                      category: &a23
+                      category: &a32
                         id: 1
                         name: Chess
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
-                      actualLocation: &a24
+                      actualLocation: &a33
                         id: 1
                         name: Chess Club
                         coordinates:
@@ -2874,31 +3202,31 @@ paths:
                       id: 1
                       name: Chess Championship 2025
                       type: league
-                      startDate: *a19
+                      startDate: *a28
                       location: online
                       logo: https://example.com/chess-tournament-logo.jpg
                       country: DE
                       description: International Chess Championship 2025
                       teamType: solo
-                      creator: *a20
-                      affiliatedGroup: *a21
-                      endDate: *a22
+                      creator: *a29
+                      affiliatedGroup: *a30
+                      endDate: *a31
                       maxParticipants: 64
                       currentParticipants: 32
                       isPublic: true
-                      category: *a23
+                      category: *a32
                       links: https://chess.com/tournament/123
-                      actualLocation: *a24
+                      actualLocation: *a33
                       createdAt: 2025-01-01T00:00:00.000Z
                       updatedAt: 2025-01-07T14:00:00.000Z
                       isMultipleTeamsPerGroupAllowed: false
                       isFakePlayersAllowed: false
-                      parentTournament: *a25
+                      parentTournament: *a34
                       conversionRuleId: 1
                       isRanked: true
                       maximumMMR: 2500
                       minimumMMR: 1500
-      tags: *a18
+      tags: *a27
     patch:
       operationId: TournamentController_update
       parameters:
@@ -2920,7 +3248,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a18
+      tags: *a27
       security:
         - bearer: []
     delete:
@@ -2938,27 +3266,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a18
-      security:
-        - bearer: []
-  /tournaments:
-    post:
-      operationId: TournamentController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateTournamentRequest"
-      responses:
-        "200":
-          description: Creates a new tournament
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a18
+      tags: *a27
       security:
         - bearer: []
   /stages:
@@ -3065,13 +3373,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a26 2025-04-03T22:37:26.865Z
-                    endDate: &a27 2025-04-03T22:37:26.865Z
+                    startDate: &a35 2025-04-04T00:24:02.031Z
+                    endDate: &a36 2025-04-04T00:24:02.031Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: &a28
+                    location: &a37
                       id: 1
                       name: Chess Club
                       coordinates:
@@ -3085,18 +3393,18 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: *a26
-                    endDate: *a27
+                    startDate: *a35
+                    endDate: *a36
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a28
+                    location: *a37
                     tournament:
                       id: 1
                       name: Chess Championship 2025
                       type: contest
-                      startDate: &a31 2025-02-01T10:00:00.000Z
+                      startDate: &a40 2025-02-01T10:00:00.000Z
                       location: online
                       logo: https://example.com/tournament-logo.jpg
                       country: DE
@@ -3108,13 +3416,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a29 2025-02-01T10:00:00.000Z
-                    endDate: &a30 2025-02-15T18:00:00.000Z
+                    startDate: &a38 2025-02-01T10:00:00.000Z
+                    endDate: &a39 2025-02-15T18:00:00.000Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a28
+                    location: *a37
                     minPlayersPerTeam: 1
                     maxPlayersPerTeam: 1
                     maxSubstitutes: 1
@@ -3126,13 +3434,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: *a29
-                    endDate: *a30
+                    startDate: *a38
+                    endDate: *a39
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a28
+                    location: *a37
                     minPlayersPerTeam: 1
                     maxPlayersPerTeam: 1
                     maxSubstitutes: 1
@@ -3141,7 +3449,7 @@ paths:
                       id: 1
                       name: Chess Championship 2025
                       type: contest
-                      startDate: *a31
+                      startDate: *a40
                       location: online
                       logo: https://example.com/tournament-logo.jpg
                       country: DE
@@ -3173,7 +3481,7 @@ paths:
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
           description: ""
-      tags: &a32
+      tags: &a41
         - stages
   /stages/managed:
     get:
@@ -3192,7 +3500,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a32
+      tags: *a41
       security:
         - bearer: []
   /stages/start/{stageId}:
@@ -3211,7 +3519,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a32
+      tags: *a41
       security:
         - bearer: []
   /stages/{stageId}:
@@ -3247,13 +3555,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a33 2025-04-03T22:37:26.865Z
-                    endDate: &a34 2025-04-03T22:37:26.865Z
+                    startDate: &a42 2025-04-04T00:24:02.031Z
+                    endDate: &a43 2025-04-04T00:24:02.031Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: &a35
+                    location: &a44
                       id: 1
                       name: Chess Club
                       coordinates:
@@ -3267,18 +3575,18 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: *a33
-                    endDate: *a34
+                    startDate: *a42
+                    endDate: *a43
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a35
+                    location: *a44
                     tournament:
                       id: 1
                       name: Chess Championship 2025
                       type: contest
-                      startDate: &a38 2025-02-01T10:00:00.000Z
+                      startDate: &a47 2025-02-01T10:00:00.000Z
                       location: online
                       logo: https://example.com/tournament-logo.jpg
                       country: DE
@@ -3290,13 +3598,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a36 2025-02-01T10:00:00.000Z
-                    endDate: &a37 2025-02-15T18:00:00.000Z
+                    startDate: &a45 2025-02-01T10:00:00.000Z
+                    endDate: &a46 2025-02-15T18:00:00.000Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a35
+                    location: *a44
                     minPlayersPerTeam: 1
                     maxPlayersPerTeam: 1
                     maxSubstitutes: 1
@@ -3308,13 +3616,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: *a36
-                    endDate: *a37
+                    startDate: *a45
+                    endDate: *a46
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a35
+                    location: *a44
                     minPlayersPerTeam: 1
                     maxPlayersPerTeam: 1
                     maxSubstitutes: 1
@@ -3323,7 +3631,7 @@ paths:
                       id: 1
                       name: Chess Championship 2025
                       type: contest
-                      startDate: *a38
+                      startDate: *a47
                       location: online
                       logo: https://example.com/tournament-logo.jpg
                       country: DE
@@ -3354,7 +3662,7 @@ paths:
                         name: Chess
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
-      tags: *a32
+      tags: *a41
   /stages/{tournamentId}:
     post:
       operationId: StageController_create
@@ -3377,7 +3685,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a32
+      tags: *a41
       security:
         - bearer: []
   /stages/{tournamentId}/{stageId}:
@@ -3407,7 +3715,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a32
+      tags: *a41
       security:
         - bearer: []
     delete:
@@ -3425,7 +3733,1176 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a32
+      tags: *a41
+      security:
+        - bearer: []
+  /roster/managed-by-user/{stageId}:
+    get:
+      operationId: RosterController_getManagedRostersForStage
+      summary: Get all managed rosters for a specific user
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: &a53
+        - roster
+      security:
+        - bearer: []
+  /roster:
+    get:
+      operationId: RosterController_findAll
+      summary: Get all rosters with optional filtering
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: stageId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: participationId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isSubstitute
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: rosterId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: memberId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: &a48
+                          id: 1
+                          name: Team Alpha
+                          logo: https://example.com/team-alpha-logo.png
+                          abbreviation: TA
+                        user: &a49
+                          id: 1
+                          username: player1
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a48
+                        user: *a49
+                        players: &a50
+                          - user:
+                              id: 1
+                              username: player1
+                              country: US
+                              profilePicture: https://example.com/player1-avatar.png
+                              isFake: false
+                            isSubstitute: false
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 1
+                                categoryId: 1
+                          - user:
+                              id: 2
+                              username: substitute1
+                              country: CA
+                              profilePicture: https://example.com/player2-avatar.png
+                              isFake: false
+                            isSubstitute: true
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 2
+                                categoryId: 1
+                        createdAt: &a51 2023-01-15T12:00:00.000Z
+                        updatedAt: &a52 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a48
+                        user: *a49
+                        players: *a50
+                        createdAt: *a51
+                        updatedAt: *a52
+          description: ""
+      tags: *a53
+  /roster/{id}:
+    get:
+      operationId: RosterController_findOne
+      summary: Get a specific roster by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a specific roster
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    id: 1
+                    stageId: 1
+                    participationId: 1
+                    group: &a54
+                      id: 1
+                      name: Team Alpha
+                      logo: https://example.com/team-alpha-logo.png
+                      abbreviation: TA
+                    user: &a55
+                      id: 1
+                      username: player1
+                      profilePicture: https://example.com/player1-avatar.png
+                      isFake: false
+                base:
+                  value:
+                    id: 1
+                    stageId: 1
+                    participationId: 1
+                    group: *a54
+                    user: *a55
+                    players: &a56
+                      - user:
+                          id: 1
+                          username: player1
+                          country: US
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                        isSubstitute: false
+                        career:
+                          - category:
+                              id: 1
+                              name: Category 1
+                              logo: https://example.com/category1-image.png
+                            elo: 1000
+                            createdAt: 2023-01-15T12:00:00.000Z
+                            userId: 1
+                            categoryId: 1
+                      - user:
+                          id: 2
+                          username: substitute1
+                          country: CA
+                          profilePicture: https://example.com/player2-avatar.png
+                          isFake: false
+                        isSubstitute: true
+                        career:
+                          - category:
+                              id: 1
+                              name: Category 1
+                              logo: https://example.com/category1-image.png
+                            elo: 1000
+                            createdAt: 2023-01-15T12:00:00.000Z
+                            userId: 2
+                            categoryId: 1
+                    createdAt: &a57 2023-01-15T12:00:00.000Z
+                    updatedAt: &a58 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    id: 1
+                    stageId: 1
+                    participationId: 1
+                    group: *a54
+                    user: *a55
+                    players: *a56
+                    createdAt: *a57
+                    updatedAt: *a58
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/MiniRosterDto"
+                  - $ref: "#/components/schemas/RosterDto"
+      tags: *a53
+    patch:
+      operationId: RosterController_update
+      summary: Update a roster
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRosterDto"
+      responses:
+        "200":
+          description: The roster has been successfully updated
+          content:
+            application/json:
+              example:
+                id: 1
+                stageId: 1
+                participationId: 1
+                group:
+                  id: 1
+                  name: Team Alpha
+                  logo: https://example.com/team-alpha-logo.png
+                  abbreviation: TA
+                user:
+                  id: 1
+                  username: player1
+                  profilePicture: https://example.com/player1-avatar.png
+                  isFake: false
+                players:
+                  - user:
+                      id: 1
+                      username: player1
+                      country: US
+                      profilePicture: https://example.com/player1-avatar.png
+                      isFake: false
+                    isSubstitute: false
+                    career:
+                      - category:
+                          id: 1
+                          name: Category 1
+                          logo: https://example.com/category1-image.png
+                        elo: 1000
+                        createdAt: 2023-01-15T12:00:00.000Z
+                        userId: 1
+                        categoryId: 1
+                  - user:
+                      id: 2
+                      username: substitute1
+                      country: CA
+                      profilePicture: https://example.com/player2-avatar.png
+                      isFake: false
+                    isSubstitute: true
+                    career:
+                      - category:
+                          id: 1
+                          name: Category 1
+                          logo: https://example.com/category1-image.png
+                        elo: 1000
+                        createdAt: 2023-01-15T12:00:00.000Z
+                        userId: 2
+                        categoryId: 1
+                createdAt: 2023-01-15T12:00:00.000Z
+                updatedAt: 2023-01-15T12:00:00.000Z
+      tags: *a53
+      security:
+        - bearer: []
+  /roster/stage/{stageId}:
+    get:
+      operationId: RosterController_findByStage
+      summary: Get all rosters for a specific stage
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: stageId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: participationId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isSubstitute
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: rosterId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: memberId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all rosters for a specific stage
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: &a59
+                          id: 1
+                          name: Team Alpha
+                          logo: https://example.com/team-alpha-logo.png
+                          abbreviation: TA
+                        user: &a60
+                          id: 1
+                          username: player1
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a59
+                        user: *a60
+                        players: &a61
+                          - user:
+                              id: 1
+                              username: player1
+                              country: US
+                              profilePicture: https://example.com/player1-avatar.png
+                              isFake: false
+                            isSubstitute: false
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 1
+                                categoryId: 1
+                          - user:
+                              id: 2
+                              username: substitute1
+                              country: CA
+                              profilePicture: https://example.com/player2-avatar.png
+                              isFake: false
+                            isSubstitute: true
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 2
+                                categoryId: 1
+                        createdAt: &a62 2023-01-15T12:00:00.000Z
+                        updatedAt: &a63 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a59
+                        user: *a60
+                        players: *a61
+                        createdAt: *a62
+                        updatedAt: *a63
+      tags: *a53
+  /roster/participation/{participationId}:
+    get:
+      operationId: RosterController_findByParticipation
+      summary: Get all rosters for a specific participation
+      parameters:
+        - name: participationId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: stageId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: participationId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isSubstitute
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: rosterId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: memberId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all rosters for a specific participation
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: &a64
+                          id: 1
+                          name: Team Alpha
+                          logo: https://example.com/team-alpha-logo.png
+                          abbreviation: TA
+                        user: &a65
+                          id: 1
+                          username: player1
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a64
+                        user: *a65
+                        players: &a66
+                          - user:
+                              id: 1
+                              username: player1
+                              country: US
+                              profilePicture: https://example.com/player1-avatar.png
+                              isFake: false
+                            isSubstitute: false
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 1
+                                categoryId: 1
+                          - user:
+                              id: 2
+                              username: substitute1
+                              country: CA
+                              profilePicture: https://example.com/player2-avatar.png
+                              isFake: false
+                            isSubstitute: true
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 2
+                                categoryId: 1
+                        createdAt: &a67 2023-01-15T12:00:00.000Z
+                        updatedAt: &a68 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a64
+                        user: *a65
+                        players: *a66
+                        createdAt: *a67
+                        updatedAt: *a68
+      tags: *a53
+  /roster/user/{userId}:
+    get:
+      operationId: RosterController_findByUser
+      summary: Get all rosters for a specific user
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: stageId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: participationId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isSubstitute
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: rosterId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: memberId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all rosters that include a specific user
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: &a69
+                          id: 1
+                          name: Team Alpha
+                          logo: https://example.com/team-alpha-logo.png
+                          abbreviation: TA
+                        user: &a70
+                          id: 1
+                          username: player1
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a69
+                        user: *a70
+                        players: &a71
+                          - user:
+                              id: 1
+                              username: player1
+                              country: US
+                              profilePicture: https://example.com/player1-avatar.png
+                              isFake: false
+                            isSubstitute: false
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 1
+                                categoryId: 1
+                          - user:
+                              id: 2
+                              username: substitute1
+                              country: CA
+                              profilePicture: https://example.com/player2-avatar.png
+                              isFake: false
+                            isSubstitute: true
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 2
+                                categoryId: 1
+                        createdAt: &a72 2023-01-15T12:00:00.000Z
+                        updatedAt: &a73 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a69
+                        user: *a70
+                        players: *a71
+                        createdAt: *a72
+                        updatedAt: *a73
+      tags: *a53
+  /roster/group/{groupId}:
+    get:
+      operationId: RosterController_findByGroup
+      summary: Get all rosters for a specific group
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: stageId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: participationId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isSubstitute
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: rosterId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: memberId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all rosters for a specific group
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: &a74
+                          id: 1
+                          name: Team Alpha
+                          logo: https://example.com/team-alpha-logo.png
+                          abbreviation: TA
+                        user: &a75
+                          id: 1
+                          username: player1
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a74
+                        user: *a75
+                        players: &a76
+                          - user:
+                              id: 1
+                              username: player1
+                              country: US
+                              profilePicture: https://example.com/player1-avatar.png
+                              isFake: false
+                            isSubstitute: false
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 1
+                                categoryId: 1
+                          - user:
+                              id: 2
+                              username: substitute1
+                              country: CA
+                              profilePicture: https://example.com/player2-avatar.png
+                              isFake: false
+                            isSubstitute: true
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 2
+                                categoryId: 1
+                        createdAt: &a77 2023-01-15T12:00:00.000Z
+                        updatedAt: &a78 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a74
+                        user: *a75
+                        players: *a76
+                        createdAt: *a77
+                        updatedAt: *a78
+      tags: *a53
+  /roster/{participationId}/{stageId}:
+    post:
+      operationId: RosterController_create
+      summary: Create a new roster
+      parameters:
+        - name: participationId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: stageId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRosterDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a53
       security:
         - bearer: []
   /participations:
@@ -3542,22 +5019,22 @@ paths:
                         groupId: 1
                         responseType: PARTICIPANT
                     results:
-                      - &a39
+                      - &a79
                         id: 1
                         userId: 1
                         tournamentId: 1
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-03T22:37:26.872Z
+                          startDate: 2025-04-04T00:24:02.047Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T22:37:26.872Z
-                        updatedAt: 2025-04-03T22:37:26.872Z
+                        createdAt: 2025-04-04T00:24:02.047Z
+                        updatedAt: 2025-04-04T00:24:02.047Z
                 base:
                   value:
                     metadata:
@@ -3575,9 +5052,9 @@ paths:
                         groupId: 1
                         responseType: BASE
                     results:
-                      - *a39
+                      - *a79
           description: ""
-      tags: &a41
+      tags: &a81
         - participations
   /participations/{participationId}:
     get:
@@ -3653,22 +5130,22 @@ paths:
                         groupId: 1
                         responseType: PARTICIPANT
                     results:
-                      - &a40
+                      - &a80
                         id: 1
                         userId: 1
                         tournamentId: 1
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-03T22:37:26.872Z
+                          startDate: 2025-04-04T00:24:02.047Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T22:37:26.872Z
-                        updatedAt: 2025-04-03T22:37:26.872Z
+                        createdAt: 2025-04-04T00:24:02.047Z
+                        updatedAt: 2025-04-04T00:24:02.047Z
                 base:
                   value:
                     metadata:
@@ -3686,9 +5163,9 @@ paths:
                         groupId: 1
                         responseType: BASE
                     results:
-                      - *a40
+                      - *a80
           description: ""
-      tags: *a41
+      tags: *a81
     delete:
       operationId: ParticipationController_remove
       parameters:
@@ -3700,7 +5177,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a41
+      tags: *a81
       security:
         - bearer: []
   /participations/apply-solo/{tournamentId}:
@@ -3719,7 +5196,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a41
+      tags: *a81
       security:
         - bearer: []
   /participations/managed-for-player/{tournamentId}:
@@ -3740,7 +5217,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MiniParticipationWithGroup"
-      tags: *a41
+      tags: *a81
       security:
         - bearer: []
   /participations/apply-group/{tournamentId}/{groupId}:
@@ -3764,7 +5241,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a41
+      tags: *a81
       security:
         - bearer: []
   /participations/admin/apply-solo/{tournamentId}/{userId}:
@@ -3788,7 +5265,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a41
+      tags: *a81
       security:
         - bearer: []
   /participations/admin/apply-group/{tournamentId}/{groupId}:
@@ -3812,9 +5289,144 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a41
+      tags: *a81
       security:
         - bearer: []
+  /matches/{tournamentId}/{matchupId}/score:
+    post:
+      operationId: MatchesController_createScore
+      summary: Create a score for a matchup
+      parameters:
+        - name: matchupId
+          required: true
+          in: path
+          description: Matchup ID
+          schema:
+            type: number
+        - name: tournamentId
+          required: true
+          in: path
+          description: Tournament ID
+          schema: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EndMatchupRequestDto"
+      responses:
+        "201":
+          description: ""
+      tags: &a82
+        - matches
+  /matches/{tournamentId}/{matchupId}/update-score:
+    post:
+      operationId: MatchesController_updateScore
+      summary: Update a score for a matchup
+      parameters:
+        - name: matchupId
+          required: true
+          in: path
+          description: Matchup ID
+          schema:
+            type: number
+        - name: tournamentId
+          required: true
+          in: path
+          description: Tournament ID
+          schema: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EndMatchupRequestDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a82
+  /matches/{tournamentId}/{matchupId}/delete-score:
+    delete:
+      operationId: MatchesController_deleteMatchScore
+      summary: Delete all scores for a matchup
+      parameters:
+        - name: matchupId
+          required: true
+          in: path
+          description: Matchup ID
+          schema:
+            type: number
+        - name: tournamentId
+          required: true
+          in: path
+          description: Tournament ID
+          schema: {}
+      responses:
+        "200":
+          description: ""
+      tags: *a82
+  /matches/stage/{stageId}/bracket:
+    get:
+      operationId: MatchesController_getBracketDataForStage
+      summary: Get bracket data for a stage
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          description: Stage ID
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns bracket data in the format required by
+            @g-loot/react-tournament-brackets
+      tags: *a82
+  /matches/stage/{stageId}/bracket/original:
+    get:
+      operationId: MatchesController_getOriginalBracketDataForStage
+      summary: Get bracket data for a stage in original format (without Challonge data)
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          description: Stage ID
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns bracket data in the original format for
+            @g-loot/react-tournament-brackets
+      tags: *a82
+  /matches/stage/{stageId}/bracket/react:
+    get:
+      operationId: MatchesController_getReactBracketDataForStage
+      summary: Get bracket data for a stage in react-brackets format
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          description: Stage ID
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns bracket data in the format required by react-brackets library
+      tags: *a82
+  /matches/stage/{stageId}/bracket/challonge:
+    get:
+      operationId: MatchesController_getChallongeBracketData
+      summary: Get bracket data directly from Challonge
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          description: Stage ID
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns bracket data from Challonge in react-brackets format
+      tags: *a82
   /blocked-groups/auto-complete/{search}:
     get:
       operationId: BlockedGroupsController_autoComplete
@@ -3843,7 +5455,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MiniGroupResponseWithLogo"
-      tags: &a42
+      tags: &a83
         - Blocked Groups
       security:
         - bearer: []
@@ -3864,7 +5476,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a42
+      tags: *a83
       security:
         - bearer: []
   /blocked-groups/{groupId}:
@@ -3879,7 +5491,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a42
+      tags: *a83
       security:
         - bearer: []
     delete:
@@ -3893,7 +5505,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a42
+      tags: *a83
       security:
         - bearer: []
   /blocked-users/auto-complete/{groupId}/{search}:
@@ -3929,7 +5541,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
-      tags: &a43
+      tags: &a84
         - blocked users
       security:
         - bearer: []
@@ -3955,7 +5567,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a43
+      tags: *a84
       security:
         - bearer: []
   /blocked-users/{groupId}/{userId}:
@@ -3975,7 +5587,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a43
+      tags: *a84
       security:
         - bearer: []
     delete:
@@ -3994,7 +5606,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a43
+      tags: *a84
       security:
         - bearer: []
   /lfg/me:
@@ -4011,7 +5623,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/LFGResponse"
-      tags: &a44
+      tags: &a85
         - LFG
       security:
         - bearer: []
@@ -4028,7 +5640,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a44
+      tags: *a85
       security:
         - bearer: []
   /lfg/{groupId}:
@@ -4043,7 +5655,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a44
+      tags: *a85
       security:
         - bearer: []
   /lfg/{id}:
@@ -4064,7 +5676,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a44
+      tags: *a85
       security:
         - bearer: []
     delete:
@@ -4078,7 +5690,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a44
+      tags: *a85
       security:
         - bearer: []
   /interest/{categoryId}:
@@ -4093,7 +5705,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: &a45
+      tags: &a86
         - interest
       security:
         - bearer: []
@@ -4108,7 +5720,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a45
+      tags: *a86
       security:
         - bearer: []
   /interest:
@@ -4128,7 +5740,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a45
+      tags: *a86
       security:
         - bearer: []
   /group-interests/{groupId}:
@@ -4153,7 +5765,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: &a46
+      tags: &a87
         - group interests
       security:
         - bearer: []
@@ -4174,7 +5786,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a46
+      tags: *a87
       security:
         - bearer: []
     delete:
@@ -4193,7 +5805,7 @@ paths:
       responses:
         "200":
           description: ""
-      tags: *a46
+      tags: *a87
       security:
         - bearer: []
   /lfp/groups:
@@ -4264,7 +5876,7 @@ paths:
       responses:
         "200":
           description: Groups retrieved successfully
-      tags: &a47
+      tags: &a88
         - lfp
       security:
         - bearer: []
@@ -4287,7 +5899,7 @@ paths:
       responses:
         "201":
           description: LFP post created successfully
-      tags: *a47
+      tags: *a88
       security:
         - bearer: []
     get:
@@ -4302,7 +5914,7 @@ paths:
       responses:
         "200":
           description: LFP posts retrieved successfully
-      tags: *a47
+      tags: *a88
       security:
         - bearer: []
   /lfp/{groupId}/{id}:
@@ -4324,7 +5936,7 @@ paths:
       responses:
         "200":
           description: LFP post updated successfully
-      tags: *a47
+      tags: *a88
       security:
         - bearer: []
     delete:
@@ -4339,7 +5951,7 @@ paths:
       responses:
         "200":
           description: LFP post deleted successfully
-      tags: *a47
+      tags: *a88
       security:
         - bearer: []
   /locations/map:
@@ -4353,7 +5965,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: &a48
+      tags: &a89
         - locations
   /locations:
     get:
@@ -4476,9 +6088,9 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2025-04-03T22:37:26.824Z
+                        createdAt: 2025-04-04T00:24:01.985Z
           description: ""
-      tags: *a48
+      tags: *a89
     post:
       operationId: LocationController_create
       parameters: []
@@ -4495,7 +6107,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a48
+      tags: *a89
       security:
         - bearer: []
   /locations/{locationId}:
@@ -4537,8 +6149,8 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2025-04-03T22:37:26.824Z
-      tags: *a48
+                      createdAt: 2025-04-04T00:24:01.985Z
+      tags: *a89
     patch:
       operationId: LocationController_update
       parameters:
@@ -4560,7 +6172,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a48
+      tags: *a89
       security:
         - bearer: []
     delete:
@@ -4578,7 +6190,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a48
+      tags: *a89
       security:
         - bearer: []
   /group-requirements/{groupId}:
@@ -4600,7 +6212,7 @@ paths:
       responses:
         "201":
           description: Requirements created successfully
-      tags: &a49
+      tags: &a90
         - group requirements
       security:
         - bearer: []
@@ -4616,7 +6228,7 @@ paths:
       responses:
         "200":
           description: Requirements retrieved successfully
-      tags: *a49
+      tags: *a90
       security:
         - bearer: []
     put:
@@ -4637,7 +6249,7 @@ paths:
       responses:
         "200":
           description: Requirements updated successfully
-      tags: *a49
+      tags: *a90
       security:
         - bearer: []
     delete:
@@ -4652,1313 +6264,9 @@ paths:
       responses:
         "200":
           description: Requirements deleted successfully
-      tags: *a49
+      tags: *a90
       security:
         - bearer: []
-  /roster/managed-by-user/{stageId}:
-    get:
-      operationId: RosterController_getManagedRostersForStage
-      summary: Get all managed rosters for a specific user
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        "200":
-          description: ""
-      tags: &a55
-        - roster
-      security:
-        - bearer: []
-  /roster:
-    get:
-      operationId: RosterController_findAll
-      summary: Get all rosters with optional filtering
-      parameters:
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: stageId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: participationId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: userId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: isSubstitute
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: rosterId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: memberId
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        "200":
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: &a50
-                          id: 1
-                          name: Team Alpha
-                          logo: https://example.com/team-alpha-logo.png
-                          abbreviation: TA
-                        user: &a51
-                          id: 1
-                          username: player1
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: BASE
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a50
-                        user: *a51
-                        players: &a52
-                          - user:
-                              id: 1
-                              username: player1
-                              country: US
-                              profilePicture: https://example.com/player1-avatar.png
-                              isFake: false
-                            isSubstitute: false
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 1
-                                categoryId: 1
-                          - user:
-                              id: 2
-                              username: substitute1
-                              country: CA
-                              profilePicture: https://example.com/player2-avatar.png
-                              isFake: false
-                            isSubstitute: true
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 2
-                                categoryId: 1
-                        createdAt: &a53 2023-01-15T12:00:00.000Z
-                        updatedAt: &a54 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: EXTENDED
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a50
-                        user: *a51
-                        players: *a52
-                        createdAt: *a53
-                        updatedAt: *a54
-          description: ""
-      tags: *a55
-  /roster/{id}:
-    get:
-      operationId: RosterController_findOne
-      summary: Get a specific roster by ID
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: responseType
-          required: true
-          in: query
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Returns a specific roster
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    id: 1
-                    stageId: 1
-                    participationId: 1
-                    group: &a56
-                      id: 1
-                      name: Team Alpha
-                      logo: https://example.com/team-alpha-logo.png
-                      abbreviation: TA
-                    user: &a57
-                      id: 1
-                      username: player1
-                      profilePicture: https://example.com/player1-avatar.png
-                      isFake: false
-                base:
-                  value:
-                    id: 1
-                    stageId: 1
-                    participationId: 1
-                    group: *a56
-                    user: *a57
-                    players: &a58
-                      - user:
-                          id: 1
-                          username: player1
-                          country: US
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                        isSubstitute: false
-                        career:
-                          - category:
-                              id: 1
-                              name: Category 1
-                              logo: https://example.com/category1-image.png
-                            elo: 1000
-                            createdAt: 2023-01-15T12:00:00.000Z
-                            userId: 1
-                            categoryId: 1
-                      - user:
-                          id: 2
-                          username: substitute1
-                          country: CA
-                          profilePicture: https://example.com/player2-avatar.png
-                          isFake: false
-                        isSubstitute: true
-                        career:
-                          - category:
-                              id: 1
-                              name: Category 1
-                              logo: https://example.com/category1-image.png
-                            elo: 1000
-                            createdAt: 2023-01-15T12:00:00.000Z
-                            userId: 2
-                            categoryId: 1
-                    createdAt: &a59 2023-01-15T12:00:00.000Z
-                    updatedAt: &a60 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    id: 1
-                    stageId: 1
-                    participationId: 1
-                    group: *a56
-                    user: *a57
-                    players: *a58
-                    createdAt: *a59
-                    updatedAt: *a60
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/MiniRosterDto"
-                  - $ref: "#/components/schemas/RosterDto"
-      tags: *a55
-    patch:
-      operationId: RosterController_update
-      summary: Update a roster
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateRosterDto"
-      responses:
-        "200":
-          description: The roster has been successfully updated
-          content:
-            application/json:
-              example:
-                id: 1
-                stageId: 1
-                participationId: 1
-                group:
-                  id: 1
-                  name: Team Alpha
-                  logo: https://example.com/team-alpha-logo.png
-                  abbreviation: TA
-                user:
-                  id: 1
-                  username: player1
-                  profilePicture: https://example.com/player1-avatar.png
-                  isFake: false
-                players:
-                  - user:
-                      id: 1
-                      username: player1
-                      country: US
-                      profilePicture: https://example.com/player1-avatar.png
-                      isFake: false
-                    isSubstitute: false
-                    career:
-                      - category:
-                          id: 1
-                          name: Category 1
-                          logo: https://example.com/category1-image.png
-                        elo: 1000
-                        createdAt: 2023-01-15T12:00:00.000Z
-                        userId: 1
-                        categoryId: 1
-                  - user:
-                      id: 2
-                      username: substitute1
-                      country: CA
-                      profilePicture: https://example.com/player2-avatar.png
-                      isFake: false
-                    isSubstitute: true
-                    career:
-                      - category:
-                          id: 1
-                          name: Category 1
-                          logo: https://example.com/category1-image.png
-                        elo: 1000
-                        createdAt: 2023-01-15T12:00:00.000Z
-                        userId: 2
-                        categoryId: 1
-                createdAt: 2023-01-15T12:00:00.000Z
-                updatedAt: 2023-01-15T12:00:00.000Z
-      tags: *a55
-      security:
-        - bearer: []
-  /roster/stage/{stageId}:
-    get:
-      operationId: RosterController_findByStage
-      summary: Get all rosters for a specific stage
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: stageId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: participationId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: userId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: isSubstitute
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: rosterId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: memberId
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns all rosters for a specific stage
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: &a61
-                          id: 1
-                          name: Team Alpha
-                          logo: https://example.com/team-alpha-logo.png
-                          abbreviation: TA
-                        user: &a62
-                          id: 1
-                          username: player1
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: BASE
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a61
-                        user: *a62
-                        players: &a63
-                          - user:
-                              id: 1
-                              username: player1
-                              country: US
-                              profilePicture: https://example.com/player1-avatar.png
-                              isFake: false
-                            isSubstitute: false
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 1
-                                categoryId: 1
-                          - user:
-                              id: 2
-                              username: substitute1
-                              country: CA
-                              profilePicture: https://example.com/player2-avatar.png
-                              isFake: false
-                            isSubstitute: true
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 2
-                                categoryId: 1
-                        createdAt: &a64 2023-01-15T12:00:00.000Z
-                        updatedAt: &a65 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: EXTENDED
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a61
-                        user: *a62
-                        players: *a63
-                        createdAt: *a64
-                        updatedAt: *a65
-      tags: *a55
-  /roster/participation/{participationId}:
-    get:
-      operationId: RosterController_findByParticipation
-      summary: Get all rosters for a specific participation
-      parameters:
-        - name: participationId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: stageId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: participationId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: userId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: isSubstitute
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: rosterId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: memberId
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns all rosters for a specific participation
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: &a66
-                          id: 1
-                          name: Team Alpha
-                          logo: https://example.com/team-alpha-logo.png
-                          abbreviation: TA
-                        user: &a67
-                          id: 1
-                          username: player1
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: BASE
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a66
-                        user: *a67
-                        players: &a68
-                          - user:
-                              id: 1
-                              username: player1
-                              country: US
-                              profilePicture: https://example.com/player1-avatar.png
-                              isFake: false
-                            isSubstitute: false
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 1
-                                categoryId: 1
-                          - user:
-                              id: 2
-                              username: substitute1
-                              country: CA
-                              profilePicture: https://example.com/player2-avatar.png
-                              isFake: false
-                            isSubstitute: true
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 2
-                                categoryId: 1
-                        createdAt: &a69 2023-01-15T12:00:00.000Z
-                        updatedAt: &a70 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: EXTENDED
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a66
-                        user: *a67
-                        players: *a68
-                        createdAt: *a69
-                        updatedAt: *a70
-      tags: *a55
-  /roster/user/{userId}:
-    get:
-      operationId: RosterController_findByUser
-      summary: Get all rosters for a specific user
-      parameters:
-        - name: userId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: stageId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: participationId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: userId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: isSubstitute
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: rosterId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: memberId
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns all rosters that include a specific user
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: &a71
-                          id: 1
-                          name: Team Alpha
-                          logo: https://example.com/team-alpha-logo.png
-                          abbreviation: TA
-                        user: &a72
-                          id: 1
-                          username: player1
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: BASE
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a71
-                        user: *a72
-                        players: &a73
-                          - user:
-                              id: 1
-                              username: player1
-                              country: US
-                              profilePicture: https://example.com/player1-avatar.png
-                              isFake: false
-                            isSubstitute: false
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 1
-                                categoryId: 1
-                          - user:
-                              id: 2
-                              username: substitute1
-                              country: CA
-                              profilePicture: https://example.com/player2-avatar.png
-                              isFake: false
-                            isSubstitute: true
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 2
-                                categoryId: 1
-                        createdAt: &a74 2023-01-15T12:00:00.000Z
-                        updatedAt: &a75 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: EXTENDED
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a71
-                        user: *a72
-                        players: *a73
-                        createdAt: *a74
-                        updatedAt: *a75
-      tags: *a55
-  /roster/group/{groupId}:
-    get:
-      operationId: RosterController_findByGroup
-      summary: Get all rosters for a specific group
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: stageId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: participationId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: userId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: isSubstitute
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: rosterId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: memberId
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns all rosters for a specific group
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: &a76
-                          id: 1
-                          name: Team Alpha
-                          logo: https://example.com/team-alpha-logo.png
-                          abbreviation: TA
-                        user: &a77
-                          id: 1
-                          username: player1
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: BASE
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a76
-                        user: *a77
-                        players: &a78
-                          - user:
-                              id: 1
-                              username: player1
-                              country: US
-                              profilePicture: https://example.com/player1-avatar.png
-                              isFake: false
-                            isSubstitute: false
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 1
-                                categoryId: 1
-                          - user:
-                              id: 2
-                              username: substitute1
-                              country: CA
-                              profilePicture: https://example.com/player2-avatar.png
-                              isFake: false
-                            isSubstitute: true
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 2
-                                categoryId: 1
-                        createdAt: &a79 2023-01-15T12:00:00.000Z
-                        updatedAt: &a80 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: EXTENDED
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a76
-                        user: *a77
-                        players: *a78
-                        createdAt: *a79
-                        updatedAt: *a80
-      tags: *a55
-  /roster/{participationId}/{stageId}:
-    post:
-      operationId: RosterController_create
-      summary: Create a new roster
-      parameters:
-        - name: participationId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: stageId
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateRosterDto"
-      responses:
-        "201":
-          description: ""
-      tags: *a55
-      security:
-        - bearer: []
-  /matches/{tournamentId}/{matchupId}/score:
-    post:
-      operationId: MatchesController_createScore
-      summary: Create a score for a matchup
-      parameters:
-        - name: matchupId
-          required: true
-          in: path
-          description: Matchup ID
-          schema:
-            type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EndMatchupRequestDto"
-      responses:
-        "201":
-          description: ""
-      tags: &a81
-        - matches
-  /matches/{tournamentId}/{matchupId}/update-score:
-    post:
-      operationId: MatchesController_updateScore
-      summary: Update a score for a matchup
-      parameters:
-        - name: matchupId
-          required: true
-          in: path
-          description: Matchup ID
-          schema:
-            type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EndMatchupRequestDto"
-      responses:
-        "201":
-          description: ""
-      tags: *a81
-  /matches/{tournamentId}/{matchupId}/delete-score:
-    delete:
-      operationId: MatchesController_deleteMatchScore
-      summary: Delete all scores for a matchup
-      parameters:
-        - name: matchupId
-          required: true
-          in: path
-          description: Matchup ID
-          schema:
-            type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
-      responses:
-        "200":
-          description: ""
-      tags: *a81
-  /matches/stage/{stageId}/bracket:
-    get:
-      operationId: MatchesController_getBracketDataForStage
-      summary: Get bracket data for a stage
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data in the format required by
-            @g-loot/react-tournament-brackets
-      tags: *a81
-  /matches/stage/{stageId}/bracket/original:
-    get:
-      operationId: MatchesController_getOriginalBracketDataForStage
-      summary: Get bracket data for a stage in original format (without Challonge data)
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data in the original format for
-            @g-loot/react-tournament-brackets
-      tags: *a81
-  /matches/stage/{stageId}/bracket/react:
-    get:
-      operationId: MatchesController_getReactBracketDataForStage
-      summary: Get bracket data for a stage in react-brackets format
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data in the format required by react-brackets library
-      tags: *a81
-  /matches/stage/{stageId}/bracket/challonge:
-    get:
-      operationId: MatchesController_getChallongeBracketData
-      summary: Get bracket data directly from Challonge
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
-          schema:
-            type: number
-      responses:
-        "200":
-          description: Returns bracket data from Challonge in react-brackets format
-      tags: *a81
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -8252,6 +8560,97 @@ components:
           type: number
         maxSubstitutes:
           type: number
+    MiniRosterDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        stageId:
+          type: number
+          readOnly: true
+        participationId:
+          type: number
+          readOnly: true
+        group:
+          type: object
+          readOnly: true
+        user:
+          type: object
+          readOnly: true
+      required:
+        - id
+        - stageId
+        - participationId
+        - group
+        - user
+    RosterDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        stageId:
+          type: number
+          readOnly: true
+        participationId:
+          type: number
+          readOnly: true
+        group:
+          type: object
+          readOnly: true
+        user:
+          type: object
+          readOnly: true
+        players:
+          readOnly: true
+          type: array
+          items:
+            type: string
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+        - id
+        - stageId
+        - participationId
+        - group
+        - user
+        - players
+        - createdAt
+        - updatedAt
+    PlayerDto:
+      type: object
+      properties:
+        user:
+          type: object
+          readOnly: true
+        isSubstitute:
+          type: boolean
+          readOnly: true
+        career:
+          readOnly: true
+          type: array
+          items:
+            type: string
+      required:
+        - user
+        - isSubstitute
+        - career
+    CreateRosterDto:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            type: string
+      required:
+        - members
     MiniParticipationResponse:
       type: object
       properties:
@@ -8315,6 +8714,64 @@ components:
         - id
         - tournamentId
         - group
+    CreateTeamScoreDto:
+      type: object
+      properties:
+        rosterId:
+          type: number
+          description: The ID of the roster
+        points:
+          type: number
+          description: The number of points scored
+        isWinner:
+          type: boolean
+          description: Whether this team is the winner
+      required:
+        - rosterId
+        - points
+        - isWinner
+    CreateScoreRequestDto:
+      type: object
+      properties:
+        roundNumber:
+          type: number
+          description: The round number
+        scores:
+          description: The scores for each team
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateTeamScoreDto"
+      required:
+        - roundNumber
+        - scores
+    SetTeamResultDto:
+      type: object
+      properties:
+        rosterId:
+          type: number
+          description: The ID of the roster
+        isWinner:
+          type: boolean
+          description: Whether this team is the winner
+      required:
+        - rosterId
+        - isWinner
+    EndMatchupRequestDto:
+      type: object
+      properties:
+        scores:
+          description: The scores for each round
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateScoreRequestDto"
+        results:
+          description: The results for each team
+          type: array
+          items:
+            $ref: "#/components/schemas/SetTeamResultDto"
+      required:
+        - scores
+        - results
     CareerCategoryResponse:
       type: object
       properties:
@@ -8486,152 +8943,3 @@ components:
     UpdateGroupRequirementsDto:
       type: object
       properties: {}
-    MiniRosterDto:
-      type: object
-      properties:
-        id:
-          type: number
-          readOnly: true
-        stageId:
-          type: number
-          readOnly: true
-        participationId:
-          type: number
-          readOnly: true
-        group:
-          type: object
-          readOnly: true
-        user:
-          type: object
-          readOnly: true
-      required:
-        - id
-        - stageId
-        - participationId
-        - group
-        - user
-    RosterDto:
-      type: object
-      properties:
-        id:
-          type: number
-          readOnly: true
-        stageId:
-          type: number
-          readOnly: true
-        participationId:
-          type: number
-          readOnly: true
-        group:
-          type: object
-          readOnly: true
-        user:
-          type: object
-          readOnly: true
-        players:
-          readOnly: true
-          type: array
-          items:
-            type: string
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        updatedAt:
-          format: date-time
-          type: string
-          readOnly: true
-      required:
-        - id
-        - stageId
-        - participationId
-        - group
-        - user
-        - players
-        - createdAt
-        - updatedAt
-    PlayerDto:
-      type: object
-      properties:
-        user:
-          type: object
-          readOnly: true
-        isSubstitute:
-          type: boolean
-          readOnly: true
-        career:
-          readOnly: true
-          type: array
-          items:
-            type: string
-      required:
-        - user
-        - isSubstitute
-        - career
-    CreateRosterDto:
-      type: object
-      properties:
-        members:
-          type: array
-          items:
-            type: string
-      required:
-        - members
-    CreateTeamScoreDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        points:
-          type: number
-          description: The number of points scored
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - points
-        - isWinner
-    CreateScoreRequestDto:
-      type: object
-      properties:
-        roundNumber:
-          type: number
-          description: The round number
-        scores:
-          description: The scores for each team
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateTeamScoreDto"
-      required:
-        - roundNumber
-        - scores
-    SetTeamResultDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - isWinner
-    EndMatchupRequestDto:
-      type: object
-      properties:
-        scores:
-          description: The scores for each round
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateScoreRequestDto"
-        results:
-          description: The results for each team
-          type: array
-          items:
-            $ref: "#/components/schemas/SetTeamResultDto"
-      required:
-        - scores
-        - results

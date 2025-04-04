@@ -62,15 +62,7 @@ export class TournamentController {
     return await this.tournamentService.autoComplete(search, query);
   }
 
-  @Get('managed')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async getManagedTournaments(
-    @CurrentUser() user: ValidatedUserDto,
-    @Query() query: PaginationOnly,
-  ) {
-    return await this.tournamentService.getManagedTournaments(user.id, query);
-  }
+  @Get()
   @ApiOkResponse({
     content: {
       'application/json': {
@@ -91,6 +83,16 @@ export class TournamentController {
       results,
       metadata,
     };
+  }
+
+  @Get('managed')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getManagedTournaments(
+    @CurrentUser() user: ValidatedUserDto,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.tournamentService.getManagedTournaments(user.id, query);
   }
 
   @Get(':tournamentId')

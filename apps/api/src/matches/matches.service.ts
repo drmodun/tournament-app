@@ -5,16 +5,17 @@ import {
   BracketDataResponseDto,
   BracketMatchDto,
   BracketParticipantDto,
+  ReactBracketsResponseDto,
+  ReactBracketsTeamDto,
 } from './dto/responses';
 import { ChallongeService } from '../challonge/challonge.service';
 import {
   IChallongeMatch,
   matchScoreToChallongeScoreRequest,
+  IEndMatchupRequest,
 } from '@tournament-app/types';
-import {
-  ReactBracketsResponseDto,
-  ReactBracketsTeamDto,
-} from './dto/responses';
+import { CreateScoreDto } from './dto/create-score.dto';
+import { UpdateScoreDto } from './dto/update-score.dto';
 
 @Injectable()
 export class MatchesService {
@@ -23,22 +24,188 @@ export class MatchesService {
     private readonly challongeService: ChallongeService,
   ) {}
 
-  async createScore(createScoreDto: any) {
+  /**
+   * Creates scores for a matchup and updates its status
+   * Also updates the match in Challonge if it's linked
+   */
+  async createMatchScore(
+    matchupId: number,
+    createMatchResult: IEndMatchupRequest,
+  ) {
+    // First check if this matchup is linked to Challonge
+    const matchup = await this.matchesRepository.getMatchupById(matchupId);
+
+    // Start transaction to ensure local DB and Challonge stay in sync
+    const scores = await this.matchesRepository.insertMatchScore(
+      matchupId,
+      createMatchResult,
+    );
+
+    // If the matchup has a Challonge ID, update the matchup in Challonge
+    if (matchup.matchup.challongeMatchupId) {
+      try {
+        // Get the stage to find the Challonge tournament ID
+        const stage = await this.matchesRepository.getStageById(
+          matchup.matchup.stageId,
+        );
+
+        if (stage && stage.challongeTournamentId) {
+          // Update the matchup in Challonge
+          await this.challongeService.updateMatchup(
+            parseInt(matchup.matchup.challongeMatchupId),
+            matchScoreToChallongeScoreRequest({
+              rosterScores: createMatchResult.results.map((result) => ({
+                rosterId: result.rosterId,
+                score: createMatchResult.scores
+                  .map(
+                    (score) =>
+                      score.scores.find((s) => s.rosterId === result.rosterId)
+                        ?.points || 0,
+                  )
+                  .join('-'),
+                isWinner: result.isWinner,
+              })),
+            }),
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Failed to update Challonge matchup ${matchup.matchup.challongeMatchupId}:`,
+          error,
+        );
+        // We don't throw here because we want to return the local scores even if Challonge update fails
+        // The mismatch will be addressed in a separate sync process or manual intervention
+      }
+    }
+
+    return scores;
+  }
+
+  /**
+   * Deletes all scores for a matchup and resets its status
+   * Also resets the match in Challonge if it's linked
+   */
+  async deleteMatchScore(matchupId: number) {
+    // First check if this matchup is linked to Challonge
+    const matchup = await this.matchesRepository.getMatchupById(matchupId);
+
+    // Delete the scores in the local database
+    const result = await this.matchesRepository.deleteMatchScore(matchupId);
+
+    // If the matchup has a Challonge ID, reset the matchup in Challonge
+    if (matchup.matchup.challongeMatchupId) {
+      try {
+        // Get the stage to find the Challonge tournament ID
+        const stage = await this.matchesRepository.getStageById(
+          matchup.matchup.stageId,
+        );
+
+        if (stage && stage.challongeTournamentId) {
+          // Reset the matchup in Challonge by setting all scores to 0
+          await this.challongeService.updateMatchup(
+            parseInt(matchup.matchup.challongeMatchupId),
+            matchScoreToChallongeScoreRequest({
+              rosterScores: matchup.rosterToMatchup.map((rm) => ({
+                rosterId: rm.rosterId,
+                score: '0',
+                isWinner: false,
+              })),
+            }),
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Failed to reset Challonge matchup ${matchup.matchup.challongeMatchupId}:`,
+          error,
+        );
+        // We don't throw here because we want to return the local result even if Challonge update fails
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Updates scores for a matchup by first deleting existing scores and then creating new ones
+   * Also updates the match in Challonge if it's linked
+   */
+  async updateMatchScore(
+    matchupId: number,
+    createMatchResult: IEndMatchupRequest,
+  ) {
+    // First check if this matchup is linked to Challonge
+    const matchup = await this.matchesRepository.getMatchupById(matchupId);
+
+    // Update the scores in the local database
+    const scores = await this.matchesRepository.updateMatchScore(
+      matchupId,
+      createMatchResult,
+    );
+
+    // If the matchup has a Challonge ID, update the matchup in Challonge
+    if (matchup.matchup.challongeMatchupId) {
+      try {
+        // Get the stage to find the Challonge tournament ID
+        const stage = await this.matchesRepository.getStageById(
+          matchup.matchup.stageId,
+        );
+
+        if (stage && stage.challongeTournamentId) {
+          // Update the matchup in Challonge
+          await this.challongeService.updateMatchup(
+            parseInt(matchup.matchup.challongeMatchupId),
+            matchScoreToChallongeScoreRequest({
+              rosterScores: createMatchResult.results.map((result) => ({
+                rosterId: result.rosterId,
+                score: createMatchResult.scores
+                  .map(
+                    (score) =>
+                      score.scores.find((s) => s.rosterId === result.rosterId)
+                        ?.points || 0,
+                  )
+                  .join('-'),
+                isWinner: result.isWinner,
+              })),
+            }),
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Failed to update Challonge matchup ${matchup.matchup.challongeMatchupId}:`,
+          error,
+        );
+        // We don't throw here because we want to return the local scores even if Challonge update fails
+      }
+    }
+
+    return scores;
+  }
+
+  /**
+   * Creates a new score entry
+   */
+  async createScore(createScoreDto: CreateScoreDto) {
     return this.matchesRepository.createScore(createScoreDto);
   }
 
+  /**
+   * Updates an existing score entry
+   */
+  async updateScore(id: number, updateScoreDto: UpdateScoreDto) {
+    return this.matchesRepository.updateScore(id, updateScoreDto);
+  }
+
+  /**
+   * Deletes a score entry
+   */
   async deleteScore(id: number) {
     return this.matchesRepository.deleteScore(id);
   }
 
-  async updateScore(id: number, updateScoreDto: any) {
-    return this.matchesRepository.updateScore(id, updateScoreDto);
-  }
-
-  async isMatchupInTournament(
-    matchupId: number,
-    tournamentId: number,
-  ): Promise<boolean> {
+  /**
+   * Checks if a matchup belongs to a specific tournament
+   */
+  async isMatchupInTournament(matchupId: number, tournamentId: number) {
     const result = await this.matchesRepository.isMatchupInTournament(
       matchupId,
       tournamentId,
@@ -46,95 +213,11 @@ export class MatchesService {
     return result.belongsToTournament;
   }
 
-  async deleteMatchScore(matchupId: number) {
-    const matchup = await this.matchesRepository.getMatchupById(matchupId);
-    const result = await this.matchesRepository.deleteMatchScore(matchupId);
-
-    // If the matchup has a Challonge ID, update it in Challonge
-    if (matchup.challongeMatchupId) {
-      await this.challongeService.updateMatchup(
-        parseInt(matchup.challongeMatchupId),
-        matchScoreToChallongeScoreRequest({
-          rosterScores: matchup.rosterToMatchup.map((rm) => ({
-            rosterId: rm.rosterId,
-            score: '0',
-            isWinner: false,
-          })),
-        }),
-      );
-    }
-
-    return result;
-  }
-
+  /**
+   * Gets a matchup by its ID
+   */
   async getMatchupById(matchupId: number) {
     return this.matchesRepository.getMatchupById(matchupId);
-  }
-
-  async createMatchScore(
-    matchupId: number,
-    createScoreDto: EndMatchupRequestDto,
-  ) {
-    const matchup = await this.matchesRepository.getMatchupById(matchupId);
-    const result = await this.matchesRepository.insertMatchScore(
-      matchupId,
-      createScoreDto,
-    );
-
-    // If the matchup has a Challonge ID, update it in Challonge
-    if (matchup.challongeMatchupId) {
-      await this.challongeService.updateMatchup(
-        parseInt(matchup.challongeMatchupId),
-        matchScoreToChallongeScoreRequest({
-          rosterScores: createScoreDto.results.map((result) => ({
-            rosterId: result.rosterId,
-            score: createScoreDto.scores
-              .map(
-                (score) =>
-                  score.scores.find((s) => s.rosterId === result.rosterId)
-                    ?.points || 0,
-              )
-              .join('-'),
-            isWinner: result.isWinner,
-          })),
-        }),
-      );
-    }
-
-    return result;
-  }
-
-  async updateMatchScore(
-    matchupId: number,
-    updateScoreDto: EndMatchupRequestDto,
-  ) {
-    const matchup = await this.matchesRepository.getMatchupById(matchupId);
-    const result = await this.matchesRepository.updateMatchScore(
-      matchupId,
-      updateScoreDto,
-    );
-
-    // If the matchup has a Challonge ID, update it in Challonge
-    if (matchup.challongeMatchupId) {
-      await this.challongeService.updateMatchup(
-        parseInt(matchup.challongeMatchupId),
-        matchScoreToChallongeScoreRequest({
-          rosterScores: updateScoreDto.results.map((result) => ({
-            rosterId: result.rosterId,
-            score: updateScoreDto.scores
-              .map(
-                (score) =>
-                  score.scores.find((s) => s.rosterId === result.rosterId)
-                    ?.points || 0,
-              )
-              .join('-'),
-            isWinner: result.isWinner,
-          })),
-        }),
-      );
-    }
-
-    return result;
   }
 
   /**
@@ -458,6 +541,9 @@ export class MatchesService {
     };
   }
 
+  /**
+   * Get bracket data directly from Challonge for a stage
+   */
   async getChallongeBracketData(
     stageId: number,
   ): Promise<ReactBracketsResponseDto> {
@@ -473,13 +559,19 @@ export class MatchesService {
     );
   }
 
+  /**
+   * Imports matches from Challonge into the database for a specific stage
+   * This is typically called after creating a new Challonge tournament and registering participants
+   */
   async importChallongeMatchesToStage(
     stageId: number,
-    matches: IChallongeMatch[],
+    challongeMatches: IChallongeMatch[],
+    stageRoundId: number,
   ) {
-    return await this.matchesRepository.importChallongeMatchesToStage(
+    return this.matchesRepository.importChallongeMatchesToStage(
       stageId,
-      matches,
+      challongeMatches,
+      stageRoundId,
     );
   }
 }

@@ -1,4 +1,5 @@
 import {
+  IMiniRosterResponse,
   IMiniRosterResponseWithChallongeId,
   IRosterResponse,
 } from "src/roster/responses.dto";
@@ -6,7 +7,7 @@ import {
 export interface IMatchupResponse {
   id: number;
   stageId: number;
-  roundId: number;
+  round: number;
   matchupType: string;
   startDate: Date;
   isFinished: boolean;
@@ -17,16 +18,15 @@ export interface IMatchupResponseWithChallongeId extends IMatchupResponse {
 }
 
 export interface IMatchupResponseWithRosters extends IMatchupResponse {
-  rosters: IMiniRosterResponseWithChallongeId[];
+  rosters: IRosterResponse[];
 }
 
 export interface IResultsResponse {
   id: number;
   matchupId: number;
-  roundNumber: number;
   score: number;
   isWinner: boolean;
-  roster: IMiniRosterResponseWithChallongeId;
+  roster: IRosterResponse;
 }
 
 export interface IScoreResponse {
@@ -34,6 +34,10 @@ export interface IScoreResponse {
   roundNumber: number;
   points: number;
   isWinner: boolean;
+}
+
+export interface IMatchupsWithMiniRostersResponse extends IMatchupResponse {
+  rosters: IMiniRosterResponse[];
 }
 
 export interface IResultsResponseWithScores extends IResultsResponse {
@@ -56,11 +60,11 @@ export enum MatchupResponsesEnum {
   WITH_RESULTS_AND_SCORES = "WITH_RESULTS_AND_SCORES",
 }
 
-export type MatchupResponse =
+export type MatchupResponseEnumType =
   (typeof MatchupResponsesEnum)[keyof typeof MatchupResponsesEnum];
 
 export enum MatchupSortingEnum {
-  CREATED_AT = "CREATED_AT",
+  ROUND_NUMBER = "ROUND_NUMBER",
   START_DATE = "START_DATE",
   IS_FINISHED = "IS_FINISHED",
 }

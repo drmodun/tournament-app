@@ -25,9 +25,12 @@ export interface IEndMatchupRequest {
 }
 
 export interface IQueryMatchupRequest {
-  matchupId: number;
+  matchupId?: number;
   rosterId?: number;
   groupId?: number;
   userId?: number;
   stageId?: number;
+  round?: number;
+  isFinished?: boolean;
+  challongeMatchupId?: string;
 }

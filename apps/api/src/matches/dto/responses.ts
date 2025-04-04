@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { MiniRosterDto, RosterDto } from '../../roster/dto/responses';
 
 export class BracketParticipantDto {
   @ApiProperty({ description: 'Participant ID (roster ID)' })
@@ -129,4 +130,98 @@ export class ReactBracketsResponseDto {
     type: [ReactBracketsRoundDto],
   })
   rounds: ReactBracketsRoundDto[];
+}
+
+export class ScoreResponseDto {
+  @ApiProperty({ description: 'The ID of the matchup' })
+  matchupId: number;
+
+  @ApiProperty({ description: 'The round number' })
+  roundNumber: number;
+
+  @ApiProperty({ description: 'The number of points scored' })
+  points: number;
+
+  @ApiProperty({ description: 'Whether this score represents a winner' })
+  isWinner: boolean;
+}
+
+export class MatchupResponseDto {
+  @ApiProperty({ description: 'The ID of the matchup' })
+  id: number;
+
+  @ApiProperty({ description: 'The ID of the stage' })
+  stageId: number;
+
+  @ApiProperty({ description: 'The ID of the round' })
+  roundId: number;
+
+  @ApiProperty({ description: 'The type of matchup' })
+  matchupType: string;
+
+  @ApiProperty({ description: 'The start date of the matchup' })
+  startDate: Date;
+
+  @ApiProperty({ description: 'Whether the matchup is finished' })
+  isFinished: boolean;
+}
+
+export class MatchupResponseWithChallongeIdDto extends MatchupResponseDto {
+  @ApiProperty({ description: 'The Challonge ID of the matchup' })
+  challongeId: string;
+}
+
+export class MatchupResponseWithRostersDto extends MatchupResponseDto {
+  @ApiProperty({
+    description: 'The rosters participating in this matchup',
+    type: [MiniRosterDto],
+  })
+  rosters: MiniRosterDto[];
+}
+
+export class ResultsResponseDto {
+  @ApiProperty({ description: 'The ID of the result' })
+  id: number;
+
+  @ApiProperty({ description: 'The ID of the matchup' })
+  matchupId: number;
+
+  @ApiProperty({ description: 'The round number' })
+  roundNumber: number;
+
+  @ApiProperty({ description: 'The score' })
+  score: number;
+
+  @ApiProperty({ description: 'Whether this result represents a winner' })
+  isWinner: boolean;
+
+  @ApiProperty({
+    description: 'The roster associated with this result',
+    type: RosterDto,
+  })
+  roster: RosterDto;
+}
+
+export class ResultsResponseWithScoresDto extends ResultsResponseDto {
+  @ApiProperty({
+    description: 'The individual scores for this result',
+    type: [ScoreResponseDto],
+  })
+  scores: ScoreResponseDto[];
+}
+
+export class MatchupResponseWithResultsDto extends MatchupResponseDto {
+  @ApiProperty({
+    description: 'The results for this matchup',
+    type: [ResultsResponseDto],
+  })
+  results: ResultsResponseDto[];
+}
+
+export class MatchupResponseWithResultsAndScoresDto extends MatchupResponseDto {
+  @ApiProperty({
+    description: 'The results with scores for this matchup',
+    type: [ResultsResponseWithScoresDto],
+  })
+  results: ResultsResponseWithScoresDto[];
 }

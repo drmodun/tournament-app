@@ -1,162 +1,62 @@
 @use "../../styles/" as *;
 
-.pfp {
-  width: $baseComponentHeight * 3.5;
-  height: $baseComponentHeight * 3.5;
-  border-radius: $borderRadius;
-  object-fit: cover;
-}
-
 .wrapper {
+  width: clamp(0px, 100%, $tabletBreakpoint);
+}
+
+.matchupCard {
+  display: flex;
+  border-radius: $borderRadius;
+  padding: $padding;
+  gap: $padding;
+  flex-direction: column;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
   width: 100%;
 }
 
-.profileEdit {
-  position: relative;
+.matchupWrapper {
   display: flex;
-  flex-direction: row;
-  width: 100%;
   gap: $doublePadding;
-  height: $baseComponentHeight * 3.5;
+  padding: $padding;
+  border-radius: $borderRadius;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 
-  @media screen and (max-width: $tabletBreakpoint) {
+  @media screen and (max-width: $desktopBreakpoint) {
     flex-direction: column;
-    height: $baseComponentHeight * 7;
     gap: $halfPadding;
     align-items: center;
   }
 }
 
-.editButton {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: transparent;
-  border: none;
-  border-radius: $borderRadius;
-  cursor: pointer;
-}
-
-.interests,
-.teams {
+.details {
   display: flex;
-  gap: $halfPadding / 2;
-  overflow-x: hidden;
   align-items: center;
-  overflow-y: hidden;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
-  &:hover {
-    overflow-x: scroll;
-  }
-}
-
-.teamsEdit,
-.interestsEdit {
-  display: flex;
-  gap: $halfPadding / 2;
-  align-items: center;
-}
-
-.interest,
-.teamText {
-  padding-right: $padding;
-}
-
-.editWrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  gap: $halfPadding;
   justify-content: center;
-  gap: $padding;
-  overflow: hidden;
 }
 
-.dialog {
-  max-width: 75%;
+.submitButton {
   display: flex;
-  flex-direction: column;
-  gap: $padding;
+  padding: $padding;
 }
 
-.noItemsText {
-  font-weight: 300;
-  color: gray;
-}
-
-.lightFill > * {
-  fill: $light;
-}
-
-.darkFill > * {
-  fill: $dark;
-}
-
-.manageTeamsText {
-  font-weight: 700;
-}
-
-.manageTeamsWrapper {
+.actions {
+  width: 100%;
   display: flex;
-  gap: $halfPadding;
+  justify-content: center;
+
   align-items: center;
-}
-
-.descriptionText {
-  margin-top: $halfPadding;
-}
-
-.userInfo {
-  display: flex;
-  gap: $halfPadding;
-}
-
-.usernameSpan {
-  color: inherit;
-  font-style: italic;
-  font-size: $fontSize;
-}
-
-.bottom {
-  display: flex;
-  flex-direction: column;
   gap: $padding;
-  margin-top: $padding;
-}
-
-.team {
-  flex-basis: 0;
-  flex-grow: 0;
-  flex-shrink: 0;
-}
-
-.boldText,
-.userInfo,
-.infoText,
-.usernameEdit,
-.descriptionText,
-.description {
-  color: inherit;
-}
-
-.pfpEdit {
-  margin-top: $halfPadding;
-}
-
-.imageDrop,
-.imagePicker,
-.pfpEdit {
-  @media screen and (max-width: $tabletBreakpoint) {
-    width: 100% !important;
-  }
-}
-
-.formItem + .formItem {
-  margin-top: $padding;
 }

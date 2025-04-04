@@ -3,6 +3,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   IMatchupResponseWithResultsAndScores,
+  IMatchupsWithMiniRostersResponse,
   IQueryRosterRequest,
 } from "@tournament-app/types";
 import {
@@ -18,7 +19,7 @@ export const getUserManagedMatchups = async (page: number) => {
   return clientApi
     .get<
       IQueryRosterRequest,
-      AxiosResponse<IMatchupResponseWithResultsAndScores[]>
+      AxiosResponse<IMatchupsWithMiniRostersResponse[]>
     >(`/matches/managed`, {
       params: {
         page,
@@ -26,7 +27,6 @@ export const getUserManagedMatchups = async (page: number) => {
       },
     })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     });
 };
@@ -40,7 +40,10 @@ export const useGetUserManagedMatchups = () => {
     retryDelay: MEDIUM_QUERY_RETRY_DELAY,
     retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (lastPage, allPages) => allPages.length + 1,
+    getNextPageParam: (lastPage, allPages) =>
+      allPages[allPages.length - 1].length < 10
+        ? undefined
+        : allPages.length + 1,
     initialPageParam: 1,
   });
 };

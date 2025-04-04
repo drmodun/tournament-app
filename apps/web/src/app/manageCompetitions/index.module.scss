@@ -10,6 +10,7 @@
   flex-direction: column;
   padding-left: $horizontalMargin;
   padding-right: $horizontalMargin;
+  gap: $padding;
 
   @media screen and (max-width: $tabletBreakpoint) {
     padding-left: $doublePadding;

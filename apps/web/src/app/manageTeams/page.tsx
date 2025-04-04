@@ -16,7 +16,7 @@ import Button from "components/button";
 import Dialog from "components/dialog";
 import Input from "components/input";
 import ProgressWheel from "components/progressWheel";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { act, Dispatch, SetStateAction, useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import useDebounce from "utils/hooks/useDebounce";
@@ -94,6 +94,14 @@ export default function Teams() {
     setActiveTab(0);
   };
 
+  useEffect(() => {
+    console.log(
+      data?.pages[activePage]?.results?.length,
+      activePage,
+      activeTab,
+    );
+  }, [activePage, activeTab]);
+
   return (
     <div className={styles.wrapper}>
       <Dialog
@@ -133,8 +141,14 @@ export default function Teams() {
           />
 
           {data?.pages[Math.floor(activePage)]?.results[activeTab] &&
-            searchData?.[activeTab] && (
-              <ManageTeams team={searchData?.[activeTab]} />
+            (searchData?.[activeTab] ||
+              data?.pages[Math.floor(activePage)]?.results[activeTab]) && (
+              <ManageTeams
+                team={
+                  searchData?.[activeTab] ||
+                  data?.pages[Math.floor(activePage)]?.results[activeTab]
+                }
+              />
             )}
         </div>
       ) : data?.pages?.[0]?.results?.length === 0 ? (
@@ -240,7 +254,6 @@ const SearchBar = ({
   setSearchVal?: (val: string) => void;
   // eslint-disable-next-line no-unused-vars
   setDialogActive?: (val: boolean) => void;
-  // eslint-disable-next-line no-unused-vars
   setIsSearching?: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -249,8 +262,11 @@ const SearchBar = ({
   const textColorTheme = textColor(theme);
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    if ((data?.length ?? 0) <= activeIndex) {
+      setActiveIndex((prev) => prev - 1);
+    }
+    console.log(data, activeIndex);
+  }, [data, activeIndex]);
 
   return (
     <div

@@ -3,6 +3,9 @@ import {
   groupRoleEnum,
   IChallongeMatch,
   IEndMatchupRequest,
+  IMatchupResponseWithRosters,
+  IMatchupsWithMiniRostersResponse,
+  IMiniRosterResponse,
   MatchupResponsesEnum,
   MatchupSortingEnum,
 } from '@tournament-app/types';
@@ -28,6 +31,7 @@ import {
   or,
   desc,
   aliasedTable,
+  count,
 } from 'drizzle-orm';
 import * as tables from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
@@ -384,11 +388,20 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return result.length > 0;
   }
 
-  async getManagedMatchups(userId: number, query?: PaginationOnly) {
+  async getManagedMatchups(
+    userId: number,
+    query?: PaginationOnly,
+  ): Promise<IMatchupsWithMiniRostersResponse[]> {
     const creatorUser = aliasedTable(user, 'creatorUser');
+    const rosterUser = aliasedTable(user, 'rosterUser');
+    const rosterGroup = aliasedTable(tables.group, 'rosterGroup');
+
+    const page = query?.page || 1;
+    const pageSize = query?.pageSize ?? 10;
+    const offset = pageSize * (page - 1);
 
     const result = await db
-      .selectDistinct({
+      .select({
         id: matchup.id,
         stageId: matchup.stageId,
         round: matchup.round,
@@ -396,6 +409,15 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         challongeMatchupId: matchup.challongeMatchupId,
         startDate: matchup.startDate,
         endDate: matchup.endDate,
+        matchupType: sql`'standard'`.mapWith(String),
+        rosters: sql<
+          IMiniRosterResponse[]
+        >`JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
+          'id', ${roster.id},
+          'name', COALESCE(${rosterGroup.name}, ${rosterUser.username}), 
+          'logo', COALESCE(${rosterGroup.logo}, ${rosterUser.profilePicture}),
+          'entityId', COALESCE(${rosterGroup.id}, ${rosterUser.id})
+        )) FILTER (WHERE ${roster.id} IS NOT NULL)`,
       })
       .from(matchup)
       .leftJoin(stage, eq(matchup.stageId, stage.id))
@@ -409,6 +431,11 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         tables.groupToUser,
         eq(tables.group.id, tables.groupToUser.groupId),
       )
+      .leftJoin(rosterToMatchup, eq(matchup.id, rosterToMatchup.matchupId))
+      .leftJoin(roster, eq(rosterToMatchup.rosterId, roster.id))
+      .leftJoin(participation, eq(roster.participationId, participation.id))
+      .leftJoin(rosterUser, eq(participation.userId, rosterUser.id))
+      .leftJoin(rosterGroup, eq(participation.groupId, rosterGroup.id))
       .where(
         or(
           and(
@@ -425,11 +452,23 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
           ),
         ),
       )
-      .orderBy(desc(matchup.startDate))
-      .limit(query.pageSize ?? 10)
-      .offset(query.pageSize * (query.page || 1 - 1));
+      .groupBy(
+        matchup.id,
+        matchup.stageId,
+        matchup.round,
+        matchup.isFinished,
+        matchup.challongeMatchupId,
+        matchup.startDate,
+        matchup.endDate,
+      )
+      .orderBy(desc(count(roster.id)))
+      .limit(pageSize)
+      .offset(offset);
 
-    return result;
+    return result.map((m) => ({
+      ...m,
+      rosters: m.rosters || [],
+    }));
   }
 
   async getMatchupById(matchupId: number) {

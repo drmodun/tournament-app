@@ -1,4 +1,6 @@
+import { stageStatusEnumType, stageTypeEnumType } from "@tournament-app/types";
 import dateFormat from "dateformat";
+import { Variants } from "types/styleTypes";
 import { ReactBracketsData } from "views/bracket/bracket";
 
 // time spans in milliseconds
@@ -70,7 +72,7 @@ export const calculateBestFutureDateFormat = (date: Date) => {
 
 export const formatDate = (date: Date) => {
   try {
-    const d: string = dateFormat(date, "mmm dS, 'yy");
+    const d: string = dateFormat(date, "mmm dS, 'yy").toLowerCase();
     return d;
   } catch {
     return "unknown";
@@ -132,6 +134,26 @@ export const calculateBestValueFormat = (targetValue: number) => {
       return `${value.toFixed(2)} ${valueName}`;
     }
   }
+};
+
+export const STAGE_TYPE_NAME_MAP = {
+  group: "group",
+  knockout: "knockout",
+  swiss: "swiss style",
+  round_robin: "round robin",
+  fixture: "fixture",
+  double_elimination: "double elimination",
+  quiz: "quiz",
+  compass: "compass",
+  triple_elimination: "triple elimination",
+  evaluated_competition: "evaluated competition",
+};
+
+export const STAGE_STATUS_VARIANT_MAP: Record<stageStatusEnumType, Variants> = {
+  upcoming: "primary",
+  ongoing: "warning",
+  finished: "secondary",
+  cancelled: "danger",
 };
 
 export const COUNTRY_CODES_TO_NAMES = {

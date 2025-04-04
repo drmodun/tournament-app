@@ -1,0 +1,77 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  max-width: $desktopBreakpoint;
+  height: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: $doublePadding;
+  }
+}
+
+.topText {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+  padding: $padding;
+  flex-grow: 0;
+}
+
+.interestLogo {
+  height: $baseComponentHeight;
+  width: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.interestCard {
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+
+.interestName {
+  font-weight: 700;
+}
+
+.interestType {
+  width: min-content;
+}
+
+.invitesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.header {
+  display: flex;
+  gap: $padding;
+  align-items: center;
+}
+
+.deleteIcon {
+  width: $baseComponentHeight;
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+}

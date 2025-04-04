@@ -3,16 +3,13 @@
 import EditIcon from "@mui/icons-material/Edit";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { IExtendedUserResponse } from "@tournament-app/types";
-import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
 import { clsx } from "clsx";
 import Button from "components/button";
-import Chip from "components/chip";
 import Dialog from "components/dialog";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -22,7 +19,6 @@ import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import UserEditForm from "views/userEditForm";
 import UserFollowersDialog from "views/userFollowersModal";
 import styles from "./manageUser.module.scss";
-import { useEffect } from "react";
 
 export default function ManageUser({
   data,
@@ -35,17 +31,7 @@ export default function ManageUser({
 
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const router = useRouter();
 
-  const scrollRefTeams = useRef<HTMLDivElement>(null);
-
-  const {
-    data: groupData,
-    fetchNextPage,
-    isFetchNextPageError,
-    isFetchingNextPage,
-    isFetching,
-  } = useUserGroups(true);
   const deleteUserMutation = useDeleteUser(data?.id);
 
   return (
@@ -78,7 +64,6 @@ export default function ManageUser({
         </button>
         <img
           src={data?.profilePicture}
-          alt="Profile picture"
           className={clsx(styles.pfp)}
           onError={(e) => {
             e.currentTarget.src = "/profilePicture.png";
@@ -132,19 +117,6 @@ export default function ManageUser({
             </Markdown>
           </p>
         </div>
-        <Link href="/manageTeams">
-          <div className={styles.manageTeamsWrapper}>
-            <p
-              className={clsx(
-                styles.manageTeamsText,
-                globals[`${textColorTheme}Color`],
-              )}
-            >
-              manage teams
-            </p>
-            <LaunchIcon className={clsx(styles[`${textColorTheme}Fill`])} />
-          </div>
-        </Link>
         <Button
           label="view followers"
           variant="secondary"

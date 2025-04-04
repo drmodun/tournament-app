@@ -25,7 +25,7 @@ export const createBlockedUser = async (data: {
     )
     .then((res) => res.data);
 };
-export const useCreatedBlockedUser = () => {
+export const useCreateBlockedUser = () => {
   const toast = useToastContext();
   const queryClient = useQueryClient();
 
@@ -33,16 +33,22 @@ export const useCreatedBlockedUser = () => {
     mutationFn: createBlockedUser,
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async (data, variables) => {
+    onSuccess: async () => {
       toast.addToast("successfully blocked user", "success");
       await queryClient.invalidateQueries({
-        queryKey: ["lfg", "team", variables.groupId],
+        queryKey: ["lfg"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["group"],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["blocked-users"],
       });
 
       return true;
     },
     onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occured...", "error");
+      toast.addToast(error.message ?? "an error occurred...", "error");
       console.error(error);
       return false;
     },

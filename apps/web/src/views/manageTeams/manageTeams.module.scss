@@ -268,3 +268,17 @@
 .verticalPadding {
   margin-bottom: $padding;
 }
+
+.splitButtons {
+  display: flex;
+  width: 100%;
+  gap: $halfPadding;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+  }
+}
+
+.splitButtons > * {
+  width: 100%;
+}

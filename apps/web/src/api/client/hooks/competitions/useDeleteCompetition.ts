@@ -35,7 +35,7 @@ export const useDeleteCompetition = () => {
       router.push("/manageCompetitions");
     },
     onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occured...", "error");
+      toast.addToast(error.message ?? "an error occurred...", "error");
       console.error(error);
       console.log(error.message);
     },

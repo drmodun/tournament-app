@@ -9,15 +9,16 @@ import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useDeleteCompetition } from "api/client/hooks/competitions/useDeleteCompetition";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
-import { useCreateGroupParticipation } from "api/client/hooks/participations/useCreateGroupParticipation";
 import { useCreateSoloParticipation } from "api/client/hooks/participations/useCreateSoloParticipation";
+import { useGetUserGroupParticipations } from "api/client/hooks/participations/useGetUserGroupParticipations";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Chip from "components/chip";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -27,7 +28,6 @@ import { formatDateTime } from "utils/mixins/formatting";
 import EditCompetitionForm from "views/editCompetitionForm";
 import GroupSelectDialog from "views/groupSelectDialog";
 import styles from "./competition.module.scss";
-import Link from "next/link";
 
 type SidebarSectionProps = {
   name: string;
@@ -47,10 +47,12 @@ export default function Competition({
 
   const deleteCompetitionMutation = useDeleteCompetition();
   const soloJoinCompetitionMutation = useCreateSoloParticipation();
-  const groupJoinCompetitionMutation = useCreateGroupParticipation();
   const { data: participationData } = useCheckIfUserIsParticipating(
     competition?.id,
     data?.id,
+  );
+  const { data: groupParticipationData } = useGetUserGroupParticipations(
+    competition?.id,
   );
 
   const [groupSelectModalOpen, setGroupSelectModalOpen] =
@@ -176,14 +178,21 @@ export default function Competition({
                 label="delete competition"
                 onClick={() => deleteCompetitionMutation.mutate(competition.id)}
               />
-              <Link href={`/manageStages/${competition?.id}`}>
+              <Link
+                href={`/manageStages/${competition?.id}`}
+                className={styles.linkStage}
+              >
                 <Button variant={textColorTheme} label="view stages" />
               </Link>
             </div>
           ) : (participationData?.results?.length ?? -1) > 0 ||
-            !competition?.isPublic ? (
+            !competition?.isPublic ||
+            (groupParticipationData?.length ?? -1) > 0 ? (
             <div className={styles.manageCompetitionButtonsWrapper}>
-              <Link href={`/manageStages/${competition?.id}`}>
+              <Link
+                href={`/stages/${competition?.id}`}
+                className={styles.linkStage}
+              >
                 <Button variant={textColorTheme} label="view stages" />
               </Link>
             </div>
@@ -205,7 +214,7 @@ export default function Competition({
                   onClick={() => setGroupSelectModalOpen(true)}
                 />
               )}
-              <Link href={`/manageStages/${competition?.id}`}>
+              <Link href={`/stages/${competition?.id}`}>
                 <Button variant={textColorTheme} label="view stages" />
               </Link>
             </div>

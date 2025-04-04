@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: Actually implement
-
 import { useVerifyUser } from "api/client/hooks/auth/useVerifyUser";
 import ProgressWheel from "components/progressWheel";
 import { useRouter } from "next/navigation";

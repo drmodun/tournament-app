@@ -1,0 +1,37 @@
+@import "../../styles/";
+
+.paginationContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: $padding;
+}
+
+.paginationButton {
+  border: 0;
+  background-color: transparent;
+}
+
+.userCardWrapper {
+  display: flex;
+  gap: $halfPadding;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    flex-wrap: unset;
+    flex-direction: column;
+  }
+}
+
+.innerFormWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.submitButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -183,14 +183,13 @@ export class StageService {
       order: 'asc',
       tournamentId,
     } satisfies StageQuery);
-
     return stages[0];
   }
 
   async isFirstStage(stageId: number, tournamentId: number): Promise<boolean> {
     const firstStage = await this.getFirstStage(tournamentId);
 
-    return stageId === firstStage.id;
+    return stageId == firstStage.id;
   }
 
   async getStagesSortedByStartDate(

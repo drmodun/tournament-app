@@ -118,9 +118,37 @@
 }
 
 .noTeams {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.searchPaginationWrapper {
+  display: flex;
+  width: 100%;
+}
+
+.searchBar {
+  align-items: center;
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.searchInput,
+.searchInputWrapper {
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+  }
+}
+
+.searchInputWrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
 }

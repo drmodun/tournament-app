@@ -6,15 +6,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import GroupIcon from "@mui/icons-material/Group";
 import InboxIcon from "@mui/icons-material/Inbox";
+import LogoutIcon from "@mui/icons-material/Logout";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import {
   groupRoleEnum,
   IGroupMembershipResponse,
   ILFPResponse,
 } from "@tournament-app/types";
+import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
 import { useEditGroup } from "api/client/hooks/groups/useEditGroup";
+import { useLeaveUserGroup } from "api/client/hooks/groups/useLeaveUserGroup";
 import { useDeleteLFP } from "api/client/hooks/lfp/useDeleteLFP";
-import { useGetLFPs } from "api/client/hooks/lfp/useGetLFPs";
+import { useGetGroupLFPs } from "api/client/hooks/lfp/useGetGroupLFPs";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dialog from "components/dialog";
@@ -50,8 +53,19 @@ export default function ManageTeams({
     useState<boolean>(false);
   const [editTeamModalActive, setEditTeamModalActive] =
     useState<boolean>(false);
-  const { data } = useGetLFPs(team?.groupId);
+  const { data } = useGetGroupLFPs(team?.groupId);
   const deleteLFPMutation = useDeleteLFP();
+
+  const deleteGroupMutation = useDeleteGroup();
+  const leaveGroupMutation = useLeaveUserGroup();
+
+  const deleteGroup = async () => {
+    await deleteGroupMutation.mutateAsync(team?.groupId);
+  };
+
+  const leaveGroup = async () => {
+    await leaveGroupMutation.mutateAsync(team?.groupId);
+  };
 
   if (!team)
     return (
@@ -128,8 +142,8 @@ export default function ManageTeams({
         <div>
           <img
             src={team?.group?.logo}
-            alt="team logo"
             className={styles.teamImage}
+            onError={(e) => (e.currentTarget.src = "/noimg.jpg")}
           />
           <p
             className={clsx(
@@ -160,7 +174,7 @@ export default function ManageTeams({
           >
             <GroupIcon
               className={clsx(
-                styles[`${textColorTheme}Fill`],
+                globals[`${textColorTheme}FillChildren`],
                 styles.buttonIconPadding,
               )}
             />
@@ -177,39 +191,73 @@ export default function ManageTeams({
               >
                 <EditIcon
                   className={clsx(
-                    styles[`${textColorTheme}Fill`],
+                    globals.darkFillChildren,
                     styles.buttonIconPadding,
                   )}
                 />
               </Button>
-              <Button
-                label="group join requests"
-                variant="primary"
-                className={styles.rostersButton}
-                onClick={() => setGroupJoinRequestsModal(true)}
-              >
-                <InboxIcon
-                  className={clsx(
-                    styles[`${textColorTheme}Fill`],
-                    styles.buttonIconPadding,
-                  )}
-                />
-              </Button>
-              <Button
-                label="browse candidates"
-                variant="secondary"
-                className={styles.rostersButton}
-                onClick={() => setLfgModalActive(true)}
-              >
-                <TravelExploreIcon
-                  className={clsx(
-                    styles[`${textColorTheme}Fill`],
-                    styles.buttonIconPadding,
-                  )}
-                />
-              </Button>
+              <div className={styles.splitButtons}>
+                <Button
+                  label="group join requests"
+                  variant="primary"
+                  className={styles.rostersButton}
+                  onClick={() => setGroupJoinRequestsModal(true)}
+                >
+                  <InboxIcon
+                    className={clsx(
+                      globals.darkFillChildren,
+                      styles.buttonIconPadding,
+                    )}
+                  />
+                </Button>
+                <Button
+                  label="browse candidates"
+                  variant="secondary"
+                  className={styles.rostersButton}
+                  onClick={() => setLfgModalActive(true)}
+                >
+                  <TravelExploreIcon
+                    className={clsx(
+                      globals.darkFillChildren,
+                      styles.buttonIconPadding,
+                    )}
+                  />
+                </Button>
+              </div>
             </>
           )}
+
+          <div className={styles.splitButtons}>
+            <Button
+              label="leave group"
+              variant="danger"
+              className={styles.rostersButton}
+              onClick={leaveGroup}
+            >
+              <LogoutIcon
+                className={clsx(
+                  globals.darkFillChildren,
+                  styles.buttonIconPadding,
+                )}
+              />
+            </Button>
+            {(team?.role === groupRoleEnum.ADMIN ||
+              team?.role === groupRoleEnum.OWNER) && (
+              <Button
+                label="delete group"
+                variant="danger"
+                className={styles.rostersButton}
+                onClick={deleteGroup}
+              >
+                <DeleteIcon
+                  className={clsx(
+                    globals.darkFillChildren,
+                    styles.buttonIconPadding,
+                  )}
+                />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <div className={styles.right}>
@@ -284,9 +332,7 @@ export default function ManageTeams({
                         }}
                         type="button"
                       >
-                        <DeleteIcon
-                          className={styles[`${textColorTheme}Fill`]}
-                        />
+                        <DeleteIcon className={globals.darkFillChildren} />
                       </button>
                       <button
                         className={styles.lfpEditButton}
@@ -298,11 +344,9 @@ export default function ManageTeams({
                         }}
                         type="button"
                       >
-                        <EditIcon className={styles[`${textColorTheme}Fill`]} />
+                        <EditIcon className={globals.darkFillChildren} />
                       </button>
-                      <ArrowOutwardIcon
-                        className={styles[`${textColorTheme}Fill`]}
-                      />
+                      <ArrowOutwardIcon className={globals.darkFillChildren} />
                     </div>
                   </Link>
                 ))

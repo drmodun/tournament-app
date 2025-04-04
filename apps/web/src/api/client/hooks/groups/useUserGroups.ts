@@ -31,7 +31,6 @@ export const getUserGroups = async (
         userId: userId,
         pageSize: pageSize ?? 2,
         page: page,
-        returnFullCount: true,
       },
     })
     .then((res) => {

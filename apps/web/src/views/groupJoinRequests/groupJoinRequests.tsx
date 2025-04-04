@@ -17,7 +17,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./groupJoinRequests.module.scss";
 
-export default function GroupMembersDialog({
+export default function GroupJoinRequests({
   groupId,
 }: {
   groupId: number | undefined;

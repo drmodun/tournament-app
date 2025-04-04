@@ -15,6 +15,10 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_NAMES_TO_CODES } from "utils/mixins/formatting";
 import styles from "./manageTeamMembers.module.scss";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
+import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import { usePromoteUser } from "api/client/hooks/groups/usePromoteUser";
+import { useDemoteUser } from "api/client/hooks/groups/useDemoteUser";
 
 type UserCardProps = {
   id: number;
@@ -38,14 +42,25 @@ const UserCard = ({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const removeUserMutation = useRemoveUserFromGroup();
+  const promoteUserMutation = usePromoteUser();
+  const demoteUserMutation = useDemoteUser();
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const handleRemove = () => {
     removeUserMutation.mutate({ userId: id, groupId: groupId });
   };
 
+  const handlePromote = () => {
+    promoteUserMutation.mutate({ userId: id, groupId: groupId });
+  };
+
+  const handleDemote = () => {
+    demoteUserMutation.mutate({ userId: id, groupId: groupId });
+  };
+
   useEffect(() => {
     if (removeUserMutation.isSuccess) setIsVisible(false);
+    console.log("role", membership?.role);
   }, [removeUserMutation.isSuccess]);
 
   return (
@@ -63,7 +78,6 @@ const UserCard = ({
         <div className={styles.userCardInnerWrapper}>
           <img
             src={profilePicture}
-            alt={`${username}'s profile picture`}
             className={styles.userCardProfilePicture}
             onError={(e) => {
               e.currentTarget.src = "/profilePicture.png";
@@ -85,23 +99,59 @@ const UserCard = ({
           </div>
         </div>
       </Link>
-      {membership?.role === groupRoleEnum.ADMIN ||
-        (membership?.role === groupRoleEnum.OWNER && (
-          <button
-            onClick={handleRemove}
-            className={clsx(
-              styles.userCardRemoveButton,
-              globals.dangerBackgroundColor,
-            )}
-          >
-            <PersonRemoveIcon
+      {(membership?.role === groupRoleEnum.ADMIN ||
+        membership?.role === groupRoleEnum.OWNER) && (
+        <div className={styles.actionButtons}>
+          {role == groupRoleEnum.MEMBER && (
+            <button
+              onClick={handlePromote}
               className={clsx(
-                globals.lightFillChildren,
-                styles.userCardCloseButton,
+                styles.userCardRemoveButton,
+                globals.warningBackgroundColor,
               )}
-            />
-          </button>
-        ))}
+            >
+              <KeyboardDoubleArrowUpIcon
+                className={clsx(
+                  globals.lightFillChildren,
+                  styles.userCardCloseButton,
+                )}
+              />
+            </button>
+          )}
+          {role == groupRoleEnum.ADMIN && (
+            <button
+              onClick={handleDemote}
+              className={clsx(
+                styles.userCardRemoveButton,
+                globals.warningBackgroundColor,
+              )}
+            >
+              <KeyboardDoubleArrowDownIcon
+                className={clsx(
+                  globals.lightFillChildren,
+                  styles.userCardCloseButton,
+                )}
+              />
+            </button>
+          )}
+          {role !== groupRoleEnum.OWNER && (
+            <button
+              onClick={handleRemove}
+              className={clsx(
+                styles.userCardRemoveButton,
+                globals.dangerBackgroundColor,
+              )}
+            >
+              <PersonRemoveIcon
+                className={clsx(
+                  globals.lightFillChildren,
+                  styles.userCardCloseButton,
+                )}
+              />
+            </button>
+          )}
+        </div> 
+      )}
     </div>
   );
 };
@@ -111,11 +161,18 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
   const textColorTheme = textColor(theme);
   const { data: groupMembers, isLoading: groupMembersIsLoading } =
     useGetGroupMembers(teamId);
-  const { data: membershipData } = useCheckIfGroupMember(teamId);
+  const { data: membershipData, isLoading: membershipDataIsLoading } =
+    useCheckIfGroupMember(teamId);
+
+  const { data } = useAuth();
+
+  useEffect(() => {
+    console.log(membershipData, "data!");
+  }, [membershipData]);
 
   return (
     <div className={clsx(styles.wrapper)}>
-      {groupMembersIsLoading ? (
+      {groupMembersIsLoading || membershipDataIsLoading ? (
         <ProgressWheel variant={textColorTheme} />
       ) : (
         <>
@@ -127,6 +184,7 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
               <p>there are no team members!</p>
             ) : (
               groupMembers?.members?.map((member) => {
+                if (member.id == data?.id) return;
                 return (
                   <UserCard
                     membership={membershipData}

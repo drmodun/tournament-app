@@ -1,0 +1,1 @@
+ALTER TABLE "quiz_attempt" ADD COLUMN "is_submitted" boolean DEFAULT false;

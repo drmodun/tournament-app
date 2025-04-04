@@ -145,7 +145,6 @@ export class LFPDrizzleRepository extends PrimaryRepository<
     const forbiddenGroupIds = [...blockedGroupIds, ...userGroupIds];
 
     const distanceInKm = distance ? distance * 1000 : null;
-
     // 2. Main Query
     const lfpList = await db
       .select({

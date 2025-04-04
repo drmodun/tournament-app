@@ -1,3 +1,4 @@
+import { IGroupInviteWithUserResponse } from "src/groupInvites";
 import {
   IMiniRosterResponse,
   IMiniRosterResponseWithChallongeId,
@@ -26,6 +27,14 @@ export interface IResultsResponse {
   matchupId: number;
   score: number;
   isWinner: boolean;
+  roster: IRosterResponse;
+}
+
+export interface ICompactResultsResponse {
+  id: number;
+  matchupId: number;
+  score: number;
+  isWinner: boolean;
   roster: IMiniRosterResponse;
 }
 
@@ -50,7 +59,6 @@ export interface IMatchupResponseWithResults extends IMatchupResponse {
 
 export interface IMatchupResponseWithResultsAndScores extends IMatchupResponse {
   results: IResultsResponseWithScores[];
-  rosters: IRosterResponse[];
 }
 
 export enum MatchupResponsesEnum {

@@ -23,3 +23,8 @@ export * from "./roster";
 export * from "./notification";
 export * from "./challonge";
 export * from "./match";
+export * from "./quiz";
+export * from "./quizQuestion";
+export * from "./quizOption";
+export * from "./quizAttempt";
+export * from "./quizAttemptAnswer";

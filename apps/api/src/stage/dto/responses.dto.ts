@@ -90,6 +90,9 @@ export class ExtendedStageResponse
 
   @ApiResponseProperty()
   maxSubstitutes?: number;
+
+  @ApiResponseProperty()
+  challongeTournamentId?: string;
 }
 
 export class ExtendedStageResponseWithTournament
@@ -98,4 +101,7 @@ export class ExtendedStageResponseWithTournament
 {
   @ApiResponseProperty({ type: TournamentResponse })
   tournament: TournamentResponse;
+
+  @ApiResponseProperty()
+  challongeTournamentId?: string;
 }

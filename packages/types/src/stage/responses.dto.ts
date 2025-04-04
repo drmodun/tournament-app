@@ -27,7 +27,12 @@ export interface IStageResponseWithTournament extends IStageResponse {
   tournament: IMiniTournamentResponseWithLogo;
 }
 
-export interface IExtendedStageResponse extends IStageResponse {
+export interface IStageResponseWithChallongeTournament extends IStageResponse {
+  challongeTournamentId?: string;
+}
+
+export interface IExtendedStageResponse
+  extends IStageResponseWithChallongeTournament {
   minPlayersPerTeam: number;
   maxPlayersPerTeam?: number;
   maxSubstitutes?: number;
@@ -37,10 +42,6 @@ export interface IExtendedStageResponse extends IStageResponse {
 export interface IExtendedStageResponseWithTournament
   extends IExtendedStageResponse {
   tournament: ITournamentResponse;
-}
-
-export interface IStageResponseWithChallongeTournament extends IStageResponse {
-  challongeTournamentId: string;
 }
 
 export type BaseStageResponseType =

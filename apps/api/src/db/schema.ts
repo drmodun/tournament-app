@@ -1317,7 +1317,7 @@ export const quiz = pgTable('quiz', {
   timeLimitTotal: integer('time_limit_total'), // Time limit (in seconds)
   description: text('description'),
   coverImage: text('cover_image'),
-  isTest: boolean('is_test').default(false), //If it is a test, you can see all questions at once and move back and forth
+  isTest: boolean('is_test').default(true), //If it is a test, you can see all questions at once and move back and forth
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   matchupId: integer('matchup_id').references(() => matchup.id),
   stageId: integer('stage_id').references(() => stage.id),
@@ -1376,7 +1376,7 @@ export const quizQuestion = pgTable('quiz_question', {
   type: quizQuestionType('type').default('multiple_choice'),
   explanation: text('explanation'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  order: integer('order').notNull(),
+  order: integer('order'),
 });
 
 export const quizOption = pgTable('quiz_option', {

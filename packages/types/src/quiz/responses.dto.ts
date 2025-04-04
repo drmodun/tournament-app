@@ -1,4 +1,5 @@
 import { IQuizQuestionWithStatistics } from "src/quizQuestion";
+import { IUserResponse } from "src/user/responses.dto";
 
 export interface ITagResponse {
   id: number;
@@ -30,5 +31,23 @@ export interface IQuizResponseExtended extends IQuizResponse {
   passingRate: number;
   questions: IQuizQuestionWithStatistics[];
 }
+
+export interface IQuizResponseWithAuthor extends IQuizResponse {
+  author: IUserResponse;
+}
+
+export type BaseQuizResponse =
+  | IQuizResponse
+  | IQuizResponseWithAuthor
+  | IQuizResponseExtended;
+
+export enum QuizResponsesEnum {
+  BASE = "BASE",
+  EXTENDED = "EXTENDED",
+  WITH_AUTHOR = "WITH_AUTHOR",
+}
+
+export type QuizReturnTypesEnumType =
+  (typeof QuizResponsesEnum)[keyof typeof QuizResponsesEnum];
 
 //TODO: for leaderboard scoring implement other types later

@@ -1,7 +1,7 @@
 "use client";
 
 import { UseMutationResult } from "@tanstack/react-query";
-import { CreateQuizDto } from "@tournament-app/types";
+import { CreateQuizDto, ICreateQuizQuestionDto } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dropdown from "components/dropdown";
@@ -46,7 +46,7 @@ export default function CreateQuizForm({
     onClose && onClose();
   };
 
-  const [questionCount, setQuestionCount] = useState<number>(0);
+  const [questions, setQuestions] = useState<ICreateQuizQuestionDto[]>([]);
 
   return (
     <FormProvider {...addMethods}>
@@ -229,20 +229,13 @@ export default function CreateQuizForm({
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
             add question
           </p>
-          <Button
-            variant="primary"
-            className={clsx(styles.iconButton, styles.button)}
-            onClick={() => setQuestionCount((prev) => prev + 1)}
-          >
-            <AddIcon
-              className={clsx(globals.lightFillChildren, styles.iconButton)}
-            />
-          </Button>
+          <CreateQuizQuestionForm setQuestions={setQuestions} />
         </div>
-        {Array.from(Array(questionCount).keys()).map(() => (
-          <CreateQuizQuestionForm setQuestionCount={setQuestionCount} />
-        ))}
-
+        <div className={clsx(styles.dialogOption, styles.addQuestion)}>
+          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
+            current question
+          </p>
+        </div>
         <Button variant={"primary"} submit={true} label="create quiz" />
       </form>
     </FormProvider>

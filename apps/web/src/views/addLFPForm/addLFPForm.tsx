@@ -27,7 +27,7 @@ export default function AddLFPForm({
       groupId: groupId,
       message: data.message,
     });
-    if (createLFPMutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
   return (
     <FormProvider {...methods}>

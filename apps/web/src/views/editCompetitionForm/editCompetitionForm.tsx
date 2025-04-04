@@ -66,7 +66,7 @@ export default function EditCompetitionForm({
 
     await updateCompetitionMutation.mutateAsync(data);
 
-    if (updateCompetitionMutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   const [isRanked, setIsRanked] = useState<boolean>(false);

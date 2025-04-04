@@ -1,0 +1,98 @@
+@import "../../styles/";
+
+.error {
+  font-size: $fontSize * 0.875;
+  color: $danger;
+  margin-top: $halfPadding;
+}
+
+.submitLfpButton {
+  width: 100%;
+  margin-top: $padding;
+}
+
+.title {
+  margin-bottom: $padding;
+}
+.input {
+  width: 100%;
+}
+
+.userCards {
+  display: flex;
+  gap: $padding;
+}
+
+.userCard {
+  display: flex;
+  gap: $halfPadding;
+  border-radius: $borderRadius;
+  padding: $padding;
+  align-items: center;
+}
+
+.versusLayout {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  align-items: center;
+}
+
+.userPfp {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  object-fit: cover;
+  border-radius: $borderRadius;
+}
+
+.resultsCard {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.score {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  border-radius: $borderRadius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scores {
+  display: flex;
+  gap: $padding;
+  align-items: center;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.results {
+  display: flex;
+  gap: $padding;
+  flex-wrap: wrap;
+}
+
+.addButton {
+  width: $baseComponentHeight;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matchesLabel {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+}
+
+.finalResultInputs {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}

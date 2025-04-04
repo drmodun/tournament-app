@@ -49,6 +49,7 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
               <Link href="/manageCompetitions">manage competitions</Link>
               <Link href="/manageTeams">manage teams</Link>
               <Link href="/manageLFG">manage lfgs</Link>
+              <Link href="/manageInterests">manage interests</Link>
               <Link href="/search">search</Link>
               <Link href="/" onClick={logout}>
                 logout

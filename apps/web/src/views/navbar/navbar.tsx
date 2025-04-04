@@ -7,6 +7,7 @@ import { useLogout } from "api/client/hooks/auth/useLogout";
 import { clsx } from "clsx";
 import Button from "components/button";
 import ProgressWheel from "components/progressWheel";
+import NotificationIndicator from "components/notificationIndicator";
 import Link from "next/link";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants, Variants } from "types/styleTypes";
@@ -68,15 +69,19 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
           {isLoading ? (
             <ProgressWheel variant={colorTheme} />
           ) : isSuccess && data?.id ? (
-            <Link href="/user">
-              <img
-                src={data?.profilePicture ?? "/profilePicture.png"}
-                className={styles.userImage}
-                onError={(e) => {
-                  e.currentTarget.src = "/profilePicture.png";
-                }}
-              />
-            </Link>
+            <>
+              <NotificationIndicator />
+              <Link href="/user">
+                <img
+                  src={data?.profilePicture ?? "/profilePicture.png"}
+                  className={styles.userImage}
+                  alt="User profile"
+                  onError={(e) => {
+                    e.currentTarget.src = "/profilePicture.png";
+                  }}
+                />
+              </Link>
+            </>
           ) : (
             <>
               <Link href="/login">

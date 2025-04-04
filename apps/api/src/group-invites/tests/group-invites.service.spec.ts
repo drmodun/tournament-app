@@ -5,10 +5,14 @@ import { GroupMembershipService } from '../../group-membership/group-membership.
 import { GroupInviteResponsesEnum } from '@tournament-app/types';
 import { BadRequestException } from '@nestjs/common';
 import { GroupService } from '../../group/group.service';
+import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
 
 describe('GroupInvitesService', () => {
   let service: GroupInvitesService;
   let repository: GroupInviteDrizzleRepository;
+  let sseNotificationsService: SseNotificationsService;
+  let templatesFiller: NotificationTemplatesFiller;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -20,11 +24,20 @@ describe('GroupInvitesService', () => {
 
   const mockGroupMembershipService = {
     entityExists: jest.fn(),
+    create: jest.fn(),
   };
 
   const mockGroupService = {
     checkIfGroupIsReal: jest.fn(),
     findOne: jest.fn(),
+  };
+
+  const mockSseNotificationsService = {
+    createWithUsers: jest.fn(),
+  };
+
+  const mockTemplatesFiller = {
+    fill: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -43,6 +56,14 @@ describe('GroupInvitesService', () => {
           provide: GroupService,
           useValue: mockGroupService,
         },
+        {
+          provide: SseNotificationsService,
+          useValue: mockSseNotificationsService,
+        },
+        {
+          provide: NotificationTemplatesFiller,
+          useValue: mockTemplatesFiller,
+        },
       ],
     }).compile();
 
@@ -50,6 +71,15 @@ describe('GroupInvitesService', () => {
     repository = module.get<GroupInviteDrizzleRepository>(
       GroupInviteDrizzleRepository,
     );
+    sseNotificationsService = module.get<SseNotificationsService>(
+      SseNotificationsService,
+    );
+    templatesFiller = module.get<NotificationTemplatesFiller>(
+      NotificationTemplatesFiller,
+    );
+
+    // Clear mocks before each test
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -57,13 +87,19 @@ describe('GroupInvitesService', () => {
   });
 
   describe('create', () => {
-    it('should create a group invite', async () => {
+    it('should create a group invite and send notification', async () => {
       const createDto = {
         message: 'test message',
       };
+      const groupData = { name: 'Test Group', id: 1 };
 
       mockGroupService.checkIfGroupIsReal.mockResolvedValue(undefined);
       mockGroupMembershipService.entityExists.mockResolvedValue(false);
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'You have been invited to join the group Test Group',
+      );
+
       await service.create(1, 1, createDto);
 
       expect(mockGroupService.checkIfGroupIsReal).toHaveBeenCalledWith(1);
@@ -72,6 +108,9 @@ describe('GroupInvitesService', () => {
         userId: 1,
         message: createDto.message,
       });
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
     });
 
     it('should throw BadRequestException if user is already a member', async () => {
@@ -81,6 +120,22 @@ describe('GroupInvitesService', () => {
       await expect(service.create(1, 1, { message: 'test' })).rejects.toThrow(
         BadRequestException,
       );
+    });
+  });
+
+  describe('sendNotificationToInvitedUser', () => {
+    it('should send notification to invited user', async () => {
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'You have been invited to join the group Test Group',
+      );
+
+      await service.sendNotificationToInvitedUser(1, 1);
+
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
     });
   });
 
@@ -138,6 +193,85 @@ describe('GroupInvitesService', () => {
         groupId: 1,
         userId: 1,
       });
+    });
+  });
+
+  describe('accept', () => {
+    it('should accept invite, create membership, remove invite and send notification', async () => {
+      const mockInvite = { id: 1, message: 'test' };
+      const groupData = { name: 'Test Group', id: 1 };
+
+      mockRepository.getSingleQuery.mockResolvedValue([mockInvite]);
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'Your join request for the group Test Group has been approved',
+      );
+
+      await service.accept(1, 1);
+
+      expect(mockGroupMembershipService.create).toHaveBeenCalledWith(1, 1);
+      expect(repository.deleteEntity).toHaveBeenCalledWith({
+        groupId: 1,
+        userId: 1,
+      });
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
+    });
+  });
+
+  describe('reject', () => {
+    it('should reject invite, remove invite and send notification', async () => {
+      const mockInvite = { id: 1, message: 'test' };
+      const groupData = { name: 'Test Group', id: 1 };
+
+      mockRepository.getSingleQuery.mockResolvedValue([mockInvite]);
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'Your join request for the group Test Group has been rejected',
+      );
+
+      await service.reject(1, 1);
+
+      expect(repository.deleteEntity).toHaveBeenCalledWith({
+        groupId: 1,
+        userId: 1,
+      });
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
+    });
+  });
+
+  describe('sendNotificationAboutAcceptance', () => {
+    it('should send notification about acceptance', async () => {
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'Your join request for the group Test Group has been approved',
+      );
+
+      await service.sendNotificationAboutAcceptance(1, 1);
+
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
+    });
+  });
+
+  describe('sendNotificationAboutRejection', () => {
+    it('should send notification about rejection', async () => {
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'Your join request for the group Test Group has been rejected',
+      );
+
+      await service.sendNotificationAboutRejection(1, 1);
+
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
     });
   });
 

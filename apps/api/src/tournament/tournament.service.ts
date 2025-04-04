@@ -96,4 +96,12 @@ export class TournamentService {
 
     return results as IMiniTournamentResponseWithLogo[];
   }
+
+  async getManagedTournaments(userId: number, pagination?: PaginationOnly) {
+    const tournaments = await this.repository.getManagedTournaments(
+      userId,
+      pagination,
+    );
+    return tournaments;
+  }
 }

@@ -44,6 +44,10 @@ import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TournamentAdminGuard } from '../tournament/guards/tournament-admin.guard';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { PaginationOnly } from 'src/base/query/baseQuery';
+import { StageAdminGuard } from './guards/stage-admin.guard';
 
 @ApiTags('stages')
 @ApiExtraModels(
@@ -94,6 +98,26 @@ export class StageController {
       results,
       metadata,
     };
+  }
+
+  @Get('managed')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getManagedStages(
+    @CurrentUser() user: ValidatedUserDto,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.stageService.getManagedStages(user.id, query);
+  }
+
+  @Patch('start/:stageId')
+  @UseGuards(JwtAuthGuard, StageAdminGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: ActionResponsePrimary,
+  })
+  async startStage(@Param('stageId', ParseIntPipe) stageId: number) {
+    return await this.stageService.startStage(stageId);
   }
 
   @Get(':stageId')
@@ -151,7 +175,7 @@ export class StageController {
   }
 
   @Patch(':tournamentId/:stageId')
-  @UseGuards(JwtAuthGuard, TournamentAdminGuard)
+  @UseGuards(JwtAuthGuard, StageAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates a stage',
@@ -174,7 +198,7 @@ export class StageController {
   }
 
   @Delete(':tournamentId/:stageId')
-  @UseGuards(JwtAuthGuard, TournamentAdminGuard)
+  @UseGuards(JwtAuthGuard, StageAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Deletes a stage',

@@ -1,10 +1,12 @@
 import {
+  IMiniUserResponse,
   IMiniUserResponseWithProfilePicture,
   IUserResponse,
 } from "../user/responses.dto";
 import {
   IMiniGroupResponseWithLogo,
   IGroupResponse,
+  IMiniGroupResponse,
 } from "../group/responses.dto";
 
 export interface IGroupJoinRequestWithUserResponse extends IUserResponse {
@@ -27,17 +29,24 @@ export interface IGroupJoinRequestWithMiniGroupResponse
   createdAt: Date;
 }
 
+export interface IGroupJoinRequestForNotification {
+  user: IMiniUserResponse;
+  group: IMiniGroupResponseWithLogo;
+}
+
 export type BaseGroupJoinRequestResponseType =
   | IGroupJoinRequestWithUserResponse
   | IGroupJoinRequestWithMiniUserResponse
   | IGroupJoinRequestWithGroupResponse
-  | IGroupJoinRequestWithMiniGroupResponse;
+  | IGroupJoinRequestWithMiniGroupResponse
+  | IGroupJoinRequestForNotification;
 
 export enum GroupJoinRequestResponsesEnum {
   WITH_USER = "with-user",
   WITH_MINI_USER = "with-mini-user",
   WITH_GROUP = "with-group",
   WITH_MINI_GROUP = "with-mini-group",
+  FOR_NOTIFICATION = "for-notification",
 }
 
 export enum GroupJoinRequestSortingEnum {

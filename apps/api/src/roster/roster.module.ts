@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { RosterService } from './roster.service';
 import { RosterController } from './roster.controller';
 import { RosterDrizzleRepository } from './roster.repository';
@@ -19,7 +19,7 @@ import { ChallongeModule } from 'src/challonge/challonge.module';
     GroupModule,
     ParticipationModule,
     CareerModule,
-    StageModule,
+    forwardRef(() => StageModule),
     TournamentModule,
     MatchesModule,
     ChallongeModule,

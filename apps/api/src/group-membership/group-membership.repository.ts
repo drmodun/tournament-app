@@ -21,6 +21,7 @@ import {
 import { asc, eq, ilike, and, SQL, sql, InferSelectModel } from 'drizzle-orm';
 import { IGroupMembershipKey } from './dto/responses.dto';
 import { db } from 'src/db/db';
+import { GroupMembershipQuery } from './dto/requests.dto';
 
 @Injectable()
 export class GroupMembershipDrizzleRepository extends CompositeRepository<
@@ -179,6 +180,20 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
         page ? (page - 1) * pageSize : 0,
       )) as IMiniUserResponseWithProfilePicture[];
   }
+
+  async getUnpaginatedUsersInfoOnly(query: GroupMembershipQuery) {
+    return await db
+      .select({
+        id: groupToUser.userId,
+        username: user.username,
+        email: user.email,
+      })
+      .from(groupToUser)
+      .where(and(...this.getValidWhereClause(query)))
+      .leftJoin(user, eq(groupToUser.userId, user.id));
+  }
+
+  // TODO: see if a group version is important and either implement it or modify this function
 
   async autoCompleteGroups(
     search: string,

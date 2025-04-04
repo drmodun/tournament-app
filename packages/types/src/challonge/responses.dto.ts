@@ -19,7 +19,7 @@ export interface IChallongeTournament {
     game_name?: string;
     private: boolean;
     description?: string;
-    timestamps: ITimestamps;
+    starts_at?: string;
   };
 }
 
@@ -48,16 +48,16 @@ export interface IChallongeMatch {
     state: MatchState;
     round: number;
     identifier: string;
-    suggested_play_order: number;
+    suggestedPlayOrder: number;
     scores: string;
-    score_in_sets: number[][];
-    points_by_participant: IMatchPoints[];
+    scoreInSets: number[][];
+    pointsByParticipant: IMatchPoints[];
     timestamps: ITimestamps;
-    winner_id?: number;
-    relationships: {
-      player1: IRelationship;
-      player2: IRelationship;
-    };
+  };
+  winnerId?: number;
+  relationships: {
+    player1: IRelationship;
+    player2: IRelationship;
   };
 }
 

@@ -8,6 +8,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
 import PublicIcon from "@mui/icons-material/Public";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { clsx } from "clsx";
 import React, { useState } from "react";
@@ -41,7 +42,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
         styles.wrapper,
         className,
         !drawerContext.drawerOpen && !animate && styles.hidden,
-        !drawerContext.drawerOpen && animate && styles.hiddenAnimate,
+        !drawerContext.drawerOpen && animate && styles.hiddenAnimate
       )}
       style={style}
       onClick={(e) => {
@@ -54,7 +55,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
         className={clsx(
           styles.drawer,
           globals[`${colorTheme}BackgroundColor`],
-          animate && !drawerContext.drawerOpen && styles.animate,
+          animate && !drawerContext.drawerOpen && styles.animate
         )}
       >
         {isSuccess && data?.id ? (
@@ -63,6 +64,11 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
               icon={AccountCircleIcon}
               label={data?.name}
               href="/user"
+            />
+            <DrawerElement
+              icon={NotificationsIcon}
+              label="Notifications"
+              href="/notifications"
             />
             <DrawerElement
               icon={FormatListBulletedIcon}
@@ -81,7 +87,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
             />
             <DrawerElement
               icon={HelpIcon}
-              label="manage teams"
+              label="logout"
               href="/logout"
               onClick={logout}
             />

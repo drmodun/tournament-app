@@ -23,3 +23,14 @@ export interface IEndMatchupRequest {
   scores: ICreateScoreRequest[];
   results: ISetTeamResult[];
 }
+
+export interface IQueryMatchupRequest {
+  matchupId?: number;
+  rosterId?: number;
+  groupId?: number;
+  userId?: number;
+  stageId?: number;
+  round?: number;
+  isFinished?: boolean;
+  challongeMatchupId?: string;
+}

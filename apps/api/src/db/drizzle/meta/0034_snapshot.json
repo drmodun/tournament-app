@@ -1,6 +1,6 @@
 {
-  "id": "b138bdfe-9ab6-49e4-8660-a332fea76202",
-  "prevId": "70c2f294-7776-4b0f-8412-55b47ba89bd8",
+  "id": "65d795d6-da71-4838-9bf8-6e8cbf58db42",
+  "prevId": "c89db709-311e-497e-962a-1b4a7b4e8114",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -2035,7 +2035,13 @@
           "name": "round_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "round": {
+          "name": "round",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         },
         "matchup_type": {
           "name": "matchup_type",
@@ -2149,17 +2155,23 @@
           "primaryKey": true,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
         "message": {
           "name": "message",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "link": {
+          "name": "link",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "type": {
           "name": "type",
@@ -2174,6 +2186,31 @@
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.notification_to_user": {
+      "name": "notification_to_user",
+      "schema": "",
+      "columns": {
+        "notification_id": {
+          "name": "notification_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
         "read": {
           "name": "read",
@@ -2181,13 +2218,33 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "notification_user_id_user_id_fk": {
-          "name": "notification_user_id_user_id_fk",
-          "tableFrom": "notification",
+        "notification_to_user_notification_id_notification_id_fk": {
+          "name": "notification_to_user_notification_id_notification_id_fk",
+          "tableFrom": "notification_to_user",
+          "tableTo": "notification",
+          "columnsFrom": [
+            "notification_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "notification_to_user_user_id_user_id_fk": {
+          "name": "notification_to_user_user_id_user_id_fk",
+          "tableFrom": "notification_to_user",
           "tableTo": "user",
           "columnsFrom": [
             "user_id"
@@ -3617,8 +3674,7 @@
           "name": "round_number",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "default": 1
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -5823,7 +5879,8 @@
         "group-removal",
         "group-admin-promotion",
         "group-admin-demotion",
-        "test-template"
+        "test-template",
+        "new-follower"
       ]
     },
     "public.organizer_role": {

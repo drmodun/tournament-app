@@ -10,6 +10,7 @@ import {
   Query,
   Req,
   Patch,
+  BadRequestException,
 } from '@nestjs/common';
 import { GroupMembershipService } from './group-membership.service';
 import { GroupAdminGuard } from 'src/group/guards/group-admin.guard';
@@ -47,6 +48,7 @@ import {
   groupMembershipResponseSchema,
 } from './dto/examples';
 import {
+  groupRoleEnum,
   GroupMembershipResponsesEnum,
   IQueryMetadata,
 } from '@tournament-app/types';
@@ -187,6 +189,10 @@ export class GroupMembershipController {
     @Param('userId', ParseIntPipe) userId: number,
     @Body() updateGroupMembershipDto: GroupMembershipUpdateRequest,
   ) {
+    if (updateGroupMembershipDto.role === groupRoleEnum.OWNER) {
+      throw new BadRequestException('Cannot change owner role');
+    }
+
     return await this.groupMembershipService.update(
       groupId,
       userId,

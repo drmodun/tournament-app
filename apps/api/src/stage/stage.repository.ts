@@ -5,9 +5,12 @@ import {
   roster,
   location,
   userToRoster,
+  group,
+  groupToUser,
+  user,
 } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
-import { BaseQuery } from 'src/base/query/baseQuery';
+import { BaseQuery, PaginationOnly } from 'src/base/query/baseQuery';
 import {
   aliasedTable,
   and,
@@ -17,6 +20,7 @@ import {
   inArray,
   lte,
   notInArray,
+  or,
   SQL,
 } from 'drizzle-orm';
 import {
@@ -26,6 +30,7 @@ import {
   StageSortingEnum,
   stageTypeEnum,
   tournamentLocationEnum,
+  groupRoleEnum,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -186,6 +191,7 @@ export class StageDrizzleRepository extends PrimaryRepository<
           description: stage.description,
           logo: stage.logo,
           startDate: stage.startDate,
+          challongeTournamentId: stage.challongeTournamentId,
           endDate: stage.endDate,
           rostersParticipating: db.$count(roster, eq(roster.stageId, stage.id)),
           location: {
@@ -254,5 +260,31 @@ export class StageDrizzleRepository extends PrimaryRepository<
       default:
         return this.getMappingObject(StageResponsesEnum.BASE);
     }
+  }
+
+  async getManagedStages(userId: number, pagination?: PaginationOnly) {
+    const stages = await db
+      .selectDistinct(this.getMappingObject(StageResponsesEnum.BASE))
+      .from(stage)
+      .leftJoin(tournament, eq(stage.tournamentId, tournament.id))
+      .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
+      .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
+      .leftJoin(user, eq(groupToUser.userId, user.id))
+      .leftJoin(location, eq(stage.locationId, location.id))
+      .where(
+        and(
+          eq(user.id, userId),
+          or(
+            eq(user.id, tournament.creatorId),
+            eq(groupToUser.role, groupRoleEnum.ADMIN),
+            eq(groupToUser.role, groupRoleEnum.OWNER),
+          ),
+        ),
+      )
+      .orderBy(asc(stage.startDate))
+      .limit(pagination.pageSize ?? 10)
+      .offset(pagination.pageSize * ((pagination.page ?? 1) - 1));
+
+    return stages;
   }
 }

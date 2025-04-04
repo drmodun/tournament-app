@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { EmailModule } from './infrastructure/email/email.module';
 import { BlobModule } from './infrastructure/blob/blob.module';
-import { NotificationsModule } from './infrastructure/notifications/notifications.module';
+import { NotificationsModule } from './infrastructure/firebase-notifications/notifications.module';
 import { AuthModule } from './auth/auth.module';
 import { GroupModule } from './group/group.module';
 import { GroupMembershipModule } from './group-membership/group-membership.module';
@@ -27,6 +27,7 @@ import { RosterModule } from './roster/roster.module';
 import { CareerModule } from './career/career.module';
 import { ChallongeModule } from './challonge/challonge.module';
 import { MatchesModule } from './matches/matches.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { MatchesModule } from './matches/matches.module';
     CareerModule,
     ChallongeModule,
     MatchesModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

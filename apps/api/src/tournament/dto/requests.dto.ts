@@ -140,6 +140,11 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @IsInt()
   @ApiPropertyOptional()
   locationId?: number;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  logo?: string;
 }
 
 export class UpdateTournamentRequest implements IUpdateTournamentRequest {

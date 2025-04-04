@@ -784,11 +784,10 @@ export const matchup = pgTable('matchup', {
       onDelete: 'cascade',
     })
     .notNull(),
-  roundId: integer('round_id')
-    .references(() => stageRound.id, {
-      onDelete: 'cascade',
-    })
-    .notNull(),
+  roundId: integer('round_id').references(() => stageRound.id, {
+    onDelete: 'cascade',
+  }),
+  round: integer('round_number'),
   matchupType: matchupType('matchup_type').default('one_vs_one'),
   challongeMatchupId: text('challonge_matchup_id'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
@@ -832,7 +831,30 @@ export const rosterRelations = relations(roster, ({ many, one }) => ({
     fields: [roster.stageId],
     references: [stage.id],
   }),
+  matchup: many(rosterToMatchup, {
+    relationName: 'rosterToMatchup',
+  }),
+  scoreToRoster: many(scoreToRoster),
 }));
+
+export const matchupRelations = relations(matchup, ({ many }) => ({
+  rosterToMatchup: many(rosterToMatchup),
+  score: many(score),
+}));
+
+export const rosterToMatchupRelations = relations(
+  rosterToMatchup,
+  ({ one }) => ({
+    matchup: one(matchup, {
+      fields: [rosterToMatchup.matchupId],
+      references: [matchup.id],
+    }),
+    roster: one(roster, {
+      fields: [rosterToMatchup.rosterId],
+      references: [roster.id],
+    }),
+  }),
+);
 
 export const userToRosterRelations = relations(userToRoster, ({ one }) => ({
   roster: one(roster, {
@@ -886,9 +908,28 @@ export const scoreToRoster = pgTable('score_to_roster', {
 export const score = pgTable('score', {
   id: serial('id').primaryKey(),
   matchupId: integer('matchup_id'),
-  roundNumber: integer('round_number').default(1),
+  roundNumber: integer('round_number'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
+
+export const scoreRelations = relations(score, ({ one, many }) => ({
+  scoreToRoster: many(scoreToRoster),
+  matchup: one(matchup, {
+    fields: [score.matchupId],
+    references: [matchup.id],
+  }),
+}));
+
+export const scoreToRosterRelations = relations(scoreToRoster, ({ one }) => ({
+  score: one(score, {
+    fields: [scoreToRoster.scoreId],
+    references: [score.id],
+  }),
+  roster: one(roster, {
+    fields: [scoreToRoster.rosterId],
+    references: [roster.id],
+  }),
+}));
 
 export const stageRound = pgTable('stage_round', {
   id: serial('id').primaryKey(),
@@ -1010,15 +1051,26 @@ export const categoryRelations = relations(category, ({ many }) => ({
 
 export const notification = pgTable('notification', {
   id: serial('id').primaryKey(),
+  message: text('message').notNull(),
+  link: text('link'),
+  image: text('image'),
+  type: text('type').default('test-template'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const notificationToUser = pgTable('notification_to_user', {
+  notificationId: integer('notification_id')
+    .references(() => notification.id, {
+      onDelete: 'cascade',
+    })
+    .notNull(),
   userId: integer('user_id')
     .references(() => user.id, {
       onDelete: 'cascade',
     })
     .notNull(),
-  message: text('message').notNull(),
-  type: text('type').default('test-template'),
+  read: boolean('read').default(false), // TODO: consider if a read time is necessary
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  read: boolean('read').default(false),
 });
 
 export const reports = pgTable('reports', {

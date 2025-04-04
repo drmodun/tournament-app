@@ -2,12 +2,22 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { FollowerDrizzleRepository } from './followers.repository';
 import { FollowerQuery } from './dto/request.dto';
 import { FollowerResponse } from './dto/responses.dto';
-import { FollowerResponsesEnum } from '@tournament-app/types';
+import {
+  FollowerResponsesEnum,
+  notificationTypeEnum,
+} from '@tournament-app/types';
 import { PaginationOnly } from 'src/base/query/baseQuery';
+import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { TemplatesEnum } from 'src/infrastructure/types';
 
 @Injectable()
 export class FollowersService {
-  constructor(private readonly followerRepository: FollowerDrizzleRepository) {}
+  constructor(
+    private readonly followerRepository: FollowerDrizzleRepository,
+    private readonly notificationService: SseNotificationsService,
+    private readonly notificationTemplatesFiller: NotificationTemplatesFiller,
+  ) {}
 
   async create(userId: number, followerId: number) {
     if (userId === followerId) {
@@ -18,6 +28,8 @@ export class FollowersService {
       userId,
       followerId,
     });
+
+    await this.saveAndEmitNotificationsForNewFollower(userId, followerId);
   }
 
   async findAll<TResponseType extends FollowerResponse = FollowerResponse>(
@@ -84,5 +96,37 @@ export class FollowersService {
       pageSize,
       page,
     });
+  }
+
+  async createNotificationBodyForNewFollower(
+    userId: number,
+    followerId: number,
+  ) {
+    const follower = await this.findOne(userId, followerId);
+    const notification = {
+      type: notificationTypeEnum.NEW_FOLLOWER,
+      message: this.notificationTemplatesFiller.fill(
+        TemplatesEnum.NEW_FOLLOWER,
+        {
+          follower: follower.username,
+        },
+      ),
+      link: `/user/${followerId}`,
+      image: follower.profilePicture,
+    };
+
+    return notification;
+  }
+
+  async saveAndEmitNotificationsForNewFollower(
+    userId: number,
+    followerId: number,
+  ) {
+    const notification = await this.createNotificationBodyForNewFollower(
+      userId,
+      followerId,
+    );
+
+    await this.notificationService.createWithUsers(notification, [userId]);
   }
 }

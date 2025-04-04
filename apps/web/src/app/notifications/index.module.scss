@@ -1,0 +1,92 @@
+@import "styles/variables.scss";
+
+.screen {
+  padding-top: $doublePadding * 4;
+  padding-bottom: $doublePadding * 2;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-left: $horizontalMargin;
+  padding-right: $horizontalMargin;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+  }
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
+  }
+
+  @media screen and (max-height: $tabletBreakpoint) {
+    padding-left: $doublePadding;
+    padding-right: $doublePadding;
+    height: 100%;
+  }
+
+  padding-bottom: $doublePadding * 2;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+}
+
+.navbar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: $phoneBreakpoint) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+}
+
+.notificationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+  font-size: 1.1rem;
+  color: $secondary;
+  text-align: center;
+  border: 1px dashed $lightMuted;
+  border-radius: 8px;
+  padding: 2rem;
+}

@@ -4,6 +4,7 @@ import { StageDrizzleRepository } from '../stage.repository';
 import {
   NotFoundException,
   UnprocessableEntityException,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateStageRequest } from '../dto/requests.dto';
 import {
@@ -11,13 +12,22 @@ import {
   StageSortingEnum,
   stageTypeEnum,
   IChallongeTournament,
+  stageStatusEnum,
+  notificationTypeEnum,
 } from '@tournament-app/types';
 import { StagesWithDates } from '../types';
 import { ChallongeService } from 'src/challonge/challonge.service';
+import { RosterDrizzleRepository } from '../../roster/roster.repository';
+import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { TemplatesEnum } from '../../infrastructure/types';
 
 describe('StageService', () => {
   let service: StageService;
   let repository: jest.Mocked<StageDrizzleRepository>;
+  let mockRosterRepository: jest.Mocked<RosterDrizzleRepository>;
+  let mockSseNotificationsService: jest.Mocked<SseNotificationsService>;
+  let mockNotificationTemplateFiller: jest.Mocked<NotificationTemplatesFiller>;
 
   const mockStage = {
     id: 1,
@@ -48,6 +58,20 @@ describe('StageService', () => {
       deleteTournament: jest.fn(),
     };
 
+    mockRosterRepository = {
+      getRostersForChallongeParticipants: jest.fn(),
+      getUsersInStageRosters: jest.fn(),
+      attachChallongeParticipantIdToRosters: jest.fn(),
+    } as unknown as jest.Mocked<RosterDrizzleRepository>;
+
+    mockSseNotificationsService = {
+      createWithUsers: jest.fn(),
+    } as unknown as jest.Mocked<SseNotificationsService>;
+
+    mockNotificationTemplateFiller = {
+      fill: jest.fn(),
+    } as unknown as jest.Mocked<NotificationTemplatesFiller>;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         StageService,
@@ -58,6 +82,18 @@ describe('StageService', () => {
         {
           provide: ChallongeService,
           useValue: mockChallongeService,
+        },
+        {
+          provide: RosterDrizzleRepository,
+          useValue: mockRosterRepository,
+        },
+        {
+          provide: SseNotificationsService,
+          useValue: mockSseNotificationsService,
+        },
+        {
+          provide: NotificationTemplatesFiller,
+          useValue: mockNotificationTemplateFiller,
         },
       ],
     }).compile();
@@ -280,6 +316,320 @@ describe('StageService', () => {
       expect(
         repository.getAllTournamentStagesSortedByStartDate,
       ).toHaveBeenCalledWith(tournamentId);
+    });
+  });
+
+  describe('getManagedStages', () => {
+    const userId = 1;
+    const pagination = { page: 1, pageSize: 10 };
+    const mockManagedStages = [mockStage];
+
+    beforeEach(() => {
+      repository.getManagedStages = jest.fn();
+    });
+
+    it('should return stages managed by the user', async () => {
+      repository.getManagedStages.mockResolvedValue(mockManagedStages);
+
+      const result = await service.getManagedStages(userId, pagination);
+
+      expect(result).toEqual(mockManagedStages);
+      expect(repository.getManagedStages).toHaveBeenCalledWith(
+        userId,
+        pagination,
+      );
+    });
+
+    it('should return empty array when no stages are managed by the user', async () => {
+      repository.getManagedStages.mockResolvedValue([]);
+
+      const result = await service.getManagedStages(userId, pagination);
+
+      expect(result).toEqual([]);
+      expect(repository.getManagedStages).toHaveBeenCalledWith(
+        userId,
+        pagination,
+      );
+    });
+
+    it('should work without pagination parameter', async () => {
+      repository.getManagedStages.mockResolvedValue(mockManagedStages);
+
+      const result = await service.getManagedStages(userId);
+
+      expect(result).toEqual(mockManagedStages);
+      expect(repository.getManagedStages).toHaveBeenCalledWith(
+        userId,
+        undefined,
+      );
+    });
+  });
+
+  describe('startStage', () => {
+    const stageId = 1;
+    const mockRosters = [
+      {
+        id: 1,
+        participationId: 1,
+        name: 'Team Alpha',
+      },
+      {
+        id: 2,
+        participationId: 1,
+        name: 'Team Beta',
+      },
+    ];
+
+    const mockStageWithChallonge = {
+      ...mockStage,
+      challongeTournamentId: 'challonge-123',
+      stageStatus: stageStatusEnum.UPCOMING,
+    };
+
+    const mockBulkParticipantsRequest = {
+      data: {
+        type: 'Participants',
+        attributes: {
+          participants: mockRosters.map((roster) => ({
+            name: roster.name,
+            misc: JSON.stringify({
+              rosterId: roster.id,
+              participationId: roster.participationId,
+            }),
+          })),
+        },
+      },
+    };
+
+    const mockChallongeParticipants = [
+      { id: 'challonge-p1', attributes: { misc: '1' } },
+      { id: 'challonge-p2', attributes: { misc: '2' } },
+    ];
+
+    beforeEach(() => {
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockStageWithChallonge);
+      jest.spyOn(service, 'update').mockResolvedValue({
+        ...mockStageWithChallonge,
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+
+      mockRosterRepository.getRostersForChallongeParticipants = jest
+        .fn()
+        .mockResolvedValue(mockRosters);
+      mockRosterRepository.attachChallongeParticipantIdToRosters = jest
+        .fn()
+        .mockResolvedValue(undefined);
+
+      // Mock ChallongeService
+      const mockChallongeService = {
+        createBulkParticipants: jest
+          .fn()
+          .mockResolvedValue(mockChallongeParticipants),
+        updateTournamentState: jest.fn().mockResolvedValue({}),
+      };
+
+      // Replace the service's dependencies with our mocks
+      Object.defineProperty(service, 'challongeService', {
+        value: mockChallongeService,
+      });
+
+      // Mock the sendStageStartNotifications method
+      service.sendStageStartNotifications = jest
+        .fn()
+        .mockResolvedValue(undefined);
+    });
+
+    it('should successfully start a stage', async () => {
+      const result = await service.startStage(stageId);
+
+      expect(service.findOne).toHaveBeenCalledWith(
+        stageId,
+        StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+      );
+
+      expect(
+        mockRosterRepository.getRostersForChallongeParticipants,
+      ).toHaveBeenCalledWith(stageId);
+
+      expect(
+        service['challongeService'].createBulkParticipants,
+      ).toHaveBeenCalled();
+
+      // Verify the transaction-based update is called with correct parameters
+      expect(
+        mockRosterRepository.attachChallongeParticipantIdToRosters,
+      ).toHaveBeenCalledWith([
+        {
+          rosterId: 1,
+          challongeParticipantId: 'challonge-p1',
+        },
+        {
+          rosterId: 2,
+          challongeParticipantId: 'challonge-p2',
+        },
+      ]);
+
+      expect(service.update).toHaveBeenCalledWith(stageId, {
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+
+      expect(
+        service['challongeService'].updateTournamentState,
+      ).toHaveBeenCalledWith(
+        mockStageWithChallonge.challongeTournamentId,
+        stageStatusEnum.ONGOING,
+      );
+
+      expect(service.sendStageStartNotifications).toHaveBeenCalledWith(
+        stageId,
+        mockStageWithChallonge.name,
+      );
+
+      expect(result.stageStatus).toEqual(stageStatusEnum.ONGOING);
+    });
+
+    it('should throw BadRequestException if stage is already ongoing', async () => {
+      jest.spyOn(service, 'findOne').mockResolvedValueOnce({
+        ...mockStageWithChallonge,
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+
+      await expect(service.startStage(stageId)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw BadRequestException if no challonge tournament ID', async () => {
+      jest.spyOn(service, 'findOne').mockResolvedValueOnce({
+        ...mockStageWithChallonge,
+        challongeTournamentId: null,
+      });
+
+      await expect(service.startStage(stageId)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw BadRequestException if no rosters found', async () => {
+      mockRosterRepository.getRostersForChallongeParticipants.mockResolvedValueOnce(
+        [],
+      );
+
+      await expect(service.startStage(stageId)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should handle transaction failure gracefully', async () => {
+      // Mock the transaction to fail
+      mockRosterRepository.attachChallongeParticipantIdToRosters.mockRejectedValueOnce(
+        new Error('Transaction failed'),
+      );
+
+      await expect(service.startStage(stageId)).rejects.toThrow(Error);
+
+      // Verify service dependencies were called correctly before the error
+      expect(
+        mockRosterRepository.getRostersForChallongeParticipants,
+      ).toHaveBeenCalledWith(stageId);
+      expect(
+        service['challongeService'].createBulkParticipants,
+      ).toHaveBeenCalled();
+
+      // Verify that the stage update was not called due to the transaction error
+      expect(service.update).not.toHaveBeenCalled();
+      expect(
+        service['challongeService'].updateTournamentState,
+      ).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sendStageStartNotifications', () => {
+    it('should send notifications to all users in stage rosters', async () => {
+      // Arrange
+      const stageId = 123;
+      const stageName = 'Test Tournament Stage';
+
+      const mockUsers = [
+        { id: 1, username: 'user1' },
+        { id: 2, username: 'user2' },
+        { id: 3, username: 'user3' },
+      ];
+
+      const mockMessage =
+        'Heads up, your tournament Test Tournament Stage has started';
+
+      mockRosterRepository.getUsersInStageRosters.mockResolvedValue(mockUsers);
+      mockNotificationTemplateFiller.fill.mockReturnValue(mockMessage);
+      mockSseNotificationsService.createWithUsers.mockResolvedValue(undefined);
+
+      // Act
+      await service.sendStageStartNotifications(stageId, stageName);
+
+      // Assert
+      expect(mockRosterRepository.getUsersInStageRosters).toHaveBeenCalledWith(
+        stageId,
+      );
+
+      expect(mockNotificationTemplateFiller.fill).toHaveBeenCalledWith(
+        TemplatesEnum.TOURNAMENT_START,
+        { tournament: stageName },
+      );
+
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalledWith(
+        {
+          type: notificationTypeEnum.TOURNAMENT_START,
+          message: mockMessage,
+          link: `/tournaments/stages/${stageId}`,
+          image: null,
+        },
+        [1, 2, 3],
+      );
+    });
+
+    it('should not send notifications when no users are found', async () => {
+      // Arrange
+      const stageId = 123;
+      const stageName = 'Test Tournament Stage';
+
+      mockRosterRepository.getUsersInStageRosters.mockResolvedValue([]);
+
+      // Act
+      await service.sendStageStartNotifications(stageId, stageName);
+
+      // Assert
+      expect(mockRosterRepository.getUsersInStageRosters).toHaveBeenCalledWith(
+        stageId,
+      );
+      expect(mockNotificationTemplateFiller.fill).not.toHaveBeenCalled();
+      expect(
+        mockSseNotificationsService.createWithUsers,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should handle errors gracefully', async () => {
+      // Arrange
+      const stageId = 123;
+      const stageName = 'Test Tournament Stage';
+
+      mockRosterRepository.getUsersInStageRosters.mockRejectedValue(
+        new Error('Database error'),
+      );
+
+      // Spy on console.error
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      // Act
+      await service.sendStageStartNotifications(stageId, stageName);
+
+      // Assert
+      expect(mockRosterRepository.getUsersInStageRosters).toHaveBeenCalledWith(
+        stageId,
+      );
+      expect(console.error).toHaveBeenCalled();
+      expect(
+        mockSseNotificationsService.createWithUsers,
+      ).not.toHaveBeenCalled();
     });
   });
 });

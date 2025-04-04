@@ -3,6 +3,8 @@ import {
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import {
   GroupMembershipResponsesEnum,
@@ -28,6 +30,7 @@ import { GroupMembershipService } from '../group-membership/group-membership.ser
 export class GroupService {
   constructor(
     private readonly repository: GroupDrizzleRepository,
+    @Inject(forwardRef(() => GroupMembershipService))
     private readonly groupMembershipService: GroupMembershipService,
   ) {}
 

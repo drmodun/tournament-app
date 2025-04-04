@@ -16,12 +16,12 @@ export default function RootLayout({
         <meta name="description" content="Tournament App" />
       </head>
       <body>
-        <ClientProviders>
-          <QueryProvider>
+        <QueryProvider>
+          <ClientProviders>
             {children}
             <Drawer />
-          </QueryProvider>
-        </ClientProviders>
+          </ClientProviders>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -85,6 +85,16 @@ export class TournamentController {
     };
   }
 
+  @Get('managed')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getManagedTournaments(
+    @CurrentUser() user: ValidatedUserDto,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.tournamentService.getManagedTournaments(user.id, query);
+  }
+
   @Get(':tournamentId')
   @ApiOkResponse({
     description: 'Returns a single tournament',

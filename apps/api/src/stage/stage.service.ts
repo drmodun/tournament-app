@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ICreateStageDto,
@@ -11,17 +12,31 @@ import {
   IStageResponse,
   StageSortingEnum,
   stageToUpdateTournamentRequest,
+  stageStatusEnum,
+  rosterToBulkCreateParticipantRequest,
+  IBulkCreateChallongeParticipantRequest,
+  notificationTypeEnum,
 } from '@tournament-app/types';
 import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
 import { IStageWithChallongeTournament, StagesWithDates } from './types';
 import { ChallongeService } from 'src/challonge/challonge.service';
+import { PaginationOnly } from 'src/base/query/baseQuery';
+import { RosterDrizzleRepository } from 'src/roster/roster.repository';
+import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { TemplatesEnum } from 'src/infrastructure/types';
+import { MatchesService } from 'src/matches/matches.service';
 
 @Injectable()
 export class StageService {
   constructor(
     private readonly repository: StageDrizzleRepository,
     private readonly challongeService: ChallongeService,
+    private readonly rosterRepository: RosterDrizzleRepository,
+    private readonly sseNotificationsService: SseNotificationsService,
+    private readonly notificationTemplateFiller: NotificationTemplatesFiller,
+    private readonly matchesService: MatchesService,
   ) {}
 
   async create(createStageDto: ICreateStageDto) {
@@ -79,9 +94,14 @@ export class StageService {
         challongeTournamentId: data.id,
       });
       return data;
-    } catch {
-      console.error('Challonge issue');
+    } catch (error) {
+      console.error('Challonge issue', error);
     }
+  }
+
+  async getManagedStages(userId: number, pagination?: PaginationOnly) {
+    const stages = await this.repository.getManagedStages(userId, pagination);
+    return stages;
   }
 
   async updateChallongeTournament(stageId: number) {
@@ -181,5 +201,126 @@ export class StageService {
       );
 
     return stages;
+  }
+
+  async sendStageStartNotifications(stageId: number, stageName: string) {
+    try {
+      const rosteredUsers =
+        await this.rosterRepository.getUsersInStageRosters(stageId);
+
+      if (!rosteredUsers || rosteredUsers.length === 0) {
+        console.log(`No users found in rosters for stage ${stageId}`);
+        return;
+      }
+
+      const message = this.notificationTemplateFiller.fill(
+        TemplatesEnum.TOURNAMENT_START,
+        {
+          tournament: stageName,
+        },
+      );
+
+      await this.sseNotificationsService.createWithUsers(
+        {
+          type: notificationTypeEnum.TOURNAMENT_START,
+          message,
+          link: `/tournaments/stages/${stageId}`,
+          image: null,
+        },
+        rosteredUsers.map((user) => user.id),
+      );
+
+      console.log(
+        `Sent stage start notifications to ${rosteredUsers.length} users for stage ${stageId}`,
+      );
+    } catch (error) {
+      console.error(
+        `Failed to send stage start notifications: ${error.message}`,
+      );
+    }
+  }
+
+  async startStage(stageId: number) {
+    const stage: IStageWithChallongeTournament = await this.findOne(
+      stageId,
+      StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+    );
+
+    if (
+      stage.stageStatus === stageStatusEnum.ONGOING ||
+      stage.stageStatus === stageStatusEnum.FINISHED
+    ) {
+      throw new BadRequestException(
+        `Stage with ID ${stageId} is already ${stage.stageStatus}`,
+      );
+    }
+
+    if (!stage.challongeTournamentId) {
+      throw new BadRequestException(
+        `Stage with ID ${stageId} does not have an associated Challonge tournament`,
+      );
+    }
+
+    const rosters =
+      await this.rosterRepository.getRostersForChallongeParticipants(stageId);
+
+    if (rosters.length === 0) {
+      throw new BadRequestException(
+        `No rosters found for stage with ID ${stageId}`,
+      );
+    }
+
+    const bulkParticipantsRequest: IBulkCreateChallongeParticipantRequest =
+      rosterToBulkCreateParticipantRequest(rosters);
+
+    const rostersWithChallongeParticipants =
+      await this.challongeService.createBulkParticipants(
+        stage.challongeTournamentId,
+        bulkParticipantsRequest,
+      );
+
+    console.log(rostersWithChallongeParticipants);
+
+    await this.rosterRepository.attachChallongeParticipantIdToRosters(
+      rostersWithChallongeParticipants.map((roster) => ({
+        rosterId: rosters.find((r) => r.id === +roster.attributes?.misc)?.id,
+        challongeParticipantId: roster.id,
+      })),
+    );
+
+    const updatedStage = await this.update(stageId, {
+      stageStatus: stageStatusEnum.ONGOING,
+    });
+
+    await this.challongeService.updateTournamentState(
+      stage.challongeTournamentId,
+      stageStatusEnum.ONGOING,
+    );
+
+    await this.sendStageStartNotifications(stageId, stage.name);
+
+    await this.importInitialChallongeMatches(
+      stageId,
+      stage.challongeTournamentId,
+    );
+
+    return updatedStage;
+  }
+
+  async getMatchesFromChallonge(challongeTournamentId: string) {
+    const matches = await this.challongeService.getTournamentMatches(
+      challongeTournamentId,
+    );
+
+    return matches;
+  }
+
+  async importInitialChallongeMatches(
+    stageId: number,
+    challongeTournamentId: string,
+  ) {
+    const matches = await this.getMatchesFromChallonge(challongeTournamentId);
+
+    await this.matchesService.importChallongeMatchesToStage(stageId, matches);
   }
 }

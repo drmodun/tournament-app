@@ -14,9 +14,15 @@ import {
   MinimalMembershipResponse,
 } from '../dto/responses.dto';
 import { NotFoundException } from '@nestjs/common';
+import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
+import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { GroupService } from '../../group/group.service';
 
 describe('GroupMembershipService', () => {
   let service: GroupMembershipService;
+  let sseNotificationsService: SseNotificationsService;
+  let templatesFiller: NotificationTemplatesFiller;
+  let groupService: GroupService;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -24,6 +30,18 @@ describe('GroupMembershipService', () => {
     getSingleQuery: jest.fn(),
     updateEntity: jest.fn(),
     deleteEntity: jest.fn(),
+  };
+
+  const mockSseNotificationsService = {
+    createWithUsers: jest.fn(),
+  };
+
+  const mockTemplatesFiller = {
+    fill: jest.fn(),
+  };
+
+  const mockGroupService = {
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -34,10 +52,30 @@ describe('GroupMembershipService', () => {
           provide: GroupMembershipDrizzleRepository,
           useValue: mockRepository,
         },
+        {
+          provide: SseNotificationsService,
+          useValue: mockSseNotificationsService,
+        },
+        {
+          provide: NotificationTemplatesFiller,
+          useValue: mockTemplatesFiller,
+        },
+        {
+          provide: GroupService,
+          useValue: mockGroupService,
+        },
       ],
     }).compile();
 
     service = module.get<GroupMembershipService>(GroupMembershipService);
+    sseNotificationsService = module.get<SseNotificationsService>(
+      SseNotificationsService,
+    );
+    templatesFiller = module.get<NotificationTemplatesFiller>(
+      NotificationTemplatesFiller,
+    );
+    groupService = module.get<GroupService>(GroupService);
+
     jest.clearAllMocks();
   });
 
@@ -154,6 +192,9 @@ describe('GroupMembershipService', () => {
 
     it('should update a group membership', async () => {
       mockRepository.updateEntity.mockResolvedValue(undefined);
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { role: groupRoleEnum.MEMBER },
+      ]);
 
       await service.update(1, 1, updateDto);
 
@@ -162,11 +203,66 @@ describe('GroupMembershipService', () => {
         updateDto,
       );
     });
+
+    it('should update and send admin promotion notification', async () => {
+      mockRepository.updateEntity.mockResolvedValue(undefined);
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { role: groupRoleEnum.MEMBER },
+      ]);
+
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'You have been promoted to admin in Test Group',
+      );
+
+      await service.update(1, 1, { role: groupRoleEnum.ADMIN });
+
+      expect(mockRepository.updateEntity).toHaveBeenCalledWith(
+        { groupId: 1, userId: 1 },
+        { role: groupRoleEnum.ADMIN },
+      );
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
+    });
+
+    it('should update and send admin demotion notification', async () => {
+      mockRepository.updateEntity.mockResolvedValue(undefined);
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { role: groupRoleEnum.ADMIN },
+      ]);
+
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'You have been demoted from admin in Test Group',
+      );
+
+      await service.update(1, 1, { role: groupRoleEnum.MEMBER });
+
+      expect(mockRepository.updateEntity).toHaveBeenCalledWith(
+        { groupId: 1, userId: 1 },
+        { role: groupRoleEnum.MEMBER },
+      );
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
+    });
   });
 
   describe('remove', () => {
-    it('should remove a group membership', async () => {
+    it('should remove a group membership and send notification', async () => {
       mockRepository.deleteEntity.mockResolvedValue(undefined);
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { role: groupRoleEnum.MEMBER },
+      ]);
+
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'You have been removed from Test Group',
+      );
 
       await service.remove(1, 1);
 
@@ -174,6 +270,41 @@ describe('GroupMembershipService', () => {
         groupId: 1,
         userId: 1,
       });
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
+    });
+  });
+
+  describe('sendNotificationAboutPromotion', () => {
+    it('should send notification about admin promotion', async () => {
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'You have been promoted to admin in Test Group',
+      );
+
+      await service.sendNotificationAboutPromotion(1, 1);
+
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
+    });
+  });
+
+  describe('sendNotificationAboutDemotion', () => {
+    it('should send notification about admin demotion', async () => {
+      const groupData = { name: 'Test Group', id: 1 };
+      mockGroupService.findOne.mockResolvedValue(groupData);
+      mockTemplatesFiller.fill.mockReturnValue(
+        'You have been demoted from admin in Test Group',
+      );
+
+      await service.sendNotificationAboutDemotion(1, 1);
+
+      expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
+      expect(mockTemplatesFiller.fill).toHaveBeenCalled();
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalled();
     });
   });
 

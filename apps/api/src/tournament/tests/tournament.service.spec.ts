@@ -179,4 +179,54 @@ describe('TournamentService', () => {
       await expect(service.remove(1)).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('getManagedTournaments', () => {
+    const userId = 1;
+    const pagination = { page: 1, pageSize: 10 };
+    const mockManagedTournaments = [mockTournament];
+
+    beforeEach(() => {
+      repository.getManagedTournaments = jest.fn();
+    });
+
+    it('should return tournaments managed by the user', async () => {
+      repository.getManagedTournaments.mockResolvedValue(
+        mockManagedTournaments,
+      );
+
+      const result = await service.getManagedTournaments(userId, pagination);
+
+      expect(result).toEqual(mockManagedTournaments);
+      expect(repository.getManagedTournaments).toHaveBeenCalledWith(
+        userId,
+        pagination,
+      );
+    });
+
+    it('should return empty array when no tournaments are managed by the user', async () => {
+      repository.getManagedTournaments.mockResolvedValue([]);
+
+      const result = await service.getManagedTournaments(userId, pagination);
+
+      expect(result).toEqual([]);
+      expect(repository.getManagedTournaments).toHaveBeenCalledWith(
+        userId,
+        pagination,
+      );
+    });
+
+    it('should work without pagination parameter', async () => {
+      repository.getManagedTournaments.mockResolvedValue(
+        mockManagedTournaments,
+      );
+
+      const result = await service.getManagedTournaments(userId);
+
+      expect(result).toEqual(mockManagedTournaments);
+      expect(repository.getManagedTournaments).toHaveBeenCalledWith(
+        userId,
+        undefined,
+      );
+    });
+  });
 });

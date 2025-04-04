@@ -1,19 +1,21 @@
-import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { AxiosResponse } from './types';
+import { Injectable, Logger } from '@nestjs/common';
+import { AxiosResponse } from 'axios';
 import {
-  IChallongeMatch,
-  IChallongeParticipant,
   IChallongeTournament,
-  ICreateChallongeParticipantRequest,
+  IChallongeParticipant,
+  IChallongeMatch,
   ICreateChallongeTournamentRequest,
-  IMatchScoreRequest,
-  IStageResponse,
-  IUpdateChallongeTournamentRequest,
+  ICreateChallongeParticipantRequest,
   IUpdateParticipantRequest,
-  rosterToCreateParticipantRequest,
+  IMatchScoreRequest,
   stageToCreateTournamentRequest,
-  IMiniRosterResponse,
+  IBulkCreateChallongeParticipantRequest,
+  IUpdateChallongeTournamentRequest,
+  ITournamentStateRequest,
+  stageStatusToTournamentStateRequest,
+  stageStatusEnum,
+  IStageResponse,
 } from '@tournament-app/types';
 import { ReactBracketsResponseDto } from '../matches/dto/responses';
 
@@ -30,33 +32,45 @@ export class ChallongeService {
 
   async getChallongeToken() {
     try {
+      const params = new URLSearchParams();
+      params.append('grant_type', 'client_credentials');
+      params.append('client_id', process.env.CHALLONGE_CLIENT_ID || '');
+      params.append('client_secret', process.env.CHALLONGE_CLIENT_SECRET || '');
+
       const response: AxiosResponse<{ access_token: string }> =
         await this.httpService.axiosRef.post(
           'https://api.challonge.com/oauth/token',
+          params,
           {
-            grant_type: 'client_credentials',
-            client_id: process.env.CHALLONGE_CLIENT_ID || '',
-            client_secret: process.env.CHALLONGE_CLIENT_SECRET || '',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           },
         );
 
       this.token = response.data.access_token;
+      this.logger.log('Successfully retrieved Challonge token');
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error('Failed to get Challonge token:', error);
     }
   }
 
   async createTournamentFunction(
     createTournamentDto: ICreateChallongeTournamentRequest,
   ) {
-    const response: AxiosResponse<IChallongeTournament> =
-      await this.httpService.axiosRef.post(
-        'https://api.challonge.com/v2/tournaments.json',
-        createTournamentDto,
-        this.injectHeaders(),
-      );
+    try {
+      const response: AxiosResponse<{ data: IChallongeTournament }> =
+        await this.httpService.axiosRef.post(
+          'https://api.challonge.com/v2/application/tournaments.json',
+          createTournamentDto,
+          this.injectHeaders(),
+        );
 
-    return response.data;
+      return response.data.data;
+    } catch (error) {
+      this.logger.error('Failed to create tournament:', error);
+      throw error;
+    }
   }
 
   async executeFunctionWithRetry(fn: () => Promise<any>) {
@@ -87,7 +101,7 @@ export class ChallongeService {
   ) {
     const response: AxiosResponse<IChallongeTournament> =
       await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/tournaments/${id}.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}.json`,
         updateTournamentDto,
         this.injectHeaders(),
       );
@@ -105,10 +119,12 @@ export class ChallongeService {
   }
 
   injectHeaders() {
+    console.log(this.token);
     return {
       headers: {
-        'Content-Type': 'application/json',
-        AuthorizationType: 'v2',
+        'Authorization-Type': 'v2',
+        'Content-Type': 'application/vnd.api+json',
+        Accept: 'application/json',
         Authorization: `Bearer ${this.token}`,
       },
     };
@@ -116,14 +132,14 @@ export class ChallongeService {
   async createParticipantFunction(
     createParticipantDto: ICreateChallongeParticipantRequest,
   ) {
-    const response: AxiosResponse<IChallongeParticipant> =
+    const response: AxiosResponse<{ data: IChallongeParticipant }> =
       await this.httpService.axiosRef.post(
-        'https://api.challonge.com/v2/participants.json',
+        'https://api.challonge.com/v2/application/participants.json',
         createParticipantDto,
         this.injectHeaders(),
       );
 
-    return response.data;
+    return response.data.data;
   }
 
   async createParticipant(
@@ -140,7 +156,7 @@ export class ChallongeService {
   ): Promise<IChallongeParticipant> {
     const response: AxiosResponse<IChallongeParticipant> =
       await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/participants/${id}.json`,
+        `https://api.challonge.com/v2/application/participants/${id}.json`,
         updateParticipantDto,
         this.injectHeaders(),
       );
@@ -158,31 +174,33 @@ export class ChallongeService {
   }
 
   async updateMatchupFunction(
-    id: number,
+    id: string,
+    tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
-    const response: AxiosResponse<IChallongeMatch> =
+    const response: AxiosResponse<{ data: IChallongeMatch }> =
       await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/matchups/${id}.json`,
+        `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches/${id}.json`,
         updateMatchupDto,
         this.injectHeaders(),
       );
 
-    return response.data;
+    return response.data.data;
   }
 
   async updateMatchup(
-    id: number,
+    id: string,
+    tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
     return this.executeFunctionWithRetry(() =>
-      this.updateMatchupFunction(id, updateMatchupDto),
+      this.updateMatchupFunction(id, tournamentId, updateMatchupDto),
     );
   }
 
   async deleteTournamentFunction(id: string) {
     await this.httpService.axiosRef.delete(
-      `https://api.challonge.com/v2/tournaments/${id}.json`,
+      `https://api.challonge.com/v2/application/tournaments/${id}.json`,
       this.injectHeaders(),
     );
   }
@@ -201,33 +219,50 @@ export class ChallongeService {
 
   async deleteParticipantFunction(id: string) {
     await this.httpService.axiosRef.delete(
-      `https://api.challonge.com/v2/participants/${id}.json`,
+      `https://api.challonge.com/v2/application/participants/${id}.json`,
       this.injectHeaders(),
     );
   }
 
   async createChallongeTournamentFromStage(stage: IStageResponse) {
-    const challongeTournament = stageToCreateTournamentRequest({
-      id: stage.id,
-      name: stage.name,
-      description: stage.description,
-      stageType: stage.stageType,
-      startDate: stage.startDate,
-    });
-    return await this.createTournament(challongeTournament);
+    return await this.createTournament(stageToCreateTournamentRequest(stage));
   }
 
-  async createChallongeParticipantFromRoster(roster: IMiniRosterResponse) {
-    const challongeParticipant = rosterToCreateParticipantRequest({
-      id: roster.id,
-    });
-    return this.createParticipant(challongeParticipant);
+  async createBulkParticipants(
+    tournamentId: string,
+    participants: IBulkCreateChallongeParticipantRequest,
+  ) {
+    return this.executeFunctionWithRetry(() =>
+      this.createBulkParticipantsFunction(tournamentId, participants),
+    );
+  }
+
+  async createBulkParticipantsFunction(
+    tournamentId: string,
+    participants: IBulkCreateChallongeParticipantRequest,
+  ): Promise<IChallongeParticipant[]> {
+    try {
+      const response: AxiosResponse<{ data: IChallongeParticipant[] }> =
+        await this.httpService.axiosRef.post(
+          `https://api.challonge.com/v2/application/tournaments/${tournamentId}/participants/bulk_add.json`,
+          participants,
+          this.injectHeaders(),
+        );
+      return response.data.data;
+    } catch (error) {
+      this.logger.error(
+        'Failed to create bulk participants:',
+        error.toString(),
+        participants,
+      );
+      throw error;
+    }
   }
 
   async getTournamentFunction(id: string): Promise<IChallongeTournament> {
     const response: AxiosResponse<IChallongeTournament> =
       await this.httpService.axiosRef.get(
-        `https://api.challonge.com/v2/tournaments/${id}.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}.json`,
         this.injectHeaders(),
       );
     return response.data;
@@ -242,7 +277,7 @@ export class ChallongeService {
   ): Promise<IChallongeParticipant[]> {
     const response: AxiosResponse<IChallongeParticipant[]> =
       await this.httpService.axiosRef.get(
-        `https://api.challonge.com/v2/tournaments/${id}/participants.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}/participants.json`,
         this.injectHeaders(),
       );
     return response.data;
@@ -257,12 +292,14 @@ export class ChallongeService {
   }
 
   async getTournamentMatchesFunction(id: string): Promise<IChallongeMatch[]> {
-    const response: AxiosResponse<IChallongeMatch[]> =
+    const response: AxiosResponse<{ data: IChallongeMatch[] }> =
       await this.httpService.axiosRef.get(
-        `https://api.challonge.com/v2/tournaments/${id}/matches.json`,
+        `https://api.challonge.com/v2/application/tournaments/${id}/matches.json`,
         this.injectHeaders(),
       );
-    return response.data;
+
+    console.log(response.data);
+    return response.data?.data;
   }
 
   async getTournamentMatches(id: string): Promise<IChallongeMatch[]> {
@@ -319,24 +356,41 @@ export class ChallongeService {
             teams: [
               {
                 id: participantToRosterMap.get(
-                  match.attributes.relationships.player1.data.id,
+                  match.relationships.player1.data.id,
                 ),
-                name: `Roster-${participantToRosterMap.get(match.attributes.relationships.player1.data.id)}`,
+                name: `Roster-${participantToRosterMap.get(match.relationships.player1.data.id)}`,
               },
               {
                 id: participantToRosterMap.get(
-                  match.attributes.relationships.player2.data.id,
+                  match.relationships.player2.data.id,
                 ),
-                name: `Roster-${participantToRosterMap.get(match.attributes.relationships.player2.data.id)}`,
+                name: `Roster-${participantToRosterMap.get(match.relationships.player2.data.id)}`,
               },
             ],
-            winner: match.attributes.winner_id
-              ? participantToRosterMap.get(
-                  match.attributes.winner_id.toString(),
-                )
+            winner: match.winnerId
+              ? participantToRosterMap.get(match.winnerId.toString())
               : undefined,
           })),
         })),
     };
+  }
+
+  async updateTournamentStateFunction(
+    id: string,
+    stateRequest: ITournamentStateRequest,
+  ) {
+    const response: AxiosResponse<any> = await this.httpService.axiosRef.put(
+      `https://api.challonge.com/v2/application/tournaments/${id}/change_state.json`,
+      stateRequest,
+      this.injectHeaders(),
+    );
+    return response.data;
+  }
+
+  async updateTournamentState(id: string, stageStatus: stageStatusEnum) {
+    const stateRequest = stageStatusToTournamentStateRequest(stageStatus);
+    return this.executeFunctionWithRetry(() =>
+      this.updateTournamentStateFunction(id, stateRequest),
+    );
   }
 }

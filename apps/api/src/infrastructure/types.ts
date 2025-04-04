@@ -1,3 +1,5 @@
+import { notificationTypeEnumType } from '@tournament-app/types';
+
 export interface EmailGenerationData {
   to: string;
   subject: string;
@@ -22,6 +24,7 @@ export enum TemplatesEnum {
   GROUP_ADMIN_PROMOTION = 'group-admin-promotion',
   GROUP_ADMIN_DEMOTION = 'group-admin-demotion',
   TEST_TEMPLATE = 'test-template',
+  NEW_FOLLOWER = 'new-follower',
 }
 
 class WelcomeInfo {
@@ -41,65 +44,59 @@ export class VerifyEmailInfo {
 }
 
 class NotificationOfBanInfo {
-  username: string;
   reason: string;
 }
 
 class BetOutcomeInfo {
-  username: string;
   bet: string;
   outcome: string;
 }
 
 class TournamentReminderInfo {
-  username: string;
   tournament: string;
 }
 
 class TournamentStartInfo {
-  username: string;
   tournament: string;
 }
 
 class TournamentEndInfo {
-  username: string;
   tournament: string;
 }
 
 class GroupInvitationInfo {
-  username: string;
   group: string;
 }
 
 class GroupJoinRequestInfo {
-  username: string;
   group: string;
 }
 
 class GroupJoinApprovalInfo {
-  username: string;
   group: string;
 }
 
 class GroupJoinRejectionInfo {
-  username: string;
   group: string;
 }
 
 class GroupRemovalInfo {
-  username: string;
   group: string;
 }
 
 class GroupAdminPromotionInfo {
-  username: string;
   group: string;
 }
 
 class GroupAdminDemotionInfo {
-  username: string;
   group: string;
 }
+
+class NewFollowerInfo {
+  follower: string;
+}
+
+// TODO: remove some types which will never be email templates
 
 export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   welcome: WelcomeInfo,
@@ -117,5 +114,14 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   'tournament-reminder': TournamentReminderInfo,
   'tournament-start': TournamentStartInfo,
   'email-confirmation': VerifyEmailInfo,
+  'new-follower': NewFollowerInfo,
   'test-template': {},
 };
+
+export interface NotificationCreateDto {
+  type: notificationTypeEnumType;
+  message: string;
+  link?: string;
+  image?: string;
+  read?: boolean;
+}

@@ -7,130 +7,134 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  Query,
+  Put,
 } from '@nestjs/common';
 import { MatchesService } from './matches.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CanEditMatchupGuard } from './guards/can-edit-matchup.guard';
-import { EndMatchupRequestDto } from './dto/requests';
+import { EndMatchupRequestDto, QueryMatchupRequestDto } from './dto/requests';
 import {
-  ApiOperation,
   ApiParam,
-  ApiResponse,
   ApiTags,
   ApiOkResponse,
+  ApiBearerAuth,
+  ApiExtraModels,
 } from '@nestjs/swagger';
-import { BracketDataResponseDto } from './dto/responses';
-import { ReactBracketsResponseDto } from './dto/responses';
+import {
+  MatchupResponseWithResultsDto,
+  MatchupResponseWithResultsAndScoresDto,
+  ResultsResponseDto,
+  ScoreResponseDto,
+} from './dto/responses';
+import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
+import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('matches')
 @Controller('matches')
 export class MatchesController {
   constructor(private readonly matchesService: MatchesService) {}
 
-  @Post(':tournamentId/:matchupId/score')
+  @ApiExtraModels(
+    MatchupResponseWithResultsDto,
+    MatchupResponseWithResultsAndScoresDto,
+    ResultsResponseDto,
+    ScoreResponseDto,
+  )
+  @Post('/:matchupId/score')
   @UseGuards(JwtAuthGuard, CanEditMatchupGuard)
-  @ApiOperation({ summary: 'Create a score for a matchup' })
-  @ApiParam({ name: 'tournamentId', description: 'Tournament ID' })
-  @ApiParam({ name: 'matchupId', description: 'Matchup ID' })
+  @ApiBearerAuth()
   async createScore(
     @Param('matchupId', ParseIntPipe) matchupId: number,
     @Body() createScoreDto: EndMatchupRequestDto,
   ) {
-    return this.matchesService.createMatchScore(matchupId, createScoreDto);
+    return await this.matchesService.createMatchScore(
+      matchupId,
+      createScoreDto,
+    );
   }
 
-  @Post(':tournamentId/:matchupId/update-score')
+  @Put('/:matchupId/update-score')
   @UseGuards(JwtAuthGuard, CanEditMatchupGuard)
-  @ApiOperation({ summary: 'Update a score for a matchup' })
-  @ApiParam({ name: 'tournamentId', description: 'Tournament ID' })
-  @ApiParam({ name: 'matchupId', description: 'Matchup ID' })
+  @ApiBearerAuth()
   async updateScore(
     @Param('matchupId', ParseIntPipe) matchupId: number,
     @Body() updateScoreDto: EndMatchupRequestDto,
   ) {
-    return this.matchesService.updateMatchScore(matchupId, updateScoreDto);
+    return await this.matchesService.updateMatchScore(
+      matchupId,
+      updateScoreDto,
+    );
   }
 
-  @Delete(':tournamentId/:matchupId/delete-score')
+  @Delete('/:matchupId/delete-score')
   @UseGuards(JwtAuthGuard, CanEditMatchupGuard)
-  @ApiOperation({ summary: 'Delete all scores for a matchup' })
-  @ApiParam({ name: 'tournamentId', description: 'Tournament ID' })
-  @ApiParam({ name: 'matchupId', description: 'Matchup ID' })
+  @ApiBearerAuth()
   async deleteMatchScore(@Param('matchupId', ParseIntPipe) matchupId: number) {
-    return this.matchesService.deleteMatchScore(matchupId);
+    return await this.matchesService.deleteMatchScore(matchupId);
   }
 
-  @Get('stage/:stageId/bracket')
-  @ApiOperation({ summary: 'Get bracket data for a stage' })
-  @ApiParam({ name: 'stageId', description: 'Stage ID' })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Returns bracket data in the format required by @g-loot/react-tournament-brackets',
-  })
+  @Get('results')
   @ApiOkResponse({
-    type: BracketDataResponseDto,
+    description: 'Returns matchups with results',
+    type: [MatchupResponseWithResultsDto],
   })
-  async getBracketDataForStage(
-    @Param('stageId', ParseIntPipe) stageId: number,
-  ) {
-    return this.matchesService.getBracketDataForStage(stageId);
+  async getMatchupsWithResults(@Query() query: QueryMatchupRequestDto) {
+    return await this.matchesService.getMatchupsWithResults(query);
   }
 
-  @Get('stage/:stageId/bracket/original')
-  @ApiOperation({
-    summary:
-      'Get bracket data for a stage in original format (without Challonge data)',
-  })
-  @ApiParam({ name: 'stageId', description: 'Stage ID' })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Returns bracket data in the original format for @g-loot/react-tournament-brackets',
-  })
+  @Get('matchup/:matchupId/results')
   @ApiOkResponse({
-    type: BracketDataResponseDto,
+    description: 'Returns a matchup with results and scores',
+    type: MatchupResponseWithResultsAndScoresDto,
   })
-  async getOriginalBracketDataForStage(
-    @Param('stageId', ParseIntPipe) stageId: number,
+  async getMatchupWithResultsAndScores(
+    @Param('matchupId', ParseIntPipe) matchupId: number,
   ) {
-    return this.matchesService.getOriginalBracketDataForStage(stageId);
+    return await this.matchesService.getMatchupWithResultsAndScores(matchupId);
+  } //TODO: check as any assertions
+
+  @Get('user/:userId/results')
+  @ApiOkResponse({
+    description: 'Returns matchups with results for a user',
+    type: [MatchupResponseWithResultsDto],
+  })
+  async getResultsForUser(@Param('userId', ParseIntPipe) userId: number) {
+    return await this.matchesService.getResultsForUser(userId);
   }
 
-  @Get('stage/:stageId/bracket/react')
-  @ApiOperation({
-    summary: 'Get bracket data for a stage in react-brackets format',
-  })
-  @ApiParam({ name: 'stageId', description: 'Stage ID' })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Returns bracket data in the format required by react-brackets library',
-  })
+  @Get('roster/:rosterId/results')
+  @ApiParam({ name: 'rosterId', description: 'Roster ID' })
   @ApiOkResponse({
-    type: ReactBracketsResponseDto,
+    description: 'Returns matchups with results for a roster',
+    type: [MatchupResponseWithResultsDto],
   })
-  async getReactBracketDataForStage(
-    @Param('stageId', ParseIntPipe) stageId: number,
-  ) {
-    return this.matchesService.getReactBracketDataForStage(stageId);
+  async getResultsForRoster(@Param('rosterId', ParseIntPipe) rosterId: number) {
+    return await this.matchesService.getResultsForRoster(rosterId);
   }
 
-  @Get('stage/:stageId/bracket/challonge')
-  @ApiOperation({
-    summary: 'Get bracket data directly from Challonge',
-  })
-  @ApiParam({ name: 'stageId', description: 'Stage ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns bracket data from Challonge in react-brackets format',
-  })
+  @Get('managed')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({
-    type: ReactBracketsResponseDto,
+    description: 'Returns matchups that a user is managing',
+    type: [MatchupResponseWithResultsDto],
   })
-  async getChallongeBracketData(
-    @Param('stageId', ParseIntPipe) stageId: number,
+  async getManagedMatchups(
+    @CurrentUser() user: ValidatedUserDto,
+    @Query() query: PaginationOnly,
   ) {
-    return this.matchesService.getChallongeBracketData(stageId);
+    return await this.matchesService.getManagedMatchups(user.id, query);
+  }
+
+  @Get('group/:groupId/results')
+  @ApiParam({ name: 'groupId', description: 'Group ID' })
+  @ApiOkResponse({
+    description: 'Returns matchups with results for a group',
+    type: [MatchupResponseWithResultsDto],
+  })
+  async getResultsForGroup(@Param('groupId', ParseIntPipe) groupId: number) {
+    return await this.matchesService.getResultsForGroup(groupId);
   }
 }

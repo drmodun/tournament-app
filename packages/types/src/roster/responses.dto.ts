@@ -1,6 +1,7 @@
 import { ICareerCategoryResponse } from "src/career";
 import { IMiniGroupResponse, IMiniGroupResponseWithLogo } from "src/group";
 import {
+  IMiniUserResponse,
   IMiniUserResponseWithCountry,
   IMiniUserResponseWithProfilePicture,
 } from "src/user";
@@ -60,6 +61,7 @@ export interface IMiniRosterResponse {
   id: number;
   stageId: number;
   participationId: number;
+  challongeParticipantId?: number;
   group?: IMiniGroupResponseWithLogo;
   user?: IMiniUserResponseWithProfilePicture;
   participation?: {
@@ -67,7 +69,13 @@ export interface IMiniRosterResponse {
     tournament: {
       categoryId: number;
     };
-    group: IMiniGroupResponse;
-    user: IMiniGroupResponse;
+    group: IMiniGroupResponse | IMiniGroupResponseWithLogo;
+    user: IMiniUserResponse | IMiniUserResponseWithProfilePicture;
   };
+}
+
+export interface IRosterInfoToCreateChallongeParticipant {
+  id: number;
+  participationId: number;
+  name: string;
 }

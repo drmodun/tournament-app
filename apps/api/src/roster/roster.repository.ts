@@ -19,6 +19,7 @@ import {
   IRosterPlayerWithoutCareer,
   IRosterResponse,
   groupRoleEnum,
+  IRosterInfoToCreateChallongeParticipant,
 } from '@tournament-app/types';
 import {
   AnyPgSelectQueryBuilder,
@@ -27,6 +28,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
 import { QueryRosterDto } from './dto/requests';
+import { sql } from 'drizzle-orm';
 
 @Injectable()
 export class RosterDrizzleRepository extends PrimaryRepository<
@@ -152,6 +154,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       where: and(
         query.ids?.length ? inArray(roster.id, query.ids) : undefined,
         query.stageId ? eq(roster.stageId, query.stageId) : undefined,
+        query.rosterId ? eq(roster.id, query.rosterId) : undefined,
         query.participationId
           ? eq(roster.participationId, query.participationId)
           : undefined,
@@ -165,6 +168,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         : undefined,
       columns: {
         id: true,
+        challongeParticipantId: true,
         stageId: true,
         participationId: true,
         createdAt: true,
@@ -408,5 +412,62 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       default:
         return null;
     }
+  }
+
+  async getRostersForChallongeParticipants(
+    stageId: number,
+  ): Promise<IRosterInfoToCreateChallongeParticipant[]> {
+    const rosters = await db
+      .select({
+        id: roster.id,
+        participationId: roster.participationId,
+        groupId: group.id,
+        groupName: group.name,
+        userId: user.id,
+        userName: user.username,
+      })
+      .from(roster)
+      .where(eq(roster.stageId, stageId))
+      .leftJoin(participation, eq(roster.participationId, participation.id))
+      .leftJoin(group, eq(participation.groupId, group.id))
+      .leftJoin(user, eq(participation.userId, user.id));
+
+    return rosters.map((rosterData) => ({
+      id: rosterData.id,
+      participationId: rosterData.participationId,
+      name:
+        rosterData.groupName ||
+        rosterData.userName ||
+        `Roster_${rosterData.id}`,
+    }));
+  }
+
+  async getUsersInStageRosters(stageId: number) {
+    const users = await db
+      .selectDistinct({
+        id: user.id,
+        username: user.username,
+      })
+      .from(userToRoster)
+      .leftJoin(roster, eq(userToRoster.rosterId, roster.id))
+      .leftJoin(user, eq(userToRoster.userId, user.id))
+      .where(eq(roster.stageId, stageId));
+
+    return users;
+  }
+
+  async attachChallongeParticipantIdToRosters(
+    ids: {
+      rosterId: number;
+      challongeParticipantId: string;
+    }[],
+  ) {
+    await db.transaction(async (tx) => {
+      for (const { rosterId, challongeParticipantId } of ids) {
+        await tx.execute(
+          sql`UPDATE ${roster} SET challonge_participant_id = ${challongeParticipantId} WHERE id = ${rosterId}`,
+        );
+      }
+    });
   }
 }

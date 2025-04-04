@@ -60,6 +60,10 @@ export class GroupJoinRequestDrizzleRepository extends CompositeRepository<
         return query.leftJoin(user, eq(groupJoinRequest.userId, user.id));
       case GroupJoinRequestResponsesEnum.WITH_MINI_GROUP:
         return query.leftJoin(group, eq(groupJoinRequest.groupId, group.id));
+      case GroupJoinRequestResponsesEnum.FOR_NOTIFICATION:
+        return query
+          .leftJoin(user, eq(groupJoinRequest.userId, user.id))
+          .leftJoin(group, eq(groupJoinRequest.groupId, group.id));
       default:
         return this.conditionallyJoin(
           query,
@@ -99,6 +103,15 @@ export class GroupJoinRequestDrizzleRepository extends CompositeRepository<
             GroupResponsesEnum.MINI_WITH_LOGO,
           ),
           createdAt: groupJoinRequest.createdAt,
+        };
+      case GroupJoinRequestResponsesEnum.FOR_NOTIFICATION:
+        return {
+          user: this.userDrizzleRepository.getMappingObject(
+            UserResponsesEnum.MINI_WITH_PFP,
+          ),
+          group: this.groupDrizzleRepository.getMappingObject(
+            GroupResponsesEnum.MINI_WITH_LOGO,
+          ),
         };
       default:
         return this.getMappingObject(GroupJoinRequestResponsesEnum.WITH_USER);

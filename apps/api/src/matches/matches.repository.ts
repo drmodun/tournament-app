@@ -6,6 +6,7 @@ import {
   IMatchupResponseWithRosters,
   IMatchupsWithMiniRostersResponse,
   IMiniRosterResponse,
+  IRosterResponse,
   MatchupResponsesEnum,
   MatchupSortingEnum,
 } from '@tournament-app/types';
@@ -18,6 +19,7 @@ import {
   stage,
   stageRound,
   user,
+  userToRoster,
 } from '../db/schema';
 import { db } from '../db/db';
 import {
@@ -391,16 +393,40 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
   async getManagedMatchups(
     userId: number,
     query?: PaginationOnly,
-  ): Promise<IMatchupsWithMiniRostersResponse[]> {
+  ): Promise<IMatchupResponseWithRosters[]> {
     const creatorUser = aliasedTable(user, 'creatorUser');
     const rosterUser = aliasedTable(user, 'rosterUser');
     const rosterGroup = aliasedTable(tables.group, 'rosterGroup');
+    const playerUser = aliasedTable(user, 'playerUser');
 
     const page = query?.page || 1;
     const pageSize = query?.pageSize ?? 10;
     const offset = pageSize * (page - 1);
 
+    const subqueryAlias = 'player_agg';
+    const playerAggregationSubquery = db.$with(subqueryAlias).as(
+      db
+        .select({
+          rosterId: userToRoster.rosterId,
+          players: sql<
+            Array<{ user: object; isSubstitute: boolean }>
+          >`JSONB_AGG(JSONB_BUILD_OBJECT(
+              'user', JSONB_BUILD_OBJECT(
+                'id', ${playerUser.id},
+                'username', ${playerUser.username},
+                'profilePicture', ${playerUser.profilePicture},
+                'country', ${playerUser.country}
+              ),
+              'isSubstitute', ${userToRoster.isSubstitute}
+            ))`.as('players'),
+        })
+        .from(userToRoster)
+        .leftJoin(playerUser, eq(userToRoster.userId, playerUser.id))
+        .groupBy(userToRoster.rosterId),
+    );
+
     const result = await db
+      .with(playerAggregationSubquery)
       .select({
         id: matchup.id,
         stageId: matchup.stageId,
@@ -410,13 +436,16 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         startDate: matchup.startDate,
         endDate: matchup.endDate,
         matchupType: sql`'standard'`.mapWith(String),
-        rosters: sql<
-          IMiniRosterResponse[]
-        >`JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
+        rosters: sql<IRosterResponse[]>`JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
           'id', ${roster.id},
-          'name', COALESCE(${rosterGroup.name}, ${rosterUser.username}), 
-          'logo', COALESCE(${rosterGroup.logo}, ${rosterUser.profilePicture}),
-          'entityId', COALESCE(${rosterGroup.id}, ${rosterUser.id})
+          'stageId', ${roster.stageId},
+          'participationId', ${roster.participationId},
+          'challongeParticipantId', ${roster.challongeParticipantId},
+          'createdAt', ${roster.createdAt},
+          'group', CASE WHEN ${rosterGroup.id} IS NOT NULL THEN JSONB_BUILD_OBJECT('id', ${rosterGroup.id}, 'name', ${rosterGroup.name}, 'logo', ${rosterGroup.logo}) ELSE NULL END,
+          'user', CASE WHEN ${rosterUser.id} IS NOT NULL THEN JSONB_BUILD_OBJECT('id', ${rosterUser.id}, 'username', ${rosterUser.username}, 'profilePicture', ${rosterUser.profilePicture}) ELSE NULL END,
+          'participation', CASE WHEN ${participation.id} IS NOT NULL THEN JSONB_BUILD_OBJECT('id', ${participation.id}, 'tournament', JSONB_BUILD_OBJECT('categoryId', ${participation.tournamentId}), 'group', JSONB_BUILD_OBJECT('id', ${participation.groupId}, 'name', ${rosterGroup.name}, 'abbreviation', ${rosterGroup.abbreviation}, 'logo', ${rosterGroup.logo}), 'user', JSONB_BUILD_OBJECT('id', ${participation.userId}, 'username', ${rosterUser.username}, 'profilePicture', ${rosterUser.profilePicture})) ELSE NULL END,
+          'players', ${sql.identifier(subqueryAlias)}.players
         )) FILTER (WHERE ${roster.id} IS NOT NULL)`,
       })
       .from(matchup)
@@ -436,6 +465,10 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       .leftJoin(participation, eq(roster.participationId, participation.id))
       .leftJoin(rosterUser, eq(participation.userId, rosterUser.id))
       .leftJoin(rosterGroup, eq(participation.groupId, rosterGroup.id))
+      .leftJoin(
+        playerAggregationSubquery,
+        eq(roster.id, playerAggregationSubquery.rosterId),
+      )
       .where(
         or(
           and(
@@ -467,7 +500,10 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
 
     return result.map((m) => ({
       ...m,
-      rosters: m.rosters || [],
+      rosters: (m.rosters || []).map((r) => ({
+        ...r,
+        players: r.players || [],
+      })),
     }));
   }
 

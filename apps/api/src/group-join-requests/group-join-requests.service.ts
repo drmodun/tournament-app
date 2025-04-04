@@ -60,7 +60,6 @@ export class GroupJoinRequestsService {
     }
 
     if (group.type == groupTypeEnum.PRIVATE) {
-      console.log(relatedLFPId);
 
       throw new BadRequestException(
         'You cannot create a group join request for a private group',

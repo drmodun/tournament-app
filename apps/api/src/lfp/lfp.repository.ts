@@ -144,7 +144,6 @@ export class LFPDrizzleRepository extends PrimaryRepository<
     const userGroupIds = userGroupsResult.map((group) => group.id);
     const forbiddenGroupIds = [...blockedGroupIds, ...userGroupIds];
 
-    console.log(blockedGroupIds, userGroupIds);
 
     const distanceInKm = distance ? distance * 1000 : null;
 

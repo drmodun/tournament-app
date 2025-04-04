@@ -47,7 +47,6 @@ export class SseNotificationsController {
     @CurrentUser() user: ValidatedUserDto,
     @Query() query: NotificationQueryDto,
   ) {
-    console.log(query);
     return this.sseNotificationsService.findAllForUser({
       ...query,
       userId: user.id,

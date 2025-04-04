@@ -93,7 +93,7 @@ export class MatchesController {
     @Param('matchupId', ParseIntPipe) matchupId: number,
   ) {
     return await this.matchesService.getMatchupWithResultsAndScores(matchupId);
-  } //TODO: check as any assertions
+  }
 
   @Get('user/:userId/results')
   @ApiOkResponse({

@@ -96,8 +96,6 @@ class NewFollowerInfo {
   follower: string;
 }
 
-// TODO: remove some types which will never be email templates
-
 export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   welcome: WelcomeInfo,
   'bet-outcome': BetOutcomeInfo,

@@ -119,7 +119,6 @@ export class ChallongeService {
   }
 
   injectHeaders() {
-    console.log(this.token);
     return {
       headers: {
         'Authorization-Type': 'v2',
@@ -298,7 +297,6 @@ export class ChallongeService {
         this.injectHeaders(),
       );
 
-    console.log(response.data);
     return response.data?.data;
   }
 

@@ -28,13 +28,18 @@ export const useRequestPasswordReset = () => {
       });
       toast.addToast(
         "successfully sent reset password request, check your email",
-        "success",
+        "success"
       );
 
       setTimeout(() => navigate.push("/login"), 1000);
     },
     onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occurred...", "error");
+      toast.addToast(
+        error.response?.data?.message ??
+          error.message ??
+          "an error occurred...",
+        "error"
+      );
       console.error(error);
     },
     onMutate: () => {

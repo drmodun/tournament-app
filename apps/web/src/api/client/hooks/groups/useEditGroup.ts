@@ -8,7 +8,7 @@ import { useToastContext } from "utils/hooks/useToastContext";
 
 export const editGroup = async (
   data: Partial<ICreateGroupRequest>,
-  groupId: number,
+  groupId: number
 ) =>
   clientApi
     .patch<never, AxiosResponse<any>>(`/groups/${groupId}`, data)
@@ -33,10 +33,15 @@ export const useEditGroup = (groupId: number) => {
       if (error.response.status === 413) {
         toast.addToast(
           "logo too large, place select an image under 2MB",
-          "error",
+          "error"
         );
       } else {
-        toast.addToast(error.message ?? "an error occurred...", "error");
+        toast.addToast(
+          error.response?.data?.message ??
+            error.message ??
+            "an error occurred...",
+          "error"
+        );
       }
       console.error(error);
       return false;

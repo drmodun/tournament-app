@@ -11,7 +11,7 @@ import { useToastContext } from "utils/hooks/useToastContext";
 import { IUpdateTournamentRequest } from "@tournament-app/types";
 
 export const editCompetition = async (
-  data: IUpdateTournamentRequest & { id?: number; categoryId?: number },
+  data: IUpdateTournamentRequest & { id?: number; categoryId?: number }
 ) => {
   const { id, categoryId, ..._data } = data;
   if (categoryId != -1 && categoryId !== undefined) {
@@ -40,7 +40,12 @@ export const useEditCompetition = () => {
       });
     },
     onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occurred...", "error");
+      toast.addToast(
+        error.response?.data?.message ??
+          error.message ??
+          "an error occurred...",
+        "error"
+      );
       console.error(error);
       console.log(error.message);
     },

@@ -2,7 +2,7 @@
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useCreatedBlockedUser } from "api/client/hooks/blockedUsers/useCreateBlockedUser";
+import { useCreateBlockedUser } from "api/client/hooks/blockedUsers/useCreateBlockedUser";
 import { useCreateGroupInvite } from "api/client/hooks/groupInvites/useCreateGroupInvite";
 import { useGetLFGTeam } from "api/client/hooks/lfg/useGetLFGTeam";
 import { clsx } from "clsx";
@@ -25,7 +25,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
 
   const { data, isLoading } = useGetLFGTeam(groupId);
   const createGroupInviteMutation = useCreateGroupInvite();
-  const createBlockedUserMutation = useCreatedBlockedUser();
+  const createBlockedUserMutation = useCreateBlockedUser();
 
   return (
     <div className={styles.paginationWrapper}>
@@ -52,7 +52,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                 className={clsx(
                   styles.userCard,
                   globals[`${textColorTheme}BackgroundColor`],
-                  globals[`${theme}Color`],
+                  globals[`${theme}Color`]
                 )}
               >
                 <img
@@ -73,7 +73,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                   <p
                     className={clsx(
                       globals.label,
-                      globals[`${textColorTheme}Color`],
+                      globals[`${textColorTheme}Color`]
                     )}
                   >
                     bio
@@ -101,7 +101,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                             <div
                               className={clsx(
                                 styles.careerCategory,
-                                globals[`${theme}Color`],
+                                globals[`${theme}Color`]
                               )}
                             >
                               {career.category.name}

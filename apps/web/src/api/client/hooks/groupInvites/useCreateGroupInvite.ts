@@ -26,7 +26,7 @@ export const createGroupInvite = async (data: {
           groupId: data?.groupId,
           userId: data?.userId,
         },
-      },
+      }
     )
     .then((res) => res.data);
 };
@@ -53,10 +53,15 @@ export const useCreateGroupInvite = () => {
       if (error.response?.status === 409) {
         toast.addToast(
           "you have already invited this user to this group",
-          "error",
+          "error"
         );
       } else {
-        toast.addToast(error.message ?? "an error occurred...", "error");
+        toast.addToast(
+          error.response?.data?.message ??
+            error.message ??
+            "an error occurred...",
+          "error"
+        );
       }
       console.error(error);
       return false;

@@ -29,10 +29,15 @@ export const useCreateGroup = () => {
       if (error.response.status === 413) {
         toast.addToast(
           "logo too large, place select an image under 2MB",
-          "error",
+          "error"
         );
       } else {
-        toast.addToast(error.message ?? "an error occurred...", "error");
+        toast.addToast(
+          error.response?.data?.message ??
+            error.message ??
+            "an error occurred...",
+          "error"
+        );
       }
       console.error(error);
       return false;

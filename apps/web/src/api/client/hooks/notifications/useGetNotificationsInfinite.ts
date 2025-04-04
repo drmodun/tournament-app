@@ -14,7 +14,7 @@ import { INotificationResponse } from "./types";
 export const getNotificationsInfinite = async (
   page: number,
   types?: notificationTypeEnum[],
-  isRead?: boolean
+  isRead?: boolean,
 ) =>
   clientApi
     .get<never, AxiosResponse<INotificationResponse[]>>("/notifications", {

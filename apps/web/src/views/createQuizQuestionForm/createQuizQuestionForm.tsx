@@ -3,7 +3,10 @@
 import { UseMutationResult } from "@tanstack/react-query";
 import {
   CreateQuizDto,
+<<<<<<< HEAD
   ICreateQuizQuestionDto,
+=======
+>>>>>>> 89c8adb (WIP: quiz support)
   quizQuestionTypeEnum,
   quizQuestionTypeEnumType,
 } from "@tournament-app/types";
@@ -46,7 +49,6 @@ export default function AddQuestionForm({
 
   const methods = useForm<ICreateQuizQuestionDto>();
   const onSubmit = async (data: ICreateQuizQuestionDto) => {
-    console.log("ODISWAJDIOWA");
     if (timeLimit) data.timeLimit = timeLimit;
     if (questionType) data.questionType = questionType;
     if (options)

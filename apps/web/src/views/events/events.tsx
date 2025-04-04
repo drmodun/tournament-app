@@ -9,6 +9,7 @@ import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./events.module.scss";
+import { textColor } from "types/styleTypes";
 
 export default function Events() {
   const { theme } = useThemeContext();
@@ -78,7 +79,7 @@ export default function Events() {
                   label={event.name}
                   location={event.location}
                   locationDetails={event.actualLocation?.name}
-                  image={event.logo ?? `/${theme}.png`}
+                  image={event.logo ?? `/${textColor(theme)}.png`}
                   startDate={new Date(event.startDate.toString()).getTime()}
                   endDate={new Date(event.endDate.toString()).getTime()}
                   organizerName={event.creator.username}

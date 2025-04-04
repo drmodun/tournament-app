@@ -532,14 +532,18 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return result;
   }
 
-  async getResultsForRoster(rosterId: number) {
+  async getResultsForRoster(rosterId: number, pagination?: PaginationOnly) {
     const ids = await this.getResultsForRosterIds(rosterId);
 
     if (ids.length === 0) {
       return [];
     }
 
-    return this.getWithResults({ ids: ids.map((id) => id.id) });
+    return this.getWithResults({
+      ids: ids.map((id) => id.id),
+      page: pagination?.page,
+      pageSize: pagination?.pageSize,
+    });
   }
 
   async getResultsForGroupIds(groupId: number) {
@@ -574,24 +578,32 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return result;
   }
 
-  async getResultsForUser(userId: number) {
+  async getResultsForUser(userId: number, pagination?: PaginationOnly) {
     const ids = await this.getResultsForUserIds(userId);
 
     if (ids.length === 0) {
       return [];
     }
 
-    return this.getWithResults({ ids: ids.map((id) => id.id) });
+    return this.getWithResults({
+      ids: ids.map((id) => id.id),
+      page: pagination?.page,
+      pageSize: pagination?.pageSize,
+    });
   }
 
-  async getResultsForGroup(groupId: number) {
+  async getResultsForGroup(groupId: number, pagination?: PaginationOnly) {
     const ids = await this.getResultsForGroupIds(groupId);
 
     if (ids.length === 0) {
       return [];
     }
 
-    return this.getWithResults({ ids: ids.map((id) => id.id) });
+    return this.getWithResults({
+      ids: ids.map((id) => id.id),
+      page: pagination?.page,
+      pageSize: pagination?.pageSize,
+    });
   }
 
   async getWithResults(query: QueryMatchupRequestDto & { ids?: number[] }) {

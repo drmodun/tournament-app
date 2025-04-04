@@ -317,18 +317,30 @@ export class MatchesService {
     };
   }
 
-  async getResultsForUser(userId: number) {
-    const results = await this.matchesRepository.getResultsForUser(userId);
+  async getResultsForUser(userId: number, pagination?: PaginationOnly) {
+    const results = await this.matchesRepository.getResultsForUser(
+      userId,
+      pagination,
+    );
+
     return this.mapRepositoryResultsToDto(results);
   }
 
-  async getResultsForRoster(rosterId: number) {
-    const results = await this.matchesRepository.getResultsForRoster(rosterId);
+  async getResultsForRoster(rosterId: number, pagination?: PaginationOnly) {
+    const results = await this.matchesRepository.getResultsForRoster(
+      rosterId,
+      pagination,
+    );
+
     return this.mapRepositoryResultsToDto(results);
   }
 
-  async getResultsForGroup(groupId: number) {
-    const results = await this.matchesRepository.getResultsForGroup(groupId);
+  async getResultsForGroup(groupId: number, pagination?: PaginationOnly) {
+    const results = await this.matchesRepository.getResultsForGroup(
+      groupId,
+      pagination,
+    );
+
     return this.mapRepositoryResultsToDto(results);
   }
 

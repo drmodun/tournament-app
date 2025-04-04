@@ -1,18 +1,11 @@
 "use client";
 
+import { IStageResponseWithChallongeTournament } from "@tournament-app/types";
 import { clsx } from "clsx";
-import { Bracket } from "react-brackets";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./bracket.module.scss";
-import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
-import {
-  IExtendedStageResponseWithTournament,
-  IStageResponse,
-  IStageResponseWithTournament,
-} from "@tournament-app/types";
-import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 
 interface TournamentBracketProps {
   stageId: number;
@@ -44,15 +37,12 @@ export interface ReactBracketsData {
 }
 
 export default function BracketView({
-  bracket,
   stage,
 }: {
-  bracket: ReactBracketsData;
-  stage?: IExtendedStageResponseWithTournament;
+  stage?: IStageResponseWithChallongeTournament;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-
   return (
     <div
       className={clsx(
@@ -60,14 +50,16 @@ export default function BracketView({
         globals[`${textColorTheme}BackgroundColor`],
       )}
     >
-      {bracket?.rounds?.length > 0 ? (
-        <Bracket
-          rounds={bracket.rounds}
-          roundClassName={`${theme}Matchup`}
-          bracketClassName={globals[`${theme}Color`]}
-        />
+      {stage?.challongeTournamentId ? (
+        <iframe
+          src={`https://challonge.com/${stage?.challongeTournamentId}/module?theme=${theme === "dark" ? 8397 : 8396}`}
+          width="100%"
+          height="500"
+          style={{ border: "none" }}
+          allowTransparency={true}
+        ></iframe>
       ) : (
-        <p className={`${globals[`${theme}Color`]}`}>No bracket data</p>
+        <p className={`${globals[`${theme}Color`]}`}>no bracket data</p>
       )}
     </div>
   );

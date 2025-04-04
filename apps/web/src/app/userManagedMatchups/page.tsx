@@ -15,7 +15,7 @@ export default async function BracketPage({
     <div className={styles.wrapper}>
       <Navbar className={styles.navbar} />
       <div className={styles.screen}>
-        <Bracket stage={stage} />
+        <ManageUserManagedMatchups stage={stage} />
       </div>
     </div>
   );

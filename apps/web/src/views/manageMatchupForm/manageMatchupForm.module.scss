@@ -49,11 +49,13 @@
   display: flex;
   flex-direction: column;
   gap: $halfPadding;
+  padding: $padding;
+  border-radius: $borderRadius;
 }
 
 .score {
-  width: $baseComponentHeight;
   height: $baseComponentHeight;
+  padding: $padding;
   border-radius: $borderRadius;
   display: flex;
   align-items: center;
@@ -95,4 +97,14 @@
   display: flex;
   align-items: center;
   gap: $halfPadding;
+}
+
+.dialog {
+  width: 75%;
+  height: 75%;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    width: 100%;
+    height: 100%;
+  }
 }

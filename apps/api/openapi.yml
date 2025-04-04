@@ -204,7 +204,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2025-04-04T18:46:34.628Z
+                        updatedAt: &a2 2025-04-04T20:19:41.855Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -304,7 +304,7 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2025-04-04T18:46:34.628Z
+                        createdAt: 2025-04-04T20:19:41.855Z
                         following: 0
                         location: New York
           description: ""
@@ -362,7 +362,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2025-04-04T18:46:34.628Z
+                    updatedAt: &a3 2025-04-04T20:19:41.855Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -394,7 +394,7 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2025-04-04T18:46:34.628Z
+                    createdAt: 2025-04-04T20:19:41.855Z
                     following: 0
                     location: New York
           description: ""
@@ -758,7 +758,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-04T18:46:34.863Z
+                        updatedAt: 2025-04-04T20:19:42.017Z
                         memberCount: 50
                 extended:
                   value:
@@ -783,9 +783,9 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-04T18:46:34.863Z
+                        updatedAt: 2025-04-04T20:19:42.017Z
                         memberCount: 50
-                        createdAt: 2025-04-04T18:46:34.863Z
+                        createdAt: 2025-04-04T20:19:42.017Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -812,7 +812,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-04T18:46:34.863Z
+                updatedAt: 2025-04-04T20:19:42.017Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -865,7 +865,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-04T18:46:34.863Z
+                    updatedAt: 2025-04-04T20:19:42.017Z
                     memberCount: 50
                 extended:
                   value:
@@ -877,9 +877,9 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-04T18:46:34.863Z
+                    updatedAt: 2025-04-04T20:19:42.017Z
                     memberCount: 50
-                    createdAt: 2025-04-04T18:46:34.863Z
+                    createdAt: 2025-04-04T20:19:42.017Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -918,7 +918,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-04T18:46:34.863Z
+                updatedAt: 2025-04-04T20:19:42.017Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -982,7 +982,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-04T18:46:34.863Z
+                  updatedAt: 2025-04-04T20:19:42.017Z
                   memberCount: 50
                 members: []
           description: ""
@@ -1010,7 +1010,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-04T18:46:34.863Z
+                  updatedAt: 2025-04-04T20:19:42.017Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -1038,7 +1038,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-04T18:46:34.863Z
+                  updatedAt: 2025-04-04T20:19:42.017Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -1230,7 +1230,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-04-04T18:46:34.869Z
+                        createdAt: 2025-04-04T20:19:42.024Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1251,7 +1251,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-04-04T18:46:34.869Z
+                      - createdAt: 2025-04-04T20:19:42.024Z
                         isFake: false
                         role: member
                         country: country
@@ -1283,7 +1283,7 @@ paths:
                         role: member
                         user: *a7
                         group: *a8
-                        createdAt: 2025-04-04T18:46:34.869Z
+                        createdAt: 2025-04-04T20:19:42.024Z
                         country: country
                         name: name
                         logo: logo
@@ -1372,10 +1372,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-04-04T18:46:34.869Z
+                    createdAt: 2025-04-04T20:19:42.024Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-04-04T18:46:34.869Z
+                    createdAt: 2025-04-04T20:19:42.024Z
                     isFake: false
                     role: member
                     country: country
@@ -1389,7 +1389,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-04-04T18:46:34.869Z
+                    createdAt: 2025-04-04T20:19:42.024Z
                     country: country
                     name: name
                     logo: logo
@@ -1734,7 +1734,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-04-04T18:46:34.878Z
+                    createdAt: 2025-04-04T20:19:42.033Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1743,11 +1743,11 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-04-04T18:46:34.878Z
+                    updatedAt: 2025-04-04T20:19:42.033Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2025-04-04T18:46:34.878Z
+                    createdAt: 2025-04-04T20:19:42.033Z
                     id: 1
                     isFake: false
                     username: john_doe
@@ -1889,7 +1889,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2025-04-04T18:46:34.628Z
+                        updatedAt: 2025-04-04T20:19:41.855Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1911,7 +1911,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T18:46:34.884Z
+                        createdAt: 2025-04-04T20:19:42.039Z
                 with-group:
                   value:
                     metadata:
@@ -1935,7 +1935,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-04T18:46:34.863Z
+                        updatedAt: 2025-04-04T20:19:42.017Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1958,7 +1958,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-04-04T18:46:34.884Z
+                        createdAt: 2025-04-04T20:19:42.039Z
           description: ""
       tags: &a13
         - group-join-requests
@@ -2061,7 +2061,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2025-04-04T18:46:34.628Z
+                    updatedAt: 2025-04-04T20:19:41.855Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -2070,7 +2070,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-04T18:46:34.884Z
+                    createdAt: 2025-04-04T20:19:42.039Z
                 with-group:
                   value:
                     id: 1
@@ -2081,7 +2081,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-04T18:46:34.863Z
+                    updatedAt: 2025-04-04T20:19:42.017Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -2091,7 +2091,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-04-04T18:46:34.884Z
+                    createdAt: 2025-04-04T20:19:42.039Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -2224,7 +2224,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-04-04T18:46:34.890Z
+                        updatedAt: 2025-04-04T20:19:42.046Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2248,7 +2248,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T18:46:34.890Z
+                        createdAt: 2025-04-04T20:19:42.046Z
                         isFake: false
                 with-group:
                   value:
@@ -2301,7 +2301,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-04-04T18:46:34.890Z
+                        createdAt: 2025-04-04T20:19:42.046Z
           description: ""
       tags: &a16
         - group-invites
@@ -2396,7 +2396,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-04-04T18:46:34.890Z
+                    updatedAt: 2025-04-04T20:19:42.046Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2405,7 +2405,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-04T18:46:34.890Z
+                    createdAt: 2025-04-04T20:19:42.046Z
                     isFake: false
                 with-group:
                   value:
@@ -2428,7 +2428,7 @@ paths:
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-04-04T18:46:34.890Z
+                    createdAt: 2025-04-04T20:19:42.046Z
           description: ""
       tags: *a16
     patch:
@@ -3373,8 +3373,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a35 2025-04-04T18:46:34.934Z
-                    endDate: &a36 2025-04-04T18:46:34.934Z
+                    startDate: &a35 2025-04-04T20:19:42.086Z
+                    endDate: &a36 2025-04-04T20:19:42.086Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3555,8 +3555,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a42 2025-04-04T18:46:34.934Z
-                    endDate: &a43 2025-04-04T18:46:34.934Z
+                    startDate: &a42 2025-04-04T20:19:42.086Z
+                    endDate: &a43 2025-04-04T20:19:42.086Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -5026,15 +5026,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-04T18:46:34.952Z
+                          startDate: 2025-04-04T20:19:42.105Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T18:46:34.952Z
-                        updatedAt: 2025-04-04T18:46:34.952Z
+                        createdAt: 2025-04-04T20:19:42.105Z
+                        updatedAt: 2025-04-04T20:19:42.105Z
                 base:
                   value:
                     metadata:
@@ -5137,15 +5137,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-04T18:46:34.952Z
+                          startDate: 2025-04-04T20:19:42.105Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T18:46:34.952Z
-                        updatedAt: 2025-04-04T18:46:34.952Z
+                        createdAt: 2025-04-04T20:19:42.105Z
+                        updatedAt: 2025-04-04T20:19:42.105Z
                 base:
                   value:
                     metadata:
@@ -6240,7 +6240,7 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2025-04-04T18:46:34.858Z
+                        createdAt: 2025-04-04T20:19:42.016Z
           description: ""
       tags: *a89
     post:
@@ -6301,7 +6301,7 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2025-04-04T18:46:34.858Z
+                      createdAt: 2025-04-04T20:19:42.016Z
       tags: *a89
     patch:
       operationId: LocationController_update
@@ -6417,6 +6417,345 @@ paths:
         "200":
           description: Requirements deleted successfully
       tags: *a90
+      security:
+        - bearer: []
+  /quiz/auto-complete/{search}:
+    get:
+      operationId: QuizController_autoComplete
+      parameters:
+        - name: search
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns a list of quizzes that can be auto-completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResponse"
+      tags: &a91
+        - quiz
+  /quiz/detailed/{quizId}:
+    get:
+      operationId: QuizController_getDetailedQuiz
+      parameters:
+        - name: quizId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns a detailed quiz
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResponseExtended"
+      tags: *a91
+      security:
+        - bearer: []
+  /quiz:
+    get:
+      operationId: QuizController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: name
+          required: false
+          in: query
+          description: Quiz name search
+          schema:
+            type: string
+        - name: authorId
+          required: false
+          in: query
+          description: Created by user ID
+          schema:
+            type: number
+        - name: matchupId
+          required: false
+          in: query
+          description: Associated matchup ID
+          schema:
+            type: number
+        - name: stageId
+          required: false
+          in: query
+          description: Associated stage ID
+          schema:
+            type: number
+        - name: isTest
+          required: false
+          in: query
+          description: Is test quiz
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Basic Response:
+                  value:
+                    results:
+                      - id: 1
+                        name: Pre-tournament Knowledge Check
+                        startDate: 2023-09-15T10:00:00Z
+                        timeLimitTotal: 600
+                        passingScore: 70
+                        isRetakable: true
+                        isAnonymousAllowed: false
+                        description: A quiz to test your knowledge before the tournament
+                        matchupId: 101
+                        stageId: 5
+                        coverImage: https://example.com/images/quiz1.jpg
+                        tags:
+                          - id: 1
+                            name: Tournament Rules
+                          - id: 2
+                            name: Game Knowledge
+                        createdAt: 2023-09-01T08:30:00Z
+                        updatedAt: 2023-09-10T14:15:00Z
+                        authorId: 42
+                    metadata:
+                      page: 1
+                      pageSize: 10
+                      totalCount: 25
+                      totalPages: 3
+          description: ""
+      tags: *a91
+    post:
+      operationId: QuizController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizRequest"
+      responses:
+        "200":
+          description: Creates a new quiz
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a91
+      security:
+        - bearer: []
+  /quiz/authored:
+    get:
+      operationId: QuizController_getAuthoredQuizzes
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns a list of quizzes authored by the current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResponse"
+      tags: *a91
+      security:
+        - bearer: []
+  /quiz/{quizId}:
+    get:
+      operationId: QuizController_findOne
+      parameters:
+        - name: quizId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                examples:
+                  BASE:
+                    value:
+                      id: 1
+                      name: Pre-tournament Knowledge Check
+                      startDate: 2023-09-15T10:00:00Z
+                      timeLimitTotal: 600
+                      passingScore: 70
+                      isRetakable: true
+                      isAnonymousAllowed: false
+                      description: A quiz to test your knowledge before the tournament
+                      matchupId: 101
+                      stageId: 5
+                      coverImage: https://example.com/images/quiz1.jpg
+                      tags:
+                        - id: 1
+                          name: Tournament Rules
+                        - id: 2
+                          name: Game Knowledge
+                      createdAt: 2023-09-01T08:30:00Z
+                      updatedAt: 2023-09-10T14:15:00Z
+                      authorId: 42
+                  EXTENDED:
+                    value:
+                      id: 1
+                      name: Pre-tournament Knowledge Check
+                      startDate: 2023-09-15T10:00:00Z
+                      timeLimitTotal: 600
+                      passingScore: 70
+                      isRetakable: true
+                      isAnonymousAllowed: false
+                      description: A quiz to test your knowledge before the tournament
+                      matchupId: 101
+                      stageId: 5
+                      coverImage: https://example.com/images/quiz1.jpg
+                      tags:
+                        - id: 1
+                          name: Tournament Rules
+                        - id: 2
+                          name: Game Knowledge
+                      createdAt: 2023-09-01T08:30:00Z
+                      updatedAt: 2023-09-10T14:15:00Z
+                      authorId: 42
+                      attempts: 150
+                      averageScore: 78.5
+                      medianScore: 82
+                      passingRate: 85.3
+                      questions:
+                        - id: 1
+                          name: What is the maximum number of players allowed?
+                          order: 1
+                          timeLimit: 30
+                          points: 10
+                          createdAt: 2023-09-01T08:35:00Z
+                          updatedAt: 2023-09-01T08:35:00Z
+                          type: multiple_choice
+                          image: null
+                          isImmediateFeedback: true
+                          correctAnswers:
+                            - "4"
+                          explanation: Tournament rules state that each team must have exactly 4 players.
+                          options:
+                            - id: 1
+                              text: "2"
+                              order: 1
+                              count: 10
+                              isCorrect: false
+                            - id: 2
+                              text: "3"
+                              order: 2
+                              count: 25
+                              isCorrect: false
+                            - id: 3
+                              text: "4"
+                              order: 3
+                              count: 105
+                              isCorrect: true
+                            - id: 4
+                              text: "5"
+                              order: 4
+                              count: 10
+                              isCorrect: false
+                          answers: []
+      tags: *a91
+    put:
+      operationId: QuizController_update
+      parameters:
+        - name: quizId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizRequest"
+      responses:
+        "200":
+          description: Updates a quiz
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a91
+      security:
+        - bearer: []
+    delete:
+      operationId: QuizController_remove
+      parameters:
+        - name: quizId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a91
       security:
         - bearer: []
 info:
@@ -8516,6 +8855,9 @@ components:
         maxSubstitutes:
           type: number
           readOnly: true
+        challongeTournamentId:
+          type: string
+          readOnly: true
       required:
         - id
         - name
@@ -8533,6 +8875,7 @@ components:
         - maxPlayersPerTeam
         - maxChanges
         - maxSubstitutes
+        - challongeTournamentId
     ExtendedStageResponseWithTournament:
       type: object
       properties:
@@ -8587,6 +8930,9 @@ components:
         maxSubstitutes:
           type: number
           readOnly: true
+        challongeTournamentId:
+          type: string
+          readOnly: true
         tournament:
           readOnly: true
           allOf:
@@ -8608,6 +8954,7 @@ components:
         - maxPlayersPerTeam
         - maxChanges
         - maxSubstitutes
+        - challongeTournamentId
         - tournament
     CreateStageRequest:
       type: object
@@ -9253,3 +9600,355 @@ components:
     UpdateGroupRequirementsDto:
       type: object
       properties: {}
+    TagResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+      required:
+        - id
+        - name
+    QuizResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        timeLimitTotal:
+          type: number
+          readOnly: true
+        passingScore:
+          type: number
+          readOnly: true
+        isRetakable:
+          type: boolean
+          readOnly: true
+        isAnonymousAllowed:
+          type: boolean
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        matchupId:
+          type: number
+          readOnly: true
+        stageId:
+          type: number
+          readOnly: true
+        coverImage:
+          type: string
+          readOnly: true
+        tags:
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/TagResponse"
+        createdAt:
+          type: object
+          readOnly: true
+        updatedAt:
+          type: object
+          readOnly: true
+        authorId:
+          type: number
+          readOnly: true
+      required:
+        - id
+        - name
+        - startDate
+        - timeLimitTotal
+        - passingScore
+        - isRetakable
+        - isAnonymousAllowed
+        - description
+        - matchupId
+        - stageId
+        - coverImage
+        - tags
+        - createdAt
+        - updatedAt
+        - authorId
+    QuizOptionResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Option ID
+        order:
+          type: number
+          readOnly: true
+        option:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - order
+        - option
+    QuizQuestionResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        order:
+          type: number
+          readOnly: true
+        timeLimit:
+          type: number
+          readOnly: true
+        points:
+          type: number
+          readOnly: true
+        createdAt:
+          type: object
+          readOnly: true
+        updatedAt:
+          type: object
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+          enum:
+            - multiple_choice
+            - true_false
+            - short_answer
+            - order
+            - hotspot
+            - programming
+        options:
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/QuizOptionResponse"
+        image:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+        - order
+        - timeLimit
+        - points
+        - createdAt
+        - updatedAt
+        - type
+        - options
+        - image
+    QuizResponseExtended:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          readOnly: true
+        timeLimitTotal:
+          type: number
+          readOnly: true
+        passingScore:
+          type: number
+          readOnly: true
+        isRetakable:
+          type: boolean
+          readOnly: true
+        isAnonymousAllowed:
+          type: boolean
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        matchupId:
+          type: number
+          readOnly: true
+        stageId:
+          type: number
+          readOnly: true
+        coverImage:
+          type: string
+          readOnly: true
+        tags:
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/TagResponse"
+        createdAt:
+          type: object
+          readOnly: true
+        updatedAt:
+          type: object
+          readOnly: true
+        authorId:
+          type: number
+          readOnly: true
+        attempts:
+          type: number
+          readOnly: true
+        averageScore:
+          type: number
+          readOnly: true
+        medianScore:
+          type: number
+          readOnly: true
+        passingRate:
+          type: number
+          readOnly: true
+        questions:
+          description: Quiz questions with statistics
+          type: array
+          items:
+            $ref: "#/components/schemas/QuizQuestionResponse"
+      required:
+        - id
+        - name
+        - startDate
+        - timeLimitTotal
+        - passingScore
+        - isRetakable
+        - isAnonymousAllowed
+        - description
+        - matchupId
+        - stageId
+        - coverImage
+        - tags
+        - createdAt
+        - updatedAt
+        - authorId
+        - attempts
+        - averageScore
+        - medianScore
+        - passingRate
+        - questions
+    CreateQuizQuestionDto:
+      type: object
+      properties:
+        quizId:
+          type: number
+        question:
+          type: string
+        questionType:
+          type: string
+          enum:
+            - multiple_choice
+            - true_false
+            - short_answer
+            - order
+            - hotspot
+            - programming
+        timeLimit:
+          type: number
+        points:
+          type: number
+        explanation:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        isImmediateFeedback:
+          type: boolean
+        correctAnswers:
+          type: array
+          items:
+            type: string
+        image:
+          type: string
+      required:
+        - question
+        - questionType
+    CreateQuizRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Quiz name
+        startDate:
+          format: date-time
+          type: string
+        timeLimitTotal:
+          type: number
+        passingScore:
+          type: number
+        maxAttempts:
+          type: number
+        isImmediateFeedback:
+          type: boolean
+        isRandomizedQuestions:
+          type: boolean
+        isAnonymousAllowed:
+          type: boolean
+        isRetakeable:
+          type: boolean
+        description:
+          type: string
+        matchupId:
+          type: number
+        stageId:
+          type: number
+        isTest:
+          type: boolean
+        coverImage:
+          type: string
+        questions:
+          description: Quiz questions
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateQuizQuestionDto"
+      required:
+        - name
+        - startDate
+        - questions
+    UpdateQuizRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Quiz name
+        startDate:
+          format: date-time
+          type: string
+        timeLimitTotal:
+          type: number
+        passingScore:
+          type: number
+        maxAttempts:
+          type: number
+        isImmediateFeedback:
+          type: boolean
+        isRandomizedQuestions:
+          type: boolean
+        isAnonymousAllowed:
+          type: boolean
+        isRetakeable:
+          type: boolean
+        description:
+          type: string
+        matchupId:
+          type: number
+        stageId:
+          type: number
+        isTest:
+          type: boolean
+        coverImage:
+          type: string
+        questions:
+          description: Quiz questions
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateQuizQuestionDto"

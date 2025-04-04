@@ -1,5 +1,6 @@
 import { IGroupInviteWithUserResponse } from "src/groupInvites";
 import {
+  IExtendedRosterResponse,
   IMiniRosterResponse,
   IMiniRosterResponseWithChallongeId,
   IRosterResponse,
@@ -46,7 +47,7 @@ export interface IScoreResponse {
 }
 
 export interface IMatchupsWithMiniRostersResponse extends IMatchupResponse {
-  rosters: IMiniRosterResponse[];
+  rosters: IRosterResponse[];
 }
 
 export interface IResultsResponseWithScores extends IMatchupResponse {

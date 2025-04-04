@@ -10,6 +10,8 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import ManageCompetitions from "views/manageCompetitions";
 import Navbar from "views/navbar";
 import styles from "./index.module.scss";
+import Button from "components/button";
+import Link from "next/link";
 
 export default function Competitions() {
   const { data, isLoading, isError } = useAuth();
@@ -28,6 +30,9 @@ export default function Competitions() {
           ) : (
             <ManageCompetitions user={data!} />
           )}
+          <Link href="/manageUserManagedMatchups">
+            <Button variant="warning" label="manage matchups"></Button>
+          </Link>
         </div>
       </div>
     </div>

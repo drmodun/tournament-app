@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ICreateScoreRequest } from "@tournament-app/types";
+import { IEndMatchupRequest } from "@tournament-app/types";
 import {
   clientApi,
   MEDIUM_QUERY_RETRY_ATTEMPTS,
@@ -17,11 +17,11 @@ export const createMatchupScore = async ({
 }: {
   id?: number;
   tournamentId?: number;
-  data?: ICreateScoreRequest;
+  data?: IEndMatchupRequest;
 }) => {
   return clientApi
-    .post<
-      ICreateScoreRequest,
+    .put<
+      IEndMatchupRequest,
       AxiosResponse
     >(`/matches/${tournamentId}/${id}/update-score`, { params: { matchupId: id, tournamentId: tournamentId }, data: data })
     .then((res) => res.data);

@@ -57,6 +57,18 @@ export class QuizController {
     return await this.quizService.autoComplete(search, query);
   }
 
+  @ApiExtraModels(QuizResponseExtended)
+  @Get('detailed/:quizId')
+  @UseGuards(JwtAuthGuard, CanEditQuizGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Returns a detailed quiz',
+    type: QuizResponseExtended,
+  })
+  async getDetailedQuiz(@Param('quizId', ParseIntPipe) id: number) {
+    return await this.quizService.getDetailedQuiz(id);
+  }
+
   @Get()
   @ApiOkResponse({
     content: {

@@ -1,4 +1,7 @@
-import { IQuizQuestionWithStatistics } from "src/quizQuestion";
+import {
+  IQuizQuestionResponse,
+  IQuizQuestionWithStatistics,
+} from "src/quizQuestion";
 import { IUserResponse } from "src/user/responses.dto";
 
 export interface ITagResponse {
@@ -32,6 +35,14 @@ export interface IQuizResponseExtended extends IQuizResponse {
   questions: IQuizQuestionWithStatistics[];
 }
 
+export interface IQuizResponseForAttempt extends IQuizResponse {
+  attempts: number;
+  averageScore: number;
+  medianScore: number;
+  passingRate: number;
+  questions: IQuizQuestionResponse[];
+}
+
 export interface IQuizResponseWithAuthor extends IQuizResponse {
   author: IUserResponse;
 }
@@ -45,6 +56,7 @@ export enum QuizResponsesEnum {
   BASE = "BASE",
   EXTENDED = "EXTENDED",
   WITH_AUTHOR = "WITH_AUTHOR",
+  FOR_ATTEMPT = "FOR_ATTEMPT",
 }
 
 export type QuizReturnTypesEnumType =

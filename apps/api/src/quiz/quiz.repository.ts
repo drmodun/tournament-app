@@ -20,6 +20,7 @@ import {
   ColumnDataType,
   eq,
   ilike,
+  InferInsertModel,
   InferSelectModel,
   SQL,
   sql,
@@ -51,7 +52,8 @@ export class QuizDrizzleRepository extends PrimaryRepository<
         return query
           .leftJoin(user, eq(quiz.userId, user.id))
           .leftJoin(quizTags, eq(quiz.id, quizTags.quizId))
-          .leftJoin(tags, eq(quizTags.tagId, tags.id));
+          .leftJoin(tags, eq(quizTags.tagId, tags.id))
+          .groupBy(quiz.id);
 
       case QuizResponsesEnum.EXTENDED:
         return query
@@ -59,15 +61,24 @@ export class QuizDrizzleRepository extends PrimaryRepository<
           .leftJoin(quizTags, eq(quiz.id, quizTags.quizId))
           .leftJoin(tags, eq(quizTags.tagId, tags.id))
           .leftJoin(quizQuestion, eq(quiz.id, quizQuestion.quizId))
-          .leftJoin(quizOption, eq(quizQuestion.id, quizOption.quizQuestionId));
+          .leftJoin(quizOption, eq(quizQuestion.id, quizOption.quizQuestionId))
+          .groupBy(quiz.id);
+      case QuizResponsesEnum.FOR_ATTEMPT:
+        return query
+          .leftJoin(quizQuestion, eq(quiz.id, quizQuestion.quizId))
+          .leftJoin(quizOption, eq(quizQuestion.id, quizOption.quizQuestionId))
+          .leftJoin(user, eq(quiz.userId, user.id))
+          .leftJoin(quizTags, eq(quiz.id, quizTags.quizId))
+          .leftJoin(tags, eq(quizTags.tagId, tags.id))
+          .groupBy(quiz.id);
       default:
-        return query;
+        return this.conditionallyJoin(query, QuizResponsesEnum.BASE);
     }
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ([_, value]) => value !== undefined,
     );
 
@@ -131,17 +142,39 @@ export class QuizDrizzleRepository extends PrimaryRepository<
             'options', (
               SELECT ARRAY_AGG(JSONB_BUILD_OBJECT(
                 'id', qo.id,
-                'text', qo.text,
-                'order', qo.order,
+                'option', qo.option,
                 'isCorrect', qo.is_correct,
-                'count', (SELECT COUNT(*) FROM quiz_attempt_answer qaa WHERE qaa.option_id = qo.id)
+                'count', (SELECT COUNT(*) FROM quiz_answer qaa WHERE qaa.selected_option_id = qo.id)
               ))
               FROM quiz_option qo
-              WHERE qo.question_id = ${quizQuestion.id}
+              WHERE qo.quiz_question_id = ${quizQuestion.id}
 
             )
           )) FILTER (WHERE ${quizQuestion.id} IS NOT NULL)`,
           // TODO: refactor other drizzle queries to use this
+        };
+      case QuizResponsesEnum.FOR_ATTEMPT:
+        return {
+          ...this.getMappingObject(QuizResponsesEnum.EXTENDED),
+          questions: sql`ARRAY_AGG(DISTINCT JSONB_BUILD_OBJECT(
+            'id', ${quizQuestion.id}, 
+            'name', ${quizQuestion.question}, 
+            'timeLimit', ${quizQuestion.timeLimit},
+            'points', ${quizQuestion.points},
+            'type', ${quizQuestion.type},
+            'image', ${quizQuestion.questionImage},
+            'isImmediateFeedback', ${quizQuestion.isImmediateFeedback},
+            'options', (
+              SELECT ARRAY_AGG(JSONB_BUILD_OBJECT(
+                'id', qo.id,
+                'option', qo.option,
+                'isCorrect', qo.is_correct,
+                'count', (SELECT COUNT(*) FROM quiz_answer qaa WHERE qaa.selected_option_id = qo.id)
+              ))
+              FROM quiz_option qo
+              WHERE qo.quiz_question_id = ${quizQuestion.id}
+            )
+          )) FILTER (WHERE ${quizQuestion.id} IS NOT NULL)`,
         };
       default:
         return this.getMappingObject(QuizResponsesEnum.BASE);
@@ -171,7 +204,8 @@ export class QuizDrizzleRepository extends PrimaryRepository<
 
   public sortRecord: Record<
     string,
-    PgColumn<ColumnBaseConfig<ColumnDataType, string>, {}, {}> | SQL<number>
+    | PgColumn<ColumnBaseConfig<ColumnDataType, string>, object, object>
+    | SQL<number>
   >; // TODO: implement quiz sorting
 
   async getAuthoredQuizzes(userId: number, pagination?: PaginationOnly) {
@@ -207,8 +241,8 @@ export class QuizDrizzleRepository extends PrimaryRepository<
           .values({
             ...question,
             quizId: id,
-            correctAnswers: question.correctAnswers.join(','),
-          })
+            correctAnswers: question.correctAnswers?.join(','),
+          } as InferInsertModel<typeof quizQuestion>)
           .returning({ id: quizQuestion.id });
 
         await tx
@@ -234,7 +268,7 @@ export class QuizDrizzleRepository extends PrimaryRepository<
   }
 
   async create(createRequest: CreateQuizRequest & { authorId: number }) {
-    return db.transaction(async (tx) => {
+    return await db.transaction(async (tx) => {
       const quizToCreate = await tx
         .insert(quiz)
         .values({
@@ -249,8 +283,8 @@ export class QuizDrizzleRepository extends PrimaryRepository<
           .values({
             ...question,
             quizId: quizToCreate[0].id,
-            correctAnswers: question.correctAnswers.join(','),
-          })
+            correctAnswers: question.correctAnswers?.join(','),
+          } as InferInsertModel<typeof quizQuestion>)
           .returning({ id: quizQuestion.id });
 
         await tx.insert(quizOption).values(

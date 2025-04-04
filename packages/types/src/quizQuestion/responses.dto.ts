@@ -6,7 +6,6 @@ import {
 
 export interface IQuizQuestionResponse {
   name: string;
-  order: number;
   timeLimit?: number;
   points?: number;
   id: number;

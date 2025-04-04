@@ -91,6 +91,26 @@ export class QuizResponseExtended
   questions: QuizQuestionWithStatistics[];
 }
 
+export class QuizResponseForAttempt extends QuizResponse {
+  @ApiResponseProperty()
+  attempts: number;
+
+  @ApiResponseProperty()
+  averageScore: number;
+
+  @ApiResponseProperty()
+  medianScore: number;
+
+  @ApiResponseProperty()
+  passingRate: number;
+
+  @ApiProperty({
+    description: 'Quiz questions with statistics',
+    type: [QuizQuestionResponse],
+  })
+  questions: QuizQuestionResponse[];
+}
+
 // Define response types and enums
 export enum QuizResponsesEnum {
   BASE = 'BASE',

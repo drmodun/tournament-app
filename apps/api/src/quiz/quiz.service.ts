@@ -3,6 +3,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
   ForbiddenException,
+  NotImplementedException,
 } from '@nestjs/common';
 import {
   QuizResponsesEnum,
@@ -25,17 +26,26 @@ export class QuizService {
   async create(createQuizDto: CreateQuizRequest & { authorId: number }) {
     const quiz = await this.repository.create(createQuizDto);
 
-    if (!quiz[0]) {
+    console.log(quiz);
+
+    if (!quiz) {
       throw new UnprocessableEntityException('Quiz creation failed');
     }
 
-    return quiz[0];
+    return quiz;
   }
 
   async findAll<TResponseType extends IQuizResponse>(
     query: QuizQuery,
   ): Promise<TResponseType[]> {
     const { responseType = QuizResponsesEnum.BASE, ...queryParams } = query;
+
+    if (responseType == QuizResponsesEnum.EXTENDED) {
+      throw new NotImplementedException(
+        'Extended response type not allowed from this endpoint',
+      );
+    }
+
     const queryFunction = this.repository.getQuery({
       ...queryParams,
       responseType,
@@ -43,6 +53,14 @@ export class QuizService {
 
     const results = await queryFunction;
     return results as TResponseType[];
+  }
+
+  async getDetailedQuiz(id: number) {
+    const results = await this.repository.getSingleQuery(
+      id,
+      QuizResponsesEnum.EXTENDED,
+    );
+    return results;
   }
 
   async findOne<TResponseType extends BaseQuizResponse>(
@@ -61,11 +79,13 @@ export class QuizService {
   async update(id: number, updateQuizDto: UpdateQuizRequest) {
     const updatedQuiz = await this.repository.update(id, updateQuizDto);
 
-    if (!updatedQuiz[0]) {
+    console.log(updatedQuiz);
+
+    if (!updatedQuiz) {
       throw new NotFoundException(`Quiz with ID ${id} not found`);
     }
 
-    return updatedQuiz[0];
+    return updatedQuiz;
   }
 
   async remove(id: number) {

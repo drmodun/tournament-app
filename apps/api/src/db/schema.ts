@@ -831,9 +831,7 @@ export const rosterRelations = relations(roster, ({ many, one }) => ({
     fields: [roster.stageId],
     references: [stage.id],
   }),
-  matchup: many(rosterToMatchup, {
-    relationName: 'rosterToMatchup',
-  }),
+  rosterMatchup: many(rosterToMatchup),
   scoreToRoster: many(scoreToRoster),
 }));
 
@@ -1369,7 +1367,7 @@ export const quizQuestion = pgTable('quiz_question', {
     .notNull(),
   question: text('question').notNull(), //question should be saved as markdownž
   questionImage: text('question_image'),
-  correctAnswers: text('correct_answers').notNull(), // a csv of correct answers for non choice questions
+  correctAnswers: text('correct_answers'), // a csv of correct answers for non choice questions
   points: integer('points').default(5),
   timeLimit: integer('time_limit'), // Generally only for quizzes
   isImmediateFeedback: boolean('is_immediate_feedback').default(false),
@@ -1405,6 +1403,7 @@ export const quizAttempt = pgTable('quiz_attempt', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   currentQuestion: integer('current_question').default(0),
   endTime: timestamp('end_time', { withTimezone: true }),
+  score: integer('score').default(0),
 });
 
 export const quizAnswer = pgTable('quiz_answer', {

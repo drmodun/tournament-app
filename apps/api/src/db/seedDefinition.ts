@@ -1797,7 +1797,9 @@ async function createQuizOptions(questions) {
       if (correctOption) {
         await db
           .update(tables.quizQuestion)
-          .set({ correctAnswers: correctOption.text })
+          .set({ correctAnswers: correctOption.option } as Partial<
+            InferInsertModel<typeof tables.quizQuestion>
+          >)
           .where(eq(tables.quizQuestion.id, question.id));
       }
     }

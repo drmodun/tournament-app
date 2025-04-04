@@ -20,10 +20,11 @@ import { CreateQuizOptionDto } from './option.dto';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateQuizQuestionDto implements ICreateQuizQuestionDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNumber()
   @Transform(({ value }) => parseInt(value))
-  quizId: number;
+  @IsOptional()
+  quizId?: number;
 
   @ApiProperty()
   @IsString()
@@ -36,12 +37,6 @@ export class CreateQuizQuestionDto implements ICreateQuizQuestionDto {
   })
   @IsEnum(quizQuestionTypeEnum)
   questionType: quizQuestionTypeEnum;
-
-  @ApiPropertyOptional()
-  @IsNumber()
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value))
-  order?: number;
 
   @ApiPropertyOptional()
   @IsNumber()

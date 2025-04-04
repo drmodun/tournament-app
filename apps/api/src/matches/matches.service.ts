@@ -59,9 +59,6 @@ export class MatchesService {
               };
             },
           );
-
-          console.log(rosterScoreData, rosterPromises);
-
           await this.challongeService.updateMatchup(
             matchup.matchup.challongeMatchupId?.toString(),
             stage.challongeTournamentId?.toString(),

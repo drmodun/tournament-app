@@ -1404,10 +1404,13 @@ export const quizAttempt = pgTable('quiz_attempt', {
   currentQuestion: integer('current_question').default(0),
   endTime: timestamp('end_time', { withTimezone: true }),
   score: integer('score').default(0),
+  isSubmitted: boolean('is_submitted').default(false),
 });
 
 export const quizAnswer = pgTable('quiz_answer', {
   id: serial('id').primaryKey(),
+  isFinal: boolean('is_final').default(false),
+  isCorrect: boolean('is_correct').default(false),
   userId: integer('user_id')
     .references(() => user.id, {
       onDelete: 'cascade',

@@ -193,8 +193,6 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
       .leftJoin(user, eq(groupToUser.userId, user.id));
   }
 
-  // TODO: see if a group version is important and either implement it or modify this function
-
   async autoCompleteGroups(
     search: string,
     userId: number,

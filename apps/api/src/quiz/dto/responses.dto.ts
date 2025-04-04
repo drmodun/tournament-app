@@ -119,5 +119,3 @@ export enum QuizResponsesEnum {
 
 export type QuizResponseEnumType =
   (typeof QuizResponsesEnum)[keyof typeof QuizResponsesEnum];
-
-// TODO: maybe author response

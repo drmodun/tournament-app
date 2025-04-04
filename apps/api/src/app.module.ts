@@ -29,6 +29,8 @@ import { ChallongeModule } from './challonge/challonge.module';
 import { MatchesModule } from './matches/matches.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { QuizModule } from './quiz/quiz.module';
+import { QuizAttemptModule } from './quiz-attempt/quiz-attempt.module';
+
 @Module({
   imports: [
     UsersModule,
@@ -58,6 +60,7 @@ import { QuizModule } from './quiz/quiz.module';
     ChallongeModule,
     MatchesModule,
     QuizModule,
+    QuizAttemptModule,
     EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],

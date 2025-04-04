@@ -213,7 +213,6 @@ function rosterToParticipantDetails(
   return {
     name: sanitizeForChallonge(roster.name),
     misc: roster.id.toString(),
-    //TODO: add seed
   };
 }
 

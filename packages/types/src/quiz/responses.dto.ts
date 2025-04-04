@@ -63,3 +63,39 @@ export type QuizReturnTypesEnumType =
   (typeof QuizResponsesEnum)[keyof typeof QuizResponsesEnum];
 
 //TODO: for leaderboard scoring implement other types later
+
+export interface IQuizAnswerResponse {
+  id: number;
+  isFinal: boolean;
+  isCorrect: boolean;
+  userId: number;
+  quizAttemptId: number;
+  quizQuestionId: number;
+  answer: string;
+  selectedOptionId?: number;
+  createdAt: Date;
+}
+
+export interface IQuizAttemptResponse {
+  id: number;
+  userId: number;
+  quizId: number;
+  currentQuestion: number;
+  endTime?: Date;
+  score: number;
+  isSubmitted: boolean;
+  createdAt: Date;
+  quiz?: IQuizResponse;
+}
+
+export interface IQuizAttemptWithAnswersResponse extends IQuizAttemptResponse {
+  answers: IQuizAnswerResponse[];
+}
+
+export enum QuizAttemptResponsesEnum {
+  BASE = "base",
+  WITH_ANSWERS = "withAnswers",
+}
+
+export type QuizAttemptResponseEnumType =
+  (typeof QuizAttemptResponsesEnum)[keyof typeof QuizAttemptResponsesEnum];

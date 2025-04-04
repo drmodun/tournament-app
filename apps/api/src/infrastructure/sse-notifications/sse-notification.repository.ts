@@ -92,7 +92,6 @@ export class SseNotificationRepository extends PrimaryRepository<
 
     return clauses.map(([key, value]) => {
       const parsed = value;
-      console.log(key, parsed);
       switch (key) {
         case 'userId':
           return eq(notificationToUser.userId, +parsed);

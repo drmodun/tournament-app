@@ -25,9 +25,6 @@ export class QuizService {
 
   async create(createQuizDto: CreateQuizRequest & { authorId: number }) {
     const quiz = await this.repository.create(createQuizDto);
-
-    console.log(quiz);
-
     if (!quiz) {
       throw new UnprocessableEntityException('Quiz creation failed');
     }
@@ -78,9 +75,6 @@ export class QuizService {
 
   async update(id: number, updateQuizDto: UpdateQuizRequest) {
     const updatedQuiz = await this.repository.update(id, updateQuizDto);
-
-    console.log(updatedQuiz);
-
     if (!updatedQuiz) {
       throw new NotFoundException(`Quiz with ID ${id} not found`);
     }

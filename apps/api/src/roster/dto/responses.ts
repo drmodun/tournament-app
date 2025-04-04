@@ -30,8 +30,6 @@ export class MiniRosterDto implements IMiniRosterResponse {
   @ApiResponseProperty()
   @Type(() => MiniUserResponseWithProfilePicture)
   user: IMiniUserResponseWithProfilePicture;
-
-  // TODO: maybe add the participation to swagger
 }
 
 export class PlayerDto implements IRosterPlayer {

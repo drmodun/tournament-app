@@ -230,13 +230,6 @@ export default function Teams() {
             >
               <FilterAltIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
-            <button
-              className={clsx(styles.button, styles.addButton)}
-              title="toggle search"
-              onClick={() => setIsSearching((prev) => !prev)}
-            >
-              <SearchIcon className={clsx(styles[`${theme}Fill`])} />
-            </button>
           </div>
 
           {data?.pages[Math.floor(activePage)]?.results[activeTab] && (

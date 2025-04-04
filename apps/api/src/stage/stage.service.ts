@@ -48,8 +48,6 @@ export class StageService {
       throw new UnprocessableEntityException('Stage creation failed');
     }
 
-    console.log(stage[0]);
-
     try {
       const stageId = await this.createChallongeTournament(
         stage[0].id as number,
@@ -229,10 +227,6 @@ export class StageService {
         },
         rosteredUsers.map((user) => user.id),
       );
-
-      console.log(
-        `Sent stage start notifications to ${rosteredUsers.length} users for stage ${stageId}`,
-      );
     } catch (error) {
       console.error(
         `Failed to send stage start notifications: ${error.message}`,
@@ -278,8 +272,6 @@ export class StageService {
         stage.challongeTournamentId,
         bulkParticipantsRequest,
       );
-
-    console.log(rostersWithChallongeParticipants);
 
     await this.rosterRepository.attachChallongeParticipantIdToRosters(
       rostersWithChallongeParticipants.map((roster) => ({

@@ -55,7 +55,7 @@ export default function AddRosterForm({
         }),
       ],
     });
-    if (createRosterMutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   const addMember = (member: any) => {

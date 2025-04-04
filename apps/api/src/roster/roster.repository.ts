@@ -158,6 +158,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         query.participationId
           ? eq(roster.participationId, query.participationId)
           : undefined,
+        query.rosterId ? eq(roster.id, query.rosterId) : undefined,
       ),
       limit: isCorrectLimit ? query.pageSize : 12,
       offset: isCorrectLimit ? query.pageSize * (query.page - 1) : 0,

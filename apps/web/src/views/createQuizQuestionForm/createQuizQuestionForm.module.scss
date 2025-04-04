@@ -8,4 +8,42 @@
 .wrapper {
   padding: $padding;
   border-radius: $borderRadius;
+
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.actionButton {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option {
+  border-radius: $borderRadius;
+  padding: $padding;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actionButton {
+  width: $baseComponentHeight;
+}
+
+.optionActionButtons {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.answers {
+  padding: $padding;
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
 }

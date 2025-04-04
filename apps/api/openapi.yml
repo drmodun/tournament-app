@@ -1528,14 +1528,14 @@ paths:
             items:
               type: string
       responses:
-        "200":
-          description: ""
+        '200':
+          description: ''
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/NotificationsResponse"
+                  $ref: '#/components/schemas/NotificationsResponse'
       tags: &a11
         - SSE Notifications
       security:
@@ -1545,8 +1545,8 @@ paths:
       operationId: SseNotificationsController_requestNewToken
       parameters: []
       responses:
-        "201":
-          description: ""
+        '201':
+          description: ''
       tags: *a11
       security:
         - bearer: []
@@ -1560,8 +1560,8 @@ paths:
           schema:
             type: number
       responses:
-        "204":
-          description: ""
+        '204':
+          description: ''
       tags: *a11
       security:
         - bearer: []
@@ -1570,8 +1570,8 @@ paths:
       operationId: SseNotificationsController_markAllAsRead
       parameters: []
       responses:
-        "200":
-          description: ""
+        '200':
+          description: ''
       tags: *a11
       security:
         - bearer: []
@@ -1580,8 +1580,8 @@ paths:
       operationId: SseNotificationsController_markBulkAsRead
       parameters: []
       responses:
-        "200":
-          description: ""
+        '200':
+          description: ''
       tags: *a11
       security:
         - bearer: []
@@ -1595,8 +1595,8 @@ paths:
           schema:
             type: number
       responses:
-        "200":
-          description: ""
+        '200':
+          description: ''
       tags: *a11
       security:
         - bearer: []
@@ -1610,8 +1610,8 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: ""
+        '200':
+          description: ''
       tags: *a11
   /followers/auto-complete/followers/{search}:
     get:
@@ -1640,13 +1640,8 @@ paths:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
-      tags: &a12
-=======
                   $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
-      tags: &a11
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a12
         - followers
       security:
         - bearer: []
@@ -1677,13 +1672,8 @@ paths:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
-      tags: *a12
-=======
                   $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
-      tags: *a11
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a12
       security:
         - bearer: []
   /followers:
@@ -1761,13 +1751,8 @@ paths:
                     id: 1
                     isFake: false
                     username: john_doe
-<<<<<<< HEAD
-          description: ""
-      tags: *a12
-=======
           description: ''
-      tags: *a11
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a12
   /followers/{userId}/{followerId}:
     get:
       operationId: FollowersController_findOne
@@ -1788,13 +1773,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/FollowerMiniResponse"
-      tags: *a12
-=======
                 $ref: '#/components/schemas/FollowerMiniResponse'
-      tags: *a11
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a12
   /followers/{userId}:
     post:
       operationId: FollowersController_create
@@ -1805,15 +1785,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a12
-=======
         '201':
           description: ''
-      tags: *a11
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a12
       security:
         - bearer: []
     delete:
@@ -1825,15 +1799,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a12
-=======
         '200':
           description: ''
-      tags: *a11
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a12
       security:
         - bearer: []
   /group-join-requests:
@@ -1990,15 +1958,9 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-<<<<<<< HEAD
                         createdAt: 2025-04-03T00:03:53.789Z
-          description: ""
-      tags: &a13
-=======
-                        createdAt: 2025-04-01T13:36:35.534Z
           description: ''
-      tags: &a12
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a13
         - group-join-requests
       security: &a15
         - &a14
@@ -2019,15 +1981,9 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateGroupJoinRequestDto'
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a13
-=======
         '201':
           description: ''
-      tags: *a12
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a13
       security:
         - *a14
         - bearer: []
@@ -2046,15 +2002,9 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateGroupJoinRequestDto'
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a13
-=======
         '200':
           description: ''
-      tags: *a12
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a13
       security:
         - *a14
         - bearer: []
@@ -2067,15 +2017,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a13
-=======
         '200':
           description: ''
-      tags: *a12
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a13
       security:
         - *a14
         - bearer: []
@@ -2150,21 +2094,12 @@ paths:
                     createdAt: 2025-04-03T00:03:53.789Z
               schema:
                 anyOf:
-<<<<<<< HEAD
-                  - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
-                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniUserResponse"
-                  - $ref: "#/components/schemas/GroupJoinRequestWithGroupResponse"
-                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniGroupResponse"
-      tags: *a13
-      security: *a15
-=======
                   - $ref: '#/components/schemas/GroupJoinRequestWithUserResponse'
                   - $ref: '#/components/schemas/GroupJoinRequestWithMiniUserResponse'
                   - $ref: '#/components/schemas/GroupJoinRequestWithGroupResponse'
                   - $ref: '#/components/schemas/GroupJoinRequestWithMiniGroupResponse'
-      tags: *a12
-      security: *a14
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a13
+      security: *a15
   /group-join-requests/{groupId}/{userId}/accept:
     post:
       operationId: GroupJoinRequestsController_accept
@@ -2180,17 +2115,10 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a13
-      security: *a15
-=======
         '201':
           description: ''
-      tags: *a12
-      security: *a14
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a13
+      security: *a15
   /group-join-requests/{groupId}/{userId}/reject:
     delete:
       operationId: GroupJoinRequestsController_reject
@@ -2206,17 +2134,10 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a13
-      security: *a15
-=======
         '200':
           description: ''
-      tags: *a12
-      security: *a14
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a13
+      security: *a15
   /group-invites:
     get:
       operationId: GroupInvitesController_findAll
@@ -2380,15 +2301,9 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-<<<<<<< HEAD
                         createdAt: 2025-04-03T00:03:53.794Z
-          description: ""
-      tags: &a16
-=======
-                        createdAt: 2025-04-01T13:36:35.540Z
           description: ''
-      tags: &a15
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a16
         - group-invites
   /group-invites/{groupId}/accept:
     post:
@@ -2400,15 +2315,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a16
-=======
         '201':
           description: ''
-      tags: *a15
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a16
       security:
         - bearer: []
   /group-invites/{groupId}/reject:
@@ -2421,15 +2330,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a16
-=======
         '200':
           description: ''
-      tags: *a15
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a16
       security:
         - bearer: []
   /group-invites/{groupId}/{userId}:
@@ -2453,15 +2356,9 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateGroupInviteDto'
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a16
-=======
         '201':
           description: ''
-      tags: *a15
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a16
       security:
         - bearer: []
     get:
@@ -2531,15 +2428,9 @@ paths:
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-<<<<<<< HEAD
                     createdAt: 2025-04-03T00:03:53.794Z
-          description: ""
-      tags: *a16
-=======
-                    createdAt: 2025-04-01T13:36:35.540Z
           description: ''
-      tags: *a15
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a16
     patch:
       operationId: GroupInvitesController_update
       parameters:
@@ -2560,15 +2451,9 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateGroupInviteDto'
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a16
-=======
         '200':
           description: ''
-      tags: *a15
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a16
       security:
         - bearer: []
     delete:
@@ -2585,15 +2470,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a16
-=======
         '200':
           description: ''
-      tags: *a15
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a16
       security:
         - bearer: []
   /categories/auto-complete/{search}:
@@ -2623,13 +2502,8 @@ paths:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
-      tags: &a17
-=======
                   $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
-      tags: &a16
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a17
         - categories
   /categories:
     get:
@@ -2766,13 +2640,8 @@ paths:
                         activeTournamentCount: 3
                         createdAt: 2024-01-07T14:00:00.000Z
                         updatedAt: 2024-01-07T14:00:00.000Z
-<<<<<<< HEAD
-          description: ""
-      tags: *a17
-=======
           description: ''
-      tags: *a16
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a17
     post:
       operationId: CategoryController_create
       parameters: []
@@ -2788,13 +2657,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a17
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a16
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a17
       security:
         - bearer: []
   /categories/{categoryId}:
@@ -2868,13 +2732,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a17
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a16
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a17
       security:
         - bearer: []
     delete:
@@ -2891,13 +2750,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a17
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a16
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a17
       security:
         - bearer: []
   /tournaments/auto-complete/{search}:
@@ -3231,13 +3085,8 @@ paths:
                         isRanked: true
                         maximumMMR: 2500
                         minimumMMR: 1500
-<<<<<<< HEAD
-          description: ""
-      tags: *a27
-=======
           description: ''
-      tags: *a26
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a27
     post:
       operationId: TournamentController_create
       parameters: []
@@ -3253,13 +3102,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a27
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a26
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a27
       security:
         - bearer: []
   /tournaments/{tournamentId}:
@@ -3383,13 +3227,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a27
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a26
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a27
       security:
         - bearer: []
     delete:
@@ -3406,13 +3245,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a27
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a26
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a27
       security:
         - bearer: []
   /stages:
@@ -3626,13 +3460,8 @@ paths:
                         name: Chess
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
-<<<<<<< HEAD
-          description: ""
-      tags: &a47
-=======
           description: ''
-      tags: &a46
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a47
         - stages
   /stages/{stageId}:
     get:
@@ -3796,13 +3625,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a47
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a46
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a47
       security:
         - bearer: []
   /stages/{tournamentId}/{stageId}:
@@ -3831,13 +3655,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a47
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a46
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a47
       security:
         - bearer: []
     delete:
@@ -3854,13 +3673,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a47
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a46
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a47
       security:
         - bearer: []
   /participations:
@@ -4010,15 +3824,9 @@ paths:
                         groupId: 1
                         responseType: BASE
                     results:
-<<<<<<< HEAD
                       - *a48
-          description: ""
-      tags: &a50
-=======
-                      - *a47
           description: ''
-      tags: &a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a50
         - participations
   /participations/{participationId}:
     get:
@@ -4127,15 +3935,9 @@ paths:
                         groupId: 1
                         responseType: BASE
                     results:
-<<<<<<< HEAD
                       - *a49
-          description: ""
-      tags: *a50
-=======
-                      - *a48
           description: ''
-      tags: *a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a50
     delete:
       operationId: ParticipationController_remove
       parameters:
@@ -4145,15 +3947,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a50
-=======
         '200':
           description: ''
-      tags: *a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a50
       security:
         - bearer: []
   /participations/apply-solo/{tournamentId}:
@@ -4171,13 +3967,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a50
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a50
       security:
         - bearer: []
   /participations/managed-for-player/{tournamentId}:
@@ -4197,13 +3988,8 @@ paths:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/MiniParticipationWithGroup"
-      tags: *a50
-=======
                   $ref: '#/components/schemas/MiniParticipationWithGroup'
-      tags: *a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a50
       security:
         - bearer: []
   /participations/apply-group/{tournamentId}/{groupId}:
@@ -4226,13 +4012,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a50
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a50
       security:
         - bearer: []
   /participations/admin/apply-solo/{tournamentId}/{userId}:
@@ -4255,13 +4036,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a50
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a50
       security:
         - bearer: []
   /participations/admin/apply-group/{tournamentId}/{groupId}:
@@ -4284,13 +4060,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a50
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a49
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a50
       security:
         - bearer: []
   /blocked-groups/auto-complete/{search}:
@@ -4320,13 +4091,8 @@ paths:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
-      tags: &a51
-=======
                   $ref: '#/components/schemas/MiniGroupResponseWithLogo'
-      tags: &a50
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a51
         - Blocked Groups
       security:
         - bearer: []
@@ -4345,15 +4111,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a51
-=======
         '200':
           description: ''
-      tags: *a50
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a51
       security:
         - bearer: []
   /blocked-groups/{groupId}:
@@ -4366,15 +4126,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a51
-=======
         '201':
           description: ''
-      tags: *a50
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a51
       security:
         - bearer: []
     delete:
@@ -4386,15 +4140,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a51
-=======
         '200':
           description: ''
-      tags: *a50
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a51
       security:
         - bearer: []
   /blocked-users/auto-complete/{groupId}/{search}:
@@ -4429,13 +4177,8 @@ paths:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
-      tags: &a52
-=======
                   $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
-      tags: &a51
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a52
         - blocked users
       security:
         - bearer: []
@@ -4459,15 +4202,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a52
-=======
         '200':
           description: ''
-      tags: *a51
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a52
       security:
         - bearer: []
   /blocked-users/{groupId}/{userId}:
@@ -4485,15 +4222,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a52
-=======
         '201':
           description: ''
-      tags: *a51
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a52
       security:
         - bearer: []
     delete:
@@ -4510,15 +4241,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a52
-=======
         '200':
           description: ''
-      tags: *a51
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a52
       security:
         - bearer: []
   /lfg/me:
@@ -4534,13 +4259,8 @@ paths:
               schema:
                 type: array
                 items:
-<<<<<<< HEAD
-                  $ref: "#/components/schemas/LFGResponse"
-      tags: &a53
-=======
                   $ref: '#/components/schemas/LFGResponse'
-      tags: &a52
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a53
         - LFG
       security:
         - bearer: []
@@ -4555,15 +4275,9 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateLFGRequest'
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a53
-=======
         '201':
           description: ''
-      tags: *a52
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a53
       security:
         - bearer: []
   /lfg/{groupId}:
@@ -4576,15 +4290,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a53
-=======
         '200':
           description: ''
-      tags: *a52
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a53
       security:
         - bearer: []
   /lfg/{id}:
@@ -4603,15 +4311,9 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateLFGRequest'
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a53
-=======
         '200':
           description: ''
-      tags: *a52
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a53
       security:
         - bearer: []
     delete:
@@ -4623,15 +4325,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a53
-=======
         '200':
           description: ''
-      tags: *a52
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a53
       security:
         - bearer: []
   /interest/{categoryId}:
@@ -4644,15 +4340,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: &a54
-=======
         '201':
           description: ''
-      tags: &a53
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a54
         - interest
       security:
         - bearer: []
@@ -4665,15 +4355,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a54
-=======
         '200':
           description: ''
-      tags: *a53
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a54
       security:
         - bearer: []
   /interest:
@@ -4691,15 +4375,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a54
-=======
         '200':
           description: ''
-      tags: *a53
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a54
       security:
         - bearer: []
   /group-interests/{groupId}:
@@ -4722,15 +4400,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: &a55
-=======
         '200':
           description: ''
-      tags: &a54
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a55
         - group interests
       security:
         - bearer: []
@@ -4749,15 +4421,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a55
-=======
         '201':
           description: ''
-      tags: *a54
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a55
       security:
         - bearer: []
     delete:
@@ -4774,15 +4440,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a55
-=======
         '200':
           description: ''
-      tags: *a54
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a55
       security:
         - bearer: []
   /lfp/groups:
@@ -4941,13 +4601,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: &a57
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: &a56
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a57
         - locations
   /locations:
     get:
@@ -5070,15 +4725,9 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-<<<<<<< HEAD
                         createdAt: 2025-04-03T00:03:53.775Z
-          description: ""
-      tags: *a57
-=======
-                        createdAt: 2025-04-01T13:36:35.512Z
           description: ''
-      tags: *a56
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a57
     post:
       operationId: LocationController_create
       parameters: []
@@ -5094,13 +4743,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a57
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a56
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a57
       security:
         - bearer: []
   /locations/{locationId}:
@@ -5164,13 +4808,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a57
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a56
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a57
       security:
         - bearer: []
     delete:
@@ -5187,13 +4826,8 @@ paths:
           content:
             application/json:
               schema:
-<<<<<<< HEAD
-                $ref: "#/components/schemas/ActionResponsePrimary"
-      tags: *a57
-=======
                 $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a56
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a57
       security:
         - bearer: []
   /group-requirements/{groupId}:
@@ -5281,15 +4915,9 @@ paths:
           schema:
             type: number
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: &a64
-=======
         '200':
           description: ''
-      tags: &a63
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a64
         - roster
       security:
         - bearer: []
@@ -5474,23 +5102,13 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-<<<<<<< HEAD
                         group: *a59
                         user: *a60
                         players: *a61
                         createdAt: *a62
                         updatedAt: *a63
-          description: ""
-      tags: *a64
-=======
-                        group: *a58
-                        user: *a59
-                        players: *a60
-                        createdAt: *a61
-                        updatedAt: *a62
           description: ''
-      tags: *a63
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a64
   /roster/{id}:
     get:
       operationId: RosterController_findOne
@@ -5581,15 +5199,9 @@ paths:
                     updatedAt: *a69
               schema:
                 oneOf:
-<<<<<<< HEAD
-                  - $ref: "#/components/schemas/MiniRosterDto"
-                  - $ref: "#/components/schemas/RosterDto"
-      tags: *a64
-=======
                   - $ref: '#/components/schemas/MiniRosterDto'
                   - $ref: '#/components/schemas/RosterDto'
-      tags: *a63
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a64
     patch:
       operationId: RosterController_update
       summary: Update a roster
@@ -6456,15 +6068,9 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateRosterDto'
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a64
-=======
         '201':
           description: ''
-      tags: *a63
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a64
       security:
         - bearer: []
   /matches/{tournamentId}/{matchupId}/score:
@@ -6490,15 +6096,9 @@ paths:
             schema:
               $ref: '#/components/schemas/EndMatchupRequestDto'
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: &a90
-=======
         '201':
           description: ''
-      tags: &a89
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: &a90
         - matches
   /matches/{tournamentId}/{matchupId}/update-score:
     post:
@@ -6523,15 +6123,9 @@ paths:
             schema:
               $ref: '#/components/schemas/EndMatchupRequestDto'
       responses:
-<<<<<<< HEAD
-        "201":
-          description: ""
-      tags: *a90
-=======
         '201':
           description: ''
-      tags: *a89
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a90
   /matches/{tournamentId}/{matchupId}/delete-score:
     delete:
       operationId: MatchesController_deleteMatchScore
@@ -6549,15 +6143,9 @@ paths:
           description: Tournament ID
           schema: {}
       responses:
-<<<<<<< HEAD
-        "200":
-          description: ""
-      tags: *a90
-=======
         '200':
           description: ''
-      tags: *a89
->>>>>>> a6c7b25 (WIP: quiz support)
+      tags: *a90
   /matches/stage/{stageId}/bracket:
     get:
       operationId: MatchesController_getBracketDataForStage

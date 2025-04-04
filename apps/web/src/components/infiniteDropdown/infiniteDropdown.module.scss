@@ -4,6 +4,7 @@
   position: absolute;
   overflow: auto;
   z-index: -1;
+  margin-top: $halfPadding;
 }
 
 .zIndex {
@@ -12,7 +13,7 @@
 
 .options {
   padding: $halfPadding $padding;
-  border-radius: 0 0 $borderRadius $borderRadius;
+  border-radius: $borderRadius;
   height: 100%;
   @media screen and (max-width: $tabletBreakpoint) {
     margin-left: 0;
@@ -33,12 +34,8 @@
 }
 
 .selectButtonActive {
-  border-radius: $borderRadius $borderRadius 0 0;
+  border-radius: $borderRadius;
   transition: border-radius $animationDuration $animationEasingFunction;
-
-  @media screen and (max-width: $tabletBreakpoint) {
-    border-bottom-left-radius: 0;
-  }
 }
 
 .hiddenAnimation {

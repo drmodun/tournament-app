@@ -28,7 +28,7 @@ export default function EditLFPForm({
       id: lfp?.id,
       message: data.message,
     });
-    if (editLFPMutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
   return (
     <FormProvider {...methods}>

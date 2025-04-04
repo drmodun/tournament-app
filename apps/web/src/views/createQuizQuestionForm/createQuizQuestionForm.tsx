@@ -3,13 +3,7 @@
 import { UseMutationResult } from "@tanstack/react-query";
 import {
   CreateQuizDto,
-<<<<<<< HEAD
-<<<<<<< HEAD
   ICreateQuizQuestionDto,
-=======
->>>>>>> 89c8adb (WIP: quiz support)
-=======
->>>>>>> 89c8adb (WIP: quiz support)
   quizQuestionTypeEnum,
   quizQuestionTypeEnumType,
 } from "@tournament-app/types";
@@ -29,7 +23,6 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./createQuizQuestionForm.module.scss";
 import MultilineInput from "components/multilineInput";
 import AddIcon from "@mui/icons-material/Add";
-<<<<<<< HEAD
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -39,16 +32,6 @@ export default function AddQuestionForm({
 }: {
   setQuestions?: Dispatch<SetStateAction<ICreateQuizQuestionDto[]>>;
   onClose?: () => void;
-=======
-import DeleteIcon from "@mui/icons-material/Delete";
-
-export default function AddQuestionForm({
-  type,
-  setQuestionCount,
-}: {
-  type?: quizQuestionTypeEnumType;
-  setQuestionCount: Dispatch<SetStateAction<number>>;
->>>>>>> 89c8adb (WIP: quiz support)
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -56,7 +39,6 @@ export default function AddQuestionForm({
   const [file, setFile] = useState<File>();
   const [coverImage, setCoverImage] = useState<string>();
   const [questionType, setQuestionType] = useState<quizQuestionTypeEnumType>();
-<<<<<<< HEAD
   const [shortAnswers, setShortAnswers] = useState<string[]>([]);
   const [options, setOptions] = useState<string[]>([]);
   const [correct, setCorrect] = useState<number>(-1);
@@ -64,6 +46,7 @@ export default function AddQuestionForm({
 
   const methods = useForm<ICreateQuizQuestionDto>();
   const onSubmit = async (data: ICreateQuizQuestionDto) => {
+    console.log("ODISWAJDIOWA");
     if (timeLimit) data.timeLimit = timeLimit;
     if (questionType) data.questionType = questionType;
     if (options)
@@ -78,16 +61,6 @@ export default function AddQuestionForm({
     onClose && onClose();
   };
 
-=======
-
-  const [shortAnswers, setShortAnswers] = useState<string[]>([]);
-
-  const [options, setOptions] = useState<string[]>([]);
-  const [correct, setCorrect] = useState<number>(-1);
-
-  const [timeLimit, setTimeLimit] = useState<number>();
-
->>>>>>> 89c8adb (WIP: quiz support)
   const handleChangeTimeLimit = (value: number) => {
     setTimeLimit((prev) => {
       if (prev === undefined) return value;
@@ -96,7 +69,6 @@ export default function AddQuestionForm({
     });
   };
 
-<<<<<<< HEAD
   return (
     <FormProvider {...methods}>
       <form
@@ -127,34 +99,6 @@ export default function AddQuestionForm({
             isReactHookForm={true}
             name="questionType"
             required={true}
-=======
-  useEffect(() => {
-    type && setQuestionType(type);
-  }, []);
-
-  return (
-    <div
-      className={clsx(
-        styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
-      )}
-    >
-      <div className={styles.dialogOption}>
-        <MultilineInput
-          label="question"
-          placeholder="enter question..."
-          variant={theme}
-        />
-      </div>
-      <div className={styles.dialogOption}>
-        <p className={clsx(globals.label, globals[`${theme}Color`])}>
-          question type
-        </p>
-        {!type && (
-          <Dropdown
-            variant={theme}
-            placeholder="select question type"
->>>>>>> 89c8adb (WIP: quiz support)
             options={[
               { label: "true/false" },
               { label: "multiple choice" },
@@ -173,7 +117,6 @@ export default function AddQuestionForm({
               }
             }}
           />
-<<<<<<< HEAD
         </div>
         {(questionType === quizQuestionTypeEnum.TRUE_FALSE ||
           questionType === quizQuestionTypeEnum.MULTIPLE_CHOICE ||
@@ -378,186 +321,5 @@ export default function AddQuestionForm({
         </div>
       </form>
     </FormProvider>
-=======
-        )}
-      </div>
-      <div className={styles.dialogOption}>
-        {questionType === quizQuestionTypeEnum.TRUE_FALSE ? (
-          <SlideButton options={["false", "true"]} />
-        ) : questionType === quizQuestionTypeEnum.MULTIPLE_CHOICE ? (
-          <div className={styles.manageAnswers}>
-            <Input
-              placeholder="add option..."
-              label="option"
-              submitLabel="add"
-              variant={theme}
-              doesSubmit={true}
-              type="input"
-              onSubmit={(val: string) =>
-                !options.includes(val) && setOptions((prev) => [...prev, val])
-              }
-            />
-            <div className={styles.answers}>
-              {options.map((answer: string, index: number) => {
-                return (
-                  <div
-                    className={clsx(
-                      styles.option,
-                      globals[`${theme}BackgroundColor`],
-                    )}
-                  >
-                    <p className={globals[`${theme}BackgroundColor`]}>
-                      {answer}
-                    </p>
-                    <div className={styles.optionActionButtons}>
-                      <Button
-                        variant="primary"
-                        onClick={() => setCorrect(index)}
-                      >
-                        <DeleteIcon
-                          className={globals.lightFillChildren}
-                        ></DeleteIcon>
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => {
-                          if (index == correct) setCorrect(-1);
-                          setOptions((prev) =>
-                            prev.filter((elem) => elem != answer),
-                          );
-                        }}
-                      >
-                        <DeleteIcon className={globals.lightFillChildren} />
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : (
-          <div className={styles.manageAnswers}>
-            <Input
-              placeholder="add answer..."
-              label="answer"
-              submitLabel="add"
-              variant={theme}
-              doesSubmit={true}
-              type="input"
-              onSubmit={(val: string) =>
-                !shortAnswers.includes(val) &&
-                setShortAnswers((prev) => [...prev, val])
-              }
-            />
-            <div className={styles.answers}>
-              {shortAnswers.map((answer: string) => {
-                return (
-                  <div
-                    className={clsx(
-                      styles.shortAnswer,
-                      globals[`${theme}BackgroundColor`],
-                    )}
-                  >
-                    <p className={globals[`${theme}BackgroundColor`]}>
-                      {answer}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className={styles.dialogOption}>
-        <Input
-          label="question"
-          variant={theme}
-          placeholder="enter the question"
-          isReactFormHook={true}
-          name="question"
-        />
-      </div>
-      <div className={styles.dialogOption}>
-        <p className={clsx(globals.label, globals[`${theme}Color`])}>
-          time limit
-        </p>
-        <div className={styles.hoursMinutesAndSeconds}>
-          <Input
-            variant={theme}
-            placeholder="hours"
-            type="number"
-            min="0"
-            onChange={(e) =>
-              handleChangeTimeLimit(parseInt(e.currentTarget.value) * 3600)
-            }
-          />
-          <Input
-            variant={theme}
-            placeholder="minutes"
-            type="number"
-            onChange={(e) =>
-              handleChangeTimeLimit(parseInt(e.currentTarget.value) * 60)
-            }
-            min="0"
-          />
-          <Input
-            variant={theme}
-            placeholder="seconds"
-            type="number"
-            onChange={(e) =>
-              handleChangeTimeLimit(parseInt(e.currentTarget.value))
-            }
-            min="0"
-          />
-        </div>
-      </div>
-      <div className={styles.dialogOption}>
-        <p className={clsx(globals.label, globals[`${theme}Color`])}>
-          cover image
-        </p>
-        {file ? (
-          <ImagePicker
-            file={file}
-            name="image"
-            isReactFormHook={true}
-            variant={theme}
-            className={styles.imagePicker}
-            required={true}
-            onChange={setCoverImage}
-          />
-        ) : (
-          <ImageDrop
-            onFile={setFile}
-            variant={theme}
-            className={styles.imageDrop}
-            required={true}
-            name="image"
-            isReactFormHook={true}
-          />
-        )}
-      </div>
-      <div className={styles.dialogOption}>
-        <MultilineInput
-          label="explanation"
-          variant={theme}
-          placeholder="enter the explanation"
-          isReactFormHook={true}
-          name="explanation"
-        />
-      </div>
-      <div className={styles.dialogOption}>
-        <Input
-          label="points"
-          variant={theme}
-          placeholder="enter the amount of points"
-          isReactFormHook={true}
-          name="points"
-          type="number"
-          defaultValue="1"
-          min="0"
-        />
-      </div>
-    </div>
->>>>>>> 89c8adb (WIP: quiz support)
   );
 }

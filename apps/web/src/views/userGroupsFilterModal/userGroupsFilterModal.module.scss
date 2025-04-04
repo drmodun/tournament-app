@@ -1,0 +1,15 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.arrowButton {
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}

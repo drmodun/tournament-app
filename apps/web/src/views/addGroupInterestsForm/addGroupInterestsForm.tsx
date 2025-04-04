@@ -78,13 +78,6 @@ export default function AddGroupInterestsForm({
   };
 
   useEffect(() => {
-    console.log(
-      data?.pages?.[page]?.results?.length,
-      data?.pages[page]?.results?.filter(
-        (category) => !userInterestIds?.includes(category.id),
-      ).length,
-      userInterestIds?.length,
-    );
     if (
       (data?.pages?.[page]?.results?.length ?? -1) > 0 &&
       data?.pages[page]?.results?.filter(

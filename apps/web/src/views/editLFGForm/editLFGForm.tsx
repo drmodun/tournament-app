@@ -51,7 +51,7 @@ export default function EditLFGForm({
     _data.categoryIds = returnIdsFromIndexes();
     _data.id = lfg?.id ?? -1;
     await editLFGMutation.mutateAsync(_data);
-    if (editLFGMutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   return (

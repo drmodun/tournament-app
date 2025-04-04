@@ -15,11 +15,13 @@ export default async function BracketPage({
   let res = await fetchFormattedBracket(id);
   res = formatBracketDateTimes(res);
 
+  const stage = await fetchStage(id);
+
   return (
     <div className={styles.wrapper}>
       <Navbar className={styles.navbar} />
       <div className={styles.screen}>
-        <Bracket bracket={res} />
+        <Bracket bracket={res} stage={stage} />
       </div>
     </div>
   );

@@ -6,6 +6,13 @@ import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./bracket.module.scss";
+import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
+import {
+  IExtendedStageResponseWithTournament,
+  IStageResponse,
+  IStageResponseWithTournament,
+} from "@tournament-app/types";
+import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 
 interface TournamentBracketProps {
   stageId: number;
@@ -38,8 +45,10 @@ export interface ReactBracketsData {
 
 export default function BracketView({
   bracket,
+  stage,
 }: {
   bracket: ReactBracketsData;
+  stage?: IExtendedStageResponseWithTournament;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);

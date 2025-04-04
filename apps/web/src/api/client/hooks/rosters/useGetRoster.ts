@@ -13,7 +13,7 @@ import {
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 
-export const getRoster = async (rosterId: number) =>
+export const getRoster = async (rosterId?: number) =>
   clientApi
     .get<never, AxiosResponse<IExtendedRosterResponse>>(`/roster/${rosterId}`, {
       params: {
@@ -22,7 +22,7 @@ export const getRoster = async (rosterId: number) =>
     })
     .then((res) => res.data);
 
-export const useGetRoster = (rosterId: number) => {
+export const useGetRoster = (rosterId?: number) => {
   return useQuery({
     queryKey: ["roster", rosterId ?? ""],
     queryFn: () => getRoster(rosterId),

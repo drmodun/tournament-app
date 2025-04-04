@@ -41,7 +41,7 @@ export default function CreateTeamForm({
     data.locationId = locationId;
     if (logo) data.logo = logo;
     await mutation.mutateAsync(data);
-    if (mutation.isError == false) onClose && onClose();
+    onClose && onClose();
   };
 
   const handleAutocomplete = async (

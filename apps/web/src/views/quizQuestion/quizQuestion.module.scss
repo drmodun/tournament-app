@@ -1,0 +1,101 @@
+@use "../../styles/" as *;
+
+.header {
+  @media screen and (max-width: $desktopBreakpoint) {
+    font-size: $headerFontSize !important;
+  }
+  margin-bottom: $padding;
+}
+
+.lightHeader {
+  -webkit-text-fill-color: $dark;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $light,
+    $num-steps: 32
+  );
+}
+
+.darkHeader {
+  -webkit-text-fill-color: $light;
+  @include text-outline(
+    $offset: $halfPadding / 2,
+    $color: $dark,
+    $num-steps: 32
+  );
+}
+
+.imageAligner {
+  background-image: url("/fadingBracket.svg");
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: clamp($doublePadding * 2, 100%, $tabletBreakpoint/4);
+    margin-top: $padding;
+  }
+
+  @media screen and (max-width: $phoneBreakpoint) {
+    background-image: url("/fadingBracketMobile.svg");
+    height: 100%;
+  }
+}
+
+.subheaderTextWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  @media screen and (max-width: $tabletBreakpoint) {
+    flex-direction: column;
+  }
+}
+
+.wrapper {
+  width: clamp(0px, 100%, $desktopBreakpoint);
+  display: flex;
+  flex-direction: column;
+  @media screen and (max-width: $tabletBreakpoint) {
+    height: 100%;
+    justify-content: center;
+  }
+}
+
+.subheaderText {
+  @media screen and (max-width: $desktopBreakpoint) {
+    font-size: $largeFontSize !important;
+  }
+}
+
+.input {
+  width: clamp(0px, 75%, $desktopBreakpoint);
+  margin-bottom: $padding;
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    width: 100%;
+  }
+}
+
+.submitButton {
+  width: clamp(0px, 75%, $desktopBreakpoint);
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    width: 100%;
+  }
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.error {
+  margin-bottom: $padding;
+  text-align: left;
+  width: clamp(0px, 75%, $desktopBreakpoint);
+
+  @media screen and (max-width: $desktopBreakpoint) {
+    width: 100%;
+  }
+}

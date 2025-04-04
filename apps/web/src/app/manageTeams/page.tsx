@@ -4,7 +4,10 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SearchIcon from "@mui/icons-material/Search";
-import { IMiniGroupResponseWithLogo } from "@tournament-app/types";
+import {
+  IGroupMembershipQueryRequest,
+  IMiniGroupResponseWithLogo,
+} from "@tournament-app/types";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { useSearchUserGroups } from "api/client/hooks/groups/useSearchUserGroups";
 import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
@@ -22,6 +25,9 @@ import CreateTeamForm from "views/createTeamForm";
 import ManageTeams from "views/manageTeams";
 import Navbar from "views/navbar";
 import styles from "./index.module.scss";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import UserGroupsFilterModal from "views/userGroupsFilterModal";
+import { useUserGroupsQuery } from "api/client/hooks/groups/useUserGroupsQuery";
 
 export default function Teams() {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -33,6 +39,7 @@ export default function Teams() {
   const textColorTheme = textColor(theme);
 
   const [fetchLimit, setFetchLimit] = useState<number>(-1);
+  const [filters, setFilters] = useState<IGroupMembershipQueryRequest>({});
 
   const {
     data,
@@ -44,8 +51,10 @@ export default function Teams() {
     isFetchingNextPage,
     isFetchingPreviousPage,
     isFetchPreviousPageError,
-  } = useUserGroups();
+  } = useUserGroupsQuery(filters);
   const createGroupMutation = useCreateGroup();
+
+  const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
 
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchVal, setSearchVal] = useState<string>();
@@ -88,6 +97,17 @@ export default function Teams() {
   return (
     <div className={styles.wrapper}>
       <Dialog
+        active={filterModalOpen}
+        onClose={() => setFilterModalOpen(false)}
+        variant={theme}
+        className={styles.dialog}
+      >
+        <UserGroupsFilterModal
+          setFilters={setFilters}
+          onClose={() => setFilterModalOpen(false)}
+        />
+      </Dialog>
+      <Dialog
         active={dialogActive}
         onClose={() => setDialogActive(false)}
         variant={theme}
@@ -112,9 +132,10 @@ export default function Teams() {
             setIsSearching={setIsSearching}
           />
 
-          {data?.pages[Math.floor(activePage)]?.results[activeTab] && (
-            <ManageTeams team={searchData?.[activeTab]} />
-          )}
+          {data?.pages[Math.floor(activePage)]?.results[activeTab] &&
+            searchData?.[activeTab] && (
+              <ManageTeams team={searchData?.[activeTab]} />
+            )}
         </div>
       ) : data?.pages?.[0]?.results?.length === 0 ? (
         <div className={styles.noTeams}>
@@ -187,6 +208,13 @@ export default function Teams() {
               onClick={() => setDialogActive(true)}
             >
               <AddIcon className={clsx(styles[`${theme}Fill`])} />
+            </button>
+            <button
+              className={clsx(styles.button, styles.addButton)}
+              title="filter"
+              onClick={() => setFilterModalOpen(true)}
+            >
+              <FilterAltIcon className={clsx(styles[`${theme}Fill`])} />
             </button>
             <button
               className={clsx(styles.button, styles.addButton)}

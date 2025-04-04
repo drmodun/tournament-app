@@ -27,7 +27,7 @@ export const useDeclineGroupInvite = () => {
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
     onSuccess: async () => {
-      toast.addToast("successfully accepted group invite", "success");
+      toast.addToast("successfully rejected group invite", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("groupInvite"),
       });

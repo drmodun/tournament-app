@@ -87,6 +87,8 @@ export default function ManageLFG() {
           <div className={styles.loading}>
             <ProgressWheel variant={textColorTheme} />
           </div>
+        ) : data?.length == 0 ? (
+          <p className={globals[`${theme}Color`]}>you have no campaigns!</p>
         ) : (
           <div className={styles.cards}>
             {data &&

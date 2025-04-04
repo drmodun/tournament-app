@@ -175,6 +175,16 @@ export default function ManageStages(stage?: {
           label="view bracket"
         />
       </Link>
+      <Link
+        href={`/manageMatchups/${stage?.stage?.id}`}
+        className={styles.actionButton}
+      >
+        <Button
+          variant="warning"
+          className={styles.actionButton}
+          label="manage matchups"
+        />
+      </Link>
     </div>
   );
 }

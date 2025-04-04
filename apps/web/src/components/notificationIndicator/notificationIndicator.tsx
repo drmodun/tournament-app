@@ -76,27 +76,27 @@ export default function NotificationIndicator() {
         <div
           className={clsx(
             styles.connectionStatus,
-            isConnected ? styles.connected : styles.disconnected
+            isConnected ? styles.connected : styles.disconnected,
           )}
         />
       </div>
 
       <div ref={panelRef} className={clsx(styles.panel, isOpen && styles.open)}>
         <div className={styles.header}>
-          <div className={styles.title}>Notifications</div>
+          <div className={styles.title}>notifications</div>
           <div className={styles.actions}>
             <button
               className={styles.action}
               onClick={handleMarkAllAsRead}
               disabled={unreadCount === 0}
             >
-              Mark all as read
+              mark all as read
             </button>
           </div>
         </div>
 
         {notifications.length === 0 ? (
-          <div className={styles.empty}>No notifications yet</div>
+          <div className={styles.empty}>no notifications yet</div>
         ) : (
           notifications.map((notification) => (
             <NotificationItem
@@ -108,7 +108,7 @@ export default function NotificationIndicator() {
         )}
         <div className={styles.seeAll}>
           <Link href="/notifications" onClick={handleSeeAllClick}>
-            See all notifications
+            see all notifications
           </Link>
         </div>
       </div>

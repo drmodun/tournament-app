@@ -32,7 +32,7 @@ export default function NotificationsPage() {
   const { markAllAsRead, markAsRead } = useNotificationContext();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isReadFilter, setIsReadFilter] = useState<boolean | undefined>(
-    undefined
+    undefined,
   );
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -47,12 +47,12 @@ export default function NotificationsPage() {
   const filterCategories: FilterCategory[] = useMemo(
     () => [
       {
-        label: "All",
+        label: "all",
         types: [] as notificationTypeEnum[],
         key: "all",
       },
       {
-        label: "Account",
+        label: "account",
         types: [
           notificationTypeEnum.WELCOME,
           notificationTypeEnum.RESET_PASSWORD,
@@ -62,7 +62,7 @@ export default function NotificationsPage() {
         key: "account",
       },
       {
-        label: "Tournaments",
+        label: "tournaments",
         types: [
           notificationTypeEnum.TOURNAMENT_REMINDER,
           notificationTypeEnum.TOURNAMENT_START,
@@ -72,7 +72,7 @@ export default function NotificationsPage() {
         key: "tournaments",
       },
       {
-        label: "Groups",
+        label: "groups",
         types: [
           notificationTypeEnum.GROUP_INVITATION,
           notificationTypeEnum.GROUP_JOIN_REQUEST,
@@ -85,7 +85,7 @@ export default function NotificationsPage() {
         key: "groups",
       },
       {
-        label: "Social",
+        label: "social",
         types: [
           notificationTypeEnum.NEW_FOLLOWER,
           notificationTypeEnum.GROUP_INVITATION,
@@ -93,7 +93,7 @@ export default function NotificationsPage() {
         key: "social",
       },
     ],
-    []
+    [],
   );
 
   const selectedType = useMemo(() => {
@@ -102,7 +102,7 @@ export default function NotificationsPage() {
     }
 
     const category = filterCategories.find(
-      (cat) => cat.key === selectedCategory
+      (cat) => cat.key === selectedCategory,
     );
     if (category && category.types.length === 1) {
       return category.types[0];
@@ -144,7 +144,7 @@ export default function NotificationsPage() {
           fetchNextPage();
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (bottomRef.current) {
@@ -162,14 +162,14 @@ export default function NotificationsPage() {
         window.location.href = link;
       }
     },
-    [markAsRead]
+    [markAsRead],
   );
 
   const handleCategoryChange = useCallback(
     (category: string) => {
       setSelectedCategory(category === selectedCategory ? null : category);
     },
-    [selectedCategory]
+    [selectedCategory],
   );
 
   const handleReadFilterChange = useCallback(
@@ -177,7 +177,7 @@ export default function NotificationsPage() {
       console.log(filter, isReadFilter);
       setIsReadFilter(filter == isReadFilter ? undefined : filter);
     },
-    [isReadFilter]
+    [isReadFilter],
   );
 
   if (authLoading) {
@@ -185,7 +185,7 @@ export default function NotificationsPage() {
       <div
         className={clsx(
           globals[`${colorTheme}BackgroundColor`],
-          styles.loadingContainer
+          styles.loadingContainer,
         )}
       >
         <ProgressWheel variant={colorTheme} />
@@ -197,15 +197,15 @@ export default function NotificationsPage() {
     <div
       className={clsx(globals[`${colorTheme}BackgroundColor`], styles.screen)}
     >
-      <Navbar className={styles.navbar} variant={textColorTheme} />
+      <Navbar className={styles.navbar} variant={theme} />
       <div className={styles.container}>
         <div className={styles.header}>
           <h1 className={clsx(styles.title, globals[`${textColorTheme}Color`])}>
-            Notifications
+            notifications
           </h1>
           {notifications && notifications.length > 0 && (
             <Button
-              label="Mark all as read"
+              label="mark all as read"
               variant={textColorTheme}
               onClick={markAllAsRead}
             />
@@ -216,16 +216,16 @@ export default function NotificationsPage() {
           className={clsx(
             styles.filterSection,
             globals[`${colorTheme}BackgroundColor`],
-            globals.boxShadow
+            globals.boxShadow,
           )}
         >
           <div
             className={clsx(
               styles.filterLabel,
-              globals[`${textColorTheme}Color`]
+              globals[`${textColorTheme}Color`],
             )}
           >
-            Filter by type:
+            filter by type:
           </div>
           <div className={styles.chipGroup}>
             {filterCategories.map((category) => (
@@ -233,7 +233,7 @@ export default function NotificationsPage() {
                 key={category.key}
                 className={clsx(
                   styles.chip,
-                  selectedCategory === category.key && styles.active
+                  selectedCategory === category.key && styles.active,
                 )}
                 onClick={() => handleCategoryChange(category.key)}
               >
@@ -245,29 +245,29 @@ export default function NotificationsPage() {
           <div
             className={clsx(
               styles.filterLabel,
-              globals[`${textColorTheme}Color`]
+              globals[`${textColorTheme}Color`],
             )}
           >
-            Filter by status:
+            filter by status:
           </div>
           <div className={styles.statusChips}>
             <button
               className={clsx(
                 styles.chip,
-                isReadFilter === false && styles.active
+                isReadFilter === false && styles.active,
               )}
               onClick={() => handleReadFilterChange(false)}
             >
-              Unread
+              unread
             </button>
             <button
               className={clsx(
                 styles.chip,
-                isReadFilter === true && styles.active
+                isReadFilter === true && styles.active,
               )}
               onClick={() => handleReadFilterChange(true)}
             >
-              Read
+              read
             </button>
           </div>
         </div>
@@ -285,7 +285,7 @@ export default function NotificationsPage() {
                   className={clsx(
                     styles.notificationCard,
                     globals[`${colorTheme}BackgroundColor`],
-                    globals.boxShadow
+                    globals.boxShadow,
                   )}
                 >
                   <NotificationItem
@@ -307,10 +307,10 @@ export default function NotificationsPage() {
               <div
                 className={clsx(
                   styles.emptyState,
-                  globals[`${textColorTheme}Color`]
+                  globals[`${textColorTheme}Color`],
                 )}
               >
-                <p>No more notifications</p>
+                <p>no more notifications</p>
               </div>
             )}
           </>
@@ -318,10 +318,10 @@ export default function NotificationsPage() {
           <div
             className={clsx(
               styles.emptyState,
-              globals[`${textColorTheme}Color`]
+              globals[`${textColorTheme}Color`],
             )}
           >
-            <p>You have no notifications</p>
+            <p>you have no notifications</p>
           </div>
         )}
       </div>

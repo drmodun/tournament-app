@@ -45,6 +45,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: $padding;
+  border-radius: $borderRadius;
+  padding: $padding;
 }
 
 .versusWrapper {
@@ -63,4 +65,24 @@
   display: flex;
   flex-direction: column;
   gap: $halfPadding;
+}
+
+.scoreWrapper {
+  display: flex;
+  gap: $halfPadding;
+  border-radius: $borderRadius;
+  padding: $halfPadding;
+  align-items: center;
+}
+
+.scoresWrapper {
+  display: flex;
+  gap: $halfPadding;
+}
+
+.resultWrapper {
+  display: flex;
+  gap: $halfPadding;
+  border-radius: $borderRadius;
+  padding: $halfPadding;
 }

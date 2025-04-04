@@ -43,7 +43,12 @@ export const useUpdateStage = (tournamentId?: number) => {
       });
     },
     onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occurred...", "error");
+      toast.addToast(
+        error.response?.data?.message ??
+          error.message ??
+          "an error occurred...",
+        "error",
+      );
       console.error(error);
       console.log(error.message);
     },

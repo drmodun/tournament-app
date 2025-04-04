@@ -67,6 +67,11 @@ export class MatchesService {
             stage.challongeTournamentId?.toString(),
             matchScoreToChallongeScoreRequest(rosterScoreData),
           );
+
+          await this.checkRoundCompletionAndUpdateNextRound(
+            matchup.matchup.stageId,
+            matchup.matchup.round,
+          );
         }
       } catch (error) {
         console.error(
@@ -169,6 +174,12 @@ export class MatchesService {
             stage.challongeTournamentId?.toString(),
             matchScoreToChallongeScoreRequest(rosterScoreData),
           );
+
+          // Check if round is complete and update next round
+          await this.checkRoundCompletionAndUpdateNextRound(
+            matchup.matchup.stageId,
+            matchup.matchup.round,
+          );
         }
       } catch (error) {
         console.error(
@@ -179,6 +190,61 @@ export class MatchesService {
     }
 
     return scores;
+  }
+
+  async checkRoundCompletionAndUpdateNextRound(
+    stageId: number,
+    round: number,
+  ): Promise<void> {
+    try {
+      const matchups = await this.matchesRepository.getMatchupsByRound(
+        stageId,
+        round,
+      );
+
+      const allMatchupsFinished = matchups.every(
+        (matchup) => matchup.isFinished,
+      );
+
+      if (allMatchupsFinished) {
+        console.log(
+          `All matchups in round ${round} for stage ${stageId} are complete. Updating next round...`,
+        );
+
+        const stage = await this.matchesRepository.getStageById(stageId);
+
+        if (stage && stage.challongeTournamentId) {
+          const challongeMatches = await this.challongeService.getMatches(
+            stage.challongeTournamentId.toString(),
+          );
+
+          const nextRoundMatches = challongeMatches.filter(
+            (match) =>
+              match.attributes.round === round + 1 &&
+              match.attributes.state !== 'pending',
+          );
+
+          if (nextRoundMatches.length > 0) {
+            console.log(
+              `Found ${nextRoundMatches.length} matches in next round from Challonge. Updating local database...`,
+            );
+
+            await this.importChallongeMatchesToStage(stageId, nextRoundMatches);
+
+            console.log(`Successfully updated matches for round ${round + 1}`);
+          } else {
+            console.log(
+              `No matches found for round ${round + 1} in Challonge yet.`,
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Error checking round completion and updating next round:`,
+        error,
+      );
+    }
   }
 
   async deleteScore(id: number) {

@@ -393,4 +393,41 @@ export class ChallongeService {
       this.updateTournamentStateFunction(id, stateRequest),
     );
   }
+
+  /**
+   * Gets all matches for a tournament from Challonge
+   * @param tournamentId The Challonge tournament ID
+   * @returns Array of matches from the Challonge API
+   */
+  async getMatches(tournamentId: string): Promise<IChallongeMatch[]> {
+    try {
+      const response = await this.httpService.axiosRef.get(
+        `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches.json`,
+        this.injectHeaders(),
+      );
+
+      if (response && response.data && response.data.data) {
+        return response.data.data.map((match) => {
+          return {
+            id: match.id.toString(),
+            round: match.attributes.round,
+            state: match.attributes.state,
+            player1Id: match.relationships.player1.data.id,
+            player2Id: match.relationships.player2.data.id,
+            winnerId: match.winnerId?.toString(),
+            scoresCsv: match.attributes.scoresCsv,
+            suggestedPlayOrder: match.attributes.suggestedPlayOrder,
+          };
+        });
+      }
+
+      return [];
+    } catch (error) {
+      console.error(
+        `Error fetching matches from Challonge for tournament ${tournamentId}:`,
+        error,
+      );
+      return [];
+    }
+  }
 }

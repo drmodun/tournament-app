@@ -3,6 +3,10 @@ import {
   groupRoleEnum,
   IChallongeMatch,
   IEndMatchupRequest,
+  IMatchupResponseWithRosters,
+  IMatchupsWithMiniRostersResponse,
+  IMiniRosterResponse,
+  IRosterResponse,
   MatchupResponsesEnum,
   MatchupSortingEnum,
 } from '@tournament-app/types';
@@ -15,6 +19,7 @@ import {
   stage,
   stageRound,
   user,
+  userToRoster,
 } from '../db/schema';
 import { db } from '../db/db';
 import {
@@ -28,6 +33,7 @@ import {
   or,
   desc,
   aliasedTable,
+  count,
 } from 'drizzle-orm';
 import * as tables from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
@@ -384,11 +390,44 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return result.length > 0;
   }
 
-  async getManagedMatchups(userId: number, query?: PaginationOnly) {
+  async getManagedMatchups(
+    userId: number,
+    query?: PaginationOnly,
+  ): Promise<IMatchupResponseWithRosters[]> {
     const creatorUser = aliasedTable(user, 'creatorUser');
+    const rosterUser = aliasedTable(user, 'rosterUser');
+    const rosterGroup = aliasedTable(tables.group, 'rosterGroup');
+    const playerUser = aliasedTable(user, 'playerUser');
+
+    const page = query?.page || 1;
+    const pageSize = query?.pageSize ?? 10;
+    const offset = pageSize * (page - 1);
+
+    const subqueryAlias = 'player_agg';
+    const playerAggregationSubquery = db.$with(subqueryAlias).as(
+      db
+        .select({
+          rosterId: userToRoster.rosterId,
+          players: sql<
+            Array<{ user: object; isSubstitute: boolean }>
+          >`JSONB_AGG(JSONB_BUILD_OBJECT(
+              'user', JSONB_BUILD_OBJECT(
+                'id', ${playerUser.id},
+                'username', ${playerUser.username},
+                'profilePicture', ${playerUser.profilePicture},
+                'country', ${playerUser.country}
+              ),
+              'isSubstitute', ${userToRoster.isSubstitute}
+            ))`.as('players'),
+        })
+        .from(userToRoster)
+        .leftJoin(playerUser, eq(userToRoster.userId, playerUser.id))
+        .groupBy(userToRoster.rosterId),
+    );
 
     const result = await db
-      .selectDistinct({
+      .with(playerAggregationSubquery)
+      .select({
         id: matchup.id,
         stageId: matchup.stageId,
         round: matchup.round,
@@ -396,6 +435,18 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         challongeMatchupId: matchup.challongeMatchupId,
         startDate: matchup.startDate,
         endDate: matchup.endDate,
+        matchupType: sql`'standard'`.mapWith(String),
+        rosters: sql<IRosterResponse[]>`JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(
+          'id', ${roster.id},
+          'stageId', ${roster.stageId},
+          'participationId', ${roster.participationId},
+          'challongeParticipantId', ${roster.challongeParticipantId},
+          'createdAt', ${roster.createdAt},
+          'group', CASE WHEN ${rosterGroup.id} IS NOT NULL THEN JSONB_BUILD_OBJECT('id', ${rosterGroup.id}, 'name', ${rosterGroup.name}, 'logo', ${rosterGroup.logo}) ELSE NULL END,
+          'user', CASE WHEN ${rosterUser.id} IS NOT NULL THEN JSONB_BUILD_OBJECT('id', ${rosterUser.id}, 'username', ${rosterUser.username}, 'profilePicture', ${rosterUser.profilePicture}) ELSE NULL END,
+          'participation', CASE WHEN ${participation.id} IS NOT NULL THEN JSONB_BUILD_OBJECT('id', ${participation.id}, 'tournament', JSONB_BUILD_OBJECT('categoryId', ${participation.tournamentId}), 'group', JSONB_BUILD_OBJECT('id', ${participation.groupId}, 'name', ${rosterGroup.name}, 'abbreviation', ${rosterGroup.abbreviation}, 'logo', ${rosterGroup.logo}), 'user', JSONB_BUILD_OBJECT('id', ${participation.userId}, 'username', ${rosterUser.username}, 'profilePicture', ${rosterUser.profilePicture})) ELSE NULL END,
+          'players', ${sql.identifier(subqueryAlias)}.players
+        )) FILTER (WHERE ${roster.id} IS NOT NULL)`,
       })
       .from(matchup)
       .leftJoin(stage, eq(matchup.stageId, stage.id))
@@ -408,6 +459,15 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       .leftJoin(
         tables.groupToUser,
         eq(tables.group.id, tables.groupToUser.groupId),
+      )
+      .leftJoin(rosterToMatchup, eq(matchup.id, rosterToMatchup.matchupId))
+      .leftJoin(roster, eq(rosterToMatchup.rosterId, roster.id))
+      .leftJoin(participation, eq(roster.participationId, participation.id))
+      .leftJoin(rosterUser, eq(participation.userId, rosterUser.id))
+      .leftJoin(rosterGroup, eq(participation.groupId, rosterGroup.id))
+      .leftJoin(
+        playerAggregationSubquery,
+        eq(roster.id, playerAggregationSubquery.rosterId),
       )
       .where(
         or(
@@ -425,11 +485,26 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
           ),
         ),
       )
-      .orderBy(desc(matchup.startDate))
-      .limit(query.pageSize ?? 10)
-      .offset(query.pageSize * (query.page || 1 - 1));
+      .groupBy(
+        matchup.id,
+        matchup.stageId,
+        matchup.round,
+        matchup.isFinished,
+        matchup.challongeMatchupId,
+        matchup.startDate,
+        matchup.endDate,
+      )
+      .orderBy(desc(count(roster.id)))
+      .limit(pageSize)
+      .offset(offset);
 
-    return result;
+    return result.map((m) => ({
+      ...m,
+      rosters: (m.rosters || []).map((r) => ({
+        ...r,
+        players: r.players || [],
+      })),
+    }));
   }
 
   async getMatchupById(matchupId: number) {
@@ -496,6 +571,15 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         }
 
         const insertedMatchups = [];
+
+        const forbiddenChallongeIds = challongeMatches.map((match) => match.id);
+
+        await tx
+          .delete(matchup)
+          .where(
+            and(inArray(matchup.challongeMatchupId, forbiddenChallongeIds)),
+          ); // delete existing outdated matchups
+
         for (const match of challongeMatches) {
           const newMatchup = await tx
             .insert(matchup)
@@ -812,5 +896,14 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     });
 
     return result;
+  }
+
+  async getMatchupsByRound(stageId: number, round: number) {
+    const query = db
+      .select()
+      .from(matchup)
+      .where(and(eq(matchup.stageId, stageId), eq(matchup.round, round)));
+
+    return await query;
   }
 }

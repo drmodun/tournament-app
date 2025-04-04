@@ -831,9 +831,7 @@ export const rosterRelations = relations(roster, ({ many, one }) => ({
     fields: [roster.stageId],
     references: [stage.id],
   }),
-  matchup: many(rosterToMatchup, {
-    relationName: 'rosterToMatchup',
-  }),
+  rosterMatchup: many(rosterToMatchup),
   scoreToRoster: many(scoreToRoster),
 }));
 
@@ -1317,7 +1315,7 @@ export const quiz = pgTable('quiz', {
   timeLimitTotal: integer('time_limit_total'), // Time limit (in seconds)
   description: text('description'),
   coverImage: text('cover_image'),
-  isTest: boolean('is_test').default(false), //If it is a test, you can see all questions at once and move back and forth
+  isTest: boolean('is_test').default(true), //If it is a test, you can see all questions at once and move back and forth
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   matchupId: integer('matchup_id').references(() => matchup.id),
   stageId: integer('stage_id').references(() => stage.id),
@@ -1369,14 +1367,13 @@ export const quizQuestion = pgTable('quiz_question', {
     .notNull(),
   question: text('question').notNull(), //question should be saved as markdownž
   questionImage: text('question_image'),
-  correctAnswers: text('correct_answers').notNull(), // a csv of correct answers for non choice questions
+  correctAnswers: text('correct_answers'), // a csv of correct answers for non choice questions
   points: integer('points').default(5),
   timeLimit: integer('time_limit'), // Generally only for quizzes
   isImmediateFeedback: boolean('is_immediate_feedback').default(false),
   type: quizQuestionType('type').default('multiple_choice'),
   explanation: text('explanation'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  order: integer('order').notNull(),
 });
 
 export const quizOption = pgTable('quiz_option', {
@@ -1406,6 +1403,7 @@ export const quizAttempt = pgTable('quiz_attempt', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   currentQuestion: integer('current_question').default(0),
   endTime: timestamp('end_time', { withTimezone: true }),
+  score: integer('score').default(0),
 });
 
 export const quizAnswer = pgTable('quiz_answer', {

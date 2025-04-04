@@ -6,15 +6,14 @@ import {
 
 export interface IQuizQuestionResponse {
   name: string;
-  order: number;
-  timeLimit: number | null;
-  points: number | null;
+  timeLimit?: number;
+  points?: number;
   id: number;
   createdAt: Date | string;
   updatedAt: Date | string;
   type: quizQuestionTypeEnum;
   options?: IQuizOptionResponse[];
-  image: string | null;
+  image?: string;
 }
 
 export interface IQuizQuestionWithCorrectAnswerAndExplanationResponse

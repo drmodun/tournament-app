@@ -226,7 +226,9 @@ export class StageDrizzleRepository extends PrimaryRepository<
         };
       case StageResponsesEnum.EXTENDED:
         return {
-          ...this.getMappingObject(StageResponsesEnum.BASE),
+          ...this.getMappingObject(
+            StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+          ),
           createdAt: stage.createdAt,
           updatedAt: stage.updatedAt,
           minPlayersPerTeam: stage.minPlayersPerTeam,

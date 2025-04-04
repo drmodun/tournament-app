@@ -253,6 +253,27 @@
       "when": 1743742339568,
       "tag": "0035_tough_hellion",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1743764019868,
+      "tag": "0036_narrow_barracuda",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1743770239512,
+      "tag": "0037_broken_the_hood",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1743774961410,
+      "tag": "0038_legal_argent",
+      "breakpoints": true
     }
   ]
 }

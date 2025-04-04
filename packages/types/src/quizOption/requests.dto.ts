@@ -1,5 +1,5 @@
 export interface ICreateQuizOptionDto {
-  questionId: number;
+  questionId?: number;
   option: string;
   isCorrect: boolean;
 }

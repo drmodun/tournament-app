@@ -61,6 +61,7 @@ describe('StageService', () => {
     mockRosterRepository = {
       getRostersForChallongeParticipants: jest.fn(),
       getUsersInStageRosters: jest.fn(),
+      attachChallongeParticipantIdToRosters: jest.fn(),
     } as unknown as jest.Mocked<RosterDrizzleRepository>;
 
     mockSseNotificationsService = {
@@ -400,6 +401,11 @@ describe('StageService', () => {
       },
     };
 
+    const mockChallongeParticipants = [
+      { id: 'challonge-p1', attributes: { misc: '1' } },
+      { id: 'challonge-p2', attributes: { misc: '2' } },
+    ];
+
     beforeEach(() => {
       jest.spyOn(service, 'findOne').mockResolvedValue(mockStageWithChallonge);
       jest.spyOn(service, 'update').mockResolvedValue({
@@ -407,18 +413,30 @@ describe('StageService', () => {
         stageStatus: stageStatusEnum.ONGOING,
       });
 
-      // @ts-ignore - Mock repositories that were not in the original setup
-      service.rosterRepository = {
-        getRostersForChallongeParticipants: jest
-          .fn()
-          .mockResolvedValue(mockRosters),
-      };
+      mockRosterRepository.getRostersForChallongeParticipants = jest
+        .fn()
+        .mockResolvedValue(mockRosters);
+      mockRosterRepository.attachChallongeParticipantIdToRosters = jest
+        .fn()
+        .mockResolvedValue(undefined);
 
-      // @ts-ignore - Mock Challonge service that was not in the original setup
-      service.challongeService = {
-        createBulkParticipants: jest.fn().mockResolvedValue([]),
+      // Mock ChallongeService
+      const mockChallongeService = {
+        createBulkParticipants: jest
+          .fn()
+          .mockResolvedValue(mockChallongeParticipants),
         updateTournamentState: jest.fn().mockResolvedValue({}),
       };
+
+      // Replace the service's dependencies with our mocks
+      Object.defineProperty(service, 'challongeService', {
+        value: mockChallongeService,
+      });
+
+      // Mock the sendStageStartNotifications method
+      service.sendStageStartNotifications = jest
+        .fn()
+        .mockResolvedValue(undefined);
     });
 
     it('should successfully start a stage', async () => {
@@ -428,20 +446,43 @@ describe('StageService', () => {
         stageId,
         StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
       );
+
       expect(
-        service['rosterRepository'].getRostersForChallongeParticipants,
+        mockRosterRepository.getRostersForChallongeParticipants,
       ).toHaveBeenCalledWith(stageId);
+
       expect(
         service['challongeService'].createBulkParticipants,
       ).toHaveBeenCalled();
+
+      // Verify the transaction-based update is called with correct parameters
+      expect(
+        mockRosterRepository.attachChallongeParticipantIdToRosters,
+      ).toHaveBeenCalledWith([
+        {
+          rosterId: 1,
+          challongeParticipantId: 'challonge-p1',
+        },
+        {
+          rosterId: 2,
+          challongeParticipantId: 'challonge-p2',
+        },
+      ]);
+
       expect(service.update).toHaveBeenCalledWith(stageId, {
         stageStatus: stageStatusEnum.ONGOING,
       });
+
       expect(
         service['challongeService'].updateTournamentState,
       ).toHaveBeenCalledWith(
         mockStageWithChallonge.challongeTournamentId,
         stageStatusEnum.ONGOING,
+      );
+
+      expect(service.sendStageStartNotifications).toHaveBeenCalledWith(
+        stageId,
+        mockStageWithChallonge.name,
       );
 
       expect(result.stageStatus).toEqual(stageStatusEnum.ONGOING);
@@ -470,14 +511,36 @@ describe('StageService', () => {
     });
 
     it('should throw BadRequestException if no rosters found', async () => {
-      // @ts-ignore
-      service.rosterRepository.getRostersForChallongeParticipants.mockResolvedValueOnce(
+      mockRosterRepository.getRostersForChallongeParticipants.mockResolvedValueOnce(
         [],
       );
 
       await expect(service.startStage(stageId)).rejects.toThrow(
         BadRequestException,
       );
+    });
+
+    it('should handle transaction failure gracefully', async () => {
+      // Mock the transaction to fail
+      mockRosterRepository.attachChallongeParticipantIdToRosters.mockRejectedValueOnce(
+        new Error('Transaction failed'),
+      );
+
+      await expect(service.startStage(stageId)).rejects.toThrow(Error);
+
+      // Verify service dependencies were called correctly before the error
+      expect(
+        mockRosterRepository.getRostersForChallongeParticipants,
+      ).toHaveBeenCalledWith(stageId);
+      expect(
+        service['challongeService'].createBulkParticipants,
+      ).toHaveBeenCalled();
+
+      // Verify that the stage update was not called due to the transaction error
+      expect(service.update).not.toHaveBeenCalled();
+      expect(
+        service['challongeService'].updateTournamentState,
+      ).not.toHaveBeenCalled();
     });
   });
 

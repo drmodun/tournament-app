@@ -132,14 +132,14 @@ export class ChallongeService {
   async createParticipantFunction(
     createParticipantDto: ICreateChallongeParticipantRequest,
   ) {
-    const response: AxiosResponse<IChallongeParticipant> =
+    const response: AxiosResponse<{ data: IChallongeParticipant }> =
       await this.httpService.axiosRef.post(
         'https://api.challonge.com/v2/application/participants.json',
         createParticipantDto,
         this.injectHeaders(),
       );
 
-    return response.data;
+    return response.data.data;
   }
 
   async createParticipant(
@@ -226,17 +226,6 @@ export class ChallongeService {
     return await this.createTournament(stageToCreateTournamentRequest(stage));
   }
 
-  async bulkAddParticipantsToTournament(
-    tournamentId: string,
-    participants: IBulkCreateChallongeParticipantRequest,
-  ) {
-    await this.httpService.axiosRef.post(
-      `https://api.challonge.com/v2/application/tournaments/${tournamentId}/participants/bulk_add.json`,
-      participants,
-      this.injectHeaders(),
-    );
-  }
-
   async createBulkParticipants(
     tournamentId: string,
     participants: IBulkCreateChallongeParticipantRequest,
@@ -249,15 +238,15 @@ export class ChallongeService {
   async createBulkParticipantsFunction(
     tournamentId: string,
     participants: IBulkCreateChallongeParticipantRequest,
-  ) {
+  ): Promise<IChallongeParticipant[]> {
     try {
-      const response: AxiosResponse<IChallongeParticipant[]> =
+      const response: AxiosResponse<{ data: IChallongeParticipant[] }> =
         await this.httpService.axiosRef.post(
           `https://api.challonge.com/v2/application/tournaments/${tournamentId}/participants/bulk_add.json`,
           participants,
           this.injectHeaders(),
         );
-      return response.data;
+      return response.data.data;
     } catch (error) {
       this.logger.error(
         'Failed to create bulk participants:',

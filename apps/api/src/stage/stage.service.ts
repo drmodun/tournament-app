@@ -272,9 +272,19 @@ export class StageService {
     const bulkParticipantsRequest: IBulkCreateChallongeParticipantRequest =
       rosterToBulkCreateParticipantRequest(rosters);
 
-    await this.challongeService.createBulkParticipants(
-      stage.challongeTournamentId,
-      bulkParticipantsRequest,
+    const rostersWithChallongeParticipants =
+      await this.challongeService.createBulkParticipants(
+        stage.challongeTournamentId,
+        bulkParticipantsRequest,
+      );
+
+    console.log(rostersWithChallongeParticipants);
+
+    await this.rosterRepository.attachChallongeParticipantIdToRosters(
+      rostersWithChallongeParticipants.map((roster) => ({
+        rosterId: rosters.find((r) => r.id === +roster.attributes?.misc)?.id,
+        challongeParticipantId: roster.id,
+      })),
     );
 
     const updatedStage = await this.update(stageId, {
@@ -289,5 +299,18 @@ export class StageService {
     await this.sendStageStartNotifications(stageId, stage.name);
 
     return updatedStage;
+  }
+
+  async getMatchesFromChallonge(stageId: number) {
+    const stage: IStageWithChallongeTournament = await this.findOne(
+      stageId,
+      StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
+    );
+
+    const matches = await this.challongeService.getTournamentMatches(
+      stage.challongeTournamentId,
+    );
+
+    return matches;
   }
 }

@@ -28,6 +28,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
 import { QueryRosterDto } from './dto/requests';
+import { sql } from 'drizzle-orm';
 
 @Injectable()
 export class RosterDrizzleRepository extends PrimaryRepository<
@@ -452,5 +453,20 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       .where(eq(roster.stageId, stageId));
 
     return users;
+  }
+
+  async attachChallongeParticipantIdToRosters(
+    ids: {
+      rosterId: number;
+      challongeParticipantId: string;
+    }[],
+  ) {
+    await db.transaction(async (tx) => {
+      for (const { rosterId, challongeParticipantId } of ids) {
+        await tx.execute(
+          sql`UPDATE ${roster} SET challonge_participant_id = ${challongeParticipantId} WHERE id = ${rosterId}`,
+        );
+      }
+    });
   }
 }

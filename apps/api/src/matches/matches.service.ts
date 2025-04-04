@@ -8,7 +8,6 @@ import {
 } from './dto/responses';
 import { ChallongeService } from '../challonge/challonge.service';
 import { matchScoreToChallongeScoreRequest } from '@tournament-app/types';
-import { IChallongeMatch, IChallongeParticipant } from '@tournament-app/types';
 import {
   ReactBracketsResponseDto,
   ReactBracketsTeamDto,

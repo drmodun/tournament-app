@@ -28,7 +28,7 @@ export const useLeaveUserGroup = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
     },

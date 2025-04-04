@@ -41,7 +41,7 @@ export const useUpdateLFG = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       return false;

@@ -11,7 +11,7 @@ import { useToastContext } from "utils/hooks/useToastContext";
 
 export const createGroupInterests = async (
   groupId?: number,
-  categoryIds?: number[]
+  categoryIds?: number[],
 ) => {
   const responses: AxiosResponse[] = [];
   for (const categoryId of categoryIds ?? []) {
@@ -51,7 +51,7 @@ export const useCreateGroupInterests = (groupId?: number) => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       return false;

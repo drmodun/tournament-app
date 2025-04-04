@@ -21,7 +21,7 @@ export const deleteBlockedUser = async (data: {
           groupId: data?.groupId,
           userId: data?.userId,
         },
-      }
+      },
     )
     .then((res) => res.data);
 };
@@ -52,7 +52,7 @@ export const useDeleteBlockedUser = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       return false;

@@ -11,7 +11,7 @@ import { useToastContext } from "utils/hooks/useToastContext";
 
 export const createGroupInterest = async (
   groupId?: number,
-  categoryId?: number
+  categoryId?: number,
 ) => {
   return clientApi
     .post<never, AxiosResponse>(`/group-interests/${groupId}/${categoryId}`, {
@@ -45,7 +45,7 @@ export const useCreateGroupInterest = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       return false;

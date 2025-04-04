@@ -11,7 +11,7 @@ import { useToastContext } from "utils/hooks/useToastContext";
 
 export const deleteGroupInterest = async (
   groupId?: number,
-  categoryId?: number
+  categoryId?: number,
 ) => {
   return clientApi
     .delete<never, AxiosResponse>(`/group-interests/${groupId}/${categoryId}`, {
@@ -45,7 +45,7 @@ export const useDeleteGroupInterest = (groupId?: number) => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       return false;

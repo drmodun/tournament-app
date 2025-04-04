@@ -11,7 +11,7 @@ import { AxiosResponse } from "axios";
 
 export const getQuiz = async (
   id: number,
-  responseType: QuizResponsesEnum = QuizResponsesEnum.BASE
+  responseType: QuizResponsesEnum = QuizResponsesEnum.BASE,
 ) => {
   return clientApi
     .get<
@@ -23,7 +23,7 @@ export const getQuiz = async (
 
 export const useQuiz = (
   id: number | undefined,
-  responseType: QuizResponsesEnum = QuizResponsesEnum.BASE
+  responseType: QuizResponsesEnum = QuizResponsesEnum.BASE,
 ) => {
   return useQuery({
     queryKey: ["quiz", id, responseType],

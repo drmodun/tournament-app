@@ -15,7 +15,7 @@ export const updateStage = async (
     data: IUpdateStageDto;
     stageId?: number;
   },
-  tournamentId?: number
+  tournamentId?: number,
 ) => {
   const { tournamentId: stageDataTournamentId, ..._data } = data.data;
 
@@ -47,7 +47,7 @@ export const useUpdateStage = (tournamentId?: number) => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
       console.log(error.message);

@@ -22,7 +22,7 @@ export const useRegister = () => {
     onSuccess: async () => {
       toast.addToast(
         "verification email sent! verify your account then login.",
-        "success"
+        "success",
       );
 
       await queryClient.invalidateQueries({
@@ -41,7 +41,7 @@ export const useRegister = () => {
         error.response?.data?.message ??
           error.message ??
           "an error occurred...",
-        "error"
+        "error",
       );
       console.error(error);
     },

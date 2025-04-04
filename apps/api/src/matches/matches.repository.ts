@@ -496,6 +496,15 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         }
 
         const insertedMatchups = [];
+
+        const forbiddenChallongeIds = challongeMatches.map((match) => match.id);
+
+        await tx
+          .delete(matchup)
+          .where(
+            and(inArray(matchup.challongeMatchupId, forbiddenChallongeIds)),
+          ); // delete existing outdated matchups
+
         for (const match of challongeMatches) {
           const newMatchup = await tx
             .insert(matchup)
@@ -812,5 +821,14 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     });
 
     return result;
+  }
+
+  async getMatchupsByRound(stageId: number, round: number) {
+    const query = db
+      .select()
+      .from(matchup)
+      .where(and(eq(matchup.stageId, stageId), eq(matchup.round, round)));
+
+    return await query;
   }
 }

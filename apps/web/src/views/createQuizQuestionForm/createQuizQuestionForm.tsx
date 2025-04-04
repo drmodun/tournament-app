@@ -73,253 +73,250 @@ export default function AddQuestionForm({
 
   return (
     <FormProvider {...methods}>
-      <form
-        className={clsx(
-          styles.wrapper,
-          globals[`${textColorTheme}BackgroundColor`],
-        )}
-        onSubmit={methods.handleSubmit(onSubmit)}
-      >
-        <div className={styles.dialogOption}>
-          <MultilineInput
-            label="question"
-            placeholder="enter question..."
-            variant={theme}
-            isReactFormHook={true}
-            name="question"
-            required={true}
-          />
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${theme}Color`])}>
-            question type
-          </p>
-
-          <Dropdown
-            variant={theme}
-            placeholder="select question type"
-            isReactHookForm={true}
-            name="questionType"
-            required={true}
-            options={[
-              { label: "true/false" },
-              { label: "multiple choice" },
-              { label: "short answer" },
-            ]}
-            onSelect={(index: number) => {
-              switch (index) {
-                case 0:
-                  setQuestionType(quizQuestionTypeEnum.TRUE_FALSE);
-                  break;
-                case 1:
-                  setQuestionType(quizQuestionTypeEnum.MULTIPLE_CHOICE);
-                  break;
-                case 2:
-                  setQuestionType(quizQuestionTypeEnum.SHORT_ANSWER);
-              }
-            }}
-          />
-        </div>
-        {(questionType === quizQuestionTypeEnum.TRUE_FALSE ||
-          questionType === quizQuestionTypeEnum.MULTIPLE_CHOICE ||
-          questionType === quizQuestionTypeEnum.SHORT_ANSWER) && (
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <div
+          className={clsx(
+            styles.wrapper,
+            globals[`${textColorTheme}BackgroundColor`],
+          )}
+        >
           <div className={styles.dialogOption}>
-            {questionType === quizQuestionTypeEnum.TRUE_FALSE ? (
-              <>
-                <p className={clsx(globals.label, globals[`${theme}Color`])}>
-                  answer
-                </p>
-                <SlideButton
-                  options={["false", "true"]}
-                  variant={theme}
-                  onChange={(val: string) => setCorrect(val === "true" ? 1 : 0)}
-                />
-              </>
-            ) : questionType === quizQuestionTypeEnum.MULTIPLE_CHOICE ? (
-              <div className={styles.manageAnswers}>
-                <Input
-                  placeholder="add option..."
-                  label="option"
-                  submitLabel="add"
-                  variant={theme}
-                  doesSubmit={true}
-                  type="input"
-                  onSubmit={(val: string) =>
-                    !options.includes(val) &&
-                    setOptions((prev) => [...prev, val])
-                  }
-                />
-                <div className={styles.answers}>
-                  {options.map((answer: string, index: number) => {
-                    return (
-                      <div
-                        className={clsx(
-                          styles.option,
-                          index === correct
-                            ? globals.primaryBackgroundColor
-                            : globals[`${theme}BackgroundColor`],
-                        )}
-                      >
-                        <p className={globals[`${textColorTheme}Color`]}>
-                          {answer}
-                        </p>
-                        <div className={styles.optionActionButtons}>
-                          {index !== correct && (
+            <MultilineInput
+              label="question"
+              placeholder="enter question..."
+              variant={theme}
+            />
+          </div>
+          <div className={styles.dialogOption}>
+            <p className={clsx(globals.label, globals[`${theme}Color`])}>
+              question type
+            </p>
+
+            <Dropdown
+              variant={theme}
+              placeholder="select question type"
+              options={[
+                { label: "true/false" },
+                { label: "multiple choice" },
+                { label: "short answer" },
+              ]}
+              onSelect={(index: number) => {
+                switch (index) {
+                  case 0:
+                    setQuestionType(quizQuestionTypeEnum.TRUE_FALSE);
+                    break;
+                  case 1:
+                    setQuestionType(quizQuestionTypeEnum.MULTIPLE_CHOICE);
+                    break;
+                  case 2:
+                    setQuestionType(quizQuestionTypeEnum.SHORT_ANSWER);
+                }
+              }}
+            />
+          </div>
+          {(questionType === quizQuestionTypeEnum.TRUE_FALSE ||
+            questionType === quizQuestionTypeEnum.MULTIPLE_CHOICE ||
+            questionType === quizQuestionTypeEnum.SHORT_ANSWER) && (
+            <div className={styles.dialogOption}>
+              {questionType === quizQuestionTypeEnum.TRUE_FALSE ? (
+                <>
+                  <p className={clsx(globals.label, globals[`${theme}Color`])}>
+                    answer
+                  </p>
+                  <SlideButton
+                    options={["false", "true"]}
+                    variant={theme}
+                    onChange={(val: string) =>
+                      setCorrect(val === "true" ? 1 : 0)
+                    }
+                  />
+                </>
+              ) : questionType === quizQuestionTypeEnum.MULTIPLE_CHOICE ? (
+                <div className={styles.manageAnswers}>
+                  <Input
+                    placeholder="add option..."
+                    label="option"
+                    submitLabel="add"
+                    variant={theme}
+                    doesSubmit={true}
+                    type="input"
+                    onSubmit={(val: string) =>
+                      !options.includes(val) &&
+                      setOptions((prev) => [...prev, val])
+                    }
+                  />
+                  <div className={styles.answers}>
+                    {options.map((answer: string, index: number) => {
+                      return (
+                        <div
+                          className={clsx(
+                            styles.option,
+                            index === correct
+                              ? globals.primaryBackgroundColor
+                              : globals[`${theme}BackgroundColor`],
+                          )}
+                        >
+                          <p className={globals[`${textColorTheme}Color`]}>
+                            {answer}
+                          </p>
+                          <div className={styles.optionActionButtons}>
+                            {index !== correct && (
+                              <Button
+                                variant="primary"
+                                onClick={() => setCorrect(index)}
+                                className={styles.actionButton}
+                              >
+                                <CheckIcon
+                                  className={clsx(globals.lightFillChildren)}
+                                />
+                              </Button>
+                            )}
                             <Button
-                              variant="primary"
-                              onClick={() => setCorrect(index)}
+                              variant="danger"
+                              onClick={() => {
+                                if (correct !== -1) {
+                                  if (index == correct) setCorrect(-1);
+                                  else if (index < correct)
+                                    setCorrect((prev) => prev - 1);
+                                }
+                                setOptions((prev) =>
+                                  prev.filter((elem) => elem != answer),
+                                );
+                              }}
                               className={styles.actionButton}
                             >
-                              <CheckIcon
+                              <DeleteIcon
                                 className={clsx(globals.lightFillChildren)}
                               />
                             </Button>
-                          )}
-                          <Button
-                            variant="danger"
-                            onClick={() => {
-                              if (correct !== -1) {
-                                if (index == correct) setCorrect(-1);
-                                else if (index < correct)
-                                  setCorrect((prev) => prev - 1);
-                              }
-                              setOptions((prev) =>
-                                prev.filter((elem) => elem != answer),
-                              );
-                            }}
-                            className={styles.actionButton}
-                          >
-                            <DeleteIcon
-                              className={clsx(globals.lightFillChildren)}
-                            />
-                          </Button>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className={styles.manageAnswers}>
+                  <Input
+                    placeholder="add answer..."
+                    label="answer"
+                    submitLabel="add"
+                    variant={theme}
+                    doesSubmit={true}
+                    type="input"
+                    onSubmit={(val: string) =>
+                      !shortAnswers.includes(val) &&
+                      setShortAnswers((prev) => [...prev, val])
+                    }
+                  />
+                  <div className={styles.answers}>
+                    {shortAnswers.map((answer: string) => {
+                      return (
+                        <div
+                          className={clsx(
+                            styles.shortAnswer,
+                            globals[`${theme}BackgroundColor`],
+                          )}
+                        >
+                          <p className={globals[`${theme}BackgroundColor`]}>
+                            {answer}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          <div className={styles.dialogOption}>
+            <p className={clsx(globals.label, globals[`${theme}Color`])}>
+              time limit
+            </p>
+            <div className={styles.hoursMinutesAndSeconds}>
+              <Input
+                variant={theme}
+                placeholder="hours"
+                type="number"
+                min="0"
+                onChange={(e) =>
+                  handleChangeTimeLimit(parseInt(e.currentTarget.value) * 3600)
+                }
+              />
+              <Input
+                variant={theme}
+                placeholder="minutes"
+                type="number"
+                onChange={(e) =>
+                  handleChangeTimeLimit(parseInt(e.currentTarget.value) * 60)
+                }
+                min="0"
+              />
+              <Input
+                variant={theme}
+                placeholder="seconds"
+                type="number"
+                onChange={(e) =>
+                  handleChangeTimeLimit(parseInt(e.currentTarget.value))
+                }
+                min="0"
+              />
+            </div>
+          </div>
+          <div className={styles.dialogOption}>
+            <p className={clsx(globals.label, globals[`${theme}Color`])}>
+              cover image
+            </p>
+            {file ? (
+              <ImagePicker
+                file={file}
+                name="image"
+                isReactFormHook={true}
+                variant={theme}
+                className={styles.imagePicker}
+                required={true}
+                onChange={setCoverImage}
+              />
             ) : (
-              <div className={styles.manageAnswers}>
-                <Input
-                  placeholder="add answer..."
-                  label="answer"
-                  submitLabel="add"
-                  variant={theme}
-                  doesSubmit={true}
-                  type="input"
-                  onSubmit={(val: string) =>
-                    !shortAnswers.includes(val) &&
-                    setShortAnswers((prev) => [...prev, val])
-                  }
-                />
-                <div className={styles.answers}>
-                  {shortAnswers.map((answer: string) => {
-                    return (
-                      <div
-                        className={clsx(
-                          styles.shortAnswer,
-                          globals[`${theme}BackgroundColor`],
-                        )}
-                      >
-                        <p className={globals[`${theme}BackgroundColor`]}>
-                          {answer}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              <ImageDrop
+                onFile={setFile}
+                variant={theme}
+                className={styles.imageDrop}
+                required={true}
+                name="image"
+                isReactFormHook={true}
+              />
             )}
           </div>
-        )}
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${theme}Color`])}>
-            time limit
-          </p>
-          <div className={styles.hoursMinutesAndSeconds}>
-            <Input
+          <div className={styles.dialogOption}>
+            <MultilineInput
+              label="explanation"
               variant={theme}
-              placeholder="hours"
-              type="number"
-              min="0"
-              onChange={(e) =>
-                handleChangeTimeLimit(parseInt(e.currentTarget.value) * 3600)
-              }
+              placeholder="enter the explanation"
+              isReactFormHook={true}
+              name="explanation"
             />
+          </div>
+          <div className={styles.dialogOption}>
             <Input
+              label="points"
               variant={theme}
-              placeholder="minutes"
+              placeholder="enter the amount of points"
+              isReactFormHook={true}
+              name="points"
               type="number"
-              onChange={(e) =>
-                handleChangeTimeLimit(parseInt(e.currentTarget.value) * 60)
-              }
-              min="0"
-            />
-            <Input
-              variant={theme}
-              placeholder="seconds"
-              type="number"
-              onChange={(e) =>
-                handleChangeTimeLimit(parseInt(e.currentTarget.value))
-              }
+              defaultValue="1"
               min="0"
             />
           </div>
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${theme}Color`])}>
-            cover image
-          </p>
-          {file ? (
-            <ImagePicker
-              file={file}
-              name="image"
-              isReactFormHook={true}
-              variant={theme}
-              className={styles.imagePicker}
-              required={true}
-              onChange={setCoverImage}
+          <div className={styles.dialogOption}>
+            <Button
+              variant={"secondary"}
+              label="add question"
+              className={styles.actionButton}
+              submit={true}
             />
-          ) : (
-            <ImageDrop
-              onFile={setFile}
-              variant={theme}
-              className={styles.imageDrop}
-              required={true}
-              name="image"
-              isReactFormHook={true}
-            />
-          )}
-        </div>
-        <div className={styles.dialogOption}>
-          <MultilineInput
-            label="explanation"
-            variant={theme}
-            placeholder="enter the explanation"
-            isReactFormHook={true}
-            name="explanation"
-          />
-        </div>
-        <div className={styles.dialogOption}>
-          <Input
-            label="points"
-            variant={theme}
-            placeholder="enter the amount of points"
-            isReactFormHook={true}
-            name="points"
-            type="number"
-            defaultValue="1"
-            min="0"
-          />
-        </div>
-        <div className={styles.dialogOption}>
-          <Button
-            variant={"secondary"}
-            label="add question"
-            className={styles.actionButton}
-            submit={true}
-          />
+          </div>
         </div>
       </form>
     </FormProvider>

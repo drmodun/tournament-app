@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
+  groupRoleEnum,
   IChallongeMatch,
   IEndMatchupRequest,
   MatchupResponsesEnum,
@@ -8,13 +9,24 @@ import {
 import {
   matchup,
   roster,
+  rosterToMatchup,
   score,
   scoreToRoster,
   stage,
   stageRound,
 } from '../db/schema';
 import { db } from '../db/db';
-import { eq, and, sql, SQL, isNull, InferInsertModel } from 'drizzle-orm';
+import {
+  eq,
+  and,
+  sql,
+  SQL,
+  isNull,
+  InferInsertModel,
+  inArray,
+  or,
+  desc,
+} from 'drizzle-orm';
 import * as tables from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import {
@@ -23,6 +35,8 @@ import {
   AnyPgSelectQueryBuilder,
 } from 'drizzle-orm/pg-core';
 import { QueryMatchupRequestDto } from './dto/requests';
+import { participation } from '../db/schema';
+import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @Injectable()
 export class MatchesDrizzleRepository extends PrimaryRepository<
@@ -213,7 +227,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         .set({
           isFinished: false,
           endDate: null,
-        })
+        } as Partial<InferInsertModel<typeof matchup>>)
         .where(eq(matchup.id, matchupId));
 
       // 6. Reset all roster-to-matchup records for this matchup
@@ -340,6 +354,65 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return this.updateMatchScore(matchupId, createMatchResult);
   }
 
+  async canUserEditMatchup(matchupId: number, userId: number) {
+    const result = await db
+      .select()
+      .from(matchup)
+      .leftJoin(stage, eq(matchup.stageId, stage.id))
+      .leftJoin(tables.tournament, eq(stage.tournamentId, tables.tournament.id))
+      .leftJoin(
+        tables.group,
+        eq(tables.tournament.affiliatedGroupId, tables.group.id),
+      )
+      .leftJoin(
+        tables.groupToUser,
+        eq(tables.group.id, tables.groupToUser.groupId),
+      )
+      .where(
+        and(
+          eq(matchup.id, matchupId),
+          eq(tables.groupToUser.userId, userId),
+          eq(tables.tournament.affiliatedGroupId, tables.group.id),
+          or(
+            eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
+            eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+          ),
+        ),
+      );
+    return result.length > 0;
+  }
+
+  async getManagedMatchups(userId: number, query?: PaginationOnly) {
+    const result = await db
+      .selectDistinct()
+      .from(matchup)
+      .leftJoin(stage, eq(matchup.stageId, stage.id))
+      .leftJoin(tables.tournament, eq(stage.tournamentId, tables.tournament.id))
+      .leftJoin(
+        tables.group,
+        eq(tables.tournament.affiliatedGroupId, tables.group.id),
+      )
+      .leftJoin(
+        tables.groupToUser,
+        eq(tables.group.id, tables.groupToUser.groupId),
+      )
+      .where(
+        and(
+          eq(tables.groupToUser.userId, userId),
+          eq(tables.tournament.affiliatedGroupId, tables.group.id),
+          or(
+            eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
+            eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+          ),
+        ),
+      )
+      .orderBy(desc(matchup.startDate))
+      .limit(query.pageSize ?? 10)
+      .offset(query.pageSize * (query.page || 1 - 1));
+
+    return result;
+  }
+
   async getMatchupById(matchupId: number) {
     const result = await db
       .select()
@@ -375,19 +448,12 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return result[0];
   }
 
-  /**
-   * Imports matches from Challonge into the database for a specific stage
-   * Uses a transaction to ensure all operations succeed or fail together
-   * Also creates the relationships between rosters and matchups
-   */
   async importChallongeMatchesToStage(
     stageId: number,
     challongeMatches: IChallongeMatch[],
-    stageRoundId: number,
   ) {
     return db.transaction(async (tx) => {
       try {
-        // 1. Get all rosters with Challonge participant IDs for this stage
         const rostersWithChallongeIds = await tx
           .select({
             id: roster.id,
@@ -403,7 +469,6 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
           );
         }
 
-        // Create a map for quick lookup of roster IDs by Challonge participant ID
         const challongeIdToRosterMap = new Map<string, number>();
         for (const r of rostersWithChallongeIds) {
           if (r.challongeParticipantId) {
@@ -411,32 +476,28 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
           }
         }
 
-        // 2. Insert matchups
         const insertedMatchups = [];
         for (const match of challongeMatches) {
-          // Create basic matchup data
           const newMatchup = await tx
             .insert(matchup)
             .values({
               stageId: stageId,
-              roundId: stageRoundId,
+              round: +match.attributes.round,
               challongeMatchupId: match.id,
-              startDate: match.attributes.timestamps.starts_at || new Date(),
+              startDate: new Date(match.attributes.timestamps.starts_at),
               endDate: null,
               isFinished: false,
-            })
+            } as any)
             .returning()
             .execute();
 
           if (newMatchup.length > 0) {
             insertedMatchups.push(newMatchup[0]);
 
-            // 3. Create roster to matchup relationships
             const player1Id = match.relationships.player1?.data?.id;
             const player2Id = match.relationships.player2?.data?.id;
 
             if (player1Id && challongeIdToRosterMap.has(player1Id)) {
-              // Use SQL template literals to avoid type issues
               await tx.execute(
                 sql`INSERT INTO roster_matchup (roster_id, matchup_id, is_winner) 
                     VALUES (${challongeIdToRosterMap.get(player1Id)}, ${newMatchup[0].id}, false)`,
@@ -444,7 +505,6 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
             }
 
             if (player2Id && challongeIdToRosterMap.has(player2Id)) {
-              // Use SQL template literals to avoid type issues
               await tx.execute(
                 sql`INSERT INTO roster_matchup (roster_id, matchup_id, is_winner) 
                     VALUES (${challongeIdToRosterMap.get(player2Id)}, ${newMatchup[0].id}, false)`,
@@ -459,5 +519,246 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         throw error;
       }
     });
+  }
+
+  async getResultsForRosterIds(rosterId: number) {
+    const result = await db
+      .selectDistinct({
+        id: matchup.id,
+      })
+      .from(matchup)
+      .innerJoin(rosterToMatchup, eq(matchup.id, rosterToMatchup.matchupId))
+      .where(eq(rosterToMatchup.rosterId, rosterId));
+    return result;
+  }
+
+  async getResultsForRoster(rosterId: number) {
+    const ids = await this.getResultsForRosterIds(rosterId);
+    return this.getWithResults({ ids: ids.map((id) => id.id) });
+  }
+
+  async getResultsForGroupIds(groupId: number) {
+    const result = await db
+      .selectDistinct({
+        id: matchup.id,
+      })
+      .from(matchup)
+      .innerJoin(rosterToMatchup, eq(matchup.id, rosterToMatchup.matchupId))
+      .innerJoin(roster, eq(rosterToMatchup.rosterId, roster.id))
+      .innerJoin(participation, eq(roster.participationId, participation.id))
+      .where(eq(participation.groupId, groupId));
+    return result;
+  }
+
+  async getResultsForUserIds(userId: number) {
+    const result = await db
+      .selectDistinct({
+        id: matchup.id,
+      })
+      .from(matchup)
+      .innerJoin(rosterToMatchup, eq(matchup.id, rosterToMatchup.matchupId))
+      .innerJoin(roster, eq(rosterToMatchup.rosterId, roster.id))
+      .innerJoin(participation, eq(roster.participationId, participation.id))
+      .innerJoin(tables.group, eq(participation.groupId, tables.group.id))
+      .innerJoin(
+        tables.groupToUser,
+        eq(tables.group.id, tables.groupToUser.groupId),
+      )
+      .where(eq(tables.groupToUser.userId, userId));
+
+    return result;
+  }
+
+  async getResultsForUser(userId: number) {
+    const ids = await this.getResultsForUserIds(userId);
+    return this.getWithResults({ ids: ids.map((id) => id.id) });
+  }
+
+  async getWithResults(query: QueryMatchupRequestDto & { ids?: number[] }) {
+    const result = await db.query.matchup.findMany({
+      where: and(
+        query.ids?.length ? inArray(matchup.id, query.ids) : undefined,
+        query.stageId ? eq(matchup.stageId, query.stageId) : undefined,
+        query.round ? eq(matchup.round, query.round) : undefined,
+        query.isFinished ? eq(matchup.isFinished, query.isFinished) : undefined,
+        query.challongeMatchupId
+          ? eq(matchup.challongeMatchupId, query.challongeMatchupId)
+          : undefined,
+      ),
+      orderBy: [desc(matchup.startDate)],
+      limit: query.pageSize ?? 10,
+      offset: query.pageSize * (query.page || 1 - 1),
+      columns: {
+        id: true,
+        stageId: true,
+        round: true,
+        isFinished: true,
+        challongeMatchupId: true,
+      },
+      with: {
+        rosterToMatchup: {
+          columns: {
+            isWinner: true,
+            matchupId: true,
+            score: true,
+          },
+          with: {
+            roster: {
+              columns: {
+                id: true,
+                stageId: true,
+                participationId: true,
+                createdAt: true,
+              },
+              with: {
+                participation: {
+                  columns: {
+                    id: true,
+                  },
+                  with: {
+                    tournament: {
+                      columns: {
+                        id: true,
+                        categoryId: true,
+                      },
+                    },
+                    group: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        abbreviation: true,
+                        logo: true,
+                      },
+                    },
+                    user: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        profilePicture: true,
+                        country: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return result;
+  }
+
+  async getWithResultsAndScores(id: number) {
+    const result = await db.query.matchup.findFirst({
+      where: eq(matchup.id, id),
+      columns: {
+        id: true,
+        stageId: true,
+        round: true,
+        isFinished: true,
+        challongeMatchupId: true,
+      },
+      with: {
+        score: {
+          columns: {
+            id: true,
+            roundNumber: true,
+            matchupId: true,
+            isWinner: true,
+          },
+          with: {
+            scoreToRoster: {
+              columns: {
+                id: true,
+                scoreId: true,
+                rosterId: true,
+                points: true,
+                isWinner: true,
+              },
+            },
+          },
+        },
+        rosterToMatchup: {
+          columns: {
+            isWinner: true,
+            matchupId: true,
+            score: true,
+          },
+          with: {
+            roster: {
+              with: {
+                participation: {
+                  columns: {
+                    id: true,
+                  },
+                  with: {
+                    tournament: {
+                      columns: {
+                        categoryId: true,
+                      },
+                    },
+                    group: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        locationId: true,
+                        abbreviation: true,
+                        logo: true,
+                      },
+                    },
+                    user: {
+                      columns: {
+                        id: true,
+                        username: true,
+                        profilePicture: true,
+                        country: true,
+                      },
+                    },
+                  },
+                },
+                players: {
+                  columns: {
+                    isSubstitute: true,
+                  },
+                  with: {
+                    user: {
+                      columns: {
+                        id: true,
+                        username: true,
+                        profilePicture: true,
+                        country: true,
+                        isFake: true,
+                      },
+                      with: {
+                        career: {
+                          columns: {
+                            elo: true,
+                            categoryId: true,
+                            createdAt: true,
+                          },
+                          with: {
+                            category: {
+                              columns: {
+                                id: true,
+                                name: true,
+                                image: true,
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return result;
   }
 }

@@ -174,25 +174,27 @@ export class ChallongeService {
   }
 
   async updateMatchupFunction(
-    id: number,
+    id: string,
+    tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
-    const response: AxiosResponse<IChallongeMatch> =
+    const response: AxiosResponse<{ data: IChallongeMatch }> =
       await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/application/matchups/${id}.json`,
+        `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches/${id}.json`,
         updateMatchupDto,
         this.injectHeaders(),
       );
 
-    return response.data;
+    return response.data.data;
   }
 
   async updateMatchup(
-    id: number,
+    id: string,
+    tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
     return this.executeFunctionWithRetry(() =>
-      this.updateMatchupFunction(id, updateMatchupDto),
+      this.updateMatchupFunction(id, tournamentId, updateMatchupDto),
     );
   }
 

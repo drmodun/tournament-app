@@ -341,19 +341,18 @@ export function challongeMatchToMatchup(match: IChallongeMatch): {
   };
 }
 
-// Convert Match Score to Challonge Match Score Request
-export function matchScoreToChallongeScoreRequest(matchScore: {
+export function matchScoreToChallongeScoreRequest(
   rosterScores: Array<{
     rosterId: number;
     score: string;
     isWinner: boolean;
-  }>;
-}): IMatchScoreRequest {
+  }>
+): IMatchScoreRequest {
   return {
     data: {
       type: "match",
       attributes: {
-        match: matchScore.rosterScores.map((score) => ({
+        match: rosterScores?.map((score) => ({
           participant_id: score.rosterId.toString(),
           score_set: score.score,
           advancing: score.isWinner,

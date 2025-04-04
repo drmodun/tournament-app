@@ -109,7 +109,7 @@ export class RosterService {
       throw new NotFoundException(`Roster with ID ${id} not found`);
     }
 
-    return results[0] as TResponseType;
+    return results[0] as unknown as TResponseType;
   }
 
   async update(id: number, updateRosterDto: any) {

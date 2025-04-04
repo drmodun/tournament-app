@@ -787,7 +787,7 @@ export const matchup = pgTable('matchup', {
   roundId: integer('round_id').references(() => stageRound.id, {
     onDelete: 'cascade',
   }),
-  round: integer('round'),
+  round: integer('round_number'),
   matchupType: matchupType('matchup_type').default('one_vs_one'),
   challongeMatchupId: text('challonge_matchup_id'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
@@ -831,7 +831,30 @@ export const rosterRelations = relations(roster, ({ many, one }) => ({
     fields: [roster.stageId],
     references: [stage.id],
   }),
+  matchup: many(rosterToMatchup, {
+    relationName: 'rosterToMatchup',
+  }),
+  scoreToRoster: many(scoreToRoster),
 }));
+
+export const matchupRelations = relations(matchup, ({ many }) => ({
+  rosterToMatchup: many(rosterToMatchup),
+  score: many(score),
+}));
+
+export const rosterToMatchupRelations = relations(
+  rosterToMatchup,
+  ({ one }) => ({
+    matchup: one(matchup, {
+      fields: [rosterToMatchup.matchupId],
+      references: [matchup.id],
+    }),
+    roster: one(roster, {
+      fields: [rosterToMatchup.rosterId],
+      references: [roster.id],
+    }),
+  }),
+);
 
 export const userToRosterRelations = relations(userToRoster, ({ one }) => ({
   roster: one(roster, {
@@ -888,6 +911,25 @@ export const score = pgTable('score', {
   roundNumber: integer('round_number'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
+
+export const scoreRelations = relations(score, ({ one, many }) => ({
+  scoreToRoster: many(scoreToRoster),
+  matchup: one(matchup, {
+    fields: [score.matchupId],
+    references: [matchup.id],
+  }),
+}));
+
+export const scoreToRosterRelations = relations(scoreToRoster, ({ one }) => ({
+  score: one(score, {
+    fields: [scoreToRoster.scoreId],
+    references: [score.id],
+  }),
+  roster: one(roster, {
+    fields: [scoreToRoster.rosterId],
+    references: [roster.id],
+  }),
+}));
 
 export const stageRound = pgTable('stage_round', {
   id: serial('id').primaryKey(),

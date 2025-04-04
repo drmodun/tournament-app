@@ -1,0 +1,1 @@
+ALTER TABLE "matchup" RENAME COLUMN "round" TO "round_number";

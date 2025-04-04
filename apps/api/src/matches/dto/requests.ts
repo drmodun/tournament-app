@@ -7,7 +7,7 @@ import {
   IEndMatchupRequest,
   IQueryMatchupRequest,
 } from '@tournament-app/types';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -106,46 +106,54 @@ export class QueryMatchupRequestDto
   @IsOptional()
   @IsNumber()
   @IsPositive()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional({ description: 'The ID of the matchup' })
   matchupId?: number;
 
   @IsOptional()
   @IsNumber()
   @IsPositive()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional({ description: 'The ID of the roster' })
   rosterId?: number;
 
   @IsOptional()
   @IsNumber()
   @IsPositive()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional({ description: 'The ID of the group' })
   groupId?: number;
 
   @IsOptional()
   @IsNumber()
   @IsPositive()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional({ description: 'The ID of the user' })
   userId?: number;
 
   @IsOptional()
   @IsNumber()
   @IsPositive()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional({ description: 'The ID of the stage' })
   stageId?: number;
 
   @IsOptional()
   @IsNumber()
   @IsPositive()
+  @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional({ description: 'The round number' })
   round?: number;
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true')
   @ApiPropertyOptional({ description: 'Whether the matchup is finished' })
   isFinished?: boolean;
 
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value ?? undefined)
   @ApiPropertyOptional({ description: 'The Challonge ID of the matchup' })
   challongeMatchupId?: string;
 }

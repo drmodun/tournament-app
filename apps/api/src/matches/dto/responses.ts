@@ -153,8 +153,8 @@ export class MatchupResponseDto {
   @ApiProperty({ description: 'The ID of the stage' })
   stageId: number;
 
-  @ApiProperty({ description: 'The ID of the round' })
-  roundId: number;
+  @ApiProperty({ description: 'The round number' })
+  round: number;
 
   @ApiProperty({ description: 'The type of matchup' })
   matchupType: string;
@@ -174,6 +174,14 @@ export class MatchupResponseWithChallongeIdDto extends MatchupResponseDto {
 export class MatchupResponseWithRostersDto extends MatchupResponseDto {
   @ApiProperty({
     description: 'The rosters participating in this matchup',
+    type: [RosterDto],
+  })
+  rosters: RosterDto[];
+}
+
+export class MatchupsWithMiniRostersResponseDto extends MatchupResponseDto {
+  @ApiProperty({
+    description: 'The mini rosters participating in this matchup',
     type: [MiniRosterDto],
   })
   rosters: MiniRosterDto[];
@@ -186,9 +194,6 @@ export class ResultsResponseDto {
   @ApiProperty({ description: 'The ID of the matchup' })
   matchupId: number;
 
-  @ApiProperty({ description: 'The round number' })
-  roundNumber: number;
-
   @ApiProperty({ description: 'The score' })
   score: number;
 
@@ -197,14 +202,14 @@ export class ResultsResponseDto {
 
   @ApiProperty({
     description: 'The roster associated with this result',
-    type: RosterDto,
+    type: MiniRosterDto,
   })
-  roster: RosterDto;
+  roster: MiniRosterDto;
 }
 
-export class ResultsResponseWithScoresDto extends ResultsResponseDto {
+export class ResultsResponseWithScoresDto extends MatchupResponseDto {
   @ApiProperty({
-    description: 'The individual scores for this result',
+    description: 'The scores for this matchup',
     type: [ScoreResponseDto],
   })
   scores: ScoreResponseDto[];
@@ -224,4 +229,10 @@ export class MatchupResponseWithResultsAndScoresDto extends MatchupResponseDto {
     type: [ResultsResponseWithScoresDto],
   })
   results: ResultsResponseWithScoresDto[];
+
+  @ApiProperty({
+    description: 'The rosters participating in this matchup',
+    type: [RosterDto],
+  })
+  rosters: RosterDto[];
 }

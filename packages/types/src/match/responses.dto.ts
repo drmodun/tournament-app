@@ -26,7 +26,7 @@ export interface IResultsResponse {
   matchupId: number;
   score: number;
   isWinner: boolean;
-  roster: IRosterResponse;
+  roster: IMiniRosterResponse;
 }
 
 export interface IScoreResponse {
@@ -40,7 +40,7 @@ export interface IMatchupsWithMiniRostersResponse extends IMatchupResponse {
   rosters: IMiniRosterResponse[];
 }
 
-export interface IResultsResponseWithScores extends IResultsResponse {
+export interface IResultsResponseWithScores extends IMatchupResponse {
   scores: IScoreResponse[];
 }
 
@@ -50,6 +50,7 @@ export interface IMatchupResponseWithResults extends IMatchupResponse {
 
 export interface IMatchupResponseWithResultsAndScores extends IMatchupResponse {
   results: IResultsResponseWithScores[];
+  rosters: IRosterResponse[];
 }
 
 export enum MatchupResponsesEnum {

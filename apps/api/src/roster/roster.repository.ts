@@ -168,6 +168,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         : undefined,
       columns: {
         id: true,
+        challongeParticipantId: true,
         stageId: true,
         participationId: true,
         createdAt: true,

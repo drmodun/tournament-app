@@ -228,6 +228,7 @@ export default function EditCompetitionForm({
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
               defaultValue={competition?.minimumMMR?.toString()}
+              type="number"
             />
             <Input
               variant={textColorTheme}
@@ -236,6 +237,7 @@ export default function EditCompetitionForm({
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
               defaultValue={competition?.minimumMMR?.toString()}
+              type="number"
             />
           </div>
         </div>

@@ -253,6 +253,13 @@
       "when": 1743742339568,
       "tag": "0035_tough_hellion",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1743764019868,
+      "tag": "0036_narrow_barracuda",
+      "breakpoints": true
     }
   ]
 }

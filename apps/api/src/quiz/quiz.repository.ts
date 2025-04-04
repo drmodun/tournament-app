@@ -120,7 +120,6 @@ export class QuizDrizzleRepository extends PrimaryRepository<
           questions: sql`ARRAY_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'id', ${quizQuestion.id}, 
             'name', ${quizQuestion.question}, 
-            'order', ${quizQuestion.order},
             'timeLimit', ${quizQuestion.timeLimit},
             'points', ${quizQuestion.points},
             'createdAt', ${quizQuestion.createdAt},

@@ -1376,7 +1376,6 @@ export const quizQuestion = pgTable('quiz_question', {
   type: quizQuestionType('type').default('multiple_choice'),
   explanation: text('explanation'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  order: integer('order'),
 });
 
 export const quizOption = pgTable('quiz_option', {

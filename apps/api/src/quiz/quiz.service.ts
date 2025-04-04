@@ -9,7 +9,6 @@ import {
   IQuizResponse,
   QuizReturnTypesEnumType,
   BaseQuizResponse,
-  UpdateQuizDto,
 } from '@tournament-app/types';
 import {
   CreateQuizRequest,
@@ -103,7 +102,9 @@ export class QuizService {
   async checkAuthor(quizId: number, userId: number) {
     const quiz = await this.repository.getSingleQuery(quizId);
 
-    if (!quiz.length || !quiz ) {
+    if (!quiz.length || !quiz[0]) {
+      throw new NotFoundException(`Quiz with ID ${quizId} not found`);
+    }
 
     if (quiz[0].authorId !== userId) {
       throw new ForbiddenException('You are not the author of this quiz');

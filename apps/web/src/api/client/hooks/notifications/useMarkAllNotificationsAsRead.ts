@@ -25,7 +25,7 @@ export const useMarkAllNotificationsAsRead = () => {
 
           // For paginated data or other formats
           return oldData;
-        }
+        },
       );
 
       // Invalidate queries to refetch if needed

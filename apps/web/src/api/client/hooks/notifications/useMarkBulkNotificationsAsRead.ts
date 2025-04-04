@@ -19,12 +19,12 @@ export const useMarkBulkNotificationsAsRead = () => {
             return oldData.map((notification: INotificationResponse) =>
               ids.includes(notification.notification.id)
                 ? { ...notification, isRead: true }
-                : notification
+                : notification,
             );
           }
 
           return oldData;
-        }
+        },
       );
 
       queryClient.invalidateQueries({ queryKey: ["notifications"] });

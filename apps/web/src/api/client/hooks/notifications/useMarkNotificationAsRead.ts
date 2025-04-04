@@ -21,13 +21,13 @@ export const useMarkNotificationAsRead = () => {
             return oldData.map((notification: INotificationResponse) =>
               notification.notification.id === id
                 ? { ...notification, isRead: true }
-                : notification
+                : notification,
             );
           }
 
           // For paginated data or other formats
           return oldData;
-        }
+        },
       );
 
       // Invalidate queries to refetch if needed

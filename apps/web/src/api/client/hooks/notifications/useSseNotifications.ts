@@ -26,7 +26,7 @@ export const useSseNotifications = (token: string | null) => {
         console.error("Error parsing notification:", error);
       }
     },
-    [toast]
+    [toast],
   );
 
   const connect = useCallback(() => {
@@ -38,7 +38,7 @@ export const useSseNotifications = (token: string | null) => {
       }
 
       const eventSource = new EventSource(
-        `${baseApiUrl}/notifications/stream?token=${token}`
+        `${baseApiUrl}/notifications/stream?token=${token}`,
       );
       eventSourceRef.current = eventSource;
 

@@ -39,7 +39,7 @@ export const NotificationContext = createContext<NotificationContextType>({
 
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [notifications, setNotifications] = useState<INotificationResponse[]>(
-    []
+    [],
   );
   const [token, setToken] = useState<string | null>(null);
 
@@ -63,7 +63,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const requestTokenMutation = useRequestNotificationToken();
 
   const unreadCount = notifications.filter(
-    (notification) => !notification.isRead
+    (notification) => !notification.isRead,
   ).length;
 
   useEffect(() => {
@@ -124,18 +124,18 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
         prev.map((notification) =>
           notification.notification.id === id
             ? { ...notification, isRead: true }
-            : notification
-        )
+            : notification,
+        ),
       );
     },
-    [markAsReadMutation]
+    [markAsReadMutation],
   );
 
   const markAllAsRead = useCallback(async () => {
     await markAllAsReadMutation.mutateAsync();
 
     setNotifications((prev) =>
-      prev.map((notification) => ({ ...notification, isRead: true }))
+      prev.map((notification) => ({ ...notification, isRead: true })),
     );
   }, [markAllAsReadMutation]);
 
@@ -147,11 +147,11 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
         prev.map((notification) =>
           ids.includes(notification.notification.id)
             ? { ...notification, isRead: true }
-            : notification
-        )
+            : notification,
+        ),
       );
     },
-    [markBulkAsReadMutation]
+    [markBulkAsReadMutation],
   );
 
   const handleDeleteNotification = useCallback(
@@ -159,10 +159,10 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       await deleteNotificationMutation.mutateAsync(id);
 
       setNotifications((prev) =>
-        prev.filter((notification) => notification.notification.id !== id)
+        prev.filter((notification) => notification.notification.id !== id),
       );
     },
-    [deleteNotificationMutation]
+    [deleteNotificationMutation],
   );
 
   const contextValue: NotificationContextType = {

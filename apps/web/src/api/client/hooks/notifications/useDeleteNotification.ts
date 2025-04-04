@@ -18,12 +18,12 @@ export const useDeleteNotification = () => {
           if (Array.isArray(oldData)) {
             return oldData.filter(
               (notification: INotificationResponse) =>
-                notification.notification.id !== id
+                notification.notification.id !== id,
             );
           }
 
           return oldData;
-        }
+        },
       );
 
       queryClient.invalidateQueries({ queryKey: ["notifications"] });

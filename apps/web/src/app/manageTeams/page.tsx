@@ -151,7 +151,7 @@ export default function Teams() {
           <div
             className={clsx(
               styles.tabs,
-              globals[`${textColor(theme)}BackgroundColor`]
+              globals[`${textColor(theme)}BackgroundColor`],
             )}
           >
             <button
@@ -176,7 +176,7 @@ export default function Teams() {
                       key={index}
                       className={clsx(
                         styles.tab,
-                        activeTab === index && styles.active
+                        activeTab === index && styles.active,
                       )}
                       onClick={() => setActiveTab(index)}
                       label={tab.group.name}
@@ -185,7 +185,7 @@ export default function Teams() {
                       }
                     />
                   );
-                }
+                },
               )}
             </div>
             <button
@@ -257,7 +257,7 @@ const SearchBar = ({
       className={clsx(
         styles.tabs,
         globals[`${textColorTheme}BackgroundColor`],
-        styles.searchBar
+        styles.searchBar,
       )}
     >
       <div className={styles.searchInputWrapper}>

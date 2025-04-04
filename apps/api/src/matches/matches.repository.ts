@@ -14,6 +14,7 @@ import {
   scoreToRoster,
   stage,
   stageRound,
+  user,
 } from '../db/schema';
 import { db } from '../db/db';
 import {
@@ -26,6 +27,7 @@ import {
   inArray,
   or,
   desc,
+  aliasedTable,
 } from 'drizzle-orm';
 import * as tables from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
@@ -383,11 +385,22 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
   }
 
   async getManagedMatchups(userId: number, query?: PaginationOnly) {
+    const creatorUser = aliasedTable(user, 'creatorUser');
+
     const result = await db
-      .selectDistinct()
+      .selectDistinct({
+        id: matchup.id,
+        stageId: matchup.stageId,
+        round: matchup.round,
+        isFinished: matchup.isFinished,
+        challongeMatchupId: matchup.challongeMatchupId,
+        startDate: matchup.startDate,
+        endDate: matchup.endDate,
+      })
       .from(matchup)
       .leftJoin(stage, eq(matchup.stageId, stage.id))
       .leftJoin(tables.tournament, eq(stage.tournamentId, tables.tournament.id))
+      .leftJoin(creatorUser, eq(tables.tournament.creatorId, creatorUser.id))
       .leftJoin(
         tables.group,
         eq(tables.tournament.affiliatedGroupId, tables.group.id),
@@ -397,12 +410,18 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         eq(tables.group.id, tables.groupToUser.groupId),
       )
       .where(
-        and(
-          eq(tables.groupToUser.userId, userId),
-          eq(tables.tournament.affiliatedGroupId, tables.group.id),
-          or(
-            eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
-            eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+        or(
+          and(
+            eq(tables.groupToUser.userId, userId),
+            eq(tables.tournament.affiliatedGroupId, tables.group.id),
+            or(
+              eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
+              eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+            ),
+          ),
+          and(
+            eq(creatorUser.id, userId),
+            eq(tables.tournament.creatorId, creatorUser.id),
           ),
         ),
       )
@@ -532,14 +551,18 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return result;
   }
 
-  async getResultsForRoster(rosterId: number) {
+  async getResultsForRoster(rosterId: number, pagination?: PaginationOnly) {
     const ids = await this.getResultsForRosterIds(rosterId);
 
     if (ids.length === 0) {
       return [];
     }
 
-    return this.getWithResults({ ids: ids.map((id) => id.id) });
+    return this.getWithResults({
+      ids: ids.map((id) => id.id),
+      page: pagination?.page,
+      pageSize: pagination?.pageSize,
+    });
   }
 
   async getResultsForGroupIds(groupId: number) {
@@ -574,24 +597,32 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return result;
   }
 
-  async getResultsForUser(userId: number) {
+  async getResultsForUser(userId: number, pagination?: PaginationOnly) {
     const ids = await this.getResultsForUserIds(userId);
 
     if (ids.length === 0) {
       return [];
     }
 
-    return this.getWithResults({ ids: ids.map((id) => id.id) });
+    return this.getWithResults({
+      ids: ids.map((id) => id.id),
+      page: pagination?.page,
+      pageSize: pagination?.pageSize,
+    });
   }
 
-  async getResultsForGroup(groupId: number) {
+  async getResultsForGroup(groupId: number, pagination?: PaginationOnly) {
     const ids = await this.getResultsForGroupIds(groupId);
 
     if (ids.length === 0) {
       return [];
     }
 
-    return this.getWithResults({ ids: ids.map((id) => id.id) });
+    return this.getWithResults({
+      ids: ids.map((id) => id.id),
+      page: pagination?.page,
+      pageSize: pagination?.pageSize,
+    });
   }
 
   async getWithResults(query: QueryMatchupRequestDto & { ids?: number[] }) {

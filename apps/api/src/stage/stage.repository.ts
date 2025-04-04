@@ -265,6 +265,8 @@ export class StageDrizzleRepository extends PrimaryRepository<
   }
 
   async getManagedStages(userId: number, pagination?: PaginationOnly) {
+    const creatorUser = aliasedTable(user, 'creatorUser');
+
     const stages = await db
       .selectDistinct(this.getMappingObject(StageResponsesEnum.BASE))
       .from(stage)
@@ -272,14 +274,21 @@ export class StageDrizzleRepository extends PrimaryRepository<
       .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
       .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
       .leftJoin(user, eq(groupToUser.userId, user.id))
+      .leftJoin(creatorUser, eq(tournament.creatorId, creatorUser.id))
       .leftJoin(location, eq(stage.locationId, location.id))
       .where(
-        and(
-          eq(user.id, userId),
-          or(
-            eq(user.id, tournament.creatorId),
-            eq(groupToUser.role, groupRoleEnum.ADMIN),
-            eq(groupToUser.role, groupRoleEnum.OWNER),
+        or(
+          and(
+            eq(user.id, userId),
+            eq(tournament.affiliatedGroupId, group.id),
+            or(
+              eq(groupToUser.role, groupRoleEnum.ADMIN),
+              eq(groupToUser.role, groupRoleEnum.OWNER),
+            ),
+          ),
+          and(
+            eq(creatorUser.id, userId),
+            eq(tournament.creatorId, creatorUser.id),
           ),
         ),
       )

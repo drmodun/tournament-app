@@ -269,21 +269,32 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
   }
 
   async getManagedTournaments(userId: number, pagination?: PaginationOnly) {
+    const creatorUser = aliasedTable(user, 'creatorUser');
+
     const tournaments = await db
-      .selectDistinct(this.getMappingObject(TournamentResponsesEnum.BASE))
+      .selectDistinct(
+        this.getMappingObject(TournamentResponsesEnum.MINI_WITH_LOGO),
+      )
       .from(tournament)
       .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
       .leftJoin(groupToUser, eq(group.id, groupToUser.groupId))
       .leftJoin(user, eq(groupToUser.userId, user.id))
+      .leftJoin(creatorUser, eq(tournament.creatorId, creatorUser.id))
       .leftJoin(location, eq(tournament.locationId, location.id))
       .leftJoin(category, eq(tournament.categoryId, category.id))
       .where(
-        and(
-          eq(user.id, userId),
-          or(
-            eq(user.id, tournament.creatorId),
-            eq(groupToUser.role, groupRoleEnum.ADMIN),
-            eq(groupToUser.role, groupRoleEnum.OWNER),
+        or(
+          and(
+            eq(user.id, userId),
+            eq(tournament.affiliatedGroupId, group.id),
+            or(
+              eq(groupToUser.role, groupRoleEnum.ADMIN),
+              eq(groupToUser.role, groupRoleEnum.OWNER),
+            ),
+          ),
+          and(
+            eq(creatorUser.id, userId),
+            eq(tournament.creatorId, creatorUser.id),
           ),
         ),
       )

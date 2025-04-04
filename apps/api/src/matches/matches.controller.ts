@@ -100,8 +100,11 @@ export class MatchesController {
     description: 'Returns matchups with results for a user',
     type: [MatchupResponseWithResultsDto],
   })
-  async getResultsForUser(@Param('userId', ParseIntPipe) userId: number) {
-    return await this.matchesService.getResultsForUser(userId);
+  async getResultsForUser(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.matchesService.getResultsForUser(userId, query);
   }
 
   @Get('roster/:rosterId/results')
@@ -110,8 +113,11 @@ export class MatchesController {
     description: 'Returns matchups with results for a roster',
     type: [MatchupResponseWithResultsDto],
   })
-  async getResultsForRoster(@Param('rosterId', ParseIntPipe) rosterId: number) {
-    return await this.matchesService.getResultsForRoster(rosterId);
+  async getResultsForRoster(
+    @Param('rosterId', ParseIntPipe) rosterId: number,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.matchesService.getResultsForRoster(rosterId, query);
   }
 
   @Get('managed')
@@ -134,7 +140,10 @@ export class MatchesController {
     description: 'Returns matchups with results for a group',
     type: [MatchupResponseWithResultsDto],
   })
-  async getResultsForGroup(@Param('groupId', ParseIntPipe) groupId: number) {
-    return await this.matchesService.getResultsForGroup(groupId);
+  async getResultsForGroup(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Query() query: PaginationOnly,
+  ) {
+    return await this.matchesService.getResultsForGroup(groupId, query);
   }
 }

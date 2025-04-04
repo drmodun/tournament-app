@@ -8,6 +8,7 @@
 .wrapper {
   padding: $padding;
   border-radius: $borderRadius;
+<<<<<<< HEAD
   display: flex;
   flex-direction: column;
   gap: $padding;
@@ -45,4 +46,6 @@
   display: flex;
   flex-direction: column;
   gap: $halfPadding;
+=======
+>>>>>>> 89c8adb (WIP: quiz support)
 }

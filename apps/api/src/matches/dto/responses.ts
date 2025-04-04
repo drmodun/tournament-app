@@ -213,6 +213,12 @@ export class ResultsResponseWithScoresDto extends MatchupResponseDto {
     type: [ScoreResponseDto],
   })
   scores: ScoreResponseDto[];
+
+  @ApiProperty({
+    description: 'The rosters for this matchup',
+    type: [RosterDto],
+  })
+  rosters: RosterDto[];
 }
 
 export class MatchupResponseWithResultsDto extends MatchupResponseDto {
@@ -229,10 +235,4 @@ export class MatchupResponseWithResultsAndScoresDto extends MatchupResponseDto {
     type: [ResultsResponseWithScoresDto],
   })
   results: ResultsResponseWithScoresDto[];
-
-  @ApiProperty({
-    description: 'The rosters participating in this matchup',
-    type: [RosterDto],
-  })
-  rosters: RosterDto[];
 }

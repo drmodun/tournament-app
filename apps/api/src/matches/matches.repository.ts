@@ -534,6 +534,11 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
 
   async getResultsForRoster(rosterId: number) {
     const ids = await this.getResultsForRosterIds(rosterId);
+
+    if (ids.length === 0) {
+      return [];
+    }
+
     return this.getWithResults({ ids: ids.map((id) => id.id) });
   }
 
@@ -571,12 +576,28 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
 
   async getResultsForUser(userId: number) {
     const ids = await this.getResultsForUserIds(userId);
+
+    if (ids.length === 0) {
+      return [];
+    }
+
+    return this.getWithResults({ ids: ids.map((id) => id.id) });
+  }
+
+  async getResultsForGroup(groupId: number) {
+    const ids = await this.getResultsForGroupIds(groupId);
+
+    if (ids.length === 0) {
+      return [];
+    }
+
     return this.getWithResults({ ids: ids.map((id) => id.id) });
   }
 
   async getWithResults(query: QueryMatchupRequestDto & { ids?: number[] }) {
     const result = await db.query.matchup.findMany({
       where: and(
+        query.matchupId ? eq(matchup.id, query.matchupId) : undefined,
         query.ids?.length ? inArray(matchup.id, query.ids) : undefined,
         query.stageId ? eq(matchup.stageId, query.stageId) : undefined,
         query.round ? eq(matchup.round, query.round) : undefined,

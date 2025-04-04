@@ -19,10 +19,13 @@ import {
   ApiTags,
   ApiOkResponse,
   ApiBearerAuth,
+  ApiExtraModels,
 } from '@nestjs/swagger';
 import {
   MatchupResponseWithResultsDto,
   MatchupResponseWithResultsAndScoresDto,
+  ResultsResponseDto,
+  ScoreResponseDto,
 } from './dto/responses';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
@@ -33,6 +36,12 @@ import { PaginationOnly } from 'src/base/query/baseQuery';
 export class MatchesController {
   constructor(private readonly matchesService: MatchesService) {}
 
+  @ApiExtraModels(
+    MatchupResponseWithResultsDto,
+    MatchupResponseWithResultsAndScoresDto,
+    ResultsResponseDto,
+    ScoreResponseDto,
+  )
   @Post('/:matchupId/score')
   @UseGuards(JwtAuthGuard, CanEditMatchupGuard)
   @ApiBearerAuth()
@@ -84,7 +93,7 @@ export class MatchesController {
     @Param('matchupId', ParseIntPipe) matchupId: number,
   ) {
     return await this.matchesService.getMatchupWithResultsAndScores(matchupId);
-  }
+  } //TODO: check as any assertions
 
   @Get('user/:userId/results')
   @ApiOkResponse({

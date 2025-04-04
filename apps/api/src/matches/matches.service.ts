@@ -207,26 +207,129 @@ export class MatchesService {
   }
 
   async getMatchupsWithResults(query: QueryMatchupRequestDto = {}) {
-    return this.matchesRepository.getWithResults(query);
+    const results = await this.matchesRepository.getWithResults(query);
+    return this.mapRepositoryResultsToDto(results);
   }
 
   async getMatchupWithResultsAndScores(matchupId: number) {
-    return this.matchesRepository.getWithResultsAndScores(matchupId);
+    type MatchupResult = {
+      id: number;
+      stageId: number;
+      round: number;
+      isFinished: boolean;
+      challongeMatchupId?: string;
+      score?: Array<{
+        id: number;
+        roundNumber: number;
+        matchupId: number;
+        isWinner?: boolean;
+        scoreToRoster?: Array<{
+          id: number;
+          scoreId: number;
+          rosterId: number;
+          points: number;
+          isWinner: boolean;
+        }>;
+      }>;
+      rosterToMatchup?: Array<{
+        isWinner: boolean;
+        matchupId: number;
+        score: number;
+        roster?: any;
+      }>;
+    };
+
+    const rawResult = (await this.matchesRepository.getWithResultsAndScores(
+      matchupId,
+    )) as MatchupResult;
+
+    if (!rawResult) {
+      return null;
+    }
+
+    const scoresMap = new Map<number, any[]>();
+
+    if (rawResult.score && Array.isArray(rawResult.score)) {
+      rawResult.score.forEach((scoreEntry) => {
+        const roundNumber = scoreEntry.roundNumber;
+
+        if (!scoresMap.has(roundNumber)) {
+          scoresMap.set(roundNumber, []);
+        }
+
+        if (
+          scoreEntry.scoreToRoster &&
+          Array.isArray(scoreEntry.scoreToRoster)
+        ) {
+          scoreEntry.scoreToRoster.forEach((scoreToRoster) => {
+            scoresMap.get(roundNumber).push({
+              matchupId: scoreEntry.matchupId,
+              roundNumber: scoreEntry.roundNumber,
+              points: scoreToRoster.points,
+              isWinner: scoreToRoster.isWinner,
+              rosterId: scoreToRoster.rosterId,
+            });
+          });
+        }
+      });
+    }
+
+    const results = Array.isArray(rawResult.rosterToMatchup)
+      ? rawResult.rosterToMatchup.map((rtm) => {
+          const result = {
+            id: rtm.roster?.id || 0,
+            matchupId: rtm.matchupId,
+            score: rtm.score,
+            isWinner: rtm.isWinner,
+            roster: rtm.roster || null,
+          };
+
+          const rosterScores = [];
+          scoresMap.forEach((roundScores, roundNumber) => {
+            const rosterScore = roundScores.find(
+              (score) => score.rosterId === rtm.roster?.id,
+            );
+            if (rosterScore) {
+              rosterScores.push({
+                matchupId: rawResult.id,
+                roundNumber,
+                points: rosterScore.points,
+                isWinner: rosterScore.isWinner,
+              });
+            }
+          });
+
+          return {
+            ...result,
+            scores: rosterScores,
+          };
+        })
+      : [];
+
+    return {
+      id: rawResult.id,
+      stageId: rawResult.stageId,
+      round: rawResult.round,
+      matchupType: 'standard',
+      startDate: new Date(),
+      isFinished: rawResult.isFinished,
+      results: results,
+    };
   }
 
   async getResultsForUser(userId: number) {
-    return this.matchesRepository.getResultsForUser(userId);
+    const results = await this.matchesRepository.getResultsForUser(userId);
+    return this.mapRepositoryResultsToDto(results);
   }
 
   async getResultsForRoster(rosterId: number) {
-    return this.matchesRepository.getResultsForRoster(rosterId);
+    const results = await this.matchesRepository.getResultsForRoster(rosterId);
+    return this.mapRepositoryResultsToDto(results);
   }
 
   async getResultsForGroup(groupId: number) {
-    const ids = await this.matchesRepository.getResultsForGroupIds(groupId);
-    return this.matchesRepository.getWithResults({
-      ids: ids.map((id) => id.id),
-    });
+    const results = await this.matchesRepository.getResultsForGroup(groupId);
+    return this.mapRepositoryResultsToDto(results);
   }
 
   async importChallongeMatchesToStage(
@@ -241,5 +344,43 @@ export class MatchesService {
 
   async getManagedMatchups(userId: number, query: PaginationOnly) {
     return this.matchesRepository.getManagedMatchups(userId, query);
+  }
+
+  private mapRepositoryResultsToDto(repositoryResults: any[] | null): any[] {
+    if (!repositoryResults || !Array.isArray(repositoryResults)) {
+      return [];
+    }
+
+    return repositoryResults
+      .map((rawMatch) => {
+        if (!rawMatch) {
+          return null;
+        }
+
+        const matchupBase = {
+          id: rawMatch.id || 0,
+          stageId: rawMatch.stageId || 0,
+          round: rawMatch.round || 0,
+          matchupType: rawMatch.matchupType || 'standard',
+          startDate: rawMatch.startDate || new Date(),
+          isFinished: !!rawMatch.isFinished,
+        };
+
+        const results = Array.isArray(rawMatch.rosterToMatchup)
+          ? rawMatch.rosterToMatchup.map((rtm) => ({
+              id: rtm?.roster?.id || 0,
+              matchupId: rtm?.matchupId || rawMatch.id || 0,
+              score: rtm?.score || 0,
+              isWinner: !!rtm?.isWinner,
+              roster: rtm?.roster || null,
+            }))
+          : [];
+
+        return {
+          ...matchupBase,
+          results,
+        };
+      })
+      .filter(Boolean);
   }
 }

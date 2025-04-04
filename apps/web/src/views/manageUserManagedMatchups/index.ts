@@ -1,2 +1,2 @@
-import ManageUser from "./manageUser";
+import ManageUser from "./manageUserManagedMatchups";
 export default ManageUser;

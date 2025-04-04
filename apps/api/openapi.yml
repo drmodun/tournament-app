@@ -5,19 +5,19 @@ paths:
       operationId: AppController_getHello
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /users/fake:
     post:
       operationId: UsersController_createFake
       parameters: []
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: &a1
         - users
       security:
@@ -42,14 +42,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       tags: *a1
   /users:
     post:
@@ -60,14 +60,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: "#/components/schemas/CreateUserRequest"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a1
     patch:
       operationId: UsersController_updateMe
@@ -77,14 +77,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserInfo'
+              $ref: "#/components/schemas/UpdateUserInfo"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a1
       security:
         - bearer: []
@@ -92,12 +92,12 @@ paths:
       operationId: UsersController_deleteMe
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MiniUserResponse'
+                $ref: "#/components/schemas/MiniUserResponse"
       tags: *a1
       security:
         - bearer: []
@@ -170,7 +170,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -204,7 +204,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2025-04-03T00:03:53.672Z
+                        updatedAt: &a2 2025-04-04T16:22:11.717Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -304,22 +304,22 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2025-04-03T00:03:53.672Z
+                        createdAt: 2025-04-04T16:22:11.717Z
                         following: 0
                         location: New York
-          description: ''
+          description: ""
       tags: *a1
   /users/me:
     get:
       operationId: UsersController_findMe
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExtendedUserResponse'
+                $ref: "#/components/schemas/ExtendedUserResponse"
       tags: *a1
       security:
         - bearer: []
@@ -338,16 +338,16 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/MiniUserResponse'
-                  - $ref: '#/components/schemas/UserResponse'
-                  - $ref: '#/components/schemas/ExtendedUserResponse'
-                  - $ref: '#/components/schemas/MiniUserResponseWithCountry'
-                  - $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  - $ref: "#/components/schemas/MiniUserResponse"
+                  - $ref: "#/components/schemas/UserResponse"
+                  - $ref: "#/components/schemas/ExtendedUserResponse"
+                  - $ref: "#/components/schemas/MiniUserResponseWithCountry"
+                  - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
               examples:
                 UserResponse:
                   value:
@@ -362,7 +362,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2025-04-03T00:03:53.672Z
+                    updatedAt: &a3 2025-04-04T16:22:11.717Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -394,10 +394,10 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2025-04-03T00:03:53.672Z
+                    createdAt: 2025-04-04T16:22:11.717Z
                     following: 0
                     location: New York
-          description: ''
+          description: ""
       tags: *a1
     patch:
       operationId: UsersController_update
@@ -412,14 +412,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserInfo'
+              $ref: "#/components/schemas/UpdateUserInfo"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a1
       security:
         - bearer: []
@@ -432,12 +432,12 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a1
       security:
         - bearer: []
@@ -451,8 +451,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: &a4
         - auth
   /auth/password-reset/{token}:
@@ -469,10 +469,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PasswordResetRequest'
+              $ref: "#/components/schemas/PasswordResetRequest"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a4
   /auth/email-confirmation/{token}:
     post:
@@ -484,16 +484,16 @@ paths:
           schema:
             type: string
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a4
   /auth/sse-token:
     get:
       operationId: AuthController_getSseToken
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a4
       security:
         - bearer: []
@@ -506,28 +506,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokensResponse'
+                $ref: "#/components/schemas/TokensResponse"
       tags: *a4
   /auth/refresh:
     get:
       operationId: AuthController_refresh
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokensResponse'
-        '401':
-          description: ''
+                $ref: "#/components/schemas/TokensResponse"
+        "401":
+          description: ""
       tags: *a4
       security:
         - bearer: []
@@ -536,20 +536,20 @@ paths:
       operationId: AuthController_auth
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a4
   /auth/google/callback:
     get:
       operationId: AuthController_authCallback
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokensResponse'
+                $ref: "#/components/schemas/TokensResponse"
       tags: *a4
       security:
         - bearer: []
@@ -573,14 +573,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       tags: &a5
         - groups
   /groups/for-roster/{tournamentId}:
@@ -593,14 +593,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       tags: *a5
       security:
         - bearer: []
@@ -674,7 +674,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -758,7 +758,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-03T00:03:53.776Z
+                        updatedAt: 2025-04-04T16:22:11.946Z
                         memberCount: 50
                 extended:
                   value:
@@ -783,12 +783,12 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-03T00:03:53.776Z
+                        updatedAt: 2025-04-04T16:22:11.946Z
                         memberCount: 50
-                        createdAt: 2025-04-03T00:03:53.776Z
+                        createdAt: 2025-04-04T16:22:11.946Z
                         tournamentCount: 10
                         subscriberCount: 100
-          description: ''
+          description: ""
       tags: *a5
     post:
       operationId: GroupController_create
@@ -798,9 +798,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGroupRequest'
+              $ref: "#/components/schemas/CreateGroupRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -812,9 +812,9 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-03T00:03:53.776Z
+                updatedAt: 2025-04-04T16:22:11.946Z
                 memberCount: 50
-          description: ''
+          description: ""
       tags: *a5
       security:
         - bearer: []
@@ -833,7 +833,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -865,7 +865,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-03T00:03:53.776Z
+                    updatedAt: 2025-04-04T16:22:11.946Z
                     memberCount: 50
                 extended:
                   value:
@@ -877,19 +877,19 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-03T00:03:53.776Z
+                    updatedAt: 2025-04-04T16:22:11.946Z
                     memberCount: 50
-                    createdAt: 2025-04-03T00:03:53.776Z
+                    createdAt: 2025-04-04T16:22:11.946Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/MiniGroupResponse'
-                  - $ref: '#/components/schemas/MiniGroupResponseWithLogo'
-                  - $ref: '#/components/schemas/MiniGroupResponseWithCountry'
-                  - $ref: '#/components/schemas/GroupResponse'
-                  - $ref: '#/components/schemas/GroupResponseExtended'
-          description: ''
+                  - $ref: "#/components/schemas/MiniGroupResponse"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithCountry"
+                  - $ref: "#/components/schemas/GroupResponse"
+                  - $ref: "#/components/schemas/GroupResponseExtended"
+          description: ""
       tags: *a5
     patch:
       operationId: GroupController_update
@@ -904,9 +904,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGroupRequest'
+              $ref: "#/components/schemas/UpdateGroupRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -918,9 +918,9 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-03T00:03:53.776Z
+                updatedAt: 2025-04-04T16:22:11.946Z
                 memberCount: 50
-          description: ''
+          description: ""
       tags: *a5
       security:
         - bearer: []
@@ -933,8 +933,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a5
       security:
         - bearer: []
@@ -947,15 +947,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateFakeGroupRequest'
+              $ref: "#/components/schemas/CreateFakeGroupRequest"
       responses:
-        '201':
+        "201":
           content:
             application/json:
               example:
                 success: true
                 id: 1
-          description: ''
+          description: ""
       tags: *a5
       security:
         - bearer: []
@@ -969,7 +969,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -982,10 +982,10 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-03T00:03:53.776Z
+                  updatedAt: 2025-04-04T16:22:11.946Z
                   memberCount: 50
                 members: []
-          description: ''
+          description: ""
       tags: *a5
   /groups/{groupId}/tournaments:
     get:
@@ -997,7 +997,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -1010,10 +1010,10 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-03T00:03:53.776Z
+                  updatedAt: 2025-04-04T16:22:11.946Z
                   memberCount: 50
                 tournaments: []
-          description: ''
+          description: ""
       tags: *a5
   /groups/{groupId}/followers:
     get:
@@ -1025,7 +1025,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -1038,10 +1038,10 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-03T00:03:53.776Z
+                  updatedAt: 2025-04-04T16:22:11.946Z
                   memberCount: 50
                 followers: []
-          description: ''
+          description: ""
       tags: *a5
   /group-membership/auto-complete/users/{groupId}/{search}:
     get:
@@ -1068,14 +1068,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       tags: &a6
         - group-membership
       security:
@@ -1100,14 +1100,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       tags: *a6
       security:
         - bearer: []
@@ -1170,7 +1170,7 @@ paths:
               - admin
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1230,7 +1230,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-04-03T00:03:53.780Z
+                        createdAt: 2025-04-04T16:22:11.951Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1251,7 +1251,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-04-03T00:03:53.780Z
+                      - createdAt: 2025-04-04T16:22:11.951Z
                         isFake: false
                         role: member
                         country: country
@@ -1283,7 +1283,7 @@ paths:
                         role: member
                         user: *a7
                         group: *a8
-                        createdAt: 2025-04-03T00:03:53.780Z
+                        createdAt: 2025-04-04T16:22:11.951Z
                         country: country
                         name: name
                         logo: logo
@@ -1311,7 +1311,7 @@ paths:
                     results:
                       - userId: 1
                         groupId: 1
-          description: ''
+          description: ""
       tags: *a6
   /group-membership/{groupId}/leave:
     delete:
@@ -1323,8 +1323,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a6
       security:
         - bearer: []
@@ -1348,7 +1348,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1372,10 +1372,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-04-03T00:03:53.780Z
+                    createdAt: 2025-04-04T16:22:11.951Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-04-03T00:03:53.780Z
+                    createdAt: 2025-04-04T16:22:11.951Z
                     isFake: false
                     role: member
                     country: country
@@ -1389,7 +1389,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-04-03T00:03:53.780Z
+                    createdAt: 2025-04-04T16:22:11.951Z
                     country: country
                     name: name
                     logo: logo
@@ -1401,12 +1401,12 @@ paths:
                     groupId: 1
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/MinimalMembershipResponse'
-                  - $ref: '#/components/schemas/GroupMembershipResponse'
-                  - $ref: '#/components/schemas/UserMembershipResponseWithDates'
-                  - $ref: '#/components/schemas/GroupMembershipResponseWithDates'
-                  - $ref: '#/components/schemas/GroupMembershipKey'
-          description: ''
+                  - $ref: "#/components/schemas/MinimalMembershipResponse"
+                  - $ref: "#/components/schemas/GroupMembershipResponse"
+                  - $ref: "#/components/schemas/UserMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipKey"
+          description: ""
       tags: *a6
     post:
       operationId: GroupMembershipController_create
@@ -1422,8 +1422,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a6
       security:
         - bearer: []
@@ -1441,8 +1441,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a6
       security:
         - bearer: []
@@ -1464,10 +1464,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupMembershipUpdateRequest'
+              $ref: "#/components/schemas/GroupMembershipUpdateRequest"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a6
       security:
         - bearer: []
@@ -1528,14 +1528,14 @@ paths:
             items:
               type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/NotificationsResponse'
+                  $ref: "#/components/schemas/NotificationsResponse"
       tags: &a11
         - SSE Notifications
       security:
@@ -1545,8 +1545,8 @@ paths:
       operationId: SseNotificationsController_requestNewToken
       parameters: []
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a11
       security:
         - bearer: []
@@ -1560,8 +1560,8 @@ paths:
           schema:
             type: number
       responses:
-        '204':
-          description: ''
+        "204":
+          description: ""
       tags: *a11
       security:
         - bearer: []
@@ -1570,8 +1570,8 @@ paths:
       operationId: SseNotificationsController_markAllAsRead
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a11
       security:
         - bearer: []
@@ -1580,8 +1580,8 @@ paths:
       operationId: SseNotificationsController_markBulkAsRead
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a11
       security:
         - bearer: []
@@ -1595,8 +1595,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a11
       security:
         - bearer: []
@@ -1610,8 +1610,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a11
   /followers/auto-complete/followers/{search}:
     get:
@@ -1633,14 +1633,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       tags: &a12
         - followers
       security:
@@ -1665,14 +1665,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       tags: *a12
       security:
         - bearer: []
@@ -1726,7 +1726,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1734,7 +1734,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-04-03T00:03:53.786Z
+                    createdAt: 2025-04-04T16:22:11.960Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1743,15 +1743,15 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-04-03T00:03:53.786Z
+                    updatedAt: 2025-04-04T16:22:11.960Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2025-04-03T00:03:53.786Z
+                    createdAt: 2025-04-04T16:22:11.960Z
                     id: 1
                     isFake: false
                     username: john_doe
-          description: ''
+          description: ""
       tags: *a12
   /followers/{userId}/{followerId}:
     get:
@@ -1768,12 +1768,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FollowerMiniResponse'
+                $ref: "#/components/schemas/FollowerMiniResponse"
       tags: *a12
   /followers/{userId}:
     post:
@@ -1785,8 +1785,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a12
       security:
         - bearer: []
@@ -1799,8 +1799,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a12
       security:
         - bearer: []
@@ -1859,7 +1859,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1889,7 +1889,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2025-04-03T00:03:53.672Z
+                        updatedAt: 2025-04-04T16:22:11.717Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1911,7 +1911,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T00:03:53.789Z
+                        createdAt: 2025-04-04T16:22:11.966Z
                 with-group:
                   value:
                     metadata:
@@ -1935,7 +1935,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-03T00:03:53.776Z
+                        updatedAt: 2025-04-04T16:22:11.946Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1958,8 +1958,8 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-04-03T00:03:53.789Z
-          description: ''
+                        createdAt: 2025-04-04T16:22:11.966Z
+          description: ""
       tags: &a13
         - group-join-requests
       security: &a15
@@ -1979,10 +1979,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGroupJoinRequestDto'
+              $ref: "#/components/schemas/CreateGroupJoinRequestDto"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a13
       security:
         - *a14
@@ -2000,10 +2000,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGroupJoinRequestDto'
+              $ref: "#/components/schemas/UpdateGroupJoinRequestDto"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a13
       security:
         - *a14
@@ -2017,8 +2017,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a13
       security:
         - *a14
@@ -2043,7 +2043,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a specific group join request
           content:
             application/json:
@@ -2061,7 +2061,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2025-04-03T00:03:53.672Z
+                    updatedAt: 2025-04-04T16:22:11.717Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -2070,7 +2070,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-03T00:03:53.789Z
+                    createdAt: 2025-04-04T16:22:11.966Z
                 with-group:
                   value:
                     id: 1
@@ -2081,7 +2081,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-03T00:03:53.776Z
+                    updatedAt: 2025-04-04T16:22:11.946Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -2091,13 +2091,13 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-04-03T00:03:53.789Z
+                    createdAt: 2025-04-04T16:22:11.966Z
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/GroupJoinRequestWithUserResponse'
-                  - $ref: '#/components/schemas/GroupJoinRequestWithMiniUserResponse'
-                  - $ref: '#/components/schemas/GroupJoinRequestWithGroupResponse'
-                  - $ref: '#/components/schemas/GroupJoinRequestWithMiniGroupResponse'
+                  - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithGroupResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniGroupResponse"
       tags: *a13
       security: *a15
   /group-join-requests/{groupId}/{userId}/accept:
@@ -2115,8 +2115,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a13
       security: *a15
   /group-join-requests/{groupId}/{userId}/reject:
@@ -2134,8 +2134,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a13
       security: *a15
   /group-invites:
@@ -2193,7 +2193,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -2224,7 +2224,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-04-03T00:03:53.794Z
+                        updatedAt: 2025-04-04T16:22:11.972Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2248,7 +2248,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T00:03:53.794Z
+                        createdAt: 2025-04-04T16:22:11.972Z
                         isFake: false
                 with-group:
                   value:
@@ -2279,7 +2279,7 @@ paths:
                         focus: Hybrid
                         locationId: 1
                         type: Public
-                        updatedAt: 4/3/2025
+                        updatedAt: 4/4/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -2301,8 +2301,8 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-04-03T00:03:53.794Z
-          description: ''
+                        createdAt: 2025-04-04T16:22:11.973Z
+          description: ""
       tags: &a16
         - group-invites
   /group-invites/{groupId}/accept:
@@ -2315,8 +2315,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a16
       security:
         - bearer: []
@@ -2330,8 +2330,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a16
       security:
         - bearer: []
@@ -2354,10 +2354,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGroupInviteDto'
+              $ref: "#/components/schemas/CreateGroupInviteDto"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a16
       security:
         - bearer: []
@@ -2380,7 +2380,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -2396,7 +2396,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-04-03T00:03:53.794Z
+                    updatedAt: 2025-04-04T16:22:11.972Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2405,7 +2405,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-03T00:03:53.794Z
+                    createdAt: 2025-04-04T16:22:11.972Z
                     isFake: false
                 with-group:
                   value:
@@ -2421,15 +2421,15 @@ paths:
                     focus: Hybrid
                     locationId: 1
                     type: Public
-                    updatedAt: 4/3/2025
+                    updatedAt: 4/4/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-04-03T00:03:53.794Z
-          description: ''
+                    createdAt: 2025-04-04T16:22:11.973Z
+          description: ""
       tags: *a16
     patch:
       operationId: GroupInvitesController_update
@@ -2449,10 +2449,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGroupInviteDto'
+              $ref: "#/components/schemas/UpdateGroupInviteDto"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a16
       security:
         - bearer: []
@@ -2470,8 +2470,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a16
       security:
         - bearer: []
@@ -2495,14 +2495,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+                  $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
       tags: &a17
         - categories
   /categories:
@@ -2555,7 +2555,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -2640,7 +2640,7 @@ paths:
                         activeTournamentCount: 3
                         createdAt: 2024-01-07T14:00:00.000Z
                         updatedAt: 2024-01-07T14:00:00.000Z
-          description: ''
+          description: ""
       tags: *a17
     post:
       operationId: CategoryController_create
@@ -2650,14 +2650,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCategoryRequest'
+              $ref: "#/components/schemas/CreateCategoryRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a17
       security:
         - bearer: []
@@ -2676,7 +2676,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a single category
           content:
             application/json:
@@ -2725,14 +2725,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateCategoryRequest'
+              $ref: "#/components/schemas/UpdateCategoryRequest"
       responses:
-        '200':
+        "200":
           description: Updates a category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a17
       security:
         - bearer: []
@@ -2745,12 +2745,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Deletes a category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a17
       security:
         - bearer: []
@@ -2774,7 +2774,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns a list of tournaments that can be auto-completed
       tags: &a27
         - tournaments
@@ -2905,7 +2905,7 @@ paths:
           schema:
             type: boolean
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -3085,7 +3085,7 @@ paths:
                         isRanked: true
                         maximumMMR: 2500
                         minimumMMR: 1500
-          description: ''
+          description: ""
       tags: *a27
     post:
       operationId: TournamentController_create
@@ -3095,14 +3095,34 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTournamentRequest'
+              $ref: "#/components/schemas/CreateTournamentRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new tournament
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a27
+      security:
+        - bearer: []
+  /tournaments/managed:
+    get:
+      operationId: TournamentController_getManagedTournaments
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
       tags: *a27
       security:
         - bearer: []
@@ -3121,7 +3141,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a single tournament
           content:
             application/json:
@@ -3220,14 +3240,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTournamentRequest'
+              $ref: "#/components/schemas/UpdateTournamentRequest"
       responses:
-        '200':
+        "200":
           description: Updates a tournament
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a27
       security:
         - bearer: []
@@ -3240,12 +3260,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Deletes a tournament
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a27
       security:
         - bearer: []
@@ -3336,7 +3356,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -3353,8 +3373,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a35 2025-04-03T00:03:53.817Z
-                    endDate: &a36 2025-04-03T00:03:53.817Z
+                    startDate: &a35 2025-04-04T16:22:12.016Z
+                    endDate: &a36 2025-04-04T16:22:12.016Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3460,9 +3480,48 @@ paths:
                         name: Chess
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
-          description: ''
-      tags: &a47
+          description: ""
+      tags: &a41
         - stages
+  /stages/managed:
+    get:
+      operationId: StageController_getManagedStages
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a41
+      security:
+        - bearer: []
+  /stages/start/{stageId}:
+    patch:
+      operationId: StageController_startStage
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a41
+      security:
+        - bearer: []
   /stages/{stageId}:
     get:
       operationId: StageController_findOne
@@ -3478,7 +3537,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a single stage
           content:
             application/json:
@@ -3496,13 +3555,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a41 2025-04-03T00:03:53.817Z
-                    endDate: &a42 2025-04-03T00:03:53.817Z
+                    startDate: &a42 2025-04-04T16:22:12.016Z
+                    endDate: &a43 2025-04-04T16:22:12.016Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: &a43
+                    location: &a44
                       id: 1
                       name: Chess Club
                       coordinates:
@@ -3516,18 +3575,18 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: *a41
-                    endDate: *a42
+                    startDate: *a42
+                    endDate: *a43
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a43
+                    location: *a44
                     tournament:
                       id: 1
                       name: Chess Championship 2025
                       type: contest
-                      startDate: &a46 2025-02-01T10:00:00.000Z
+                      startDate: &a47 2025-02-01T10:00:00.000Z
                       location: online
                       logo: https://example.com/tournament-logo.jpg
                       country: DE
@@ -3539,13 +3598,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a44 2025-02-01T10:00:00.000Z
-                    endDate: &a45 2025-02-15T18:00:00.000Z
+                    startDate: &a45 2025-02-01T10:00:00.000Z
+                    endDate: &a46 2025-02-15T18:00:00.000Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a43
+                    location: *a44
                     minPlayersPerTeam: 1
                     maxPlayersPerTeam: 1
                     maxSubstitutes: 1
@@ -3557,13 +3616,13 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: *a44
-                    endDate: *a45
+                    startDate: *a45
+                    endDate: *a46
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
                     locationId: 1
-                    location: *a43
+                    location: *a44
                     minPlayersPerTeam: 1
                     maxPlayersPerTeam: 1
                     maxSubstitutes: 1
@@ -3572,7 +3631,7 @@ paths:
                       id: 1
                       name: Chess Championship 2025
                       type: contest
-                      startDate: *a46
+                      startDate: *a47
                       location: online
                       logo: https://example.com/tournament-logo.jpg
                       country: DE
@@ -3603,7 +3662,7 @@ paths:
                         name: Chess
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
-      tags: *a47
+      tags: *a41
   /stages/{tournamentId}:
     post:
       operationId: StageController_create
@@ -3618,15 +3677,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateStageRequest'
+              $ref: "#/components/schemas/CreateStageRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new stage
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a47
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a41
       security:
         - bearer: []
   /stages/{tournamentId}/{stageId}:
@@ -3648,15 +3707,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateStageRequest'
+              $ref: "#/components/schemas/UpdateStageRequest"
       responses:
-        '200':
+        "200":
           description: Updates a stage
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a47
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a41
       security:
         - bearer: []
     delete:
@@ -3668,1240 +3727,13 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Deletes a stage
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a47
-      security:
-        - bearer: []
-  /participations:
-    get:
-      operationId: ParticipationController_findAll
-      parameters:
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: tournamentId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: userId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        userId: 1
-                        tournamentId: 1
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: EXTENDED
-                    results:
-                      - {}
-                participant:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: PARTICIPANT
-                    results:
-                      - &a48
-                        id: 1
-                        userId: 1
-                        tournamentId: 1
-                        tournament:
-                          id: 1
-                          type: league
-                          startDate: 2025-04-03T00:03:53.823Z
-                          name: Chess Championship
-                        user:
-                          id: 1
-                          username: john_doe
-                          isFake: false
-                          profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T00:03:53.823Z
-                        updatedAt: 2025-04-03T00:03:53.823Z
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: BASE
-                    results:
-                      - *a48
-          description: ''
-      tags: &a50
-        - participations
-  /participations/{participationId}:
-    get:
-      operationId: ParticipationController_findOne
-      parameters:
-        - name: participationId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: responseType
-          required: true
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        userId: 1
-                        tournamentId: 1
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: EXTENDED
-                    results:
-                      - {}
-                participant:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: PARTICIPANT
-                    results:
-                      - &a49
-                        id: 1
-                        userId: 1
-                        tournamentId: 1
-                        tournament:
-                          id: 1
-                          type: league
-                          startDate: 2025-04-03T00:03:53.823Z
-                          name: Chess Championship
-                        user:
-                          id: 1
-                          username: john_doe
-                          isFake: false
-                          profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-03T00:03:53.823Z
-                        updatedAt: 2025-04-03T00:03:53.823Z
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /participations?page=1
-                        prev: /participations?page=0
-                        next: /participations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        userId: 1
-                        groupId: 1
-                        responseType: BASE
-                    results:
-                      - *a49
-          description: ''
-      tags: *a50
-    delete:
-      operationId: ParticipationController_remove
-      parameters:
-        - name: participationId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a50
-      security:
-        - bearer: []
-  /participations/apply-solo/{tournamentId}:
-    post:
-      operationId: ParticipationController_createSolo
-      parameters:
-        - name: tournamentId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a50
-      security:
-        - bearer: []
-  /participations/managed-for-player/{tournamentId}:
-    get:
-      operationId: ParticipationController_getManagedParticipationsForPlayer
-      parameters:
-        - name: tournamentId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MiniParticipationWithGroup'
-      tags: *a50
-      security:
-        - bearer: []
-  /participations/apply-group/{tournamentId}/{groupId}:
-    post:
-      operationId: ParticipationController_createTeam
-      parameters:
-        - name: tournamentId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a50
-      security:
-        - bearer: []
-  /participations/admin/apply-solo/{tournamentId}/{userId}:
-    post:
-      operationId: ParticipationController_createForFakePlayer
-      parameters:
-        - name: tournamentId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: userId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a50
-      security:
-        - bearer: []
-  /participations/admin/apply-group/{tournamentId}/{groupId}:
-    post:
-      operationId: ParticipationController_createForFakeTeam
-      parameters:
-        - name: tournamentId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a50
-      security:
-        - bearer: []
-  /blocked-groups/auto-complete/{search}:
-    get:
-      operationId: BlockedGroupsController_autoComplete
-      parameters:
-        - name: search
-          required: true
-          in: path
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
-      tags: &a51
-        - Blocked Groups
-      security:
-        - bearer: []
-  /blocked-groups:
-    get:
-      operationId: BlockedGroupsController_findAll
-      parameters:
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a51
-      security:
-        - bearer: []
-  /blocked-groups/{groupId}:
-    post:
-      operationId: BlockedGroupsController_block
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '201':
-          description: ''
-      tags: *a51
-      security:
-        - bearer: []
-    delete:
-      operationId: BlockedGroupsController_unblock
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a51
-      security:
-        - bearer: []
-  /blocked-users/auto-complete/{groupId}/{search}:
-    get:
-      operationId: BlockedUsersController_autoComplete
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: search
-          required: true
-          in: path
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
-      tags: &a52
-        - blocked users
-      security:
-        - bearer: []
-  /blocked-users/{groupId}:
-    get:
-      operationId: BlockedUsersController_findAll
-      parameters:
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a52
-      security:
-        - bearer: []
-  /blocked-users/{groupId}/{userId}:
-    post:
-      operationId: BlockedUsersController_block
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: userId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '201':
-          description: ''
-      tags: *a52
-      security:
-        - bearer: []
-    delete:
-      operationId: BlockedUsersController_unblock
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: userId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a52
-      security:
-        - bearer: []
-  /lfg/me:
-    get:
-      operationId: LfgController_findMyLFG
-      summary: Get all LFG posts by the current user
-      parameters: []
-      responses:
-        '200':
-          description: Returns all LFG posts by the current user
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/LFGResponse'
-      tags: &a53
-        - LFG
-      security:
-        - bearer: []
-  /lfg:
-    post:
-      operationId: LfgController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateLFGRequest'
-      responses:
-        '201':
-          description: ''
-      tags: *a53
-      security:
-        - bearer: []
-  /lfg/{groupId}:
-    get:
-      operationId: LfgController_findPlayers
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a53
-      security:
-        - bearer: []
-  /lfg/{id}:
-    patch:
-      operationId: LfgController_update
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateLFGRequest'
-      responses:
-        '200':
-          description: ''
-      tags: *a53
-      security:
-        - bearer: []
-    delete:
-      operationId: LfgController_delete
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a53
-      security:
-        - bearer: []
-  /interest/{categoryId}:
-    post:
-      operationId: InterestController_createInterest
-      parameters:
-        - name: categoryId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '201':
-          description: ''
-      tags: &a54
-        - interest
-      security:
-        - bearer: []
-    delete:
-      operationId: InterestController_deleteInterest
-      parameters:
-        - name: categoryId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a54
-      security:
-        - bearer: []
-  /interest:
-    get:
-      operationId: InterestController_getInterestCategories
-      parameters:
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a54
-      security:
-        - bearer: []
-  /group-interests/{groupId}:
-    get:
-      operationId: GroupInterestsController_findAll
-      parameters:
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: &a55
-        - group interests
-      security:
-        - bearer: []
-  /group-interests/{groupId}/{categoryId}:
-    post:
-      operationId: GroupInterestsController_addInterest
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: categoryId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '201':
-          description: ''
-      tags: *a55
-      security:
-        - bearer: []
-    delete:
-      operationId: GroupInterestsController_removeInterest
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: categoryId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: ''
-      tags: *a55
-      security:
-        - bearer: []
-  /lfp/groups:
-    get:
-      operationId: LFPController_getGroups
-      summary: Get groups for user
-      parameters:
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: message
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: lat
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: lng
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: distance
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Groups retrieved successfully
-      tags: &a56
-        - lfp
-      security:
-        - bearer: []
-  /lfp/{groupId}:
-    post:
-      operationId: LFPController_createLFP
-      summary: Create LFP post
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateLFPDto'
-      responses:
-        '201':
-          description: LFP post created successfully
-      tags: *a56
-      security:
-        - bearer: []
-    get:
-      operationId: LFPController_getForGroup
-      summary: Get LFP posts for a group
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: LFP posts retrieved successfully
-      tags: *a56
-      security:
-        - bearer: []
-  /lfp/{groupId}/{id}:
-    patch:
-      operationId: LFPController_updateLFP
-      summary: Update LFP post
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateLFPDto'
-      responses:
-        '200':
-          description: LFP post updated successfully
-      tags: *a56
-      security:
-        - bearer: []
-    delete:
-      operationId: LFPController_deleteLFP
-      summary: Delete LFP post
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: LFP post deleted successfully
-      tags: *a56
-      security:
-        - bearer: []
-  /locations/map:
-    get:
-      operationId: LocationController_getMap
-      parameters: []
-      responses:
-        '200':
-          description: 'Returns all locations unpaginated '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: &a57
-        - locations
-  /locations:
-    get:
-      operationId: LocationController_findAll
-      parameters:
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: name
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: apiId
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: lat
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: lng
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /locations?page=1
-                        prev: /locations?page=0
-                        next: /locations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        apiId: location123
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /locations?page=1
-                        prev: /locations?page=0
-                        next: /locations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: BASE
-                    results:
-                      - id: 1
-                        apiId: location123
-                        name: New York
-                        lat: 40.7128
-                        lng: -74.006
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /locations?page=1
-                        prev: /locations?page=0
-                        next: /locations?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: EXTENDED
-                    results:
-                      - id: 1
-                        apiId: location123
-                        name: New York
-                        lat: 40.7128
-                        lng: -74.006
-                        createdAt: 2025-04-03T00:03:53.775Z
-          description: ''
-      tags: *a57
-    post:
-      operationId: LocationController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateLocationDto'
-      responses:
-        '200':
-          description: Creates a new location
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a57
-      security:
-        - bearer: []
-  /locations/{locationId}:
-    get:
-      operationId: LocationController_findOne
-      parameters:
-        - name: locationId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: responseType
-          required: true
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Returns a single location
-          content:
-            application/json:
-              schema:
-                examples:
-                  mini:
-                    value:
-                      id: 1
-                      apiId: location123
-                  base:
-                    value:
-                      id: 1
-                      apiId: location123
-                      name: New York
-                      lat: 40.7128
-                      lng: -74.006
-                  extended:
-                    value:
-                      id: 1
-                      apiId: location123
-                      name: New York
-                      lat: 40.7128
-                      lng: -74.006
-                      createdAt: 2025-04-03T00:03:53.775Z
-      tags: *a57
-    patch:
-      operationId: LocationController_update
-      parameters:
-        - name: locationId
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateLocationDto'
-      responses:
-        '200':
-          description: Updates a location
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a57
-      security:
-        - bearer: []
-    delete:
-      operationId: LocationController_remove
-      parameters:
-        - name: locationId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Deletes a location
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
-      tags: *a57
-      security:
-        - bearer: []
-  /group-requirements/{groupId}:
-    post:
-      operationId: GroupRequirementsController_createRequirements
-      summary: Create group requirements
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateGroupRequirementsDto'
-      responses:
-        '201':
-          description: Requirements created successfully
-      tags: &a58
-        - group requirements
-      security:
-        - bearer: []
-    get:
-      operationId: GroupRequirementsController_getRequirements
-      summary: Get group requirements
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Requirements retrieved successfully
-      tags: *a58
-      security:
-        - bearer: []
-    put:
-      operationId: GroupRequirementsController_updateRequirements
-      summary: Update group requirements
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateGroupRequirementsDto'
-      responses:
-        '200':
-          description: Requirements updated successfully
-      tags: *a58
-      security:
-        - bearer: []
-    delete:
-      operationId: GroupRequirementsController_deleteRequirements
-      summary: Delete group requirements
-      parameters:
-        - name: groupId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Requirements deleted successfully
-      tags: *a58
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a41
       security:
         - bearer: []
   /roster/managed-by-user/{stageId}:
@@ -4915,9 +3747,9 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
-      tags: &a64
+        "200":
+          description: ""
+      tags: &a53
         - roster
       security:
         - bearer: []
@@ -4997,7 +3829,366 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: &a48
+                          id: 1
+                          name: Team Alpha
+                          logo: https://example.com/team-alpha-logo.png
+                          abbreviation: TA
+                        user: &a49
+                          id: 1
+                          username: player1
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a48
+                        user: *a49
+                        players: &a50
+                          - user:
+                              id: 1
+                              username: player1
+                              country: US
+                              profilePicture: https://example.com/player1-avatar.png
+                              isFake: false
+                            isSubstitute: false
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 1
+                                categoryId: 1
+                          - user:
+                              id: 2
+                              username: substitute1
+                              country: CA
+                              profilePicture: https://example.com/player2-avatar.png
+                              isFake: false
+                            isSubstitute: true
+                            career:
+                              - category:
+                                  id: 1
+                                  name: Category 1
+                                  logo: https://example.com/category1-image.png
+                                elo: 1000
+                                createdAt: 2023-01-15T12:00:00.000Z
+                                userId: 2
+                                categoryId: 1
+                        createdAt: &a51 2023-01-15T12:00:00.000Z
+                        updatedAt: &a52 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /roster?page=1
+                        prev: /roster?page=0
+                        next: /roster?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        stageId: 1
+                        participationId: 1
+                        group: *a48
+                        user: *a49
+                        players: *a50
+                        createdAt: *a51
+                        updatedAt: *a52
+          description: ""
+      tags: *a53
+  /roster/{id}:
+    get:
+      operationId: RosterController_findOne
+      summary: Get a specific roster by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a specific roster
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    id: 1
+                    stageId: 1
+                    participationId: 1
+                    group: &a54
+                      id: 1
+                      name: Team Alpha
+                      logo: https://example.com/team-alpha-logo.png
+                      abbreviation: TA
+                    user: &a55
+                      id: 1
+                      username: player1
+                      profilePicture: https://example.com/player1-avatar.png
+                      isFake: false
+                base:
+                  value:
+                    id: 1
+                    stageId: 1
+                    participationId: 1
+                    group: *a54
+                    user: *a55
+                    players: &a56
+                      - user:
+                          id: 1
+                          username: player1
+                          country: US
+                          profilePicture: https://example.com/player1-avatar.png
+                          isFake: false
+                        isSubstitute: false
+                        career:
+                          - category:
+                              id: 1
+                              name: Category 1
+                              logo: https://example.com/category1-image.png
+                            elo: 1000
+                            createdAt: 2023-01-15T12:00:00.000Z
+                            userId: 1
+                            categoryId: 1
+                      - user:
+                          id: 2
+                          username: substitute1
+                          country: CA
+                          profilePicture: https://example.com/player2-avatar.png
+                          isFake: false
+                        isSubstitute: true
+                        career:
+                          - category:
+                              id: 1
+                              name: Category 1
+                              logo: https://example.com/category1-image.png
+                            elo: 1000
+                            createdAt: 2023-01-15T12:00:00.000Z
+                            userId: 2
+                            categoryId: 1
+                    createdAt: &a57 2023-01-15T12:00:00.000Z
+                    updatedAt: &a58 2023-01-15T12:00:00.000Z
+                extended:
+                  value:
+                    id: 1
+                    stageId: 1
+                    participationId: 1
+                    group: *a54
+                    user: *a55
+                    players: *a56
+                    createdAt: *a57
+                    updatedAt: *a58
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/MiniRosterDto"
+                  - $ref: "#/components/schemas/RosterDto"
+      tags: *a53
+    patch:
+      operationId: RosterController_update
+      summary: Update a roster
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRosterDto"
+      responses:
+        "200":
+          description: The roster has been successfully updated
+          content:
+            application/json:
+              example:
+                id: 1
+                stageId: 1
+                participationId: 1
+                group:
+                  id: 1
+                  name: Team Alpha
+                  logo: https://example.com/team-alpha-logo.png
+                  abbreviation: TA
+                user:
+                  id: 1
+                  username: player1
+                  profilePicture: https://example.com/player1-avatar.png
+                  isFake: false
+                players:
+                  - user:
+                      id: 1
+                      username: player1
+                      country: US
+                      profilePicture: https://example.com/player1-avatar.png
+                      isFake: false
+                    isSubstitute: false
+                    career:
+                      - category:
+                          id: 1
+                          name: Category 1
+                          logo: https://example.com/category1-image.png
+                        elo: 1000
+                        createdAt: 2023-01-15T12:00:00.000Z
+                        userId: 1
+                        categoryId: 1
+                  - user:
+                      id: 2
+                      username: substitute1
+                      country: CA
+                      profilePicture: https://example.com/player2-avatar.png
+                      isFake: false
+                    isSubstitute: true
+                    career:
+                      - category:
+                          id: 1
+                          name: Category 1
+                          logo: https://example.com/category1-image.png
+                        elo: 1000
+                        createdAt: 2023-01-15T12:00:00.000Z
+                        userId: 2
+                        categoryId: 1
+                createdAt: 2023-01-15T12:00:00.000Z
+                updatedAt: 2023-01-15T12:00:00.000Z
+      tags: *a53
+      security:
+        - bearer: []
+  /roster/stage/{stageId}:
+    get:
+      operationId: RosterController_findByStage
+      summary: Get all rosters for a specific stage
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: stageId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: participationId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isSubstitute
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: rosterId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: memberId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns all rosters for a specific stage
           content:
             application/json:
               examples:
@@ -5107,366 +4298,7 @@ paths:
                         players: *a61
                         createdAt: *a62
                         updatedAt: *a63
-          description: ''
-      tags: *a64
-  /roster/{id}:
-    get:
-      operationId: RosterController_findOne
-      summary: Get a specific roster by ID
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: responseType
-          required: true
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Returns a specific roster
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    id: 1
-                    stageId: 1
-                    participationId: 1
-                    group: &a65
-                      id: 1
-                      name: Team Alpha
-                      logo: https://example.com/team-alpha-logo.png
-                      abbreviation: TA
-                    user: &a66
-                      id: 1
-                      username: player1
-                      profilePicture: https://example.com/player1-avatar.png
-                      isFake: false
-                base:
-                  value:
-                    id: 1
-                    stageId: 1
-                    participationId: 1
-                    group: *a65
-                    user: *a66
-                    players: &a67
-                      - user:
-                          id: 1
-                          username: player1
-                          country: US
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                        isSubstitute: false
-                        career:
-                          - category:
-                              id: 1
-                              name: Category 1
-                              logo: https://example.com/category1-image.png
-                            elo: 1000
-                            createdAt: 2023-01-15T12:00:00.000Z
-                            userId: 1
-                            categoryId: 1
-                      - user:
-                          id: 2
-                          username: substitute1
-                          country: CA
-                          profilePicture: https://example.com/player2-avatar.png
-                          isFake: false
-                        isSubstitute: true
-                        career:
-                          - category:
-                              id: 1
-                              name: Category 1
-                              logo: https://example.com/category1-image.png
-                            elo: 1000
-                            createdAt: 2023-01-15T12:00:00.000Z
-                            userId: 2
-                            categoryId: 1
-                    createdAt: &a68 2023-01-15T12:00:00.000Z
-                    updatedAt: &a69 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    id: 1
-                    stageId: 1
-                    participationId: 1
-                    group: *a65
-                    user: *a66
-                    players: *a67
-                    createdAt: *a68
-                    updatedAt: *a69
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/MiniRosterDto'
-                  - $ref: '#/components/schemas/RosterDto'
-      tags: *a64
-    patch:
-      operationId: RosterController_update
-      summary: Update a roster
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: number
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateRosterDto'
-      responses:
-        '200':
-          description: The roster has been successfully updated
-          content:
-            application/json:
-              example:
-                id: 1
-                stageId: 1
-                participationId: 1
-                group:
-                  id: 1
-                  name: Team Alpha
-                  logo: https://example.com/team-alpha-logo.png
-                  abbreviation: TA
-                user:
-                  id: 1
-                  username: player1
-                  profilePicture: https://example.com/player1-avatar.png
-                  isFake: false
-                players:
-                  - user:
-                      id: 1
-                      username: player1
-                      country: US
-                      profilePicture: https://example.com/player1-avatar.png
-                      isFake: false
-                    isSubstitute: false
-                    career:
-                      - category:
-                          id: 1
-                          name: Category 1
-                          logo: https://example.com/category1-image.png
-                        elo: 1000
-                        createdAt: 2023-01-15T12:00:00.000Z
-                        userId: 1
-                        categoryId: 1
-                  - user:
-                      id: 2
-                      username: substitute1
-                      country: CA
-                      profilePicture: https://example.com/player2-avatar.png
-                      isFake: false
-                    isSubstitute: true
-                    career:
-                      - category:
-                          id: 1
-                          name: Category 1
-                          logo: https://example.com/category1-image.png
-                        elo: 1000
-                        createdAt: 2023-01-15T12:00:00.000Z
-                        userId: 2
-                        categoryId: 1
-                createdAt: 2023-01-15T12:00:00.000Z
-                updatedAt: 2023-01-15T12:00:00.000Z
-      tags: *a64
-      security:
-        - bearer: []
-  /roster/stage/{stageId}:
-    get:
-      operationId: RosterController_findByStage
-      summary: Get all rosters for a specific stage
-      parameters:
-        - name: stageId
-          required: true
-          in: path
-          schema:
-            type: number
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: page
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: pageSize
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: search
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: stageId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: participationId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: groupId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: userId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: isSubstitute
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: rosterId
-          required: false
-          in: query
-          schema:
-            type: number
-        - name: memberId
-          required: false
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Returns all rosters for a specific stage
-          content:
-            application/json:
-              examples:
-                mini:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: MINI
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: &a70
-                          id: 1
-                          name: Team Alpha
-                          logo: https://example.com/team-alpha-logo.png
-                          abbreviation: TA
-                        user: &a71
-                          id: 1
-                          username: player1
-                          profilePicture: https://example.com/player1-avatar.png
-                          isFake: false
-                base:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: BASE
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a70
-                        user: *a71
-                        players: &a72
-                          - user:
-                              id: 1
-                              username: player1
-                              country: US
-                              profilePicture: https://example.com/player1-avatar.png
-                              isFake: false
-                            isSubstitute: false
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 1
-                                categoryId: 1
-                          - user:
-                              id: 2
-                              username: substitute1
-                              country: CA
-                              profilePicture: https://example.com/player2-avatar.png
-                              isFake: false
-                            isSubstitute: true
-                            career:
-                              - category:
-                                  id: 1
-                                  name: Category 1
-                                  logo: https://example.com/category1-image.png
-                                elo: 1000
-                                createdAt: 2023-01-15T12:00:00.000Z
-                                userId: 2
-                                categoryId: 1
-                        createdAt: &a73 2023-01-15T12:00:00.000Z
-                        updatedAt: &a74 2023-01-15T12:00:00.000Z
-                extended:
-                  value:
-                    metadata:
-                      pagination:
-                        page: 1
-                        pageSize: 10
-                      links:
-                        first: /roster?page=1
-                        prev: /roster?page=0
-                        next: /roster?page=2
-                      query:
-                        page: 1
-                        pageSize: 10
-                        responseType: EXTENDED
-                    results:
-                      - id: 1
-                        stageId: 1
-                        participationId: 1
-                        group: *a70
-                        user: *a71
-                        players: *a72
-                        createdAt: *a73
-                        updatedAt: *a74
-      tags: *a64
+      tags: *a53
   /roster/participation/{participationId}:
     get:
       operationId: RosterController_findByParticipation
@@ -5548,7 +4380,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns all rosters for a specific participation
           content:
             application/json:
@@ -5571,12 +4403,12 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: &a75
+                        group: &a64
                           id: 1
                           name: Team Alpha
                           logo: https://example.com/team-alpha-logo.png
                           abbreviation: TA
-                        user: &a76
+                        user: &a65
                           id: 1
                           username: player1
                           profilePicture: https://example.com/player1-avatar.png
@@ -5599,9 +4431,9 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: *a75
-                        user: *a76
-                        players: &a77
+                        group: *a64
+                        user: *a65
+                        players: &a66
                           - user:
                               id: 1
                               username: player1
@@ -5634,8 +4466,8 @@ paths:
                                 createdAt: 2023-01-15T12:00:00.000Z
                                 userId: 2
                                 categoryId: 1
-                        createdAt: &a78 2023-01-15T12:00:00.000Z
-                        updatedAt: &a79 2023-01-15T12:00:00.000Z
+                        createdAt: &a67 2023-01-15T12:00:00.000Z
+                        updatedAt: &a68 2023-01-15T12:00:00.000Z
                 extended:
                   value:
                     metadata:
@@ -5654,12 +4486,12 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: *a75
-                        user: *a76
-                        players: *a77
-                        createdAt: *a78
-                        updatedAt: *a79
-      tags: *a64
+                        group: *a64
+                        user: *a65
+                        players: *a66
+                        createdAt: *a67
+                        updatedAt: *a68
+      tags: *a53
   /roster/user/{userId}:
     get:
       operationId: RosterController_findByUser
@@ -5741,7 +4573,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns all rosters that include a specific user
           content:
             application/json:
@@ -5764,12 +4596,12 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: &a80
+                        group: &a69
                           id: 1
                           name: Team Alpha
                           logo: https://example.com/team-alpha-logo.png
                           abbreviation: TA
-                        user: &a81
+                        user: &a70
                           id: 1
                           username: player1
                           profilePicture: https://example.com/player1-avatar.png
@@ -5792,9 +4624,9 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: *a80
-                        user: *a81
-                        players: &a82
+                        group: *a69
+                        user: *a70
+                        players: &a71
                           - user:
                               id: 1
                               username: player1
@@ -5827,8 +4659,8 @@ paths:
                                 createdAt: 2023-01-15T12:00:00.000Z
                                 userId: 2
                                 categoryId: 1
-                        createdAt: &a83 2023-01-15T12:00:00.000Z
-                        updatedAt: &a84 2023-01-15T12:00:00.000Z
+                        createdAt: &a72 2023-01-15T12:00:00.000Z
+                        updatedAt: &a73 2023-01-15T12:00:00.000Z
                 extended:
                   value:
                     metadata:
@@ -5847,12 +4679,12 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: *a80
-                        user: *a81
-                        players: *a82
-                        createdAt: *a83
-                        updatedAt: *a84
-      tags: *a64
+                        group: *a69
+                        user: *a70
+                        players: *a71
+                        createdAt: *a72
+                        updatedAt: *a73
+      tags: *a53
   /roster/group/{groupId}:
     get:
       operationId: RosterController_findByGroup
@@ -5934,7 +4766,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns all rosters for a specific group
           content:
             application/json:
@@ -5957,12 +4789,12 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: &a85
+                        group: &a74
                           id: 1
                           name: Team Alpha
                           logo: https://example.com/team-alpha-logo.png
                           abbreviation: TA
-                        user: &a86
+                        user: &a75
                           id: 1
                           username: player1
                           profilePicture: https://example.com/player1-avatar.png
@@ -5985,9 +4817,9 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: *a85
-                        user: *a86
-                        players: &a87
+                        group: *a74
+                        user: *a75
+                        players: &a76
                           - user:
                               id: 1
                               username: player1
@@ -6020,8 +4852,8 @@ paths:
                                 createdAt: 2023-01-15T12:00:00.000Z
                                 userId: 2
                                 categoryId: 1
-                        createdAt: &a88 2023-01-15T12:00:00.000Z
-                        updatedAt: &a89 2023-01-15T12:00:00.000Z
+                        createdAt: &a77 2023-01-15T12:00:00.000Z
+                        updatedAt: &a78 2023-01-15T12:00:00.000Z
                 extended:
                   value:
                     metadata:
@@ -6040,12 +4872,12 @@ paths:
                       - id: 1
                         stageId: 1
                         participationId: 1
-                        group: *a85
-                        user: *a86
-                        players: *a87
-                        createdAt: *a88
-                        updatedAt: *a89
-      tags: *a64
+                        group: *a74
+                        user: *a75
+                        players: *a76
+                        createdAt: *a77
+                        updatedAt: *a78
+      tags: *a53
   /roster/{participationId}/{stageId}:
     post:
       operationId: RosterController_create
@@ -6066,148 +4898,1527 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRosterDto'
+              $ref: "#/components/schemas/CreateRosterDto"
       responses:
-        '201':
-          description: ''
-      tags: *a64
+        "201":
+          description: ""
+      tags: *a53
       security:
         - bearer: []
-  /matches/{tournamentId}/{matchupId}/score:
+  /participations:
+    get:
+      operationId: ParticipationController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: tournamentId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        userId: 1
+                        tournamentId: 1
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: EXTENDED
+                    results:
+                      - {}
+                participant:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: PARTICIPANT
+                    results:
+                      - &a79
+                        id: 1
+                        userId: 1
+                        tournamentId: 1
+                        tournament:
+                          id: 1
+                          type: league
+                          startDate: 2025-04-04T16:22:12.035Z
+                          name: Chess Championship
+                        user:
+                          id: 1
+                          username: john_doe
+                          isFake: false
+                          profilePicture: https://example.com/image.jpg
+                        createdAt: 2025-04-04T16:22:12.035Z
+                        updatedAt: 2025-04-04T16:22:12.035Z
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: BASE
+                    results:
+                      - *a79
+          description: ""
+      tags: &a81
+        - participations
+  /participations/{participationId}:
+    get:
+      operationId: ParticipationController_findOne
+      parameters:
+        - name: participationId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        userId: 1
+                        tournamentId: 1
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: EXTENDED
+                    results:
+                      - {}
+                participant:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: PARTICIPANT
+                    results:
+                      - &a80
+                        id: 1
+                        userId: 1
+                        tournamentId: 1
+                        tournament:
+                          id: 1
+                          type: league
+                          startDate: 2025-04-04T16:22:12.035Z
+                          name: Chess Championship
+                        user:
+                          id: 1
+                          username: john_doe
+                          isFake: false
+                          profilePicture: https://example.com/image.jpg
+                        createdAt: 2025-04-04T16:22:12.035Z
+                        updatedAt: 2025-04-04T16:22:12.035Z
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /participations?page=1
+                        prev: /participations?page=0
+                        next: /participations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        userId: 1
+                        groupId: 1
+                        responseType: BASE
+                    results:
+                      - *a80
+          description: ""
+      tags: *a81
+    delete:
+      operationId: ParticipationController_remove
+      parameters:
+        - name: participationId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a81
+      security:
+        - bearer: []
+  /participations/apply-solo/{tournamentId}:
+    post:
+      operationId: ParticipationController_createSolo
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a81
+      security:
+        - bearer: []
+  /participations/managed-for-player/{tournamentId}:
+    get:
+      operationId: ParticipationController_getManagedParticipationsForPlayer
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MiniParticipationWithGroup"
+      tags: *a81
+      security:
+        - bearer: []
+  /participations/apply-group/{tournamentId}/{groupId}:
+    post:
+      operationId: ParticipationController_createTeam
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a81
+      security:
+        - bearer: []
+  /participations/admin/apply-solo/{tournamentId}/{userId}:
+    post:
+      operationId: ParticipationController_createForFakePlayer
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a81
+      security:
+        - bearer: []
+  /participations/admin/apply-group/{tournamentId}/{groupId}:
+    post:
+      operationId: ParticipationController_createForFakeTeam
+      parameters:
+        - name: tournamentId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a81
+      security:
+        - bearer: []
+  /matches/{matchupId}/score:
     post:
       operationId: MatchesController_createScore
-      summary: Create a score for a matchup
       parameters:
         - name: matchupId
           required: true
           in: path
-          description: Matchup ID
           schema:
             type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EndMatchupRequestDto'
+              $ref: "#/components/schemas/EndMatchupRequestDto"
       responses:
-        '201':
-          description: ''
-      tags: &a90
+        "201":
+          description: ""
+      tags: &a82
         - matches
-  /matches/{tournamentId}/{matchupId}/update-score:
-    post:
+      security:
+        - bearer: []
+  /matches/{matchupId}/update-score:
+    put:
       operationId: MatchesController_updateScore
-      summary: Update a score for a matchup
       parameters:
         - name: matchupId
           required: true
           in: path
-          description: Matchup ID
           schema:
             type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EndMatchupRequestDto'
+              $ref: "#/components/schemas/EndMatchupRequestDto"
       responses:
-        '201':
-          description: ''
-      tags: *a90
-  /matches/{tournamentId}/{matchupId}/delete-score:
+        "200":
+          description: ""
+      tags: *a82
+      security:
+        - bearer: []
+  /matches/{matchupId}/delete-score:
     delete:
       operationId: MatchesController_deleteMatchScore
-      summary: Delete all scores for a matchup
       parameters:
         - name: matchupId
           required: true
           in: path
-          description: Matchup ID
           schema:
             type: number
-        - name: tournamentId
-          required: true
-          in: path
-          description: Tournament ID
-          schema: {}
       responses:
-        '200':
-          description: ''
-      tags: *a90
-  /matches/stage/{stageId}/bracket:
+        "200":
+          description: ""
+      tags: *a82
+      security:
+        - bearer: []
+  /matches/results:
     get:
-      operationId: MatchesController_getBracketDataForStage
-      summary: Get bracket data for a stage
+      operationId: MatchesController_getMatchupsWithResults
       parameters:
-        - name: stageId
-          required: true
-          in: path
-          description: Stage ID
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
           schema:
             type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: matchupId
+          required: false
+          in: query
+          description: The ID of the matchup
+          schema:
+            type: number
+        - name: rosterId
+          required: false
+          in: query
+          description: The ID of the roster
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          description: The ID of the group
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          description: The ID of the user
+          schema:
+            type: number
+        - name: stageId
+          required: false
+          in: query
+          description: The ID of the stage
+          schema:
+            type: number
+        - name: round
+          required: false
+          in: query
+          description: The round number
+          schema:
+            type: number
+        - name: isFinished
+          required: false
+          in: query
+          description: Whether the matchup is finished
+          schema:
+            type: boolean
+        - name: challongeMatchupId
+          required: false
+          in: query
+          description: The Challonge ID of the matchup
+          schema:
+            type: string
       responses:
-        '200':
-          description: Returns bracket data in the format required by
-            @g-loot/react-tournament-brackets
-      tags: *a90
-  /matches/stage/{stageId}/bracket/original:
+        "200":
+          description: Returns matchups with results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
+      tags: *a82
+  /matches/matchup/{matchupId}/results:
     get:
-      operationId: MatchesController_getOriginalBracketDataForStage
-      summary: Get bracket data for a stage in original format (without Challonge data)
+      operationId: MatchesController_getMatchupWithResultsAndScores
       parameters:
-        - name: stageId
+        - name: matchupId
           required: true
           in: path
-          description: Stage ID
           schema:
             type: number
       responses:
-        '200':
-          description: Returns bracket data in the original format for
-            @g-loot/react-tournament-brackets
-      tags: *a90
-  /matches/stage/{stageId}/bracket/react:
+        "200":
+          description: Returns a matchup with results and scores
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchupResponseWithResultsAndScoresDto"
+      tags: *a82
+  /matches/user/{userId}/results:
     get:
-      operationId: MatchesController_getReactBracketDataForStage
-      summary: Get bracket data for a stage in react-brackets format
+      operationId: MatchesController_getResultsForUser
       parameters:
-        - name: stageId
+        - name: userId
           required: true
           in: path
-          description: Stage ID
+          schema:
+            type: number
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
           schema:
             type: number
       responses:
-        '200':
-          description: Returns bracket data in the format required by react-brackets library
-      tags: *a90
-  /matches/stage/{stageId}/bracket/challonge:
+        "200":
+          description: Returns matchups with results for a user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
+      tags: *a82
+  /matches/roster/{rosterId}/results:
     get:
-      operationId: MatchesController_getChallongeBracketData
-      summary: Get bracket data directly from Challonge
+      operationId: MatchesController_getResultsForRoster
       parameters:
-        - name: stageId
+        - name: rosterId
           required: true
           in: path
-          description: Stage ID
+          description: Roster ID
+          schema:
+            type: number
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
           schema:
             type: number
       responses:
-        '200':
-          description: Returns bracket data from Challonge in react-brackets format
+        "200":
+          description: Returns matchups with results for a roster
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
+      tags: *a82
+  /matches/managed:
+    get:
+      operationId: MatchesController_getManagedMatchups
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns matchups that a user is managing
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
+      tags: *a82
+      security:
+        - bearer: []
+  /matches/group/{groupId}/results:
+    get:
+      operationId: MatchesController_getResultsForGroup
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          description: Group ID
+          schema:
+            type: number
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns matchups with results for a group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
+      tags: *a82
+  /blocked-groups/auto-complete/{search}:
+    get:
+      operationId: BlockedGroupsController_autoComplete
+      parameters:
+        - name: search
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+      tags: &a83
+        - Blocked Groups
+      security:
+        - bearer: []
+  /blocked-groups:
+    get:
+      operationId: BlockedGroupsController_findAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a83
+      security:
+        - bearer: []
+  /blocked-groups/{groupId}:
+    post:
+      operationId: BlockedGroupsController_block
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a83
+      security:
+        - bearer: []
+    delete:
+      operationId: BlockedGroupsController_unblock
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a83
+      security:
+        - bearer: []
+  /blocked-users/auto-complete/{groupId}/{search}:
+    get:
+      operationId: BlockedUsersController_autoComplete
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: search
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
+      tags: &a84
+        - blocked users
+      security:
+        - bearer: []
+  /blocked-users/{groupId}:
+    get:
+      operationId: BlockedUsersController_findAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a84
+      security:
+        - bearer: []
+  /blocked-users/{groupId}/{userId}:
+    post:
+      operationId: BlockedUsersController_block
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a84
+      security:
+        - bearer: []
+    delete:
+      operationId: BlockedUsersController_unblock
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a84
+      security:
+        - bearer: []
+  /lfg/me:
+    get:
+      operationId: LfgController_findMyLFG
+      summary: Get all LFG posts by the current user
+      parameters: []
+      responses:
+        "200":
+          description: Returns all LFG posts by the current user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LFGResponse"
+      tags: &a85
+        - LFG
+      security:
+        - bearer: []
+  /lfg:
+    post:
+      operationId: LfgController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLFGRequest"
+      responses:
+        "201":
+          description: ""
+      tags: *a85
+      security:
+        - bearer: []
+  /lfg/{groupId}:
+    get:
+      operationId: LfgController_findPlayers
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a85
+      security:
+        - bearer: []
+  /lfg/{id}:
+    patch:
+      operationId: LfgController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLFGRequest"
+      responses:
+        "200":
+          description: ""
+      tags: *a85
+      security:
+        - bearer: []
+    delete:
+      operationId: LfgController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a85
+      security:
+        - bearer: []
+  /interest/{categoryId}:
+    post:
+      operationId: InterestController_createInterest
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: &a86
+        - interest
+      security:
+        - bearer: []
+    delete:
+      operationId: InterestController_deleteInterest
+      parameters:
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a86
+      security:
+        - bearer: []
+  /interest:
+    get:
+      operationId: InterestController_getInterestCategories
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a86
+      security:
+        - bearer: []
+  /group-interests/{groupId}:
+    get:
+      operationId: GroupInterestsController_findAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: &a87
+        - group interests
+      security:
+        - bearer: []
+  /group-interests/{groupId}/{categoryId}:
+    post:
+      operationId: GroupInterestsController_addInterest
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "201":
+          description: ""
+      tags: *a87
+      security:
+        - bearer: []
+    delete:
+      operationId: GroupInterestsController_removeInterest
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: categoryId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: *a87
+      security:
+        - bearer: []
+  /lfp/groups:
+    get:
+      operationId: LFPController_getGroups
+      summary: Get groups for user
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: groupId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: message
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: lat
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: lng
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: distance
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Groups retrieved successfully
+      tags: &a88
+        - lfp
+      security:
+        - bearer: []
+  /lfp/{groupId}:
+    post:
+      operationId: LFPController_createLFP
+      summary: Create LFP post
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLFPDto"
+      responses:
+        "201":
+          description: LFP post created successfully
+      tags: *a88
+      security:
+        - bearer: []
+    get:
+      operationId: LFPController_getForGroup
+      summary: Get LFP posts for a group
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: LFP posts retrieved successfully
+      tags: *a88
+      security:
+        - bearer: []
+  /lfp/{groupId}/{id}:
+    patch:
+      operationId: LFPController_updateLFP
+      summary: Update LFP post
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLFPDto"
+      responses:
+        "200":
+          description: LFP post updated successfully
+      tags: *a88
+      security:
+        - bearer: []
+    delete:
+      operationId: LFPController_deleteLFP
+      summary: Delete LFP post
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: LFP post deleted successfully
+      tags: *a88
+      security:
+        - bearer: []
+  /locations/map:
+    get:
+      operationId: LocationController_getMap
+      parameters: []
+      responses:
+        "200":
+          description: "Returns all locations unpaginated "
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: &a89
+        - locations
+  /locations:
+    get:
+      operationId: LocationController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: apiId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: lat
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: lng
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                mini:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /locations?page=1
+                        prev: /locations?page=0
+                        next: /locations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: MINI
+                    results:
+                      - id: 1
+                        apiId: location123
+                base:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /locations?page=1
+                        prev: /locations?page=0
+                        next: /locations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: BASE
+                    results:
+                      - id: 1
+                        apiId: location123
+                        name: New York
+                        lat: 40.7128
+                        lng: -74.006
+                extended:
+                  value:
+                    metadata:
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                      links:
+                        first: /locations?page=1
+                        prev: /locations?page=0
+                        next: /locations?page=2
+                      query:
+                        page: 1
+                        pageSize: 10
+                        responseType: EXTENDED
+                    results:
+                      - id: 1
+                        apiId: location123
+                        name: New York
+                        lat: 40.7128
+                        lng: -74.006
+                        createdAt: 2025-04-04T16:22:11.944Z
+          description: ""
+      tags: *a89
+    post:
+      operationId: LocationController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocationDto"
+      responses:
+        "200":
+          description: Creates a new location
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a89
+      security:
+        - bearer: []
+  /locations/{locationId}:
+    get:
+      operationId: LocationController_findOne
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a single location
+          content:
+            application/json:
+              schema:
+                examples:
+                  mini:
+                    value:
+                      id: 1
+                      apiId: location123
+                  base:
+                    value:
+                      id: 1
+                      apiId: location123
+                      name: New York
+                      lat: 40.7128
+                      lng: -74.006
+                  extended:
+                    value:
+                      id: 1
+                      apiId: location123
+                      name: New York
+                      lat: 40.7128
+                      lng: -74.006
+                      createdAt: 2025-04-04T16:22:11.944Z
+      tags: *a89
+    patch:
+      operationId: LocationController_update
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLocationDto"
+      responses:
+        "200":
+          description: Updates a location
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a89
+      security:
+        - bearer: []
+    delete:
+      operationId: LocationController_remove
+      parameters:
+        - name: locationId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Deletes a location
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a89
+      security:
+        - bearer: []
+  /group-requirements/{groupId}:
+    post:
+      operationId: GroupRequirementsController_createRequirements
+      summary: Create group requirements
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupRequirementsDto"
+      responses:
+        "201":
+          description: Requirements created successfully
+      tags: &a90
+        - group requirements
+      security:
+        - bearer: []
+    get:
+      operationId: GroupRequirementsController_getRequirements
+      summary: Get group requirements
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Requirements retrieved successfully
       tags: *a90
+      security:
+        - bearer: []
+    put:
+      operationId: GroupRequirementsController_updateRequirements
+      summary: Update group requirements
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupRequirementsDto"
+      responses:
+        "200":
+          description: Requirements updated successfully
+      tags: *a90
+      security:
+        - bearer: []
+    delete:
+      operationId: GroupRequirementsController_deleteRequirements
+      summary: Delete group requirements
+      parameters:
+        - name: groupId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Requirements deleted successfully
+      tags: *a90
+      security:
+        - bearer: []
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -6526,9 +6737,9 @@ components:
         pagination:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/PaginationInstance'
+            - $ref: "#/components/schemas/PaginationInstance"
         links:
-          $ref: '#/components/schemas/LinksInstance'
+          $ref: "#/components/schemas/LinksInstance"
         query:
           type: object
       required:
@@ -6543,7 +6754,7 @@ components:
         metadata:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/QueryMetadata'
+            - $ref: "#/components/schemas/QueryMetadata"
       required:
         - results
         - metadata
@@ -6748,7 +6959,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -6801,7 +7012,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -6948,11 +7159,11 @@ components:
         user:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
         group:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
         createdAt:
           type: string
           readOnly: true
@@ -7288,7 +7499,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -7474,7 +7685,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -7533,7 +7744,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -7799,11 +8010,11 @@ components:
         creator:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponse'
+            - $ref: "#/components/schemas/MiniUserResponse"
         affiliatedGroup:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponse'
+            - $ref: "#/components/schemas/MiniGroupResponse"
         endDate:
           format: date-time
           type: string
@@ -7820,14 +8031,14 @@ components:
         category:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
         links:
           type: string
           readOnly: true
         actualLocation:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
       required:
         - id
         - name
@@ -7885,11 +8096,11 @@ components:
         creator:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponse'
+            - $ref: "#/components/schemas/MiniUserResponse"
         affiliatedGroup:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponse'
+            - $ref: "#/components/schemas/MiniGroupResponse"
         endDate:
           format: date-time
           type: string
@@ -7906,14 +8117,14 @@ components:
         category:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
         links:
           type: string
           readOnly: true
         actualLocation:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         createdAt:
           format: date-time
           type: string
@@ -7931,7 +8142,7 @@ components:
         parentTournament:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniTournamentResponseWithLogo'
+            - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
         conversionRuleId:
           type: number
           readOnly: true
@@ -8034,6 +8245,8 @@ components:
           type: string
         locationId:
           type: number
+        logo:
+          type: string
       required:
         - name
         - description
@@ -8175,7 +8388,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
       required:
         - id
         - name
@@ -8230,11 +8443,11 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         tournament:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniTournamentResponseWithLogo'
+            - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
       required:
         - id
         - name
@@ -8290,7 +8503,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         minPlayersPerTeam:
           type: number
           readOnly: true
@@ -8361,7 +8574,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         minPlayersPerTeam:
           type: number
           readOnly: true
@@ -8377,7 +8590,7 @@ components:
         tournament:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/TournamentResponse'
+            - $ref: "#/components/schemas/TournamentResponse"
       required:
         - id
         - name
@@ -8399,8 +8612,6 @@ components:
     CreateStageRequest:
       type: object
       properties:
-        tournamentId:
-          type: number
         conversionRuleId:
           type: number
         stageStatus:
@@ -8448,7 +8659,6 @@ components:
         maxPlayersPerTeam:
           type: number
       required:
-        - tournamentId
         - name
         - startDate
     UpdateStageRequest:
@@ -8504,6 +8714,97 @@ components:
           type: number
         maxSubstitutes:
           type: number
+    MiniRosterDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        stageId:
+          type: number
+          readOnly: true
+        participationId:
+          type: number
+          readOnly: true
+        group:
+          type: object
+          readOnly: true
+        user:
+          type: object
+          readOnly: true
+      required:
+        - id
+        - stageId
+        - participationId
+        - group
+        - user
+    RosterDto:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        stageId:
+          type: number
+          readOnly: true
+        participationId:
+          type: number
+          readOnly: true
+        group:
+          type: object
+          readOnly: true
+        user:
+          type: object
+          readOnly: true
+        players:
+          readOnly: true
+          type: array
+          items:
+            type: string
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+        - id
+        - stageId
+        - participationId
+        - group
+        - user
+        - players
+        - createdAt
+        - updatedAt
+    PlayerDto:
+      type: object
+      properties:
+        user:
+          type: object
+          readOnly: true
+        isSubstitute:
+          type: boolean
+          readOnly: true
+        career:
+          readOnly: true
+          type: array
+          items:
+            type: string
+      required:
+        - user
+        - isSubstitute
+        - career
+    CreateRosterDto:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            type: string
+      required:
+        - members
     MiniParticipationResponse:
       type: object
       properties:
@@ -8530,11 +8831,11 @@ components:
         tournamentId:
           type: number
         tournament:
-          $ref: '#/components/schemas/MiniTournamentResponse'
+          $ref: "#/components/schemas/MiniTournamentResponse"
         group:
-          $ref: '#/components/schemas/MiniGroupResponse'
+          $ref: "#/components/schemas/MiniGroupResponse"
         user:
-          $ref: '#/components/schemas/MiniUserResponse'
+          $ref: "#/components/schemas/MiniUserResponse"
         createdAt:
           format: date-time
           type: string
@@ -8562,11 +8863,225 @@ components:
         tournamentId:
           type: number
         group:
-          $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+          $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       required:
         - id
         - tournamentId
         - group
+    ResultsResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: The ID of the result
+        matchupId:
+          type: number
+          description: The ID of the matchup
+        score:
+          type: number
+          description: The score
+        isWinner:
+          type: boolean
+          description: Whether this result represents a winner
+        roster:
+          description: The roster associated with this result
+          allOf:
+            - $ref: "#/components/schemas/MiniRosterDto"
+      required:
+        - id
+        - matchupId
+        - score
+        - isWinner
+        - roster
+    MatchupResponseWithResultsDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: The ID of the matchup
+        stageId:
+          type: number
+          description: The ID of the stage
+        round:
+          type: number
+          description: The round number
+        matchupType:
+          type: string
+          description: The type of matchup
+        startDate:
+          format: date-time
+          type: string
+          description: The start date of the matchup
+        isFinished:
+          type: boolean
+          description: Whether the matchup is finished
+        results:
+          description: The results for this matchup
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultsResponseDto"
+      required:
+        - id
+        - stageId
+        - round
+        - matchupType
+        - startDate
+        - isFinished
+        - results
+    ScoreResponseDto:
+      type: object
+      properties:
+        matchupId:
+          type: number
+          description: The ID of the matchup
+        roundNumber:
+          type: number
+          description: The round number
+        points:
+          type: number
+          description: The number of points scored
+        isWinner:
+          type: boolean
+          description: Whether this score represents a winner
+      required:
+        - matchupId
+        - roundNumber
+        - points
+        - isWinner
+    ResultsResponseWithScoresDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: The ID of the matchup
+        stageId:
+          type: number
+          description: The ID of the stage
+        round:
+          type: number
+          description: The round number
+        matchupType:
+          type: string
+          description: The type of matchup
+        startDate:
+          format: date-time
+          type: string
+          description: The start date of the matchup
+        isFinished:
+          type: boolean
+          description: Whether the matchup is finished
+        scores:
+          description: The scores for this matchup
+          type: array
+          items:
+            $ref: "#/components/schemas/ScoreResponseDto"
+        rosters:
+          description: The rosters for this matchup
+          type: array
+          items:
+            $ref: "#/components/schemas/RosterDto"
+      required:
+        - id
+        - stageId
+        - round
+        - matchupType
+        - startDate
+        - isFinished
+        - scores
+        - rosters
+    MatchupResponseWithResultsAndScoresDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: The ID of the matchup
+        stageId:
+          type: number
+          description: The ID of the stage
+        round:
+          type: number
+          description: The round number
+        matchupType:
+          type: string
+          description: The type of matchup
+        startDate:
+          format: date-time
+          type: string
+          description: The start date of the matchup
+        isFinished:
+          type: boolean
+          description: Whether the matchup is finished
+        results:
+          description: The results with scores for this matchup
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultsResponseWithScoresDto"
+      required:
+        - id
+        - stageId
+        - round
+        - matchupType
+        - startDate
+        - isFinished
+        - results
+    CreateTeamScoreDto:
+      type: object
+      properties:
+        rosterId:
+          type: number
+          description: The ID of the roster
+        points:
+          type: number
+          description: The number of points scored
+        isWinner:
+          type: boolean
+          description: Whether this team is the winner
+      required:
+        - rosterId
+        - points
+        - isWinner
+    CreateScoreRequestDto:
+      type: object
+      properties:
+        roundNumber:
+          type: number
+          description: The round number
+        scores:
+          description: The scores for each team
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateTeamScoreDto"
+      required:
+        - roundNumber
+        - scores
+    SetTeamResultDto:
+      type: object
+      properties:
+        rosterId:
+          type: number
+          description: The ID of the roster
+        isWinner:
+          type: boolean
+          description: Whether this team is the winner
+      required:
+        - rosterId
+        - isWinner
+    EndMatchupRequestDto:
+      type: object
+      properties:
+        scores:
+          description: The scores for each round
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateScoreRequestDto"
+        results:
+          description: The results for each team
+          type: array
+          items:
+            $ref: "#/components/schemas/SetTeamResultDto"
+      required:
+        - scores
+        - results
     CareerCategoryResponse:
       type: object
       properties:
@@ -8586,7 +9101,7 @@ components:
         category:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
       required:
         - userId
         - categoryId
@@ -8619,7 +9134,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/CareerCategoryResponse'
+            $ref: "#/components/schemas/CareerCategoryResponse"
       required:
         - id
         - userId
@@ -8738,152 +9253,3 @@ components:
     UpdateGroupRequirementsDto:
       type: object
       properties: {}
-    MiniRosterDto:
-      type: object
-      properties:
-        id:
-          type: number
-          readOnly: true
-        stageId:
-          type: number
-          readOnly: true
-        participationId:
-          type: number
-          readOnly: true
-        group:
-          type: object
-          readOnly: true
-        user:
-          type: object
-          readOnly: true
-      required:
-        - id
-        - stageId
-        - participationId
-        - group
-        - user
-    RosterDto:
-      type: object
-      properties:
-        id:
-          type: number
-          readOnly: true
-        stageId:
-          type: number
-          readOnly: true
-        participationId:
-          type: number
-          readOnly: true
-        group:
-          type: object
-          readOnly: true
-        user:
-          type: object
-          readOnly: true
-        players:
-          readOnly: true
-          type: array
-          items:
-            type: string
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        updatedAt:
-          format: date-time
-          type: string
-          readOnly: true
-      required:
-        - id
-        - stageId
-        - participationId
-        - group
-        - user
-        - players
-        - createdAt
-        - updatedAt
-    PlayerDto:
-      type: object
-      properties:
-        user:
-          type: object
-          readOnly: true
-        isSubstitute:
-          type: boolean
-          readOnly: true
-        career:
-          readOnly: true
-          type: array
-          items:
-            type: string
-      required:
-        - user
-        - isSubstitute
-        - career
-    CreateRosterDto:
-      type: object
-      properties:
-        members:
-          type: array
-          items:
-            type: string
-      required:
-        - members
-    CreateTeamScoreDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        points:
-          type: number
-          description: The number of points scored
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - points
-        - isWinner
-    CreateScoreRequestDto:
-      type: object
-      properties:
-        roundNumber:
-          type: number
-          description: The round number
-        scores:
-          description: The scores for each team
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateTeamScoreDto'
-      required:
-        - roundNumber
-        - scores
-    SetTeamResultDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - isWinner
-    EndMatchupRequestDto:
-      type: object
-      properties:
-        scores:
-          description: The scores for each round
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateScoreRequestDto'
-        results:
-          description: The results for each team
-          type: array
-          items:
-            $ref: '#/components/schemas/SetTeamResultDto'
-      required:
-        - scores
-        - results

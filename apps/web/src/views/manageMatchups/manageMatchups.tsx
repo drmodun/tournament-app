@@ -9,6 +9,8 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTime } from "utils/mixins/formatting";
 import styles from "./manageMatchups.module.scss";
+import { useGetUserManagedMatchups } from "api/client/hooks/matchups/useGetUserManagedMatchups";
+import ProgressWheel from "components/progressWheel";
 
 interface IMatchupResponse {
   id: number;
@@ -288,6 +290,9 @@ export default function ManageMatchups({ stageId }: { stageId?: number }) {
     },
   ]);
 
+  const { data, isFetching, fetchNextPage, isLoading } =
+    useGetUserManagedMatchups();
+
   return (
     <div
       className={clsx(
@@ -297,9 +302,15 @@ export default function ManageMatchups({ stageId }: { stageId?: number }) {
     >
       <h3>manage matchups</h3>
 
-      {matchups.map((matchup) => {
-        return <MatchupCard matchup={matchup} />;
-      })}
+      {isLoading ? (
+        <ProgressWheel variant={textColorTheme} />
+      ) : (
+        <>
+          {data?.pages.map((page) => {
+            return <MatchupCard matchup={page} />;
+          })}
+        </>
+      )}
     </div>
   );
 }

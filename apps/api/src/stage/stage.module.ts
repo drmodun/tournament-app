@@ -9,6 +9,7 @@ import { RosterModule } from 'src/roster/roster.module';
 import { StageAdminGuard } from './guards/stage-admin.guard';
 import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
 import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { MatchesModule } from 'src/matches/matches.module';
 
 @Module({
   controllers: [StageController],
@@ -24,6 +25,7 @@ import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notific
     GroupMembershipModule,
     ChallongeModule,
     forwardRef(() => RosterModule),
+    forwardRef(() => MatchesModule),
     SseNotificationsModule,
   ],
 })

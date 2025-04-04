@@ -7,7 +7,10 @@ import {
   BracketParticipantDto,
 } from './dto/responses';
 import { ChallongeService } from '../challonge/challonge.service';
-import { matchScoreToChallongeScoreRequest } from '@tournament-app/types';
+import {
+  IChallongeMatch,
+  matchScoreToChallongeScoreRequest,
+} from '@tournament-app/types';
 import {
   ReactBracketsResponseDto,
   ReactBracketsTeamDto,
@@ -467,6 +470,16 @@ export class MatchesService {
 
     return this.challongeService.getChallongeBracketData(
       stage.challongeTournamentId,
+    );
+  }
+
+  async importChallongeMatchesToStage(
+    stageId: number,
+    matches: IChallongeMatch[],
+  ) {
+    return await this.matchesRepository.importChallongeMatchesToStage(
+      stageId,
+      matches,
     );
   }
 }

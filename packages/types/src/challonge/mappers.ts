@@ -251,29 +251,29 @@ export function matchupToChallongeMatch(matchup: {
       state,
       round: matchup.roundId,
       identifier: `Match-${matchup.id}`,
-      suggested_play_order: 0,
+      suggestedPlayOrder: 0,
       scores: "",
-      score_in_sets: [],
-      points_by_participant: [],
+      scoreInSets: [],
+      pointsByParticipant: [],
       timestamps: {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         starts_at: matchup.startDate.toISOString(),
         completed_at: matchup.endDate?.toISOString(),
       },
-      winner_id: matchup.rosterToMatchup?.find((r) => r.isWinner)?.rosterId,
-      relationships: {
-        player1: {
-          data: {
-            id: matchup.rosterToMatchup?.[0]?.rosterId.toString() || "",
-            type: "participant",
-          },
+    },
+    winnerId: matchup.rosterToMatchup?.find((r) => r.isWinner)?.rosterId,
+    relationships: {
+      player1: {
+        data: {
+          id: matchup.rosterToMatchup?.[0]?.rosterId.toString() || "",
+          type: "participant",
         },
-        player2: {
-          data: {
-            id: matchup.rosterToMatchup?.[1]?.rosterId.toString() || "",
-            type: "participant",
-          },
+      },
+      player2: {
+        data: {
+          id: matchup.rosterToMatchup?.[1]?.rosterId.toString() || "",
+          type: "participant",
         },
       },
     },
@@ -337,20 +337,7 @@ export function challongeMatchToMatchup(match: IChallongeMatch): {
     endDate: match.attributes.timestamps.completed_at
       ? new Date(match.attributes.timestamps.completed_at)
       : undefined,
-    rosterToMatchup: [
-      {
-        rosterId: parseInt(match.attributes.relationships.player1.data.id),
-        isWinner:
-          match.attributes.winner_id ===
-          parseInt(match.attributes.relationships.player1.data.id),
-      },
-      {
-        rosterId: parseInt(match.attributes.relationships.player2.data.id),
-        isWinner:
-          match.attributes.winner_id ===
-          parseInt(match.attributes.relationships.player2.data.id),
-      },
-    ],
+    rosterToMatchup: [],
   };
 }
 

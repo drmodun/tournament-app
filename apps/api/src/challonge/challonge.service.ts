@@ -290,12 +290,14 @@ export class ChallongeService {
   }
 
   async getTournamentMatchesFunction(id: string): Promise<IChallongeMatch[]> {
-    const response: AxiosResponse<IChallongeMatch[]> =
+    const response: AxiosResponse<{ data: IChallongeMatch[] }> =
       await this.httpService.axiosRef.get(
         `https://api.challonge.com/v2/application/tournaments/${id}/matches.json`,
         this.injectHeaders(),
       );
-    return response.data;
+
+    console.log(response.data);
+    return response.data?.data;
   }
 
   async getTournamentMatches(id: string): Promise<IChallongeMatch[]> {
@@ -352,21 +354,19 @@ export class ChallongeService {
             teams: [
               {
                 id: participantToRosterMap.get(
-                  match.attributes.relationships.player1.data.id,
+                  match.relationships.player1.data.id,
                 ),
-                name: `Roster-${participantToRosterMap.get(match.attributes.relationships.player1.data.id)}`,
+                name: `Roster-${participantToRosterMap.get(match.relationships.player1.data.id)}`,
               },
               {
                 id: participantToRosterMap.get(
-                  match.attributes.relationships.player2.data.id,
+                  match.relationships.player2.data.id,
                 ),
-                name: `Roster-${participantToRosterMap.get(match.attributes.relationships.player2.data.id)}`,
+                name: `Roster-${participantToRosterMap.get(match.relationships.player2.data.id)}`,
               },
             ],
-            winner: match.attributes.winner_id
-              ? participantToRosterMap.get(
-                  match.attributes.winner_id.toString(),
-                )
+            winner: match.winnerId
+              ? participantToRosterMap.get(match.winnerId.toString())
               : undefined,
           })),
         })),

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IEndMatchupRequest } from '@tournament-app/types';
+import { IChallongeMatch, IEndMatchupRequest } from '@tournament-app/types';
 import {
   group,
   matchup,
@@ -672,5 +672,78 @@ export class MatchesDrizzleRepository {
       .execute();
 
     return result[0];
+  }
+
+  async importChallongeMatchesToStage(
+    stageId: number,
+    challongeMatches: IChallongeMatch[],
+  ) {
+    return db.transaction(async (tx) => {
+      try {
+        const rostersWithChallongeIds = await tx
+          .select({
+            id: roster.id,
+            challongeParticipantId: roster.challongeParticipantId,
+          })
+          .from(roster)
+          .where(eq(roster.stageId, stageId))
+          .execute();
+
+        if (!rostersWithChallongeIds.length) {
+          throw new Error(
+            `No rosters found for stage ID ${stageId} with Challonge participant IDs`,
+          );
+        }
+
+        const challongeIdToRosterMap = new Map<string, number>();
+        for (const r of rostersWithChallongeIds) {
+          if (r.challongeParticipantId) {
+            challongeIdToRosterMap.set(r.challongeParticipantId, r.id);
+          }
+        }
+
+        const insertedMatchups = [];
+        for (const match of challongeMatches) {
+          const newMatchup = await tx
+            .insert(matchup)
+            .values({
+              stageId: stageId,
+              round: match.attributes.round,
+              challongeMatchupId: match.id,
+              startDate: match.attributes.timestamps.starts_at || new Date(),
+              endDate: null,
+              isFinished: false,
+            })
+            .returning()
+            .execute();
+
+          if (newMatchup.length > 0) {
+            insertedMatchups.push(newMatchup[0]);
+
+            const player1Id = match.relationships.player1?.data?.id;
+            const player2Id = match.relationships.player2?.data?.id;
+
+            if (player1Id && challongeIdToRosterMap.has(player1Id)) {
+              await tx.execute(
+                sql`INSERT INTO roster_matchup (roster_id, matchup_id, is_winner) 
+                    VALUES (${challongeIdToRosterMap.get(player1Id)}, ${newMatchup[0].id}, false)`,
+              );
+            }
+
+            if (player2Id && challongeIdToRosterMap.has(player2Id)) {
+              await tx.execute(
+                sql`INSERT INTO roster_matchup (roster_id, matchup_id, is_winner) 
+                    VALUES (${challongeIdToRosterMap.get(player2Id)}, ${newMatchup[0].id}, false)`,
+              );
+            }
+          }
+        }
+
+        return insertedMatchups;
+      } catch (error) {
+        console.error('Failed to import Challonge matches:', error);
+        throw error;
+      }
+    });
   }
 }

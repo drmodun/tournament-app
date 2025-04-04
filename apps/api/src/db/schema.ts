@@ -787,6 +787,7 @@ export const matchup = pgTable('matchup', {
   roundId: integer('round_id').references(() => stageRound.id, {
     onDelete: 'cascade',
   }),
+  round: integer('round'),
   matchupType: matchupType('matchup_type').default('one_vs_one'),
   challongeMatchupId: text('challonge_matchup_id'),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),

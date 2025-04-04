@@ -26,6 +26,7 @@ import { RosterDrizzleRepository } from 'src/roster/roster.repository';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
 import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
 import { TemplatesEnum } from 'src/infrastructure/types';
+import { MatchesService } from 'src/matches/matches.service';
 
 @Injectable()
 export class StageService {
@@ -35,6 +36,7 @@ export class StageService {
     private readonly rosterRepository: RosterDrizzleRepository,
     private readonly sseNotificationsService: SseNotificationsService,
     private readonly notificationTemplateFiller: NotificationTemplatesFiller,
+    private readonly matchesService: MatchesService,
   ) {}
 
   async create(createStageDto: ICreateStageDto) {
@@ -298,19 +300,28 @@ export class StageService {
 
     await this.sendStageStartNotifications(stageId, stage.name);
 
-    return updatedStage;
-  }
-
-  async getMatchesFromChallonge(stageId: number) {
-    const stage: IStageWithChallongeTournament = await this.findOne(
+    await this.importInitialChallongeMatches(
       stageId,
-      StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
-    );
-
-    const matches = await this.challongeService.getTournamentMatches(
       stage.challongeTournamentId,
     );
 
+    return updatedStage;
+  }
+
+  async getMatchesFromChallonge(challongeTournamentId: string) {
+    const matches = await this.challongeService.getTournamentMatches(
+      challongeTournamentId,
+    );
+
     return matches;
+  }
+
+  async importInitialChallongeMatches(
+    stageId: number,
+    challongeTournamentId: string,
+  ) {
+    const matches = await this.getMatchesFromChallonge(challongeTournamentId);
+
+    await this.matchesService.importChallongeMatchesToStage(stageId, matches);
   }
 }

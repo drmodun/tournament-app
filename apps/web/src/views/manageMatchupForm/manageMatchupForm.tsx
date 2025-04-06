@@ -19,18 +19,18 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import AddMatchResult from "views/addMatchResult";
 import styles from "./manageMatchupForm.module.scss";
 import CheckboxGroup from "components/checkboxGroup";
-import { useCreateMatchupScore } from "api/client/hooks/matchups/useUpdateMatchupScore";
+import { useUpdateMatchScore } from "api/client/hooks/matchups/useUpdateMatchupScore";
+import { useGetStage } from "api/client/hooks/stages/useGetStage";
+import Chip from "components/chip";
 
 export default function ManageMatchupForm({
   onClose,
   rosters,
   id,
-  tournamentId,
 }: {
   onClose?: () => void;
   rosters?: (IRosterResponse | IExtendedRosterResponse)[];
   id?: number;
-  tournamentId?: number;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -43,7 +43,7 @@ export default function ManageMatchupForm({
     rosters ? new Array(rosters.length).fill(false) : [],
   );
 
-  const createScoreMutation = useCreateMatchupScore();
+  const createScoreMutation = useUpdateMatchScore();
 
   const submit = async () => {
     if (!rosters || !scores) return;
@@ -55,7 +55,6 @@ export default function ManageMatchupForm({
 
     await createScoreMutation.mutateAsync({
       id,
-      tournamentId,
       data: { scores, results },
     });
     onClose && onClose();
@@ -87,6 +86,13 @@ export default function ManageMatchupForm({
             return (
               <>
                 <div className={styles.userCards}>
+                  <Chip
+                    label={
+                      roster?.participation?.group?.name ??
+                      roster?.participation?.user?.username
+                    }
+                    variant="primary"
+                  />
                   {(roster?.players ?? []).map((player) => {
                     return (
                       <div

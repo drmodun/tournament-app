@@ -12,6 +12,7 @@ import { clsx } from "clsx";
 import { formatDateTime } from "utils/mixins/formatting";
 import Chip from "components/chip";
 import Button from "components/button";
+import ManageMatchupForm from "views/manageMatchupForm";
 
 export default function ManagedUserManagedMatchups() {
   const [dialogActive, setDialogActive] = useState<boolean>(false);
@@ -19,6 +20,8 @@ export default function ManagedUserManagedMatchups() {
   const textColorTheme = textColor(theme);
   const { data, fetchNextPage, isFetching, hasNextPage, isFetchNextPageError } =
     useGetUserManagedMatchups();
+
+  const [active, setActive] = useState<IMatchupsWithMiniRostersResponse>();
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
@@ -53,6 +56,10 @@ export default function ManagedUserManagedMatchups() {
     };
   }, [isFetching, isFetchNextPageError, fetchNextPage, hasNextPage]);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   return (
     <div className={styles.wrapper}>
       <Dialog
@@ -60,7 +67,9 @@ export default function ManagedUserManagedMatchups() {
         onClose={() => setDialogActive(false)}
         variant={theme}
         className={styles.dialog}
-      ></Dialog>
+      >
+        <ManageMatchupForm rosters={active?.rosters} id={active?.id} />
+      </Dialog>
       <div
         className={clsx(
           styles.contentWrapper,
@@ -70,7 +79,6 @@ export default function ManagedUserManagedMatchups() {
         {data &&
           data.pages.map((page) => {
             return page.flatMap((elem: IMatchupsWithMiniRostersResponse) => {
-              console.log(elem, "elem");
               return (
                 <div
                   key={elem.id}
@@ -144,6 +152,7 @@ export default function ManagedUserManagedMatchups() {
                   <div className={styles.actions}>
                     <Button
                       onClick={() => {
+                        setActive(elem);
                         setDialogActive(true);
                       }}
                       variant="warning"

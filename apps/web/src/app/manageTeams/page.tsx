@@ -265,7 +265,6 @@ const SearchBar = ({
     if ((data?.length ?? 0) <= activeIndex) {
       setActiveIndex((prev) => prev - 1);
     }
-    console.log(data, activeIndex);
   }, [data, activeIndex]);
 
   return (

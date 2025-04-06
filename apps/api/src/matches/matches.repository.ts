@@ -357,6 +357,8 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
   }
 
   async canUserEditMatchup(matchupId: number, userId: number) {
+    const creatorUser = aliasedTable(user, 'creatorUser');
+
     const result = await db
       .select()
       .from(matchup)
@@ -370,17 +372,23 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         tables.groupToUser,
         eq(tables.group.id, tables.groupToUser.groupId),
       )
+      .leftJoin(creatorUser, eq(tables.tournament.creatorId, creatorUser.id))
       .where(
         and(
           eq(matchup.id, matchupId),
           or(
-            eq(tables.groupToUser.userId, userId),
-            eq(tables.tournament.creatorId, userId),
-          ),
-          eq(tables.tournament.affiliatedGroupId, tables.group.id),
-          or(
-            eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
-            eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+            and(
+              eq(tables.groupToUser.userId, userId),
+              eq(tables.tournament.affiliatedGroupId, tables.group.id),
+              or(
+                eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
+                eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+              ),
+            ),
+            and(
+              eq(creatorUser.id, userId),
+              eq(tables.tournament.creatorId, creatorUser.id),
+            ),
           ),
         ),
       );

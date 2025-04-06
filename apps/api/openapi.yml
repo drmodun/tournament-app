@@ -204,7 +204,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2025-04-04T20:19:41.855Z
+                        updatedAt: &a2 2025-04-06T13:33:57.900Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -304,7 +304,7 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2025-04-04T20:19:41.855Z
+                        createdAt: 2025-04-06T13:33:57.900Z
                         following: 0
                         location: New York
           description: ""
@@ -362,7 +362,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2025-04-04T20:19:41.855Z
+                    updatedAt: &a3 2025-04-06T13:33:57.900Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -394,7 +394,7 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2025-04-04T20:19:41.855Z
+                    createdAt: 2025-04-06T13:33:57.900Z
                     following: 0
                     location: New York
           description: ""
@@ -758,7 +758,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-04T20:19:42.017Z
+                        updatedAt: 2025-04-06T13:33:58.014Z
                         memberCount: 50
                 extended:
                   value:
@@ -783,9 +783,9 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-04T20:19:42.017Z
+                        updatedAt: 2025-04-06T13:33:58.014Z
                         memberCount: 50
-                        createdAt: 2025-04-04T20:19:42.017Z
+                        createdAt: 2025-04-06T13:33:58.015Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -812,7 +812,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-04T20:19:42.017Z
+                updatedAt: 2025-04-06T13:33:58.014Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -865,7 +865,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-04T20:19:42.017Z
+                    updatedAt: 2025-04-06T13:33:58.014Z
                     memberCount: 50
                 extended:
                   value:
@@ -877,9 +877,9 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-04T20:19:42.017Z
+                    updatedAt: 2025-04-06T13:33:58.014Z
                     memberCount: 50
-                    createdAt: 2025-04-04T20:19:42.017Z
+                    createdAt: 2025-04-06T13:33:58.015Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -918,7 +918,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-04T20:19:42.017Z
+                updatedAt: 2025-04-06T13:33:58.014Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -982,7 +982,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-04T20:19:42.017Z
+                  updatedAt: 2025-04-06T13:33:58.014Z
                   memberCount: 50
                 members: []
           description: ""
@@ -1010,7 +1010,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-04T20:19:42.017Z
+                  updatedAt: 2025-04-06T13:33:58.014Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -1038,7 +1038,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-04T20:19:42.017Z
+                  updatedAt: 2025-04-06T13:33:58.014Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -1230,7 +1230,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-04-04T20:19:42.024Z
+                        createdAt: 2025-04-06T13:33:58.018Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1251,7 +1251,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-04-04T20:19:42.024Z
+                      - createdAt: 2025-04-06T13:33:58.018Z
                         isFake: false
                         role: member
                         country: country
@@ -1283,7 +1283,7 @@ paths:
                         role: member
                         user: *a7
                         group: *a8
-                        createdAt: 2025-04-04T20:19:42.024Z
+                        createdAt: 2025-04-06T13:33:58.018Z
                         country: country
                         name: name
                         logo: logo
@@ -1372,10 +1372,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-04-04T20:19:42.024Z
+                    createdAt: 2025-04-06T13:33:58.018Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-04-04T20:19:42.024Z
+                    createdAt: 2025-04-06T13:33:58.018Z
                     isFake: false
                     role: member
                     country: country
@@ -1389,7 +1389,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-04-04T20:19:42.024Z
+                    createdAt: 2025-04-06T13:33:58.018Z
                     country: country
                     name: name
                     logo: logo
@@ -1734,7 +1734,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-04-04T20:19:42.033Z
+                    createdAt: 2025-04-06T13:33:58.024Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1743,11 +1743,11 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-04-04T20:19:42.033Z
+                    updatedAt: 2025-04-06T13:33:58.024Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2025-04-04T20:19:42.033Z
+                    createdAt: 2025-04-06T13:33:58.024Z
                     id: 1
                     isFake: false
                     username: john_doe
@@ -1889,7 +1889,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2025-04-04T20:19:41.855Z
+                        updatedAt: 2025-04-06T13:33:57.900Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1911,7 +1911,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T20:19:42.039Z
+                        createdAt: 2025-04-06T13:33:58.028Z
                 with-group:
                   value:
                     metadata:
@@ -1935,7 +1935,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-04T20:19:42.017Z
+                        updatedAt: 2025-04-06T13:33:58.014Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1958,7 +1958,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-04-04T20:19:42.039Z
+                        createdAt: 2025-04-06T13:33:58.028Z
           description: ""
       tags: &a13
         - group-join-requests
@@ -2061,7 +2061,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2025-04-04T20:19:41.855Z
+                    updatedAt: 2025-04-06T13:33:57.900Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -2070,7 +2070,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-04T20:19:42.039Z
+                    createdAt: 2025-04-06T13:33:58.028Z
                 with-group:
                   value:
                     id: 1
@@ -2081,7 +2081,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-04T20:19:42.017Z
+                    updatedAt: 2025-04-06T13:33:58.014Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -2091,7 +2091,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-04-04T20:19:42.039Z
+                    createdAt: 2025-04-06T13:33:58.028Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -2224,7 +2224,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-04-04T20:19:42.046Z
+                        updatedAt: 2025-04-06T13:33:58.032Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2248,7 +2248,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T20:19:42.046Z
+                        createdAt: 2025-04-06T13:33:58.032Z
                         isFake: false
                 with-group:
                   value:
@@ -2279,7 +2279,7 @@ paths:
                         focus: Hybrid
                         locationId: 1
                         type: Public
-                        updatedAt: 4/4/2025
+                        updatedAt: 4/6/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -2301,7 +2301,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-04-04T20:19:42.046Z
+                        createdAt: 2025-04-06T13:33:58.033Z
           description: ""
       tags: &a16
         - group-invites
@@ -2396,7 +2396,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-04-04T20:19:42.046Z
+                    updatedAt: 2025-04-06T13:33:58.032Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2405,7 +2405,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-04T20:19:42.046Z
+                    createdAt: 2025-04-06T13:33:58.032Z
                     isFake: false
                 with-group:
                   value:
@@ -2421,14 +2421,14 @@ paths:
                     focus: Hybrid
                     locationId: 1
                     type: Public
-                    updatedAt: 4/4/2025
+                    updatedAt: 4/6/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-04-04T20:19:42.046Z
+                    createdAt: 2025-04-06T13:33:58.033Z
           description: ""
       tags: *a16
     patch:
@@ -3373,8 +3373,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a35 2025-04-04T20:19:42.086Z
-                    endDate: &a36 2025-04-04T20:19:42.086Z
+                    startDate: &a35 2025-04-06T13:33:58.059Z
+                    endDate: &a36 2025-04-06T13:33:58.059Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3555,8 +3555,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a42 2025-04-04T20:19:42.086Z
-                    endDate: &a43 2025-04-04T20:19:42.086Z
+                    startDate: &a42 2025-04-06T13:33:58.059Z
+                    endDate: &a43 2025-04-06T13:33:58.059Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -5026,15 +5026,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-04T20:19:42.105Z
+                          startDate: 2025-04-06T13:33:58.072Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T20:19:42.105Z
-                        updatedAt: 2025-04-04T20:19:42.105Z
+                        createdAt: 2025-04-06T13:33:58.072Z
+                        updatedAt: 2025-04-06T13:33:58.072Z
                 base:
                   value:
                     metadata:
@@ -5137,15 +5137,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-04T20:19:42.105Z
+                          startDate: 2025-04-06T13:33:58.072Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-04T20:19:42.105Z
-                        updatedAt: 2025-04-04T20:19:42.105Z
+                        createdAt: 2025-04-06T13:33:58.072Z
+                        updatedAt: 2025-04-06T13:33:58.072Z
                 base:
                   value:
                     metadata:
@@ -5527,6 +5527,26 @@ paths:
     get:
       operationId: MatchesController_getManagedMatchups
       parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
         - name: page
           required: false
           in: query
@@ -5537,6 +5557,59 @@ paths:
           in: query
           schema:
             type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: matchupId
+          required: false
+          in: query
+          description: The ID of the matchup
+          schema:
+            type: number
+        - name: rosterId
+          required: false
+          in: query
+          description: The ID of the roster
+          schema:
+            type: number
+        - name: groupId
+          required: false
+          in: query
+          description: The ID of the group
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          description: The ID of the user
+          schema:
+            type: number
+        - name: stageId
+          required: false
+          in: query
+          description: The ID of the stage
+          schema:
+            type: number
+        - name: round
+          required: false
+          in: query
+          description: The round number
+          schema:
+            type: number
+        - name: isFinished
+          required: false
+          in: query
+          description: Whether the matchup is finished
+          schema:
+            type: boolean
+        - name: challongeMatchupId
+          required: false
+          in: query
+          description: The Challonge ID of the matchup
+          schema:
+            type: string
       responses:
         "200":
           description: Returns matchups that a user is managing
@@ -6240,7 +6313,7 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2025-04-04T20:19:42.016Z
+                        createdAt: 2025-04-06T13:33:58.014Z
           description: ""
       tags: *a89
     post:
@@ -6301,7 +6374,7 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2025-04-04T20:19:42.016Z
+                      createdAt: 2025-04-06T13:33:58.014Z
       tags: *a89
     patch:
       operationId: LocationController_update
@@ -6756,6 +6829,231 @@ paths:
               schema:
                 $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a91
+      security:
+        - bearer: []
+  /quiz-attempt:
+    get:
+      operationId: QuizAttemptController_findAll
+      parameters:
+        - name: field
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: order
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: returnFullCount
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: responseType
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: quizId
+          required: false
+          in: query
+          description: Quiz ID
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: isSubmitted
+          required: false
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                basic:
+                  value:
+                    id: 1
+                    userId: 42
+                    quizId: 7
+                    currentQuestion: 2
+                    endTime: 2023-05-30T15:30:00Z
+                    score: 80
+                    isSubmitted: true
+                    createdAt: 2023-05-30T14:30:00Z
+          description: ""
+      tags: &a92
+        - quiz-attempt
+      security:
+        - bearer: []
+    post:
+      operationId: QuizAttemptController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizAttemptRequest"
+      responses:
+        "200":
+          description: Creates a new quiz attempt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a92
+      security:
+        - bearer: []
+  /quiz-attempt/my-attempts:
+    get:
+      operationId: QuizAttemptController_getMyAttempts
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: pageSize
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Returns a list of quiz attempts made by the current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizAttemptResponse"
+      tags: *a92
+      security:
+        - bearer: []
+  /quiz-attempt/{attemptId}:
+    get:
+      operationId: QuizAttemptController_findOne
+      parameters:
+        - name: attemptId
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: responseType
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a quiz attempt by ID
+          content:
+            application/json:
+              schema:
+                example:
+                  id: 1
+                  userId: 42
+                  quizId: 7
+                  currentQuestion: 2
+                  endTime: 2023-05-30T15:30:00Z
+                  score: 80
+                  isSubmitted: true
+                  createdAt: 2023-05-30T14:30:00Z
+      tags: *a92
+      security:
+        - bearer: []
+  /quiz-attempt/{attemptId}/submit:
+    put:
+      operationId: QuizAttemptController_submitAttempt
+      parameters:
+        - name: attemptId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitQuizAttemptRequest"
+      responses:
+        "200":
+          description: Submits a quiz attempt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a92
+      security:
+        - bearer: []
+  /quiz-attempt/{attemptId}/answers:
+    post:
+      operationId: QuizAttemptController_createAnswer
+      parameters:
+        - name: attemptId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizAnswerRequest"
+      responses:
+        "200":
+          description: Creates a new answer for a quiz attempt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a92
+      security:
+        - bearer: []
+  /quiz-attempt/answers/{answerId}:
+    put:
+      operationId: QuizAttemptController_updateAnswer
+      parameters:
+        - name: answerId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizAnswerRequest"
+      responses:
+        "200":
+          description: Updates an answer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResponsePrimary"
+      tags: *a92
       security:
         - bearer: []
 info:
@@ -9952,3 +10250,172 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CreateQuizQuestionDto"
+    QuizAttemptResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+          readOnly: true
+        quizId:
+          type: number
+          readOnly: true
+        currentQuestion:
+          type: number
+          readOnly: true
+        endTime:
+          format: date-time
+          type: string
+          readOnly: true
+        score:
+          type: number
+          readOnly: true
+        isSubmitted:
+          type: boolean
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        quiz:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/QuizResponse"
+      required:
+        - id
+        - userId
+        - quizId
+        - currentQuestion
+        - endTime
+        - score
+        - isSubmitted
+        - createdAt
+        - quiz
+    QuizAnswerResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        isFinal:
+          type: boolean
+          readOnly: true
+        isCorrect:
+          type: boolean
+          readOnly: true
+        userId:
+          type: number
+          readOnly: true
+        quizAttemptId:
+          type: number
+          readOnly: true
+        quizQuestionId:
+          type: number
+          readOnly: true
+        answer:
+          type: string
+          readOnly: true
+        selectedOptionId:
+          type: number
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+        - id
+        - isFinal
+        - isCorrect
+        - userId
+        - quizAttemptId
+        - quizQuestionId
+        - answer
+        - selectedOptionId
+        - createdAt
+    QuizAttemptWithAnswersResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          readOnly: true
+        userId:
+          type: number
+          readOnly: true
+        quizId:
+          type: number
+          readOnly: true
+        currentQuestion:
+          type: number
+          readOnly: true
+        endTime:
+          format: date-time
+          type: string
+          readOnly: true
+        score:
+          type: number
+          readOnly: true
+        isSubmitted:
+          type: boolean
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        quiz:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/QuizResponse"
+        answers:
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/QuizAnswerResponse"
+      required:
+        - id
+        - userId
+        - quizId
+        - currentQuestion
+        - endTime
+        - score
+        - isSubmitted
+        - createdAt
+        - quiz
+        - answers
+    CreateQuizAttemptRequest:
+      type: object
+      properties:
+        quizId:
+          type: number
+          description: Quiz ID
+      required:
+        - quizId
+    SubmitQuizAttemptRequest:
+      type: object
+      properties:
+        isSubmitted:
+          type: boolean
+      required:
+        - isSubmitted
+    CreateQuizAnswerRequest:
+      type: object
+      properties:
+        quizQuestionId:
+          type: number
+        answer:
+          type: string
+        selectedOptionId:
+          type: number
+          description: Selected option ID for multiple choice questions
+      required:
+        - quizQuestionId
+        - answer
+    UpdateQuizAnswerRequest:
+      type: object
+      properties:
+        answer:
+          type: string
+        selectedOptionId:
+          type: number
+          description: Selected option ID for multiple choice questions

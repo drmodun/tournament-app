@@ -12,7 +12,10 @@ export class CanEditMatchupGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const matchupId = parseInt(request.params.matchupId, 10);
+    const matchupId = parseInt(
+      request.params.matchupId || request.body.matchupId || request.params.id,
+    );
+
     const userId = request.user.id;
 
     const result = await this.matchesService.canUserEditMatchup(

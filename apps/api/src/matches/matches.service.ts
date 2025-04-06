@@ -417,7 +417,7 @@ export class MatchesService {
     );
   }
 
-  async getManagedMatchups(userId: number, query: PaginationOnly) {
+  async getManagedMatchups(userId: number, query: QueryMatchupRequestDto) {
     return this.matchesRepository.getManagedMatchups(userId, query);
   }
 

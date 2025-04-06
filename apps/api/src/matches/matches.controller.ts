@@ -129,7 +129,7 @@ export class MatchesController {
   })
   async getManagedMatchups(
     @CurrentUser() user: ValidatedUserDto,
-    @Query() query: PaginationOnly,
+    @Query() query: QueryMatchupRequestDto,
   ) {
     return await this.matchesService.getManagedMatchups(user.id, query);
   }

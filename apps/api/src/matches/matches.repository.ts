@@ -4,8 +4,6 @@ import {
   IChallongeMatch,
   IEndMatchupRequest,
   IMatchupResponseWithRosters,
-  IMatchupsWithMiniRostersResponse,
-  IMiniRosterResponse,
   IRosterResponse,
   MatchupResponsesEnum,
   MatchupSortingEnum,
@@ -196,10 +194,6 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return db.delete(score).where(eq(score.id, scoreId));
   }
 
-  /**
-   * Deletes all data related to a matchup's scores and resets the matchup state
-   * Only focuses on local state, not bracket progression
-   */
   async deleteMatchScore(matchupId: number) {
     return db.transaction(async (tx) => {
       // 1. Get the current matchup
@@ -379,7 +373,10 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       .where(
         and(
           eq(matchup.id, matchupId),
-          eq(tables.groupToUser.userId, userId),
+          or(
+            eq(tables.groupToUser.userId, userId),
+            eq(tables.tournament.creatorId, userId),
+          ),
           eq(tables.tournament.affiliatedGroupId, tables.group.id),
           or(
             eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
@@ -392,7 +389,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
 
   async getManagedMatchups(
     userId: number,
-    query?: PaginationOnly,
+    query?: QueryMatchupRequestDto,
   ): Promise<IMatchupResponseWithRosters[]> {
     const creatorUser = aliasedTable(user, 'creatorUser');
     const rosterUser = aliasedTable(user, 'rosterUser');
@@ -470,18 +467,29 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         eq(roster.id, playerAggregationSubquery.rosterId),
       )
       .where(
-        or(
-          and(
-            eq(tables.groupToUser.userId, userId),
-            eq(tables.tournament.affiliatedGroupId, tables.group.id),
-            or(
-              eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
-              eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+        and(
+          query?.stageId ? eq(matchup.stageId, query.stageId) : undefined,
+          query?.round ? eq(matchup.round, query.round) : undefined,
+          query?.isFinished
+            ? eq(matchup.isFinished, query.isFinished)
+            : undefined,
+          query?.challongeMatchupId
+            ? eq(matchup.challongeMatchupId, query.challongeMatchupId)
+            : undefined,
+          query?.rosterId ? eq(roster.id, query.rosterId) : undefined,
+          or(
+            and(
+              eq(tables.groupToUser.userId, userId),
+              eq(tables.tournament.affiliatedGroupId, tables.group.id),
+              or(
+                eq(tables.groupToUser.role, groupRoleEnum.ADMIN),
+                eq(tables.groupToUser.role, groupRoleEnum.OWNER),
+              ),
             ),
-          ),
-          and(
-            eq(creatorUser.id, userId),
-            eq(tables.tournament.creatorId, creatorUser.id),
+            and(
+              eq(creatorUser.id, userId),
+              eq(tables.tournament.creatorId, creatorUser.id),
+            ),
           ),
         ),
       )
@@ -581,13 +589,14 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
           ); // delete existing outdated matchups
 
         for (const match of challongeMatches) {
+          console.log('match', match);
           const newMatchup = await tx
             .insert(matchup)
             .values({
               stageId: stageId,
               round: +match.attributes.round,
               challongeMatchupId: match.id,
-              startDate: new Date(match.attributes.timestamps.starts_at),
+              startDate: new Date(match.attributes.timestamps['startedAt']),
               endDate: null,
               isFinished: false,
             } as any)

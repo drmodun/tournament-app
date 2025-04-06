@@ -49,6 +49,7 @@ export class ChallongeService {
         );
 
       this.token = response.data.access_token;
+      console.log('this.token', this.token);
       this.logger.log('Successfully retrieved Challonge token');
     } catch (error) {
       this.logger.error('Failed to get Challonge token:', error);
@@ -247,6 +248,7 @@ export class ChallongeService {
           participants,
           this.injectHeaders(),
         );
+
       return response.data.data;
     } catch (error) {
       this.logger.error(

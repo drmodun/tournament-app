@@ -10,7 +10,6 @@ import {
   ICreateChallongeParticipantRequest,
   IMatchScoreRequest,
   IUpdateChallongeTournamentRequest,
-  IUpdateParticipantRequest,
   ITournamentStateRequest,
   IBulkCreateChallongeParticipantRequest,
   IParticipantDetails,
@@ -49,11 +48,13 @@ export function stageToChallongeTournament(stage: {
   startDate: Date;
   endDate?: Date;
 }): Omit<IChallongeTournament, "id"> {
+  const randomId = Math.random().toString(36).substring(2, 15);
+
   return {
     type: "tournament",
     attributes: {
       name: sanitizeForChallonge(stage.name),
-      url: `winning_stage_${stage.id}`,
+      url: `winning_stage_${randomId}`,
       tournament_type: stageTypeToChallongeType[stage.stageType],
       state: stageStatusToChallongeState[stage.stageStatus],
       description: stage.description

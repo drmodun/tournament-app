@@ -67,6 +67,19 @@ export default function ManageStages(stage?: {
   const { data: userData } = useAuth();
 
   const startStageMutation = useStartStage();
+<<<<<<< HEAD
+=======
+
+  useEffect(() => {
+    console.log(data, tData, userData);
+    console.log(
+      data?.role,
+      tData?.creator.id,
+      userData?.id,
+      tData?.creator.id == userData?.id,
+    );
+  }, [data, tData, userData]);
+>>>>>>> ba52e99 (Matchups integration)
 
   return (
     <div

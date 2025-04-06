@@ -5535,26 +5535,6 @@ paths:
     get:
       operationId: MatchesController_getManagedMatchups
       parameters:
-        - name: field
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: order
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: returnFullCount
-          required: false
-          in: query
-          schema:
-            type: boolean
-        - name: responseType
-          required: false
-          in: query
-          schema:
-            type: string
         - name: page
           required: false
           in: query

@@ -70,6 +70,7 @@ export default function ManageStages(stage?: {
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
   useEffect(() => {
     console.log(data, tData, userData);
     console.log(
@@ -81,6 +82,8 @@ export default function ManageStages(stage?: {
   }, [data, tData, userData]);
 >>>>>>> ba52e99 (Matchups integration)
 
+=======
+>>>>>>> 7c4f8b3 (Fixes, matchups and quiz)
   return (
     <div
       className={clsx(

@@ -21,7 +21,7 @@ export const createMatchupScore = async ({
     .put<
       IEndMatchupRequest,
       AxiosResponse
-    >(`/matches/${id}/update-score`, { params: { matchupId: id }, data: data })
+    >(`/matches/${id}/update-score`, { ...data })
     .then((res) => res.data);
 };
 

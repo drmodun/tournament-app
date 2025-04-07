@@ -1324,6 +1324,7 @@ export const quiz = pgTable('quiz', {
       onDelete: 'cascade',
     })
     .notNull(),
+  isImmediateFeedback: boolean('is_immediate_feedback').default(false),
   isAnonymousAllowed: boolean('is_anonymous_allowed').default(false),
   isRandomizedQuestions: boolean('is_randomized_questions').default(false),
   isRetakeable: boolean('is_retakeable').default(false),

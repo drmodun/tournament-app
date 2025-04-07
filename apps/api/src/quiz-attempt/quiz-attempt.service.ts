@@ -31,7 +31,6 @@ export class QuizAttemptService {
   async create(
     createQuizAttemptDto: CreateQuizAttemptRequest & { userId: number },
   ) {
-    // First, check if the quiz exists
     const quiz = await this.quizService.findOne(createQuizAttemptDto.quizId);
 
     if (!quiz) {
@@ -40,14 +39,12 @@ export class QuizAttemptService {
       );
     }
 
-    // Check if the quiz allows anonymous users if this is not a logged-in user
     if (!quiz.isAnonymousAllowed && !createQuizAttemptDto.userId) {
       throw new ForbiddenException(
         'This quiz does not allow anonymous attempts',
       );
     }
 
-    // Check if there's already an open attempt for this user and quiz
     const existingAttempt = await this.repository.getQuizAttemptForUser(
       createQuizAttemptDto.userId,
       createQuizAttemptDto.quizId,
@@ -57,7 +54,6 @@ export class QuizAttemptService {
       return existingAttempt;
     }
 
-    // Create a new attempt
     const attempt = await this.repository.createQuizAttempt(
       createQuizAttemptDto.userId,
       createQuizAttemptDto.quizId,

@@ -32,6 +32,9 @@ export interface IQuizResponseExtended extends IQuizResponse {
   createdAt: Date | string;
   updatedAt: Date | string;
   passingRate: number;
+  maxAttempts: number;
+  isRandomizedQuestions: boolean;
+  isTest: boolean;
   questions: IQuizQuestionWithStatistics[];
 }
 

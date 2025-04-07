@@ -11,11 +11,13 @@ import {
 import { QueryParticipationDto } from './dto/requests.dto';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { TournamentParticipantArgument } from './types';
+import { RosterService } from 'src/roster/roster.service';
 
 @Injectable()
 export class ParticipationService {
   constructor(
     private readonly participationRepository: ParticipationDrizzleRepository,
+    private readonly rosterService: RosterService,
   ) {}
 
   async create(
@@ -33,6 +35,13 @@ export class ParticipationService {
       userId,
       groupId,
     });
+
+    if (userId) {
+      await this.rosterService.createForSinglePlayer(
+        tournamentId,
+        action[0].id as number,
+      );
+    }
 
     if (!action[0]) {
       throw new BadRequestException('Failed to create participation');

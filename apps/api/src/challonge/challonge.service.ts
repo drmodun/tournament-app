@@ -178,14 +178,19 @@ export class ChallongeService {
     tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
-    const response: AxiosResponse<{ data: IChallongeMatch }> =
-      await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches/${id}.json`,
-        updateMatchupDto,
-        this.injectHeaders(),
-      );
+    try {
+      const response: AxiosResponse<{ data: IChallongeMatch }> =
+        await this.httpService.axiosRef.put(
+          `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches/${id}.json`,
+          updateMatchupDto,
+          this.injectHeaders(),
+        );
 
-    return response.data.data;
+      return response.data.data;
+    } catch (error) {
+      this.logger.error('Failed to update matchup:', error);
+      throw error;
+    }
   }
 
   async updateMatchup(

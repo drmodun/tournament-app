@@ -24,10 +24,10 @@ export class CreateQuizAnswerRequest {
   @IsInt()
   quizQuestionId: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
-  @IsNotEmpty()
-  answer: string;
+  @IsOptional()
+  answer?: string;
 
   @ApiPropertyOptional({
     description: 'Selected option ID for multiple choice questions',

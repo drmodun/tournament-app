@@ -111,7 +111,7 @@ export class QuizDrizzleRepository extends PrimaryRepository<
           startDate: quiz.startDate,
           timeLimitTotal: quiz.timeLimitTotal,
           passingScore: quiz.passingScore,
-          isRetakable: quiz.isRetakeable,
+          isRetakeable: quiz.isRetakeable,
           isAnonymousAllowed: quiz.isAnonymousAllowed,
           description: quiz.description,
           matchupId: quiz.matchupId,

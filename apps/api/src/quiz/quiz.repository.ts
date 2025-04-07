@@ -128,6 +128,9 @@ export class QuizDrizzleRepository extends PrimaryRepository<
           averageScore: sql`(SELECT AVG(score) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id})`,
           medianScore: sql`(SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY score) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id})`,
           passingRate: sql`(SELECT COUNT(*) * 100.0 / NULLIF(COUNT(*), 0) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id} AND quiz_attempt.score >= ${quiz.passingScore})`,
+          isRandomizedQuestions: quiz.isRandomizedQuestions,
+          isImmediateFeedback: quiz.isImmediateFeedback,
+          isTest: quiz.isTest,
           questions: sql`ARRAY_AGG(DISTINCT JSONB_BUILD_OBJECT(
             'id', ${quizQuestion.id}, 
             'name', ${quizQuestion.question}, 

@@ -59,6 +59,7 @@ export class MatchesService {
               };
             },
           );
+
           await this.challongeService.updateMatchup(
             matchup.matchup.challongeMatchupId?.toString(),
             stage.challongeTournamentId?.toString(),

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   roster,
   user,
@@ -287,6 +287,27 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       return { rosterId: rosterId?.[0]?.id };
     });
     return transaction;
+  }
+
+  createForSinglePlayer(participationId: number, tournamentId: number) {
+    const res = db.transaction(async (tx) => {
+      const stages = await tx.query.stage.findMany({
+        where: eq(stage.tournamentId, tournamentId),
+      });
+
+      if (stages.length === 0) {
+        throw new NotFoundException('Stage not found');
+      }
+
+      const rosterId = await tx
+        .insert(roster)
+        .values(stages.map((stage) => ({ participationId, stageId: stage.id })))
+        .returning({ id: roster.id });
+
+      return rosterId;
+    });
+
+    return res;
   }
 
   async updateWithPlayers(id: number, { members }: ICreateRosterRequest) {

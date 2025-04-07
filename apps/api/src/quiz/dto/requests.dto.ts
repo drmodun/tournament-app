@@ -43,13 +43,6 @@ export class CreateQuizRequest implements CreateQuizDto {
   passingScore?: number | null;
 
   @ApiPropertyOptional()
-  @IsNumber()
-  @Transform(({ value }) => parseInt(value))
-  @IsOptional()
-  @Min(1)
-  maxAttempts?: number | null;
-
-  @ApiPropertyOptional()
   @Transform(({ value }) => (value ? value === 'true' : undefined))
   @IsBoolean()
   @IsOptional()

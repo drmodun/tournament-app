@@ -1,0 +1,1 @@
+ALTER TABLE "quiz" ADD COLUMN "is_immediate_feedback" boolean DEFAULT false;

@@ -49,7 +49,7 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
         return query
           .leftJoin(quiz, eq(quizAttempt.quizId, quiz.id))
           .leftJoin(user, eq(quizAttempt.userId, user.id))
-          .groupBy(quizAttempt.id);
+          .groupBy(quizAttempt.id, quiz.id);
 
       case QuizAttemptResponsesEnum.WITH_ANSWERS:
         return query
@@ -61,7 +61,7 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
             eq(quizAnswer.quizQuestionId, quizQuestion.id),
           )
           .leftJoin(quizOption, eq(quizAnswer.selectedOptionId, quizOption.id))
-          .groupBy(quizAttempt.id);
+          .groupBy(quizAttempt.id, quiz.id, quizAnswer.id);
 
       default:
         return this.conditionallyJoin(query, QuizAttemptResponsesEnum.BASE);
@@ -109,6 +109,8 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
             'passingScore', ${quiz.passingScore}
           )`,
         };
+
+      //TODO: test some otehr stuff in terms of consistency etc.
       case QuizAttemptResponsesEnum.WITH_ANSWERS:
         return {
           ...this.getMappingObject(QuizAttemptResponsesEnum.BASE),
@@ -340,6 +342,8 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     return result[0];
   }
 
+  // TODO: auth forbid some types of returns, forbid multiple retakes if they are false
+
   async updateAnswer(
     answerId: number,
     userId: number,
@@ -489,7 +493,7 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
       .where(eq(quizAttempt.userId, userId))
       .limit(limit)
       .offset(offset)
-      .groupBy(quizAttempt.id);
+      .groupBy(quizAttempt.id, quiz.id);
 
     return await query;
   }

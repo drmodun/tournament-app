@@ -32,6 +32,7 @@ import {
   desc,
   aliasedTable,
   count,
+  isNotNull,
 } from 'drizzle-orm';
 import * as tables from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
@@ -84,12 +85,16 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
             return eq(matchup.stageId, value as number);
           case 'round':
             return eq(matchup.round, value as number);
+          case 'rosterId':
+            return eq(roster.id, value as number);
           case 'isFinished':
             return eq(matchup.isFinished, value as boolean);
           case 'challongeMatchupId':
             return value === null
               ? isNull(matchup.challongeMatchupId)
               : eq(matchup.challongeMatchupId, value as string);
+          case 'hasChallongeId':
+            return isNotNull(matchup.challongeMatchupId);
           default:
             return undefined;
         }
@@ -394,7 +399,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       );
     return result.length > 0;
   }
-
+  // TODO: remove consle logs
   async getManagedMatchups(
     userId: number,
     query?: QueryMatchupRequestDto,
@@ -476,15 +481,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       )
       .where(
         and(
-          query?.stageId ? eq(matchup.stageId, query.stageId) : undefined,
-          query?.round ? eq(matchup.round, query.round) : undefined,
-          query?.isFinished
-            ? eq(matchup.isFinished, query.isFinished)
-            : undefined,
-          query?.challongeMatchupId
-            ? eq(matchup.challongeMatchupId, query.challongeMatchupId)
-            : undefined,
-          query?.rosterId ? eq(roster.id, query.rosterId) : undefined,
+          ...this.getValidWhereClause(query),
           or(
             and(
               eq(tables.groupToUser.userId, userId),

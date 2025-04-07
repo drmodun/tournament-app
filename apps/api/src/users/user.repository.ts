@@ -63,15 +63,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
         return query
           .leftJoin(follower, eq(user.id, follower.userId))
           .groupBy(user.id);
-
-      case UserResponsesEnum.ADMIN:
-        return query
-          .leftJoin(follower, eq(user.id, follower.userId))
-          .leftJoin(
-            alias(follower, 'followingAlias'),
-            eq(user.id, follower.followerId),
-          )
-          .groupBy(user.id);
       default:
         return query;
     }
@@ -113,15 +104,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
           createdAt: user.createdAt,
         };
       case UserResponsesEnum.ADMIN:
-        return {
-          ...this.getMappingObject(UserResponsesEnum.EXTENDED),
-          password: user.password,
-          role: user.role,
-          passwordResetToken: user.passwordResetToken,
-          passwordResetTokenExpiresAt: user.passwordResetTokenExpiresAt,
-          emailConfirmationToken: user.emailConfirmationToken,
-          sseToken: user.sseToken,
-        };
+        return null;
       case UserDtosEnum.VALIDATED:
         return {
           id: user.id,

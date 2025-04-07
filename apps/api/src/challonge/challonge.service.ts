@@ -198,6 +198,7 @@ export class ChallongeService {
     tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
+    console.log('updateMatchupDto', updateMatchupDto);
     return this.executeFunctionWithRetry(() =>
       this.updateMatchupFunction(id, tournamentId, updateMatchupDto),
     );

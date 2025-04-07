@@ -38,7 +38,7 @@ export class QuizResponse implements IQuizResponse {
   passingScore?: number | null;
 
   @ApiResponseProperty()
-  isRetakable: boolean;
+  isRetakeable: boolean;
 
   @ApiResponseProperty()
   isAnonymousAllowed?: boolean;

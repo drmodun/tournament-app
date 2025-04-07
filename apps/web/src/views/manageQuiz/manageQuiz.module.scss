@@ -1,0 +1,82 @@
+@use "../../styles/" as *;
+
+.coverImage {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  border-radius: $borderRadius;
+  object-fit: cover;
+}
+
+.quizTop {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+}
+
+.property {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.timeLimit {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.userCard {
+  padding: $padding;
+  border-radius: $borderRadius;
+
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+
+  text-decoration: none;
+}
+
+.quizBottom {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.quizzes {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.questionsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.questionWrapper {
+  padding: $padding;
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  border-radius: $borderRadius;
+}
+.optionWrapper,
+.questionBottom {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.questionProperty {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.questionTop {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+}

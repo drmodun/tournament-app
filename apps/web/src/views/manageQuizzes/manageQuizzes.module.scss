@@ -1,0 +1,49 @@
+@use "../../styles/" as *;
+
+.coverImage {
+  width: $baseComponentHeight;
+  height: $baseComponentHeight;
+  border-radius: $borderRadius;
+  object-fit: cover;
+}
+
+.quizTop {
+  display: flex;
+  align-items: center;
+  gap: $padding;
+}
+
+.property {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.timeLimit {
+  display: flex;
+  align-items: center;
+  gap: $halfPadding;
+}
+
+.userCard {
+  padding: $padding;
+  border-radius: $borderRadius;
+
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+
+  text-decoration: none;
+}
+
+.quizBottom {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.quizzes {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}

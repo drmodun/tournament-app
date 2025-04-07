@@ -12,8 +12,8 @@ import { AxiosResponse } from "axios";
 
 export const getDetailedQuiz = async (id: number) => {
   return clientApi
-    .get<never, AxiosResponse<IQuizResponseExtended>>(`/quiz/detailed/${id}`)
-    .then((res) => res.data);
+    .get<never, AxiosResponse<IQuizResponseExtended[]>>(`/quiz/detailed/${id}`)
+    .then((res) => res.data?.[0] ?? undefined);
 };
 
 export const useDetailedQuiz = (id: number | undefined) => {

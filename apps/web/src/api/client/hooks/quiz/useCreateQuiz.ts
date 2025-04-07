@@ -18,7 +18,7 @@ export const useCreateQuiz = () => {
   return useMutation({
     mutationFn: createQuiz,
     onSuccess: async (data) => {
-      toast.addToast("Quiz created successfully", "success");
+      toast.addToast("quiz created successfully", "success");
       await queryClient.invalidateQueries({
         predicate: (query) =>
           query.queryKey.includes("quizzes") ||
@@ -29,17 +29,17 @@ export const useCreateQuiz = () => {
     onError: (error: any) => {
       if (error.response?.status === 413) {
         toast.addToast(
-          "Image too large, please select an image under 2MB",
+          "image too large, please select an image under 2MB",
           "error",
         );
       } else {
-        toast.addToast(error.message ?? "Failed to create quiz", "error");
+        toast.addToast(error.message ?? "failed to create quiz", "error");
       }
       console.error(error);
       return false;
     },
     onMutate: () => {
-      toast.addToast("Creating quiz...", "info");
+      toast.addToast("creating quiz...", "info");
     },
   });
 };

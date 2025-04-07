@@ -77,95 +77,99 @@ export default function ManagedUserManagedMatchups() {
         )}
       >
         {data &&
-          data.pages.map((page) => {
-            return page.flatMap((elem: IMatchupsWithMiniRostersResponse) => {
-              return (
-                <div
-                  key={elem.id}
-                  className={clsx(
-                    styles.matchupCard,
-                    globals[`${theme}BackgroundColor`],
-                  )}
-                >
-                  <div className={styles.matchupWrapper}>
-                    {elem.rosters.map((roster, index) => {
-                      return (
-                        <>
-                          <div
-                            key={roster.id}
-                            className={clsx(styles.rosterWrapper)}
-                          >
-                            <h3>
-                              {roster?.participation?.group?.name ??
-                                roster?.participation?.user?.username}
-                            </h3>
-                            {roster.players.map((player) => {
-                              return (
-                                <div
-                                  key={player?.user?.id}
-                                  className={styles.playerWrapper}
+          (data.pages[0].length === 0 ? (
+            <p className={globals[`${theme}Color`]}>you manage no matchups!</p>
+          ) : (
+            data.pages.map((page) => {
+              return page.flatMap((elem: IMatchupsWithMiniRostersResponse) => {
+                return (
+                  <div
+                    key={elem.id}
+                    className={clsx(
+                      styles.matchupCard,
+                      globals[`${theme}BackgroundColor`],
+                    )}
+                  >
+                    <div className={styles.matchupWrapper}>
+                      {elem.rosters.map((roster, index) => {
+                        return (
+                          <>
+                            <div
+                              key={roster.id}
+                              className={clsx(styles.rosterWrapper)}
+                            >
+                              <h3>
+                                {roster?.participation?.group?.name ??
+                                  roster?.participation?.user?.username}
+                              </h3>
+                              {roster.players.map((player) => {
+                                return (
+                                  <div
+                                    key={player?.user?.id}
+                                    className={styles.playerWrapper}
+                                  >
+                                    <p>{player.user?.username}</p>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            {index % 2 == 0 &&
+                              elem.rosters.length > index + 1 && (
+                                <p
+                                  className={clsx(
+                                    globals[`${textColorTheme}Color`],
+                                    styles.versus,
+                                  )}
                                 >
-                                  <p>{player.user?.username}</p>
-                                </div>
-                              );
-                            })}
-                          </div>
-                          {index % 2 == 0 &&
-                            elem.rosters.length > index + 1 && (
-                              <p
-                                className={clsx(
-                                  globals[`${textColorTheme}Color`],
-                                  styles.versus,
-                                )}
-                              >
-                                vs
-                              </p>
-                            )}
-                        </>
-                      );
-                    })}
+                                  vs
+                                </p>
+                              )}
+                          </>
+                        );
+                      })}
+                    </div>
+                    <div className={styles.details}>
+                      {elem.startDate && (
+                        <Chip
+                          variant="secondary"
+                          label={formatDateTime(new Date(elem.startDate))}
+                        />
+                      )}
+                      {elem.isFinished && (
+                        <Chip
+                          variant="primary"
+                          label={elem.isFinished ? "finished" : "in progress"}
+                        />
+                      )}
+                      {elem.matchupType && (
+                        <Chip
+                          variant="primary"
+                          label={
+                            elem.matchupType === "ONE_VS_ONE"
+                              ? "1v1"
+                              : "free for all"
+                          }
+                        />
+                      )}
+                    </div>
+                    <div className={styles.actions}>
+                      <Button
+                        onClick={() => {
+                          setActive(elem);
+                          setDialogActive(true);
+                        }}
+                        variant="warning"
+                        style={{ color: "white" }}
+                        className={styles.submitButton}
+                      >
+                        manage matchup
+                      </Button>
+                    </div>
                   </div>
-                  <div className={styles.details}>
-                    {elem.startDate && (
-                      <Chip
-                        variant="secondary"
-                        label={formatDateTime(new Date(elem.startDate))}
-                      />
-                    )}
-                    {elem.isFinished && (
-                      <Chip
-                        variant="primary"
-                        label={elem.isFinished ? "finished" : "in progress"}
-                      />
-                    )}
-                    {elem.matchupType && (
-                      <Chip
-                        variant="primary"
-                        label={
-                          elem.matchupType === "ONE_VS_ONE"
-                            ? "1v1"
-                            : "free for all"
-                        }
-                      />
-                    )}
-                  </div>
-                  <div className={styles.actions}>
-                    <Button
-                      onClick={() => {
-                        setActive(elem);
-                        setDialogActive(true);
-                      }}
-                      variant="warning"
-                      style={{ color: "white" }}
-                      className={styles.submitButton}
-                    >
-                      manage matchup
-                    </Button>
-                  </div>
-                </div>
-              );
-            });
-          })}
+                );
+              });
+            })
+          ))}
       </div>
     </div>
   );

@@ -119,6 +119,7 @@ export default function Input({
                 {...methods.register(name, {
                   required: required,
                   onChange: handleChange,
+                  valueAsNumber: type === "number",
                   ...reactFormHookProps,
                 })}
               />
@@ -130,7 +131,7 @@ export default function Input({
             value={
               (controlledValue ?? value) == ""
                 ? defaultValue
-                : controlledValue ?? value
+                : (controlledValue ?? value)
             }
             placeholder={placeholder}
             className={clsx(

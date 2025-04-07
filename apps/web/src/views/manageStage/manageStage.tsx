@@ -68,16 +68,6 @@ export default function ManageStages(stage?: {
 
   const startStageMutation = useStartStage();
 
-  useEffect(() => {
-    console.log(data, tData, userData);
-    console.log(
-      data?.role,
-      tData?.creator.id,
-      userData?.id,
-      tData?.creator.id == userData?.id,
-    );
-  }, [data, tData, userData]);
-
   return (
     <div
       className={clsx(

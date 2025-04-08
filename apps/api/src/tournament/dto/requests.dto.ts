@@ -39,8 +39,6 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   description: string;
 
   @IsString()
-  @MinLength(2)
-  @MaxLength(2)
   @ApiProperty()
   country: string;
 
@@ -164,8 +162,6 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
 
   @IsOptional()
   @IsString()
-  @MinLength(2)
-  @MaxLength(2)
   @ApiPropertyOptional()
   country?: string;
 

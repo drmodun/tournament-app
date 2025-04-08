@@ -330,11 +330,11 @@ export class RosterDrizzleRepository extends PrimaryRepository<
           )
           .returning({ id: roster.id }));
 
-      participations.length > 0 &&
+      rosterId?.length > 0 &&
         (await tx.insert(userToRoster).values(
           participations.map((participation, index) => ({
             userId: participation.userId,
-            rosterId: rosterId[index].id,
+            rosterId: rosterId?.[index]?.id,
           })),
         ));
 

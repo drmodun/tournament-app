@@ -57,7 +57,7 @@ export default function ManageQuiz({ id }: { id: number }) {
                     {Math.floor(
                       (quiz.timeLimitTotal -
                         Math.floor(quiz.timeLimitTotal / 3600) * 3600) /
-                        60
+                        60,
                     )}{" "}
                     min
                   </p>
@@ -67,7 +67,7 @@ export default function ManageQuiz({ id }: { id: number }) {
                       Math.floor(
                         (quiz.timeLimitTotal -
                           Math.floor(quiz.timeLimitTotal / 3600) * 3600) /
-                          60
+                          60,
                       ) *
                         60}{" "}
                     s
@@ -140,7 +140,7 @@ export default function ManageQuiz({ id }: { id: number }) {
                         className={clsx(
                           styles.questionWrapper,
                           globals[`${textColorTheme}BackgroundColor`],
-                          globals[`${theme}Color`]
+                          globals[`${theme}Color`],
                         )}
                       >
                         <div className={styles.questionTop}>

@@ -89,7 +89,7 @@ export default function AddQuestionForm({
   const handleChangeTimeLimit = (
     seconds: number,
     minutes: number,
-    hours: number
+    hours: number,
   ) => {
     let val: number = 0;
     if (!isNaN(hours)) val += hours * 3600;
@@ -180,7 +180,7 @@ export default function AddQuestionForm({
                           styles.option,
                           isCorrect
                             ? globals.primaryBackgroundColor
-                            : globals[`${theme}BackgroundColor`]
+                            : globals[`${theme}BackgroundColor`],
                         )}
                       >
                         <p
@@ -210,7 +210,7 @@ export default function AddQuestionForm({
                               variant="warning"
                               onClick={() =>
                                 setCorrect((prev) =>
-                                  prev.filter((elem) => elem !== answer)
+                                  prev.filter((elem) => elem !== answer),
                                 )
                               }
                               className={styles.actionButton}
@@ -225,12 +225,12 @@ export default function AddQuestionForm({
                             onClick={() => {
                               if (isCorrect) {
                                 setCorrect((prev) =>
-                                  prev.filter((elem) => elem !== answer)
+                                  prev.filter((elem) => elem !== answer),
                                 );
                               }
 
                               setOptions((prev) =>
-                                prev.filter((elem) => elem != answer)
+                                prev.filter((elem) => elem != answer),
                               );
                             }}
                             className={styles.actionButton}
@@ -265,7 +265,7 @@ export default function AddQuestionForm({
                       <div
                         className={clsx(
                           styles.shortAnswer,
-                          globals[`${theme}BackgroundColor`]
+                          globals[`${theme}BackgroundColor`],
                         )}
                       >
                         <p className={globals[`${theme}BackgroundColor`]}>
@@ -294,7 +294,7 @@ export default function AddQuestionForm({
                 handleChangeTimeLimit(
                   seconds,
                   minutes,
-                  e.currentTarget.valueAsNumber
+                  e.currentTarget.valueAsNumber,
                 );
               }}
               fullClassName={styles.timeLimitInput}
@@ -308,7 +308,7 @@ export default function AddQuestionForm({
                 handleChangeTimeLimit(
                   seconds,
                   e.currentTarget.valueAsNumber,
-                  hours
+                  hours,
                 );
               }}
               min="0"
@@ -324,7 +324,7 @@ export default function AddQuestionForm({
                 handleChangeTimeLimit(
                   e.currentTarget.valueAsNumber,
                   minutes,
-                  hours
+                  hours,
                 );
               }}
               min="0"

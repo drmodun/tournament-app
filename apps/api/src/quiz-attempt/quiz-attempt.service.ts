@@ -70,6 +70,12 @@ export class QuizAttemptService {
   async findAll<TResponseType extends IQuizAttemptResponse>(
     query: QuizAttemptQuery,
   ): Promise<TResponseType[]> {
+    if (query?.responseType === QuizAttemptResponsesEnum.WITH_ANSWERS) {
+      throw new BadRequestException(
+        'Cannot fetch attempts with answers, use getMyAttempts instead',
+      );
+    }
+
     const { responseType = QuizAttemptResponsesEnum.BASE, ...queryParams } =
       query;
 
@@ -195,5 +201,19 @@ export class QuizAttemptService {
     const quiz = await this.quizService.findOne(quizId);
 
     return quiz.isRetakeable;
+  }
+
+  async getQuizLeaderboard(quizId: number, pagination?: PaginationOnly) {
+    const quiz = await this.quizService.findOne(quizId);
+    if (!quiz) {
+      throw new NotFoundException(`Quiz with ID ${quizId} not found`);
+    }
+
+    const leaderboard = await this.repository.getQuizLeaderboard(
+      quizId,
+      pagination,
+    );
+
+    return leaderboard;
   }
 }

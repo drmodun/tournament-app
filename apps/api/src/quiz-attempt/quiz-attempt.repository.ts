@@ -524,4 +524,54 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
 
     return await query;
   }
+
+  async getQuizLeaderboard(
+    quizId: number,
+    pagination?: PaginationOnly,
+  ): Promise<any> {
+    const limit = pagination?.pageSize || 10;
+    const offset = pagination?.page ? (pagination.page - 1) * limit : 0;
+
+    const query = db
+      .select({
+        id: quizAttempt.id,
+        userId: quizAttempt.userId,
+        score: quizAttempt.score,
+        endTime: quizAttempt.endTime,
+        createdAt: quizAttempt.createdAt,
+        userName: user.name,
+        userProfilePicture: user.profilePicture,
+        rank: sql<number>`ROW_NUMBER() OVER (ORDER BY ${quizAttempt.score} DESC, ${quizAttempt.endTime} ASC)`,
+      })
+      .from(quizAttempt)
+      .leftJoin(user, eq(quizAttempt.userId, user.id))
+      .where(
+        and(eq(quizAttempt.quizId, quizId), eq(quizAttempt.isSubmitted, true)),
+      )
+      .orderBy(sql`${quizAttempt.score} DESC, ${quizAttempt.endTime} ASC`)
+      .limit(limit)
+      .offset(offset);
+
+    const results = await query;
+
+    const countQuery = db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(quizAttempt)
+      .where(
+        and(eq(quizAttempt.quizId, quizId), eq(quizAttempt.isSubmitted, true)),
+      );
+
+    const countResult = await countQuery;
+    const totalCount = countResult[0]?.count || 0;
+
+    return {
+      results,
+      metadata: {
+        total: totalCount,
+        page: pagination?.page || 1,
+        pageSize: limit,
+        totalPages: Math.ceil(totalCount / limit),
+      },
+    };
+  }
 }

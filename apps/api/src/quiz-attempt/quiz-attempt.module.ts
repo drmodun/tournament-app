@@ -4,7 +4,6 @@ import { QuizAttemptService } from './quiz-attempt.service';
 import { QuizAttemptDrizzleRepository } from './quiz-attempt.repository';
 import { QuizModule } from '../quiz/quiz.module';
 import { CanAccessAttemptGuard } from './guards/can-access-attempt.guard';
-import { QuizAttemptValidationGuard } from './guards/quiz-attempt-validation.guard';
 
 @Module({
   imports: [QuizModule],
@@ -13,7 +12,6 @@ import { QuizAttemptValidationGuard } from './guards/quiz-attempt-validation.gua
     QuizAttemptService,
     QuizAttemptDrizzleRepository,
     CanAccessAttemptGuard,
-    QuizAttemptValidationGuard,
   ],
   exports: [QuizAttemptService],
 })

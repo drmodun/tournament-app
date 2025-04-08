@@ -20,6 +20,7 @@ import {
   QuizAnswerResponse,
   QuizAttemptResponse,
   QuizAttemptWithAnswersResponse,
+  QuizLeaderboardResponse,
 } from './dto/responses.dto';
 import {
   ApiBearerAuth,
@@ -42,12 +43,14 @@ import { PaginationOnly } from 'src/base/query/baseQuery';
 import { QuizAttemptService } from './quiz-attempt.service';
 import { CanAccessAttemptGuard } from './guards/can-access-attempt.guard';
 import { CanAttemptGuard } from './guards/can-attempt.guard';
+import { CanSubmitAnswerGuard } from './guards/can-submit-answer.guard';
 
 @ApiTags('quiz-attempt')
 @ApiExtraModels(
   QuizAttemptResponse,
   QuizAttemptWithAnswersResponse,
   QuizAnswerResponse,
+  QuizLeaderboardResponse,
 )
 @Controller('quiz-attempt')
 export class QuizAttemptController {
@@ -155,7 +158,7 @@ export class QuizAttemptController {
   }
 
   @Post('/answers/:attemptId/:questionId')
-  @UseGuards(JwtAuthGuard, CanAccessAttemptGuard)
+  @UseGuards(JwtAuthGuard, CanSubmitAnswerGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new answer for a quiz attempt',
@@ -175,7 +178,7 @@ export class QuizAttemptController {
   }
 
   @Put('answers/:attemptId/:answerId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, CanSubmitAnswerGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates an answer',
@@ -191,5 +194,18 @@ export class QuizAttemptController {
       user.id,
       updateAnswerDto,
     );
+  }
+
+  @Get('leaderboard/:quizId')
+  @ApiOkResponse({
+    description:
+      'Returns a leaderboard of users who have completed the quiz, sorted by score and time',
+    type: QuizLeaderboardResponse,
+  })
+  async getQuizLeaderboard(
+    @Param('quizId', ParseIntPipe) quizId: number,
+    @Query() pagination: PaginationOnly,
+  ) {
+    return await this.quizAttemptService.getQuizLeaderboard(quizId, pagination);
   }
 }

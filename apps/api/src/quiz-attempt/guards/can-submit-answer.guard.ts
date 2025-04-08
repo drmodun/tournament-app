@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
@@ -39,14 +38,7 @@ export class CanSubmitAnswerGuard implements CanActivate {
   }
 
   async checkForPostAttempt(attemptId: number, questionId: number) {
-    const attempt = await this.quizAttemptService.checkIfAnswerExists(
-      attemptId,
-      questionId,
-    );
-
-    if (attempt) {
-      throw new BadRequestException('Answer already exists');
-    }
+    await this.quizAttemptService.checkIfAnswerExists(attemptId, questionId);
   }
 
   async checkForPutAttempt(answerId: number) {

@@ -295,10 +295,6 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         where: eq(stage.tournamentId, tournamentId),
       });
 
-      if (stages.length === 0) {
-        throw new NotFoundException('Stage not found');
-      }
-
       const rosterId = await tx
         .insert(roster)
         .values(stages.map((stage) => ({ participationId, stageId: stage.id })))

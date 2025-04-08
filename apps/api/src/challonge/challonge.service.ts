@@ -61,6 +61,7 @@ export class ChallongeService {
     createTournamentDto: ICreateChallongeTournamentRequest,
   ) {
     try {
+      console.log('createTournamentDto', createTournamentDto);
       const response: AxiosResponse<{ data: IChallongeTournament }> =
         await this.httpService.axiosRef.post(
           'https://api.challonge.com/v2/application/tournaments.json',

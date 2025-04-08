@@ -29,6 +29,7 @@ import {
   CreateQuizAnswerRequest,
   UpdateQuizAnswerRequest,
 } from './dto/requests.dto';
+import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 
 @Injectable()
 export class QuizAttemptDrizzleRepository extends PrimaryRepository<
@@ -436,6 +437,32 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     }
 
     return result[0];
+  }
+
+  async checkIfAnswerIsFinal(answerId: number): Promise<boolean> {
+    const answerData = await db
+      .select({ isFinal: quizAnswer.isFinal })
+      .from(quizAnswer)
+      .where(eq(quizAnswer.id, answerId));
+
+    return answerData[0].isFinal;
+  }
+
+  async getAnswer(
+    attemptId: number,
+    quizQuestionId: number,
+  ): Promise<ActionResponsePrimary[]> {
+    const answerData = await db
+      .select({ id: quizAnswer.id })
+      .from(quizAnswer)
+      .where(
+        and(
+          eq(quizAnswer.quizAttemptId, attemptId),
+          eq(quizAnswer.quizQuestionId, quizQuestionId),
+        ),
+      );
+
+    return answerData;
   }
 
   async calculateAttemptScore(

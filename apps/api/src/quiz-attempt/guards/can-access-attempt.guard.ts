@@ -4,7 +4,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { QuizAttemptService } from '../quiz-attempt.service';
 
 @Injectable()

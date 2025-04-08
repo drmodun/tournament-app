@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import {
   CreateQuizAnswerRequest,
-  CreateQuizAttemptRequest,
   SubmitQuizAttemptRequest,
   QuizAttemptQuery,
   UpdateQuizAnswerRequest,
@@ -30,6 +29,7 @@ import {
 } from '@nestjs/swagger';
 import { quizAttemptExamples } from './dto/examples';
 import {
+  CreateQuizAttemptDto,
   IQueryMetadata,
   QuizAttemptResponsesEnum,
 } from '@tournament-app/types';
@@ -41,6 +41,7 @@ import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { QuizAttemptService } from './quiz-attempt.service';
 import { CanAccessAttemptGuard } from './guards/can-access-attempt.guard';
+import { CanAttemptGuard } from './guards/can-attempt.guard';
 
 @ApiTags('quiz-attempt')
 @ApiExtraModels(
@@ -117,20 +118,22 @@ export class QuizAttemptController {
     return await this.quizAttemptService.findOne(id, responseType);
   }
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
+  @Post(':quizId')
+  @UseGuards(JwtAuthGuard, CanAttemptGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new quiz attempt',
     type: ActionResponsePrimary,
   })
   async create(
-    @Body() createQuizAttemptDto: CreateQuizAttemptRequest,
+    @Body() createQuizAttemptDto: CreateQuizAttemptDto,
+    @Param('quizId', ParseIntPipe) quizId: number,
     @CurrentUser() user: ValidatedUserDto,
   ) {
     return await this.quizAttemptService.create({
       ...createQuizAttemptDto,
       userId: user.id,
+      quizId,
     });
   }
 
@@ -151,7 +154,7 @@ export class QuizAttemptController {
     );
   }
 
-  @Post(':attemptId/answers')
+  @Post('/answers/:attemptId/:questionId')
   @UseGuards(JwtAuthGuard, CanAccessAttemptGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
@@ -160,17 +163,18 @@ export class QuizAttemptController {
   })
   async createAnswer(
     @Param('attemptId', ParseIntPipe) attemptId: number,
+    @Param('questionId', ParseIntPipe) questionId: number,
     @Body() createAnswerDto: CreateQuizAnswerRequest,
     @CurrentUser() user: ValidatedUserDto,
   ) {
-    return await this.quizAttemptService.createAnswer(
+    return await this.quizAttemptService.createAnswer(attemptId, user.id, {
+      ...createAnswerDto,
+      quizQuestionId: questionId,
       attemptId,
-      user.id,
-      createAnswerDto,
-    );
+    });
   }
 
-  @Put('answers/:answerId')
+  @Put('answers/:attemptId/:answerId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({

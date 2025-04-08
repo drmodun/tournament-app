@@ -1,18 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
-export class CreateQuizAttemptRequest {
-  @ApiProperty({ description: 'Quiz ID' })
-  @IsInt()
-  quizId: number;
-}
-
 export class SubmitQuizAttemptRequest {
   @ApiProperty()
   @IsBoolean()
@@ -20,10 +8,6 @@ export class SubmitQuizAttemptRequest {
 }
 
 export class CreateQuizAnswerRequest {
-  @ApiProperty()
-  @IsInt()
-  quizQuestionId: number;
-
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
@@ -35,6 +19,9 @@ export class CreateQuizAnswerRequest {
   @IsOptional()
   @IsInt()
   selectedOptionId?: number;
+
+  quizQuestionId?: number;
+  attemptId?: number;
 }
 
 export class UpdateQuizAnswerRequest {

@@ -1,3 +1,7 @@
 export interface CreateQuizAttemptDto {
-  quizId: number;
+  quizId?: number;
+}
+
+export interface SubmitQuizAttemptDto {
+  isSubmitted?: boolean;
 }

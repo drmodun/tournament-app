@@ -172,7 +172,6 @@ export class QuizDrizzleRepository extends PrimaryRepository<
                 'id', qo.id,
                 'option', qo.option,
                 'isCorrect', qo.is_correct,
-                'count', (SELECT COUNT(*) FROM quiz_answer qaa WHERE qaa.selected_option_id = qo.id)
               ))
               FROM quiz_option qo
               WHERE qo.quiz_question_id = ${quizQuestion.id}

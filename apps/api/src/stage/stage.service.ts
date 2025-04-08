@@ -27,6 +27,7 @@ import { SseNotificationsService } from 'src/infrastructure/sse-notifications/ss
 import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
 import { TemplatesEnum } from 'src/infrastructure/types';
 import { MatchesService } from 'src/matches/matches.service';
+import { RosterService } from 'src/roster/roster.service';
 
 @Injectable()
 export class StageService {
@@ -37,6 +38,7 @@ export class StageService {
     private readonly sseNotificationsService: SseNotificationsService,
     private readonly notificationTemplateFiller: NotificationTemplatesFiller,
     private readonly matchesService: MatchesService,
+    private readonly rosterService: RosterService,
   ) {}
 
   async create(createStageDto: ICreateStageDto) {
@@ -47,6 +49,10 @@ export class StageService {
     if (!stage[0]) {
       throw new UnprocessableEntityException('Stage creation failed');
     }
+
+    await this.rosterService.createForSinglePlayerForNewStage(
+      stage[0].id as number,
+    );
 
     try {
       const stageId = await this.createChallongeTournament(
@@ -100,6 +106,13 @@ export class StageService {
   async getManagedStages(userId: number, pagination?: PaginationOnly) {
     const stages = await this.repository.getManagedStages(userId, pagination);
     return stages;
+  }
+
+  async createForSinglePlayer(stageId: number, tournamentId: number) {
+    const stage: IStageResponse = await this.findOne(
+      stageId,
+      StageResponsesEnum.BASE,
+    );
   }
 
   async updateChallongeTournament(stageId: number) {

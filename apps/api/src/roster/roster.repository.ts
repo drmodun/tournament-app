@@ -10,7 +10,7 @@ import {
 } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { eq, SQL, desc, asc, inArray, and, or } from 'drizzle-orm';
+import { eq, SQL, desc, asc, inArray, and, or, isNotNull } from 'drizzle-orm';
 import {
   RosterResponsesEnum,
   RosterSortingEnum,
@@ -299,6 +299,42 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         .insert(roster)
         .values(stages.map((stage) => ({ participationId, stageId: stage.id })))
         .returning({ id: roster.id });
+
+      return rosterId;
+    });
+
+    return res;
+  }
+
+  async createForSinglePlayerForNewStage(stageId: number) {
+    const res = db.transaction(async (tx) => {
+      const tournament = await tx.query.stage.findFirst({
+        where: eq(stage.id, stageId),
+      });
+
+      const participations = await tx.query.participation.findMany({
+        where: and(
+          eq(participation.tournamentId, tournament.tournamentId),
+          isNotNull(participation.userId),
+        ),
+      });
+
+      const rosterId = await tx
+        .insert(roster)
+        .values(
+          participations.map((participation) => ({
+            participationId: participation.id,
+            stageId,
+          })),
+        )
+        .returning({ id: roster.id });
+
+      await tx.insert(userToRoster).values(
+        participations.map((participation, index) => ({
+          userId: participation.userId,
+          rosterId: rosterId[index].id,
+        })),
+      );
 
       return rosterId;
     });

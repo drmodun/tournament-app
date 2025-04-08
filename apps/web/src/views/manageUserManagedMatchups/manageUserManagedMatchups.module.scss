@@ -10,6 +10,7 @@
   padding: $padding;
   gap: $padding;
   flex-direction: column;
+  text-decoration: none;
 }
 
 .contentWrapper {
@@ -45,6 +46,7 @@
   align-items: center;
   gap: $halfPadding;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .submitButton {

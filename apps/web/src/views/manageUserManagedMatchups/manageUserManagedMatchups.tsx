@@ -13,13 +13,19 @@ import { formatDateTime } from "utils/mixins/formatting";
 import Chip from "components/chip";
 import Button from "components/button";
 import ManageMatchupForm from "views/manageMatchupForm";
+import { useGetStageMatchups } from "api/client/hooks/matchups/useGetStageMatchups";
+import Link from "next/link";
 
-export default function ManagedUserManagedMatchups() {
+export default function ManagedUserManagedMatchups({
+  stageId,
+}: {
+  stageId?: number;
+}) {
   const [dialogActive, setDialogActive] = useState<boolean>(false);
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { data, fetchNextPage, isFetching, hasNextPage, isFetchNextPageError } =
-    useGetUserManagedMatchups();
+    stageId ? useGetStageMatchups(stageId) : useGetUserManagedMatchups();
 
   const [active, setActive] = useState<IMatchupsWithMiniRostersResponse>();
 
@@ -83,12 +89,14 @@ export default function ManagedUserManagedMatchups() {
             data.pages.map((page) => {
               return page.flatMap((elem: IMatchupsWithMiniRostersResponse) => {
                 return (
-                  <div
+                  <Link
                     key={elem.id}
                     className={clsx(
                       styles.matchupCard,
                       globals[`${theme}BackgroundColor`],
+                      globals[`${textColorTheme}Color`],
                     )}
+                    href={`/manageMatchup/${elem.id}`}
                   >
                     <div className={styles.matchupWrapper}>
                       {elem.rosters.map((roster, index) => {
@@ -137,8 +145,14 @@ export default function ManagedUserManagedMatchups() {
                       )}
                       {elem.isFinished && (
                         <Chip
-                          variant="primary"
+                          variant={textColorTheme}
                           label={elem.isFinished ? "finished" : "in progress"}
+                        />
+                      )}
+                      {elem.round && (
+                        <Chip
+                          variant={textColorTheme}
+                          label={`round ${elem.round}`}
                         />
                       )}
                       {elem.matchupType && (
@@ -154,7 +168,9 @@ export default function ManagedUserManagedMatchups() {
                     </div>
                     <div className={styles.actions}>
                       <Button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
                           setActive(elem);
                           setDialogActive(true);
                         }}
@@ -165,7 +181,7 @@ export default function ManagedUserManagedMatchups() {
                         manage matchup
                       </Button>
                     </div>
-                  </div>
+                  </Link>
                 );
               });
             })

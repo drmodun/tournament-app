@@ -3,6 +3,7 @@
 import {
   groupRoleEnum,
   IExtendedStageResponseWithTournament,
+  stageStatusEnum,
 } from "@tournament-app/types";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
@@ -153,14 +154,17 @@ export default function ManageStages(stage?: {
               data?.role == groupRoleEnum.OWNER ||
               tData?.creator.id == userData?.id) && (
               <>
-                <Button
-                  variant="primary"
-                  onClick={() =>
-                    startStageMutation.mutate(stage?.stage?.id ?? -1)
-                  }
-                  className={styles.actionButton}
-                  label="start stage"
-                />
+                {stage?.stage?.stageStatus !== stageStatusEnum.ONGOING &&
+                  stage?.stage?.stageStatus !== stageStatusEnum.FINISHED && (
+                    <Button
+                      variant="primary"
+                      onClick={() =>
+                        startStageMutation.mutate(stage?.stage?.id ?? -1)
+                      }
+                      className={styles.actionButton}
+                      label="start stage"
+                    />
+                  )}
                 <Button
                   variant="warning"
                   onClick={() => setEditDialogOpen(true)}
@@ -192,7 +196,7 @@ export default function ManageStages(stage?: {
         />
       </Link>
       <Link
-        href={`/manageMatchups/${stage?.stage?.id}`}
+        href={`/manageUserManagedMatchups/${stage?.stage?.id}`}
         className={styles.actionButton}
       >
         <Button

@@ -31,7 +31,7 @@ export const useCheckIfGroupIsParticipating = () => {
   const toast = useToastContext();
 
   return useMutation({
-    mutationKey: ["me", "group"],
+    mutationKey: ["participation", "me", "group"],
     mutationFn: checkIfGroupIsParticipating,
     retryDelay: 5000,
     onSuccess: async (data) => {

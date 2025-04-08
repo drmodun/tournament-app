@@ -29,82 +29,150 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @IsString()
   @MinLength(3)
   @MaxLength(50)
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Name of the tournament',
+    example: 'Summer Championship 2023',
+    minLength: 3,
+    maxLength: 50,
+  })
   name: string;
 
   @IsString()
   @MinLength(10)
   @MaxLength(500)
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Detailed description of the tournament',
+    example:
+      'Annual summer championship tournament with prizes for top 3 teams',
+    minLength: 10,
+    maxLength: 500,
+  })
   description: string;
 
   @IsString()
   @MinLength(2)
   @MaxLength(2)
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Two-letter country code where the tournament is held',
+    example: 'US',
+    minLength: 2,
+    maxLength: 2,
+  })
   country: string;
 
   @IsEnum(tournamentTypeEnum)
-  @ApiProperty({ enum: tournamentTypeEnum })
+  @ApiProperty({
+    description: 'Type of tournament',
+    enum: tournamentTypeEnum,
+    example: 'SINGLE_ELIMINATION',
+  })
   tournamentType: tournamentTypeEnum;
 
   @IsEnum(tournamentLocationEnum)
-  @ApiProperty({ enum: tournamentLocationEnum })
+  @ApiProperty({
+    description: 'Location type of the tournament',
+    enum: tournamentLocationEnum,
+    example: 'ONLINE',
+  })
   location: tournamentLocationEnum;
 
   @IsEnum(tournamentTeamTypeEnum)
-  @ApiProperty({ enum: tournamentTeamTypeEnum })
+  @ApiProperty({
+    description: 'Team type for the tournament',
+    enum: tournamentTeamTypeEnum,
+    example: 'SINGLE',
+  })
   tournamentTeamType: tournamentTeamTypeEnum;
 
   @IsOptional()
   @IsBoolean()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Whether multiple teams per group are allowed',
+    example: false,
+    default: false,
+  })
   isMultipleTeamsPerGroupAllowed?: boolean;
 
   @IsOptional()
   @IsBoolean()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Whether fake players are allowed in the tournament',
+    example: false,
+    default: false,
+  })
   isFakePlayersAllowed?: boolean;
 
   @IsOptional()
   @IsInt()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the parent tournament if this is a sub-tournament',
+    example: 123,
+    nullable: true,
+  })
   parentTournamentId?: number;
 
   @IsOptional()
   @IsInt()
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the conversion rule to apply to this tournament',
+    example: 456,
+    nullable: true,
+  })
   conversionRuleId?: number;
 
   @IsInt()
   @Min(2)
   @Max(1024)
   @Transform(({ value }) => parseInt(value))
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Maximum number of participants allowed in the tournament',
+    example: 64,
+    minimum: 2,
+    maximum: 1024,
+  })
   maxParticipants: number;
 
   @Type(() => Date)
   @IsDate()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Start date and time of the tournament',
+    example: '2023-07-01T10:00:00Z',
+    type: Date,
+  })
   startDate: Date;
 
   @Type(() => Date)
   @IsDate()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'End date and time of the tournament',
+    example: '2023-07-15T18:00:00Z',
+    type: Date,
+  })
   endDate: Date;
 
   @IsBoolean()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Whether the tournament is public or private',
+    example: true,
+    default: true,
+  })
   isPublic: boolean;
 
   @IsBoolean()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Whether the tournament is ranked',
+    example: true,
+    default: true,
+  })
   isRanked: boolean;
 
   @IsInt()
   @Transform(({ value }) => parseInt(value))
-  @ApiProperty()
+  @ApiProperty({
+    description: 'ID of the category this tournament belongs to',
+    example: 789,
+  })
   categoryId: number;
 
   @IsOptional()
@@ -112,7 +180,13 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @Min(0)
   @Max(10000)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Maximum MMR (Matchmaking Rating) allowed for participants',
+    example: 2500,
+    minimum: 0,
+    maximum: 10000,
+    nullable: true,
+  })
   maximumMMR?: number;
 
   @IsOptional()
@@ -120,30 +194,56 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   @Min(0)
   @Max(10000)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Minimum MMR (Matchmaking Rating) required for participants',
+    example: 1000,
+    minimum: 0,
+    maximum: 10000,
+    nullable: true,
+  })
   minimumMMR?: number;
 
+  @ApiProperty({
+    description: 'ID of the user creating the tournament',
+    example: 321,
+  })
   creatorId: number;
 
   @IsOptional()
   @IsInt()
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the affiliated group for this tournament',
+    example: 654,
+    nullable: true,
+  })
   affiliatedGroupId?: number;
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'External links related to the tournament',
+    example: 'https://example.com/tournament-info',
+    nullable: true,
+  })
   links?: string;
 
   @IsOptional()
   @IsInt()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the location where the tournament is held',
+    example: 987,
+    nullable: true,
+  })
   locationId?: number;
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'URL to the tournament logo',
+    example: 'https://example.com/images/tournament-logo.png',
+    nullable: true,
+  })
   logo?: string;
 }
 
@@ -285,103 +385,171 @@ export class TournamentQuery
   extends BaseQuery<TournamentReturnTypesEnumType>
   implements TournamentQueryType
 {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Name of the tournament',
+    example: 'Summer Championship 2023',
+    nullable: true,
+  })
   @IsOptional()
   @IsString()
   name?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Type of the tournament',
+    example: 'SINGLE_ELIMINATION',
+    nullable: true,
+  })
   @IsOptional()
   @IsEnum(tournamentTypeEnum)
   type?: tournamentTypeEnum;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Location of the tournament',
+    example: 'ONLINE',
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => tournamentLocation)
   @IsEnum(tournamentLocationEnum)
   location?: tournamentLocationEnum;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Location ID of the tournament',
+    example: 123,
+    nullable: true,
+  })
   @IsOptional()
   @IsInt()
   @Transform(({ value }) => parseInt(value))
   locationId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Team type of the tournament',
+    example: 'SINGLE',
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => tournamentTeamType)
   @IsEnum(tournamentTeamTypeEnum)
   teamType?: tournamentTeamTypeEnum;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Start date of the tournament',
+    example: '2023-07-01T10:00:00Z',
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Date)
   @IsDate()
   startDate?: Date;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'End date of the tournament',
+    example: '2023-07-15T18:00:00Z',
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Date)
   @IsDate()
   endDate?: Date;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Whether the tournament is ranked',
+    example: true,
+    nullable: true,
+  })
   @IsOptional()
   @IsBoolean()
   isRanked?: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Minimum MMR of the tournament',
+    example: 1000,
+    nullable: true,
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
   @Transform(({ value }) => parseInt(value))
   minimumMMR?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Maximum MMR of the tournament',
+    example: 10000,
+    nullable: true,
+  })
   @IsOptional()
   @IsNumber()
   @Max(10000)
   @Transform(({ value }) => parseInt(value))
   maximumMMR?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Whether multiple teams per group are allowed',
+    example: true,
+    nullable: true,
+  })
   @IsOptional()
   @IsBoolean()
   isMultipleTeamsPerGroupAllowed?: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Category ID of the tournament',
+    example: 123,
+    nullable: true,
+  })
   @IsOptional()
   @IsInt()
   @Transform(({ value }) => parseInt(value))
   categoryId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Affiliated group ID of the tournament',
+    example: 123,
+    nullable: true,
+  })
   @IsOptional()
   @IsInt()
   @Transform(({ value }) => parseInt(value))
   affiliatedGroupId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Creator ID of the tournament',
+    example: 123,
+    nullable: true,
+  })
   @IsOptional()
   @IsInt()
   @Transform(({ value }) => parseInt(value))
   creatorId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Minimum participants of the tournament',
+    example: 2,
+    nullable: true,
+  })
   @IsOptional()
   @IsInt()
   @Min(2)
   @Transform(({ value }) => parseInt(value))
   minParticipants?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Maximum participants of the tournament',
+    example: 1024,
+    nullable: true,
+  })
   @IsOptional()
   @IsInt()
   @Max(1024)
   @Transform(({ value }) => parseInt(value))
   maxParticipants?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Whether the tournament is public',
+    example: true,
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Boolean)
   @IsBoolean()

@@ -108,13 +108,6 @@ export class StageService {
     return stages;
   }
 
-  async createForSinglePlayer(stageId: number, tournamentId: number) {
-    const stage: IStageResponse = await this.findOne(
-      stageId,
-      StageResponsesEnum.BASE,
-    );
-  }
-
   async updateChallongeTournament(stageId: number) {
     const stage: IStageWithChallongeTournament = await this.findOne(
       stageId,

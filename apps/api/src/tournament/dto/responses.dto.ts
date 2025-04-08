@@ -1,4 +1,4 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IMiniTournamentResponse,
   IMiniTournamentResponseWithLogo,
@@ -16,19 +16,41 @@ import { MiniUserResponse } from 'src/users/dto/responses.dto';
 import { Type } from 'class-transformer';
 
 export class MiniTournamentResponse implements IMiniTournamentResponse {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Unique identifier for the tournament',
+    example: 123,
+    readOnly: true,
+  })
   id: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Name of the tournament',
+    example: 'Summer Championship 2023',
+    readOnly: true,
+  })
   name: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Type of tournament',
+    example: 'SINGLE_ELIMINATION',
+    enum: tournamentTypeEnum,
+    readOnly: true,
+  })
   type: tournamentTypeEnum;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Start date and time of the tournament',
+    example: '2023-07-01T10:00:00Z',
+    readOnly: true,
+  })
   startDate: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'ID of the location where the tournament is held',
+    example: 456,
+    nullable: true,
+    readOnly: true,
+  })
   locationId?: number;
 }
 
@@ -36,13 +58,26 @@ export class MiniTournamentResponseWithLogo
   extends MiniTournamentResponse
   implements IMiniTournamentResponseWithLogo
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Location type of the tournament',
+    example: 'ONLINE',
+    enum: tournamentLocationEnum,
+    readOnly: true,
+  })
   location: tournamentLocationEnum;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'URL to the tournament logo',
+    example: 'https://example.com/images/tournament-logo.png',
+    readOnly: true,
+  })
   logo: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Two-letter country code where the tournament is held',
+    example: 'US',
+    readOnly: true,
+  })
   country: string;
 }
 
@@ -50,37 +85,86 @@ export class TournamentResponse
   extends MiniTournamentResponseWithLogo
   implements ITournamentResponse
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Detailed description of the tournament',
+    example:
+      'Annual summer championship tournament with prizes for top 3 teams',
+    readOnly: true,
+  })
   description: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Team type for the tournament',
+    example: 'SINGLE',
+    enum: tournamentTeamTypeEnum,
+    readOnly: true,
+  })
   teamType: tournamentTeamTypeEnum;
 
-  @ApiResponseProperty({ type: MiniUserResponse })
+  @ApiProperty({
+    description: 'User who created the tournament',
+    type: () => MiniUserResponse,
+    readOnly: true,
+  })
   creator: MiniUserResponse;
 
-  @ApiResponseProperty({ type: MiniGroupResponse })
+  @ApiProperty({
+    description: 'Group affiliated with the tournament',
+    type: () => MiniGroupResponse,
+    nullable: true,
+    readOnly: true,
+  })
   affiliatedGroup?: MiniGroupResponse;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'End date and time of the tournament',
+    example: '2023-07-15T18:00:00Z',
+    readOnly: true,
+  })
   endDate: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Maximum number of participants allowed in the tournament',
+    example: 64,
+    readOnly: true,
+  })
   maxParticipants: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Current number of participants in the tournament',
+    example: 32,
+    readOnly: true,
+  })
   currentParticipants: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Whether the tournament is public or private',
+    example: true,
+    readOnly: true,
+  })
   isPublic: boolean;
 
-  @ApiResponseProperty({ type: CategoryMiniResponseWithLogo })
+  @ApiProperty({
+    description: 'Category this tournament belongs to',
+    type: () => CategoryMiniResponseWithLogo,
+    readOnly: true,
+  })
   category: CategoryMiniResponseWithLogo;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'External links related to the tournament',
+    example: 'https://example.com/tournament-info',
+    nullable: true,
+    readOnly: true,
+  })
   links: string;
 
-  @ApiResponseProperty({ type: LocationResponse })
+  @ApiProperty({
+    description: 'Detailed location information for the tournament',
+    type: () => LocationResponse,
+    nullable: true,
+    readOnly: true,
+  })
   @Type(() => LocationResponse)
   actualLocation?: ILocationResponse;
 }
@@ -89,33 +173,77 @@ export class ExtendedTournamentResponse
   extends TournamentResponse
   implements IExtendedTournamentResponse
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the tournament was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the tournament was last updated',
+    example: '2023-01-20T09:15:30Z',
+    readOnly: true,
+  })
   updatedAt: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'External links related to the tournament',
+    example: 'https://example.com/tournament-info',
+    readOnly: true,
+  })
   links: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Whether multiple teams per group are allowed',
+    example: false,
+    readOnly: true,
+  })
   isMultipleTeamsPerGroupAllowed: boolean;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Whether fake players are allowed in the tournament',
+    example: false,
+    readOnly: true,
+  })
   isFakePlayersAllowed: boolean;
 
-  @ApiResponseProperty({ type: MiniTournamentResponseWithLogo })
+  @ApiProperty({
+    description: 'Parent tournament if this is a sub-tournament',
+    type: () => MiniTournamentResponseWithLogo,
+    nullable: true,
+    readOnly: true,
+  })
   parentTournament: MiniTournamentResponseWithLogo;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'ID of the conversion rule applied to this tournament',
+    example: 789,
+    nullable: true,
+    readOnly: true,
+  })
   conversionRuleId: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Whether the tournament is ranked',
+    example: true,
+    readOnly: true,
+  })
   isRanked: boolean;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Maximum MMR (Matchmaking Rating) allowed for participants',
+    example: 2500,
+    nullable: true,
+    readOnly: true,
+  })
   maximumMMR: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Minimum MMR (Matchmaking Rating) required for participants',
+    example: 1000,
+    nullable: true,
+    readOnly: true,
+  })
   minimumMMR: number;
 }

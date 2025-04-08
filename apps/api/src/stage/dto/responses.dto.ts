@@ -1,4 +1,4 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IMiniStageResponse,
   IStageResponse,
@@ -7,10 +7,7 @@ import {
   IExtendedStageResponseWithTournament,
   ILocationResponse,
 } from '@tournament-app/types';
-import {
-  stageStatusEnumType,
-  stageTypeEnumType,
-} from '@tournament-app/types/src/enums';
+import { stageStatusEnum, stageTypeEnum } from '@tournament-app/types';
 import { Type } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 import { LocationResponse } from 'src/location/dto/responses';
@@ -20,43 +17,98 @@ import {
 } from 'src/tournament/dto/responses.dto';
 
 export class MiniStageResponse implements IMiniStageResponse {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Unique identifier for the stage',
+    example: 1,
+    readOnly: true,
+  })
   id: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Name of the stage',
+    example: 'Group Stage',
+    readOnly: true,
+  })
   name: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'ID of the tournament this stage belongs to',
+    example: 1,
+    readOnly: true,
+  })
   tournamentId: number;
 
-  @ApiResponseProperty()
-  stageStatus: stageStatusEnumType;
+  @ApiProperty({
+    description: 'Current status of the stage',
+    enum: stageStatusEnum,
+    example: 'ONGOING',
+    readOnly: true,
+  })
+  stageStatus: stageStatusEnum;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'ID of the physical location for the stage',
+    example: 1,
+    readOnly: true,
+    required: false,
+  })
   locationId?: number;
 }
 
 export class StageResponse extends MiniStageResponse implements IStageResponse {
-  @ApiResponseProperty()
-  stageType: stageTypeEnumType;
+  @ApiProperty({
+    description: 'Type of the stage',
+    enum: stageTypeEnum,
+    example: 'ROUND_ROBIN',
+    readOnly: true,
+  })
+  stageType: stageTypeEnum;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Detailed description of the stage',
+    example: 'Initial group stage of the tournament',
+    readOnly: true,
+  })
   description: string;
 
   @IsOptional()
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'URL to the stage logo',
+    example: 'https://example.com/stage-logo.jpg',
+    readOnly: true,
+    required: false,
+  })
   logo?: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Number of rosters participating in this stage',
+    example: 8,
+    readOnly: true,
+  })
   rostersParticipating: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Start date and time of the stage',
+    example: '2025-02-01T10:00:00Z',
+    type: Date,
+    readOnly: true,
+  })
   startDate: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'End date and time of the stage',
+    example: '2025-02-15T18:00:00Z',
+    type: Date,
+    readOnly: true,
+  })
   endDate: Date;
 
-  @ApiResponseProperty({ type: LocationResponse })
+  @ApiProperty({
+    description: 'Location details for the stage',
+    type: LocationResponse,
+    readOnly: true,
+    required: false,
+  })
   @Type(() => LocationResponse)
   location?: ILocationResponse;
 }
@@ -65,7 +117,11 @@ export class StageResponseWithTournament
   extends StageResponse
   implements IStageResponseWithTournament
 {
-  @ApiResponseProperty({ type: MiniTournamentResponseWithLogo })
+  @ApiProperty({
+    description: 'Tournament details associated with this stage',
+    type: MiniTournamentResponseWithLogo,
+    readOnly: true,
+  })
   tournament: MiniTournamentResponseWithLogo;
 }
 
@@ -73,25 +129,59 @@ export class ExtendedStageResponse
   extends StageResponse
   implements IExtendedStageResponse
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'End date and time of the stage',
+    example: '2025-02-15T18:00:00Z',
+    type: Date,
+    readOnly: true,
+  })
   endDate: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Start date and time of the stage',
+    example: '2025-02-01T10:00:00Z',
+    type: Date,
+    readOnly: true,
+  })
   startDate: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Minimum number of players required per team',
+    example: 1,
+    readOnly: true,
+  })
   minPlayersPerTeam: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Maximum number of players allowed per team',
+    example: 1,
+    readOnly: true,
+    required: false,
+  })
   maxPlayersPerTeam?: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Maximum number of roster changes allowed',
+    example: 1,
+    readOnly: true,
+    required: false,
+  })
   maxChanges?: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Maximum number of substitutes allowed',
+    example: 1,
+    readOnly: true,
+    required: false,
+  })
   maxSubstitutes?: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Challonge tournament ID associated with this stage',
+    example: 'tournament123',
+    readOnly: true,
+    required: false,
+  })
   challongeTournamentId?: string;
 }
 
@@ -99,9 +189,18 @@ export class ExtendedStageResponseWithTournament
   extends ExtendedStageResponse
   implements IExtendedStageResponseWithTournament
 {
-  @ApiResponseProperty({ type: TournamentResponse })
+  @ApiProperty({
+    description: 'Full tournament details associated with this stage',
+    type: TournamentResponse,
+    readOnly: true,
+  })
   tournament: TournamentResponse;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Challonge tournament ID associated with this stage',
+    example: 'tournament123',
+    readOnly: true,
+    required: false,
+  })
   challongeTournamentId?: string;
 }

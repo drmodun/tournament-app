@@ -22,14 +22,12 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import AddMatchResult from "views/addMatchResult";
 import styles from "./manageMatchupForm.module.scss";
 
-export default function ManageMatchupForm({
+export default function ManageMatchupForm2({
   onClose,
-  rosters,
   id,
   matchup,
 }: {
   onClose?: () => void;
-  rosters?: (IRosterResponse | IExtendedRosterResponse)[];
   id?: number;
   matchup?: IMatchupResponseWithResults;
 }) {
@@ -41,19 +39,19 @@ export default function ManageMatchupForm({
   const [addMatchModalOpen, setAddMatchModalOpen] = useState<boolean>(false);
 
   const [winners, setWinners] = useState<boolean[]>(
-    rosters ? new Array(rosters.length).fill(false) : [],
+    matchup?.results ? new Array(matchup?.results.length).fill(false) : [],
   );
 
-  rosters ??= matchup?.results.map((res) => res.roster);
+  const rosters = matchup?.results.map((res) => res.roster);
 
   const createScoreMutation = useUpdateMatchScore();
 
   const submit = async () => {
-    if (!rosters || !scores) return;
+    if (!matchup || !scores) return;
 
     const results = [];
     for (let i = 0; i < winners.length; i++) {
-      results.push({ isWinner: winners[i], rosterId: rosters[i].id });
+      results.push({ isWinner: winners[i], rosterId: matchup.results[i].id });
     }
 
     await createScoreMutation.mutateAsync({
@@ -65,7 +63,7 @@ export default function ManageMatchupForm({
 
   return (
     <div className={styles.innerFormWrapper}>
-      {rosters && (rosters?.length ?? 0) > 1 && (
+      {rosters && (rosters.length ?? 0) > 1 && (
         <Dialog
           onClose={() => setAddMatchModalOpen(false)}
           active={addMatchModalOpen}

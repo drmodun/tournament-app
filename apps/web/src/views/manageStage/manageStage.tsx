@@ -3,6 +3,7 @@
 import {
   groupRoleEnum,
   IExtendedStageResponseWithTournament,
+  stageStatusEnum,
 } from "@tournament-app/types";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
@@ -23,6 +24,8 @@ import { formatDateTime } from "utils/mixins/formatting";
 import EditStageForm from "views/editStageForm";
 import EditStageRostersModal from "views/editStageRostersModal";
 import styles from "./manageStage.module.scss";
+import { useStartStage } from "api/client/hooks/stages/useStartStage";
+import { useAuth } from "api/client/hooks/auth/useAuth";
 
 export type GroupParticipationType = {
   id: number;
@@ -51,16 +54,20 @@ export default function ManageStages(stage?: {
     useState<boolean>(false);
 
   const { data: participationData, isLoading: isParticipationDataLoading } =
-    useGetManagedForPlayer(stage?.stage?.tournamentId);
+    useGetManagedForPlayer(
+      stage?.stage?.tournamentId ?? stage?.stage?.tournament.id,
+    );
 
-  const { data: tData } = useGetCompetition(stage?.stage?.tournament?.id ?? -1);
+  const { data: tData } = useGetCompetition(
+    stage?.stage?.tournamentId ?? stage?.stage?.tournament.id ?? -1,
+  );
   const { data, isLoading } = useCheckIfGroupMember(
     (tData && tData.affiliatedGroup?.id) ?? -1,
   );
 
-  useEffect(() => {
-    console.log(data, tData, participationData, stage?.stage?.tournamentId);
-  }, [data, tData, participationData]);
+  const { data: userData } = useAuth();
+
+  const startStageMutation = useStartStage();
 
   return (
     <div
@@ -142,17 +149,30 @@ export default function ManageStages(stage?: {
         {isLoading || isParticipationDataLoading ? (
           <ProgressWheel variant={textColorTheme} />
         ) : (
-          <>
-            {data &&
-              (data.role == groupRoleEnum.ADMIN ||
-                data.role == groupRoleEnum.OWNER) && (
+          <div className={styles.actionButtons}>
+            {(data?.role == groupRoleEnum.ADMIN ||
+              data?.role == groupRoleEnum.OWNER ||
+              tData?.creator.id == userData?.id) && (
+              <>
+                {stage?.stage?.stageStatus !== stageStatusEnum.ONGOING &&
+                  stage?.stage?.stageStatus !== stageStatusEnum.FINISHED && (
+                    <Button
+                      variant="primary"
+                      onClick={() =>
+                        startStageMutation.mutate(stage?.stage?.id ?? -1)
+                      }
+                      className={styles.actionButton}
+                      label="start stage"
+                    />
+                  )}
                 <Button
                   variant="warning"
                   onClick={() => setEditDialogOpen(true)}
                   className={styles.actionButton}
                   label="edit stage"
                 />
-              )}
+              </>
+            )}
             {participationData && participationData?.length > 0 && (
               <Link href={`/manageRosters/${stage?.stage?.id}`}>
                 <Button
@@ -162,7 +182,7 @@ export default function ManageStages(stage?: {
                 />
               </Link>
             )}
-          </>
+          </div>
         )}
       </div>
       <Link

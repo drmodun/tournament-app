@@ -3,12 +3,17 @@
 .hoursMinutesAndSeconds {
   display: flex;
   gap: $halfPadding;
+
+  @media screen and (max-width: $phoneBreakpoint) {
+    flex-direction: column;
+  }
+}
+
+.timeLimitInput {
+  width: 100%;
 }
 
 .wrapper {
-  padding: $padding;
-  border-radius: $borderRadius;
-
   display: flex;
   flex-direction: column;
   gap: $padding;

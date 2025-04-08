@@ -294,7 +294,6 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       const stages = await tx.query.stage.findMany({
         where: eq(stage.tournamentId, tournamentId),
       });
-
       const rosterId = await tx
         .insert(roster)
         .values(stages.map((stage) => ({ participationId, stageId: stage.id })))

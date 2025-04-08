@@ -9,37 +9,33 @@ import {
 import {
   clientApi,
   getAccessToken,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
+  MEDIUM_QUERY_RETRY_ATTEMPTS,
+  MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
+import { useAuth } from "../auth/useAuth";
 
-export const checkIfUserIsParticipating = async (data: {
-  tournamentId?: number;
-  userId?: number;
-}) =>
+export const getUserParticipations = async (id?: number) =>
   clientApi
     .get<never, AxiosResponse<IBaseQueryResponse<IParticipationResponse>>>(
       `/participations`,
       {
         params: {
           responseType: ParticipationResponsesEnum.BASE,
-          ...data,
+          userId: id,
         },
       },
     )
     .then((res) => res.data);
 
-export const useCheckIfUserIsParticipating = (
-  tournamentId?: number,
-  userId?: number,
-) => {
+export const useGetUserParticipations = () => {
+  const { data } = useAuth();
   return useQuery({
-    queryKey: ["participation", "competition", "me", tournamentId, userId],
-    queryFn: () => checkIfUserIsParticipating({ tournamentId, userId }),
+    queryKey: ["participations", "competition", "me"],
+    queryFn: () => getUserParticipations(data?.id),
     staleTime: Infinity,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
+    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
+    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
   });
 };

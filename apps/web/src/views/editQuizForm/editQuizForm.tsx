@@ -6,6 +6,7 @@ import {
   CreateQuizDto,
   ICreateQuizOptionDto,
   ICreateQuizQuestionDto,
+  IQuizResponseExtended,
 } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Button from "components/button";
@@ -14,7 +15,7 @@ import ImagePicker from "components/imagePicker";
 import Input from "components/input";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
@@ -22,67 +23,77 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { QUESTION_TYPE_MAP } from "utils/mixins/formatting";
 import CreateQuizQuestionForm from "views/createQuizQuestionForm";
 import styles from "./createQuizForm.module.scss";
-import { useCreateQuiz } from "api/client/hooks/quiz";
+import { UpdateQuizParams, useUpdateQuiz } from "api/client/hooks/quiz";
+import { formatDateHTMLInput } from "utils/mixins/formatting";
+import { imageUrlToFile } from "utils/mixins/helpers";
+import { useToastContext } from "utils/hooks/useToastContext";
 
-export default function CreateQuizForm({
+export default function EditQuizForm({
   mutation,
+  quiz,
   onClose,
 }: {
-  mutation?: UseMutationResult<any, any, CreateQuizDto, void>;
+  mutation?: UseMutationResult<any, any, UpdateQuizParams, void>;
+  quiz?: IQuizResponseExtended;
   onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  const createQuizMutation = useCreateQuiz();
+  const createQuizMutation = mutation ?? useUpdateQuiz();
+  const { addToast } = useToastContext();
 
   const [file, setFile] = useState<File>();
 
   const [coverImage, setCoverImage] = useState<string>();
 
-  const [isImmediateFeedback, setIsImmediateFeedback] =
-    useState<boolean>(false);
-  const [isRandomizedQuestions, setIsRandomizedQuestions] =
-    useState<boolean>(false);
   const [isAnonymousAllowed, setIsAnonymousAllowed] = useState<boolean>(false);
   const [isRetakeable, setIsRetakeable] = useState<boolean>(false);
-  const [isTest, setIsTest] = useState<boolean>(false);
   const [hours, setHours] = useState<number>(NaN);
   const [minutes, setMinutes] = useState<number>(NaN);
   const [seconds, setSeconds] = useState<number>(NaN);
 
-  const addMethods = useForm<CreateQuizDto>();
-  const onAddSubmit: SubmitHandler<CreateQuizDto> = async (data) => {
-    if (!isNaN(hours) || !isNaN(minutes) || !isNaN(seconds))
+  const editMethods = useForm<CreateQuizDto>();
+  const onEditSubmit: SubmitHandler<CreateQuizDto> = async (data) => {
+    if (!quiz?.id) {
+      addToast("no id provided", "error");
+      return;
+    }
+    if (!isNaN(hours) || !isNaN(minutes) || !isNaN(seconds)) {
       data.timeLimitTotal =
         (isNaN(hours) ? 0 : hours * 3600) +
         (isNaN(minutes) ? 0 : minutes * 60) +
         (isNaN(seconds) ? 0 : seconds);
+    } else {
+      data.timeLimitTotal = undefined;
+    }
 
     data.questions = questions;
-    data.isTest = isTest;
     data.isRetakeable = isRetakeable;
     data.isAnonymousAllowed = isAnonymousAllowed;
-    data.isRandomizedQuestions = isRandomizedQuestions;
-    data.isImmediateFeedback = isImmediateFeedback;
 
     if (coverImage) data.coverImage = coverImage;
 
-    await createQuizMutation.mutateAsync(data);
+    await createQuizMutation.mutateAsync({ id: quiz?.id, data: data });
 
     onClose && onClose();
   };
 
   const [questions, setQuestions] = useState<ICreateQuizQuestionDto[]>([]);
 
+  useEffect(() => {
+    imageUrlToFile(quiz?.coverImage).then((val) => setFile(val));
+  }, []);
+
   return (
-    <FormProvider {...addMethods}>
+    <FormProvider {...editMethods}>
       <form
-        onSubmit={addMethods.handleSubmit(onAddSubmit)}
+        onSubmit={editMethods.handleSubmit(onEditSubmit)}
         className={styles.form}
       >
         <div className={styles.dialogOption}>
           <Input
+            defaultValue={quiz?.name}
             variant={textColorTheme}
             label="name"
             placeholder="enter quiz name"
@@ -96,12 +107,12 @@ export default function CreateQuizForm({
               },
             }}
           />
-          {addMethods.formState.errors.name?.type === "required" && (
+          {editMethods.formState.errors.name?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
-          {addMethods.formState.errors.name?.type === "pattern" && (
+          {editMethods.formState.errors.name?.type === "pattern" && (
             <p className={styles.error}>
-              {addMethods.formState.errors.name.message}
+              {editMethods.formState.errors.name.message}
             </p>
           )}
         </div>
@@ -119,25 +130,19 @@ export default function CreateQuizForm({
             min={new Date()
               .toISOString()
               .slice(0, new Date().toISOString().lastIndexOf(":"))}
+            defaultValue={
+              quiz?.startDate
+                ? new Date(quiz.startDate)
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+                : new Date()
+                    .toISOString()
+                    .slice(0, new Date().toISOString().lastIndexOf(":"))
+            }
           />
-          {addMethods.formState.errors.startDate?.type === "required" && (
+          {editMethods.formState.errors.startDate?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
-        </div>
-
-        <div className={styles.dialogOption}>
-          <Input
-            variant={textColorTheme}
-            label="ending time"
-            placeholder="enter the quiz's ending time"
-            name="endDate"
-            className={styles.input}
-            isReactFormHook={true}
-            type="datetime-local"
-            min={new Date()
-              .toISOString()
-              .slice(0, new Date().toISOString().lastIndexOf(":"))}
-          />
         </div>
 
         <div className={styles.dialogOption}>
@@ -149,9 +154,10 @@ export default function CreateQuizForm({
             name="passingScore"
             type="number"
             min="0"
+            defaultValue={quiz?.passingScore?.toString()}
           />
         </div>
-
+        {/*
         <div className={styles.dialogOption}>
           <Input
             label="number of attempts"
@@ -161,24 +167,36 @@ export default function CreateQuizForm({
             name="maxAttempts"
             type="number"
             min="1"
-            defaultValue="1"
+            defaultValue={quiz?.}
           />
         </div>
+        */}
 
         <div className={styles.dialogOption}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
             cover image
           </p>
           {file ? (
-            <ImagePicker
-              file={file}
-              name="coverImage"
-              isReactFormHook={true}
-              variant={textColorTheme}
-              className={styles.imagePicker}
-              required={true}
-              onChange={setCoverImage}
-            />
+            <>
+              <ImagePicker
+                file={file}
+                name="coverImage"
+                isReactFormHook={true}
+                variant={textColorTheme}
+                className={styles.imagePicker}
+                required={true}
+                onChange={setCoverImage}
+              />
+              <Button
+                variant="danger"
+                label="remove"
+                className={styles.removeLogoButton}
+                onClick={() => {
+                  setFile(undefined);
+                  editMethods.setValue("coverImage", undefined);
+                }}
+              />
+            </>
           ) : (
             <ImageDrop
               onFile={setFile}
@@ -190,7 +208,7 @@ export default function CreateQuizForm({
             />
           )}
 
-          {addMethods.formState.errors.coverImage?.type === "required" && (
+          {editMethods.formState.errors.coverImage?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
         </div>
@@ -205,8 +223,9 @@ export default function CreateQuizForm({
             variant={textColorTheme}
             required={true}
             isSSR={true}
+            startingContent={quiz?.description ?? ""}
           />
-          {addMethods.formState.errors.description?.type === "required" && (
+          {editMethods.formState.errors.description?.type === "required" && (
             <p className={styles.error}>this field is required!</p>
           )}
         </div>
@@ -224,6 +243,10 @@ export default function CreateQuizForm({
                 setHours(e.currentTarget.valueAsNumber);
               }}
               fullClassName={styles.timeLimitInput}
+              defaultValue={((quiz?.timeLimitTotal ?? 0) >= 3600
+                ? Math.floor((quiz?.timeLimitTotal ?? 0) / 3600)
+                : 0
+              ).toString()}
             />
             <Input
               variant={textColorTheme}
@@ -235,6 +258,14 @@ export default function CreateQuizForm({
               min="0"
               max="59"
               fullClassName={styles.timeLimitInput}
+              defaultValue={((quiz?.timeLimitTotal ?? 0) >= 60
+                ? Math.floor(
+                    ((quiz?.timeLimitTotal ?? 0) -
+                      Math.floor((quiz?.timeLimitTotal ?? 0) / 3600) * 3600) /
+                      60,
+                  )
+                : 0
+              ).toString()}
             />
             <Input
               variant={textColorTheme}
@@ -246,32 +277,13 @@ export default function CreateQuizForm({
               min="0"
               max="59"
               fullClassName={styles.timeLimitInput}
+              defaultValue={(
+                (quiz?.timeLimitTotal ?? 0) -
+                Math.floor((quiz?.timeLimitTotal ?? 0) / 3600) * 3600 -
+                Math.floor((quiz?.timeLimitTotal ?? 0) / 60) * 60
+              ).toString()}
             />
           </div>
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            allow immediate feedback
-          </p>
-          <SlideButton
-            options={["no", "yes"]}
-            onChange={(val: string) => setIsImmediateFeedback(val === "yes")}
-            isReactFormHook={true}
-            name="isImmediateFeedback"
-            variant={textColorTheme}
-          />
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            randomize question order
-          </p>
-          <SlideButton
-            options={["no", "yes"]}
-            onChange={(val: string) => setIsRandomizedQuestions(val === "yes")}
-            isReactFormHook={true}
-            name="isRandomizedQuestions"
-            variant={textColorTheme}
-          />
         </div>
         <div className={styles.dialogOption}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
@@ -283,18 +295,7 @@ export default function CreateQuizForm({
             isReactFormHook={true}
             name="isAnonymousAllowed"
             variant={textColorTheme}
-          />
-        </div>
-        <div className={styles.dialogOption}>
-          <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            use test format
-          </p>
-          <SlideButton
-            options={["no", "yes"]}
-            onChange={(val: string) => setIsTest(val === "yes")}
-            isReactFormHook={true}
-            name="isTest"
-            variant={textColorTheme}
+            defaultValue={quiz?.isAnonymousAllowed ? "yes" : "no"}
           />
         </div>
         <div className={styles.dialogOption}>
@@ -307,6 +308,7 @@ export default function CreateQuizForm({
             isReactFormHook={true}
             name="isRetakeable"
             variant={textColorTheme}
+            defaultValue={quiz?.isRetakeable ? "yes" : "no"}
           />
         </div>
 
@@ -334,7 +336,7 @@ export default function CreateQuizForm({
             {questions.length == 0 ? (
               <p>no questions yet!</p>
             ) : (
-              questions.map((q) => {
+              [...questions, ...(quiz?.questions ?? [])].map((q) => {
                 return (
                   <div
                     className={clsx(
@@ -353,7 +355,7 @@ export default function CreateQuizForm({
                           }}
                         />
                       )}
-                      <p>{q.question}</p>
+                      <p>{q?.question ?? ""}</p>
                     </div>
                     <div className={styles.questionBottom}>
                       {q.timeLimit && q.timeLimit > 0 && (
@@ -416,7 +418,7 @@ export default function CreateQuizForm({
             )}
           </div>
         </div>
-        <Button variant={"primary"} submit={true} label="create quiz" />
+        <Button variant={"warning"} submit={true} label="edit quiz" />
       </form>
     </FormProvider>
   );

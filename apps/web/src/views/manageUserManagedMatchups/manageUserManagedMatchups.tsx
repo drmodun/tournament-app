@@ -12,6 +12,7 @@ import { clsx } from "clsx";
 import { formatDateTime } from "utils/mixins/formatting";
 import Chip from "components/chip";
 import Button from "components/button";
+import ManageMatchupForm from "views/manageMatchupForm";
 
 export default function ManagedUserManagedMatchups() {
   const [dialogActive, setDialogActive] = useState<boolean>(false);
@@ -19,6 +20,8 @@ export default function ManagedUserManagedMatchups() {
   const textColorTheme = textColor(theme);
   const { data, fetchNextPage, isFetching, hasNextPage, isFetchNextPageError } =
     useGetUserManagedMatchups();
+
+  const [active, setActive] = useState<IMatchupsWithMiniRostersResponse>();
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
@@ -53,6 +56,10 @@ export default function ManagedUserManagedMatchups() {
     };
   }, [isFetching, isFetchNextPageError, fetchNextPage, hasNextPage]);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   return (
     <div className={styles.wrapper}>
       <Dialog
@@ -60,7 +67,9 @@ export default function ManagedUserManagedMatchups() {
         onClose={() => setDialogActive(false)}
         variant={theme}
         className={styles.dialog}
-      ></Dialog>
+      >
+        <ManageMatchupForm rosters={active?.rosters} id={active?.id} />
+      </Dialog>
       <div
         className={clsx(
           styles.contentWrapper,
@@ -68,95 +77,99 @@ export default function ManagedUserManagedMatchups() {
         )}
       >
         {data &&
-          data.pages.map((page) => {
-            return page.flatMap((elem: IMatchupsWithMiniRostersResponse) => {
-              console.log(elem, "elem");
-              return (
-                <div
-                  key={elem.id}
-                  className={clsx(
-                    styles.matchupCard,
-                    globals[`${theme}BackgroundColor`],
-                  )}
-                >
-                  <div className={styles.matchupWrapper}>
-                    {elem.rosters.map((roster, index) => {
-                      return (
-                        <>
-                          <div
-                            key={roster.id}
-                            className={clsx(styles.rosterWrapper)}
-                          >
-                            <h3>
-                              {roster?.participation?.group?.name ??
-                                roster?.participation?.user?.username}
-                            </h3>
-                            {roster.players.map((player) => {
-                              return (
-                                <div
-                                  key={player?.user?.id}
-                                  className={styles.playerWrapper}
+          (data.pages[0].length === 0 ? (
+            <p className={globals[`${theme}Color`]}>you manage no matchups!</p>
+          ) : (
+            data.pages.map((page) => {
+              return page.flatMap((elem: IMatchupsWithMiniRostersResponse) => {
+                return (
+                  <div
+                    key={elem.id}
+                    className={clsx(
+                      styles.matchupCard,
+                      globals[`${theme}BackgroundColor`],
+                    )}
+                  >
+                    <div className={styles.matchupWrapper}>
+                      {elem.rosters.map((roster, index) => {
+                        return (
+                          <>
+                            <div
+                              key={roster.id}
+                              className={clsx(styles.rosterWrapper)}
+                            >
+                              <h3>
+                                {roster?.participation?.group?.name ??
+                                  roster?.participation?.user?.username}
+                              </h3>
+                              {roster.players.map((player) => {
+                                return (
+                                  <div
+                                    key={player?.user?.id}
+                                    className={styles.playerWrapper}
+                                  >
+                                    <p>{player.user?.username}</p>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            {index % 2 == 0 &&
+                              elem.rosters.length > index + 1 && (
+                                <p
+                                  className={clsx(
+                                    globals[`${textColorTheme}Color`],
+                                    styles.versus,
+                                  )}
                                 >
-                                  <p>{player.user?.username}</p>
-                                </div>
-                              );
-                            })}
-                          </div>
-                          {index % 2 == 0 &&
-                            elem.rosters.length > index + 1 && (
-                              <p
-                                className={clsx(
-                                  globals[`${textColorTheme}Color`],
-                                  styles.versus,
-                                )}
-                              >
-                                vs
-                              </p>
-                            )}
-                        </>
-                      );
-                    })}
+                                  vs
+                                </p>
+                              )}
+                          </>
+                        );
+                      })}
+                    </div>
+                    <div className={styles.details}>
+                      {elem.startDate && (
+                        <Chip
+                          variant="secondary"
+                          label={formatDateTime(new Date(elem.startDate))}
+                        />
+                      )}
+                      {elem.isFinished && (
+                        <Chip
+                          variant="primary"
+                          label={elem.isFinished ? "finished" : "in progress"}
+                        />
+                      )}
+                      {elem.matchupType && (
+                        <Chip
+                          variant="primary"
+                          label={
+                            elem.matchupType === "ONE_VS_ONE"
+                              ? "1v1"
+                              : "free for all"
+                          }
+                        />
+                      )}
+                    </div>
+                    <div className={styles.actions}>
+                      <Button
+                        onClick={() => {
+                          setActive(elem);
+                          setDialogActive(true);
+                        }}
+                        variant="warning"
+                        style={{ color: "white" }}
+                        className={styles.submitButton}
+                      >
+                        manage matchup
+                      </Button>
+                    </div>
                   </div>
-                  <div className={styles.details}>
-                    {elem.startDate && (
-                      <Chip
-                        variant="secondary"
-                        label={formatDateTime(new Date(elem.startDate))}
-                      />
-                    )}
-                    {elem.isFinished && (
-                      <Chip
-                        variant="primary"
-                        label={elem.isFinished ? "finished" : "in progress"}
-                      />
-                    )}
-                    {elem.matchupType && (
-                      <Chip
-                        variant="primary"
-                        label={
-                          elem.matchupType === "ONE_VS_ONE"
-                            ? "1v1"
-                            : "free for all"
-                        }
-                      />
-                    )}
-                  </div>
-                  <div className={styles.actions}>
-                    <Button
-                      onClick={() => {
-                        setDialogActive(true);
-                      }}
-                      variant="warning"
-                      style={{ color: "white" }}
-                      className={styles.submitButton}
-                    >
-                      manage matchup
-                    </Button>
-                  </div>
-                </div>
-              );
-            });
-          })}
+                );
+              });
+            })
+          ))}
       </div>
     </div>
   );

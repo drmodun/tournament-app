@@ -119,6 +119,7 @@ export default function Input({
                 {...methods.register(name, {
                   required: required,
                   onChange: handleChange,
+                  valueAsNumber: type === "number",
                   ...reactFormHookProps,
                 })}
               />

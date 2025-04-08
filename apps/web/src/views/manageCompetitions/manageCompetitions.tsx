@@ -15,6 +15,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CreateTournamentForm from "views/createTournamentForm";
 import styles from "./manageCompetitions.module.scss";
+import { useGetUserParticipations } from "api/client/hooks/participations/useGetUserParticipations";
 
 export default function ManageCompetitions({
   user,
@@ -24,6 +25,10 @@ export default function ManageCompetitions({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { isLoading, data } = useGetUserOrganizedCompetitions();
+  const {
+    isLoading: isLoadingUserParticipations,
+    data: userParticipationsData,
+  } = useGetUserParticipations();
   const { isLoading: isLoadingUser, data: userData } = useAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -31,6 +36,10 @@ export default function ManageCompetitions({
   useEffect(() => {
     if (!isLoadingUser && !userData) router.push("/login");
   }, [isLoadingUser, userData]);
+
+  useEffect(() => {
+    console.log(userParticipationsData);
+  }, [userParticipationsData]);
 
   return (
     <div
@@ -65,21 +74,65 @@ export default function ManageCompetitions({
       ) : (
         <div className={styles.competitionsWrapper}>
           <div className={styles.competitions}>
-            {data?.results.map((card, index) => (
-              <CardExpanded
-                key={index}
-                image={card.logo}
-                label={card.name}
-                startDate={new Date(card?.startDate.toString()).getTime()}
-                endDate={new Date(card?.endDate.toString()).getTime()}
-                category={card.category.name}
-                participants={card.currentParticipants}
-                location={card?.location}
-                locationDetails={card.location}
-                variant={theme}
-                id={card.id}
-              />
-            ))}
+            {data?.results.length == 0 ? (
+              <p className={globals[`${theme}Color`]}>
+                you have no competitions
+              </p>
+            ) : (
+              data?.results.map((card, index) => (
+                <CardExpanded
+                  key={index}
+                  image={card.logo}
+                  label={card.name}
+                  startDate={new Date(card?.startDate.toString()).getTime()}
+                  endDate={new Date(card?.endDate.toString()).getTime()}
+                  category={card.category.name}
+                  participants={card.currentParticipants}
+                  location={card?.location}
+                  locationDetails={card.location}
+                  variant={theme}
+                  id={card.id}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      )}
+      <div className={styles.competitionsTitle}>
+        <b className={clsx(globals[`${theme}Color`])}>
+          competitions you participate in
+        </b>
+        <button
+          title="add competition"
+          className={styles.addButton}
+          onClick={() => setIsAddDialogOpen(true)}
+        >
+          <AddIcon className={styles[`${theme}Fill`]} />
+        </button>
+      </div>
+      {isLoading ? (
+        <ProgressWheel variant={textColorTheme} />
+      ) : (
+        <div className={styles.competitionsWrapper}>
+          <div className={styles.competitions}>
+            {userParticipationsData?.results.length == 0 ? (
+              <p className={globals[`${theme}Color`]}>
+                you don't participate in any competitions
+              </p>
+            ) : (
+              userParticipationsData?.results?.map((card, index) => (
+                <CardExpanded
+                  key={index}
+                  label={card.tournament.name}
+                  startDate={new Date(
+                    card?.tournament?.startDate?.toString(),
+                  ).getTime()}
+                  category={card.tournament.type}
+                  variant={theme}
+                  id={card.tournamentId}
+                />
+              ))
+            )}
           </div>
         </div>
       )}

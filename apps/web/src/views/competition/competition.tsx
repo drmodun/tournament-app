@@ -214,7 +214,10 @@ export default function Competition({
                   onClick={() => setGroupSelectModalOpen(true)}
                 />
               )}
-              <Link href={`/stages/${competition?.id}`}>
+              <Link
+                href={`/stages/${competition?.id}`}
+                className={styles.linkStage}
+              >
                 <Button variant={textColorTheme} label="view stages" />
               </Link>
             </div>

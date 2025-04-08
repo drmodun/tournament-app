@@ -1,42 +1,32 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IEndMatchupRequest } from "@tournament-app/types";
 import {
   clientApi,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-export const createMatchupScore = async ({
-  id,
-  data,
-}: {
-  id?: number;
-  data?: IEndMatchupRequest;
-}) => {
+export const startStage = async (stageId?: number) => {
   return clientApi
-    .put<
-      IEndMatchupRequest,
-      AxiosResponse
-    >(`/matches/${id}/update-score`, { ...data })
+    .patch<never, AxiosResponse<{ id: number }>>(`/stages/start/${stageId}`)
     .then((res) => res.data);
 };
 
-export const useUpdateMatchScore = () => {
+export const useStartStage = () => {
   const toast = useToastContext();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createMatchupScore,
-    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
-    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
+    mutationFn: (stageId: number) => startStage(stageId),
+    retryDelay: SMALL_QUERY_RETRY_DELAY,
+    retry: SMALL_QUERY_RETRY_ATTEMPTS,
     onSuccess: async () => {
-      toast.addToast("successfully updated score", "success");
+      toast.addToast("successfully started stage", "success");
       await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("matchup"),
+        predicate: (query) => query.queryKey.includes("stage"),
       });
     },
     onError: (error: any) => {
@@ -50,7 +40,7 @@ export const useUpdateMatchScore = () => {
       console.log(error.message);
     },
     onMutate: () => {
-      toast.addToast("updating the score...", "info");
+      toast.addToast("starting the stage...", "info");
     },
   });
 };

@@ -6,7 +6,7 @@ import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-interface UpdateQuizParams {
+export interface UpdateQuizParams {
   id: number;
   data: UpdateQuizDto;
 }

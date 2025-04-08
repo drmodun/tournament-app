@@ -70,9 +70,9 @@ export default function CreateTournamentForm({
     if (links.length > 0) data.links = links.join(",");
 
     // @ts-ignore
-    if (data.minimumMMR == "") data.minimumMMR = "0";
+    if (!data.minimumMMR) data.minimumMMR = 0;
     // @ts-ignore
-    if (data.maximumMMR == "") data.maximumMMR = "10000";
+    if (!data.maximumMMR) data.maximumMMR = 10000;
 
     await createCompetitionMutation.mutateAsync(data);
 

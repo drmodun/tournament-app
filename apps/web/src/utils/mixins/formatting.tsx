@@ -1,4 +1,8 @@
-import { stageStatusEnumType, stageTypeEnumType } from "@tournament-app/types";
+import {
+  quizQuestionTypeEnum,
+  stageStatusEnumType,
+  stageTypeEnumType,
+} from "@tournament-app/types";
 import dateFormat from "dateformat";
 import { Variants } from "types/styleTypes";
 
@@ -143,6 +147,15 @@ export const STAGE_STATUS_VARIANT_MAP: Record<stageStatusEnumType, Variants> = {
   ongoing: "warning",
   finished: "secondary",
   cancelled: "danger",
+};
+
+export const QUESTION_TYPE_MAP = {
+  true_false: "true/false",
+  hotspot: "hotspot",
+  order: "order",
+  programming: "programming",
+  short_answer: "short answer",
+  multiple_choice: "multiple choice",
 };
 
 export const COUNTRY_CODES_TO_NAMES = {

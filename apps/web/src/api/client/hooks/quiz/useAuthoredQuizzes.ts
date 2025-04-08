@@ -11,16 +11,6 @@ import {
 import { AxiosResponse } from "axios";
 import { useSearchParams } from "next/navigation";
 
-interface AuthoredQuizzesResponse {
-  results: IQuizResponse[];
-  metadata: {
-    page: number;
-    pageSize: number;
-    totalCount: number;
-    totalPages: number;
-  };
-}
-
 interface AuthoredQuizzesParams {
   page?: number;
   pageSize?: number;
@@ -37,7 +27,7 @@ export const getAuthoredQuizzes = async (params?: AuthoredQuizzesParams) => {
   const url = `/quiz/authored${queryString ? `?${queryString}` : ""}`;
 
   return clientApi
-    .get<never, AxiosResponse<AuthoredQuizzesResponse>>(url)
+    .get<never, AxiosResponse<IQuizResponse[]>>(url)
     .then((res) => res.data);
 };
 

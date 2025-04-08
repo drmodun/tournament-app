@@ -127,7 +127,7 @@ export default function EditStageForm({
 
         <div className={styles.dialogOption}>
           <p className={clsx(globals.label, globals[`${textColorTheme}Color`])}>
-            group logo
+            stage logo
           </p>
           {file ? (
             <div className={styles.imagePickerWrapper}>
@@ -137,7 +137,6 @@ export default function EditStageForm({
                 isReactFormHook={true}
                 variant={textColorTheme}
                 className={styles.imagePicker}
-                required={true}
               />
               <Button
                 variant="danger"
@@ -269,31 +268,33 @@ export default function EditStageForm({
             <p className={styles.error}>this field is required!</p>
           )}
         </div>
-        <div className={styles.dialogOption}>
-          <Input
-            variant={textColorTheme}
-            label="location"
-            placeholder="enter your place of residence"
-            name="location"
-            required={true}
-            className={styles.input}
-            isReactFormHook={true}
-            defaultValue={stage?.location?.name}
-            onChange={(e) => {
-              fetchAutocomplete(e.target).then((autocomplete) => {
-                const tempListener = autocomplete.addListener(
-                  "place_changed",
-                  () => handleAutocomplete(autocomplete, e.target.value),
-                );
-                setListener(tempListener);
-              });
-            }}
-          />
+        {stage?.location && (
+          <div className={styles.dialogOption}>
+            <Input
+              variant={textColorTheme}
+              label="location"
+              placeholder="enter stage location"
+              name="location"
+              required={true}
+              className={styles.input}
+              isReactFormHook={true}
+              defaultValue={stage?.location?.name}
+              onChange={(e) => {
+                fetchAutocomplete(e.target).then((autocomplete) => {
+                  const tempListener = autocomplete.addListener(
+                    "place_changed",
+                    () => handleAutocomplete(autocomplete, e.target.value),
+                  );
+                  setListener(tempListener);
+                });
+              }}
+            />
 
-          {editMethods.formState.errors.locationId?.type === "required" && (
-            <p className={styles.error}>this field is required!</p>
-          )}
-        </div>
+            {editMethods.formState.errors.locationId?.type === "required" && (
+              <p className={styles.error}>this field is required!</p>
+            )}
+          </div>
+        )}
 
         <Button variant={"warning"} submit={true} label="update competition" />
       </form>

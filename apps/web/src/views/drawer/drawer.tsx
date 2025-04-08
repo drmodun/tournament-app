@@ -19,6 +19,7 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import DrawerElement from "views/drawerElement";
 import styles from "./drawer.module.scss";
 import { useLogout } from "api/client/hooks/auth/useLogout";
+import GroupsIcon from "@mui/icons-material/Groups";
 export interface DrawerProps {
   style?: React.CSSProperties;
   variant?: TextVariants;
@@ -67,7 +68,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
             />
             <DrawerElement
               icon={NotificationsIcon}
-              label="Notifications"
+              label="notifications"
               href="/notifications"
             />
             <DrawerElement
@@ -76,7 +77,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
               href="/manageCompetitions"
             />
             <DrawerElement
-              icon={HelpIcon}
+              icon={GroupsIcon}
               label="manage teams"
               href="/manageTeams"
             />

@@ -60,6 +60,10 @@ const MatchupCard = ({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
+  useEffect(() => {
+    console.log(matchup, "matchup");
+  }, [matchup]);
+
   return (
     <div className={styles.matchupWrapper}>
       {matchup.results.map((res: IResultsResponseWithScores) => {
@@ -120,21 +124,43 @@ const MatchupCard = ({
                 );
               })}
             </div>
-            <div className={styles.details}>
-              {res.matchupType && (
-                <Chip
-                  variant="secondary"
-                  label={
-                    res.matchupType === matchupTypeEnum.ONE_VS_ONE
-                      ? "1v1"
-                      : "free for all"
-                  }
-                />
-              )}
-            </div>
           </div>
         );
       })}
+      <div className={clsx(styles.details, globals[`${theme}Color`])}>
+        {matchup.matchupType && (
+          <div className={styles.detailsInfo}>
+            <b>matchup type</b>
+            <Chip
+              variant="secondary"
+              label={
+                matchup.matchupType === matchupTypeEnum.ONE_VS_ONE
+                  ? "1v1"
+                  : "free for all"
+              }
+            />
+          </div>
+        )}
+        {matchup.isFinished ? (
+          <div className={styles.detailsInfo}>
+            <b>is finished</b>
+            <Chip
+              variant="secondary"
+              label={matchup.isFinished ? "yes" : "no"}
+            />
+          </div>
+        ) : (
+          matchup.startDate && (
+            <div className={styles.detailsInfo}>
+              <b>starting date</b>
+              <Chip
+                variant="secondary"
+                label={formatDateTime(new Date(matchup.startDate))}
+              />
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 };

@@ -26,6 +26,7 @@ import styles from "./createQuizForm.module.scss";
 import { UpdateQuizParams, useUpdateQuiz } from "api/client/hooks/quiz";
 import { formatDateHTMLInput } from "utils/mixins/formatting";
 import { imageUrlToFile } from "utils/mixins/helpers";
+import { useToastContext } from "utils/hooks/useToastContext";
 
 export default function EditQuizForm({
   mutation,
@@ -40,6 +41,7 @@ export default function EditQuizForm({
   const textColorTheme = textColor(theme);
 
   const createQuizMutation = mutation ?? useUpdateQuiz();
+  const { addToast } = useToastContext();
 
   const [file, setFile] = useState<File>();
 
@@ -53,11 +55,18 @@ export default function EditQuizForm({
 
   const editMethods = useForm<CreateQuizDto>();
   const onEditSubmit: SubmitHandler<CreateQuizDto> = async (data) => {
-    if (!isNaN(hours) || !isNaN(minutes) || !isNaN(seconds))
+    if (!quiz?.id) {
+      addToast("no id provided", "error");
+      return;
+    }
+    if (!isNaN(hours) || !isNaN(minutes) || !isNaN(seconds)) {
       data.timeLimitTotal =
         (isNaN(hours) ? 0 : hours * 3600) +
         (isNaN(minutes) ? 0 : minutes * 60) +
         (isNaN(seconds) ? 0 : seconds);
+    } else {
+      data.timeLimitTotal = undefined;
+    }
 
     data.questions = questions;
     data.isRetakeable = isRetakeable;
@@ -65,7 +74,7 @@ export default function EditQuizForm({
 
     if (coverImage) data.coverImage = coverImage;
 
-    await createQuizMutation.mutateAsync({ ...data, id: quiz?.id });
+    await createQuizMutation.mutateAsync({ id: quiz?.id, data: data });
 
     onClose && onClose();
   };
@@ -299,7 +308,7 @@ export default function EditQuizForm({
             isReactFormHook={true}
             name="isRetakeable"
             variant={textColorTheme}
-            defaultValue={quiz?.isRetakable ? "yes" : "no"}
+            defaultValue={quiz?.isRetakeable ? "yes" : "no"}
           />
         </div>
 

@@ -3,6 +3,7 @@
 import {
   groupRoleEnum,
   IExtendedStageResponseWithTournament,
+  stageStatusEnum,
 } from "@tournament-app/types";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
@@ -67,23 +68,7 @@ export default function ManageStages(stage?: {
   const { data: userData } = useAuth();
 
   const startStageMutation = useStartStage();
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
-  useEffect(() => {
-    console.log(data, tData, userData);
-    console.log(
-      data?.role,
-      tData?.creator.id,
-      userData?.id,
-      tData?.creator.id == userData?.id,
-    );
-  }, [data, tData, userData]);
->>>>>>> ba52e99 (Matchups integration)
-
-=======
->>>>>>> 7c4f8b3 (Fixes, matchups and quiz)
   return (
     <div
       className={clsx(
@@ -169,14 +154,17 @@ export default function ManageStages(stage?: {
               data?.role == groupRoleEnum.OWNER ||
               tData?.creator.id == userData?.id) && (
               <>
-                <Button
-                  variant="primary"
-                  onClick={() =>
-                    startStageMutation.mutate(stage?.stage?.id ?? -1)
-                  }
-                  className={styles.actionButton}
-                  label="start stage"
-                />
+                {stage?.stage?.stageStatus !== stageStatusEnum.ONGOING &&
+                  stage?.stage?.stageStatus !== stageStatusEnum.FINISHED && (
+                    <Button
+                      variant="primary"
+                      onClick={() =>
+                        startStageMutation.mutate(stage?.stage?.id ?? -1)
+                      }
+                      className={styles.actionButton}
+                      label="start stage"
+                    />
+                  )}
                 <Button
                   variant="warning"
                   onClick={() => setEditDialogOpen(true)}

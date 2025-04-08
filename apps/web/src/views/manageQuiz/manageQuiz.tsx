@@ -117,10 +117,10 @@ export default function ManageQuiz({ id }: { id: number }) {
                 </p>
               </div>
             )}
-            {quiz.isRetakable && (
+            {quiz.isRetakeable && (
               <div className={styles.property}>
                 <b>is retakeable?</b>
-                <p>{quiz.isRetakable ? "yes" : "no"}</p>
+                <p>{quiz.isRetakeable ? "yes" : "no"}</p>
               </div>
             )}
             {quiz.isAnonymousAllowed && (

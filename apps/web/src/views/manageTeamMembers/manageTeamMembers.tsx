@@ -61,7 +61,6 @@ const UserCard = ({
 
   useEffect(() => {
     if (removeUserMutation.isSuccess) setIsVisible(false);
-    console.log("role", membership?.role);
   }, [removeUserMutation.isSuccess]);
 
   return (
@@ -69,7 +68,7 @@ const UserCard = ({
       className={clsx(
         globals[`${textColorTheme}BackgroundColor`],
         styles.userCardWrapper,
-        !isVisible && globals.hidden,
+        !isVisible && globals.hidden
       )}
     >
       <Link
@@ -87,7 +86,7 @@ const UserCard = ({
           <div
             className={clsx(
               globals[`${theme}Color`],
-              styles.userCardTextWrapper,
+              styles.userCardTextWrapper
             )}
             title={username}
           >
@@ -108,13 +107,13 @@ const UserCard = ({
               onClick={handlePromote}
               className={clsx(
                 styles.userCardRemoveButton,
-                globals.warningBackgroundColor,
+                globals.warningBackgroundColor
               )}
             >
               <KeyboardDoubleArrowUpIcon
                 className={clsx(
                   globals.lightFillChildren,
-                  styles.userCardCloseButton,
+                  styles.userCardCloseButton
                 )}
               />
             </button>
@@ -124,13 +123,13 @@ const UserCard = ({
               onClick={handleDemote}
               className={clsx(
                 styles.userCardRemoveButton,
-                globals.warningBackgroundColor,
+                globals.warningBackgroundColor
               )}
             >
               <KeyboardDoubleArrowDownIcon
                 className={clsx(
                   globals.lightFillChildren,
-                  styles.userCardCloseButton,
+                  styles.userCardCloseButton
                 )}
               />
             </button>
@@ -140,13 +139,13 @@ const UserCard = ({
               onClick={handleRemove}
               className={clsx(
                 styles.userCardRemoveButton,
-                globals.dangerBackgroundColor,
+                globals.dangerBackgroundColor
               )}
             >
               <PersonRemoveIcon
                 className={clsx(
                   globals.lightFillChildren,
-                  styles.userCardCloseButton,
+                  styles.userCardCloseButton
                 )}
               />
             </button>
@@ -166,10 +165,6 @@ export default function ManageTeamMembers({ teamId }: { teamId: number }) {
     useCheckIfGroupMember(teamId);
 
   const { data } = useAuth();
-
-  useEffect(() => {
-    console.log(membershipData, "data!");
-  }, [membershipData]);
 
   return (
     <div className={clsx(styles.wrapper)}>

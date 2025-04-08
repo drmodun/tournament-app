@@ -1,24 +1,12 @@
 "use client";
 
-import AddIcon from "@mui/icons-material/Add";
-import {
-  IBaseQueryResponse,
-  IExtendedUserResponse,
-  IGroupMembershipResponse,
-  IMiniUserResponseWithProfilePicture,
-} from "@tournament-app/types";
-import { useAuth } from "api/client/hooks/auth/useAuth";
-import { useGetUserOrganizedCompetitions } from "api/client/hooks/competitions/useGetUserOrganizedCompetitions";
+import { IGroupMembershipResponse } from "@tournament-app/types";
 import { clsx } from "clsx";
-import CardExpanded from "components/cardExpanded";
-import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import CreateTournamentForm from "views/createTournamentForm";
 import styles from "./manageBlockedUsers.module.scss";
 import { useGetBlockedUsers } from "api/client/hooks/blockedUsers/useGetBlockedUsers";
 import InfiniteDropdown from "components/infiniteDropdown";
@@ -26,7 +14,6 @@ import { useAdminUserGroups } from "api/client/hooks/groups/useAdminUserGroups";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "components/button";
 import { useDeleteBlockedUser } from "api/client/hooks/blockedUsers/useDeleteBlockedUser";
-import { group } from "console";
 
 export default function ManageBlockedUsers() {
   const { theme } = useThemeContext();
@@ -72,7 +59,7 @@ export default function ManageBlockedUsers() {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 },
+      { threshold: 0.1 }
     );
 
     const currentRef = loadMoreRef.current;
@@ -89,7 +76,7 @@ export default function ManageBlockedUsers() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <div className={styles.competitionsTitle}>
@@ -116,7 +103,7 @@ export default function ManageBlockedUsers() {
             setSelectedGroup(
               (adminData?.pages?.flatMap((page) => {
                 return page.results?.flatMap((res) => res);
-              }) ?? [])[index],
+              }) ?? [])[index]
             );
           }}
         />
@@ -140,7 +127,7 @@ export default function ManageBlockedUsers() {
                       className={clsx(
                         styles.userCard,
                         globals[`${textColorTheme}Color`],
-                        globals[`${theme}BackgroundColor`],
+                        globals[`${theme}BackgroundColor`]
                       )}
                       key={index}
                     >
@@ -166,13 +153,13 @@ export default function ManageBlockedUsers() {
                         <DeleteIcon
                           className={clsx(
                             globals.lightFillChildren,
-                            styles.trashButton,
+                            styles.trashButton
                           )}
                         />
                       </Button>
                     </div>
                   );
-                }),
+                })
               )
             )}
           </div>

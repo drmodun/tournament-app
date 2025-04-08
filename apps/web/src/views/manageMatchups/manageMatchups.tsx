@@ -42,7 +42,7 @@ export default function ManageMatchups({
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <h3 className={globals[`${theme}Color`]}>manage matchup</h3>
@@ -60,10 +60,6 @@ const MatchupCard = ({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  useEffect(() => {
-    console.log(matchup, "matchup");
-  }, [matchup]);
-
   return (
     <div className={styles.matchupWrapper}>
       {matchup.results.map((res: IResultsResponseWithScores) => {
@@ -75,7 +71,7 @@ const MatchupCard = ({
             <div
               className={clsx(
                 styles.rosterWrapper,
-                globals[`${theme}BackgroundColor`],
+                globals[`${theme}BackgroundColor`]
               )}
             >
               {(roster?.participation?.group?.logo ??
@@ -98,7 +94,6 @@ const MatchupCard = ({
             </div>
             <div className={styles.scoresWrapper}>
               {res.scores.map((score, index) => {
-                console.log(score, "score");
                 return (
                   <div
                     key={score.roundNumber ?? index + 1}
@@ -107,7 +102,7 @@ const MatchupCard = ({
                         ? globals.primaryBackgroundColor
                         : globals.dangerBackgroundColor,
                       globals.lightColor,
-                      styles.scoreWrapper,
+                      styles.scoreWrapper
                     )}
                   >
                     <b className={globals.lightColor}>

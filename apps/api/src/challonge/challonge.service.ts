@@ -50,7 +50,6 @@ export class ChallongeService {
         );
 
       this.token = response.data.access_token;
-      console.log('this.token', this.token);
       this.logger.log('Successfully retrieved Challonge token');
     } catch (error) {
       this.logger.error('Failed to get Challonge token:', error);
@@ -61,7 +60,6 @@ export class ChallongeService {
     createTournamentDto: ICreateChallongeTournamentRequest,
   ) {
     try {
-      console.log('createTournamentDto', createTournamentDto);
       const response: AxiosResponse<{ data: IChallongeTournament }> =
         await this.httpService.axiosRef.post(
           'https://api.challonge.com/v2/application/tournaments.json',
@@ -200,7 +198,6 @@ export class ChallongeService {
     tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
-    console.log('updateMatchupDto', updateMatchupDto);
     return this.executeFunctionWithRetry(() =>
       this.updateMatchupFunction(id, tournamentId, updateMatchupDto),
     );
@@ -411,8 +408,6 @@ export class ChallongeService {
         `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches.json`,
         this.injectHeaders(),
       );
-
-      console.log('response', response.data.data);
 
       if (response && response.data && response.data.data) {
         return response.data.data.filter((match) =>

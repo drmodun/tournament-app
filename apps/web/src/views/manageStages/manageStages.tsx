@@ -42,7 +42,7 @@ export default function ManageStages({
       className={clsx(
         styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
-        globals[`${theme}Color`],
+        globals[`${theme}Color`]
       )}
     >
       <Dialog
@@ -74,13 +74,12 @@ export default function ManageStages({
               <p>you have no stages!</p>
             ) : (
               data?.pages.map((page, i) => {
-                console.log(page.results);
                 return (
                   <div
                     key={i}
                     className={clsx(
                       styles.stagesContainer,
-                      styles[`${theme}Color`],
+                      styles[`${theme}Color`]
                     )}
                   >
                     {page.results.map((stage) => (

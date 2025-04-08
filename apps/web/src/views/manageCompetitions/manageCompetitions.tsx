@@ -37,10 +37,6 @@ export default function ManageCompetitions({
     if (!isLoadingUser && !userData) router.push("/login");
   }, [isLoadingUser, userData]);
 
-  useEffect(() => {
-    console.log(userParticipationsData);
-  }, [userParticipationsData]);
-
   return (
     <div
       className={clsx(
@@ -125,7 +121,7 @@ export default function ManageCompetitions({
                   key={index}
                   label={card.tournament.name}
                   startDate={new Date(
-                    card?.tournament?.startDate?.toString(),
+                    card?.tournament?.startDate?.toString()
                   ).getTime()}
                   category={card.tournament.type}
                   variant={theme}

@@ -111,7 +111,6 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
           )`,
         };
 
-      //TODO: test some otehr stuff in terms of consistency etc.
       case QuizAttemptResponsesEnum.WITH_ANSWERS:
         return {
           ...this.getMappingObject(QuizAttemptResponsesEnum.BASE),
@@ -342,8 +341,6 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
 
     return result[0];
   }
-
-  // TODO: auth forbid some types of returns, forbid multiple retakes if they are false
 
   async updateAnswer(
     answerId: number,

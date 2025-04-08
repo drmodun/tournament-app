@@ -65,8 +65,6 @@ export enum QuizResponsesEnum {
 export type QuizReturnTypesEnumType =
   (typeof QuizResponsesEnum)[keyof typeof QuizResponsesEnum];
 
-//TODO: for leaderboard scoring implement other types later
-
 export interface IQuizAnswerResponse {
   id: number;
   isFinal: boolean;

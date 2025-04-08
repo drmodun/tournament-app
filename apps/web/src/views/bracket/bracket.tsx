@@ -52,14 +52,11 @@ export default function BracketView({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  useEffect(() => {
-    console.log(theme !== "light", theme);
-  }, [theme]);
   return (
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       {stage?.challongeTournamentId ? (

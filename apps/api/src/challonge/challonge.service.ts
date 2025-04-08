@@ -16,6 +16,7 @@ import {
   stageStatusToTournamentStateRequest,
   stageStatusEnum,
   IStageResponse,
+  IChallongeSimplifiedMatch,
 } from '@tournament-app/types';
 import { ReactBracketsResponseDto } from '../matches/dto/responses';
 
@@ -400,31 +401,22 @@ export class ChallongeService {
     );
   }
 
-  /**
-   * Gets all matches for a tournament from Challonge
-   * @param tournamentId The Challonge tournament ID
-   * @returns Array of matches from the Challonge API
-   */
-  async getMatches(tournamentId: string): Promise<IChallongeMatch[]> {
+  async getMatchesFiltered(
+    tournamentId: string,
+    roundId?: number,
+  ): Promise<IChallongeMatch[]> {
     try {
       const response = await this.httpService.axiosRef.get(
         `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches.json`,
         this.injectHeaders(),
       );
 
+      console.log('response', response.data.data);
+
       if (response && response.data && response.data.data) {
-        return response.data.data.map((match) => {
-          return {
-            id: match.id.toString(),
-            round: match.attributes.round,
-            state: match.attributes.state,
-            player1Id: match.relationships.player1.data.id,
-            player2Id: match.relationships.player2.data.id,
-            winnerId: match.winnerId?.toString(),
-            scoresCsv: match.attributes.scoresCsv,
-            suggestedPlayOrder: match.attributes.suggestedPlayOrder,
-          };
-        });
+        return response.data.data.filter((match) =>
+          roundId ? match.attributes.round == roundId : true,
+        );
       }
 
       return [];

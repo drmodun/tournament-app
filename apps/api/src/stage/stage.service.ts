@@ -304,7 +304,7 @@ export class StageService {
       challongeTournamentId,
     );
 
-    return matches;
+    return matches.filter((match) => match?.attributes?.round == 1);
   }
 
   async importInitialChallongeMatches(

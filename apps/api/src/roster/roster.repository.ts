@@ -318,22 +318,25 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         ),
       });
 
-      const rosterId = await tx
-        .insert(roster)
-        .values(
-          participations.map((participation) => ({
-            participationId: participation.id,
-            stageId,
-          })),
-        )
-        .returning({ id: roster.id });
+      const rosterId =
+        participations.length > 0 &&
+        (await tx
+          .insert(roster)
+          .values(
+            participations.map((participation) => ({
+              participationId: participation.id,
+              stageId,
+            })),
+          )
+          .returning({ id: roster.id }));
 
-      await tx.insert(userToRoster).values(
-        participations.map((participation, index) => ({
-          userId: participation.userId,
-          rosterId: rosterId[index].id,
-        })),
-      );
+      participations.length > 0 &&
+        (await tx.insert(userToRoster).values(
+          participations.map((participation, index) => ({
+            userId: participation.userId,
+            rosterId: rosterId[index].id,
+          })),
+        ));
 
       return rosterId;
     });

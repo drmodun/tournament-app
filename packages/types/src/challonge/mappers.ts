@@ -39,33 +39,6 @@ export const stageStatusToChallongeState: Record<
   cancelled: "ended",
 };
 
-export function stageToChallongeTournament(stage: {
-  id: number;
-  name: string;
-  description?: string;
-  stageType: stageTypeEnum;
-  stageStatus: stageStatusEnum;
-  startDate: Date;
-  endDate?: Date;
-}): Omit<IChallongeTournament, "id"> {
-  const randomId = Math.random().toString(36).substring(2, 15);
-
-  return {
-    type: "tournament",
-    attributes: {
-      name: sanitizeForChallonge(stage.name),
-      url: `winning_stage_${randomId}`,
-      tournament_type: stageTypeToChallongeType[stage.stageType],
-      state: stageStatusToChallongeState[stage.stageStatus],
-      description: stage.description
-        ? sanitizeForChallonge(stage.description)
-        : undefined,
-      private: true,
-      starts_at: formatDateForChallonge(stage.startDate),
-    },
-  };
-}
-
 export function stageToCreateTournamentRequest(stage: {
   id: number;
   name: string;
@@ -78,7 +51,6 @@ export function stageToCreateTournamentRequest(stage: {
       type: "tournament",
       attributes: {
         name: sanitizeForChallonge(stage.name),
-        url: `winning_stage_${stage.id}`,
         tournament_type: stageTypeToChallongeType[stage.stageType],
         description: stage.description
           ? sanitizeForChallonge(stage.description)
@@ -116,7 +88,6 @@ export function stageToUpdateTournamentRequest(stage: {
       type: "tournament",
       attributes: {
         name: sanitizeForChallonge(stage.name),
-        url: `winning_stage_${stage.id}`,
         tournament_type: stageTypeToChallongeType[stage.stageType],
         description: stage.description
           ? sanitizeForChallonge(stage.description)
@@ -199,12 +170,13 @@ export function checkAndHandleDuplicateChallongeTeams(
   rosters: IRosterInfoToCreateChallongeParticipant[]
 ): IRosterInfoToCreateChallongeParticipant[] {
   for (const roster of rosters) {
-    const duplicateRoster = rosters.find((r) => r.name === roster.name);
+    const duplicateRoster = rosters.find(
+      (r) => r.name === roster.name && r.id !== roster.id
+    );
     if (duplicateRoster) {
-      roster.name = `${roster.name}-${duplicateRoster.id}`;
+      roster.name = `${sanitizeForChallonge(roster.name)}_${roster.id}`;
     }
   }
-
   return rosters;
 }
 

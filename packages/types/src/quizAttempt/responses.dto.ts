@@ -1,5 +1,8 @@
 import { questionAnswerStateEnumType } from "src/enums";
-import { IQuizAttemptAnswerResponse, IQuizAttemptAnswerWithFeedbackResponse } from "src/quizAttemptAnswer";
+import {
+  IQuizAttemptAnswerResponse,
+  IQuizAttemptAnswerWithFeedbackResponse,
+} from "src/quizAttemptAnswer";
 
 export interface QuizAttemptInProgressResponse {
   id: number;
@@ -34,6 +37,17 @@ export type QuizAttemptResponseType =
 export enum QuizAttemptResponseTypeEnum {
   IN_PROGRESS = "inProgress",
   POST = "post",
+}
+
+export interface QuizAttemptLeaderboardResponse {
+  id: number;
+  userId: number;
+  score: number;
+  endTime: Date;
+  createdAt: Date;
+  userName: string;
+  userProfilePicture?: string;
+  rank: number;
 }
 
 export type QuizAttemptResponseTypeEnumType =

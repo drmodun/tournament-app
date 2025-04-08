@@ -16,6 +16,7 @@ import {
   stageStatusToTournamentStateRequest,
   stageStatusEnum,
   IStageResponse,
+  IChallongeSimplifiedMatch,
 } from '@tournament-app/types';
 import { ReactBracketsResponseDto } from '../matches/dto/responses';
 
@@ -60,6 +61,7 @@ export class ChallongeService {
     createTournamentDto: ICreateChallongeTournamentRequest,
   ) {
     try {
+      console.log('createTournamentDto', createTournamentDto);
       const response: AxiosResponse<{ data: IChallongeTournament }> =
         await this.httpService.axiosRef.post(
           'https://api.challonge.com/v2/application/tournaments.json',
@@ -178,14 +180,19 @@ export class ChallongeService {
     tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
-    const response: AxiosResponse<{ data: IChallongeMatch }> =
-      await this.httpService.axiosRef.put(
-        `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches/${id}.json`,
-        updateMatchupDto,
-        this.injectHeaders(),
-      );
+    try {
+      const response: AxiosResponse<{ data: IChallongeMatch }> =
+        await this.httpService.axiosRef.put(
+          `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches/${id}.json`,
+          updateMatchupDto,
+          this.injectHeaders(),
+        );
 
-    return response.data.data;
+      return response.data.data;
+    } catch (error) {
+      this.logger.error('Failed to update matchup:', error);
+      throw error;
+    }
   }
 
   async updateMatchup(
@@ -193,6 +200,7 @@ export class ChallongeService {
     tournamentId: string,
     updateMatchupDto: IMatchScoreRequest,
   ): Promise<IChallongeMatch> {
+    console.log('updateMatchupDto', updateMatchupDto);
     return this.executeFunctionWithRetry(() =>
       this.updateMatchupFunction(id, tournamentId, updateMatchupDto),
     );
@@ -394,31 +402,22 @@ export class ChallongeService {
     );
   }
 
-  /**
-   * Gets all matches for a tournament from Challonge
-   * @param tournamentId The Challonge tournament ID
-   * @returns Array of matches from the Challonge API
-   */
-  async getMatches(tournamentId: string): Promise<IChallongeMatch[]> {
+  async getMatchesFiltered(
+    tournamentId: string,
+    roundId?: number,
+  ): Promise<IChallongeMatch[]> {
     try {
       const response = await this.httpService.axiosRef.get(
         `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches.json`,
         this.injectHeaders(),
       );
 
+      console.log('response', response.data.data);
+
       if (response && response.data && response.data.data) {
-        return response.data.data.map((match) => {
-          return {
-            id: match.id.toString(),
-            round: match.attributes.round,
-            state: match.attributes.state,
-            player1Id: match.relationships.player1.data.id,
-            player2Id: match.relationships.player2.data.id,
-            winnerId: match.winnerId?.toString(),
-            scoresCsv: match.attributes.scoresCsv,
-            suggestedPlayOrder: match.attributes.suggestedPlayOrder,
-          };
-        });
+        return response.data.data.filter((match) =>
+          roundId ? match.attributes.round == roundId : true,
+        );
       }
 
       return [];

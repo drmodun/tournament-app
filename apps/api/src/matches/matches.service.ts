@@ -59,6 +59,7 @@ export class MatchesService {
               };
             },
           );
+
           await this.challongeService.updateMatchup(
             matchup.matchup.challongeMatchupId?.toString(),
             stage.challongeTournamentId?.toString(),
@@ -211,8 +212,9 @@ export class MatchesService {
         const stage = await this.matchesRepository.getStageById(stageId);
 
         if (stage && stage.challongeTournamentId) {
-          const challongeMatches = await this.challongeService.getMatches(
+          const challongeMatches = await this.challongeService.getMatchesFiltered(
             stage.challongeTournamentId.toString(),
+            round + 1,
           );
 
           const nextRoundMatches = challongeMatches.filter(

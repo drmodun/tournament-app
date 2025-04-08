@@ -45,6 +45,22 @@ export class RosterService {
     return { id: roster.rosterId };
   }
 
+  async createForSinglePlayer(tournamentId: number, participationId: number) {
+    const roster = await this.repository.createForSinglePlayer(
+      participationId,
+      tournamentId,
+    );
+
+    return roster;
+  }
+
+  async createForSinglePlayerForNewStage(stageId: number) {
+    const roster =
+      await this.repository.createForSinglePlayerForNewStage(stageId);
+
+    return roster;
+  }
+
   async findAll<TResponseType extends BaseRosterResponse>(
     query: QueryRosterDto,
   ): Promise<TResponseType[]> {

@@ -24,8 +24,8 @@ export class CreateRosterMemberDto implements ICreateRosterMemberRequest {
   userId: number;
 
   @ApiProperty()
-  @IsBoolean()
   @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @IsBoolean()
   isSubstitute: boolean = false;
 }
 
@@ -67,8 +67,8 @@ export class QueryRosterDto extends BaseQuery<RosterResponsesEnum> {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsBoolean()
   @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @IsBoolean()
   isSubstitute?: boolean;
 
   @ApiPropertyOptional()

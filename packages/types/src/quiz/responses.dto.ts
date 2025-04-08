@@ -14,7 +14,7 @@ export interface IQuizResponse {
   startDate: Date | string;
   timeLimitTotal?: number | null; // Time limit (in seconds)
   passingScore?: number | null; // Percentage
-  isRetakable: boolean;
+  isRetakeable: boolean;
   isAnonymousAllowed?: boolean;
   description?: string | null;
   matchupId?: number | null;
@@ -32,6 +32,9 @@ export interface IQuizResponseExtended extends IQuizResponse {
   createdAt: Date | string;
   updatedAt: Date | string;
   passingRate: number;
+  isImmediateFeedback: boolean;
+  isRandomizedQuestions: boolean;
+  isTest: boolean;
   questions: IQuizQuestionWithStatistics[];
 }
 

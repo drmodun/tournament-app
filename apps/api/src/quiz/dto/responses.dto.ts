@@ -38,7 +38,7 @@ export class QuizResponse implements IQuizResponse {
   passingScore?: number | null;
 
   @ApiResponseProperty()
-  isRetakable: boolean;
+  isRetakeable: boolean;
 
   @ApiResponseProperty()
   isAnonymousAllowed?: boolean;
@@ -89,6 +89,15 @@ export class QuizResponseExtended
     type: [QuizQuestionResponse],
   })
   questions: QuizQuestionWithStatistics[];
+
+  @ApiResponseProperty()
+  isRandomizedQuestions: boolean;
+
+  @ApiResponseProperty()
+  isImmediateFeedback: boolean;
+
+  @ApiResponseProperty()
+  isTest: boolean;
 }
 
 export class QuizResponseForAttempt extends QuizResponse {

@@ -28,6 +28,14 @@ async function teardown() {
   try {
     // Delete tables in order of dependencies (child tables first)
     const tableDeleteOrder = [
+      // Quiz-related tables first
+      tables.quizAnswer,
+      tables.quizAttempt,
+      tables.quizOption,
+      tables.quizQuestion,
+      tables.quizTags,
+      tables.quiz,
+
       // Relationship tables first
       tables.scoreToRoster,
       tables.score,
@@ -1465,7 +1473,6 @@ async function createQuizzes() {
     : 30;
 
   const users = await db.select().from(tables.user);
-  const tournaments = await db.select().from(tables.tournament);
   const stages = await db.select().from(tables.stage);
   const matchups = await db.select().from(tables.matchup);
   const tags = await db.select().from(tables.tags);
@@ -1822,6 +1829,204 @@ async function createQuizOptions(questions) {
   return options;
 }
 
+async function createQuizAttempts() {
+  console.log('Creating quiz attempts...');
+  const users = await db.select().from(tables.user);
+  const quizzes = await db.select().from(tables.quiz);
+
+  const attempts = [];
+  let attemptId = 1;
+
+  // For each quiz, create attempts for ~30% of users
+  for (const quiz of quizzes) {
+    const shuffledUsers = [...users].sort(() => 0.5 - Math.random());
+    const numAttempts = Math.floor(users.length * 0.3);
+    const selectedUsers = shuffledUsers.slice(0, numAttempts);
+
+    for (const user of selectedUsers) {
+      // Create 1-3 attempts per user if quiz is retakeable
+      const numAttemptsPerUser = quiz.isRetakeable
+        ? faker.number.int({ min: 1, max: 3 })
+        : 1;
+
+      for (let i = 0; i < numAttemptsPerUser; i++) {
+        const isSubmitted = faker.datatype.boolean();
+        const startTime = faker.date.between({
+          from: quiz.startDate,
+          to: new Date(quiz.startDate.getTime() + 1000 * 60 * 60 * 24 * 30),
+        });
+        const endTime = isSubmitted
+          ? faker.date.between({
+              from: startTime,
+              to: new Date(startTime.getTime() + 1000 * 60 * 60 * 24 * 30),
+            })
+          : null;
+
+        attempts.push({
+          id: attemptId++,
+          userId: user.id,
+          quizId: quiz.id,
+          currentQuestion: isSubmitted
+            ? faker.number.int({ min: 0, max: 15 })
+            : 0,
+          endTime,
+          score: isSubmitted ? faker.number.int({ min: 0, max: 100 }) : 0,
+          isSubmitted,
+          createdAt: startTime,
+        });
+      }
+    }
+  }
+
+  if (attempts.length > 0) {
+    await db.insert(tables.quizAttempt).values(attempts);
+    await db.execute(
+      sql<string>`ALTER SEQUENCE quiz_attempt_id_seq RESTART WITH ${sql.raw(
+        String(attemptId),
+      )}`,
+    );
+  }
+
+  return attempts;
+}
+
+async function createQuizAnswers(attempts: any[]) {
+  console.log('Creating quiz answers...');
+  const questions = await db.select().from(tables.quizQuestion);
+  const options = await db.select().from(tables.quizOption);
+  const answers = [];
+  let answerId = 1;
+
+  // Group questions by quiz
+  const questionsByQuiz = questions.reduce((acc, question) => {
+    if (!acc[question.quizId]) {
+      acc[question.quizId] = [];
+    }
+    acc[question.quizId].push(question);
+    return acc;
+  }, {});
+
+  // Group options by question
+  const optionsByQuestion = options.reduce((acc, option) => {
+    if (!acc[option.quizQuestionId]) {
+      acc[option.quizQuestionId] = [];
+    }
+    acc[option.quizQuestionId].push(option);
+    return acc;
+  }, {});
+
+  for (const attempt of attempts) {
+    if (!attempt.isSubmitted && !faker.datatype.boolean()) continue; // Skip some non-submitted attempts
+
+    const quizQuestions = questionsByQuiz[attempt.quizId] || [];
+    const numAnswers = attempt.isSubmitted
+      ? quizQuestions.length
+      : faker.number.int({ min: 1, max: quizQuestions.length });
+
+    // Create answers for questions
+    for (let i = 0; i < numAnswers; i++) {
+      const question = quizQuestions[i];
+      if (!question) continue;
+
+      const isFinal = question.isImmediateFeedback || attempt.isSubmitted;
+      let isCorrect = false;
+      let answer = '';
+      let selectedOptionId = null;
+
+      // Handle different question types
+      if (
+        question.type === 'multiple_choice' ||
+        question.type === 'true_false'
+      ) {
+        const questionOptions = optionsByQuestion[question.id] || [];
+        const selectedOption = faker.helpers.arrayElement(
+          questionOptions,
+        ) as any;
+        if (selectedOption) {
+          selectedOptionId = selectedOption.id;
+          answer = selectedOption.option;
+          isCorrect = selectedOption.isCorrect;
+        }
+      } else {
+        // For other question types
+        answer = faker.lorem.sentence();
+        if (question.correctAnswers) {
+          const correctAnswers = question.correctAnswers.split(',');
+          isCorrect =
+            faker.datatype.boolean() &&
+            faker.helpers.arrayElement([true, false, false]); // 33% chance of correct answer
+          if (isCorrect) {
+            answer = faker.helpers.arrayElement(correctAnswers);
+          }
+        }
+      }
+
+      answers.push({
+        id: answerId++,
+        userId: attempt.userId,
+        quizAttemptId: attempt.id,
+        quizQuestionId: question.id,
+        answer,
+        selectedOptionId,
+        isCorrect,
+        isFinal,
+        createdAt: faker.date.between({
+          from: attempt.createdAt,
+          to:
+            attempt.endTime ||
+            new Date(attempt.createdAt.getTime() + 1000 * 60 * 60 * 24 * 30),
+        }),
+      });
+    }
+  }
+
+  if (answers.length > 0) {
+    // Insert answers in batches to avoid memory issues
+    const BATCH_SIZE = 100;
+    for (let i = 0; i < answers.length; i += BATCH_SIZE) {
+      const batch = answers.slice(i, i + BATCH_SIZE);
+      await db.insert(tables.quizAnswer).values(batch);
+    }
+
+    await db.execute(
+      sql<string>`ALTER SEQUENCE quiz_answer_id_seq RESTART WITH ${sql.raw(
+        String(answerId),
+      )}`,
+    );
+  }
+
+  // Update attempt scores for submitted attempts
+  for (const attempt of attempts) {
+    if (attempt.isSubmitted) {
+      const attemptAnswers = answers.filter(
+        (a) => a.quizAttemptId === attempt.id,
+      );
+      const attemptQuestions = questionsByQuiz[attempt.quizId] || [];
+
+      let totalScore = 0;
+      for (const answer of attemptAnswers) {
+        if (answer.isCorrect) {
+          const question = attemptQuestions.find(
+            (q) => q.id === answer.quizQuestionId,
+          );
+          if (question) {
+            totalScore += question.points || 0;
+          }
+        }
+      }
+
+      await db
+        .update(tables.quizAttempt)
+        .set({
+          score: totalScore,
+          isSubmitted: true,
+          endTime: new Date(),
+        } as Partial<InferInsertModel<typeof tables.quizAttempt>>)
+        .where(eq(tables.quizAttempt.id, attempt.id));
+    }
+  }
+}
+
 export async function seed() {
   console.log('Seeding database...');
 
@@ -1854,4 +2059,8 @@ export async function seed() {
   await createInitialMatchScores();
   console.log('Creating quizzes and related data...');
   await createQuizzes();
+  console.log('Creating quiz attempts...');
+  const attempts = await createQuizAttempts();
+  console.log('Creating quiz answers...');
+  await createQuizAnswers(attempts);
 }

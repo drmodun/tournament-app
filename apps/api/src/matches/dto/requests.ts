@@ -156,4 +156,12 @@ export class QueryMatchupRequestDto
   @Transform(({ value }) => value ?? undefined)
   @ApiPropertyOptional({ description: 'The Challonge ID of the matchup' })
   challongeMatchupId?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  @ApiPropertyOptional({
+    description: 'Whether the matchup has a challonge id',
+  })
+  hasChallongeId?: boolean;
 }

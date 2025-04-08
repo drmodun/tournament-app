@@ -29,6 +29,7 @@ import {
   CreateQuizAnswerRequest,
   UpdateQuizAnswerRequest,
 } from './dto/requests.dto';
+import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 
 @Injectable()
 export class QuizAttemptDrizzleRepository extends PrimaryRepository<
@@ -49,7 +50,7 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
         return query
           .leftJoin(quiz, eq(quizAttempt.quizId, quiz.id))
           .leftJoin(user, eq(quizAttempt.userId, user.id))
-          .groupBy(quizAttempt.id);
+          .groupBy(quizAttempt.id, quiz.id);
 
       case QuizAttemptResponsesEnum.WITH_ANSWERS:
         return query
@@ -61,7 +62,7 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
             eq(quizAnswer.quizQuestionId, quizQuestion.id),
           )
           .leftJoin(quizOption, eq(quizAnswer.selectedOptionId, quizOption.id))
-          .groupBy(quizAttempt.id);
+          .groupBy(quizAttempt.id, quiz.id, quizAnswer.id);
 
       default:
         return this.conditionallyJoin(query, QuizAttemptResponsesEnum.BASE);
@@ -109,6 +110,8 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
             'passingScore', ${quiz.passingScore}
           )`,
         };
+
+      //TODO: test some otehr stuff in terms of consistency etc.
       case QuizAttemptResponsesEnum.WITH_ANSWERS:
         return {
           ...this.getMappingObject(QuizAttemptResponsesEnum.BASE),
@@ -340,6 +343,8 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     return result[0];
   }
 
+  // TODO: auth forbid some types of returns, forbid multiple retakes if they are false
+
   async updateAnswer(
     answerId: number,
     userId: number,
@@ -434,6 +439,32 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     return result[0];
   }
 
+  async checkIfAnswerIsFinal(answerId: number): Promise<boolean> {
+    const answerData = await db
+      .select({ isFinal: quizAnswer.isFinal })
+      .from(quizAnswer)
+      .where(eq(quizAnswer.id, answerId));
+
+    return answerData[0].isFinal;
+  }
+
+  async getAnswer(
+    attemptId: number,
+    quizQuestionId: number,
+  ): Promise<ActionResponsePrimary[]> {
+    const answerData = await db
+      .select({ id: quizAnswer.id })
+      .from(quizAnswer)
+      .where(
+        and(
+          eq(quizAnswer.quizAttemptId, attemptId),
+          eq(quizAnswer.quizQuestionId, quizQuestionId),
+        ),
+      );
+
+    return answerData;
+  }
+
   async calculateAttemptScore(
     attemptId: number,
     quizId: number,
@@ -489,8 +520,58 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
       .where(eq(quizAttempt.userId, userId))
       .limit(limit)
       .offset(offset)
-      .groupBy(quizAttempt.id);
+      .groupBy(quizAttempt.id, quiz.id);
 
     return await query;
+  }
+
+  async getQuizLeaderboard(
+    quizId: number,
+    pagination?: PaginationOnly,
+  ): Promise<any> {
+    const limit = pagination?.pageSize || 10;
+    const offset = pagination?.page ? (pagination.page - 1) * limit : 0;
+
+    const query = db
+      .select({
+        id: quizAttempt.id,
+        userId: quizAttempt.userId,
+        score: quizAttempt.score,
+        endTime: quizAttempt.endTime,
+        createdAt: quizAttempt.createdAt,
+        userName: user.name,
+        userProfilePicture: user.profilePicture,
+        rank: sql<number>`ROW_NUMBER() OVER (ORDER BY ${quizAttempt.score} DESC, ${quizAttempt.endTime} ASC)`,
+      })
+      .from(quizAttempt)
+      .leftJoin(user, eq(quizAttempt.userId, user.id))
+      .where(
+        and(eq(quizAttempt.quizId, quizId), eq(quizAttempt.isSubmitted, true)),
+      )
+      .orderBy(sql`${quizAttempt.score} DESC, ${quizAttempt.endTime} ASC`)
+      .limit(limit)
+      .offset(offset);
+
+    const results = await query;
+
+    const countQuery = db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(quizAttempt)
+      .where(
+        and(eq(quizAttempt.quizId, quizId), eq(quizAttempt.isSubmitted, true)),
+      );
+
+    const countResult = await countQuery;
+    const totalCount = countResult[0]?.count || 0;
+
+    return {
+      results,
+      metadata: {
+        total: totalCount,
+        page: pagination?.page || 1,
+        pageSize: limit,
+        totalPages: Math.ceil(totalCount / limit),
+      },
+    };
   }
 }

@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import {
   CreateQuizAnswerRequest,
-  CreateQuizAttemptRequest,
   SubmitQuizAttemptRequest,
   QuizAttemptQuery,
   UpdateQuizAnswerRequest,
@@ -21,6 +20,7 @@ import {
   QuizAnswerResponse,
   QuizAttemptResponse,
   QuizAttemptWithAnswersResponse,
+  QuizLeaderboardResponse,
 } from './dto/responses.dto';
 import {
   ApiBearerAuth,
@@ -30,6 +30,7 @@ import {
 } from '@nestjs/swagger';
 import { quizAttemptExamples } from './dto/examples';
 import {
+  CreateQuizAttemptDto,
   IQueryMetadata,
   QuizAttemptResponsesEnum,
 } from '@tournament-app/types';
@@ -41,12 +42,15 @@ import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { QuizAttemptService } from './quiz-attempt.service';
 import { CanAccessAttemptGuard } from './guards/can-access-attempt.guard';
+import { CanAttemptGuard } from './guards/can-attempt.guard';
+import { CanSubmitAnswerGuard } from './guards/can-submit-answer.guard';
 
 @ApiTags('quiz-attempt')
 @ApiExtraModels(
   QuizAttemptResponse,
   QuizAttemptWithAnswersResponse,
   QuizAnswerResponse,
+  QuizLeaderboardResponse,
 )
 @Controller('quiz-attempt')
 export class QuizAttemptController {
@@ -117,20 +121,22 @@ export class QuizAttemptController {
     return await this.quizAttemptService.findOne(id, responseType);
   }
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
+  @Post(':quizId')
+  @UseGuards(JwtAuthGuard, CanAttemptGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new quiz attempt',
     type: ActionResponsePrimary,
   })
   async create(
-    @Body() createQuizAttemptDto: CreateQuizAttemptRequest,
+    @Body() createQuizAttemptDto: CreateQuizAttemptDto,
+    @Param('quizId', ParseIntPipe) quizId: number,
     @CurrentUser() user: ValidatedUserDto,
   ) {
     return await this.quizAttemptService.create({
       ...createQuizAttemptDto,
       userId: user.id,
+      quizId,
     });
   }
 
@@ -151,8 +157,8 @@ export class QuizAttemptController {
     );
   }
 
-  @Post(':attemptId/answers')
-  @UseGuards(JwtAuthGuard, CanAccessAttemptGuard)
+  @Post('/answers/:attemptId/:questionId')
+  @UseGuards(JwtAuthGuard, CanSubmitAnswerGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Creates a new answer for a quiz attempt',
@@ -160,18 +166,19 @@ export class QuizAttemptController {
   })
   async createAnswer(
     @Param('attemptId', ParseIntPipe) attemptId: number,
+    @Param('questionId', ParseIntPipe) questionId: number,
     @Body() createAnswerDto: CreateQuizAnswerRequest,
     @CurrentUser() user: ValidatedUserDto,
   ) {
-    return await this.quizAttemptService.createAnswer(
+    return await this.quizAttemptService.createAnswer(attemptId, user.id, {
+      ...createAnswerDto,
+      quizQuestionId: questionId,
       attemptId,
-      user.id,
-      createAnswerDto,
-    );
+    });
   }
 
-  @Put('answers/:answerId')
-  @UseGuards(JwtAuthGuard)
+  @Put('answers/:attemptId/:answerId')
+  @UseGuards(JwtAuthGuard, CanSubmitAnswerGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates an answer',
@@ -187,5 +194,18 @@ export class QuizAttemptController {
       user.id,
       updateAnswerDto,
     );
+  }
+
+  @Get('leaderboard/:quizId')
+  @ApiOkResponse({
+    description:
+      'Returns a leaderboard of users who have completed the quiz, sorted by score and time',
+    type: QuizLeaderboardResponse,
+  })
+  async getQuizLeaderboard(
+    @Param('quizId', ParseIntPipe) quizId: number,
+    @Query() pagination: PaginationOnly,
+  ) {
+    return await this.quizAttemptService.getQuizLeaderboard(quizId, pagination);
   }
 }

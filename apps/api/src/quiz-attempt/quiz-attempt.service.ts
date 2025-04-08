@@ -3,16 +3,17 @@ import {
   NotFoundException,
   UnprocessableEntityException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   QuizAttemptResponsesEnum,
   IQuizAttemptResponse,
   IQuizAttemptWithAnswersResponse,
   QuizAttemptResponseEnumType,
+  CreateQuizAttemptDto,
 } from '@tournament-app/types';
 import {
   CreateQuizAnswerRequest,
-  CreateQuizAttemptRequest,
   QuizAttemptQuery,
   SubmitQuizAttemptRequest,
   UpdateQuizAnswerRequest,
@@ -29,7 +30,7 @@ export class QuizAttemptService {
   ) {}
 
   async create(
-    createQuizAttemptDto: CreateQuizAttemptRequest & { userId: number },
+    createQuizAttemptDto: CreateQuizAttemptDto & { userId: number },
   ) {
     const quiz = await this.quizService.findOne(createQuizAttemptDto.quizId);
 
@@ -69,6 +70,12 @@ export class QuizAttemptService {
   async findAll<TResponseType extends IQuizAttemptResponse>(
     query: QuizAttemptQuery,
   ): Promise<TResponseType[]> {
+    if (query?.responseType === QuizAttemptResponsesEnum.WITH_ANSWERS) {
+      throw new BadRequestException(
+        'Cannot fetch attempts with answers, use getMyAttempts instead',
+      );
+    }
+
     const { responseType = QuizAttemptResponsesEnum.BASE, ...queryParams } =
       query;
 
@@ -150,6 +157,14 @@ export class QuizAttemptService {
     return answer;
   }
 
+  async checkIfAnswerExists(attemptId: number, quizQuestionId: number) {
+    const answer = await this.repository.getAnswer(attemptId, quizQuestionId);
+
+    if (answer.length) {
+      throw new BadRequestException('Answer already exists');
+    }
+  }
+
   async getUserAttempts(userId: number, pagination?: PaginationOnly) {
     return this.repository.getUserAttempts(userId, pagination);
   }
@@ -166,5 +181,39 @@ export class QuizAttemptService {
     if (attempt[0].userId !== userId) {
       throw new ForbiddenException('You are not the owner of this attempt');
     }
+  }
+
+  async checkForPreviousAttempt(quizId: number, userId: number) {
+    const attempt = await this.repository.getQuizAttemptForUser(userId, quizId);
+
+    if (attempt) {
+      throw new ForbiddenException('You have already attempted this quiz');
+    }
+  }
+
+  async checkIfTheAnswerIsFinal(answerId: number) {
+    const isFinal = await this.repository.checkIfAnswerIsFinal(answerId);
+
+    return isFinal;
+  }
+
+  async checkIfQuizIsRetakeable(quizId: number) {
+    const quiz = await this.quizService.findOne(quizId);
+
+    return quiz.isRetakeable;
+  }
+
+  async getQuizLeaderboard(quizId: number, pagination?: PaginationOnly) {
+    const quiz = await this.quizService.findOne(quizId);
+    if (!quiz) {
+      throw new NotFoundException(`Quiz with ID ${quizId} not found`);
+    }
+
+    const leaderboard = await this.repository.getQuizLeaderboard(
+      quizId,
+      pagination,
+    );
+
+    return leaderboard;
   }
 }

@@ -54,6 +54,13 @@ export class RosterService {
     return roster;
   }
 
+  async createForSinglePlayerForNewStage(stageId: number) {
+    const roster =
+      await this.repository.createForSinglePlayerForNewStage(stageId);
+
+    return roster;
+  }
+
   async findAll<TResponseType extends BaseRosterResponse>(
     query: QueryRosterDto,
   ): Promise<TResponseType[]> {

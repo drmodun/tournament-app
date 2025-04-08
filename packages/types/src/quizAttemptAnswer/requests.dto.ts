@@ -1,8 +1,8 @@
 export interface CreateQuizAttemptAnswerDto {
-  attemptId: number;
-  questionId: number;
+  attemptId?: number;
+  quizQuestionId?: number;
   selectedOptionId?: number;
-  answer: string;
+  answer?: string;
 }
 
 export interface UpdateQuizAttemptAnswerDto {

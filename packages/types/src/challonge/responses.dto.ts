@@ -124,6 +124,17 @@ export interface IChallongeRound {
   links: ILinks;
 }
 
+export interface IChallongeSimplifiedMatch {
+  id: string;
+  round: number;
+  state: MatchState;
+  player1Id: string;
+  player2Id: string;
+  winnerId?: string;
+  scoresCsv: string;
+  suggestedPlayOrder: number;
+}
+
 export interface IChallongeElapsedTime {
   id: string;
   type: "elapsed_time";

@@ -79,7 +79,7 @@ export default function NotificationIndicator() {
         <div
           className={clsx(
             styles.connectionStatus,
-            isConnected ? styles.connected : styles.disconnected
+            isConnected ? styles.connected : styles.disconnected,
           )}
         />
       </div>
@@ -89,7 +89,7 @@ export default function NotificationIndicator() {
         className={clsx(
           styles.panel,
           isOpen && styles.open,
-          globals[`${theme}BackgroundColor`]
+          globals[`${theme}BackgroundColor`],
         )}
       >
         <div className={styles.header}>

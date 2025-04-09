@@ -24,7 +24,7 @@ export const imageUrlToFile = async (image: string | undefined) => {
 };
 
 export const extractUniqueGroupsFromRosters = (
-  rosters: IExtendedRosterResponse[]
+  rosters: IExtendedRosterResponse[],
 ) => {
   const groups: IMiniGroupResponse[] = [];
   const ids: number[] = [];
@@ -41,7 +41,7 @@ export const extractUniqueGroupsFromRosters = (
   return groups;
 };
 export const handleError = (
-  error: AxiosError<{ message: string & string[] }>
+  error: AxiosError<{ message: string & string[] }>,
 ) => {
   console.error(error);
   if (typeof (error.response?.data?.message ?? error.message) === "string") {

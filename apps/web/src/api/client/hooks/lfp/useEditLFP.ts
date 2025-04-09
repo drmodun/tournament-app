@@ -25,7 +25,7 @@ export const editLFP = async (data: {
           groupId: data?.groupId,
           id: data?.groupId,
         },
-      }
+      },
     )
     .then((res) => res.data);
 

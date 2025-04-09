@@ -18,7 +18,7 @@ export const updateStage = async (
     data: IUpdateStageDto;
     stageId?: number;
   },
-  tournamentId?: number
+  tournamentId?: number,
 ) => {
   const { tournamentId: stageDataTournamentId, ..._data } = data.data;
 

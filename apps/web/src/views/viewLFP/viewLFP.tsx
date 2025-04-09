@@ -70,7 +70,7 @@ export default function ViewLFP({
       <div
         className={clsx(
           styles.pagination,
-          globals[`${textColorTheme}BackgroundColor`]
+          globals[`${textColorTheme}BackgroundColor`],
         )}
       >
         <button
@@ -97,7 +97,7 @@ export default function ViewLFP({
                   key={item.id}
                   className={clsx(
                     globals[`${theme}BackgroundColor`],
-                    styles.card
+                    styles.card,
                   )}
                   href={`/user/${item.id}`}
                 >
@@ -138,7 +138,7 @@ export default function ViewLFP({
                     />
                   </div>
                 </Link>
-              )
+              ),
             )
           )}
         </div>

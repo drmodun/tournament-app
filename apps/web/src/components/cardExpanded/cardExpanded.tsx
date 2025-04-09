@@ -78,7 +78,7 @@ export default function Card({
         styles[`${variant}Background`],
         className,
         globals.doublePaddingHorizontal,
-        globals.paddingVertical
+        globals.paddingVertical,
       )}
       style={style}
       onClick={handleClick}
@@ -88,7 +88,7 @@ export default function Card({
           className={clsx(
             styles.label,
             labelClassName,
-            globals[`${variant}TextColor`]
+            globals[`${variant}TextColor`],
           )}
           style={labelStyle}
         >
@@ -98,7 +98,7 @@ export default function Card({
           {registrationTillDate && (
             <Chip
               label={calculateBestFutureDateFormat(
-                new Date(registrationTillDate)
+                new Date(registrationTillDate),
               )}
               variant="primary"
             />
@@ -115,7 +115,7 @@ export default function Card({
               <FlagIcon
                 className={clsx(
                   globals[`${textColor(variant)}FillChildren`],
-                  styles.flagIcon
+                  styles.flagIcon,
                 )}
               />
             </Chip>
@@ -129,7 +129,7 @@ export default function Card({
                 <PlaceIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
               </div>
@@ -139,7 +139,7 @@ export default function Card({
                 <PublicIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
               </div>
@@ -151,7 +151,7 @@ export default function Card({
                 <PlaceIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
                 <p className={globals[`${textColor(variant)}Color`]}>
@@ -160,7 +160,7 @@ export default function Card({
                 <PublicIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
               </div>

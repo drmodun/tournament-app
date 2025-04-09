@@ -29,7 +29,7 @@ export default function ViewMatch(
     //matchup,
   }: {
     //matchup?: IMatchupResponseWithRosters;
-  }
+  },
 ) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -169,7 +169,7 @@ export default function ViewMatch(
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <h3>manage match</h3>
@@ -202,7 +202,7 @@ export default function ViewMatch(
               <div
                 className={clsx(
                   styles.roster,
-                  globals[`${theme}BackgroundColor`]
+                  globals[`${theme}BackgroundColor`],
                 )}
               >
                 <b className={globals[`${textColorTheme}Color`]}>

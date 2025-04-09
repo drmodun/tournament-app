@@ -13,7 +13,7 @@ import { invalidateCompetitions } from "./serverFetches";
 import { handleError } from "utils/mixins/helpers";
 
 export const editCompetition = async (
-  data: IUpdateTournamentRequest & { id?: number; categoryId?: number }
+  data: IUpdateTournamentRequest & { id?: number; categoryId?: number },
 ) => {
   const { id, categoryId, ..._data } = data;
   if (categoryId != -1 && categoryId !== undefined) {

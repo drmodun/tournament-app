@@ -81,9 +81,9 @@ export default function AddMatchResult({
           placeholder="select roster"
           defaultValue={
             rosters.length == 2
-              ? (rosters[0]?.participation?.group?.name ??
+              ? rosters[0]?.participation?.group?.name ??
                 rosters[0]?.participation?.user?.username ??
-                undefined)
+                undefined
               : undefined
           }
           onSelect={(index: number) => {
@@ -106,9 +106,9 @@ export default function AddMatchResult({
           }}
           defaultValue={
             rosters.length == 2
-              ? (rosters[1]?.participation?.group?.name ??
+              ? rosters[1]?.participation?.group?.name ??
                 rosters[1]?.participation?.user?.username ??
-                undefined)
+                undefined
               : undefined
           }
           options={rosters.map((roster) => {
@@ -131,7 +131,7 @@ export default function AddMatchResult({
                     key={player.user.id}
                     className={clsx(
                       styles.userCard,
-                      globals[`${textColorTheme}BackgroundColor`]
+                      globals[`${textColorTheme}BackgroundColor`],
                     )}
                   >
                     <img
@@ -162,7 +162,7 @@ export default function AddMatchResult({
                     key={player.user.id}
                     className={clsx(
                       styles.userCard,
-                      globals[`${textColorTheme}BackgroundColor`]
+                      globals[`${textColorTheme}BackgroundColor`],
                     )}
                   >
                     <img
@@ -190,7 +190,7 @@ export default function AddMatchResult({
               <p
                 className={clsx(
                   globals[`${textColorTheme}Color`],
-                  globals.label
+                  globals.label,
                 )}
               >
                 select winner

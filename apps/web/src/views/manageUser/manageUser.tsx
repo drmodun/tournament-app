@@ -72,7 +72,7 @@ export default function ManageUser({
         <div
           className={clsx(
             styles.editWrapper,
-            globals[`${textColorTheme}Color`]
+            globals[`${textColorTheme}Color`],
           )}
         >
           <div className={styles.usernameEdit}>
@@ -80,7 +80,7 @@ export default function ManageUser({
               className={clsx(
                 styles.username,
                 globals.largeText,
-                styles.infoText
+                styles.infoText,
               )}
             >
               {data?.name}{" "}

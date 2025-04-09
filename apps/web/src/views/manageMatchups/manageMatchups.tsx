@@ -42,7 +42,7 @@ export default function ManageMatchups({
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <h3 className={globals[`${theme}Color`]}>manage matchup</h3>
@@ -71,7 +71,7 @@ const MatchupCard = ({
             <div
               className={clsx(
                 styles.rosterWrapper,
-                globals[`${theme}BackgroundColor`]
+                globals[`${theme}BackgroundColor`],
               )}
             >
               {(roster?.participation?.group?.logo ??
@@ -103,7 +103,7 @@ const MatchupCard = ({
                         ? globals.primaryBackgroundColor
                         : globals.dangerBackgroundColor,
                       globals.lightColor,
-                      styles.scoreWrapper
+                      styles.scoreWrapper,
                     )}
                   >
                     <b className={globals.lightColor}>

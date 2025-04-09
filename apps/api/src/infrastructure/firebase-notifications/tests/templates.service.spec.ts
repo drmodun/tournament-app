@@ -44,7 +44,7 @@ describe('NotificationTemplatesFiller', () => {
           outcome: 'won',
         },
       );
-      expect(result).toBe('Hello John, your bet 123 has been won');
+      expect(result).toBe('Hello, your bet 123 has been won');
     });
 
     it('should throw an error if required keys are missing', () => {

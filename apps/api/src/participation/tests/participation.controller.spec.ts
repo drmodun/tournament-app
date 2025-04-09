@@ -134,6 +134,56 @@ describe('ParticipationController', () => {
         ParticipationResponsesEnum.BASE,
       );
     });
+
+    it('should use BASE response type by default', async () => {
+      service.findOne.mockResolvedValue(mockParticipation);
+
+      const result = await controller.findOne(1);
+
+      expect(result).toEqual(mockParticipation);
+      expect(service.findOne).toHaveBeenCalledWith(
+        1,
+        ParticipationResponsesEnum.BASE,
+      );
+    });
+  });
+
+  describe('getManagedParticipationsForPlayer', () => {
+    const mockUser: ValidatedUserDto = {
+      id: 1,
+      role: userRoleEnum.USER,
+      email: 'test@example.com',
+    };
+
+    const mockManagedParticipations = [
+      {
+        id: 2,
+        tournamentId: 1,
+        group: {
+          id: 5,
+          name: 'Test Group',
+        },
+        userId: null,
+        groupId: 5,
+      },
+    ];
+
+    it('should return participations managed by the player', async () => {
+      service.getManagedParticipationsForPlayer.mockResolvedValue(
+        mockManagedParticipations,
+      );
+
+      const result = await controller.getManagedParticipationsForPlayer(
+        1,
+        mockUser,
+      );
+
+      expect(result).toEqual(mockManagedParticipations);
+      expect(service.getManagedParticipationsForPlayer).toHaveBeenCalledWith(
+        1,
+        mockUser.id,
+      );
+    });
   });
 
   describe('createSolo', () => {

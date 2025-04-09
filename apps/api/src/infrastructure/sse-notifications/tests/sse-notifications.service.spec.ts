@@ -76,12 +76,87 @@ describe('SseNotificationsService', () => {
     });
   });
 
+  describe('createNotificationAndLinkToUsers', () => {
+    it('should call repository.createWithUsers with notification and user ids', async () => {
+      jest.spyOn(repository, 'createWithUsers').mockResolvedValue(undefined);
+
+      await service.createNotificationAndLinkToUsers(
+        mockNotification,
+        mockUserIds,
+      );
+
+      expect(repository.createWithUsers).toHaveBeenCalledWith(
+        mockNotification,
+        mockUserIds,
+      );
+    });
+
+    it('should not call eventEmitter.emitAsync', async () => {
+      jest.spyOn(repository, 'createWithUsers').mockResolvedValue(undefined);
+      jest.spyOn(eventEmitter, 'emitAsync');
+
+      await service.createNotificationAndLinkToUsers(
+        mockNotification,
+        mockUserIds,
+      );
+
+      expect(eventEmitter.emitAsync).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('publishManyNotifications', () => {
+    it('should call publishNotification for each user id', async () => {
+      jest
+        .spyOn(service, 'publishNotification')
+        .mockResolvedValue(undefined as any);
+
+      await service.publishManyNotifications(mockUserIds, mockNotification);
+
+      expect(service.publishNotification).toHaveBeenCalledTimes(
+        mockUserIds.length,
+      );
+      mockUserIds.forEach((userId) => {
+        expect(service.publishNotification).toHaveBeenCalledWith(
+          userId,
+          mockNotification,
+        );
+      });
+    });
+
+    it('should resolve when all publishNotification calls resolve', async () => {
+      jest
+        .spyOn(service, 'publishNotification')
+        .mockResolvedValue(undefined as any);
+
+      const result = await service.publishManyNotifications(
+        mockUserIds,
+        mockNotification,
+      );
+
+      expect(result).toEqual([undefined, undefined, undefined]);
+    });
+
+    it('should reject if any publishNotification call rejects', async () => {
+      const mockError = new Error('Publish failed');
+      jest
+        .spyOn(service, 'publishNotification')
+        .mockImplementation((userId) => {
+          if (userId === 2) {
+            return Promise.reject(mockError);
+          }
+          return Promise.resolve(undefined as any);
+        });
+
+      await expect(
+        service.publishManyNotifications(mockUserIds, mockNotification),
+      ).rejects.toThrow(mockError);
+    });
+  });
+
   describe('createWithUsers', () => {
     it('should create notifications and publish them to users', async () => {
       jest.spyOn(repository, 'createWithUsers').mockResolvedValue(undefined);
-      jest
-        .spyOn(eventEmitter, 'emitAsync')
-        .mockResolvedValue(Promise.resolve([]));
+      jest.spyOn(service, 'publishManyNotifications').mockResolvedValue([]);
 
       await service.createWithUsers(mockNotification, mockUserIds);
 
@@ -89,7 +164,23 @@ describe('SseNotificationsService', () => {
         mockNotification,
         mockUserIds,
       );
-      expect(eventEmitter.emitAsync).toHaveBeenCalledTimes(mockUserIds.length);
+      expect(service.publishManyNotifications).toHaveBeenCalledWith(
+        mockUserIds,
+        mockNotification,
+      );
+    });
+
+    it('should still publish notifications if repository.createWithUsers fails', async () => {
+      const mockError = new Error('Creation failed');
+      jest.spyOn(repository, 'createWithUsers').mockRejectedValue(mockError);
+      jest.spyOn(service, 'publishManyNotifications').mockResolvedValue([]);
+      jest.spyOn(console, 'error').mockImplementation();
+
+      await expect(
+        service.createWithUsers(mockNotification, mockUserIds),
+      ).rejects.toThrow(mockError);
+
+      expect(service.publishManyNotifications).not.toHaveBeenCalled();
     });
   });
 

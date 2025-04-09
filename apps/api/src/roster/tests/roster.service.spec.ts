@@ -61,7 +61,7 @@ describe('RosterService', () => {
         career: [],
       },
     ],
-  };
+  } as any;
 
   beforeEach(async () => {
     const mockRosterRepository = {
@@ -78,6 +78,8 @@ describe('RosterService', () => {
       getForStage: jest.fn(),
       getOnlyPlayers: jest.fn(),
       updateWithPlayers: jest.fn(),
+      createForSinglePlayer: jest.fn(),
+      createForSinglePlayerForNewStage: jest.fn(),
     };
 
     const mockStageRepository = {
@@ -376,6 +378,59 @@ describe('RosterService', () => {
       repository.deleteEntity.mockResolvedValue([]);
 
       await expect(service.remove(1)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('createForSinglePlayer', () => {
+    it('should create a roster for a single player', async () => {
+      // Arrange
+      const tournamentId = 1;
+      const participationId = 2;
+      repository.createForSinglePlayer.mockResolvedValue([mockRoster]);
+
+      // Act
+      const result = await service.createForSinglePlayer(
+        tournamentId,
+        participationId,
+      );
+
+      // Assert
+      expect(repository.createForSinglePlayer).toHaveBeenCalledWith(
+        participationId,
+        tournamentId,
+      );
+      expect(result).toEqual([mockRoster]);
+    });
+  });
+
+  describe('createForSinglePlayerForNewStage', () => {
+    it('should create rosters for single players in a new stage', async () => {
+      // Arrange
+      const stageId = 1;
+      const mockCreatedRosters = [
+        {
+          rosterId: 1,
+          userId: 10,
+          participationId: 100,
+        },
+        {
+          rosterId: 2,
+          userId: 20,
+          participationId: 200,
+        },
+      ];
+      repository.createForSinglePlayerForNewStage.mockResolvedValue(
+        mockCreatedRosters,
+      );
+
+      // Act
+      const result = await service.createForSinglePlayerForNewStage(stageId);
+
+      // Assert
+      expect(repository.createForSinglePlayerForNewStage).toHaveBeenCalledWith(
+        stageId,
+      );
+      expect(result).toEqual(mockCreatedRosters);
     });
   });
 

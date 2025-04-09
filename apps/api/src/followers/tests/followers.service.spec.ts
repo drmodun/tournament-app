@@ -95,7 +95,7 @@ describe('FollowersService', () => {
         expect.objectContaining({
           type: notificationTypeEnum.NEW_FOLLOWER,
           message: 'Test User is now following you',
-          link: `/user/${userId}`,
+          link: `/user/${followerId}`,
           image: mockFollower.profilePicture,
         }),
         [userId],
@@ -239,7 +239,7 @@ describe('FollowersService', () => {
       expect(result).toEqual({
         type: notificationTypeEnum.NEW_FOLLOWER,
         message: 'Follower is now following you',
-        link: `/user/${userId}`,
+        link: `/user/${followerId}`,
         image: 'profile.jpg',
       });
 

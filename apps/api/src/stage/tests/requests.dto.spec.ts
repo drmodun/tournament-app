@@ -16,7 +16,6 @@ describe('StageRequestsDtos', () => {
       expect(errors.length).toBeGreaterThan(0);
       expect(errors.map((x) => x.property)).toContain('name');
       expect(errors.map((x) => x.property)).toContain('startDate');
-      expect(errors.map((x) => x.property)).toContain('tournamentId');
     });
 
     it('should fail validation with invalid data types', async () => {

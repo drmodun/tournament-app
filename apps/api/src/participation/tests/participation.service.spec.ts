@@ -5,10 +5,16 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ParticipationResponsesEnum } from '@tournament-app/types';
 import { QueryParticipationDto } from '../dto/requests.dto';
 import { TournamentParticipantArgument } from '../types';
-
+import { RosterService } from '../../roster/roster.service';
+import { mock } from 'node:test';
 describe('ParticipationService', () => {
   let service: ParticipationService;
   let repository: jest.Mocked<ParticipationDrizzleRepository>;
+  let mockRosterService: jest.Mocked<RosterService>;
+
+  const mockRosterService = {
+    getRostersByStage: jest.fn(),
+  } as unknown as jest.Mocked<RosterService>;
 
   const mockParticipation = {
     id: 1,
@@ -27,6 +33,7 @@ describe('ParticipationService', () => {
       getSingleQuery: jest.fn(),
       updateEntity: jest.fn(),
       deleteEntity: jest.fn(),
+      getManagedParticipationsForPlayer: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -137,26 +144,56 @@ describe('ParticipationService', () => {
   });
 
   describe('findOneWithoutThrow', () => {
-    it('should return a single participation', async () => {
-      repository.getSingleQuery.mockResolvedValue([mockParticipation]);
+    it('should return participation if found', async () => {
+      const mockParticipationId = 1;
+      const mockParticipation = {
+        id: mockParticipationId,
+        tournamentId: 1,
+        userId: 1,
+        groupId: null,
+      };
+
+      jest
+        .spyOn(repository, 'getSingleQuery')
+        .mockResolvedValue([mockParticipation]);
 
       const result = await service.findOneWithoutThrow(
-        1,
+        mockParticipationId,
         ParticipationResponsesEnum.BASE,
       );
 
       expect(result).toEqual(mockParticipation);
-    });
-
-    it('should return null when participation not found', async () => {
-      repository.getSingleQuery.mockResolvedValue([]);
-
-      const result = await service.findOneWithoutThrow(
-        1,
+      expect(repository.getSingleQuery).toHaveBeenCalledWith(
+        mockParticipationId,
         ParticipationResponsesEnum.BASE,
       );
+    });
+
+    it('should return null if participation not found', async () => {
+      const mockParticipationId = 1;
+
+      jest.spyOn(repository, 'getSingleQuery').mockResolvedValue([]);
+
+      const result = await service.findOneWithoutThrow(mockParticipationId);
 
       expect(result).toBeNull();
+      expect(repository.getSingleQuery).toHaveBeenCalledWith(
+        mockParticipationId,
+        ParticipationResponsesEnum.BASE,
+      );
+    });
+
+    it('should use BASE response type by default', async () => {
+      const mockParticipationId = 1;
+
+      jest.spyOn(repository, 'getSingleQuery').mockResolvedValue([]);
+
+      await service.findOneWithoutThrow(mockParticipationId);
+
+      expect(repository.getSingleQuery).toHaveBeenCalledWith(
+        mockParticipationId,
+        ParticipationResponsesEnum.BASE,
+      );
     });
   });
 
@@ -191,24 +228,40 @@ describe('ParticipationService', () => {
   });
 
   describe('entityExists', () => {
-    it('should return true when entity exists', async () => {
-      repository.getSingleQuery.mockResolvedValue([mockParticipation]);
+    it('should return true if participation exists', async () => {
+      const mockParticipationId = 1;
+      const mockParticipation = {
+        id: mockParticipationId,
+        tournamentId: 1,
+        userId: 1,
+        groupId: null,
+      };
 
-      const result = await service.entityExists(1);
+      jest
+        .spyOn(repository, 'getSingleQuery')
+        .mockResolvedValue([mockParticipation]);
+
+      const result = await service.entityExists(mockParticipationId);
 
       expect(result).toBe(true);
       expect(repository.getSingleQuery).toHaveBeenCalledWith(
-        1,
+        mockParticipationId,
         ParticipationResponsesEnum.MINI,
       );
     });
 
-    it('should return false when entity does not exist', async () => {
-      repository.getSingleQuery.mockResolvedValue([]);
+    it('should return false if participation does not exist', async () => {
+      const mockParticipationId = 1;
 
-      const result = await service.entityExists(1);
+      jest.spyOn(repository, 'getSingleQuery').mockResolvedValue([]);
+
+      const result = await service.entityExists(mockParticipationId);
 
       expect(result).toBe(false);
+      expect(repository.getSingleQuery).toHaveBeenCalledWith(
+        mockParticipationId,
+        ParticipationResponsesEnum.MINI,
+      );
     });
   });
 
@@ -230,54 +283,113 @@ describe('ParticipationService', () => {
   });
 
   describe('isParticipant', () => {
-    const tournamentId = 1;
+    it('should return true if user is a participant', async () => {
+      const mockTournamentId = 1;
+      const mockUserId = 2;
+      const mockParticipation = {
+        id: 3,
+        tournamentId: mockTournamentId,
+        userId: mockUserId,
+        groupId: null,
+      };
 
-    it('should return true for existing solo participant', async () => {
-      const participantArg: TournamentParticipantArgument = { userId: 1 };
-      repository.getQuery.mockResolvedValue([mockParticipation]);
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([mockParticipation]);
 
-      const result = await service.isParticipant(tournamentId, participantArg);
+      const result = await service.isParticipant(mockTournamentId, {
+        userId: mockUserId,
+      });
 
       expect(result).toBe(true);
       expect(repository.getQuery).toHaveBeenCalledWith({
-        userId: 1,
-        tournamentId,
+        userId: mockUserId,
+        tournamentId: mockTournamentId,
         groupId: undefined,
       });
     });
 
-    it('should return true for existing group participant', async () => {
-      const participantArg: TournamentParticipantArgument = { groupId: 1 };
-      repository.getQuery.mockResolvedValue([
-        { ...mockParticipation, userId: null, groupId: 1 },
-      ]);
+    it('should return true if group is a participant', async () => {
+      const mockTournamentId = 1;
+      const mockGroupId = 2;
+      const mockParticipation = {
+        id: 3,
+        tournamentId: mockTournamentId,
+        userId: null,
+        groupId: mockGroupId,
+      };
 
-      const result = await service.isParticipant(tournamentId, participantArg);
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([mockParticipation]);
+
+      const result = await service.isParticipant(mockTournamentId, {
+        groupId: mockGroupId,
+      });
 
       expect(result).toBe(true);
       expect(repository.getQuery).toHaveBeenCalledWith({
         userId: undefined,
-        tournamentId,
-        groupId: 1,
+        tournamentId: mockTournamentId,
+        groupId: mockGroupId,
       });
     });
 
-    it('should return false when neither userId nor groupId provided', async () => {
-      const participantArg: TournamentParticipantArgument = {};
+    it('should return false if neither user nor group is provided', async () => {
+      const mockTournamentId = 1;
 
-      const result = await service.isParticipant(tournamentId, participantArg);
+      const result = await service.isParticipant(mockTournamentId, {});
 
       expect(result).toBe(false);
       expect(repository.getQuery).not.toHaveBeenCalled();
     });
 
-    it('should return false when participant not found', async () => {
-      const participantArg: TournamentParticipantArgument = { userId: 1 };
-      repository.getQuery.mockResolvedValue([]);
+    it('should return false if no participations found', async () => {
+      const mockTournamentId = 1;
+      const mockUserId = 2;
 
-      const result = await service.isParticipant(tournamentId, participantArg);
+      jest.spyOn(repository, 'getQuery').mockResolvedValue([]);
+
+      const result = await service.isParticipant(mockTournamentId, {
+        userId: mockUserId,
+      });
 
       expect(result).toBe(false);
+      expect(repository.getQuery).toHaveBeenCalledWith({
+        userId: mockUserId,
+        tournamentId: mockTournamentId,
+        groupId: undefined,
+      });
+    });
+  });
+
+  describe('getManagedParticipationsForPlayer', () => {
+    it('should call repository.getManagedParticipationsForPlayer with correct parameters', async () => {
+      const mockTournamentId = 1;
+      const mockPlayerId = 2;
+      const mockManagedParticipations = [
+        {
+          id: 3,
+          tournamentId: mockTournamentId,
+          group: {
+            id: 5,
+            name: 'Test Group',
+          },
+          userId: null,
+          groupId: 5,
+        },
+      ];
+
+      jest
+        .spyOn(repository, 'getManagedParticipationsForPlayer')
+        .mockResolvedValue(mockManagedParticipations);
+
+      const result = await service.getManagedParticipationsForPlayer(
+        mockTournamentId,
+        mockPlayerId,
+      );
+
+      expect(result).toEqual(mockManagedParticipations);
+      expect(repository.getManagedParticipationsForPlayer).toHaveBeenCalledWith(
+        mockTournamentId,
+        mockPlayerId,
+      );
     });
   });
 });

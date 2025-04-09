@@ -482,7 +482,9 @@ describe('MatchesService', () => {
         },
       ];
 
-      matchesRepository.getManagedMatchups.mockResolvedValue(expectedResults);
+      matchesRepository.getManagedMatchups.mockResolvedValue(
+        expectedResults as any,
+      );
 
       // Act
       const result = await service.getManagedMatchups(userId, query);
@@ -538,6 +540,390 @@ describe('MatchesService', () => {
         tournamentId,
       );
       expect(result).toBe(true);
+    });
+  });
+
+  describe('updateMatchScore', () => {
+    it('should update match score and update Challonge if the matchup has a Challonge ID', async () => {
+      // Arrange
+      const matchupId = 1;
+      const updateMatchupRequest: IEndMatchupRequest = {
+        scores: [
+          {
+            roundNumber: 1,
+            scores: [
+              { rosterId: 1, points: 5, isWinner: true },
+              { rosterId: 2, points: 2, isWinner: false },
+            ],
+          },
+        ],
+        results: [
+          { rosterId: 1, isWinner: true },
+          { rosterId: 2, isWinner: false },
+        ],
+      };
+
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: {
+          id: 1,
+          stageId: 5,
+          challongeMatchupId: '123',
+        },
+        rosterToMatchup: [
+          { rosterId: 1, matchupId: 1, isWinner: false },
+          { rosterId: 2, matchupId: 1, isWinner: false },
+        ],
+      });
+
+      matchesRepository.getStageById.mockResolvedValue({
+        id: 5,
+        name: 'Stage 1',
+        challongeTournamentId: '456',
+        stageType: 'single elimination',
+        tournamentId: 1,
+      } as any);
+
+      matchesRepository.updateMatchScore.mockResolvedValue([
+        { id: 10, matchupId: 1, roundNumber: 1 } as any,
+      ]);
+
+      rosterService.findOne.mockImplementation(async (rosterId) => {
+        return {
+          id: rosterId,
+          stageId: 5,
+          challongeParticipantId: rosterId === 1 ? '111' : '222',
+        } as any;
+      });
+
+      challongeService.updateMatchup.mockResolvedValue(undefined);
+
+      // Act
+      const result = await service.updateMatchScore(
+        matchupId,
+        updateMatchupRequest,
+      );
+
+      // Assert
+      expect(matchesRepository.getMatchupById).toHaveBeenCalledWith(matchupId);
+      expect(matchesRepository.updateMatchScore).toHaveBeenCalledWith(
+        matchupId,
+        updateMatchupRequest,
+      );
+      expect(matchesRepository.getStageById).toHaveBeenCalledWith(5);
+      expect(rosterService.findOne).toHaveBeenCalledTimes(2);
+      expect(challongeService.updateMatchup).toHaveBeenCalled();
+      expect(result).toEqual([{ id: 10, matchupId: 1, roundNumber: 1 }]);
+    });
+
+    it('should update match score without updating Challonge if no Challonge ID', async () => {
+      // Arrange
+      const matchupId = 1;
+      const updateMatchupRequest: IEndMatchupRequest = {
+        scores: [
+          {
+            roundNumber: 1,
+            scores: [
+              { rosterId: 1, points: 5, isWinner: true },
+              { rosterId: 2, points: 2, isWinner: false },
+            ],
+          },
+        ],
+        results: [
+          { rosterId: 1, isWinner: true },
+          { rosterId: 2, isWinner: false },
+        ],
+      };
+
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: {
+          id: 1,
+          stageId: 5,
+          challongeMatchupId: null,
+        },
+        rosterToMatchup: [
+          { rosterId: 1, matchupId: 1, isWinner: false },
+          { rosterId: 2, matchupId: 1, isWinner: false },
+        ],
+      });
+
+      matchesRepository.updateMatchScore.mockResolvedValue([
+        { id: 10, matchupId: 1, roundNumber: 1 } as any,
+      ]);
+
+      // Act
+      const result = await service.updateMatchScore(
+        matchupId,
+        updateMatchupRequest,
+      );
+
+      // Assert
+      expect(matchesRepository.getMatchupById).toHaveBeenCalledWith(matchupId);
+      expect(matchesRepository.updateMatchScore).toHaveBeenCalledWith(
+        matchupId,
+        updateMatchupRequest,
+      );
+      expect(matchesRepository.getStageById).not.toHaveBeenCalled();
+      expect(rosterService.findOne).not.toHaveBeenCalled();
+      expect(challongeService.updateMatchup).not.toHaveBeenCalled();
+      expect(result).toEqual([{ id: 10, matchupId: 1, roundNumber: 1 }]);
+    });
+  });
+
+  describe('deleteMatchScore', () => {
+    it('should delete match score and update Challonge if the matchup has a Challonge ID', async () => {
+      // Arrange
+      const matchupId = 1;
+
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: {
+          id: 1,
+          stageId: 5,
+          challongeMatchupId: '123',
+        },
+        rosterToMatchup: [
+          { rosterId: 1, matchupId: 1, isWinner: true },
+          { rosterId: 2, matchupId: 1, isWinner: false },
+        ],
+      });
+
+      matchesRepository.getStageById.mockResolvedValue({
+        id: 5,
+        name: 'Stage 1',
+        challongeTournamentId: '456',
+        stageType: 'single elimination',
+        tournamentId: 1,
+      } as any);
+
+      matchesRepository.deleteScore.mockResolvedValue({
+        id: 1,
+        stageId: 5,
+        challongeMatchupId: '123',
+      } as any);
+
+      rosterService.findOne.mockImplementation(async (rosterId) => {
+        return {
+          id: rosterId,
+          stageId: 5,
+          challongeParticipantId: rosterId === 1 ? '111' : '222',
+        } as any;
+      });
+
+      challongeService.updateMatchup.mockResolvedValue(undefined);
+
+      // Act
+      const result = await service.deleteMatchScore(matchupId);
+
+      // Assert
+      expect(matchesRepository.getMatchupById).toHaveBeenCalledWith(matchupId);
+      expect(matchesRepository.deleteScore).toHaveBeenCalledWith(matchupId);
+      expect(matchesRepository.getStageById).toHaveBeenCalledWith(5);
+      expect(challongeService.updateMatchup).toHaveBeenCalled();
+      expect(result).toEqual({
+        id: 1,
+        stageId: 5,
+        challongeMatchupId: '123',
+      });
+    });
+
+    it('should delete match score without updating Challonge if no Challonge ID', async () => {
+      // Arrange
+      const matchupId = 1;
+
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: {
+          id: 1,
+          stageId: 5,
+          challongeMatchupId: null,
+        },
+        rosterToMatchup: [
+          { rosterId: 1, matchupId: 1, isWinner: true },
+          { rosterId: 2, matchupId: 1, isWinner: false },
+        ],
+      });
+
+      matchesRepository.deleteScore.mockResolvedValue({
+        id: 1,
+        stageId: 5,
+        challongeMatchupId: null,
+      } as any);
+
+      // Act
+      const result = await service.deleteMatchScore(matchupId);
+
+      // Assert
+      expect(matchesRepository.getMatchupById).toHaveBeenCalledWith(matchupId);
+      expect(matchesRepository.deleteScore).toHaveBeenCalledWith(matchupId);
+      expect(matchesRepository.getStageById).not.toHaveBeenCalled();
+      expect(challongeService.updateMatchup).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        id: 1,
+        stageId: 5,
+        challongeMatchupId: null,
+      });
+    });
+  });
+
+  describe('getResultsForUser', () => {
+    it('should return matchups with results for a user', async () => {
+      // Arrange
+      const userId = 1;
+      const pagination: PaginationOnly = { page: 1, pageSize: 10 };
+      const expectedResults = [
+        {
+          id: 1,
+          stageId: 5,
+          round: 1,
+          isFinished: true,
+          rosterToMatchup: [
+            {
+              isWinner: true,
+              matchupId: 1,
+              score: 3,
+              roster: {
+                id: 1,
+                stageId: 5,
+                players: [
+                  {
+                    userId: 1,
+                    rosterId: 1,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ];
+
+      matchesRepository.getResultsForUser.mockResolvedValue(
+        expectedResults as any,
+      );
+
+      // Act
+      const result = await service.getResultsForUser(userId, pagination);
+
+      // Assert
+      expect(matchesRepository.getResultsForUser).toHaveBeenCalledWith(
+        userId,
+        pagination,
+      );
+      expect(result).toEqual(expectedResults);
+    });
+  });
+
+  describe('getResultsForRoster', () => {
+    it('should return matchups with results for a roster', async () => {
+      // Arrange
+      const rosterId = 1;
+      const pagination: PaginationOnly = { page: 1, pageSize: 10 };
+      const expectedResults = [
+        {
+          id: 1,
+          stageId: 5,
+          round: 1,
+          isFinished: true,
+          
+        },
+      ];
+
+      matchesRepository.getResultsForRoster.mockResolvedValue(
+        expectedResults as any,
+      );
+
+      // Act
+      const result = await service.getResultsForRoster(rosterId, pagination);
+
+      // Assert
+      expect(matchesRepository.getResultsForRoster).toHaveBeenCalledWith(
+        rosterId,
+        pagination,
+      );
+      expect(result).toEqual(expectedResults);
+    });
+  });
+
+  describe('getManagedMatchups', () => {
+    it('should return matchups managed by the user', async () => {
+      // Arrange
+      const userId = 1;
+      const query: QueryMatchupRequestDto = { stageId: 5 };
+      const expectedResults = [
+        {
+          id: 1,
+          stageId: 5,
+          round: 1,
+          isFinished: true,
+          rosterToMatchup: [
+            {
+              isWinner: true,
+              matchupId: 1,
+              score: 3,
+              roster: {
+                id: 1,
+                stageId: 5,
+              },
+            },
+          ],
+        },
+      ];
+
+      matchesRepository.getManagedMatchups.mockResolvedValue(
+        expectedResults as any,
+      );
+
+      // Act
+      const result = await service.getManagedMatchups(userId, query);
+
+      // Assert
+      expect(matchesRepository.getManagedMatchups).toHaveBeenCalledWith(
+        userId,
+        query,
+      );
+      expect(result).toEqual(expectedResults);
+    });
+  });
+
+  describe('getResultsForGroup', () => {
+    it('should return matchups with results for a group', async () => {
+      // Arrange
+      const groupId = 1;
+      const pagination: PaginationOnly = { page: 1, pageSize: 10 };
+      const expectedResults = [
+        {
+          id: 1,
+          stageId: 5,
+          round: 1,
+          isFinished: true,
+          rosterToMatchup: [
+            {
+              isWinner: true,
+              matchupId: 1,
+              score: 3,
+              roster: {
+                id: 1,
+                stageId: 5,
+                participation: {
+                  id: 10,
+                  group: { id: 1, name: 'Group A' },
+                },
+              },
+            },
+          ],
+        },
+      ];
+
+      matchesRepository.getResultsForGroup.mockResolvedValue(
+        expectedResults as any,
+      );
+
+      // Act
+      const result = await service.getResultsForGroup(groupId, pagination);
+
+      // Assert
+      expect(matchesRepository.getResultsForGroupIds).toHaveBeenCalledWith(
+        [groupId],
+        pagination,
+      );
+      expect(result).toEqual(expectedResults);
     });
   });
 });

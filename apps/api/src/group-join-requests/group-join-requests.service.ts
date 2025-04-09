@@ -210,7 +210,6 @@ export class GroupJoinRequestsService {
         },
       ),
       image: information.group?.logo,
-      link: `/group/${groupId}`,
     };
 
     return notificationDto;

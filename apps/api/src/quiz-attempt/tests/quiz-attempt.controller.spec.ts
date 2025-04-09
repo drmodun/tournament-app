@@ -3,7 +3,6 @@ import { QuizAttemptController } from '../quiz-attempt.controller';
 import { QuizAttemptService } from '../quiz-attempt.service';
 import { QuizAttemptResponsesEnum } from '@tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
-import { createMock } from '@golevelup/ts-jest';
 
 jest.mock('src/base/static/makeMetadata', () => ({
   MetadataMaker: {
@@ -139,7 +138,11 @@ describe('QuizAttemptController', () => {
     it('should create a new attempt', async () => {
       mockService.create.mockResolvedValue(mockAttempt);
 
-      const result = await controller.create(createDto, mockUser as any);
+      const result = await controller.create(
+        createDto,
+        mockUser as any,
+        mockUser as any,
+      );
 
       expect(result).toEqual(mockAttempt);
       expect(service.create).toHaveBeenCalledWith({
@@ -166,6 +169,7 @@ describe('QuizAttemptController', () => {
 
   describe('createAnswer', () => {
     const attemptId = 1;
+    const questionId = 1;
     const createAnswerDto = { quizQuestionId: 1, answer: 'Test answer' };
     const mockUser = { id: 1 };
     const mockAnswer = { id: 1 };
@@ -175,6 +179,7 @@ describe('QuizAttemptController', () => {
 
       const result = await controller.createAnswer(
         attemptId,
+        questionId,
         createAnswerDto,
         mockUser as any,
       );

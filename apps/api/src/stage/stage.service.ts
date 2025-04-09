@@ -228,7 +228,7 @@ export class StageService {
         {
           type: notificationTypeEnum.TOURNAMENT_START,
           message,
-          link: `/tournaments/stages/${stageId}`,
+          link: `/stage/${stageId}`,
           image: null,
         },
         rosteredUsers.map((user) => user.id),

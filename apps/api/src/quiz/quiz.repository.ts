@@ -231,7 +231,7 @@ export class QuizDrizzleRepository extends PrimaryRepository<
     return db.transaction(async (tx) => {
       const quizToUpdate = await tx.select().from(quiz).where(eq(quiz.id, id));
 
-      if (!quizToUpdate.length) {
+      if (!quizToUpdate.length || quizToUpdate.length === 0) {
         throw new NotFoundException(`Quiz with ID ${id} not found`);
       }
 

@@ -21,6 +21,7 @@ import { RosterDrizzleRepository } from '../../roster/roster.repository';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
 import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
 import { TemplatesEnum } from '../../infrastructure/types';
+import { MatchService } from '../../match/match.service';
 
 describe('StageService', () => {
   let service: StageService;
@@ -28,6 +29,8 @@ describe('StageService', () => {
   let mockRosterRepository: jest.Mocked<RosterDrizzleRepository>;
   let mockSseNotificationsService: jest.Mocked<SseNotificationsService>;
   let mockNotificationTemplateFiller: jest.Mocked<NotificationTemplatesFiller>;
+  let mockChallongeService: jest.Mocked<ChallongeService>;
+  let mockMatchService: jest.Mocked<MatchService>;
 
   const mockStage = {
     id: 1,
@@ -56,6 +59,12 @@ describe('StageService', () => {
       createChallongeTournamentFromStage: jest.fn(),
       updateTournament: jest.fn(),
       deleteTournament: jest.fn(),
+    };
+
+    mockMatchService = {
+      createMatches: jest.fn(),
+      updateMatches: jest.fn(),
+      deleteMatches: jest.fn(),
     };
 
     mockRosterRepository = {

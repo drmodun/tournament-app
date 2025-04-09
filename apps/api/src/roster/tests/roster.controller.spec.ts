@@ -207,7 +207,9 @@ describe('RosterController', () => {
         page: 1,
         pageSize: 10,
       };
-      service.findByParticipation.mockResolvedValue([mockRosterWithPlayers]);
+      service.findByParticipation.mockResolvedValue([
+        mockRosterWithPlayers as any,
+      ]);
 
       const req = {
         url: '/roster/participation/1',
@@ -229,7 +231,7 @@ describe('RosterController', () => {
         page: 1,
         pageSize: 10,
       };
-      service.findByPlayer.mockResolvedValue([mockRosterWithPlayers]);
+      service.findByPlayer.mockResolvedValue([mockRosterWithPlayers as any]);
 
       const req = {
         url: '/roster/user/1',
@@ -251,7 +253,7 @@ describe('RosterController', () => {
         page: 1,
         pageSize: 10,
       };
-      service.findByGroup.mockResolvedValue([mockRosterWithPlayers]);
+      service.findByGroup.mockResolvedValue([mockRosterWithPlayers as any]);
 
       const req = {
         url: '/roster/group/1',

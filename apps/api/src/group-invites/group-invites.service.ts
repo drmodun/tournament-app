@@ -56,7 +56,7 @@ export class GroupInvitesService {
       {
         type: notificationTypeEnum.GROUP_INVITATION,
         message,
-        link: `/groups/${groupId}/invites`,
+        link: `/manageGroupInvites`,
         image: null,
       },
       [userId],
@@ -154,7 +154,6 @@ export class GroupInvitesService {
       {
         type: notificationTypeEnum.GROUP_JOIN_REJECTION,
         message,
-        link: `/groups`,
         image: null,
       },
       [userId],
@@ -175,7 +174,7 @@ export class GroupInvitesService {
       {
         type: notificationTypeEnum.GROUP_JOIN_APPROVAL,
         message,
-        link: `/groups`,
+        link: `/group/${groupId}`,
         image: null,
       },
       [userId],

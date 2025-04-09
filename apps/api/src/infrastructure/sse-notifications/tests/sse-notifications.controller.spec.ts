@@ -3,13 +3,14 @@ import { SseNotificationsController } from '../sse-notifications.controller';
 import { SseNotificationsService } from '../sse-notifications.service';
 import { notificationTypeEnum } from '@tournament-app/types';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NotificationQueryDto } from '../dto/requests';
 import { NotificationCreateDto } from '../../types';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 
 describe('SseNotificationsController', () => {
   let controller: SseNotificationsController;
-  let service: SseNotificationsService;
+  let service: jest.Mocked<SseNotificationsService>;
 
   const mockUser = {
     id: 1,
@@ -45,10 +46,16 @@ describe('SseNotificationsController', () => {
             setBulkAsRead: jest.fn(),
             remove: jest.fn(),
             getNotificationStream: jest.fn(),
+            createNotificationAndLinkToUsers: jest.fn(),
+            publishNotification: jest.fn(),
+            publishManyNotifications: jest.fn(),
           },
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: jest.fn().mockReturnValue(true) })
+      .compile();
 
     controller = module.get<SseNotificationsController>(
       SseNotificationsController,
@@ -67,13 +74,26 @@ describe('SseNotificationsController', () => {
 
       jest.spyOn(service, 'findAllForUser').mockResolvedValue(mockResult);
 
-      const result = await controller.findAll(mockUser, mockQuery);
+      const result = await controller.findAll(mockUser as any, mockQuery);
 
       expect(service.findAllForUser).toHaveBeenCalledWith({
         ...mockQuery,
         userId: mockUser.id,
       });
       expect(result).toEqual(mockResult);
+    });
+
+    it('should handle empty query parameters', async () => {
+      const mockQuery: NotificationQueryDto = {};
+      const mockResult = [{ notification: mockNotification, isRead: false }];
+
+      jest.spyOn(service, 'findAllForUser').mockResolvedValue(mockResult);
+
+      await controller.findAll(mockUser as any, mockQuery);
+
+      expect(service.findAllForUser).toHaveBeenCalledWith({
+        userId: mockUser.id,
+      });
     });
   });
 
@@ -83,7 +103,7 @@ describe('SseNotificationsController', () => {
 
       jest.spyOn(service, 'requestNewToken').mockResolvedValue(mockUpdatedUser);
 
-      const result = await controller.requestNewToken(mockUser);
+      const result = await controller.requestNewToken(mockUser as any);
 
       expect(service.requestNewToken).toHaveBeenCalledWith(mockUser.id);
       expect(result).toEqual(mockUpdatedUser);
@@ -104,7 +124,7 @@ describe('SseNotificationsController', () => {
     it('should call service.setAllAsReadForUser with user id', async () => {
       jest.spyOn(service, 'setAllAsReadForUser').mockResolvedValue(undefined);
 
-      await controller.markAllAsRead(mockUser);
+      await controller.markAllAsRead(mockUser as any);
 
       expect(service.setAllAsReadForUser).toHaveBeenCalledWith(mockUser.id);
     });
@@ -113,6 +133,16 @@ describe('SseNotificationsController', () => {
   describe('markBulkAsRead', () => {
     it('should call service.setBulkAsRead with notification ids', async () => {
       const notificationIds = [1, 2, 3];
+
+      jest.spyOn(service, 'setBulkAsRead').mockResolvedValue(undefined);
+
+      await controller.markBulkAsRead(notificationIds);
+
+      expect(service.setBulkAsRead).toHaveBeenCalledWith(notificationIds);
+    });
+
+    it('should handle empty array of ids', async () => {
+      const notificationIds = [];
 
       jest.spyOn(service, 'setBulkAsRead').mockResolvedValue(undefined);
 
@@ -154,6 +184,16 @@ describe('SseNotificationsController', () => {
       expect(service.getUserIdByToken).toHaveBeenCalledWith(mockToken);
       expect(service.getNotificationStream).toHaveBeenCalledWith(mockUser.id);
       expect(result).toBe(mockObservable);
+    });
+
+    it('should propagate errors from getUserIdByToken', async () => {
+      jest
+        .spyOn(service, 'getUserIdByToken')
+        .mockRejectedValue(new BadRequestException('Invalid token'));
+
+      await expect(controller.getNotificationStream(mockToken)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });

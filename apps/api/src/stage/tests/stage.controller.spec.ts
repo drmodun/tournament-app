@@ -170,11 +170,14 @@ describe('StageController', () => {
       service.getManagedStages.mockResolvedValue(mockManagedStages);
 
       const result = await controller.getManagedStages(
-        mockUser,
+        mockUser as any,
         paginationQuery,
       );
 
-      expect(result).toEqual(mockManagedStages);
+      expect(result).toEqual({
+        results: mockManagedStages,
+        metadata: expect.any(Object),
+      });
       expect(service.getManagedStages).toHaveBeenCalledWith(
         mockUser.id,
         paginationQuery,
@@ -184,7 +187,7 @@ describe('StageController', () => {
     it('should pass the correct user ID to the service', async () => {
       service.getManagedStages.mockResolvedValue([]);
 
-      await controller.getManagedStages(mockUser, paginationQuery);
+      await controller.getManagedStages(mockUser as any, paginationQuery);
 
       expect(service.getManagedStages).toHaveBeenCalledWith(
         1,

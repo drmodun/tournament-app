@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext, NotFoundException } from '@nestjs/common';
 import { CanAccessAttemptGuard } from '../guards/can-access-attempt.guard';
 import { QuizAttemptService } from '../quiz-attempt.service';
-import { createMock } from '@golevelup/ts-jest';
 
 describe('CanAccessAttemptGuard', () => {
   let guard: CanAccessAttemptGuard;

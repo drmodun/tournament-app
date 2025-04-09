@@ -11,23 +11,35 @@ import { Transform } from 'class-transformer';
 import { BaseQuery } from 'src/base/query/baseQuery';
 
 export class CreateLocationDto implements ICreateLocationRequest {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Name of the location',
+    example: 'New York',
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'API ID of the location',
+    example: '1234567890',
+  })
   @IsString()
   @IsNotEmpty()
   apiId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Latitude of the location',
+    example: 40.7128,
+  })
   @IsNumber()
   @Transform(({ value }) => Number(value))
   @IsNotEmpty()
   lat: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Longitude of the location',
+    example: -74.006,
+  })
   @IsNumber()
   @Transform(({ value }) => Number(value))
   @IsNotEmpty()
@@ -35,23 +47,35 @@ export class CreateLocationDto implements ICreateLocationRequest {
 }
 
 export class UpdateLocationDto implements IUpdateLocationRequest {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Name of the location',
+    example: 'New York',
+  })
   @IsString()
   @IsOptional()
   name?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'API ID of the location',
+    example: '1234567890',
+  })
   @IsString()
   @IsOptional()
   apiId?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Latitude of the location',
+    example: 40.7128,
+  })
   @IsNumber()
   @Transform(({ value }) => Number(value))
   @IsOptional()
   lat?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Longitude of the location',
+    example: -74.006,
+  })
   @IsNumber()
   @Transform(({ value }) => Number(value))
   @IsOptional()
@@ -62,24 +86,36 @@ export class LocationQuery
   extends BaseQuery<LocationResponseEnumType>
   implements ILocationQuery
 {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Name of the location',
+    example: 'New York',
+  })
   @IsOptional()
   @IsString()
   name?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'API ID of the location',
+    example: '1234567890',
+  })
   @IsOptional()
   @IsString()
   apiId?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Latitude of the location',
+    example: 40.7128,
+  })
   @IsOptional()
   @Transform(({ value }) => parseFloat(value))
   @IsNumber()
   @IsOptional()
   lat?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Longitude of the location',
+    example: -74.006,
+  })
   @IsOptional()
   @Transform(({ value }) => parseFloat(value))
   @IsNumber()

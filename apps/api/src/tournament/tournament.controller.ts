@@ -27,6 +27,7 @@ import {
   ApiBearerAuth,
   ApiExtraModels,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { tournamentQueryExamples, tournamentResponses } from './dto/examples';
@@ -53,7 +54,13 @@ export class TournamentController {
 
   @Get('auto-complete/:search')
   @ApiOkResponse({
-    description: 'Returns a list of tournaments that can be auto-completed',
+    description:
+      'Returns a list of tournaments that can be auto-completed based on the search term.',
+  })
+  @ApiOperation({
+    summary: 'Auto-complete tournaments based on search term',
+    description:
+      'Returns a list of tournaments that can be auto-completed based on the search term.',
   })
   async autoComplete(
     @Param('search') search: string,
@@ -64,11 +71,18 @@ export class TournamentController {
 
   @Get()
   @ApiOkResponse({
+    description:
+      'Retrieves a list of tournaments based on the provided query parameters.',
     content: {
       'application/json': {
         examples: tournamentQueryExamples.responses,
       },
     },
+  })
+  @ApiOperation({
+    summary: 'Retrieve all tournaments',
+    description:
+      'Retrieves a list of tournaments based on the provided query parameters.',
   })
   async findAll(@Query() query: TournamentQuery, @Req() req: Request) {
     const results = await this.tournamentService.findAll(query);
@@ -88,6 +102,13 @@ export class TournamentController {
   @Get('managed')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Retrieves a list of tournaments managed by the current user.',
+  })
+  @ApiOperation({
+    summary: 'Retrieve all tournaments managed by the current user',
+    description: 'Retrieves a list of tournaments managed by the current user.',
+  })
   async getManagedTournaments(
     @CurrentUser() user: ValidatedUserDto,
     @Query() query: PaginationOnly,
@@ -97,8 +118,14 @@ export class TournamentController {
 
   @Get(':tournamentId')
   @ApiOkResponse({
-    description: 'Returns a single tournament',
+    description:
+      'Returns details of a single tournament specified by the tournament ID.',
     schema: { examples: tournamentResponses },
+  })
+  @ApiOperation({
+    summary: 'Retrieve a single tournament by ID',
+    description:
+      'Returns details of a single tournament specified by the tournament ID.',
   })
   async findOne(
     @Param('tournamentId', ParseIntPipe) id: number,
@@ -111,8 +138,12 @@ export class TournamentController {
   @UseGuards(JwtAuthGuard, ConditionalAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Creates a new tournament',
+    description: 'Creates a new tournament with the provided details.',
     type: ActionResponsePrimary,
+  })
+  @ApiOperation({
+    summary: 'Create a new tournament',
+    description: 'Creates a new tournament with the provided details.',
   })
   async create(
     @Body() createTournamentDto: CreateTournamentRequest,
@@ -128,8 +159,14 @@ export class TournamentController {
   @UseGuards(JwtAuthGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Updates a tournament',
+    description:
+      'Updates the details of an existing tournament specified by the tournament ID.',
     type: ActionResponsePrimary,
+  })
+  @ApiOperation({
+    summary: 'Update an existing tournament',
+    description:
+      'Updates the details of an existing tournament specified by the tournament ID.',
   })
   async update(
     @Param('tournamentId', ParseIntPipe) id: number,
@@ -142,8 +179,12 @@ export class TournamentController {
   @UseGuards(JwtAuthGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Deletes a tournament',
+    description: 'Deletes a tournament specified by the tournament ID.',
     type: ActionResponsePrimary,
+  })
+  @ApiOperation({
+    summary: 'Delete a tournament',
+    description: 'Deletes a tournament specified by the tournament ID.',
   })
   async remove(@Param('tournamentId', ParseIntPipe) id: number) {
     return await this.tournamentService.remove(id);

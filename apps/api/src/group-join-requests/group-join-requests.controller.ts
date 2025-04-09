@@ -20,6 +20,7 @@ import {
   ApiBearerAuth,
   ApiExtraModels,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -60,6 +61,9 @@ export class GroupJoinRequestsController {
   ) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Gets all group join requests',
+  })
   @ApiOkResponse({
     content: {
       'application/json': {
@@ -83,6 +87,9 @@ export class GroupJoinRequestsController {
   }
 
   @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @ApiOperation({
+    summary: 'Creates a new group join request',
+  })
   @ApiBearerAuth()
   @Post(':groupId')
   async create(
@@ -98,6 +105,9 @@ export class GroupJoinRequestsController {
   }
 
   @Get(':groupId/:userId')
+  @ApiOperation({
+    summary: 'Gets a specific group join request',
+  })
   @ApiOkResponse({
     description: 'Returns a specific group join request',
     content: {
@@ -120,6 +130,9 @@ export class GroupJoinRequestsController {
   }
 
   @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @ApiOperation({
+    summary: 'Updates a group join request',
+  })
   @ApiBearerAuth()
   @Patch(':groupId')
   async update(
@@ -135,6 +148,9 @@ export class GroupJoinRequestsController {
   }
 
   @UseGuards(JwtAuthGuard, GroupNonMemberGuard)
+  @ApiOperation({
+    summary: 'Deletes a group join request',
+  })
   @ApiBearerAuth()
   @Delete(':groupId')
   async remove(
@@ -145,6 +161,9 @@ export class GroupJoinRequestsController {
   }
 
   @Post(':groupId/:userId/accept')
+  @ApiOperation({
+    summary: 'Accepts a group join request',
+  })
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
   async accept(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -154,6 +173,9 @@ export class GroupJoinRequestsController {
   }
 
   @Delete(':groupId/:userId/reject')
+  @ApiOperation({
+    summary: 'Rejects a group join request',
+  })
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
   async reject(
     @Param('groupId', ParseIntPipe) groupId: number,

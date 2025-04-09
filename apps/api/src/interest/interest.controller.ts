@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { InterestService } from './interest.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { PaginationOnly } from 'src/base/query/baseQuery';
@@ -23,6 +23,9 @@ export class InterestController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Create interest',
+  })
   @Post(':categoryId')
   async createInterest(
     @Param('categoryId') categoryId: number,
@@ -33,6 +36,9 @@ export class InterestController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete interest',
+  })
   @Delete(':categoryId')
   async deleteInterest(
     @Param('categoryId') categoryId: number,
@@ -43,6 +49,9 @@ export class InterestController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get interest categories',
+  })
   @Get()
   async getInterestCategories(
     @Query() query: PaginationOnly,

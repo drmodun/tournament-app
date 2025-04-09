@@ -28,6 +28,7 @@ import {
   ApiBearerAuth,
   ApiExtraModels,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -62,7 +63,12 @@ export class StageController {
   constructor(private readonly stageService: StageService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Retrieves a list of stages based on the provided query parameters.',
+  })
   @ApiOkResponse({
+    description:
+      'Retrieves a list of stages based on the provided query parameters.',
     content: {
       'application/json': {
         examples: {
@@ -101,8 +107,14 @@ export class StageController {
   }
 
   @Get('managed')
+  @ApiOperation({
+    summary: 'Retrieves a list of stages managed by the current user.',
+  })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Retrieves a list of stages managed by the current user.',
+  })
   async getManagedStages(
     @CurrentUser() user: ValidatedUserDto,
     @Query() query: PaginationOnly,
@@ -111,9 +123,13 @@ export class StageController {
   }
 
   @Patch('start/:stageId')
+  @ApiOperation({
+    summary: 'Starts a stage specified by the stage ID.',
+  })
   @UseGuards(JwtAuthGuard, StageAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
+    description: 'Starts a stage specified by the stage ID.',
     type: ActionResponsePrimary,
   })
   async startStage(@Param('stageId', ParseIntPipe) stageId: number) {
@@ -121,8 +137,11 @@ export class StageController {
   }
 
   @Get(':stageId')
+  @ApiOperation({
+    summary: 'Returns details of a single stage specified by the stage ID.',
+  })
   @ApiOkResponse({
-    description: 'Returns a single stage',
+    description: 'Returns details of a single stage specified by the stage ID.',
     content: {
       'application/json': {
         examples: {
@@ -153,10 +172,13 @@ export class StageController {
   }
 
   @Post(':tournamentId')
+  @ApiOperation({
+    summary: 'Creates a new stage within the specified tournament.',
+  })
   @UseGuards(JwtAuthGuard, TournamentAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Creates a new stage',
+    description: 'Creates a new stage within the specified tournament.',
     type: ActionResponsePrimary,
     content: {
       'application/json': {
@@ -175,10 +197,14 @@ export class StageController {
   }
 
   @Patch(':tournamentId/:stageId')
+  @ApiOperation({
+    summary: 'Updates the details of an existing stage specified by the stage ID.',
+  })
   @UseGuards(JwtAuthGuard, StageAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Updates a stage',
+    description:
+      'Updates the details of an existing stage specified by the stage ID.',
     type: ActionResponsePrimary,
     content: {
       'application/json': {
@@ -198,10 +224,14 @@ export class StageController {
   }
 
   @Delete(':tournamentId/:stageId')
+  @ApiOperation({
+    summary: 'Deletes a stage specified by the stage ID within the specified tournament.',
+  })
   @UseGuards(JwtAuthGuard, StageAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Deletes a stage',
+    description:
+      'Deletes a stage specified by the stage ID within the specified tournament.',
     type: ActionResponsePrimary,
   })
   async remove(@Param('stageId', ParseIntPipe) id: number) {

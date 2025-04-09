@@ -43,6 +43,12 @@ export class LfgController {
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new LFG post' })
+  @ApiResponse({
+    status: 201,
+    description: 'LFG post created successfully',
+    type: LFGResponse,
+  })
   async create(
     @Body() createLFGRequest: CreateLFGRequest,
     @CurrentUser() user: ValidatedUserDto,
@@ -52,6 +58,12 @@ export class LfgController {
   @Get(':groupId')
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get LFG posts for a group' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns LFG posts for a specific group',
+    type: [LFGResponse],
+  })
   async findPlayers(@Param('groupId', ParseIntPipe) groupId: number) {
     return await this.lfgService.findPlayers(groupId);
   }
@@ -59,6 +71,12 @@ export class LfgController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update an existing LFG post' })
+  @ApiResponse({
+    status: 200,
+    description: 'LFG post updated successfully',
+    type: LFGResponse,
+  })
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateLFGRequest: UpdateLFGRequest,
@@ -70,6 +88,12 @@ export class LfgController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete an LFG post' })
+  @ApiResponse({
+    status: 200,
+    description: 'LFG post deleted successfully',
+    type: LFGResponse,
+  })
   async delete(
     @Param('id', ParseIntPipe) id: number,
     @CurrentUser() user: ValidatedUserDto,

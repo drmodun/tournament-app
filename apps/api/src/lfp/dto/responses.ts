@@ -1,4 +1,4 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import {
   IGroupRequirementsResponse,
   IGroupResponse,
@@ -11,23 +11,47 @@ import { GroupResponse } from 'src/group/dto/responses.dto';
 import { GroupRequirementsResponseDto } from 'src/group/requirements/dto/responses';
 import { LocationResponse } from 'src/location/dto/responses';
 export class LFPResponse implements ILFPResponse {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Unique identifier for the LFP',
+    example: 123,
+    readOnly: true,
+  })
   id: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'ID of the group',
+    example: 456,
+    readOnly: true,
+  })
   groupId: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Group affiliated with the LFP',
+    type: () => GroupResponse,
+    readOnly: true,
+  })
   @Type(() => GroupResponse)
   group: IGroupResponse;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Message for the LFP',
+    example: 'Looking for players for our competitive team',
+    readOnly: true,
+  })
   message: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the LFP was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Requirements for the group',
+    type: () => GroupRequirementsResponseDto,
+    readOnly: true,
+  })
   @Type(() => GroupRequirementsResponseDto)
   requirements: IGroupRequirementsResponse;
 
@@ -37,15 +61,31 @@ export class LFPResponse implements ILFPResponse {
 }
 
 export class MiniLFPResponse implements IMiniLFPResponse {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Unique identifier for the LFP',
+    example: 123,
+    readOnly: true,
+  })
   id: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'ID of the group',
+    example: 456,
+    readOnly: true,
+  })
   groupId: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Message for the LFP',
+    example: 'Looking for players for our competitive team',
+    readOnly: true,
+  })
   message: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the LFP was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: string;
 }

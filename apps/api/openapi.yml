@@ -10,10 +10,11 @@ paths:
   /users/fake:
     post:
       operationId: UsersController_createFake
+      summary: Creates a fake user for seeding or custom tourney purposes.
       parameters: []
       responses:
         "201":
-          description: ""
+          description: Creates a fake user for seeding or custom tourney purposes.
           content:
             application/json:
               schema:
@@ -25,6 +26,8 @@ paths:
   /users/auto-complete/{search}:
     get:
       operationId: UsersController_userAutoComplete
+      summary: Returns a list of users that can be auto-completed based on the search
+        term.
       parameters:
         - name: search
           required: true
@@ -43,7 +46,8 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Returns a list of users that can be auto-completed based on the
+            search term.
           content:
             application/json:
               schema:
@@ -54,6 +58,7 @@ paths:
   /users:
     post:
       operationId: UsersController_create
+      summary: Creates a new user with the provided details.
       parameters: []
       requestBody:
         required: true
@@ -63,7 +68,7 @@ paths:
               $ref: "#/components/schemas/CreateUserRequest"
       responses:
         "201":
-          description: ""
+          description: Creates a new user with the provided details.
           content:
             application/json:
               schema:
@@ -71,6 +76,7 @@ paths:
       tags: *a1
     patch:
       operationId: UsersController_updateMe
+      summary: Updates the current user profile with the provided details.
       parameters: []
       requestBody:
         required: true
@@ -80,7 +86,7 @@ paths:
               $ref: "#/components/schemas/UpdateUserInfo"
       responses:
         "200":
-          description: ""
+          description: Updates the current user profile with the provided details.
           content:
             application/json:
               schema:
@@ -90,10 +96,11 @@ paths:
         - bearer: []
     delete:
       operationId: UsersController_deleteMe
+      summary: Deletes the current user profile.
       parameters: []
       responses:
         "200":
-          description: ""
+          description: Deletes the current user profile.
           content:
             application/json:
               schema:
@@ -103,6 +110,7 @@ paths:
         - bearer: []
     get:
       operationId: UsersController_findAll
+      summary: Retrieves a list of users based on the provided query parameters.
       parameters:
         - name: field
           required: false
@@ -190,6 +198,7 @@ paths:
             type: number
       responses:
         "200":
+          description: Retrieves a list of users based on the provided query parameters.
           content:
             application/json:
               examples:
@@ -223,7 +232,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2025-04-08T21:54:45.781Z
+                        updatedAt: &a2 2025-04-09T00:11:37.700Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -323,18 +332,18 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2025-04-08T21:54:45.781Z
+                        createdAt: 2025-04-09T00:11:37.700Z
                         following: 0
                         location: New York
-          description: ""
       tags: *a1
   /users/me:
     get:
       operationId: UsersController_findMe
+      summary: Retrieves the current user profile.
       parameters: []
       responses:
         "200":
-          description: ""
+          description: Retrieves the current user profile.
           content:
             application/json:
               schema:
@@ -345,6 +354,7 @@ paths:
   /users/{id}:
     get:
       operationId: UsersController_findOne
+      summary: Returns details of a single user specified by the user ID.
       parameters:
         - name: id
           required: true
@@ -358,6 +368,7 @@ paths:
             type: string
       responses:
         "200":
+          description: Returns details of a single user specified by the user ID.
           content:
             application/json:
               schema:
@@ -381,7 +392,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2025-04-08T21:54:45.781Z
+                    updatedAt: &a3 2025-04-09T00:11:37.700Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -413,13 +424,13 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2025-04-08T21:54:45.781Z
+                    createdAt: 2025-04-09T00:11:37.700Z
                     following: 0
                     location: New York
-          description: ""
       tags: *a1
     patch:
       operationId: UsersController_update
+      summary: Updates the details of an existing user specified by the user ID.
       parameters:
         - name: id
           required: true
@@ -434,7 +445,7 @@ paths:
               $ref: "#/components/schemas/UpdateUserInfo"
       responses:
         "201":
-          description: ""
+          description: Updates the details of an existing user specified by the user ID.
           content:
             application/json:
               schema:
@@ -444,6 +455,7 @@ paths:
         - bearer: []
     delete:
       operationId: UsersController_remove
+      summary: Deletes a user specified by the user ID.
       parameters:
         - name: id
           required: true
@@ -452,7 +464,7 @@ paths:
             type: number
       responses:
         "201":
-          description: ""
+          description: Deletes a user specified by the user ID.
           content:
             application/json:
               schema:
@@ -777,7 +789,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-08T21:54:45.984Z
+                        updatedAt: 2025-04-09T00:11:37.868Z
                         memberCount: 50
                 extended:
                   value:
@@ -802,9 +814,9 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-08T21:54:45.984Z
+                        updatedAt: 2025-04-09T00:11:37.868Z
                         memberCount: 50
-                        createdAt: 2025-04-08T21:54:45.985Z
+                        createdAt: 2025-04-09T00:11:37.868Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -831,7 +843,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-08T21:54:45.984Z
+                updatedAt: 2025-04-09T00:11:37.868Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -884,7 +896,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-08T21:54:45.984Z
+                    updatedAt: 2025-04-09T00:11:37.868Z
                     memberCount: 50
                 extended:
                   value:
@@ -896,9 +908,9 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-08T21:54:45.984Z
+                    updatedAt: 2025-04-09T00:11:37.868Z
                     memberCount: 50
-                    createdAt: 2025-04-08T21:54:45.985Z
+                    createdAt: 2025-04-09T00:11:37.868Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -937,7 +949,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-08T21:54:45.984Z
+                updatedAt: 2025-04-09T00:11:37.868Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -1001,7 +1013,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-08T21:54:45.984Z
+                  updatedAt: 2025-04-09T00:11:37.868Z
                   memberCount: 50
                 members: []
           description: ""
@@ -1029,7 +1041,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-08T21:54:45.984Z
+                  updatedAt: 2025-04-09T00:11:37.868Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -1057,7 +1069,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-08T21:54:45.984Z
+                  updatedAt: 2025-04-09T00:11:37.868Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -1065,6 +1077,7 @@ paths:
   /group-membership/auto-complete/users/{groupId}/{search}:
     get:
       operationId: GroupMembershipController_autoComplete
+      summary: Gets the users by group ID and search string in an autocomplete manner
       parameters:
         - name: groupId
           required: true
@@ -1102,6 +1115,7 @@ paths:
   /group-membership/auto-complete/groups/{search}:
     get:
       operationId: GroupMembershipController_autoCompleteGroups
+      summary: Gets the groups by search string in an autocomplete manner
       parameters:
         - name: search
           required: true
@@ -1172,16 +1186,22 @@ paths:
         - name: userId
           required: false
           in: query
+          description: User ID
+          example: 123
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Group ID
+          example: 456
           schema:
             type: number
         - name: role
           required: false
           in: query
+          description: Role
+          example: admin
           schema:
             enum:
               - owner
@@ -1249,7 +1269,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-04-08T21:54:45.989Z
+                        createdAt: 2025-04-09T00:11:37.876Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1270,7 +1290,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-04-08T21:54:45.989Z
+                      - createdAt: 2025-04-09T00:11:37.876Z
                         isFake: false
                         role: member
                         country: country
@@ -1302,7 +1322,7 @@ paths:
                         role: member
                         user: *a7
                         group: *a8
-                        createdAt: 2025-04-08T21:54:45.989Z
+                        createdAt: 2025-04-09T00:11:37.876Z
                         country: country
                         name: name
                         logo: logo
@@ -1335,6 +1355,7 @@ paths:
   /group-membership/{groupId}/leave:
     delete:
       operationId: GroupMembershipController_removeMyself
+      summary: Leaves the group
       parameters:
         - name: groupId
           required: true
@@ -1350,6 +1371,7 @@ paths:
   /group-membership/{groupId}/{userId}:
     get:
       operationId: GroupMembershipController_findOne
+      summary: Gets the group membership by group ID and user ID
       parameters:
         - name: groupId
           required: true
@@ -1391,10 +1413,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-04-08T21:54:45.989Z
+                    createdAt: 2025-04-09T00:11:37.876Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-04-08T21:54:45.989Z
+                    createdAt: 2025-04-09T00:11:37.876Z
                     isFake: false
                     role: member
                     country: country
@@ -1408,7 +1430,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-04-08T21:54:45.989Z
+                    createdAt: 2025-04-09T00:11:37.876Z
                     country: country
                     name: name
                     logo: logo
@@ -1429,6 +1451,7 @@ paths:
       tags: *a6
     post:
       operationId: GroupMembershipController_create
+      summary: Creates the group membership by group ID and user ID
       parameters:
         - name: groupId
           required: true
@@ -1448,6 +1471,7 @@ paths:
         - bearer: []
     delete:
       operationId: GroupMembershipController_remove
+      summary: Deletes the group membership by group ID and user ID
       parameters:
         - name: groupId
           required: true
@@ -1467,6 +1491,7 @@ paths:
         - bearer: []
     patch:
       operationId: GroupMembershipController_update
+      summary: Updates the group membership by group ID and user ID
       parameters:
         - name: groupId
           required: true
@@ -1493,6 +1518,7 @@ paths:
   /notifications:
     get:
       operationId: SseNotificationsController_findAll
+      summary: Get notifications
       parameters:
         - name: field
           required: false
@@ -1532,16 +1558,24 @@ paths:
         - name: isRead
           required: false
           in: query
+          description: Is read
+          example: false
           schema:
             type: boolean
         - name: userId
           required: false
           in: query
+          description: User ID
+          example: 123
           schema:
             type: number
         - name: types
           required: false
           in: query
+          description: Notification types
+          example:
+            - match
+            - tournament
           schema:
             type: array
             items:
@@ -1562,6 +1596,7 @@ paths:
   /notifications/token:
     post:
       operationId: SseNotificationsController_requestNewToken
+      summary: Request new token
       parameters: []
       responses:
         "201":
@@ -1572,6 +1607,7 @@ paths:
   /notifications/{id}/read:
     patch:
       operationId: SseNotificationsController_markAsRead
+      summary: Mark notification as read
       parameters:
         - name: id
           required: true
@@ -1587,6 +1623,7 @@ paths:
   /notifications/read/all:
     patch:
       operationId: SseNotificationsController_markAllAsRead
+      summary: Mark all notifications as read
       parameters: []
       responses:
         "200":
@@ -1597,6 +1634,7 @@ paths:
   /notifications/read/bulk:
     patch:
       operationId: SseNotificationsController_markBulkAsRead
+      summary: Mark bulk notifications as read
       parameters: []
       responses:
         "200":
@@ -1607,6 +1645,7 @@ paths:
   /notifications/{id}:
     delete:
       operationId: SseNotificationsController_remove
+      summary: Delete notification
       parameters:
         - name: id
           required: true
@@ -1622,6 +1661,7 @@ paths:
   /notifications/stream:
     get:
       operationId: SseNotificationsController_getNotificationStream
+      summary: Get notification stream
       parameters:
         - name: token
           required: true
@@ -1635,6 +1675,9 @@ paths:
   /followers/auto-complete/followers/{search}:
     get:
       operationId: FollowersController_autoCompleteFollowers
+      summary: Auto-complete followers based on search term
+      description: Returns a list of followers that can be auto-completed based on the
+        search term.
       parameters:
         - name: search
           required: true
@@ -1653,7 +1696,8 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Returns a list of followers that can be auto-completed based on the
+            search term.
           content:
             application/json:
               schema:
@@ -1667,6 +1711,9 @@ paths:
   /followers/auto-complete/following/{search}:
     get:
       operationId: FollowersController_autoCompleteFollowing
+      summary: Auto-complete following based on search term
+      description: Returns a list of users being followed that can be auto-completed
+        based on the search term.
       parameters:
         - name: search
           required: true
@@ -1685,7 +1732,8 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Returns a list of users being followed that can be auto-completed
+            based on the search term.
           content:
             application/json:
               schema:
@@ -1698,6 +1746,8 @@ paths:
   /followers:
     get:
       operationId: FollowersController_findAll
+      summary: Retrieve all followers
+      description: Retrieves a list of followers based on the provided query parameters.
       parameters:
         - name: field
           required: false
@@ -1737,15 +1787,20 @@ paths:
         - name: userId
           required: false
           in: query
+          description: User ID
+          example: 123
           schema:
             type: number
         - name: followerId
           required: false
           in: query
+          description: Follower ID
+          example: 456
           schema:
             type: number
       responses:
         "200":
+          description: Retrieves a list of followers based on the provided query parameters.
           content:
             application/json:
               examples:
@@ -1753,7 +1808,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-04-08T21:54:46.003Z
+                    createdAt: 2025-04-09T00:11:37.892Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1762,19 +1817,20 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-04-08T21:54:46.003Z
+                    updatedAt: 2025-04-09T00:11:37.892Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2025-04-08T21:54:46.003Z
+                    createdAt: 2025-04-09T00:11:37.892Z
                     id: 1
                     isFake: false
                     username: john_doe
-          description: ""
       tags: *a12
   /followers/{userId}/{followerId}:
     get:
       operationId: FollowersController_findOne
+      summary: Retrieve a specific follower relationship
+      description: Returns details of a specific follower relationship.
       parameters:
         - name: userId
           required: true
@@ -1788,7 +1844,7 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Returns details of a specific follower relationship.
           content:
             application/json:
               schema:
@@ -1797,20 +1853,9 @@ paths:
   /followers/{userId}:
     post:
       operationId: FollowersController_create
-      parameters:
-        - name: userId
-          required: true
-          in: path
-          schema:
-            type: number
-      responses:
-        "201":
-          description: ""
-      tags: *a12
-      security:
-        - bearer: []
-    delete:
-      operationId: FollowersController_remove
+      summary: Create a follower relationship
+      description: Creates a follower relationship for the current user with the
+        specified user.
       parameters:
         - name: userId
           required: true
@@ -1819,13 +1864,41 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Creates a follower relationship for the current user with the
+            specified user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FollowerResponse"
+      tags: *a12
+      security:
+        - bearer: []
+    delete:
+      operationId: FollowersController_remove
+      summary: Remove a follower relationship
+      description: Removes the follower relationship for the current user with the
+        specified user.
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Removes the follower relationship for the current user with the
+            specified user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FollowerResponse"
       tags: *a12
       security:
         - bearer: []
   /group-join-requests:
     get:
       operationId: GroupJoinRequestsController_findAll
+      summary: Gets all group join requests
       parameters:
         - name: field
           required: false
@@ -1865,16 +1938,22 @@ paths:
         - name: userId
           required: false
           in: query
+          description: User ID
+          example: 123
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Group ID
+          example: 456
           schema:
             type: number
         - name: relatedLFPId
           required: false
           in: query
+          description: LFP ID
+          example: 789
           schema:
             type: number
       responses:
@@ -1908,7 +1987,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2025-04-08T21:54:45.781Z
+                        updatedAt: 2025-04-09T00:11:37.700Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1930,7 +2009,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-08T21:54:46.007Z
+                        createdAt: 2025-04-09T00:11:37.897Z
                 with-group:
                   value:
                     metadata:
@@ -1954,7 +2033,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-08T21:54:45.984Z
+                        updatedAt: 2025-04-09T00:11:37.868Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1977,7 +2056,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-04-08T21:54:46.007Z
+                        createdAt: 2025-04-09T00:11:37.897Z
           description: ""
       tags: &a13
         - group-join-requests
@@ -1987,6 +2066,7 @@ paths:
   /group-join-requests/{groupId}:
     post:
       operationId: GroupJoinRequestsController_create
+      summary: Creates a new group join request
       parameters:
         - name: groupId
           required: true
@@ -2008,6 +2088,7 @@ paths:
         - bearer: []
     patch:
       operationId: GroupJoinRequestsController_update
+      summary: Updates a group join request
       parameters:
         - name: groupId
           required: true
@@ -2029,6 +2110,7 @@ paths:
         - bearer: []
     delete:
       operationId: GroupJoinRequestsController_remove
+      summary: Deletes a group join request
       parameters:
         - name: groupId
           required: true
@@ -2045,6 +2127,7 @@ paths:
   /group-join-requests/{groupId}/{userId}:
     get:
       operationId: GroupJoinRequestsController_findOne
+      summary: Gets a specific group join request
       parameters:
         - name: groupId
           required: true
@@ -2080,7 +2163,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2025-04-08T21:54:45.781Z
+                    updatedAt: 2025-04-09T00:11:37.700Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -2089,7 +2172,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-08T21:54:46.007Z
+                    createdAt: 2025-04-09T00:11:37.897Z
                 with-group:
                   value:
                     id: 1
@@ -2100,7 +2183,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-08T21:54:45.984Z
+                    updatedAt: 2025-04-09T00:11:37.868Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -2110,7 +2193,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-04-08T21:54:46.007Z
+                    createdAt: 2025-04-09T00:11:37.897Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -2122,6 +2205,7 @@ paths:
   /group-join-requests/{groupId}/{userId}/accept:
     post:
       operationId: GroupJoinRequestsController_accept
+      summary: Accepts a group join request
       parameters:
         - name: groupId
           required: true
@@ -2141,6 +2225,7 @@ paths:
   /group-join-requests/{groupId}/{userId}/reject:
     delete:
       operationId: GroupJoinRequestsController_reject
+      summary: Rejects a group join request
       parameters:
         - name: groupId
           required: true
@@ -2160,6 +2245,7 @@ paths:
   /group-invites:
     get:
       operationId: GroupInvitesController_findAll
+      summary: Gets all group invites
       parameters:
         - name: field
           required: false
@@ -2199,16 +2285,22 @@ paths:
         - name: userId
           required: false
           in: query
+          description: User ID
+          example: 123
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Group ID
+          example: 456
           schema:
             type: number
         - name: relatedLFPId
           required: false
           in: query
+          description: LFP ID
+          example: 789
           schema:
             type: number
       responses:
@@ -2243,7 +2335,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-04-08T21:54:46.013Z
+                        updatedAt: 2025-04-09T00:11:37.903Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2267,7 +2359,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-08T21:54:46.013Z
+                        createdAt: 2025-04-09T00:11:37.903Z
                         isFake: false
                 with-group:
                   value:
@@ -2298,7 +2390,7 @@ paths:
                         focus: Hybrid
                         locationId: 1
                         type: Public
-                        updatedAt: 4/8/2025
+                        updatedAt: 4/9/2025
                 with-mini-group:
                   value:
                     metadata:
@@ -2320,13 +2412,14 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-04-08T21:54:46.013Z
+                        createdAt: 2025-04-09T00:11:37.903Z
           description: ""
       tags: &a16
         - group-invites
   /group-invites/{groupId}/accept:
     post:
       operationId: GroupInvitesController_accept
+      summary: Accepts a group invite
       parameters:
         - name: groupId
           required: true
@@ -2342,6 +2435,7 @@ paths:
   /group-invites/{groupId}/reject:
     delete:
       operationId: GroupInvitesController_reject
+      summary: Rejects a group invite
       parameters:
         - name: groupId
           required: true
@@ -2357,6 +2451,7 @@ paths:
   /group-invites/{groupId}/{userId}:
     post:
       operationId: GroupInvitesController_create
+      summary: Creates a new group invite
       parameters:
         - name: groupId
           required: true
@@ -2382,6 +2477,7 @@ paths:
         - bearer: []
     get:
       operationId: GroupInvitesController_findOne
+      summary: Gets a specific group invite
       parameters:
         - name: userId
           required: true
@@ -2415,7 +2511,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-04-08T21:54:46.013Z
+                    updatedAt: 2025-04-09T00:11:37.903Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2424,7 +2520,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-08T21:54:46.013Z
+                    createdAt: 2025-04-09T00:11:37.903Z
                     isFake: false
                 with-group:
                   value:
@@ -2440,18 +2536,19 @@ paths:
                     focus: Hybrid
                     locationId: 1
                     type: Public
-                    updatedAt: 4/8/2025
+                    updatedAt: 4/9/2025
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-04-08T21:54:46.013Z
+                    createdAt: 2025-04-09T00:11:37.903Z
           description: ""
       tags: *a16
     patch:
       operationId: GroupInvitesController_update
+      summary: Updates a group invite
       parameters:
         - name: userId
           required: true
@@ -2477,6 +2574,7 @@ paths:
         - bearer: []
     delete:
       operationId: GroupInvitesController_remove
+      summary: Deletes a group invite
       parameters:
         - name: userId
           required: true
@@ -2776,6 +2874,9 @@ paths:
   /tournaments/auto-complete/{search}:
     get:
       operationId: TournamentController_autoComplete
+      summary: Auto-complete tournaments based on search term
+      description: Returns a list of tournaments that can be auto-completed based on
+        the search term.
       parameters:
         - name: search
           required: true
@@ -2794,12 +2895,15 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns a list of tournaments that can be auto-completed
+          description: Returns a list of tournaments that can be auto-completed based on
+            the search term.
       tags: &a27
         - tournaments
   /tournaments:
     get:
       operationId: TournamentController_findAll
+      summary: Retrieve all tournaments
+      description: Retrieves a list of tournaments based on the provided query parameters.
       parameters:
         - name: field
           required: false
@@ -2976,6 +3080,8 @@ paths:
             type: boolean
       responses:
         "200":
+          description: Retrieves a list of tournaments based on the provided query
+            parameters.
           content:
             application/json:
               examples:
@@ -3155,10 +3261,11 @@ paths:
                         isRanked: true
                         maximumMMR: 2500
                         minimumMMR: 1500
-          description: ""
       tags: *a27
     post:
       operationId: TournamentController_create
+      summary: Create a new tournament
+      description: Creates a new tournament with the provided details.
       parameters: []
       requestBody:
         required: true
@@ -3168,7 +3275,7 @@ paths:
               $ref: "#/components/schemas/CreateTournamentRequest"
       responses:
         "200":
-          description: Creates a new tournament
+          description: Creates a new tournament with the provided details.
           content:
             application/json:
               schema:
@@ -3179,6 +3286,8 @@ paths:
   /tournaments/managed:
     get:
       operationId: TournamentController_getManagedTournaments
+      summary: Retrieve all tournaments managed by the current user
+      description: Retrieves a list of tournaments managed by the current user.
       parameters:
         - name: page
           required: false
@@ -3192,13 +3301,15 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Retrieves a list of tournaments managed by the current user.
       tags: *a27
       security:
         - bearer: []
   /tournaments/{tournamentId}:
     get:
       operationId: TournamentController_findOne
+      summary: Retrieve a single tournament by ID
+      description: Returns details of a single tournament specified by the tournament ID.
       parameters:
         - name: tournamentId
           required: true
@@ -3212,7 +3323,8 @@ paths:
             type: string
       responses:
         "200":
-          description: Returns a single tournament
+          description: Returns details of a single tournament specified by the tournament
+            ID.
           content:
             application/json:
               schema:
@@ -3299,6 +3411,9 @@ paths:
       tags: *a27
     patch:
       operationId: TournamentController_update
+      summary: Update an existing tournament
+      description: Updates the details of an existing tournament specified by the
+        tournament ID.
       parameters:
         - name: tournamentId
           required: true
@@ -3313,7 +3428,8 @@ paths:
               $ref: "#/components/schemas/UpdateTournamentRequest"
       responses:
         "200":
-          description: Updates a tournament
+          description: Updates the details of an existing tournament specified by the
+            tournament ID.
           content:
             application/json:
               schema:
@@ -3323,6 +3439,8 @@ paths:
         - bearer: []
     delete:
       operationId: TournamentController_remove
+      summary: Delete a tournament
+      description: Deletes a tournament specified by the tournament ID.
       parameters:
         - name: tournamentId
           required: true
@@ -3331,7 +3449,7 @@ paths:
             type: number
       responses:
         "200":
-          description: Deletes a tournament
+          description: Deletes a tournament specified by the tournament ID.
           content:
             application/json:
               schema:
@@ -3342,6 +3460,7 @@ paths:
   /stages:
     get:
       operationId: StageController_findAll
+      summary: Retrieves a list of stages based on the provided query parameters.
       parameters:
         - name: field
           required: false
@@ -3476,6 +3595,7 @@ paths:
             type: number
       responses:
         "200":
+          description: Retrieves a list of stages based on the provided query parameters.
           content:
             application/json:
               examples:
@@ -3492,8 +3612,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a35 2025-04-08T21:54:46.071Z
-                    endDate: &a36 2025-04-08T21:54:46.071Z
+                    startDate: &a35 2025-04-09T00:11:37.945Z
+                    endDate: &a36 2025-04-09T00:11:37.945Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3599,12 +3719,12 @@ paths:
                         name: Chess
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
-          description: ""
       tags: &a41
         - stages
   /stages/managed:
     get:
       operationId: StageController_getManagedStages
+      summary: Retrieves a list of stages managed by the current user.
       parameters:
         - name: page
           required: false
@@ -3618,13 +3738,14 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Retrieves a list of stages managed by the current user.
       tags: *a41
       security:
         - bearer: []
   /stages/start/{stageId}:
     patch:
       operationId: StageController_startStage
+      summary: Starts a stage specified by the stage ID.
       parameters:
         - name: stageId
           required: true
@@ -3633,7 +3754,7 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Starts a stage specified by the stage ID.
           content:
             application/json:
               schema:
@@ -3644,6 +3765,7 @@ paths:
   /stages/{stageId}:
     get:
       operationId: StageController_findOne
+      summary: Returns details of a single stage specified by the stage ID.
       parameters:
         - name: stageId
           required: true
@@ -3657,7 +3779,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Returns a single stage
+          description: Returns details of a single stage specified by the stage ID.
           content:
             application/json:
               examples:
@@ -3674,8 +3796,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a42 2025-04-08T21:54:46.071Z
-                    endDate: &a43 2025-04-08T21:54:46.071Z
+                    startDate: &a42 2025-04-09T00:11:37.945Z
+                    endDate: &a43 2025-04-09T00:11:37.945Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3785,6 +3907,7 @@ paths:
   /stages/{tournamentId}:
     post:
       operationId: StageController_create
+      summary: Creates a new stage within the specified tournament.
       parameters:
         - name: tournamentId
           required: true
@@ -3799,7 +3922,7 @@ paths:
               $ref: "#/components/schemas/CreateStageRequest"
       responses:
         "200":
-          description: Creates a new stage
+          description: Creates a new stage within the specified tournament.
           content:
             application/json:
               schema:
@@ -3810,6 +3933,7 @@ paths:
   /stages/{tournamentId}/{stageId}:
     patch:
       operationId: StageController_update
+      summary: Updates the details of an existing stage specified by the stage ID.
       parameters:
         - name: stageId
           required: true
@@ -3829,7 +3953,7 @@ paths:
               $ref: "#/components/schemas/UpdateStageRequest"
       responses:
         "200":
-          description: Updates a stage
+          description: Updates the details of an existing stage specified by the stage ID.
           content:
             application/json:
               schema:
@@ -3839,6 +3963,8 @@ paths:
         - bearer: []
     delete:
       operationId: StageController_remove
+      summary: Deletes a stage specified by the stage ID within the specified
+        tournament.
       parameters:
         - name: stageId
           required: true
@@ -3847,7 +3973,8 @@ paths:
             type: number
       responses:
         "200":
-          description: Deletes a stage
+          description: Deletes a stage specified by the stage ID within the specified
+            tournament.
           content:
             application/json:
               schema:
@@ -5097,6 +5224,7 @@ paths:
   /participations:
     get:
       operationId: ParticipationController_findAll
+      summary: Retrieves participations based on the query parameters.
       parameters:
         - name: field
           required: false
@@ -5224,15 +5352,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-08T21:54:46.102Z
+                          startDate: 2025-04-09T00:11:37.962Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-08T21:54:46.102Z
-                        updatedAt: 2025-04-08T21:54:46.102Z
+                        createdAt: 2025-04-09T00:11:37.962Z
+                        updatedAt: 2025-04-09T00:11:37.962Z
                 base:
                   value:
                     metadata:
@@ -5257,6 +5385,7 @@ paths:
   /participations/{participationId}:
     get:
       operationId: ParticipationController_findOne
+      summary: Retrieves a specific participation based on the ID.
       parameters:
         - name: participationId
           required: true
@@ -5335,15 +5464,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-08T21:54:46.102Z
+                          startDate: 2025-04-09T00:11:37.962Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-08T21:54:46.102Z
-                        updatedAt: 2025-04-08T21:54:46.102Z
+                        createdAt: 2025-04-09T00:11:37.962Z
+                        updatedAt: 2025-04-09T00:11:37.962Z
                 base:
                   value:
                     metadata:
@@ -5400,6 +5529,7 @@ paths:
   /participations/managed-for-player/{tournamentId}:
     get:
       operationId: ParticipationController_getManagedParticipationsForPlayer
+      summary: Retrieves participations managed by a specific player.
       parameters:
         - name: tournamentId
           required: true
@@ -5421,6 +5551,7 @@ paths:
   /participations/apply-group/{tournamentId}/{groupId}:
     post:
       operationId: ParticipationController_createTeam
+      summary: Creates a participation for a specific group in a tournament.
       parameters:
         - name: tournamentId
           required: true
@@ -5445,6 +5576,7 @@ paths:
   /participations/admin/apply-solo/{tournamentId}/{userId}:
     post:
       operationId: ParticipationController_createForFakePlayer
+      summary: Creates a participation for a specific user in a tournament.
       parameters:
         - name: tournamentId
           required: true
@@ -5493,6 +5625,7 @@ paths:
   /matches/{matchupId}/score:
     post:
       operationId: MatchesController_createScore
+      summary: Creates a score for a specific matchup.
       parameters:
         - name: matchupId
           required: true
@@ -5506,8 +5639,12 @@ paths:
             schema:
               $ref: "#/components/schemas/EndMatchupRequestDto"
       responses:
-        "201":
-          description: ""
+        "200":
+          description: Creates a score for a specific matchup.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       tags: &a82
         - matches
       security:
@@ -5515,6 +5652,7 @@ paths:
   /matches/{matchupId}/update-score:
     put:
       operationId: MatchesController_updateScore
+      summary: Updates the score for a specific matchup.
       parameters:
         - name: matchupId
           required: true
@@ -5529,13 +5667,18 @@ paths:
               $ref: "#/components/schemas/EndMatchupRequestDto"
       responses:
         "200":
-          description: ""
+          description: Updates the score for a specific matchup.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       tags: *a82
       security:
         - bearer: []
   /matches/{matchupId}/delete-score:
     delete:
       operationId: MatchesController_deleteMatchScore
+      summary: Deletes the score for a specific matchup.
       parameters:
         - name: matchupId
           required: true
@@ -5544,13 +5687,18 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Deletes the score for a specific matchup.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       tags: *a82
       security:
         - bearer: []
   /matches/results:
     get:
       operationId: MatchesController_getMatchupsWithResults
+      summary: Retrieves matchups with results based on the query parameters.
       parameters:
         - name: field
           required: false
@@ -5661,7 +5809,7 @@ paths:
             type: boolean
       responses:
         "200":
-          description: Returns matchups with results
+          description: Retrieves matchups with results based on the query parameters.
           content:
             application/json:
               schema:
@@ -5680,7 +5828,7 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns a matchup with results and scores
+          description: Retrieves a specific matchup with its results and scores.
           content:
             application/json:
               schema:
@@ -5707,7 +5855,7 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns matchups with results for a user
+          description: Retrieves matchups with results for a specific user.
           content:
             application/json:
               schema:
@@ -5718,6 +5866,7 @@ paths:
   /matches/roster/{rosterId}/results:
     get:
       operationId: MatchesController_getResultsForRoster
+      summary: Retrieves matchups with results for a specific roster.
       parameters:
         - name: rosterId
           required: true
@@ -5737,7 +5886,7 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns matchups with results for a roster
+          description: Retrieves matchups with results for a specific roster.
           content:
             application/json:
               schema:
@@ -5748,6 +5897,7 @@ paths:
   /matches/managed:
     get:
       operationId: MatchesController_getManagedMatchups
+      summary: Retrieves matchups that the current user is managing.
       parameters:
         - name: field
           required: false
@@ -5858,7 +6008,7 @@ paths:
             type: boolean
       responses:
         "200":
-          description: Returns matchups that a user is managing
+          description: Retrieves matchups that the current user is managing.
           content:
             application/json:
               schema:
@@ -5871,6 +6021,7 @@ paths:
   /matches/group/{groupId}/results:
     get:
       operationId: MatchesController_getResultsForGroup
+      summary: Retrieves matchups with results for a specific group.
       parameters:
         - name: groupId
           required: true
@@ -5890,7 +6041,7 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns matchups with results for a group
+          description: Retrieves matchups with results for a specific group.
           content:
             application/json:
               schema:
@@ -5982,6 +6133,7 @@ paths:
   /blocked-users/auto-complete/{groupId}/{search}:
     get:
       operationId: BlockedUsersController_autoComplete
+      summary: Gets blocked users
       parameters:
         - name: groupId
           required: true
@@ -6019,6 +6171,7 @@ paths:
   /blocked-users/{groupId}:
     get:
       operationId: BlockedUsersController_findAll
+      summary: Gets blocked users
       parameters:
         - name: page
           required: false
@@ -6038,12 +6191,19 @@ paths:
       responses:
         "200":
           description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       tags: *a84
       security:
         - bearer: []
   /blocked-users/{groupId}/{userId}:
     post:
       operationId: BlockedUsersController_block
+      summary: Blocks a user
       parameters:
         - name: groupId
           required: true
@@ -6063,6 +6223,7 @@ paths:
         - bearer: []
     delete:
       operationId: BlockedUsersController_unblock
+      summary: Unblocks a user
       parameters:
         - name: groupId
           required: true
@@ -6101,6 +6262,7 @@ paths:
   /lfg:
     post:
       operationId: LfgController_create
+      summary: Create a new LFG post
       parameters: []
       requestBody:
         required: true
@@ -6110,13 +6272,18 @@ paths:
               $ref: "#/components/schemas/CreateLFGRequest"
       responses:
         "201":
-          description: ""
+          description: LFG post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LFGResponse"
       tags: *a85
       security:
         - bearer: []
   /lfg/{groupId}:
     get:
       operationId: LfgController_findPlayers
+      summary: Get LFG posts for a group
       parameters:
         - name: groupId
           required: true
@@ -6125,13 +6292,20 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Returns LFG posts for a specific group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LFGResponse"
       tags: *a85
       security:
         - bearer: []
   /lfg/{id}:
     patch:
       operationId: LfgController_update
+      summary: Update an existing LFG post
       parameters:
         - name: id
           required: true
@@ -6146,12 +6320,17 @@ paths:
               $ref: "#/components/schemas/UpdateLFGRequest"
       responses:
         "200":
-          description: ""
+          description: LFG post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LFGResponse"
       tags: *a85
       security:
         - bearer: []
     delete:
       operationId: LfgController_delete
+      summary: Delete an LFG post
       parameters:
         - name: id
           required: true
@@ -6160,13 +6339,18 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: LFG post deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LFGResponse"
       tags: *a85
       security:
         - bearer: []
   /interest/{categoryId}:
     post:
       operationId: InterestController_createInterest
+      summary: Create interest
       parameters:
         - name: categoryId
           required: true
@@ -6182,6 +6366,7 @@ paths:
         - bearer: []
     delete:
       operationId: InterestController_deleteInterest
+      summary: Delete interest
       parameters:
         - name: categoryId
           required: true
@@ -6197,6 +6382,7 @@ paths:
   /interest:
     get:
       operationId: InterestController_getInterestCategories
+      summary: Get interest categories
       parameters:
         - name: page
           required: false
@@ -6322,31 +6508,42 @@ paths:
         - name: groupId
           required: false
           in: query
+          description: Group ID
           schema:
             type: number
         - name: message
           required: false
           in: query
+          description: Message for the LFP
           schema:
             type: string
         - name: lat
           required: false
           in: query
+          description: Latitude of the location
           schema:
             type: number
         - name: lng
           required: false
           in: query
+          description: Longitude of the location
           schema:
             type: number
         - name: distance
           required: false
           in: query
+          description: Distance
           schema:
             type: number
       responses:
         "200":
           description: Groups retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GroupResponse"
       tags: &a88
         - lfp
       security:
@@ -6370,6 +6567,10 @@ paths:
       responses:
         "201":
           description: LFP post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LFPResponse"
       tags: *a88
       security:
         - bearer: []
@@ -6385,6 +6586,12 @@ paths:
       responses:
         "200":
           description: LFP posts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LFPResponse"
       tags: *a88
       security:
         - bearer: []
@@ -6407,6 +6614,10 @@ paths:
       responses:
         "200":
           description: LFP post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LFPResponse"
       tags: *a88
       security:
         - bearer: []
@@ -6422,6 +6633,10 @@ paths:
       responses:
         "200":
           description: LFP post deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LFPResponse"
       tags: *a88
       security:
         - bearer: []
@@ -6480,21 +6695,29 @@ paths:
         - name: name
           required: false
           in: query
+          description: Name of the location
+          example: New York
           schema:
             type: string
         - name: apiId
           required: false
           in: query
+          description: API ID of the location
+          example: "1234567890"
           schema:
             type: string
         - name: lat
           required: false
           in: query
+          description: Latitude of the location
+          example: 40.7128
           schema:
             type: number
         - name: lng
           required: false
           in: query
+          description: Longitude of the location
+          example: -74.006
           schema:
             type: number
       responses:
@@ -6559,7 +6782,7 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2025-04-08T21:54:45.983Z
+                        createdAt: 2025-04-09T00:11:37.867Z
           description: ""
       tags: *a89
     post:
@@ -6620,7 +6843,7 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2025-04-08T21:54:45.983Z
+                      createdAt: 2025-04-09T00:11:37.867Z
       tags: *a89
     patch:
       operationId: LocationController_update
@@ -6759,7 +6982,8 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns a list of quizzes that can be auto-completed
+          description: Returns a list of quizzes that can be auto-completed based on the
+            search term.
           content:
             application/json:
               schema:
@@ -6777,7 +7001,7 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns a detailed quiz
+          description: Returns detailed information about a specific quiz.
           content:
             application/json:
               schema:
@@ -6861,6 +7085,7 @@ paths:
             type: boolean
       responses:
         "200":
+          description: Retrieves a list of quizzes based on the provided query parameters.
           content:
             application/json:
               examples:
@@ -6891,7 +7116,6 @@ paths:
                       pageSize: 10
                       totalCount: 25
                       totalPages: 3
-          description: ""
       tags: *a91
     post:
       operationId: QuizController_create
@@ -6904,7 +7128,7 @@ paths:
               $ref: "#/components/schemas/CreateQuizRequest"
       responses:
         "200":
-          description: Creates a new quiz
+          description: Creates a new quiz with the provided details.
           content:
             application/json:
               schema:
@@ -6928,7 +7152,7 @@ paths:
             type: number
       responses:
         "200":
-          description: Returns a list of quizzes authored by the current user
+          description: Returns a list of quizzes authored by the current user.
           content:
             application/json:
               schema:
@@ -6952,7 +7176,7 @@ paths:
             type: string
       responses:
         "200":
-          description: ""
+          description: Returns details of a specific quiz based on the quiz ID.
           content:
             application/json:
               schema:
@@ -7056,7 +7280,7 @@ paths:
               $ref: "#/components/schemas/UpdateQuizRequest"
       responses:
         "200":
-          description: Updates a quiz
+          description: Updates the details of an existing quiz specified by the quiz ID.
           content:
             application/json:
               schema:
@@ -7074,7 +7298,7 @@ paths:
             type: number
       responses:
         "200":
-          description: ""
+          description: Deletes a quiz specified by the quiz ID.
           content:
             application/json:
               schema:
@@ -8006,14 +8230,24 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the location
+          example: 123
           readOnly: true
         apiId:
           type: string
+          description: API ID of the location
+          example: "1234567890"
           readOnly: true
         name:
           type: string
+          description: Name of the location
+          example: New York
           readOnly: true
         coordinates:
+          description: Coordinates of the location
+          example: &a98
+            - 40.7128
+            - -74.006
           readOnly: true
           type: array
           items:
@@ -8222,17 +8456,23 @@ components:
       properties:
         groupId:
           type: number
+          description: Group ID
           readOnly: true
+          example: 123
         userId:
           type: number
+          description: User ID
           readOnly: true
+          example: 456
         role:
           type: string
-          readOnly: true
           enum:
             - owner
             - member
             - admin
+          readOnly: true
+          example: admin
+          description: Role
       required:
         - groupId
         - userId
@@ -8242,28 +8482,32 @@ components:
       properties:
         groupId:
           type: number
+          description: Group ID
           readOnly: true
+          example: 123
         userId:
           type: number
+          description: User ID
           readOnly: true
+          example: 456
         role:
           type: string
-          readOnly: true
           enum:
             - owner
             - member
             - admin
+          readOnly: true
+          example: admin
+          description: Role
         user:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
+          $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
         group:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+          $ref: "#/components/schemas/MiniGroupResponseWithLogo"
         createdAt:
           type: string
+          description: Date when the membership was created
           readOnly: true
+          example: 2023-01-15T12:30:45Z
       required:
         - groupId
         - userId
@@ -8302,14 +8546,18 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the membership was created
           readOnly: true
+          example: 2023-01-15T12:30:45Z
         role:
           type: string
-          readOnly: true
           enum:
             - owner
             - member
             - admin
+          readOnly: true
+          example: admin
+          description: Role
       required:
         - id
         - username
@@ -8342,14 +8590,18 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the membership was created
           readOnly: true
+          example: 2023-01-15T12:30:45Z
         role:
           type: string
-          readOnly: true
           enum:
             - owner
             - member
             - admin
+          readOnly: true
+          example: admin
+          description: Role
       required:
         - id
         - name
@@ -8364,10 +8616,14 @@ components:
       properties:
         userId:
           type: number
+          description: User ID
           readOnly: true
+          example: 123
         groupId:
           type: number
+          description: Group ID
           readOnly: true
+          example: 456
       required:
         - userId
         - groupId
@@ -8376,34 +8632,56 @@ components:
       properties:
         role:
           type: string
+          description: Role
+          example: admin
+          enum:
+            - owner
+            - member
+            - admin
     NotificationsResponse:
       type: object
       properties:
         id:
           type: number
+          description: Unique identifier for the notification
           readOnly: true
+          example: 123
         userId:
           type: number
+          description: ID of the user
           readOnly: true
+          example: 456
         message:
           type: string
+          description: Message for the notification
           readOnly: true
+          example: You have a new match
         link:
           type: string
+          description: Link for the notification
           readOnly: true
+          example: https://example.com
         image:
           type: string
+          description: Image for the notification
           readOnly: true
+          example: https://example.com
         type:
           type: string
+          description: Type of the notification
           readOnly: true
+          example: match
         createdAt:
           format: date-time
           type: string
+          description: Date when the notification was created
           readOnly: true
+          example: 2023-01-15T12:30:45Z
         read:
           type: boolean
+          description: Is read
           readOnly: true
+          example: false
       required:
         - id
         - userId
@@ -8480,6 +8758,9 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the follower was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
       required:
         - id
         - username
@@ -8515,6 +8796,9 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the follower was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
       required:
         - id
         - username
@@ -8586,8 +8870,13 @@ components:
           readOnly: true
         groupId:
           type: number
+          description: Group ID
+          example: 456
+          readOnly: true
         message:
           type: string
+          description: Message
+          example: I want to join this group
       required:
         - id
         - username
@@ -8629,6 +8918,9 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the request was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
       required:
         - id
         - username
@@ -8677,8 +8969,13 @@ components:
           readOnly: true
         userId:
           type: number
+          description: User ID
+          example: 123
+          readOnly: true
         message:
           type: string
+          description: Message
+          example: I want to join this group
       required:
         - id
         - name
@@ -8715,6 +9012,9 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the request was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
       required:
         - id
         - name
@@ -8727,8 +9027,12 @@ components:
       properties:
         message:
           type: string
+          description: Message
+          example: I want to join this group
         relatedLFPId:
           type: number
+          description: LFP ID
+          example: 789
       required:
         - message
     UpdateGroupJoinRequestDto:
@@ -8736,8 +9040,12 @@ components:
       properties:
         message:
           type: string
+          description: Message
+          example: I want to join this group
         relatedLFPId:
           type: number
+          description: LFP ID
+          example: 789
     GroupInviteWithUserResponseDto:
       type: object
       properties:
@@ -8804,8 +9112,12 @@ components:
           readOnly: true
         message:
           type: string
+          description: Message
+          example: I want to join this group
         groupId:
           type: number
+          description: Group ID
+          example: 456
       required:
         - id
         - username
@@ -8847,6 +9159,9 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the invite was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
       required:
         - id
         - username
@@ -8895,8 +9210,14 @@ components:
           readOnly: true
         message:
           type: string
+          description: Message
+          example: I want to join this group
+          readOnly: true
         userId:
           type: number
+          description: User ID
+          example: 123
+          readOnly: true
       required:
         - id
         - name
@@ -8955,6 +9276,9 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the invite was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
       required:
         - id
         - name
@@ -8974,8 +9298,12 @@ components:
       properties:
         message:
           type: string
+          description: Message
+          example: I want to join this group
         relatedLFPId:
           type: number
+          description: LFP ID
+          example: 789
       required:
         - message
     UpdateGroupInviteDto:
@@ -8983,8 +9311,12 @@ components:
       properties:
         message:
           type: string
+          description: Message
+          example: I want to join this group
         relatedLFPId:
           type: number
+          description: LFP ID
+          example: 789
     CategoryMiniResponse:
       type: object
       properties:
@@ -10414,18 +10746,27 @@ components:
       properties:
         userId:
           type: number
+          description: User ID
           readOnly: true
+          example: 123
         categoryId:
           type: number
+          description: Category ID
           readOnly: true
+          example: 456
         elo:
           type: number
+          description: Elo rating
           readOnly: true
+          example: 1000
         createdAt:
           format: date-time
           type: string
+          description: Date when the career category was created
           readOnly: true
+          example: 2023-01-15T12:30:45Z
         category:
+          description: Category affiliated with the career category
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
@@ -10973,25 +11314,38 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the LFG
           readOnly: true
+          example: 123
         userId:
           type: number
+          description: ID of the user
           readOnly: true
+          example: 456
         categoryId:
           type: number
+          description: Category ID
           readOnly: true
+          example: 789
         message:
           type: string
+          description: Message for the LFG
           readOnly: true
+          example: Looking for players for our competitive team
         createdAt:
           format: date-time
           type: string
+          description: Date when the LFG was created
           readOnly: true
+          example: 2023-01-15T12:30:45Z
         user:
-          type: object
+          description: User affiliated with the LFG
           readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/UserResponse"
         careers:
           readOnly: true
+          description: Categories affiliated with the LFG
           type: array
           items:
             $ref: "#/components/schemas/CareerCategoryResponse"
@@ -11008,7 +11362,14 @@ components:
       properties:
         message:
           type: string
+          description: Message for the LFG
+          example: Looking for players for our competitive team
         categoryIds:
+          description: Categories for the LFG
+          example:
+            - 1
+            - 2
+            - 3
           type: array
           items:
             type: string
@@ -11020,7 +11381,14 @@ components:
       properties:
         message:
           type: string
+          description: Message for the LFG
+          example: Looking for players for our competitive team
         categoryIds:
+          description: Categories for the LFG
+          example:
+            - 1
+            - 2
+            - 3
           type: array
           items:
             type: string
@@ -11029,21 +11397,129 @@ components:
       properties:
         message:
           type: string
+          description: Message for the LFP
+          example: Looking for players for our competitive team
       required:
         - message
+    EloRequirementResponseDto:
+      type: object
+      properties:
+        categoryId:
+          type: number
+          description: ID of the category for the Elo requirement
+          example: 1
+        minimumElo:
+          type: number
+          description: Minimum Elo rating for the category
+          example: 1000
+        maximumElo:
+          type: number
+          description: Maximum Elo rating for the category
+          example: 2000
+        category:
+          description: Category
+          allOf:
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
+      required:
+        - categoryId
+        - minimumElo
+        - maximumElo
+        - category
+    GroupRequirementsResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID of the group requirements
+          example: 1
+        groupId:
+          type: number
+          description: ID of the group
+          example: 456
+        minimumAge:
+          type: number
+          description: Minimum age requirement for the group
+          example: 18
+        maximumAge:
+          type: number
+          description: Maximum age requirement for the group
+          example: 65
+        isSameCountry:
+          type: boolean
+          description: Whether the group requires members to be from the same country
+          example: true
+        eloRequirements:
+          description: Elo requirements for the group
+          type: array
+          items:
+            $ref: "#/components/schemas/EloRequirementResponseDto"
+      required:
+        - id
+        - groupId
+        - eloRequirements
+    LFPResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the LFP
+          example: 123
+          readOnly: true
+        groupId:
+          type: number
+          description: ID of the group
+          example: 456
+          readOnly: true
+        group:
+          description: Group affiliated with the LFP
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/GroupResponse"
+        message:
+          type: string
+          description: Message for the LFP
+          example: Looking for players for our competitive team
+          readOnly: true
+        createdAt:
+          type: string
+          description: Date when the LFP was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
+        requirements:
+          description: Requirements for the group
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/GroupRequirementsResponseDto"
+        location:
+          type: object
+          readOnly: true
+      required:
+        - id
+        - groupId
+        - group
+        - message
+        - createdAt
+        - requirements
+        - location
     UpdateLFPDto:
       type: object
       properties:
         message:
           type: string
+          description: Message for the LFP
+          example: Looking for players for our competitive team
     MiniLocationResponse:
       type: object
       properties:
         id:
           type: number
+          description: Unique identifier for the location
+          example: 123
           readOnly: true
         apiId:
           type: string
+          description: API ID of the location
+          example: "1234567890"
           readOnly: true
       required:
         - id
@@ -11053,14 +11529,22 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the location
+          example: 123
           readOnly: true
         apiId:
           type: string
+          description: API ID of the location
+          example: "1234567890"
           readOnly: true
         name:
           type: string
+          description: Name of the location
+          example: New York
           readOnly: true
         coordinates:
+          description: Coordinates of the location
+          example: *a98
           readOnly: true
           type: array
           items:
@@ -11068,10 +11552,14 @@ components:
         createdAt:
           format: date-time
           type: string
+          description: Date when the location was created
+          example: 2023-01-15T12:30:45Z
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the location was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
       required:
         - id
@@ -11085,12 +11573,20 @@ components:
       properties:
         name:
           type: string
+          description: Name of the location
+          example: New York
         apiId:
           type: string
+          description: API ID of the location
+          example: "1234567890"
         lat:
           type: number
+          description: Latitude of the location
+          example: 40.7128
         lng:
           type: number
+          description: Longitude of the location
+          example: -74.006
       required:
         - name
         - apiId
@@ -11101,18 +11597,68 @@ components:
       properties:
         name:
           type: string
+          description: Name of the location
+          example: New York
         apiId:
           type: string
+          description: API ID of the location
+          example: "1234567890"
         lat:
           type: number
+          description: Latitude of the location
+          example: 40.7128
         lng:
           type: number
+          description: Longitude of the location
+          example: -74.006
     CreateGroupRequirementsDto:
       type: object
-      properties: {}
+      properties:
+        minimumAge:
+          type: number
+          description: Minimum age requirement for the group
+          example: 18
+        maximumAge:
+          type: number
+          description: Maximum age requirement for the group
+          example: 30
+        isSameCountry:
+          type: boolean
+          description: Whether the group is restricted to users from the same country
+          example: true
+        eloRequirements:
+          description: Elo requirements for the group
+          example:
+            - categoryId: 1
+              minimumElo: 1000
+              maximumElo: 2000
+          type: array
+          items:
+            type: string
     UpdateGroupRequirementsDto:
       type: object
-      properties: {}
+      properties:
+        minimumAge:
+          type: number
+          description: Minimum age requirement for the group
+          example: 18
+        maximumAge:
+          type: number
+          description: Maximum age requirement for the group
+          example: 30
+        isSameCountry:
+          type: boolean
+          description: Whether the group is restricted to users from the same country
+          example: true
+        eloRequirements:
+          description: Elo requirements for the group
+          example:
+            - categoryId: 1
+              minimumElo: 1000
+              maximumElo: 2000
+          type: array
+          items:
+            type: string
     TagResponse:
       type: object
       properties:
@@ -11561,7 +12107,7 @@ components:
           example: https://example.com/images/quiz-cover.jpg
         tags:
           description: List of tag IDs associated with the quiz
-          example: &a98
+          example: &a99
             - 1
             - 2
             - 3
@@ -11570,7 +12116,7 @@ components:
             type: number
         questions:
           description: List of questions for the quiz
-          example: &a99
+          example: &a100
             - text: What is the maximum team size allowed?
               type: MULTIPLE_CHOICE
               options:
@@ -11658,13 +12204,13 @@ components:
           example: https://example.com/images/quiz-cover.jpg
         tags:
           description: List of tag IDs associated with the quiz
-          example: *a98
+          example: *a99
           type: array
           items:
             type: number
         questions:
           description: List of questions for the quiz
-          example: *a99
+          example: *a100
           type: array
           items:
             $ref: "#/components/schemas/CreateQuizQuestionDto"

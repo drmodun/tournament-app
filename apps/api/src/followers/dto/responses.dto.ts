@@ -9,7 +9,11 @@ export class FollowerMiniResponse
   extends MiniUserResponse
   implements IFollowerMiniResponse
 {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Date when the follower was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: Date;
 }
 
@@ -17,6 +21,10 @@ export class FollowerResponse
   extends UserResponse
   implements IFollowerResponse
 {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Date when the follower was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: Date; // This marks the followed at date
 }

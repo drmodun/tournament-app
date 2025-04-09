@@ -19,14 +19,22 @@ export class GroupMembershipQuery
   extends BaseQuery<GroupMembershipResponsesEnum>
   implements IGroupMembershipQueryRequest
 {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'User ID',
+    required: false,
+    example: 123,
+  })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
   @IsPositive()
   userId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Group ID',
+    required: false,
+    example: 456,
+  })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
@@ -34,6 +42,9 @@ export class GroupMembershipQuery
   groupId?: number;
 
   @ApiPropertyOptional({
+    description: 'Role',
+    required: false,
+    example: 'admin',
     enum: groupRoleEnum,
   })
   @IsOptional()
@@ -43,7 +54,12 @@ export class GroupMembershipQuery
 }
 
 export class GroupMembershipUpdateRequest {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Role',
+    required: false,
+    example: 'admin',
+    enum: groupRoleEnum,
+  })
   @IsOptional()
   @IsEnum(groupRoleEnum)
   @IsString()

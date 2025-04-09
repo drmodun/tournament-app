@@ -18,10 +18,17 @@ export class GroupJoinRequestWithUserResponse
   extends UserResponse
   implements IGroupJoinRequestWithUserResponse
 {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Group ID',
+    example: 456,
+    readOnly: true,
+  })
   groupId: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Message',
+    example: 'I want to join this group',
+  })
   message: string;
 }
 
@@ -29,7 +36,11 @@ export class GroupJoinRequestWithMiniUserResponse
   extends MiniUserResponseWithProfilePicture
   implements IGroupJoinRequestWithMiniUserResponse
 {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Date when the request was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: Date;
 }
 
@@ -37,10 +48,17 @@ export class GroupJoinRequestWithGroupResponse
   extends GroupResponse
   implements IGroupJoinRequestWithGroupResponse
 {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'User ID',
+    example: 123,
+    readOnly: true,
+  })
   userId: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Message',
+    example: 'I want to join this group',
+  })
   message: string;
 }
 
@@ -48,6 +66,10 @@ export class GroupJoinRequestWithMiniGroupResponse
   extends MiniGroupResponseWithLogo
   implements IGroupJoinRequestWithMiniGroupResponse
 {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Date when the request was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: Date;
 }

@@ -24,6 +24,7 @@ import {
   ApiCreatedResponse,
   ApiExtraModels,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -64,7 +65,13 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post('fake')
-  @ApiCreatedResponse({ type: ActionResponsePrimary })
+  @ApiOperation({
+    summary: 'Creates a fake user for seeding or custom tourney purposes.',
+  })
+  @ApiCreatedResponse({
+    description: 'Creates a fake user for seeding or custom tourney purposes.',
+    type: ActionResponsePrimary,
+  })
   async createFake(@Body() createUserDto: ICreateUserRequest) {
     return await this.usersService.create({
       ...createUserDto,
@@ -85,7 +92,14 @@ export class UsersController {
     ...actualClassList,
   )
   @Get('auto-complete/:search')
-  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
+  @ApiOperation({
+    summary: 'Returns a list of users that can be auto-completed based on the search term.',
+  })
+  @ApiOkResponse({
+    description:
+      'Returns a list of users that can be auto-completed based on the search term.',
+    type: [MiniUserResponseWithProfilePicture],
+  })
   async userAutoComplete(
     @Param('search') search: string,
     @Query() query: PaginationOnly,
@@ -94,7 +108,13 @@ export class UsersController {
   }
 
   @Post()
-  @ApiCreatedResponse({ type: ActionResponsePrimary })
+  @ApiOperation({
+    summary: 'Creates a new user with the provided details.',
+  })
+  @ApiCreatedResponse({
+    description: 'Creates a new user with the provided details.',
+    type: ActionResponsePrimary,
+  })
   async create(@Body() createUserDto: CreateUserRequest) {
     return await this.usersService.create(createUserDto);
   }
@@ -102,7 +122,13 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Patch()
-  @ApiOkResponse({ type: ActionResponsePrimary })
+  @ApiOperation({
+    summary: 'Updates the current user profile with the provided details.',
+  })
+  @ApiOkResponse({
+    description: 'Updates the current user profile with the provided details.',
+    type: ActionResponsePrimary,
+  })
   async updateMe(
     @CurrentUser() user: ValidatedUserDto,
     @Body() editedUserBody: UpdateUserInfo,
@@ -113,7 +139,13 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete()
-  @ApiOkResponse({ type: MiniUserResponse })
+  @ApiOperation({
+    summary: 'Deletes the current user profile.',
+  })
+  @ApiOkResponse({
+    description: 'Deletes the current user profile.',
+    type: MiniUserResponse,
+  })
   async deleteMe(@CurrentUser() user: ValidatedUserDto) {
     return await this.usersService.remove(user.id);
   }
@@ -121,7 +153,13 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('me')
-  @ApiOkResponse({ type: ExtendedUserResponse })
+  @ApiOperation({
+    summary: 'Retrieves the current user profile.',
+  })
+  @ApiOkResponse({
+    description: 'Retrieves the current user profile.',
+    type: ExtendedUserResponse,
+  })
   async findMe(@CurrentUser() user: ValidatedUserDto) {
     return await this.usersService.findOne<ExtendedUserResponse>(
       user.id,
@@ -130,7 +168,12 @@ export class UsersController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'Retrieves a list of users based on the provided query parameters.',
+  })
   @ApiOkResponse({
+    description:
+      'Retrieves a list of users based on the provided query parameters.',
     content: {
       'application/json': {
         examples: userQueryResponses,
@@ -153,7 +196,11 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Returns details of a single user specified by the user ID.',
+  })
   @ApiOkResponse({
+    description: 'Returns details of a single user specified by the user ID.',
     content: {
       'application/json': {
         schema: userResponseSchema,
@@ -172,7 +219,14 @@ export class UsersController {
   @UseGuards(AdminAuthGuard)
   @ApiBearerAuth()
   @Patch(':id')
-  @ApiCreatedResponse({ type: ActionResponsePrimary })
+  @ApiOperation({
+    summary: 'Updates the details of an existing user specified by the user ID.',
+  })
+  @ApiCreatedResponse({
+    description:
+      'Updates the details of an existing user specified by the user ID.',
+    type: ActionResponsePrimary,
+  })
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserInfo,
@@ -183,7 +237,13 @@ export class UsersController {
   @UseGuards(AdminAuthGuard)
   @ApiBearerAuth()
   @Delete(':id')
-  @ApiCreatedResponse({ type: ActionResponsePrimary })
+  @ApiOperation({
+    summary: 'Deletes a user specified by the user ID.',
+  })
+  @ApiCreatedResponse({
+    description: 'Deletes a user specified by the user ID.',
+    type: ActionResponsePrimary,
+  })
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.remove(id);
   }

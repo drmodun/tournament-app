@@ -20,6 +20,7 @@ import {
   ApiOkResponse,
   ApiBearerAuth,
   ApiExtraModels,
+  ApiOperation,
 } from '@nestjs/swagger';
 import {
   MatchupResponseWithResultsDto,
@@ -45,6 +46,13 @@ export class MatchesController {
   @Post('/:matchupId/score')
   @UseGuards(JwtAuthGuard, CanEditMatchupGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Creates a score for a specific matchup.',
+  })
+  @ApiOkResponse({
+    description: 'Creates a score for a specific matchup.',
+    type: MatchupResponseWithResultsDto,
+  })
   async createScore(
     @Param('matchupId', ParseIntPipe) matchupId: number,
     @Body() createScoreDto: EndMatchupRequestDto,
@@ -58,6 +66,13 @@ export class MatchesController {
   @Put('/:matchupId/update-score')
   @UseGuards(JwtAuthGuard, CanEditMatchupGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Updates the score for a specific matchup.',
+  })
+  @ApiOkResponse({
+    description: 'Updates the score for a specific matchup.',
+    type: MatchupResponseWithResultsDto,
+  })
   async updateScore(
     @Param('matchupId', ParseIntPipe) matchupId: number,
     @Body() updateScoreDto: EndMatchupRequestDto,
@@ -71,13 +86,24 @@ export class MatchesController {
   @Delete('/:matchupId/delete-score')
   @UseGuards(JwtAuthGuard, CanEditMatchupGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Deletes the score for a specific matchup.',
+  })
+  @ApiOkResponse({
+    description: 'Deletes the score for a specific matchup.',
+    type: MatchupResponseWithResultsDto,
+  })
   async deleteMatchScore(@Param('matchupId', ParseIntPipe) matchupId: number) {
     return await this.matchesService.deleteMatchScore(matchupId);
   }
 
   @Get('results')
+  @ApiOperation({
+    summary: 'Retrieves matchups with results based on the query parameters.',
+  })
   @ApiOkResponse({
-    description: 'Returns matchups with results',
+    description:
+      'Retrieves matchups with results based on the query parameters.',
     type: [MatchupResponseWithResultsDto],
   })
   async getMatchupsWithResults(@Query() query: QueryMatchupRequestDto) {
@@ -86,7 +112,7 @@ export class MatchesController {
 
   @Get('matchup/:matchupId/results')
   @ApiOkResponse({
-    description: 'Returns a matchup with results and scores',
+    description: 'Retrieves a specific matchup with its results and scores.',
     type: MatchupResponseWithResultsAndScoresDto,
   })
   async getMatchupWithResultsAndScores(
@@ -97,7 +123,7 @@ export class MatchesController {
 
   @Get('user/:userId/results')
   @ApiOkResponse({
-    description: 'Returns matchups with results for a user',
+    description: 'Retrieves matchups with results for a specific user.',
     type: [MatchupResponseWithResultsDto],
   })
   async getResultsForUser(
@@ -108,9 +134,12 @@ export class MatchesController {
   }
 
   @Get('roster/:rosterId/results')
+  @ApiOperation({
+    summary: 'Retrieves matchups with results for a specific roster.',
+  })
   @ApiParam({ name: 'rosterId', description: 'Roster ID' })
   @ApiOkResponse({
-    description: 'Returns matchups with results for a roster',
+    description: 'Retrieves matchups with results for a specific roster.',
     type: [MatchupResponseWithResultsDto],
   })
   async getResultsForRoster(
@@ -121,10 +150,13 @@ export class MatchesController {
   }
 
   @Get('managed')
+  @ApiOperation({
+    summary: 'Retrieves matchups that the current user is managing.',
+  })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({
-    description: 'Returns matchups that a user is managing',
+    description: 'Retrieves matchups that the current user is managing.',
     type: [MatchupResponseWithResultsDto],
   })
   async getManagedMatchups(
@@ -135,9 +167,12 @@ export class MatchesController {
   }
 
   @Get('group/:groupId/results')
+  @ApiOperation({
+    summary: 'Retrieves matchups with results for a specific group.',
+  })
   @ApiParam({ name: 'groupId', description: 'Group ID' })
   @ApiOkResponse({
-    description: 'Returns matchups with results for a group',
+    description: 'Retrieves matchups with results for a specific group.',
     type: [MatchupResponseWithResultsDto],
   })
   async getResultsForGroup(

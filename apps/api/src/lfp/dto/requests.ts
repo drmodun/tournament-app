@@ -12,7 +12,12 @@ import {
 import { BaseQuery } from 'src/base/query/baseQuery';
 
 export class CreateLFPDto implements ICreateLFPRequest {
-  @ApiProperty()
+  @ApiProperty(
+    {
+      description: 'Message for the LFP',
+      example: 'Looking for players for our competitive team',
+    }
+  )
   @IsString()
   @IsNotEmpty()
   @MinLength(10)
@@ -21,7 +26,11 @@ export class CreateLFPDto implements ICreateLFPRequest {
 }
 
 export class UpdateLFPDto implements IUpdateLFPRequest {
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Message for the LFP',
+    example: 'Looking for players for our competitive team',
+    required: false
+  })
   @IsString()
   @IsOptional()
   @MinLength(10)
@@ -30,33 +39,48 @@ export class UpdateLFPDto implements IUpdateLFPRequest {
 }
 
 export class LFPQueryDto extends BaseQuery implements LFPQueryDto {
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Group ID',
+    required: false
+  })
   @IsNumber()
   @IsOptional()
   @Type(() => Number)
   groupId?: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Message for the LFP',
+    required: false
+  })
   @IsString()
   @IsOptional()
   @Transform(({ value }) => value?.trim())
   message?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Latitude of the location',
+    required: false
+  })
   @IsNumber()
   @Transform(({ value }) => Number(value))
   @IsOptional()
   @Type(() => Number)
   lat?: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Longitude of the location',
+    required: false
+  })
   @IsNumber()
   @Transform(({ value }) => Number(value))
   @IsOptional()
   @Type(() => Number)
   lng?: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Distance',
+    required: false
+  })
   @IsNumber()
   @Transform(({ value }) => Number(value))
   @IsOptional()

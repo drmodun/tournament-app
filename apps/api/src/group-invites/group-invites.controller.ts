@@ -28,6 +28,7 @@ import {
   ApiExtraModels,
   ApiOkResponse,
   ApiTags,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GroupAdminGuard } from 'src/group/guards/group-admin.guard';
@@ -53,6 +54,9 @@ export class GroupInvitesController {
   constructor(private readonly groupInvitesService: GroupInvitesService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Gets all group invites',
+  })
   @ApiOkResponse({
     content: {
       'application/json': {
@@ -76,6 +80,9 @@ export class GroupInvitesController {
   }
 
   @UseGuards(GroupNonMemberGuard)
+  @ApiOperation({
+    summary: 'Accepts a group invite',
+  })
   @Post(':groupId/accept')
   @ApiBearerAuth()
   async accept(
@@ -86,6 +93,9 @@ export class GroupInvitesController {
   }
 
   @UseGuards(GroupNonMemberGuard)
+  @ApiOperation({
+    summary: 'Rejects a group invite',
+  })
   @Delete(':groupId/reject')
   @ApiBearerAuth()
   async reject(
@@ -96,6 +106,9 @@ export class GroupInvitesController {
   }
 
   @UseGuards(GroupAdminGuard)
+  @ApiOperation({
+    summary: 'Creates a new group invite',
+  })
   @ApiBearerAuth()
   @Post(':groupId/:userId')
   async create(
@@ -111,6 +124,9 @@ export class GroupInvitesController {
   }
 
   @Get(':groupId/:userId')
+  @ApiOperation({
+    summary: 'Gets a specific group invite',
+  })
   @ApiOkResponse({
     content: {
       'application/json': {
@@ -127,6 +143,9 @@ export class GroupInvitesController {
     return await this.groupInvitesService.findOne(groupId, id, responseType);
   }
 
+  @ApiOperation({
+    summary: 'Updates a group invite',
+  })
   @ApiBearerAuth()
   @Patch(':groupId/:userId')
   @UseGuards(GroupAdminGuard)
@@ -142,7 +161,13 @@ export class GroupInvitesController {
     );
   }
 
-  @Delete(':groupId/:userId')
+  @ApiOperation({
+    summary: 'Deletes a group invite',
+  })
+  @Delete(':groupId/:userId') 
+  @ApiOperation({
+    summary: 'Deletes a group invite',
+  })
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
   @ApiBearerAuth()
   async remove(

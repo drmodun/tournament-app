@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { BlockedUsersService } from './blocked-users.service';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
@@ -22,6 +22,9 @@ export class BlockedUsersController {
   constructor(private readonly blockedUsersService: BlockedUsersService) {}
 
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
+  @ApiOperation({
+    summary: 'Gets blocked users',
+  })
   @ApiBearerAuth()
   @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
   @Get('auto-complete/:groupId/:search')
@@ -38,7 +41,11 @@ export class BlockedUsersController {
   }
 
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
+  @ApiOperation({
+    summary: 'Gets blocked users',
+  })
   @ApiBearerAuth()
+  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
   @Get(':groupId')
   async findAll(
     @Query() pagination: PaginationOnly,
@@ -62,6 +69,9 @@ export class BlockedUsersController {
   }
 
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
+  @ApiOperation({
+    summary: 'Blocks a user',
+  })
   @ApiBearerAuth()
   @Post(':groupId/:userId')
   async block(
@@ -72,6 +82,9 @@ export class BlockedUsersController {
   }
 
   @UseGuards(JwtAuthGuard, GroupAdminGuard)
+  @ApiOperation({
+    summary: 'Unblocks a user',
+  })
   @ApiBearerAuth()
   @Delete(':groupId/:userId')
   async unblock(

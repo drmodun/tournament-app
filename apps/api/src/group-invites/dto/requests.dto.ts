@@ -13,19 +13,19 @@ export class GroupInviteQuery
   extends BaseQuery<GroupInviteResponsesEnum>
   implements IGroupInviteQuery
 {
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, description: 'User ID', example: 123 })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
   userId?: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, description: 'Group ID', example: 456 })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
   groupId?: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, description: 'LFP ID', example: 789 })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
@@ -33,11 +33,11 @@ export class GroupInviteQuery
 }
 
 export class CreateGroupInviteDto implements ICreateGroupInviteDto {
-  @ApiProperty()
+  @ApiProperty({ description: 'Message', example: 'I want to join this group' })
   @IsString()
   message: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, description: 'LFP ID', example: 789 })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
@@ -45,12 +45,12 @@ export class CreateGroupInviteDto implements ICreateGroupInviteDto {
 }
 
 export class UpdateGroupInviteDto implements IUpdateGroupInviteDto {
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, description: 'Message', example: 'I want to join this group' })
   @IsOptional()
   @IsString()
   message?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, description: 'LFP ID', example: 789 })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()

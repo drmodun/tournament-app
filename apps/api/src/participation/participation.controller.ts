@@ -14,6 +14,7 @@ import {
   ApiExtraModels,
   ApiOkResponse,
   ApiTags,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { ParticipationService } from './participation.service';
 import { QueryParticipationDto } from './dto/requests.dto';
@@ -54,6 +55,9 @@ export class ParticipationController {
   constructor(private readonly participationService: ParticipationService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Retrieves participations based on the query parameters.',
+  })
   @ApiOkResponse({
     content: {
       'application/json': {
@@ -82,6 +86,9 @@ export class ParticipationController {
         examples: participationQueryExamples.responses,
       },
     },
+  })
+  @ApiOperation({
+    summary: 'Retrieves a specific participation based on the ID.',
   })
   async findOne(
     @Param('participationId', ParseIntPipe) id: number,
@@ -115,6 +122,9 @@ export class ParticipationController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('/managed-for-player/:tournamentId')
+  @ApiOperation({
+    summary: 'Retrieves participations managed by a specific player.',
+  })
   @ApiOkResponse({
     type: [MiniParticipationWithGroup],
   })
@@ -139,6 +149,9 @@ export class ParticipationController {
   )
   @ApiBearerAuth()
   @Post('/apply-group/:tournamentId/:groupId')
+  @ApiOperation({
+    summary: 'Creates a participation for a specific group in a tournament.',
+  })
   @ApiOkResponse({
     type: ActionResponsePrimary,
   })
@@ -161,6 +174,9 @@ export class ParticipationController {
   )
   @ApiBearerAuth()
   @Post('/admin/apply-solo/:tournamentId/:userId')
+  @ApiOperation({
+    summary: 'Creates a participation for a specific user in a tournament.',
+  })
   @ApiOkResponse({
     type: ActionResponsePrimary,
   })

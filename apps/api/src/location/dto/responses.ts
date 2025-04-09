@@ -1,4 +1,4 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import {
   BaseLocationResponse,
   IExtendedLocationResponse,
@@ -9,10 +9,18 @@ import { LocationQuery } from './requests';
 import { generateQueryExamples } from 'src/base/swagger/example.generator';
 
 export class MiniLocationResponse implements IMiniLocationResponse {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Unique identifier for the location',
+    example: 123,
+    readOnly: true,
+  })
   id: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'API ID of the location',
+    example: '1234567890',
+    readOnly: true,
+  })
   apiId: string;
 }
 
@@ -20,10 +28,18 @@ export class LocationResponse
   extends MiniLocationResponse
   implements ILocationResponse
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Name of the location',
+    example: 'New York',
+    readOnly: true,
+  })
   name: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Coordinates of the location',
+    example: [40.7128, -74.006],
+    readOnly: true,
+  })
   coordinates: [number, number];
 }
 
@@ -31,10 +47,18 @@ export class ExtendedLocationResponse
   extends LocationResponse
   implements IExtendedLocationResponse
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the location was created',
+    example: '2023-01-15T12:30:45Z',
+    readOnly: true,
+  })
   createdAt: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the location was last updated',
+    example: '2023-01-20T09:15:30Z',
+    readOnly: true,
+  })
   updatedAt: Date;
 }
 
@@ -77,3 +101,4 @@ export const locationQueryResponses = generateQueryExamples<
     pageSize: 10,
   },
 });
+  

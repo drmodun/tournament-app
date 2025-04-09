@@ -25,6 +25,7 @@ import {
   ApiBearerAuth,
   ApiExtraModels,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { NotificationsResponse } from './dto/responses';
@@ -37,6 +38,9 @@ export class SseNotificationsController {
 
   @ApiExtraModels(NotificationsResponse)
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: 'Get notifications',
+  })
   @ApiBearerAuth()
   @Get()
   @ApiOkResponse({
@@ -55,6 +59,9 @@ export class SseNotificationsController {
 
   @UseGuards(JwtAuthGuard)
   @Post('token')
+  @ApiOperation({
+    summary: 'Request new token',
+  })
   @ApiBearerAuth()
   async requestNewToken(@CurrentUser() user: ValidatedUserDto) {
     return this.sseNotificationsService.requestNewToken(user.id);
@@ -62,6 +69,9 @@ export class SseNotificationsController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id/read')
+  @ApiOperation({
+    summary: 'Mark notification as read',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
   async markAsRead(@Param('id', ParseIntPipe) id: number) {
@@ -70,6 +80,9 @@ export class SseNotificationsController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('read/all')
+  @ApiOperation({
+    summary: 'Mark all notifications as read',
+  })
   @ApiBearerAuth()
   async markAllAsRead(@CurrentUser() user: ValidatedUserDto) {
     return this.sseNotificationsService.setAllAsReadForUser(user.id);
@@ -77,6 +90,9 @@ export class SseNotificationsController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('read/bulk')
+  @ApiOperation({
+    summary: 'Mark bulk notifications as read',
+  })
   @ApiBearerAuth()
   async markBulkAsRead(
     @Body('ids', new ParseArrayPipe({ items: Number })) ids: number[],
@@ -86,12 +102,18 @@ export class SseNotificationsController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete notification',
+  })
   @ApiBearerAuth()
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.sseNotificationsService.remove(id);
   }
 
   @Sse('stream')
+  @ApiOperation({
+    summary: 'Get notification stream',
+  })
   async getNotificationStream(
     @Query('token') token: string,
   ): Promise<Observable<MessageEvent>> {

@@ -1,4 +1,4 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import {
   IMinimalMembershipResponse,
   IGroupMembershipResponse,
@@ -17,33 +17,63 @@ import {
 } from '../../users/dto/responses.dto';
 
 export class MinimalMembershipResponse implements IMinimalMembershipResponse {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Group ID',
+    readOnly: true,
+    example: 123,
+  })
   groupId: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'User ID',
+    readOnly: true,
+    example: 456,
+  })
   userId: number;
 
-  @ApiResponseProperty({ enum: groupRoleEnum })
+  @ApiProperty({
+    enum: groupRoleEnum,
+    readOnly: true,
+    example: 'admin',
+    description: 'Role',
+  })
   role: groupRoleEnumType;
 }
 
 export class GroupMembershipResponse implements IGroupMembershipResponse {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Group ID',
+    readOnly: true,
+    example: 123,
+  })
   groupId: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'User ID',
+    readOnly: true,
+    example: 456,
+  })
   userId: number;
 
-  @ApiResponseProperty({ enum: groupRoleEnum })
+  @ApiProperty({
+    enum: groupRoleEnum,
+    readOnly: true,
+    example: 'admin',
+    description: 'Role',
+  })
   role: groupRoleEnumType;
 
-  @ApiResponseProperty({ type: () => MiniUserResponseWithProfilePicture })
+  @ApiProperty({ type: () => MiniUserResponseWithProfilePicture })
   user: MiniUserResponseWithProfilePicture;
 
-  @ApiResponseProperty({ type: () => MiniGroupResponseWithLogo })
+  @ApiProperty({ type: () => MiniGroupResponseWithLogo })
   group: MiniGroupResponseWithLogo;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the membership was created',
+    readOnly: true,
+    example: '2023-01-15T12:30:45Z',
+  })
   createdAt: string;
 }
 
@@ -51,10 +81,19 @@ export class UserMembershipResponseWithDates
   extends MiniUserResponseWithCountry
   implements IUserMembershipResponseWithDates
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the membership was created',
+    readOnly: true,
+    example: '2023-01-15T12:30:45Z',
+  })
   createdAt: Date;
 
-  @ApiResponseProperty({ enum: groupRoleEnum })
+  @ApiProperty({
+    enum: groupRoleEnum,
+    readOnly: true,
+    example: 'admin',
+    description: 'Role',
+  })
   role: groupRoleEnumType;
 }
 
@@ -62,18 +101,35 @@ export class GroupMembershipResponseWithDates
   extends MiniGroupResponseWithCountry
   implements IGroupMembershipResponseWithDates
 {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the membership was created',
+    readOnly: true,
+    example: '2023-01-15T12:30:45Z',
+  })
   createdAt: Date;
 
-  @ApiResponseProperty({ enum: groupRoleEnum })
+  @ApiProperty({
+    enum: groupRoleEnum,
+    readOnly: true,
+    example: 'admin',
+    description: 'Role',
+  })
   role: groupRoleEnumType;
 }
 
 export class GroupMembershipKey implements IGroupMembershipKey {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'User ID',
+    readOnly: true,
+    example: 123,
+  })
   userId: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Group ID',
+    readOnly: true,
+    example: 456,
+  })
   groupId: number;
 
   [key: string]: number;

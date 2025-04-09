@@ -1,31 +1,63 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import {
   INotificationResponseDto,
   notificationTypeEnumType,
 } from '@tournament-app/types';
 
 export class NotificationsResponse implements INotificationResponseDto {
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Unique identifier for the notification',
+    readOnly: true,
+    example: 123,
+  })
   id: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'ID of the user',
+    readOnly: true,
+    example: 456,
+  })
   userId: number;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Message for the notification',
+    readOnly: true,
+    example: 'You have a new match',
+  })
   message: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Link for the notification',
+    readOnly: true,
+    example: 'https://example.com',
+  })
   link: string | null;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Image for the notification',
+    readOnly: true,
+    example: 'https://example.com',
+  })
   image: string | null;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Type of the notification',
+    readOnly: true,
+    example: 'match',
+  })
   type: notificationTypeEnumType;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Date when the notification was created',
+    readOnly: true,
+    example: '2023-01-15T12:30:45Z',
+  })
   createdAt: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty({
+    description: 'Is read',
+    readOnly: true,
+    example: false,
+  })
   read: boolean;
 }

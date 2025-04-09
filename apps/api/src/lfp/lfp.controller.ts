@@ -23,6 +23,8 @@ import { GroupAdminGuard } from '../group/guards/group-admin.guard';
 import { GroupMemberGuard } from '../group/guards/group-member.guard';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
+import { LFPResponse } from './dto/responses';
+import { GroupResponse } from 'src/group/dto/responses.dto';
 
 @ApiTags('lfp')
 @Controller('lfp')
@@ -37,6 +39,7 @@ export class LFPController {
   @ApiResponse({
     status: 200,
     description: 'Groups retrieved successfully',
+    type: [GroupResponse],
   })
   async getGroups(
     @CurrentUser() user: ValidatedUserDto,
@@ -52,6 +55,7 @@ export class LFPController {
   @ApiResponse({
     status: 201,
     description: 'LFP post created successfully',
+    type: LFPResponse,
   })
   async createLFP(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -67,6 +71,7 @@ export class LFPController {
   @ApiResponse({
     status: 200,
     description: 'LFP posts retrieved successfully',
+    type: [LFPResponse],
   })
   async getForGroup(@Param('groupId', ParseIntPipe) groupId: number) {
     return await this.lfpService.getForGroup(groupId);
@@ -79,6 +84,7 @@ export class LFPController {
   @ApiResponse({
     status: 200,
     description: 'LFP post updated successfully',
+    type: LFPResponse,
   })
   async updateLFP(
     @Param('id', ParseIntPipe) id: number,
@@ -94,6 +100,7 @@ export class LFPController {
   @ApiResponse({
     status: 200,
     description: 'LFP post deleted successfully',
+    type: LFPResponse,
   })
   async deleteLFP(@Param('id', ParseIntPipe) id: number) {
     return await this.lfpService.deleteLFP(id);

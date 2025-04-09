@@ -21,10 +21,16 @@ export class CreateLFGRequest implements ICreateLFGRequest {
   @IsString()
   @MinLength(10)
   @MaxLength(750)
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Message for the LFG',
+    example: 'Looking for players for our competitive team',
+  })
   message: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Categories for the LFG',
+    example: [1, 2, 3],
+  })
   @IsArray()
   @Transform(({ value }) => {
     if (Array.isArray(value)) {
@@ -46,11 +52,17 @@ export class UpdateLFGRequest implements IUpdateLFGRequest {
   @IsString()
   @MinLength(10)
   @MaxLength(750)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Message for the LFG',
+    example: 'Looking for players for our competitive team',
+  })
   message?: string;
 
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Categories for the LFG',
+    example: [1, 2, 3],
+  })
   @IsArray()
   @Transform(({ value }) => {
     if (Array.isArray(value)) {
@@ -74,6 +86,9 @@ export class LFGQuery
   @IsOptional()
   @IsNumber()
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'User ID',
+    example: 123,
+  })
   userId?: number;
 }

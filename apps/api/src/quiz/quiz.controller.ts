@@ -47,7 +47,8 @@ export class QuizController {
   @ApiExtraModels(QuizResponse, QuizResponseExtended)
   @Get('auto-complete/:search')
   @ApiOkResponse({
-    description: 'Returns a list of quizzes that can be auto-completed',
+    description:
+      'Returns a list of quizzes that can be auto-completed based on the search term.',
     type: QuizResponse,
   })
   async autoComplete(
@@ -62,7 +63,7 @@ export class QuizController {
   @UseGuards(JwtAuthGuard, CanEditQuizGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Returns a detailed quiz',
+    description: 'Returns detailed information about a specific quiz.',
     type: QuizResponseExtended,
   })
   async getDetailedQuiz(@Param('quizId', ParseIntPipe) id: number) {
@@ -71,6 +72,8 @@ export class QuizController {
 
   @Get()
   @ApiOkResponse({
+    description:
+      'Retrieves a list of quizzes based on the provided query parameters.',
     content: {
       'application/json': {
         examples: quizQueryExamples.responses,
@@ -96,7 +99,7 @@ export class QuizController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Returns a list of quizzes authored by the current user',
+    description: 'Returns a list of quizzes authored by the current user.',
     type: QuizResponse,
   })
   async getAuthoredQuizzes(
@@ -108,6 +111,7 @@ export class QuizController {
 
   @Get(':quizId')
   @ApiOkResponse({
+    description: 'Returns details of a specific quiz based on the quiz ID.',
     schema: { examples: quizResponses },
   })
   async findOne(
@@ -121,7 +125,7 @@ export class QuizController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Creates a new quiz',
+    description: 'Creates a new quiz with the provided details.',
     type: ActionResponsePrimary,
   })
   async create(
@@ -138,7 +142,8 @@ export class QuizController {
   @UseGuards(JwtAuthGuard, CanEditQuizGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Updates a quiz',
+    description:
+      'Updates the details of an existing quiz specified by the quiz ID.',
     type: ActionResponsePrimary,
   })
   async update(
@@ -152,6 +157,7 @@ export class QuizController {
   @UseGuards(JwtAuthGuard, CanEditQuizGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
+    description: 'Deletes a quiz specified by the quiz ID.',
     type: ActionResponsePrimary,
   })
   async remove(@Param('quizId', ParseIntPipe) id: number) {

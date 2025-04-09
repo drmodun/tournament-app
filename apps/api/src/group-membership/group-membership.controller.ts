@@ -25,6 +25,7 @@ import {
   ApiBearerAuth,
   ApiExtraModels,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -77,6 +78,9 @@ export class GroupMembershipController {
 
   @Get('auto-complete/users/:groupId/:search')
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Gets the users by group ID and search string in an autocomplete manner',
+  })
   @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
   async autoComplete(
     @Param('groupId') groupId: number,
@@ -93,6 +97,9 @@ export class GroupMembershipController {
   @Get('auto-complete/groups/:search')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Gets the groups by search string in an autocomplete manner',
+  })
   @ApiOkResponse({ type: [MiniGroupResponseWithLogo] })
   async autoCompleteGroups(
     @Param('search') search: string,
@@ -131,6 +138,9 @@ export class GroupMembershipController {
 
   @UseGuards(GroupMemberGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Leaves the group',
+  })
   @Delete(':groupId/leave')
   async removeMyself(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -148,6 +158,9 @@ export class GroupMembershipController {
       },
     },
   })
+  @ApiOperation({
+    summary: 'Gets the group membership by group ID and user ID',
+  })
   async findOne(
     @Param('groupId', ParseIntPipe) groupId: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -163,6 +176,9 @@ export class GroupMembershipController {
 
   @UseGuards(AdminAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Creates the group membership by group ID and user ID',
+  })
   @Post(':groupId/:userId') // No return types
   async create(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -173,6 +189,9 @@ export class GroupMembershipController {
 
   @UseGuards(GroupAdminGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Deletes the group membership by group ID and user ID',
+  })
   @Delete(':groupId/:userId')
   async remove(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -183,6 +202,9 @@ export class GroupMembershipController {
 
   @UseGuards(GroupAdminGuard)
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Updates the group membership by group ID and user ID',
+  })
   @Patch(':groupId/:userId')
   async update(
     @Param('groupId', ParseIntPipe) groupId: number,

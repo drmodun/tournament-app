@@ -14,6 +14,7 @@ import {
   ApiExtraModels,
   ApiOkResponse,
   ApiTags,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ParseIntPipe } from '@nestjs/common';
@@ -37,7 +38,16 @@ export class FollowersController {
   @Get('auto-complete/followers/:search')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
+  @ApiOkResponse({
+    description:
+      'Returns a list of followers that can be auto-completed based on the search term.',
+    type: [MiniUserResponseWithProfilePicture],
+  })
+  @ApiOperation({
+    summary: 'Auto-complete followers based on search term',
+    description:
+      'Returns a list of followers that can be auto-completed based on the search term.',
+  })
   async autoCompleteFollowers(
     @Param('search') search: string,
     @Query() query: PaginationOnly,
@@ -53,7 +63,16 @@ export class FollowersController {
   @Get('auto-complete/following/:search')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: [MiniUserResponseWithProfilePicture] })
+  @ApiOkResponse({
+    description:
+      'Returns a list of users being followed that can be auto-completed based on the search term.',
+    type: [MiniUserResponseWithProfilePicture],
+  })
+  @ApiOperation({
+    summary: 'Auto-complete following based on search term',
+    description:
+      'Returns a list of users being followed that can be auto-completed based on the search term.',
+  })
   async autoCompleteFollowing(
     @Param('search') search: string,
     @Query() query: PaginationOnly,
@@ -68,11 +87,18 @@ export class FollowersController {
 
   @Get()
   @ApiOkResponse({
+    description:
+      'Retrieves a list of followers based on the provided query parameters.',
     content: {
       'application/json': {
         examples: followerQueryResponses,
       },
     },
+  })
+  @ApiOperation({
+    summary: 'Retrieve all followers',
+    description:
+      'Retrieves a list of followers based on the provided query parameters.',
   })
   async findAll(@Query() query: FollowerQuery, @Req() req: Request) {
     const results = await this.followersService.findAll(query);
@@ -90,7 +116,14 @@ export class FollowersController {
   }
 
   @Get(':userId/:followerId')
-  @ApiOkResponse({ type: FollowerMiniResponse })
+  @ApiOkResponse({
+    description: 'Returns details of a specific follower relationship.',
+    type: FollowerMiniResponse,
+  })
+  @ApiOperation({
+    summary: 'Retrieve a specific follower relationship',
+    description: 'Returns details of a specific follower relationship.',
+  })
   async findOne(
     @Param('userId', ParseIntPipe) userId: number,
     @Param('followerId', ParseIntPipe) followerId: number,
@@ -101,6 +134,16 @@ export class FollowersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post(':userId')
+  @ApiOkResponse({
+    description:
+      'Creates a follower relationship for the current user with the specified user.',
+    type: FollowerResponse,
+  })
+  @ApiOperation({
+    summary: 'Create a follower relationship',
+    description:
+      'Creates a follower relationship for the current user with the specified user.',
+  })
   async create(
     @Param('userId', ParseIntPipe) userId: number,
     @CurrentUser() user: ValidatedUserDto,
@@ -111,6 +154,16 @@ export class FollowersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete(':userId')
+  @ApiOkResponse({
+    description:
+      'Removes the follower relationship for the current user with the specified user.',
+    type: FollowerResponse,
+  })
+  @ApiOperation({
+    summary: 'Remove a follower relationship',
+    description:
+      'Removes the follower relationship for the current user with the specified user.',
+  })
   async remove(
     @Param('userId', ParseIntPipe) userId: number,
     @CurrentUser() user: ValidatedUserDto,

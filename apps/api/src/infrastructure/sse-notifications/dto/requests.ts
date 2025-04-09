@@ -11,19 +11,31 @@ export class NotificationQueryDto
   extends BaseQuery
   implements INotificationQueryDto
 {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Is read',
+    required: false,
+    example: false,
+  })
   @IsOptional()
   @Transform(({ value }) => (value ? value === 'true' : undefined))
   @IsBoolean()
   isRead?: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'User ID',
+    required: false,
+    example: 123,
+  })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
   userId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Notification types',
+    required: false,
+    example: ['match', 'tournament'],
+  } )
   @IsOptional()
   @IsString({ each: true })
   @Transform(({ value }) => value.split(','))

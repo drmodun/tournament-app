@@ -45,6 +45,7 @@ export class CreateGroupRequest implements ICreateGroupRequest {
   @ApiProperty({ enum: groupFocusEnum })
   focus: groupFocusEnumType;
 
+  @IsString()
   @ApiProperty()
   logo: string;
 
@@ -151,6 +152,7 @@ export class CreateFakeGroupRequest implements ICreateFakeGroupRequest {
   @ApiProperty()
   abbreviation: string;
 
+  @IsString()
   @ApiProperty()
   logo: string;
 

@@ -28,6 +28,7 @@ export class CreateCategoryRequest implements ICreateCategoryRequest {
   description: string;
 
   @ApiProperty()
+  @IsString()
   logo: string;
 
   @IsEnum(categoryTypeEnum)

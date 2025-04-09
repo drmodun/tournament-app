@@ -22,51 +22,94 @@ import { BaseQuery } from '../../base/query/baseQuery';
 import { IsDateGreaterThan } from 'src/base/decorators/isDateGreaterThan';
 
 export class CreateStageRequest implements ICreateStageDto {
+  @ApiProperty({
+    description: 'Unique identifier for the tournament this stage belongs to',
+    example: 123,
+    type: Number,
+  })
   tournamentId: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the conversion rule to apply to this stage',
+    example: 456,
+    nullable: true,
+  })
   conversionRuleId?: number;
 
   @IsOptional()
   @IsEnum(stageStatusEnum)
-  @ApiPropertyOptional({ enum: stageStatusEnum })
+  @ApiPropertyOptional({
+    description: 'Current status of the stage',
+    enum: stageStatusEnum,
+    example: 'SCHEDULED',
+    nullable: true,
+  })
   stageStatus?: stageStatusEnum;
 
   @IsOptional()
   @IsEnum(stageTypeEnum)
-  @ApiPropertyOptional({ enum: stageTypeEnum })
+  @ApiPropertyOptional({
+    description: 'Type of the stage',
+    enum: stageTypeEnum,
+    example: 'SINGLE_ELIMINATION',
+    nullable: true,
+  })
   stageType?: stageTypeEnum;
 
   @IsString()
   @MinLength(3)
   @MaxLength(50)
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Name of the stage',
+    example: 'Playoffs',
+    minLength: 3,
+    maxLength: 50,
+  })
   name: string;
 
   @IsOptional()
   @IsEnum(tournamentLocationEnum)
-  @ApiPropertyOptional({ enum: tournamentLocationEnum })
+  @ApiPropertyOptional({
+    description: 'Location type for the stage',
+    enum: tournamentLocationEnum,
+    example: 'ONLINE',
+    nullable: true,
+  })
   stageLocation?: tournamentLocationEnum;
 
   @IsOptional()
   @IsString()
   @MinLength(10)
   @MaxLength(500)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Detailed description of the stage',
+    example: 'Single elimination playoffs with best of 3 matches',
+    minLength: 10,
+    maxLength: 500,
+    nullable: true,
+  })
   description?: string;
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'URL to the stage logo',
+    example: 'https://example.com/logos/playoffs.png',
+    nullable: true,
+  })
   logo?: string;
 
   @IsDate()
   @Type(() => Date)
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Start date and time of the stage',
+    example: '2023-07-01T14:00:00Z',
+    type: Date,
+  })
   startDate: Date;
 
   @IsOptional()
@@ -75,27 +118,49 @@ export class CreateStageRequest implements ICreateStageDto {
   @IsDateGreaterThan('startDate', {
     message: 'End date must be greater than start date',
   })
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'End date and time of the stage',
+    example: '2023-07-15T18:00:00Z',
+    type: Date,
+    nullable: true,
+  })
   endDate?: Date;
 
   @IsOptional()
   @IsInt()
   @Min(1)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the physical location for the stage',
+    example: 789,
+    minimum: 1,
+    nullable: true,
+  })
   locationId?: number;
 
   @IsOptional()
   @IsInt()
   @Min(1)
   @Max(100)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Minimum number of players required per team',
+    example: 4,
+    minimum: 1,
+    maximum: 100,
+    nullable: true,
+  })
   minPlayersPerTeam?: number;
 
   @IsOptional()
   @IsInt()
   @Min(1)
   @Max(100)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Maximum number of players allowed per team',
+    example: 6,
+    minimum: 1,
+    maximum: 100,
+    nullable: true,
+  })
   maxPlayersPerTeam?: number;
 }
 
@@ -104,59 +169,109 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @IsInt()
   @Type(() => Number)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the conversion rule to apply to this stage',
+    example: 456,
+    nullable: true,
+  })
   conversionRuleId?: number;
 
   @IsOptional()
   @IsEnum(stageStatusEnum)
-  @ApiPropertyOptional({ enum: stageStatusEnum })
+  @ApiPropertyOptional({
+    description: 'Current status of the stage',
+    enum: stageStatusEnum,
+    example: 'IN_PROGRESS',
+    nullable: true,
+  })
   stageStatus?: stageStatusEnum;
 
   @IsOptional()
   @IsEnum(stageTypeEnum)
-  @ApiPropertyOptional({ enum: stageTypeEnum })
+  @ApiPropertyOptional({
+    description: 'Type of the stage',
+    enum: stageTypeEnum,
+    example: 'DOUBLE_ELIMINATION',
+    nullable: true,
+  })
   stageType?: stageTypeEnum;
 
   @IsOptional()
   @IsString()
   @MinLength(3)
   @MaxLength(50)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Name of the stage',
+    example: 'Finals',
+    minLength: 3,
+    maxLength: 50,
+    nullable: true,
+  })
   name?: string;
 
   @IsOptional()
   @IsEnum(tournamentLocationEnum)
-  @ApiPropertyOptional({ enum: tournamentLocationEnum })
+  @ApiPropertyOptional({
+    description: 'Location type for the stage',
+    enum: tournamentLocationEnum,
+    example: 'OFFLINE',
+    nullable: true,
+  })
   stageLocation?: tournamentLocationEnum;
 
   @IsOptional()
   @IsString()
   @MinLength(10)
   @MaxLength(500)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Detailed description of the stage',
+    example: 'Double elimination finals with best of 5 matches',
+    minLength: 10,
+    maxLength: 500,
+    nullable: true,
+  })
   description?: string;
 
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'URL to the stage logo',
+    example: 'https://example.com/logos/finals.png',
+    nullable: true,
+  })
   logo?: string;
 
   @IsOptional()
   @IsInt()
   @Min(1)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'ID of the physical location for the stage',
+    example: 789,
+    minimum: 1,
+    nullable: true,
+  })
   locationId?: number;
 
   @IsOptional()
   @Type(() => Date)
   @IsDate()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Start date and time of the stage',
+    example: '2023-07-01T14:00:00Z',
+    type: Date,
+    nullable: true,
+  })
   startDate?: Date;
 
   @IsOptional()
   @Type(() => Date)
   @IsDate()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'End date and time of the stage',
+    example: '2023-07-15T18:00:00Z',
+    type: Date,
+    nullable: true,
+  })
   endDate?: Date;
 
   @IsOptional()
@@ -164,7 +279,13 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @Min(1)
   @Max(100)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Minimum number of players required per team',
+    example: 4,
+    minimum: 1,
+    maximum: 100,
+    nullable: true,
+  })
   minPlayersPerTeam?: number;
 
   @IsOptional()
@@ -172,7 +293,13 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @Min(1)
   @Max(100)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Maximum number of players allowed per team',
+    example: 6,
+    minimum: 1,
+    maximum: 100,
+    nullable: true,
+  })
   maxPlayersPerTeam?: number;
 
   @IsOptional()
@@ -180,7 +307,13 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @Min(0)
   @Max(10)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Maximum number of roster changes allowed',
+    example: 2,
+    minimum: 0,
+    maximum: 10,
+    nullable: true,
+  })
   maxChanges?: number;
 
   @IsOptional()
@@ -188,60 +321,115 @@ export class UpdateStageRequest implements IUpdateStageDto {
   @Min(0)
   @Max(10)
   @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Maximum number of substitutes allowed',
+    example: 3,
+    minimum: 0,
+    maximum: 10,
+    nullable: true,
+  })
   maxSubstitutes?: number;
 
+  @ApiPropertyOptional({
+    description: 'Unique identifier for the tournament this stage belongs to',
+    example: 123,
+    nullable: true,
+  })
   tournamentId?: number;
 }
 
 export class StageQuery extends BaseQuery {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Search stages by name',
+    example: 'Playoffs',
+    nullable: true,
+  })
   @IsOptional()
   @IsString()
   name?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by type',
+    enum: stageTypeEnum,
+    example: 'SINGLE_ELIMINATION',
+    nullable: true,
+  })
   @IsOptional()
   @IsEnum(stageTypeEnum)
   stageType?: stageTypeEnum;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by status',
+    enum: stageStatusEnum,
+    example: 'SCHEDULED',
+    nullable: true,
+  })
   @IsOptional()
   @IsEnum(stageStatusEnum)
   stageStatus?: stageStatusEnum;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by location type',
+    enum: tournamentLocationEnum,
+    example: 'ONLINE',
+    nullable: true,
+  })
   @IsOptional()
   @IsEnum(tournamentLocationEnum)
   stageLocation?: tournamentLocationEnum;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by start date',
+    example: '2023-07-01T00:00:00Z',
+    type: Date,
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Date)
   @IsDate()
   startDate?: Date;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by end date',
+    example: '2023-07-15T23:59:59Z',
+    type: Date,
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Date)
   @IsDate()
   endDate?: Date;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by tournament ID',
+    example: 123,
+    type: Number,
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Number)
   @Transform(({ value }) => parseInt(value))
   @IsInt()
   tournamentId?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by minimum players per team',
+    example: 4,
+    minimum: 1,
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
   minPlayersPerTeam?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Filter stages by maximum players per team',
+    example: 6,
+    maximum: 100,
+    nullable: true,
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()

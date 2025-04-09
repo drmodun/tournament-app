@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { category, tournament } from '../db/schema';
-import { IUpdateCategoryRequest } from '@tournament-app/types/src/category';
+import { IUpdateCategoryRequest } from '@tournament-app/types';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
 import { and, asc, eq, gte, ilike, lte, sql, SQL } from 'drizzle-orm';

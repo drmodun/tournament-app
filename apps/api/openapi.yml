@@ -142,32 +142,51 @@ paths:
         - name: name
           required: false
           in: query
+          description: Filter users by name
+          example: John
           schema:
+            nullable: true
             type: string
         - name: username
           required: false
           in: query
+          description: Filter users by username
+          example: johndoe
           schema:
+            nullable: true
             type: string
         - name: email
           required: false
           in: query
+          description: Filter users by email
+          example: john.doe@example.com
           schema:
+            format: email
+            nullable: true
             type: string
         - name: country
           required: false
           in: query
+          description: Filter users by country code
+          example: US
           schema:
+            nullable: true
             type: string
         - name: location
           required: false
           in: query
+          description: Filter users by location
+          example: New York
           schema:
+            nullable: true
             type: string
         - name: age
           required: false
           in: query
+          description: Filter users by age
+          example: 25
           schema:
+            nullable: true
             type: number
       responses:
         "200":
@@ -204,7 +223,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2025-04-09T00:07:49.181Z
+                        updatedAt: &a2 2025-04-09T00:36:01.164Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -304,7 +323,7 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2025-04-09T00:07:49.181Z
+                        createdAt: 2025-04-09T00:36:01.164Z
                         following: 0
                         location: New York
           description: ""
@@ -362,7 +381,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2025-04-09T00:07:49.181Z
+                    updatedAt: &a3 2025-04-09T00:36:01.164Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -394,7 +413,7 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2025-04-09T00:07:49.181Z
+                    createdAt: 2025-04-09T00:36:01.164Z
                     following: 0
                     location: New York
           description: ""
@@ -758,7 +777,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-09T00:07:49.263Z
+                        updatedAt: 2025-04-09T00:36:01.310Z
                         memberCount: 50
                 extended:
                   value:
@@ -783,9 +802,9 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-09T00:07:49.263Z
+                        updatedAt: 2025-04-09T00:36:01.310Z
                         memberCount: 50
-                        createdAt: 2025-04-09T00:07:49.263Z
+                        createdAt: 2025-04-09T00:36:01.310Z
                         tournamentCount: 10
                         subscriberCount: 100
           description: ""
@@ -812,7 +831,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-09T00:07:49.263Z
+                updatedAt: 2025-04-09T00:36:01.310Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -865,7 +884,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-09T00:07:49.263Z
+                    updatedAt: 2025-04-09T00:36:01.310Z
                     memberCount: 50
                 extended:
                   value:
@@ -877,9 +896,9 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-09T00:07:49.263Z
+                    updatedAt: 2025-04-09T00:36:01.310Z
                     memberCount: 50
-                    createdAt: 2025-04-09T00:07:49.263Z
+                    createdAt: 2025-04-09T00:36:01.310Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
@@ -918,7 +937,7 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2025-04-09T00:07:49.263Z
+                updatedAt: 2025-04-09T00:36:01.310Z
                 memberCount: 50
           description: ""
       tags: *a5
@@ -982,7 +1001,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-09T00:07:49.263Z
+                  updatedAt: 2025-04-09T00:36:01.310Z
                   memberCount: 50
                 members: []
           description: ""
@@ -1010,7 +1029,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-09T00:07:49.263Z
+                  updatedAt: 2025-04-09T00:36:01.310Z
                   memberCount: 50
                 tournaments: []
           description: ""
@@ -1038,7 +1057,7 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2025-04-09T00:07:49.263Z
+                  updatedAt: 2025-04-09T00:36:01.310Z
                   memberCount: 50
                 followers: []
           description: ""
@@ -1230,7 +1249,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2025-04-09T00:07:49.266Z
+                        createdAt: 2025-04-09T00:36:01.317Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1251,7 +1270,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2025-04-09T00:07:49.266Z
+                      - createdAt: 2025-04-09T00:36:01.317Z
                         isFake: false
                         role: member
                         country: country
@@ -1283,7 +1302,7 @@ paths:
                         role: member
                         user: *a7
                         group: *a8
-                        createdAt: 2025-04-09T00:07:49.266Z
+                        createdAt: 2025-04-09T00:36:01.317Z
                         country: country
                         name: name
                         logo: logo
@@ -1372,10 +1391,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2025-04-09T00:07:49.266Z
+                    createdAt: 2025-04-09T00:36:01.317Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2025-04-09T00:07:49.266Z
+                    createdAt: 2025-04-09T00:36:01.317Z
                     isFake: false
                     role: member
                     country: country
@@ -1389,7 +1408,7 @@ paths:
                     role: member
                     user: *a9
                     group: *a10
-                    createdAt: 2025-04-09T00:07:49.266Z
+                    createdAt: 2025-04-09T00:36:01.317Z
                     country: country
                     name: name
                     logo: logo
@@ -1734,7 +1753,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2025-04-09T00:07:49.272Z
+                    createdAt: 2025-04-09T00:36:01.337Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1743,11 +1762,11 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2025-04-09T00:07:49.272Z
+                    updatedAt: 2025-04-09T00:36:01.337Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2025-04-09T00:07:49.272Z
+                    createdAt: 2025-04-09T00:36:01.337Z
                     id: 1
                     isFake: false
                     username: john_doe
@@ -1889,7 +1908,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2025-04-09T00:07:49.181Z
+                        updatedAt: 2025-04-09T00:36:01.164Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -1911,7 +1930,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-09T00:07:49.276Z
+                        createdAt: 2025-04-09T00:36:01.344Z
                 with-group:
                   value:
                     metadata:
@@ -1935,7 +1954,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2025-04-09T00:07:49.263Z
+                        updatedAt: 2025-04-09T00:36:01.310Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -1958,7 +1977,7 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2025-04-09T00:07:49.276Z
+                        createdAt: 2025-04-09T00:36:01.344Z
           description: ""
       tags: &a13
         - group-join-requests
@@ -2061,7 +2080,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2025-04-09T00:07:49.181Z
+                    updatedAt: 2025-04-09T00:36:01.164Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -2070,7 +2089,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-09T00:07:49.276Z
+                    createdAt: 2025-04-09T00:36:01.344Z
                 with-group:
                   value:
                     id: 1
@@ -2081,7 +2100,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2025-04-09T00:07:49.263Z
+                    updatedAt: 2025-04-09T00:36:01.310Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -2091,7 +2110,7 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2025-04-09T00:07:49.276Z
+                    createdAt: 2025-04-09T00:36:01.344Z
               schema:
                 anyOf:
                   - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
@@ -2224,7 +2243,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2025-04-09T00:07:49.280Z
+                        updatedAt: 2025-04-09T00:36:01.351Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2248,7 +2267,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-09T00:07:49.280Z
+                        createdAt: 2025-04-09T00:36:01.351Z
                         isFake: false
                 with-group:
                   value:
@@ -2301,7 +2320,7 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2025-04-09T00:07:49.280Z
+                        createdAt: 2025-04-09T00:36:01.351Z
           description: ""
       tags: &a16
         - group-invites
@@ -2396,7 +2415,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2025-04-09T00:07:49.280Z
+                    updatedAt: 2025-04-09T00:36:01.351Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2405,7 +2424,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2025-04-09T00:07:49.280Z
+                    createdAt: 2025-04-09T00:36:01.351Z
                     isFake: false
                 with-group:
                   value:
@@ -2428,7 +2447,7 @@ paths:
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2025-04-09T00:07:49.280Z
+                    createdAt: 2025-04-09T00:36:01.351Z
           description: ""
       tags: *a16
     patch:
@@ -2820,89 +2839,140 @@ paths:
         - name: name
           required: false
           in: query
+          description: Name of the tournament
+          example: Summer Championship 2023
           schema:
+            nullable: true
             type: string
         - name: type
           required: false
           in: query
+          description: Type of the tournament
+          example: SINGLE_ELIMINATION
           schema:
+            nullable: true
             type: string
         - name: location
           required: false
           in: query
+          description: Location of the tournament
+          example: ONLINE
           schema:
+            nullable: true
             type: string
         - name: locationId
           required: false
           in: query
+          description: Location ID of the tournament
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: teamType
           required: false
           in: query
+          description: Team type of the tournament
+          example: SINGLE
           schema:
+            nullable: true
             type: string
         - name: startDate
           required: false
           in: query
+          description: Start date of the tournament
+          example: 2023-07-01T10:00:00Z
           schema:
             format: date-time
+            nullable: true
             type: string
         - name: endDate
           required: false
           in: query
+          description: End date of the tournament
+          example: 2023-07-15T18:00:00Z
           schema:
             format: date-time
+            nullable: true
             type: string
         - name: isRanked
           required: false
           in: query
+          description: Whether the tournament is ranked
+          example: true
           schema:
+            nullable: true
             type: boolean
         - name: minimumMMR
           required: false
           in: query
+          description: Minimum MMR of the tournament
+          example: 1000
           schema:
+            nullable: true
             type: number
         - name: maximumMMR
           required: false
           in: query
+          description: Maximum MMR of the tournament
+          example: 10000
           schema:
+            nullable: true
             type: number
         - name: isMultipleTeamsPerGroupAllowed
           required: false
           in: query
+          description: Whether multiple teams per group are allowed
+          example: true
           schema:
+            nullable: true
             type: boolean
         - name: categoryId
           required: false
           in: query
+          description: Category ID of the tournament
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: affiliatedGroupId
           required: false
           in: query
+          description: Affiliated group ID of the tournament
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: creatorId
           required: false
           in: query
+          description: Creator ID of the tournament
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: minParticipants
           required: false
           in: query
+          description: Minimum participants of the tournament
+          example: 2
           schema:
+            nullable: true
             type: number
         - name: maxParticipants
           required: false
           in: query
+          description: Maximum participants of the tournament
+          example: 1024
           schema:
+            nullable: true
             type: number
         - name: isPublic
           required: false
           in: query
+          description: Whether the tournament is public
+          example: true
           schema:
+            nullable: true
             type: boolean
       responses:
         "200":
@@ -3311,49 +3381,98 @@ paths:
         - name: name
           required: false
           in: query
+          description: Search stages by name
+          example: Playoffs
           schema:
+            nullable: true
             type: string
         - name: stageType
           required: false
           in: query
+          description: Filter stages by type
+          example: SINGLE_ELIMINATION
           schema:
+            nullable: true
+            enum:
+              - group
+              - knockout
+              - swiss
+              - round_robin
+              - fixture
+              - double_elimination
+              - quiz
+              - compass
+              - triple_elimination
+              - evaluated_competition
             type: string
         - name: stageStatus
           required: false
           in: query
+          description: Filter stages by status
+          example: SCHEDULED
           schema:
+            nullable: true
+            enum:
+              - upcoming
+              - ongoing
+              - finished
+              - cancelled
             type: string
         - name: stageLocation
           required: false
           in: query
+          description: Filter stages by location type
+          example: ONLINE
           schema:
+            nullable: true
+            enum:
+              - online
+              - offline
+              - hybrid
             type: string
         - name: startDate
           required: false
           in: query
+          description: Filter stages by start date
+          example: 2023-07-01T00:00:00Z
           schema:
             format: date-time
+            nullable: true
             type: string
         - name: endDate
           required: false
           in: query
+          description: Filter stages by end date
+          example: 2023-07-15T23:59:59Z
           schema:
             format: date-time
+            nullable: true
             type: string
         - name: tournamentId
           required: false
           in: query
+          description: Filter stages by tournament ID
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: minPlayersPerTeam
           required: false
           in: query
+          description: Filter stages by minimum players per team
+          example: 4
           schema:
+            minimum: 1
+            nullable: true
             type: number
         - name: maxPlayersPerTeam
           required: false
           in: query
+          description: Filter stages by maximum players per team
+          example: 6
           schema:
+            maximum: 100
+            nullable: true
             type: number
       responses:
         "200":
@@ -3373,8 +3492,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a35 2025-04-09T00:07:49.306Z
-                    endDate: &a36 2025-04-09T00:07:49.306Z
+                    startDate: &a35 2025-04-09T00:36:01.400Z
+                    endDate: &a36 2025-04-09T00:36:01.400Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3555,8 +3674,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a42 2025-04-09T00:07:49.306Z
-                    endDate: &a43 2025-04-09T00:07:49.306Z
+                    startDate: &a42 2025-04-09T00:36:01.400Z
+                    endDate: &a43 2025-04-09T00:36:01.400Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3796,36 +3915,50 @@ paths:
         - name: stageId
           required: false
           in: query
+          description: Filter rosters by stage ID
+          example: 789
           schema:
             type: number
         - name: participationId
           required: false
           in: query
+          description: Filter rosters by participation ID
+          example: 456
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Filter rosters by group ID
+          example: 321
           schema:
             type: number
         - name: userId
           required: false
           in: query
+          description: Filter rosters by user ID
+          example: 123
           schema:
             type: number
         - name: isSubstitute
           required: false
           in: query
+          description: Filter rosters by substitute status
+          example: true
           schema:
             type: boolean
         - name: rosterId
           required: false
           in: query
+          description: Filter by specific roster ID
+          example: 654
           schema:
             type: number
         - name: memberId
           required: false
           in: query
+          description: Filter by specific member ID
+          example: 987
           schema:
             type: number
       responses:
@@ -4154,36 +4287,50 @@ paths:
         - name: stageId
           required: false
           in: query
+          description: Filter rosters by stage ID
+          example: 789
           schema:
             type: number
         - name: participationId
           required: false
           in: query
+          description: Filter rosters by participation ID
+          example: 456
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Filter rosters by group ID
+          example: 321
           schema:
             type: number
         - name: userId
           required: false
           in: query
+          description: Filter rosters by user ID
+          example: 123
           schema:
             type: number
         - name: isSubstitute
           required: false
           in: query
+          description: Filter rosters by substitute status
+          example: true
           schema:
             type: boolean
         - name: rosterId
           required: false
           in: query
+          description: Filter by specific roster ID
+          example: 654
           schema:
             type: number
         - name: memberId
           required: false
           in: query
+          description: Filter by specific member ID
+          example: 987
           schema:
             type: number
       responses:
@@ -4347,36 +4494,50 @@ paths:
         - name: stageId
           required: false
           in: query
+          description: Filter rosters by stage ID
+          example: 789
           schema:
             type: number
         - name: participationId
           required: false
           in: query
+          description: Filter rosters by participation ID
+          example: 456
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Filter rosters by group ID
+          example: 321
           schema:
             type: number
         - name: userId
           required: false
           in: query
+          description: Filter rosters by user ID
+          example: 123
           schema:
             type: number
         - name: isSubstitute
           required: false
           in: query
+          description: Filter rosters by substitute status
+          example: true
           schema:
             type: boolean
         - name: rosterId
           required: false
           in: query
+          description: Filter by specific roster ID
+          example: 654
           schema:
             type: number
         - name: memberId
           required: false
           in: query
+          description: Filter by specific member ID
+          example: 987
           schema:
             type: number
       responses:
@@ -4540,36 +4701,50 @@ paths:
         - name: stageId
           required: false
           in: query
+          description: Filter rosters by stage ID
+          example: 789
           schema:
             type: number
         - name: participationId
           required: false
           in: query
+          description: Filter rosters by participation ID
+          example: 456
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Filter rosters by group ID
+          example: 321
           schema:
             type: number
         - name: userId
           required: false
           in: query
+          description: Filter rosters by user ID
+          example: 123
           schema:
             type: number
         - name: isSubstitute
           required: false
           in: query
+          description: Filter rosters by substitute status
+          example: true
           schema:
             type: boolean
         - name: rosterId
           required: false
           in: query
+          description: Filter by specific roster ID
+          example: 654
           schema:
             type: number
         - name: memberId
           required: false
           in: query
+          description: Filter by specific member ID
+          example: 987
           schema:
             type: number
       responses:
@@ -4733,36 +4908,50 @@ paths:
         - name: stageId
           required: false
           in: query
+          description: Filter rosters by stage ID
+          example: 789
           schema:
             type: number
         - name: participationId
           required: false
           in: query
+          description: Filter rosters by participation ID
+          example: 456
           schema:
             type: number
         - name: groupId
           required: false
           in: query
+          description: Filter rosters by group ID
+          example: 321
           schema:
             type: number
         - name: userId
           required: false
           in: query
+          description: Filter rosters by user ID
+          example: 123
           schema:
             type: number
         - name: isSubstitute
           required: false
           in: query
+          description: Filter rosters by substitute status
+          example: true
           schema:
             type: boolean
         - name: rosterId
           required: false
           in: query
+          description: Filter by specific roster ID
+          example: 654
           schema:
             type: number
         - name: memberId
           required: false
           in: query
+          description: Filter by specific member ID
+          example: 987
           schema:
             type: number
       responses:
@@ -4947,17 +5136,26 @@ paths:
         - name: tournamentId
           required: false
           in: query
+          description: Filter participations by tournament ID
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: userId
           required: false
           in: query
+          description: Filter participations by user ID
+          example: 456
           schema:
+            nullable: true
             type: number
         - name: groupId
           required: false
           in: query
+          description: Filter participations by group ID
+          example: 789
           schema:
+            nullable: true
             type: number
       responses:
         "200":
@@ -5026,15 +5224,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-09T00:07:49.315Z
+                          startDate: 2025-04-09T00:36:01.416Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-09T00:07:49.315Z
-                        updatedAt: 2025-04-09T00:07:49.315Z
+                        createdAt: 2025-04-09T00:36:01.416Z
+                        updatedAt: 2025-04-09T00:36:01.416Z
                 base:
                   value:
                     metadata:
@@ -5137,15 +5335,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2025-04-09T00:07:49.315Z
+                          startDate: 2025-04-09T00:36:01.416Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2025-04-09T00:07:49.315Z
-                        updatedAt: 2025-04-09T00:07:49.315Z
+                        createdAt: 2025-04-09T00:36:01.416Z
+                        updatedAt: 2025-04-09T00:36:01.416Z
                 base:
                   value:
                     metadata:
@@ -5392,56 +5590,74 @@ paths:
         - name: matchupId
           required: false
           in: query
-          description: The ID of the matchup
+          description: The ID of the matchup to filter by
+          example: 789
           schema:
+            nullable: true
             type: number
         - name: rosterId
           required: false
           in: query
-          description: The ID of the roster
+          description: The ID of the roster to filter by
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: groupId
           required: false
           in: query
-          description: The ID of the group
+          description: The ID of the group to filter by
+          example: 456
           schema:
+            nullable: true
             type: number
         - name: userId
           required: false
           in: query
-          description: The ID of the user
+          description: The ID of the user to filter by
+          example: 321
           schema:
+            nullable: true
             type: number
         - name: stageId
           required: false
           in: query
-          description: The ID of the stage
+          description: The ID of the stage to filter by
+          example: 654
           schema:
+            nullable: true
             type: number
         - name: round
           required: false
           in: query
-          description: The round number
+          description: The round number to filter by
+          example: 1
           schema:
+            nullable: true
             type: number
         - name: isFinished
           required: false
           in: query
-          description: Whether the matchup is finished
+          description: Filter by whether the matchup is finished
+          example: true
           schema:
+            nullable: true
             type: boolean
         - name: challongeMatchupId
           required: false
           in: query
-          description: The Challonge ID of the matchup
+          description: The Challonge ID of the matchup to filter by
+          example: "123456789"
           schema:
+            nullable: true
             type: string
         - name: hasChallongeId
           required: false
           in: query
-          description: Whether the matchup has a challonge id
+          description: Filter by whether the matchup has a Challonge ID
+          example: true
           schema:
+            nullable: true
             type: boolean
       responses:
         "200":
@@ -5571,56 +5787,74 @@ paths:
         - name: matchupId
           required: false
           in: query
-          description: The ID of the matchup
+          description: The ID of the matchup to filter by
+          example: 789
           schema:
+            nullable: true
             type: number
         - name: rosterId
           required: false
           in: query
-          description: The ID of the roster
+          description: The ID of the roster to filter by
+          example: 123
           schema:
+            nullable: true
             type: number
         - name: groupId
           required: false
           in: query
-          description: The ID of the group
+          description: The ID of the group to filter by
+          example: 456
           schema:
+            nullable: true
             type: number
         - name: userId
           required: false
           in: query
-          description: The ID of the user
+          description: The ID of the user to filter by
+          example: 321
           schema:
+            nullable: true
             type: number
         - name: stageId
           required: false
           in: query
-          description: The ID of the stage
+          description: The ID of the stage to filter by
+          example: 654
           schema:
+            nullable: true
             type: number
         - name: round
           required: false
           in: query
-          description: The round number
+          description: The round number to filter by
+          example: 1
           schema:
+            nullable: true
             type: number
         - name: isFinished
           required: false
           in: query
-          description: Whether the matchup is finished
+          description: Filter by whether the matchup is finished
+          example: true
           schema:
+            nullable: true
             type: boolean
         - name: challongeMatchupId
           required: false
           in: query
-          description: The Challonge ID of the matchup
+          description: The Challonge ID of the matchup to filter by
+          example: "123456789"
           schema:
+            nullable: true
             type: string
         - name: hasChallongeId
           required: false
           in: query
-          description: Whether the matchup has a challonge id
+          description: Filter by whether the matchup has a Challonge ID
+          example: true
           schema:
+            nullable: true
             type: boolean
       responses:
         "200":
@@ -6325,7 +6559,7 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2025-04-09T00:07:49.262Z
+                        createdAt: 2025-04-09T00:36:01.308Z
           description: ""
       tags: *a89
     post:
@@ -6386,7 +6620,7 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2025-04-09T00:07:49.262Z
+                      createdAt: 2025-04-09T00:36:01.308Z
       tags: *a89
     patch:
       operationId: LocationController_update
@@ -6593,31 +6827,36 @@ paths:
         - name: name
           required: false
           in: query
-          description: Quiz name search
+          description: Search for quizzes by name
+          example: Tournament Rules
           schema:
             type: string
         - name: authorId
           required: false
           in: query
-          description: Created by user ID
+          description: Filter quizzes by author ID
+          example: 789
           schema:
             type: number
         - name: matchupId
           required: false
           in: query
-          description: Associated matchup ID
+          description: Filter quizzes by associated matchup ID
+          example: 123
           schema:
             type: number
         - name: stageId
           required: false
           in: query
-          description: Associated stage ID
+          description: Filter quizzes by associated stage ID
+          example: 456
           schema:
             type: number
         - name: isTest
           required: false
           in: query
-          description: Is test quiz
+          description: Filter for test quizzes
+          example: false
           schema:
             type: boolean
       responses:
@@ -7128,12 +7367,18 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
       required:
         - id
@@ -7144,15 +7389,23 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
       required:
         - id
@@ -7164,18 +7417,28 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
       required:
         - id
@@ -7188,40 +7451,64 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
         email:
           type: string
+          description: Email address of the user
+          example: john.doe@example.com
           readOnly: true
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
           readOnly: true
         level:
           type: number
+          description: User's level in the platform
+          example: 42
           readOnly: true
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
           readOnly: true
         age:
           type: number
+          description: Age of the user
+          example: 28
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the user profile was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
         followers:
           type: number
+          description: Number of followers the user has
+          example: 156
           readOnly: true
       required:
         - id
@@ -7241,50 +7528,80 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
         email:
           type: string
+          description: Email address of the user
+          example: john.doe@example.com
           readOnly: true
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
           readOnly: true
         level:
           type: number
+          description: User's level in the platform
+          example: 42
           readOnly: true
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
           readOnly: true
         age:
           type: number
+          description: Age of the user
+          example: 28
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the user profile was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
         followers:
           type: number
+          description: Number of followers the user has
+          example: 156
           readOnly: true
         location:
           type: string
+          description: User's location
+          example: New York, USA
           readOnly: true
         following:
           type: number
+          description: Number of users this user is following
+          example: 89
           readOnly: true
         createdAt:
           format: date-time
           type: string
+          description: Date when the user account was created
+          example: 2022-05-10T14:30:00Z
           readOnly: true
       required:
         - id
@@ -7307,64 +7624,98 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
         email:
           type: string
+          description: Email address of the user
+          example: john.doe@example.com
           readOnly: true
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
           readOnly: true
         level:
           type: number
+          description: User's level in the platform
+          example: 42
           readOnly: true
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
           readOnly: true
         age:
           type: number
+          description: Age of the user
+          example: 28
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the user profile was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
         followers:
           type: number
+          description: Number of followers the user has
+          example: 156
           readOnly: true
         location:
           type: string
+          description: User's location
+          example: New York, USA
           readOnly: true
         following:
           type: number
+          description: Number of users this user is following
+          example: 89
           readOnly: true
         createdAt:
           format: date-time
           type: string
+          description: Date when the user account was created
+          example: 2022-05-10T14:30:00Z
           readOnly: true
         subscription:
           type: string
-          readOnly: true
+          description: User's subscription type
           enum:
             - free
             - pro
             - premium
+          example: PREMIUM
+          readOnly: true
         role:
           type: string
-          readOnly: true
+          description: User's role in the platform
           enum:
             - admin
             - user
+          example: ADMIN
+          readOnly: true
       required:
         - id
         - username
@@ -7445,21 +7796,56 @@ components:
       properties:
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
+          minLength: 3
+          maxLength: 30
         username:
           type: string
+          description: Username for the user account
+          example: johndoe
+          minLength: 3
+          maxLength: 30
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
+          minLength: 3
+          maxLength: 300
+          nullable: true
         email:
           type: string
+          description: Email address for the user account
+          example: john.doe@example.com
+          format: email
         password:
           type: string
+          description: Password for the user account (must meet strong password
+            requirements)
+          example: P@ssw0rd123!
+          format: password
+        isFake:
+          type: boolean
+          description: Whether this is a fake user account
+          example: false
+          default: false
+          nullable: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
+          nullable: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
+          minLength: 2
+          maxLength: 2
         dateOfBirth:
           format: date-time
           type: string
+          description: User's date of birth
+          example: 1995-06-15
       required:
         - name
         - username
@@ -7472,19 +7858,48 @@ components:
       properties:
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
+          nullable: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
+          minLength: 2
+          maxLength: 2
+          nullable: true
         username:
           type: string
+          description: Username for the user account
+          example: johndoe
+          minLength: 3
+          maxLength: 30
+          nullable: true
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
+          minLength: 3
+          maxLength: 30
+          nullable: true
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
+          minLength: 3
+          maxLength: 300
+          nullable: true
         dateOfBirth:
           format: date-time
           type: string
+          description: User's date of birth
+          example: 1995-06-15
+          nullable: true
         location:
           type: string
+          description: User's location
+          example: New York, USA
+          nullable: true
     PasswordResetRequest:
       type: object
       properties:
@@ -7861,18 +8276,28 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
         createdAt:
           format: date-time
@@ -7993,40 +8418,64 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
         email:
           type: string
+          description: Email address of the user
+          example: john.doe@example.com
           readOnly: true
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
           readOnly: true
         level:
           type: number
+          description: User's level in the platform
+          example: 42
           readOnly: true
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
           readOnly: true
         age:
           type: number
+          description: Age of the user
+          example: 28
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the user profile was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
         followers:
           type: number
+          description: Number of followers the user has
+          example: 156
           readOnly: true
         createdAt:
           format: date-time
@@ -8050,12 +8499,18 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         createdAt:
           format: date-time
@@ -8070,40 +8525,64 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
         email:
           type: string
+          description: Email address of the user
+          example: john.doe@example.com
           readOnly: true
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
           readOnly: true
         level:
           type: number
+          description: User's level in the platform
+          example: 42
           readOnly: true
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
           readOnly: true
         age:
           type: number
+          description: Age of the user
+          example: 28
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the user profile was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
         followers:
           type: number
+          description: Number of followers the user has
+          example: 156
           readOnly: true
         groupId:
           type: number
@@ -8129,15 +8608,23 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         createdAt:
           format: date-time
@@ -8256,40 +8743,64 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the user is from
+          example: US
           readOnly: true
         email:
           type: string
+          description: Email address of the user
+          example: john.doe@example.com
           readOnly: true
         bio:
           type: string
+          description: Biography or description of the user
+          example: Professional gamer with 5 years of experience
           readOnly: true
         level:
           type: number
+          description: User's level in the platform
+          example: 42
           readOnly: true
         name:
           type: string
+          description: Full name of the user
+          example: John Doe
           readOnly: true
         age:
           type: number
+          description: Age of the user
+          example: 28
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the user profile was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
         followers:
           type: number
+          description: Number of followers the user has
+          example: 156
           readOnly: true
         message:
           type: string
@@ -8315,15 +8826,23 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the user
+          example: 123
           readOnly: true
         username:
           type: string
+          description: Username of the user
+          example: johndoe
           readOnly: true
         isFake:
           type: boolean
+          description: Whether this is a fake user account
+          example: false
           readOnly: true
         profilePicture:
           type: string
+          description: URL to the user's profile picture
+          example: https://example.com/images/profile.jpg
           readOnly: true
         createdAt:
           format: date-time
@@ -8598,19 +9117,36 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the tournament
+          example: 123
           readOnly: true
         name:
           type: string
+          description: Name of the tournament
+          example: Summer Championship 2023
           readOnly: true
         type:
           type: string
+          description: Type of tournament
+          example: SINGLE_ELIMINATION
+          enum: &a93
+            - league
+            - competition
+            - seasonal
+            - contest
+            - event
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the tournament
+          example: 2023-07-01T10:00:00Z
           readOnly: true
         locationId:
           type: number
+          description: ID of the location where the tournament is held
+          example: 456
+          nullable: true
           readOnly: true
       required:
         - id
@@ -8623,28 +9159,50 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the tournament
+          example: 123
           readOnly: true
         name:
           type: string
+          description: Name of the tournament
+          example: Summer Championship 2023
           readOnly: true
         type:
           type: string
+          description: Type of tournament
+          example: SINGLE_ELIMINATION
+          enum: *a93
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the tournament
+          example: 2023-07-01T10:00:00Z
           readOnly: true
         locationId:
           type: number
+          description: ID of the location where the tournament is held
+          example: 456
+          nullable: true
           readOnly: true
         location:
           type: string
+          description: Location type of the tournament
+          example: ONLINE
+          enum: &a94
+            - online
+            - offline
+            - hybrid
           readOnly: true
         logo:
           type: string
+          description: URL to the tournament logo
+          example: https://example.com/images/tournament-logo.png
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the tournament is held
+          example: US
           readOnly: true
       required:
         - id
@@ -8660,64 +9218,108 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the tournament
+          example: 123
           readOnly: true
         name:
           type: string
+          description: Name of the tournament
+          example: Summer Championship 2023
           readOnly: true
         type:
           type: string
+          description: Type of tournament
+          example: SINGLE_ELIMINATION
+          enum: *a93
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the tournament
+          example: 2023-07-01T10:00:00Z
           readOnly: true
         locationId:
           type: number
+          description: ID of the location where the tournament is held
+          example: 456
+          nullable: true
           readOnly: true
         location:
           type: string
+          description: Location type of the tournament
+          example: ONLINE
+          enum: *a94
           readOnly: true
         logo:
           type: string
+          description: URL to the tournament logo
+          example: https://example.com/images/tournament-logo.png
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the tournament is held
+          example: US
           readOnly: true
         description:
           type: string
+          description: Detailed description of the tournament
+          example: Annual summer championship tournament with prizes for top 3 teams
           readOnly: true
         teamType:
           type: string
+          description: Team type for the tournament
+          example: SINGLE
+          enum: &a95
+            - solo
+            - team
+            - mixed
           readOnly: true
         creator:
+          description: User who created the tournament
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/MiniUserResponse"
         affiliatedGroup:
+          description: Group affiliated with the tournament
+          nullable: true
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/MiniGroupResponse"
         endDate:
           format: date-time
           type: string
+          description: End date and time of the tournament
+          example: 2023-07-15T18:00:00Z
           readOnly: true
         maxParticipants:
           type: number
+          description: Maximum number of participants allowed in the tournament
+          example: 64
           readOnly: true
         currentParticipants:
           type: number
+          description: Current number of participants in the tournament
+          example: 32
           readOnly: true
         isPublic:
           type: boolean
+          description: Whether the tournament is public or private
+          example: true
           readOnly: true
         category:
+          description: Category this tournament belongs to
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
         links:
           type: string
+          description: External links related to the tournament
+          example: https://example.com/tournament-info
+          nullable: true
           readOnly: true
         actualLocation:
+          description: Detailed location information for the tournament
+          nullable: true
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/LocationResponse"
@@ -8746,96 +9348,158 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the tournament
+          example: 123
           readOnly: true
         name:
           type: string
+          description: Name of the tournament
+          example: Summer Championship 2023
           readOnly: true
         type:
           type: string
+          description: Type of tournament
+          example: SINGLE_ELIMINATION
+          enum: *a93
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the tournament
+          example: 2023-07-01T10:00:00Z
           readOnly: true
         locationId:
           type: number
+          description: ID of the location where the tournament is held
+          example: 456
+          nullable: true
           readOnly: true
         location:
           type: string
+          description: Location type of the tournament
+          example: ONLINE
+          enum: *a94
           readOnly: true
         logo:
           type: string
+          description: URL to the tournament logo
+          example: https://example.com/images/tournament-logo.png
           readOnly: true
         country:
           type: string
+          description: Two-letter country code where the tournament is held
+          example: US
           readOnly: true
         description:
           type: string
+          description: Detailed description of the tournament
+          example: Annual summer championship tournament with prizes for top 3 teams
           readOnly: true
         teamType:
           type: string
+          description: Team type for the tournament
+          example: SINGLE
+          enum: *a95
           readOnly: true
         creator:
+          description: User who created the tournament
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/MiniUserResponse"
         affiliatedGroup:
+          description: Group affiliated with the tournament
+          nullable: true
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/MiniGroupResponse"
         endDate:
           format: date-time
           type: string
+          description: End date and time of the tournament
+          example: 2023-07-15T18:00:00Z
           readOnly: true
         maxParticipants:
           type: number
+          description: Maximum number of participants allowed in the tournament
+          example: 64
           readOnly: true
         currentParticipants:
           type: number
+          description: Current number of participants in the tournament
+          example: 32
           readOnly: true
         isPublic:
           type: boolean
+          description: Whether the tournament is public or private
+          example: true
           readOnly: true
         category:
+          description: Category this tournament belongs to
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
         links:
           type: string
+          description: External links related to the tournament
+          example: https://example.com/tournament-info
+          nullable: true
           readOnly: true
         actualLocation:
+          description: Detailed location information for the tournament
+          nullable: true
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/LocationResponse"
         createdAt:
           format: date-time
           type: string
+          description: Date when the tournament was created
+          example: 2023-01-15T12:30:45Z
           readOnly: true
         updatedAt:
           format: date-time
           type: string
+          description: Date when the tournament was last updated
+          example: 2023-01-20T09:15:30Z
           readOnly: true
         isMultipleTeamsPerGroupAllowed:
           type: boolean
+          description: Whether multiple teams per group are allowed
+          example: false
           readOnly: true
         isFakePlayersAllowed:
           type: boolean
+          description: Whether fake players are allowed in the tournament
+          example: false
           readOnly: true
         parentTournament:
+          description: Parent tournament if this is a sub-tournament
+          nullable: true
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
         conversionRuleId:
           type: number
+          description: ID of the conversion rule applied to this tournament
+          example: 789
+          nullable: true
           readOnly: true
         isRanked:
           type: boolean
+          description: Whether the tournament is ranked
+          example: true
           readOnly: true
         maximumMMR:
           type: number
+          description: Maximum MMR (Matchmaking Rating) allowed for participants
+          example: 2500
+          nullable: true
           readOnly: true
         minimumMMR:
           type: number
+          description: Minimum MMR (Matchmaking Rating) required for participants
+          example: 1000
+          nullable: true
           readOnly: true
       required:
         - id
@@ -8871,64 +9535,132 @@ components:
       properties:
         name:
           type: string
+          description: Name of the tournament
+          example: Summer Championship 2023
+          minLength: 3
+          maxLength: 50
         description:
           type: string
+          description: Detailed description of the tournament
+          example: Annual summer championship tournament with prizes for top 3 teams
+          minLength: 10
+          maxLength: 500
         country:
           type: string
         tournamentType:
           type: string
+          description: Type of tournament
           enum:
             - league
             - competition
             - seasonal
             - contest
             - event
+          example: SINGLE_ELIMINATION
         location:
           type: string
+          description: Location type of the tournament
           enum:
             - online
             - offline
             - hybrid
+          example: ONLINE
         tournamentTeamType:
           type: string
+          description: Team type for the tournament
           enum:
             - solo
             - team
             - mixed
+          example: SINGLE
         isMultipleTeamsPerGroupAllowed:
           type: boolean
+          description: Whether multiple teams per group are allowed
+          example: false
+          default: false
         isFakePlayersAllowed:
           type: boolean
+          description: Whether fake players are allowed in the tournament
+          example: false
+          default: false
         parentTournamentId:
           type: number
+          description: ID of the parent tournament if this is a sub-tournament
+          example: 123
+          nullable: true
         conversionRuleId:
           type: number
+          description: ID of the conversion rule to apply to this tournament
+          example: 456
+          nullable: true
         maxParticipants:
           type: number
+          description: Maximum number of participants allowed in the tournament
+          example: 64
+          minimum: 2
+          maximum: 1024
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the tournament
+          example: 2023-07-01T10:00:00Z
         endDate:
           format: date-time
           type: string
+          description: End date and time of the tournament
+          example: 2023-07-15T18:00:00Z
         isPublic:
           type: boolean
+          description: Whether the tournament is public or private
+          example: true
+          default: true
         isRanked:
           type: boolean
+          description: Whether the tournament is ranked
+          example: true
+          default: true
         categoryId:
           type: number
+          description: ID of the category this tournament belongs to
+          example: 789
         maximumMMR:
           type: number
+          description: Maximum MMR (Matchmaking Rating) allowed for participants
+          example: 2500
+          minimum: 0
+          maximum: 10000
+          nullable: true
         minimumMMR:
           type: number
+          description: Minimum MMR (Matchmaking Rating) required for participants
+          example: 1000
+          minimum: 0
+          maximum: 10000
+          nullable: true
+        creatorId:
+          type: number
+          description: ID of the user creating the tournament
+          example: 321
         affiliatedGroupId:
           type: number
+          description: ID of the affiliated group for this tournament
+          example: 654
+          nullable: true
         links:
           type: string
+          description: External links related to the tournament
+          example: https://example.com/tournament-info
+          nullable: true
         locationId:
           type: number
+          description: ID of the location where the tournament is held
+          example: 987
+          nullable: true
         logo:
           type: string
+          description: URL to the tournament logo
+          example: https://example.com/images/tournament-logo.png
+          nullable: true
       required:
         - name
         - description
@@ -8942,6 +9674,7 @@ components:
         - isPublic
         - isRanked
         - categoryId
+        - creatorId
     UpdateTournamentRequest:
       type: object
       properties:
@@ -9010,64 +9743,113 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the stage
+          example: 1
           readOnly: true
         name:
           type: string
+          description: Name of the stage
+          example: Group Stage
           readOnly: true
         tournamentId:
           type: number
+          description: ID of the tournament this stage belongs to
+          example: 1
           readOnly: true
         stageStatus:
           type: string
+          description: Current status of the stage
+          enum: &a96
+            - upcoming
+            - ongoing
+            - finished
+            - cancelled
+          example: ONGOING
           readOnly: true
         locationId:
           type: number
+          description: ID of the physical location for the stage
+          example: 1
           readOnly: true
       required:
         - id
         - name
         - tournamentId
         - stageStatus
-        - locationId
     StageResponse:
       type: object
       properties:
         id:
           type: number
+          description: Unique identifier for the stage
+          example: 1
           readOnly: true
         name:
           type: string
+          description: Name of the stage
+          example: Group Stage
           readOnly: true
         tournamentId:
           type: number
+          description: ID of the tournament this stage belongs to
+          example: 1
           readOnly: true
         stageStatus:
           type: string
+          description: Current status of the stage
+          enum: *a96
+          example: ONGOING
           readOnly: true
         locationId:
           type: number
+          description: ID of the physical location for the stage
+          example: 1
           readOnly: true
         stageType:
           type: string
+          description: Type of the stage
+          enum: &a97
+            - group
+            - knockout
+            - swiss
+            - round_robin
+            - fixture
+            - double_elimination
+            - quiz
+            - compass
+            - triple_elimination
+            - evaluated_competition
+          example: ROUND_ROBIN
           readOnly: true
         description:
           type: string
+          description: Detailed description of the stage
+          example: Initial group stage of the tournament
           readOnly: true
         logo:
           type: string
+          description: URL to the stage logo
+          example: https://example.com/stage-logo.jpg
           readOnly: true
         rostersParticipating:
           type: number
+          description: Number of rosters participating in this stage
+          example: 8
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the stage
+          example: 2025-02-01T10:00:00Z
           readOnly: true
         endDate:
           format: date-time
           type: string
+          description: End date and time of the stage
+          example: 2025-02-15T18:00:00Z
           readOnly: true
         location:
+          description: Location details for the stage
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/LocationResponse"
@@ -9076,57 +9858,80 @@ components:
         - name
         - tournamentId
         - stageStatus
-        - locationId
         - stageType
         - description
-        - logo
         - rostersParticipating
         - startDate
         - endDate
-        - location
     StageResponseWithTournament:
       type: object
       properties:
         id:
           type: number
+          description: Unique identifier for the stage
+          example: 1
           readOnly: true
         name:
           type: string
+          description: Name of the stage
+          example: Group Stage
           readOnly: true
         tournamentId:
           type: number
+          description: ID of the tournament this stage belongs to
+          example: 1
           readOnly: true
         stageStatus:
           type: string
+          description: Current status of the stage
+          enum: *a96
+          example: ONGOING
           readOnly: true
         locationId:
           type: number
+          description: ID of the physical location for the stage
+          example: 1
           readOnly: true
         stageType:
           type: string
+          description: Type of the stage
+          enum: *a97
+          example: ROUND_ROBIN
           readOnly: true
         description:
           type: string
+          description: Detailed description of the stage
+          example: Initial group stage of the tournament
           readOnly: true
         logo:
           type: string
+          description: URL to the stage logo
+          example: https://example.com/stage-logo.jpg
           readOnly: true
         rostersParticipating:
           type: number
+          description: Number of rosters participating in this stage
+          example: 8
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the stage
+          example: 2025-02-01T10:00:00Z
           readOnly: true
         endDate:
           format: date-time
           type: string
+          description: End date and time of the stage
+          example: 2025-02-15T18:00:00Z
           readOnly: true
         location:
+          description: Location details for the stage
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/LocationResponse"
         tournament:
+          description: Tournament details associated with this stage
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
@@ -9135,148 +9940,209 @@ components:
         - name
         - tournamentId
         - stageStatus
-        - locationId
         - stageType
         - description
-        - logo
         - rostersParticipating
         - startDate
         - endDate
-        - location
         - tournament
     ExtendedStageResponse:
       type: object
       properties:
         id:
           type: number
+          description: Unique identifier for the stage
+          example: 1
           readOnly: true
         name:
           type: string
+          description: Name of the stage
+          example: Group Stage
           readOnly: true
         tournamentId:
           type: number
+          description: ID of the tournament this stage belongs to
+          example: 1
           readOnly: true
         stageStatus:
           type: string
+          description: Current status of the stage
+          enum: *a96
+          example: ONGOING
           readOnly: true
         locationId:
           type: number
+          description: ID of the physical location for the stage
+          example: 1
           readOnly: true
         stageType:
           type: string
+          description: Type of the stage
+          enum: *a97
+          example: ROUND_ROBIN
           readOnly: true
         description:
           type: string
+          description: Detailed description of the stage
+          example: Initial group stage of the tournament
           readOnly: true
         logo:
           type: string
+          description: URL to the stage logo
+          example: https://example.com/stage-logo.jpg
           readOnly: true
         rostersParticipating:
           type: number
+          description: Number of rosters participating in this stage
+          example: 8
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the stage
+          example: 2025-02-01T10:00:00Z
           readOnly: true
         endDate:
           format: date-time
           type: string
+          description: End date and time of the stage
+          example: 2025-02-15T18:00:00Z
           readOnly: true
         location:
+          description: Location details for the stage
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/LocationResponse"
         minPlayersPerTeam:
           type: number
+          description: Minimum number of players required per team
+          example: 1
           readOnly: true
         maxPlayersPerTeam:
           type: number
+          description: Maximum number of players allowed per team
+          example: 1
           readOnly: true
         maxChanges:
           type: number
+          description: Maximum number of roster changes allowed
+          example: 1
           readOnly: true
         maxSubstitutes:
           type: number
+          description: Maximum number of substitutes allowed
+          example: 1
           readOnly: true
         challongeTournamentId:
           type: string
+          description: Challonge tournament ID associated with this stage
+          example: tournament123
           readOnly: true
       required:
         - id
         - name
         - tournamentId
         - stageStatus
-        - locationId
         - stageType
         - description
-        - logo
         - rostersParticipating
         - startDate
         - endDate
-        - location
         - minPlayersPerTeam
-        - maxPlayersPerTeam
-        - maxChanges
-        - maxSubstitutes
-        - challongeTournamentId
     ExtendedStageResponseWithTournament:
       type: object
       properties:
         id:
           type: number
+          description: Unique identifier for the stage
+          example: 1
           readOnly: true
         name:
           type: string
+          description: Name of the stage
+          example: Group Stage
           readOnly: true
         tournamentId:
           type: number
+          description: ID of the tournament this stage belongs to
+          example: 1
           readOnly: true
         stageStatus:
           type: string
+          description: Current status of the stage
+          enum: *a96
+          example: ONGOING
           readOnly: true
         locationId:
           type: number
+          description: ID of the physical location for the stage
+          example: 1
           readOnly: true
         stageType:
           type: string
+          description: Type of the stage
+          enum: *a97
+          example: ROUND_ROBIN
           readOnly: true
         description:
           type: string
+          description: Detailed description of the stage
+          example: Initial group stage of the tournament
           readOnly: true
         logo:
           type: string
+          description: URL to the stage logo
+          example: https://example.com/stage-logo.jpg
           readOnly: true
         rostersParticipating:
           type: number
+          description: Number of rosters participating in this stage
+          example: 8
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the stage
+          example: 2025-02-01T10:00:00Z
           readOnly: true
         endDate:
           format: date-time
           type: string
+          description: End date and time of the stage
+          example: 2025-02-15T18:00:00Z
           readOnly: true
         location:
+          description: Location details for the stage
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/LocationResponse"
         minPlayersPerTeam:
           type: number
+          description: Minimum number of players required per team
+          example: 1
           readOnly: true
         maxPlayersPerTeam:
           type: number
+          description: Maximum number of players allowed per team
+          example: 1
           readOnly: true
         maxChanges:
           type: number
+          description: Maximum number of roster changes allowed
+          example: 1
           readOnly: true
         maxSubstitutes:
           type: number
+          description: Maximum number of substitutes allowed
+          example: 1
           readOnly: true
         challongeTournamentId:
           type: string
+          description: Challonge tournament ID associated with this stage
+          example: tournament123
           readOnly: true
         tournament:
+          description: Full tournament details associated with this stage
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/TournamentResponse"
@@ -9285,34 +10151,38 @@ components:
         - name
         - tournamentId
         - stageStatus
-        - locationId
         - stageType
         - description
-        - logo
         - rostersParticipating
         - startDate
         - endDate
-        - location
         - minPlayersPerTeam
-        - maxPlayersPerTeam
-        - maxChanges
-        - maxSubstitutes
-        - challongeTournamentId
         - tournament
     CreateStageRequest:
       type: object
       properties:
+        tournamentId:
+          type: number
+          description: Unique identifier for the tournament this stage belongs to
+          example: 123
         conversionRuleId:
           type: number
+          description: ID of the conversion rule to apply to this stage
+          example: 456
+          nullable: true
         stageStatus:
           type: string
+          description: Current status of the stage
           enum:
             - upcoming
             - ongoing
             - finished
             - cancelled
+          example: SCHEDULED
+          nullable: true
         stageType:
           type: string
+          description: Type of the stage
           enum:
             - group
             - knockout
@@ -9324,31 +10194,68 @@ components:
             - compass
             - triple_elimination
             - evaluated_competition
+          example: SINGLE_ELIMINATION
+          nullable: true
         name:
           type: string
+          description: Name of the stage
+          example: Playoffs
+          minLength: 3
+          maxLength: 50
         stageLocation:
           type: string
+          description: Location type for the stage
           enum:
             - online
             - offline
             - hybrid
+          example: ONLINE
+          nullable: true
         description:
           type: string
+          description: Detailed description of the stage
+          example: Single elimination playoffs with best of 3 matches
+          minLength: 10
+          maxLength: 500
+          nullable: true
         logo:
           type: string
+          description: URL to the stage logo
+          example: https://example.com/logos/playoffs.png
+          nullable: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the stage
+          example: 2023-07-01T14:00:00Z
         endDate:
           format: date-time
           type: string
+          description: End date and time of the stage
+          example: 2023-07-15T18:00:00Z
+          nullable: true
         locationId:
           type: number
+          description: ID of the physical location for the stage
+          example: 789
+          minimum: 1
+          nullable: true
         minPlayersPerTeam:
           type: number
+          description: Minimum number of players required per team
+          example: 4
+          minimum: 1
+          maximum: 100
+          nullable: true
         maxPlayersPerTeam:
           type: number
+          description: Maximum number of players allowed per team
+          example: 6
+          minimum: 1
+          maximum: 100
+          nullable: true
       required:
+        - tournamentId
         - name
         - startDate
     UpdateStageRequest:
@@ -9356,15 +10263,22 @@ components:
       properties:
         conversionRuleId:
           type: number
+          description: ID of the conversion rule to apply to this stage
+          example: 456
+          nullable: true
         stageStatus:
           type: string
+          description: Current status of the stage
           enum:
             - upcoming
             - ongoing
             - finished
             - cancelled
+          example: IN_PROGRESS
+          nullable: true
         stageType:
           type: string
+          description: Type of the stage
           enum:
             - group
             - knockout
@@ -9376,402 +10290,121 @@ components:
             - compass
             - triple_elimination
             - evaluated_competition
+          example: DOUBLE_ELIMINATION
+          nullable: true
         name:
           type: string
+          description: Name of the stage
+          example: Finals
+          minLength: 3
+          maxLength: 50
+          nullable: true
         stageLocation:
           type: string
+          description: Location type for the stage
           enum:
             - online
             - offline
             - hybrid
+          example: OFFLINE
+          nullable: true
         description:
           type: string
+          description: Detailed description of the stage
+          example: Double elimination finals with best of 5 matches
+          minLength: 10
+          maxLength: 500
+          nullable: true
         logo:
           type: string
+          description: URL to the stage logo
+          example: https://example.com/logos/finals.png
+          nullable: true
         locationId:
           type: number
+          description: ID of the physical location for the stage
+          example: 789
+          minimum: 1
+          nullable: true
         startDate:
           format: date-time
           type: string
+          description: Start date and time of the stage
+          example: 2023-07-01T14:00:00Z
+          nullable: true
         endDate:
           format: date-time
           type: string
+          description: End date and time of the stage
+          example: 2023-07-15T18:00:00Z
+          nullable: true
         minPlayersPerTeam:
           type: number
+          description: Minimum number of players required per team
+          example: 4
+          minimum: 1
+          maximum: 100
+          nullable: true
         maxPlayersPerTeam:
           type: number
+          description: Maximum number of players allowed per team
+          example: 6
+          minimum: 1
+          maximum: 100
+          nullable: true
         maxChanges:
           type: number
+          description: Maximum number of roster changes allowed
+          example: 2
+          minimum: 0
+          maximum: 10
+          nullable: true
         maxSubstitutes:
           type: number
+          description: Maximum number of substitutes allowed
+          example: 3
+          minimum: 0
+          maximum: 10
+          nullable: true
+        tournamentId:
+          type: number
+          description: Unique identifier for the tournament this stage belongs to
+          example: 123
+          nullable: true
     MiniRosterDto:
       type: object
       properties:
         id:
           type: number
+          example: 123
+          description: Unique identifier for the roster
           readOnly: true
         stageId:
           type: number
+          description: ID of the stage this roster belongs to
+          example: 456
           readOnly: true
         participationId:
           type: number
+          description: ID of the participation this roster is associated with
+          example: 789
           readOnly: true
         group:
-          type: object
+          description: Group information associated with this roster
           readOnly: true
-        user:
-          type: object
-          readOnly: true
-      required:
-        - id
-        - stageId
-        - participationId
-        - group
-        - user
-    RosterDto:
-      type: object
-      properties:
-        id:
-          type: number
-          readOnly: true
-        stageId:
-          type: number
-          readOnly: true
-        participationId:
-          type: number
-          readOnly: true
-        group:
-          type: object
-          readOnly: true
-        user:
-          type: object
-          readOnly: true
-        players:
-          readOnly: true
-          type: array
-          items:
-            type: string
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        updatedAt:
-          format: date-time
-          type: string
-          readOnly: true
-      required:
-        - id
-        - stageId
-        - participationId
-        - group
-        - user
-        - players
-        - createdAt
-        - updatedAt
-    PlayerDto:
-      type: object
-      properties:
-        user:
-          type: object
-          readOnly: true
-        isSubstitute:
-          type: boolean
-          readOnly: true
-        career:
-          readOnly: true
-          type: array
-          items:
-            type: string
-      required:
-        - user
-        - isSubstitute
-        - career
-    CreateRosterDto:
-      type: object
-      properties:
-        members:
-          type: array
-          items:
-            type: string
-      required:
-        - members
-    MiniParticipationResponse:
-      type: object
-      properties:
-        id:
-          type: number
-        userId:
-          type: number
-        groupId:
-          type: number
-        tournamentId:
-          type: number
-      required:
-        - id
-        - tournamentId
-    ParticipationResponse:
-      type: object
-      properties:
-        id:
-          type: number
-        userId:
-          type: number
-        groupId:
-          type: number
-        tournamentId:
-          type: number
-        tournament:
-          $ref: "#/components/schemas/MiniTournamentResponse"
-        group:
-          $ref: "#/components/schemas/MiniGroupResponse"
-        user:
-          $ref: "#/components/schemas/MiniUserResponse"
-        createdAt:
-          format: date-time
-          type: string
-        updatedAt:
-          format: date-time
-          type: string
-      required:
-        - id
-        - tournamentId
-        - tournament
-        - createdAt
-        - updatedAt
-    ExtendedParticipationResponse:
-      type: object
-      properties: {}
-    MiniParticipationWithGroup:
-      type: object
-      properties:
-        id:
-          type: number
-        userId:
-          type: number
-        groupId:
-          type: number
-        tournamentId:
-          type: number
-        group:
-          $ref: "#/components/schemas/MiniGroupResponseWithLogo"
-      required:
-        - id
-        - tournamentId
-        - group
-    ResultsResponseDto:
-      type: object
-      properties:
-        id:
-          type: number
-          description: The ID of the result
-        matchupId:
-          type: number
-          description: The ID of the matchup
-        score:
-          type: number
-          description: The score
-        isWinner:
-          type: boolean
-          description: Whether this result represents a winner
-        roster:
-          description: The roster associated with this result
           allOf:
-            - $ref: "#/components/schemas/MiniRosterDto"
-      required:
-        - id
-        - matchupId
-        - score
-        - isWinner
-        - roster
-    MatchupResponseWithResultsDto:
-      type: object
-      properties:
-        id:
-          type: number
-          description: The ID of the matchup
-        stageId:
-          type: number
-          description: The ID of the stage
-        round:
-          type: number
-          description: The round number
-        matchupType:
-          type: string
-          description: The type of matchup
-        startDate:
-          format: date-time
-          type: string
-          description: The start date of the matchup
-        isFinished:
-          type: boolean
-          description: Whether the matchup is finished
-        results:
-          description: The results for this matchup
-          type: array
-          items:
-            $ref: "#/components/schemas/ResultsResponseDto"
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+        user:
+          description: User information associated with this roster
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       required:
         - id
         - stageId
-        - round
-        - matchupType
-        - startDate
-        - isFinished
-        - results
-    ScoreResponseDto:
-      type: object
-      properties:
-        matchupId:
-          type: number
-          description: The ID of the matchup
-        roundNumber:
-          type: number
-          description: The round number
-        points:
-          type: number
-          description: The number of points scored
-        isWinner:
-          type: boolean
-          description: Whether this score represents a winner
-      required:
-        - matchupId
-        - roundNumber
-        - points
-        - isWinner
-    ResultsResponseWithScoresDto:
-      type: object
-      properties:
-        id:
-          type: number
-          description: The ID of the matchup
-        stageId:
-          type: number
-          description: The ID of the stage
-        round:
-          type: number
-          description: The round number
-        matchupType:
-          type: string
-          description: The type of matchup
-        startDate:
-          format: date-time
-          type: string
-          description: The start date of the matchup
-        isFinished:
-          type: boolean
-          description: Whether the matchup is finished
-        scores:
-          description: The scores for this matchup
-          type: array
-          items:
-            $ref: "#/components/schemas/ScoreResponseDto"
-        rosters:
-          description: The rosters for this matchup
-          type: array
-          items:
-            $ref: "#/components/schemas/RosterDto"
-      required:
-        - id
-        - stageId
-        - round
-        - matchupType
-        - startDate
-        - isFinished
-        - scores
-        - rosters
-    MatchupResponseWithResultsAndScoresDto:
-      type: object
-      properties:
-        id:
-          type: number
-          description: The ID of the matchup
-        stageId:
-          type: number
-          description: The ID of the stage
-        round:
-          type: number
-          description: The round number
-        matchupType:
-          type: string
-          description: The type of matchup
-        startDate:
-          format: date-time
-          type: string
-          description: The start date of the matchup
-        isFinished:
-          type: boolean
-          description: Whether the matchup is finished
-        results:
-          description: The results with scores for this matchup
-          type: array
-          items:
-            $ref: "#/components/schemas/ResultsResponseWithScoresDto"
-      required:
-        - id
-        - stageId
-        - round
-        - matchupType
-        - startDate
-        - isFinished
-        - results
-    CreateTeamScoreDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        points:
-          type: number
-          description: The number of points scored
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - points
-        - isWinner
-    CreateScoreRequestDto:
-      type: object
-      properties:
-        roundNumber:
-          type: number
-          description: The round number
-        scores:
-          description: The scores for each team
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateTeamScoreDto"
-      required:
-        - roundNumber
-        - scores
-    SetTeamResultDto:
-      type: object
-      properties:
-        rosterId:
-          type: number
-          description: The ID of the roster
-        isWinner:
-          type: boolean
-          description: Whether this team is the winner
-      required:
-        - rosterId
-        - isWinner
-    EndMatchupRequestDto:
-      type: object
-      properties:
-        scores:
-          description: The scores for each round
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateScoreRequestDto"
-        results:
-          description: The results for each team
-          type: array
-          items:
-            $ref: "#/components/schemas/SetTeamResultDto"
-      required:
-        - scores
-        - results
+        - participationId
+        - group
+        - user
     CareerCategoryResponse:
       type: object
       properties:
@@ -9798,6 +10431,539 @@ components:
         - elo
         - createdAt
         - category
+    PlayerDto:
+      type: object
+      properties:
+        user:
+          description: User information for the player
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponseWithCountry"
+        isSubstitute:
+          type: boolean
+          description: Whether the player is a substitute
+          example: false
+          readOnly: true
+        career:
+          description: Career information for the player
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/CareerCategoryResponse"
+      required:
+        - user
+        - isSubstitute
+        - career
+    RosterDto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 123
+          description: Unique identifier for the roster
+          readOnly: true
+        stageId:
+          type: number
+          description: ID of the stage this roster belongs to
+          example: 456
+          readOnly: true
+        participationId:
+          type: number
+          description: ID of the participation this roster is associated with
+          example: 789
+          readOnly: true
+        group:
+          description: Group information associated with this roster
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+        user:
+          description: User information associated with this roster
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
+        players:
+          description: List of players in the roster
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/PlayerDto"
+        createdAt:
+          format: date-time
+          type: string
+          description: Date when the roster was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          description: Date when the roster was last updated
+          example: 2023-01-20T09:15:30Z
+          readOnly: true
+      required:
+        - id
+        - stageId
+        - participationId
+        - group
+        - user
+        - players
+        - createdAt
+        - updatedAt
+    CreateRosterMemberDto:
+      type: object
+      properties:
+        userId:
+          type: number
+          description: The ID of the user to add to the roster
+          example: 123
+        isSubstitute:
+          type: boolean
+          description: Whether the user is a substitute player
+          example: false
+          default: false
+      required:
+        - userId
+        - isSubstitute
+    CreateRosterDto:
+      type: object
+      properties:
+        members:
+          description: List of members to add to the roster
+          example:
+            - userId: 123
+              isSubstitute: false
+            - userId: 456
+              isSubstitute: true
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateRosterMemberDto"
+      required:
+        - members
+    MiniParticipationResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the participation
+          example: 123
+          readOnly: true
+        userId:
+          type: number
+          description: ID of the user participating in the tournament
+          example: 456
+          readOnly: true
+          nullable: true
+        groupId:
+          type: number
+          description: ID of the group participating in the tournament
+          example: 789
+          readOnly: true
+          nullable: true
+        tournamentId:
+          type: number
+          description: ID of the tournament being participated in
+          example: 101
+          readOnly: true
+      required:
+        - id
+        - tournamentId
+    ParticipationResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the participation
+          example: 123
+          readOnly: true
+        userId:
+          type: number
+          description: ID of the user participating in the tournament
+          example: 456
+          readOnly: true
+          nullable: true
+        groupId:
+          type: number
+          description: ID of the group participating in the tournament
+          example: 789
+          readOnly: true
+          nullable: true
+        tournamentId:
+          type: number
+          description: ID of the tournament being participated in
+          example: 101
+          readOnly: true
+        tournament:
+          description: Tournament information
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniTournamentResponse"
+        group:
+          description: Group information if participating as a group
+          readOnly: true
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponse"
+        user:
+          description: User information if participating as an individual
+          readOnly: true
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/MiniUserResponse"
+        createdAt:
+          format: date-time
+          type: string
+          description: Date when the participation was created
+          example: 2023-01-15T12:30:45Z
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          description: Date when the participation was last updated
+          example: 2023-01-20T09:15:30Z
+          readOnly: true
+      required:
+        - id
+        - tournamentId
+        - tournament
+        - createdAt
+        - updatedAt
+    ExtendedParticipationResponse:
+      type: object
+      properties: {}
+    MiniParticipationWithGroup:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the participation
+          example: 123
+          readOnly: true
+        userId:
+          type: number
+          description: ID of the user participating in the tournament
+          example: 456
+          readOnly: true
+          nullable: true
+        groupId:
+          type: number
+          description: ID of the group participating in the tournament
+          example: 789
+          readOnly: true
+          nullable: true
+        tournamentId:
+          type: number
+          description: ID of the tournament being participated in
+          example: 101
+          readOnly: true
+        group:
+          description: Group information with logo
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+      required:
+        - id
+        - tournamentId
+        - group
+    ResultsResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the result
+          example: 123
+          readOnly: true
+        matchupId:
+          type: number
+          description: Unique identifier for the matchup
+          example: 456
+          readOnly: true
+        score:
+          type: number
+          description: Score achieved
+          example: 2
+          readOnly: true
+        isWinner:
+          type: boolean
+          description: Whether this result represents a winning team
+          example: true
+          readOnly: true
+        roster:
+          description: Roster associated with this result
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/MiniRosterDto"
+      required:
+        - id
+        - matchupId
+        - score
+        - isWinner
+        - roster
+    MatchupResponseWithResultsDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the matchup
+          example: 123
+          readOnly: true
+        stageId:
+          type: number
+          description: Unique identifier for the stage
+          example: 456
+          readOnly: true
+        round:
+          type: number
+          description: Round number in the tournament
+          example: 1
+          readOnly: true
+        matchupType:
+          type: string
+          description: Type of the matchup
+          example: SINGLE_ELIMINATION
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          description: Start date and time of the matchup
+          example: 2023-07-01T14:00:00Z
+          readOnly: true
+        isFinished:
+          type: boolean
+          description: Whether the matchup has been completed
+          example: false
+          readOnly: true
+        results:
+          description: List of results for the matchup
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultsResponseDto"
+      required:
+        - id
+        - stageId
+        - round
+        - matchupType
+        - startDate
+        - isFinished
+        - results
+    ScoreResponseDto:
+      type: object
+      properties:
+        matchupId:
+          type: number
+          description: Unique identifier for the matchup
+          example: 123
+          readOnly: true
+        roundNumber:
+          type: number
+          description: Round number in the tournament
+          example: 1
+          readOnly: true
+        points:
+          type: number
+          description: Number of points scored
+          example: 2
+          readOnly: true
+        isWinner:
+          type: boolean
+          description: Whether this score represents a winning team
+          example: true
+          readOnly: true
+      required:
+        - matchupId
+        - roundNumber
+        - points
+        - isWinner
+    ResultsResponseWithScoresDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the matchup
+          example: 123
+          readOnly: true
+        stageId:
+          type: number
+          description: Unique identifier for the stage
+          example: 456
+          readOnly: true
+        round:
+          type: number
+          description: Round number in the tournament
+          example: 1
+          readOnly: true
+        matchupType:
+          type: string
+          description: Type of the matchup
+          example: SINGLE_ELIMINATION
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          description: Start date and time of the matchup
+          example: 2023-07-01T14:00:00Z
+          readOnly: true
+        isFinished:
+          type: boolean
+          description: Whether the matchup has been completed
+          example: false
+          readOnly: true
+        scores:
+          description: List of scores for the matchup
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/ScoreResponseDto"
+        rosters:
+          description: List of rosters in the matchup
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/RosterDto"
+      required:
+        - id
+        - stageId
+        - round
+        - matchupType
+        - startDate
+        - isFinished
+        - scores
+        - rosters
+    MatchupResponseWithResultsAndScoresDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the matchup
+          example: 123
+          readOnly: true
+        stageId:
+          type: number
+          description: Unique identifier for the stage
+          example: 456
+          readOnly: true
+        round:
+          type: number
+          description: Round number in the tournament
+          example: 1
+          readOnly: true
+        matchupType:
+          type: string
+          description: Type of the matchup
+          example: SINGLE_ELIMINATION
+          readOnly: true
+        startDate:
+          format: date-time
+          type: string
+          description: Start date and time of the matchup
+          example: 2023-07-01T14:00:00Z
+          readOnly: true
+        isFinished:
+          type: boolean
+          description: Whether the matchup has been completed
+          example: false
+          readOnly: true
+        results:
+          description: List of results with scores for the matchup
+          readOnly: true
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultsResponseWithScoresDto"
+      required:
+        - id
+        - stageId
+        - round
+        - matchupType
+        - startDate
+        - isFinished
+        - results
+    CreateTeamScoreDto:
+      type: object
+      properties:
+        rosterId:
+          type: number
+          description: The ID of the roster participating in the match
+          example: 123
+        points:
+          type: number
+          description: The number of points scored by the team
+          example: 2
+          minimum: 0
+        isWinner:
+          type: boolean
+          description: Whether this team won the match
+          example: true
+      required:
+        - rosterId
+        - points
+        - isWinner
+    CreateScoreRequestDto:
+      type: object
+      properties:
+        roundNumber:
+          type: number
+          description: The round number in the tournament
+          example: 1
+          minimum: 1
+        scores:
+          description: The scores for each team participating in the round
+          example:
+            - rosterId: 123
+              points: 2
+              isWinner: true
+            - rosterId: 456
+              points: 1
+              isWinner: false
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateTeamScoreDto"
+      required:
+        - roundNumber
+        - scores
+    SetTeamResultDto:
+      type: object
+      properties:
+        rosterId:
+          type: number
+          description: The ID of the roster participating in the match
+          example: 123
+        isWinner:
+          type: boolean
+          description: Whether this team won the match
+          example: true
+      required:
+        - rosterId
+        - isWinner
+    EndMatchupRequestDto:
+      type: object
+      properties:
+        scores:
+          description: The scores for each round in the matchup
+          example:
+            - roundNumber: 1
+              scores:
+                - rosterId: 123
+                  points: 2
+                  isWinner: true
+                - rosterId: 456
+                  points: 1
+                  isWinner: false
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateScoreRequestDto"
+        results:
+          description: The final results for each team in the matchup
+          example:
+            - rosterId: 123
+              isWinner: true
+            - rosterId: 456
+              isWinner: false
+          type: array
+          items:
+            $ref: "#/components/schemas/SetTeamResultDto"
+      required:
+        - scores
+        - results
     LFGResponse:
       type: object
       properties:
@@ -9948,8 +11114,14 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the tag
+          example: 1
+          readOnly: true
         name:
           type: string
+          description: Name of the tag
+          example: Tournament Rules
+          readOnly: true
       required:
         - id
         - name
@@ -9958,51 +11130,87 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the quiz
+          example: 123
           readOnly: true
         name:
           type: string
+          description: Name of the quiz
+          example: Tournament Rules Quiz
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Date and time when the quiz becomes available
+          example: 2023-07-01T10:00:00Z
           readOnly: true
         timeLimitTotal:
           type: number
+          description: Total time limit for completing the quiz in seconds
+          example: 1800
           readOnly: true
+          nullable: true
         passingScore:
           type: number
+          description: Minimum score required to pass the quiz (percentage)
+          example: 70
           readOnly: true
+          nullable: true
         isRetakeable:
           type: boolean
+          description: Whether users can retake the quiz after completion
+          example: true
           readOnly: true
         isAnonymousAllowed:
           type: boolean
+          description: Whether anonymous users can take the quiz
+          example: false
           readOnly: true
+          nullable: true
         description:
           type: string
+          description: Detailed description of the quiz
+          example: This quiz covers the rules and regulations for the upcoming tournament
           readOnly: true
+          nullable: true
         matchupId:
           type: number
+          description: ID of the matchup this quiz is associated with
+          example: 123
           readOnly: true
+          nullable: true
         stageId:
           type: number
+          description: ID of the stage this quiz is associated with
+          example: 456
           readOnly: true
+          nullable: true
         coverImage:
           type: string
+          description: URL to the quiz cover image
+          example: https://example.com/images/quiz-cover.jpg
           readOnly: true
+          nullable: true
         tags:
+          description: List of tags associated with the quiz
           readOnly: true
           type: array
           items:
             $ref: "#/components/schemas/TagResponse"
         createdAt:
           type: object
+          description: Date when the quiz was created
+          example: 2023-06-15T14:30:00Z
           readOnly: true
         updatedAt:
           type: object
+          description: Date when the quiz was last updated
+          example: 2023-06-20T09:15:00Z
           readOnly: true
         authorId:
           type: number
+          description: ID of the user who created the quiz
+          example: 789
           readOnly: true
       required:
         - id
@@ -10094,77 +11302,128 @@ components:
       properties:
         id:
           type: number
+          description: Unique identifier for the quiz
+          example: 123
           readOnly: true
         name:
           type: string
+          description: Name of the quiz
+          example: Tournament Rules Quiz
           readOnly: true
         startDate:
           format: date-time
           type: string
+          description: Date and time when the quiz becomes available
+          example: 2023-07-01T10:00:00Z
           readOnly: true
         timeLimitTotal:
           type: number
+          description: Total time limit for completing the quiz in seconds
+          example: 1800
           readOnly: true
+          nullable: true
         passingScore:
           type: number
+          description: Minimum score required to pass the quiz (percentage)
+          example: 70
           readOnly: true
+          nullable: true
         isRetakeable:
           type: boolean
+          description: Whether users can retake the quiz after completion
+          example: true
           readOnly: true
         isAnonymousAllowed:
           type: boolean
+          description: Whether anonymous users can take the quiz
+          example: false
           readOnly: true
+          nullable: true
         description:
           type: string
+          description: Detailed description of the quiz
+          example: This quiz covers the rules and regulations for the upcoming tournament
           readOnly: true
+          nullable: true
         matchupId:
           type: number
+          description: ID of the matchup this quiz is associated with
+          example: 123
           readOnly: true
+          nullable: true
         stageId:
           type: number
+          description: ID of the stage this quiz is associated with
+          example: 456
           readOnly: true
+          nullable: true
         coverImage:
           type: string
+          description: URL to the quiz cover image
+          example: https://example.com/images/quiz-cover.jpg
           readOnly: true
+          nullable: true
         tags:
+          description: List of tags associated with the quiz
           readOnly: true
           type: array
           items:
             $ref: "#/components/schemas/TagResponse"
         createdAt:
           type: object
+          description: Date when the quiz was created
+          example: 2023-06-15T14:30:00Z
           readOnly: true
         updatedAt:
           type: object
+          description: Date when the quiz was last updated
+          example: 2023-06-20T09:15:00Z
           readOnly: true
         authorId:
           type: number
+          description: ID of the user who created the quiz
+          example: 789
           readOnly: true
         attempts:
           type: number
+          description: Total number of attempts made on the quiz
+          example: 50
           readOnly: true
         averageScore:
           type: number
+          description: Average score achieved by all attempts
+          example: 75.5
           readOnly: true
         medianScore:
           type: number
+          description: Median score achieved by all attempts
+          example: 80
           readOnly: true
         passingRate:
           type: number
+          description: Percentage of attempts that passed the quiz
+          example: 65.5
           readOnly: true
         questions:
-          description: Quiz questions with statistics
+          description: List of questions with their statistics
+          readOnly: true
           type: array
           items:
             $ref: "#/components/schemas/QuizQuestionResponse"
         isRandomizedQuestions:
           type: boolean
+          description: Whether questions are presented in random order
+          example: true
           readOnly: true
         isImmediateFeedback:
           type: boolean
+          description: Whether feedback is shown immediately after each question
+          example: true
           readOnly: true
         isTest:
           type: boolean
+          description: Whether this is a test quiz
+          example: false
           readOnly: true
       required:
         - id
@@ -10232,34 +11491,91 @@ components:
       properties:
         name:
           type: string
-          description: Quiz name
+          description: Name of the quiz
+          example: Tournament Rules Quiz
+          minLength: 1
         startDate:
           format: date-time
           type: string
+          description: Date and time when the quiz becomes available
+          example: 2023-07-01T10:00:00Z
         timeLimitTotal:
           type: number
+          description: Total time limit for completing the quiz in seconds
+          example: 1800
+          minimum: 60
+          nullable: true
         passingScore:
           type: number
+          description: Minimum score required to pass the quiz (percentage)
+          example: 70
+          minimum: 0
+          maximum: 100
+          nullable: true
         isImmediateFeedback:
           type: boolean
+          description: Whether to show feedback immediately after each question
+          example: true
+          nullable: true
         isRandomizedQuestions:
           type: boolean
+          description: Whether to randomize the order of questions
+          example: true
+          nullable: true
         isAnonymousAllowed:
           type: boolean
+          description: Whether anonymous users can take the quiz
+          example: false
         isRetakeable:
           type: boolean
+          description: Whether users can retake the quiz after completion
+          example: true
         description:
           type: string
+          description: Detailed description of the quiz
+          example: This quiz covers the rules and regulations for the upcoming tournament
+          minLength: 10
+          maxLength: 500
+          nullable: true
         matchupId:
           type: number
+          description: ID of the matchup this quiz is associated with
+          example: 123
+          nullable: true
         stageId:
           type: number
+          description: ID of the stage this quiz is associated with
+          example: 456
+          nullable: true
         isTest:
           type: boolean
+          description: Whether this is a test quiz
+          example: false
         coverImage:
           type: string
+          description: URL to the quiz cover image
+          example: https://example.com/images/quiz-cover.jpg
+        tags:
+          description: List of tag IDs associated with the quiz
+          example: &a98
+            - 1
+            - 2
+            - 3
+          type: array
+          items:
+            type: number
         questions:
-          description: Quiz questions
+          description: List of questions for the quiz
+          example: &a99
+            - text: What is the maximum team size allowed?
+              type: MULTIPLE_CHOICE
+              options:
+                - text: 4 players
+                  isCorrect: true
+                - text: 5 players
+                  isCorrect: false
+                - text: 6 players
+                  isCorrect: false
           type: array
           items:
             $ref: "#/components/schemas/CreateQuizQuestionDto"
@@ -10272,34 +11588,79 @@ components:
       properties:
         name:
           type: string
-          description: Quiz name
+          description: Name of the quiz
+          example: Tournament Rules Quiz
+          minLength: 1
         startDate:
           format: date-time
           type: string
+          description: Date and time when the quiz becomes available
+          example: 2023-07-01T10:00:00Z
         timeLimitTotal:
           type: number
+          description: Total time limit for completing the quiz in seconds
+          example: 1800
+          minimum: 60
+          nullable: true
         passingScore:
           type: number
+          description: Minimum score required to pass the quiz (percentage)
+          example: 70
+          minimum: 0
+          maximum: 100
+          nullable: true
         isImmediateFeedback:
           type: boolean
+          description: Whether to show feedback immediately after each question
+          example: true
+          nullable: true
         isRandomizedQuestions:
           type: boolean
+          description: Whether to randomize the order of questions
+          example: true
+          nullable: true
         isAnonymousAllowed:
           type: boolean
+          description: Whether anonymous users can take the quiz
+          example: false
         isRetakeable:
           type: boolean
+          description: Whether users can retake the quiz after completion
+          example: true
         description:
           type: string
+          description: Detailed description of the quiz
+          example: This quiz covers the rules and regulations for the upcoming tournament
+          minLength: 10
+          maxLength: 500
+          nullable: true
         matchupId:
           type: number
+          description: ID of the matchup this quiz is associated with
+          example: 123
+          nullable: true
         stageId:
           type: number
+          description: ID of the stage this quiz is associated with
+          example: 456
+          nullable: true
         isTest:
           type: boolean
+          description: Whether this is a test quiz
+          example: false
         coverImage:
           type: string
+          description: URL to the quiz cover image
+          example: https://example.com/images/quiz-cover.jpg
+        tags:
+          description: List of tag IDs associated with the quiz
+          example: *a98
+          type: array
+          items:
+            type: number
         questions:
-          description: Quiz questions
+          description: List of questions for the quiz
+          example: *a99
           type: array
           items:
             $ref: "#/components/schemas/CreateQuizQuestionDto"

@@ -318,6 +318,8 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         ),
       });
 
+      console.log(participations);
+
       const rosterId =
         participations.length > 0 &&
         participations.forEach(async (participation) => {
@@ -328,8 +330,10 @@ export class RosterDrizzleRepository extends PrimaryRepository<
 
           await tx
             .insert(userToRoster)
-            .values({ userId: participation.userId, rosterId: rosterId[0].id });
+            .values({ userId: participation.userId, rosterId: rosterId[0].id })
         });
+
+      console.log(rosterId, participations.length);
 
       return rosterId;
     });

@@ -35,6 +35,7 @@ export class GroupService {
   ) {}
 
   async create(createGroupDto: CreateGroupRequest, userId: number) {
+    
     const action = await this.repository.createEntityWithUser({
       ...createGroupDto,
       userId,

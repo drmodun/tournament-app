@@ -141,9 +141,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
   ) {
     const userId = createGroupDto.userId;
 
-
     const newGroup = db.transaction(async (tx) => {
-
       const [createdGroup] = await tx
         .insert(group)
         .values({
@@ -189,7 +187,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       const field = group[key];
       if (!field) return;
       const parsed = value as string;
-
 
       switch (key) {
         case 'name':

@@ -1,5 +1,12 @@
 import { stageTypeEnum, stageStatusEnum } from "../enums";
-import { TournamentType, TournamentState, MatchState } from "./index";
+import {
+  TournamentType,
+  TournamentState,
+  MatchState,
+  ISwissOptions,
+  IRoundRobinOptions,
+  IDoubleEliminationOptions,
+} from "./index";
 import {
   IChallongeTournament,
   IChallongeParticipant,
@@ -46,6 +53,9 @@ export function stageToCreateTournamentRequest(stage: {
   stageType: stageTypeEnum;
   startDate: Date;
 }): ICreateChallongeTournamentRequest {
+  const type = stageTypeToChallongeType[stage.stageType];
+  const additionalInfo = getAdditionalData(type);
+
   return {
     data: {
       type: "tournament",
@@ -57,9 +67,46 @@ export function stageToCreateTournamentRequest(stage: {
           : undefined,
         private: true,
         starts_at: formatDateForChallonge(stage.startDate),
+        ...additionalInfo,
       },
     },
   };
+}
+
+export function getAdditionalData(option: string) {
+  switch (option) {
+    case "swiss":
+      return {
+        swiss_options: {
+          rounds: 5,
+          pts_for_game_win: 1,
+          pts_for_game_tie: 0,
+          pts_for_match_win: 1,
+          pts_for_match_tie: 0.5,
+          pts_for_bye: 0.5,
+        } as ISwissOptions,
+      };
+    case "round robin":
+      return {
+        round_robin_options: {
+          iterations: 2,
+          ranking: "match wins",
+          pts_for_game_win: 1,
+          pts_for_game_tie: 0,
+          pts_for_match_win: 3,
+          pts_for_match_tie: 1,
+        } as IRoundRobinOptions,
+      };
+    case "double elimination": {
+      return {
+        double_elimination_options: {
+          split_participants: false,
+          grand_finals_modifier: "single match",
+        } as IDoubleEliminationOptions,
+      };
+    }
+    // TODO: make this customizable by user
+  }
 }
 
 function sanitizeForChallonge(str: string): string {

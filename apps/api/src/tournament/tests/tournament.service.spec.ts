@@ -191,7 +191,7 @@ describe('TournamentService', () => {
 
     it('should return tournaments managed by the user', async () => {
       repository.getManagedTournaments.mockResolvedValue(
-        mockManagedTournaments,
+        mockManagedTournaments as any,
       );
 
       const result = await service.getManagedTournaments(userId, pagination);
@@ -217,7 +217,7 @@ describe('TournamentService', () => {
 
     it('should work without pagination parameter', async () => {
       repository.getManagedTournaments.mockResolvedValue(
-        mockManagedTournaments,
+        mockManagedTournaments as any,
       );
 
       const result = await service.getManagedTournaments(userId);

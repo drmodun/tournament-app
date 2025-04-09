@@ -133,10 +133,10 @@ export default function ManageBlockedUsers() {
                     >
                       <div className={styles.leftContent}>
                         <img
-                          src={card.profilePicture}
-                          onError={(e) =>
-                            (e.currentTarget.src = "/profilePicture.png")
-                          }
+                          src={card.profilePicture ?? "/profilePicture.png"}
+                          onError={(e) => {
+                            e.currentTarget.src = "/profilePicture.png";
+                          }}
                           className={styles.pfp}
                         />
                         <p>{card.username}</p>

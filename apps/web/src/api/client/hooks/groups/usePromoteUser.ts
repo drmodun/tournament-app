@@ -3,8 +3,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { groupRoleEnum } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateGroups } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const promoteUser = async (data: { groupId: number; userId: number }) =>
   clientApi
@@ -12,7 +14,7 @@ export const promoteUser = async (data: { groupId: number; userId: number }) =>
       `/group-membership/${data.groupId}/${data.userId}`,
       {
         role: groupRoleEnum.ADMIN,
-      },
+      }
     )
     .then((res) => res.data);
 
@@ -28,10 +30,11 @@ export const usePromoteUser = () => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("group"),
       });
+      invalidateGroups();
     },
-    onError: (error: any) => {
-      toast.addToast(error.message ?? "an error occured...", "error");
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("promoting user...", "info");

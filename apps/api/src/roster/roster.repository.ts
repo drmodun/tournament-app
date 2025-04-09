@@ -10,7 +10,17 @@ import {
 } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { eq, SQL, desc, asc, inArray, and, or, isNotNull, InferInsertModel } from 'drizzle-orm';
+import {
+  eq,
+  SQL,
+  desc,
+  asc,
+  inArray,
+  and,
+  or,
+  isNotNull,
+  InferInsertModel,
+} from 'drizzle-orm';
 import {
   RosterResponsesEnum,
   RosterSortingEnum,
@@ -330,20 +340,27 @@ export class RosterDrizzleRepository extends PrimaryRepository<
             .returning({ id: roster.id });
 
           if (!rosterResult[0]) {
-            console.error('Failed to create roster for participation', participation.id);
+            console.error(
+              'Failed to create roster for participation',
+              participation.id,
+            );
             return null;
           }
 
           const rosterId = rosterResult[0].id;
-          
-           await tx
+
+          await tx
             .insert(userToRoster)
-            .values({ userId: participation.userId, rosterId, isSubstitute: false } as InferInsertModel<typeof userToRoster>)
+            .values({
+              userId: participation.userId,
+              rosterId,
+              isSubstitute: false,
+            } as InferInsertModel<typeof userToRoster>)
             .returning();
-        })
+        }),
       );
 
-      return createdRosters.filter(result => result !== null);
+      return createdRosters.filter((result) => result !== null);
     });
 
     return res;

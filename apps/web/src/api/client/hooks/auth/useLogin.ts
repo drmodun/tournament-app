@@ -9,7 +9,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { handleError } from "utils/mixins/helpers";
 
 export const loginUser = async (data: IEmailPasswordLoginRequest) =>
   clientApi
@@ -37,9 +38,9 @@ export const useLogin = () => {
 
       setTimeout(() => navigate.push("/main"), 1000);
     },
-    onError: (error: any) => {
-      toast.addToast("invalid credentials", "error");
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("logging in...", "info");

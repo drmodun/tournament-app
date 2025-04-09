@@ -27,30 +27,38 @@ export default function EditLFGForm({
 
   const editLFGMutation = useUpdateLFG();
   const { data, isLoading } = useGetUserInterests();
-  const [values, setValues] = useState<boolean[]>();
+  const [values, setValues] = useState<boolean[]>([]);
 
   useEffect(() => {
     setValues(
       data?.results.map((elem) => {
         return lfg?.careers.some((e) => e.category.id == elem.id) ?? false;
-      }) ?? [],
+      }) ?? []
     );
   }, [data]);
 
   const returnIdsFromIndexes = () => {
-    if (!values) return [];
+    if (values.length === 0) return [];
     const arr: number[] = [];
-    data?.results.map((elem, i) => {
-      if (values[i]) arr.push(elem.id);
+    values.map((elem, i) => {
+      if (elem) arr.push(data?.results[i].id ?? -1);
     });
     return arr;
   };
 
   const methods = useForm<IUpdateLFGRequest & { id: number }>();
   const onSubmit = async (_data: IUpdateLFGRequest & { id: number }) => {
-    _data.categoryIds = returnIdsFromIndexes();
-    _data.id = lfg?.id ?? -1;
-    await editLFGMutation.mutateAsync(_data);
+    console.log("AAAAAAAA");
+    console.log({
+      id: lfg?.id ?? -1,
+      categoryIds: returnIdsFromIndexes(),
+      message: _data.message,
+    });
+    await editLFGMutation.mutateAsync({
+      id: lfg?.id ?? -1,
+      categoryIds: returnIdsFromIndexes(),
+      message: _data.message,
+    });
     onClose && onClose();
   };
 
@@ -116,7 +124,7 @@ export default function EditLFGForm({
                     setValues((prev) => {
                       if (!prev) return [];
                       return prev.map((value, index) =>
-                        index === i ? !value : value,
+                        index === i ? !value : value
                       );
                     });
                   },

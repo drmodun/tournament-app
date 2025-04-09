@@ -8,17 +8,7 @@
   transition: background-color 0.2s ease;
   position: relative;
 
-  &:hover {
-    background-color: $secondaryMuted;
-  }
-
   &.unread {
-    background-color: rgba($primary, 0.05);
-
-    &:hover {
-      background-color: rgba($primary, 0.1);
-    }
-
     &::before {
       content: "";
       position: absolute;
@@ -26,7 +16,6 @@
       top: 0;
       bottom: 0;
       width: 4px;
-      background-color: $primary;
     }
   }
 }

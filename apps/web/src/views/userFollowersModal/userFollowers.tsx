@@ -95,13 +95,12 @@ export default function UserFollowersDialog() {
                         className={clsx(
                           styles.noTextDecoration,
                           styles.userCardLink,
-                          globals[`${textColorTheme}BackgroundColor`],
+                          globals[`${textColorTheme}BackgroundColor`]
                         )}
                       >
                         <div className={styles.userCardInnerWrapper}>
                           <img
-                            src={user.profilePicture}
-                            alt={`${user.username}'s profile picture`}
+                            src={user.profilePicture ?? "/profilePicture.png"}
                             className={styles.userCardProfilePicture}
                             onError={(e) => {
                               e.currentTarget.src = "/profilePicture.png";
@@ -110,7 +109,7 @@ export default function UserFollowersDialog() {
                           <div
                             className={clsx(
                               globals[`${theme}Color`],
-                              styles.userCardTextWrapper,
+                              styles.userCardTextWrapper
                             )}
                             title={user.username}
                           >
@@ -120,7 +119,7 @@ export default function UserFollowersDialog() {
                             <p className={styles.userCardText}>
                               {user.country &&
                                 getUnicodeFlagIcon(
-                                  COUNTRY_NAMES_TO_CODES[user.country] ?? "ZZ",
+                                  COUNTRY_NAMES_TO_CODES[user.country] ?? "ZZ"
                                 )}
                             </p>
                           </div>

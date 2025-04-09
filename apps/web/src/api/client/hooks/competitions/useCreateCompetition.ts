@@ -2,9 +2,11 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { ICreateTournamentRequest } from "@tournament-app/types";
+import { invalidateCompetitions } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const createCompetition = async (data: ICreateTournamentRequest) =>
   clientApi
@@ -27,15 +29,11 @@ export const useCreateCompetition = () => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("competition"),
       });
+      invalidateCompetitions();
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("creating competition...", "info");

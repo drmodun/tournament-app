@@ -18,13 +18,16 @@ import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { formatDateTime } from "utils/mixins/formatting";
+import {
+  COUNTRY_NAMES_TO_CODES,
+  formatDateTime,
+} from "utils/mixins/formatting";
 import EditCompetitionForm from "views/editCompetitionForm";
 import GroupSelectDialog from "views/groupSelectDialog";
 import styles from "./competition.module.scss";
@@ -43,16 +46,16 @@ export default function Competition({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { data: groupMembershipData, isLoading: groupMembershipIsLoading } =
-    useCheckIfGroupMember(competition?.affiliatedGroup?.id);
+    useCheckIfGroupMember(competition?.affiliatedGroup?.id ?? -1);
 
   const deleteCompetitionMutation = useDeleteCompetition();
   const soloJoinCompetitionMutation = useCreateSoloParticipation();
   const { data: participationData } = useCheckIfUserIsParticipating(
     competition?.id,
-    data?.id,
+    data?.id
   );
   const { data: groupParticipationData } = useGetUserGroupParticipations(
-    competition?.id,
+    competition?.id
   );
 
   const [groupSelectModalOpen, setGroupSelectModalOpen] =
@@ -86,7 +89,6 @@ export default function Competition({
           <div className={styles.bannerContent}>
             <img
               src={competition?.logo ?? "/noimg.jpg"}
-              alt="tournament logo"
               className={styles.bannerLogo}
               onError={(e) => {
                 e.currentTarget.src = "/noimg.jpg";
@@ -96,7 +98,7 @@ export default function Competition({
               <h1
                 className={clsx(
                   styles.organiserName,
-                  globals[`${textColorTheme}Color`],
+                  globals[`${textColorTheme}Color`]
                 )}
               >
                 {competition?.name}
@@ -118,47 +120,65 @@ export default function Competition({
       </div>
       <div className={clsx(styles.right)}>
         <div className={styles.sidebarContent}>
-          <SidebarSection name="date">
-            <div className={styles.dates}>
+          {competition?.startDate && competition?.endDate && (
+            <SidebarSection name="date">
+              <div className={styles.dates}>
+                <Chip
+                  label={formatDateTime(competition?.startDate)}
+                  variant={textColorTheme}
+                />
+                <p>-</p>
+                <Chip
+                  label={formatDateTime(competition?.endDate)}
+                  variant={textColorTheme}
+                />
+              </div>
+            </SidebarSection>
+          )}
+          {(competition?.actualLocation?.name || competition?.location) && (
+            <SidebarSection name="location">
               <Chip
-                label={formatDateTime(competition?.startDate)}
-                variant={textColorTheme}
-              />
-              <p>-</p>
+                label={
+                  competition?.actualLocation?.name != undefined
+                    ? competition?.actualLocation?.name
+                    : competition?.location
+                }
+              ></Chip>
+            </SidebarSection>
+          )}
+          {competition?.country && (
+            <SidebarSection name="country">
               <Chip
-                label={formatDateTime(competition?.endDate)}
-                variant={textColorTheme}
-              />
-            </div>
-          </SidebarSection>
-          <SidebarSection name="location">
-            <Chip
-              label={
-                competition?.actualLocation?.name != undefined
-                  ? competition?.actualLocation?.name
-                  : competition?.location
-              }
-            ></Chip>
-          </SidebarSection>
-          <SidebarSection name="country">
-            <Chip
-              label={`${competition?.country} ${getUnicodeFlagIcon(competition?.country ?? "ZZ")}`}
-            ></Chip>
-          </SidebarSection>
-
-          <SidebarSection name="mmr">
-            <div className={styles.dates}>
-              <Chip label={competition?.minimumMMR?.toString()}></Chip>
-              <p className={globals[`${textColorTheme}Color`]}>-</p>
-              <Chip label={competition?.maximumMMR?.toString()}></Chip>
-            </div>
-          </SidebarSection>
-          <SidebarSection name="type">
-            <Chip label={competition?.type}></Chip>
-          </SidebarSection>
-          <SidebarSection name="category">
-            <Chip label={competition?.category?.name}></Chip>
-          </SidebarSection>
+                label={`${competition?.country} ${getUnicodeFlagIcon(COUNTRY_NAMES_TO_CODES[competition?.country ?? "Unknown"] ?? "ZZ")}`}
+              ></Chip>
+            </SidebarSection>
+          )}
+          {competition?.minimumMMR !== undefined &&
+            competition?.maximumMMR !== undefined && (
+              <SidebarSection name="mmr">
+                <div className={styles.dates}>
+                  <Chip
+                    label={competition?.minimumMMR?.toString()}
+                    variant={textColorTheme}
+                  ></Chip>
+                  <p className={globals[`${textColorTheme}Color`]}>-</p>
+                  <Chip
+                    label={competition?.maximumMMR?.toString()}
+                    variant={textColorTheme}
+                  ></Chip>
+                </div>
+              </SidebarSection>
+            )}
+          {competition?.type && (
+            <SidebarSection name="type">
+              <Chip label={competition?.type}></Chip>
+            </SidebarSection>
+          )}
+          {competition?.category && (
+            <SidebarSection name="category">
+              <Chip label={competition?.category?.name}></Chip>
+            </SidebarSection>
+          )}
         </div>
         {groupMembershipIsLoading || isLoading ? (
           <ProgressWheel variant={textColorTheme} />
@@ -237,7 +257,7 @@ const SidebarSection = ({ name, children }: SidebarSectionProps) => {
         className={clsx(
           styles.sidebarSectionName,
           globals.label,
-          globals[`${textColorTheme}Color`],
+          globals[`${textColorTheme}Color`]
         )}
       >
         {name}

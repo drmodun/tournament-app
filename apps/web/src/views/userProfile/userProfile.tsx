@@ -8,7 +8,7 @@ import { useUnfollowUser } from "api/client/hooks/followers/useUnfollowUser";
 import { clsx } from "clsx";
 import Button from "components/button";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -18,6 +18,7 @@ import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import styles from "./userProfile.module.scss";
 import Dialog from "components/dialog";
 import InviteUserForm from "views/inviteUserForm";
+import { useRouter } from "next/navigation";
 
 export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
   const { theme } = useThemeContext();
@@ -27,6 +28,8 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
   const textColorTheme = textColor(theme);
   const { data: authData } = useAuth();
   const [buttonFollowed, setButtonFollowed] = useState<boolean | null>(null);
+
+  const router = useRouter();
 
   const [inviteModalOpen, setInviteModalOpen] = useState<boolean>(false);
 
@@ -39,6 +42,10 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
     await unfollowUserMutation.mutateAsync(user?.id);
     if (!unfollowUserMutation.isError) setButtonFollowed(false);
   };
+
+  useEffect(() => {
+    if (authData?.id === user?.id) router.push("/user");
+  }, [authData, user]);
 
   return (
     <div className={clsx(styles.wrapper, globals[`${theme}BackgroundColor`])}>
@@ -56,8 +63,7 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
       </Dialog>
       <div className={clsx(globals[`${textColorTheme}Color`], styles.top)}>
         <img
-          src={user?.profilePicture}
-          alt="Profile picture"
+          src={user?.profilePicture ?? "/profilePicture.png"}
           className={clsx(styles.pfp)}
           onError={(e) => {
             e.currentTarget.src = "/profilePicture.png";
@@ -68,7 +74,7 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
             className={clsx(
               styles.username,
               globals.largeText,
-              styles.infoText,
+              styles.infoText
             )}
           >
             {user?.name}{" "}
@@ -79,7 +85,7 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
       <div
         className={clsx(
           styles.detailsWrapper,
-          globals[`${textColorTheme}Color`],
+          globals[`${textColorTheme}Color`]
         )}
       >
         <div className={styles.userInfo}>

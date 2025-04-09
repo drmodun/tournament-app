@@ -7,8 +7,11 @@ import styles from "./notificationIndicator.module.scss";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import Link from "next/link";
+import globals from "styles/globals.module.scss";
+import { useThemeContext } from "utils/hooks/useThemeContext";
 
 export default function NotificationIndicator() {
+  const { theme } = useThemeContext();
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const { notifications, unreadCount, isConnected, markAsRead, markAllAsRead } =
@@ -58,7 +61,7 @@ export default function NotificationIndicator() {
   };
 
   return (
-    <div className={styles.indicator}>
+    <div className={clsx(styles.indicator, globals[`${theme}BackgroundColor`])}>
       <div onClick={togglePanel}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -76,12 +79,19 @@ export default function NotificationIndicator() {
         <div
           className={clsx(
             styles.connectionStatus,
-            isConnected ? styles.connected : styles.disconnected,
+            isConnected ? styles.connected : styles.disconnected
           )}
         />
       </div>
 
-      <div ref={panelRef} className={clsx(styles.panel, isOpen && styles.open)}>
+      <div
+        ref={panelRef}
+        className={clsx(
+          styles.panel,
+          isOpen && styles.open,
+          globals[`${theme}BackgroundColor`]
+        )}
+      >
         <div className={styles.header}>
           <div className={styles.title}>notifications</div>
           <div className={styles.actions}>

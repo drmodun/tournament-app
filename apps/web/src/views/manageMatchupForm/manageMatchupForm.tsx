@@ -41,7 +41,7 @@ export default function ManageMatchupForm({
   const [addMatchModalOpen, setAddMatchModalOpen] = useState<boolean>(false);
 
   const [winners, setWinners] = useState<boolean[]>(
-    rosters ? new Array(rosters.length).fill(false) : [],
+    rosters ? new Array(rosters.length).fill(false) : []
   );
 
   rosters ??= matchup?.results.map((res) => res.roster);
@@ -101,13 +101,15 @@ export default function ManageMatchupForm({
                       <div
                         className={clsx(
                           styles.userCard,
-                          globals[`${textColorTheme}BackgroundColor`],
+                          globals[`${textColorTheme}BackgroundColor`]
                         )}
                       >
                         <img
-                          src={player.user.profilePicture}
+                          src={
+                            player.user.profilePicture ?? "/profilePicture.png"
+                          }
                           onError={(e) =>
-                            (e.currentTarget.src = "./profilePicture.png")
+                            (e.currentTarget.src = "/profilePicture.png")
                           }
                           className={styles.userPfp}
                         />
@@ -143,7 +145,7 @@ export default function ManageMatchupForm({
               <div
                 className={clsx(
                   styles.resultsCard,
-                  globals[`${textColorTheme}BackgroundColor`],
+                  globals[`${textColorTheme}BackgroundColor`]
                 )}
               >
                 <p className={globals[`${theme}Color`]}>{score.roundNumber}.</p>
@@ -154,12 +156,12 @@ export default function ManageMatchupForm({
                       globals.lightColor,
                       score?.scores?.[0].isWinner
                         ? globals.primaryBackgroundColor
-                        : globals.dangerBackgroundColor,
+                        : globals.dangerBackgroundColor
                     )}
                   >
                     {rosters
                       ?.filter(
-                        (elem) => elem.id === score?.scores?.[0].rosterId,
+                        (elem) => elem.id === score?.scores?.[0].rosterId
                       )
                       .map((roster) => {
                         return (
@@ -177,12 +179,12 @@ export default function ManageMatchupForm({
                       globals.lightColor,
                       score?.scores?.[1].isWinner
                         ? globals.primaryBackgroundColor
-                        : globals.dangerBackgroundColor,
+                        : globals.dangerBackgroundColor
                     )}
                   >
                     {rosters
                       ?.filter(
-                        (elem) => elem.id === score?.scores?.[1].rosterId,
+                        (elem) => elem.id === score?.scores?.[1].rosterId
                       )
                       .map((roster) => {
                         return (

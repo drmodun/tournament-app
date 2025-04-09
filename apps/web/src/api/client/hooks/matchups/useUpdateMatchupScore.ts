@@ -7,8 +7,10 @@ import {
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateMatchups } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const createMatchupScore = async ({
   id,
@@ -38,16 +40,11 @@ export const useUpdateMatchScore = () => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("matchup"),
       });
+      invalidateMatchups();
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
-      console.log(error.message);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("updating the score...", "info");

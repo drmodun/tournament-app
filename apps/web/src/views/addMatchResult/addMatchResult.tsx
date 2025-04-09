@@ -79,6 +79,13 @@ export default function AddMatchResult({
 
         <Dropdown
           placeholder="select roster"
+          defaultValue={
+            rosters.length == 2
+              ? (rosters[0]?.participation?.group?.name ??
+                rosters[0]?.participation?.user?.username ??
+                undefined)
+              : undefined
+          }
           onSelect={(index: number) => {
             rosters && setRoster1(rosters[index]);
           }}
@@ -97,6 +104,13 @@ export default function AddMatchResult({
           onSelect={(index: number) => {
             rosters && setRoster2(rosters[index]);
           }}
+          defaultValue={
+            rosters.length == 2
+              ? (rosters[1]?.participation?.group?.name ??
+                rosters[1]?.participation?.user?.username ??
+                undefined)
+              : undefined
+          }
           options={rosters.map((roster) => {
             return {
               label:
@@ -117,13 +131,13 @@ export default function AddMatchResult({
                     key={player.user.id}
                     className={clsx(
                       styles.userCard,
-                      globals[`${textColorTheme}BackgroundColor`],
+                      globals[`${textColorTheme}BackgroundColor`]
                     )}
                   >
                     <img
-                      src={player.user.profilePicture}
+                      src={player.user.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
-                        (e.currentTarget.src = "./profilePicture.png")
+                        (e.currentTarget.src = "/profilePicture.png")
                       }
                       className={styles.userPfp}
                     />
@@ -148,13 +162,13 @@ export default function AddMatchResult({
                     key={player.user.id}
                     className={clsx(
                       styles.userCard,
-                      globals[`${textColorTheme}BackgroundColor`],
+                      globals[`${textColorTheme}BackgroundColor`]
                     )}
                   >
                     <img
-                      src={player.user.profilePicture}
+                      src={player.user.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
-                        (e.currentTarget.src = "./profilePicture.png")
+                        (e.currentTarget.src = "/profilePicture.png")
                       }
                       className={styles.userPfp}
                     />
@@ -176,7 +190,7 @@ export default function AddMatchResult({
               <p
                 className={clsx(
                   globals[`${textColorTheme}Color`],
-                  globals.label,
+                  globals.label
                 )}
               >
                 select winner

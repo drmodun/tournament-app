@@ -27,11 +27,15 @@ export default function BrowseLFPs() {
   const { data, isLoading } = useGetLFPs();
   const createGroupJoinRequestMutation = useCreateGroupJoinRequest();
 
+  if (!isLoading && data?.length == 0) {
+    return;
+  }
+
   return (
     <div
       className={clsx(
         styles.paginationWrapper,
-        globals[`${textColorTheme}BackgroundColor`],
+        globals[`${textColorTheme}BackgroundColor`]
       )}
     >
       <button
@@ -57,11 +61,11 @@ export default function BrowseLFPs() {
                   className={clsx(
                     styles.userCard,
                     globals[`${theme}BackgroundColor`],
-                    globals[`${textColorTheme}Color`],
+                    globals[`${textColorTheme}Color`]
                   )}
                 >
                   <img
-                    src={data && data[index]?.group.logo}
+                    src={data[index]?.group.logo ?? "/profilePicture.png"}
                     onError={(e) =>
                       (e.currentTarget.src = "/profilePicture.png")
                     }

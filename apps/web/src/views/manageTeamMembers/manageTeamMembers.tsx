@@ -77,7 +77,7 @@ const UserCard = ({
       >
         <div className={styles.userCardInnerWrapper}>
           <img
-            src={profilePicture}
+            src={profilePicture ?? "/profilePicture.png"}
             className={styles.userCardProfilePicture}
             onError={(e) => {
               e.currentTarget.src = "/profilePicture.png";

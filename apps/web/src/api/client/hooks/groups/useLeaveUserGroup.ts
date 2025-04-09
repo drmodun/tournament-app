@@ -2,8 +2,10 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateGroups } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const leaveUserGroup = async (groupId: number | undefined) =>
   clientApi
@@ -22,15 +24,11 @@ export const useLeaveUserGroup = () => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("group"),
       });
+      invalidateGroups();
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("leaving group...", "info");

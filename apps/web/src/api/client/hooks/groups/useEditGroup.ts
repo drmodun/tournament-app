@@ -3,12 +3,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICreateGroupRequest } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { handleError } from "utils/mixins/helpers";
 
 export const editGroup = async (
   data: Partial<ICreateGroupRequest>,
-  groupId: number,
+  groupId: number
 ) =>
   clientApi
     .patch<never, AxiosResponse<any>>(`/groups/${groupId}`, data)
@@ -29,22 +30,9 @@ export const useEditGroup = (groupId: number) => {
       });
       return true;
     },
-    onError: (error: any) => {
-      if (error.response.status === 413) {
-        toast.addToast(
-          "logo too large, place select an image under 2MB",
-          "error",
-        );
-      } else {
-        toast.addToast(
-          error.response?.data?.message ??
-            error.message ??
-            "an error occurred...",
-          "error",
-        );
-      }
-      console.error(error);
-      return false;
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("updating group...", "info");

@@ -5,16 +5,18 @@ import {
   IExtendedStageResponseWithTournament,
   stageStatusEnum,
 } from "@tournament-app/types";
+import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 import { useGetManagedForPlayer } from "api/client/hooks/participations/useGetManagedForPlayer";
+import { useStartStage } from "api/client/hooks/stages/useStartStage";
 import { useUpdateStage } from "api/client/hooks/stages/useUpdateStage";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -24,8 +26,6 @@ import { formatDateTime } from "utils/mixins/formatting";
 import EditStageForm from "views/editStageForm";
 import EditStageRostersModal from "views/editStageRostersModal";
 import styles from "./manageStage.module.scss";
-import { useStartStage } from "api/client/hooks/stages/useStartStage";
-import { useAuth } from "api/client/hooks/auth/useAuth";
 
 export type GroupParticipationType = {
   id: number;
@@ -55,14 +55,14 @@ export default function ManageStages(stage?: {
 
   const { data: participationData, isLoading: isParticipationDataLoading } =
     useGetManagedForPlayer(
-      stage?.stage?.tournamentId ?? stage?.stage?.tournament.id,
+      stage?.stage?.tournamentId ?? stage?.stage?.tournament.id
     );
 
   const { data: tData } = useGetCompetition(
-    stage?.stage?.tournamentId ?? stage?.stage?.tournament.id ?? -1,
+    stage?.stage?.tournamentId ?? stage?.stage?.tournament.id ?? -1
   );
   const { data, isLoading } = useCheckIfGroupMember(
-    (tData && tData.affiliatedGroup?.id) ?? -1,
+    (tData && tData.affiliatedGroup?.id) ?? -1
   );
 
   const { data: userData } = useAuth();
@@ -74,7 +74,7 @@ export default function ManageStages(stage?: {
       className={clsx(
         styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
-        globals[`${theme}Color`],
+        globals[`${theme}Color`]
       )}
     >
       <Dialog
@@ -107,7 +107,7 @@ export default function ManageStages(stage?: {
         key={stage?.stage?.id}
         className={clsx(
           styles.stageItem,
-          globals[`${textColorTheme}MutedBackgroundColor`],
+          globals[`${textColorTheme}MutedBackgroundColor`]
         )}
       >
         <h4 className={styles.title}>
@@ -121,7 +121,10 @@ export default function ManageStages(stage?: {
         </h4>
         <p className={globals.label}>
           stage status{" "}
-          <b className={styles.info}> {stage?.stage?.stageStatus}</b>
+          <b className={styles.info}>
+            {" "}
+            {stage?.stage?.stageStatus ?? "undetermined"}
+          </b>
         </p>
         <p className={globals.label}>
           stage type <b className={styles.info}> {stage?.stage?.stageType}</b>
@@ -137,7 +140,7 @@ export default function ManageStages(stage?: {
             className={clsx(
               globals[`${textColorTheme}Color`],
               globals[`${theme}BackgroundColor`],
-              styles.description,
+              styles.description
             )}
             rehypePlugins={[rehypeRaw]}
           >
@@ -195,16 +198,22 @@ export default function ManageStages(stage?: {
           label="view bracket"
         />
       </Link>
-      <Link
-        href={`/manageUserManagedMatchups/${stage?.stage?.id}`}
-        className={styles.actionButton}
-      >
-        <Button
-          variant="warning"
-          className={styles.actionButton}
-          label="manage matchups"
-        />
-      </Link>
+      {(data?.role == groupRoleEnum.ADMIN ||
+        data?.role == groupRoleEnum.OWNER ||
+        tData?.creator.id == userData?.id) &&
+        (stage?.stage?.stageStatus === stageStatusEnum.ONGOING ||
+          stage?.stage?.stageStatus === stageStatusEnum.FINISHED) && (
+          <Link
+            href={`/manageUserManagedMatchups/${stage?.stage?.id}`}
+            className={styles.actionButton}
+          >
+            <Button
+              variant="warning"
+              className={styles.actionButton}
+              label="manage matchups"
+            />
+          </Link>
+        )}
     </div>
   );
 }

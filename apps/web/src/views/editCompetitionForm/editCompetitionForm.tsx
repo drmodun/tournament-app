@@ -54,7 +54,7 @@ export default function EditCompetitionForm({
     data.isRanked = isRanked;
     data.isMultipleTeamsPerGroupAllowed = isMultipleTeamsPerGroupAllowed;
     data.categoryId = categoryId;
-    data.country = COUNTRY_NAMES_TO_CODES[data?.country ?? ""] ?? "ZZ";
+    data.country = data?.country ?? "Unknown";
     data.locationId = locationId;
     data.id = competition?.id;
     if (links.length > 0) data.links = links.join(",");
@@ -83,7 +83,7 @@ export default function EditCompetitionForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
+    placeName?: string
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -236,7 +236,7 @@ export default function EditCompetitionForm({
               name="maximumMMR"
               className={clsx(styles.input, styles.mmrInput)}
               isReactFormHook={true}
-              defaultValue={competition?.minimumMMR?.toString()}
+              defaultValue={competition?.maximumMMR?.toString()}
               type="number"
             />
           </div>
@@ -269,7 +269,7 @@ export default function EditCompetitionForm({
                   "place_changed",
                   () => {
                     return handleAutocomplete(autocomplete, e.target.value);
-                  },
+                  }
                 );
                 setListener(tempListener);
               });

@@ -5,7 +5,8 @@ import { clientApi, getRefreshToken, setAuthTokens } from "api/client/base";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useAuth } from "./useAuth";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { handleError } from "utils/mixins/helpers";
 
 export const refreshUser = async () =>
   clientApi
@@ -30,9 +31,9 @@ export const useRefresh = () => {
         predicate: (query) => query.queryKey.includes("me"),
       });
     },
-    onError: (error: any) => {
-      toast.addToast("login failed", "error");
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
   });
 };

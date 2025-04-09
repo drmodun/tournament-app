@@ -6,9 +6,11 @@ import {
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateUser } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const deleteUser = async (id: number | undefined) => {
   return clientApi
@@ -33,16 +35,12 @@ export const useDeleteUser = (id: number | undefined) => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("me"),
       });
+      invalidateUser();
       router.push("/");
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("deleting user...", "info");

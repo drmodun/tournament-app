@@ -8,7 +8,8 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { handleError } from "utils/mixins/helpers";
 
 export const requestPasswordReset = async (email?: string) =>
   clientApi
@@ -28,19 +29,14 @@ export const useRequestPasswordReset = () => {
       });
       toast.addToast(
         "successfully sent reset password request, check your email",
-        "success",
+        "success"
       );
 
       setTimeout(() => navigate.push("/login"), 1000);
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("sending mail...", "info");

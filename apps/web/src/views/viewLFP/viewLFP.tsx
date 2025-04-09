@@ -70,7 +70,7 @@ export default function ViewLFP({
       <div
         className={clsx(
           styles.pagination,
-          globals[`${textColorTheme}BackgroundColor`],
+          globals[`${textColorTheme}BackgroundColor`]
         )}
       >
         <button
@@ -97,15 +97,14 @@ export default function ViewLFP({
                   key={item.id}
                   className={clsx(
                     globals[`${theme}BackgroundColor`],
-                    styles.card,
+                    styles.card
                   )}
                   href={`/user/${item.id}`}
                 >
                   <div className={styles.text}>
                     <div className={styles.textTop}>
                       <img
-                        src={item.profilePicture}
-                        alt="profile picture"
+                        src={item.profilePicture ?? "/profilePicture.png"}
                         onError={(e) =>
                           (e.currentTarget.src = "/profilePicture.png")
                         }
@@ -139,7 +138,7 @@ export default function ViewLFP({
                     />
                   </div>
                 </Link>
-              ),
+              )
             )
           )}
         </div>

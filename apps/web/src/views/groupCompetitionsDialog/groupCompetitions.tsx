@@ -37,13 +37,12 @@ export default function GroupMembersDialog({
                 className={clsx(
                   styles.noTextDecoration,
                   styles.userCardLink,
-                  globals[`${textColorTheme}BackgroundColor`],
+                  globals[`${textColorTheme}BackgroundColor`]
                 )}
               >
                 <div className={styles.userCardInnerWrapper}>
                   <img
-                    src={comp.logo}
-                    alt={`${comp.logo}'s logo`}
+                    src={comp.logo ?? "/noimg.jpg"}
                     className={styles.userCardProfilePicture}
                     onError={(e) => {
                       e.currentTarget.src = "/noimg.jpg";
@@ -52,7 +51,7 @@ export default function GroupMembersDialog({
                   <div
                     className={clsx(
                       globals[`${theme}Color`],
-                      styles.userCardTextWrapper,
+                      styles.userCardTextWrapper
                     )}
                     title={comp.name}
                   >
@@ -60,7 +59,7 @@ export default function GroupMembersDialog({
                     <p className={styles.userCardText}>
                       {comp.country &&
                         getUnicodeFlagIcon(
-                          COUNTRY_NAMES_TO_CODES[comp.country] ?? "ZZ",
+                          COUNTRY_NAMES_TO_CODES[comp.country] ?? "ZZ"
                         )}
                     </p>
                     <p className={styles.userCardText}>{comp.type}</p>

@@ -109,8 +109,10 @@ export default function EditRosterForm({
               )}
             >
               <img
-                src={member.profilePicture}
-                onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
+                src={member.profilePicture ?? "/profilePicture.png"}
+                onError={(e) => {
+                  e.currentTarget.src = "/profilePicture.png";
+                }}
                 className={styles.pfp}
               />
               <p>{member.username}</p>
@@ -136,8 +138,10 @@ export default function EditRosterForm({
               )}
             >
               <img
-                src={member.profilePicture}
-                onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
+                src={member.profilePicture ?? "/profilePicture.png"}
+                onError={(e) => {
+                  e.currentTarget.src = "/profilePicture.png";
+                }}
                 className={styles.pfp}
               />
               <p>{member.username}</p>
@@ -168,8 +172,7 @@ export default function EditRosterForm({
                     )}
                   >
                     <img
-                      src={member.profilePicture}
-                      alt="profile picture"
+                      src={member.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
                         (e.currentTarget.src = "/profilePicture.png")
                       }
@@ -207,8 +210,7 @@ export default function EditRosterForm({
                     )}
                   >
                     <img
-                      src={member.profilePicture}
-                      alt="profile picture"
+                      src={member.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
                         (e.currentTarget.src = "/profilePicture.png")
                       }

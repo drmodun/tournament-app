@@ -3,8 +3,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateQuizDto } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateQuizzes } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const createQuiz = async (data: CreateQuizDto) =>
   clientApi
@@ -24,22 +26,12 @@ export const useCreateQuiz = () => {
           query.queryKey.includes("quizzes") ||
           query.queryKey.includes("authored-quizzes"),
       });
+      invalidateQuizzes();
       return data;
     },
-    onError: (error: any) => {
-      if (error.response?.status === 413) {
-        toast.addToast(
-          "image too large, please select an image under 2MB",
-          "error",
-        );
-      } else {
-        toast.addToast(error.message ?? "failed to create quiz", "error");
-      }
-      console.error(error);
-      return false;
-    },
-    onMutate: () => {
-      toast.addToast("creating quiz...", "info");
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
   });
 };

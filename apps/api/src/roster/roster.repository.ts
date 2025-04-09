@@ -306,7 +306,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
   }
 
   async createForSinglePlayerForNewStage(stageId: number) {
-    const res = db.transaction(async (tx) => {
+    const res = await db.transaction(async (tx) => {
       const tournament = await tx.query.stage.findFirst({
         where: eq(stage.id, stageId),
       });
@@ -320,23 +320,17 @@ export class RosterDrizzleRepository extends PrimaryRepository<
 
       const rosterId =
         participations.length > 0 &&
-        (await tx
-          .insert(roster)
-          .values(
-            participations.map((participation) => ({
-              participationId: participation.id,
-              stageId,
-            })),
-          )
-          .returning({ id: roster.id }));
-
-      rosterId?.length > 0 &&
-        (await tx.insert(userToRoster).values(
-          participations.map((participation, index) => ({
-            userId: participation.userId,
-            rosterId: rosterId?.[index]?.id,
-          })),
-        ));
+        participations.forEach(async (participation) => {
+          const rosterId = await tx
+            .insert(roster)
+            .values({ participationId: participation.id, stageId })
+            .returning({ id: roster.id });
+          
+          await tx
+            .insert(userToRoster)
+            .values({ userId: participation.userId, rosterId: rosterId[0].id })
+            .returning({ id: userToRoster.id });
+        });
 
       return rosterId;
     });

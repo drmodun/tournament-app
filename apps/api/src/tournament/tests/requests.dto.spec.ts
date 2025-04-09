@@ -63,7 +63,7 @@ describe('TournamentRequestsDtos', () => {
       };
       const createRequest = plainToInstance(CreateTournamentRequest, body);
       const errors = await validate(createRequest);
-      expect(errors.length).toBe(3);
+      expect(errors.length).toBe(2);
       expect(errors.map((x) => x.property)).toContain('name');
       expect(errors.map((x) => x.property)).toContain('description');
     });

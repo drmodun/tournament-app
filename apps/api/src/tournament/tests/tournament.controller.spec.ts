@@ -14,6 +14,7 @@ import {
   TournamentResponsesEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
+  userRoleEnum,
 } from '@tournament-app/types';
 
 describe('TournamentController', () => {
@@ -186,9 +187,9 @@ describe('TournamentController', () => {
       username: 'testuser',
       isFake: false,
       email: 'test@example.com',
-      role: userRoleEnumType.USER,
+      role: userRoleEnum.USER,
     } as any;
-    const mockManagedTournaments = [mockTournament];
+    const mockManagedTournaments = [mockTournament] as any;
 
     beforeEach(() => {
       service.getManagedTournaments = jest.fn();

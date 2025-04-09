@@ -74,7 +74,7 @@ describe('QuizService', () => {
         questions: [],
         tags: [],
       };
-      mockRepository.create.mockResolvedValue([]);
+      mockRepository.create.mockResolvedValue(null);
 
       // Act & Assert
       await expect(service.create(createQuizDto)).rejects.toThrow(
@@ -157,7 +157,7 @@ describe('QuizService', () => {
       // Arrange
       const id = 999;
       const updateQuizDto = { name: 'Updated Quiz' };
-      mockRepository.update.mockResolvedValue([]);
+      mockRepository.update.mockResolvedValue(null);
 
       // Act & Assert
       await expect(service.update(id, updateQuizDto)).rejects.toThrow(

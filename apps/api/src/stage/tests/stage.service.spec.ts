@@ -20,8 +20,24 @@ import { ChallongeService } from 'src/challonge/challonge.service';
 import { RosterDrizzleRepository } from '../../roster/roster.repository';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
 import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
-import { TemplatesEnum } from '../../infrastructure/types';
-import { MatchService } from '../../match/match.service';
+import { TemplatesEnum } from 'src/infrastructure/types';
+import { MatchesService } from 'src/matches/matches.service';
+import { RosterService } from 'src/roster/roster.service';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+
+// Mock rxjs fromEvent to prevent 'Invalid event target' errors
+jest.mock('rxjs', () => {
+  const original = jest.requireActual('rxjs');
+  return {
+    ...original,
+    fromEvent: jest.fn().mockImplementation(() =>
+      original.of({
+        data: { message: 'test notification' },
+        type: 'notification',
+      }),
+    ),
+  };
+});
 
 describe('StageService', () => {
   let service: StageService;
@@ -29,8 +45,9 @@ describe('StageService', () => {
   let mockRosterRepository: jest.Mocked<RosterDrizzleRepository>;
   let mockSseNotificationsService: jest.Mocked<SseNotificationsService>;
   let mockNotificationTemplateFiller: jest.Mocked<NotificationTemplatesFiller>;
-  let mockChallongeService: jest.Mocked<ChallongeService>;
-  let mockMatchService: jest.Mocked<MatchService>;
+  let mockMatchService: jest.Mocked<MatchesService>;
+  let mockRosterService: jest.Mocked<RosterService>;
+  let mockChallongeServiceImpl: jest.Mocked<ChallongeService>;
 
   const mockStage = {
     id: 1,
@@ -54,24 +71,34 @@ describe('StageService', () => {
       getAllTournamentStagesSortedByStartDate: jest.fn(),
     };
 
-    const mockChallongeService = {
+    mockChallongeServiceImpl = {
       createChallongeTournament: jest.fn(),
       createChallongeTournamentFromStage: jest.fn(),
       updateTournament: jest.fn(),
       deleteTournament: jest.fn(),
-    };
+      getTournamentMatches: jest.fn(),
+      createBulkParticipants: jest.fn(),
+      updateTournamentState: jest.fn(),
+    } as unknown as jest.Mocked<ChallongeService>;
 
     mockMatchService = {
-      createMatches: jest.fn(),
-      updateMatches: jest.fn(),
-      deleteMatches: jest.fn(),
-    };
+      createMatchScore: jest.fn(),
+      canUserEditMatchup: jest.fn(),
+      checkRoundCompletionAndUpdateNextRound: jest.fn(),
+      getMatchupsWithResults: jest.fn(),
+      importChallongeMatchesToStage: jest.fn(),
+    } as unknown as jest.Mocked<MatchesService>;
 
     mockRosterRepository = {
       getRostersForChallongeParticipants: jest.fn(),
       getUsersInStageRosters: jest.fn(),
       attachChallongeParticipantIdToRosters: jest.fn(),
     } as unknown as jest.Mocked<RosterDrizzleRepository>;
+
+    mockRosterService = {
+      createForSinglePlayer: jest.fn(),
+      createForSinglePlayerForNewStage: jest.fn(),
+    } as unknown as jest.Mocked<RosterService>;
 
     mockSseNotificationsService = {
       createWithUsers: jest.fn(),
@@ -82,6 +109,7 @@ describe('StageService', () => {
     } as unknown as jest.Mocked<NotificationTemplatesFiller>;
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [EventEmitterModule.forRoot()],
       providers: [
         StageService,
         {
@@ -90,7 +118,7 @@ describe('StageService', () => {
         },
         {
           provide: ChallongeService,
-          useValue: mockChallongeService,
+          useValue: mockChallongeServiceImpl,
         },
         {
           provide: RosterDrizzleRepository,
@@ -103,6 +131,14 @@ describe('StageService', () => {
         {
           provide: NotificationTemplatesFiller,
           useValue: mockNotificationTemplateFiller,
+        },
+        {
+          provide: MatchesService,
+          useValue: mockMatchService,
+        },
+        {
+          provide: RosterService,
+          useValue: mockRosterService,
         },
       ],
     }).compile();
@@ -395,21 +431,6 @@ describe('StageService', () => {
       stageStatus: stageStatusEnum.UPCOMING,
     };
 
-    const mockBulkParticipantsRequest = {
-      data: {
-        type: 'Participants',
-        attributes: {
-          participants: mockRosters.map((roster) => ({
-            name: roster.name,
-            misc: JSON.stringify({
-              rosterId: roster.id,
-              participationId: roster.participationId,
-            }),
-          })),
-        },
-      },
-    };
-
     const mockChallongeParticipants = [
       { id: 'challonge-p1', attributes: { misc: '1' } },
       { id: 'challonge-p2', attributes: { misc: '2' } },
@@ -429,17 +450,20 @@ describe('StageService', () => {
         .fn()
         .mockResolvedValue(undefined);
 
-      // Mock ChallongeService
-      const mockChallongeService = {
-        createBulkParticipants: jest
-          .fn()
-          .mockResolvedValue(mockChallongeParticipants),
-        updateTournamentState: jest.fn().mockResolvedValue({}),
-      };
+      // Set up ChallongeService mock methods
+      mockChallongeServiceImpl.createBulkParticipants = jest
+        .fn()
+        .mockResolvedValue(mockChallongeParticipants);
+      mockChallongeServiceImpl.updateTournamentState = jest
+        .fn()
+        .mockResolvedValue({});
+      mockChallongeServiceImpl.getTournamentMatches = jest
+        .fn()
+        .mockResolvedValue([]);
 
-      // Replace the service's dependencies with our mocks
+      // Use the mock directly instead of creating a new one
       Object.defineProperty(service, 'challongeService', {
-        value: mockChallongeService,
+        value: mockChallongeServiceImpl,
       });
 
       // Mock the sendStageStartNotifications method
@@ -461,7 +485,7 @@ describe('StageService', () => {
       ).toHaveBeenCalledWith(stageId);
 
       expect(
-        service['challongeService'].createBulkParticipants,
+        mockChallongeServiceImpl.createBulkParticipants,
       ).toHaveBeenCalled();
 
       // Verify the transaction-based update is called with correct parameters
@@ -483,7 +507,7 @@ describe('StageService', () => {
       });
 
       expect(
-        service['challongeService'].updateTournamentState,
+        mockChallongeServiceImpl.updateTournamentState,
       ).toHaveBeenCalledWith(
         mockStageWithChallonge.challongeTournamentId,
         stageStatusEnum.ONGOING,
@@ -542,13 +566,13 @@ describe('StageService', () => {
         mockRosterRepository.getRostersForChallongeParticipants,
       ).toHaveBeenCalledWith(stageId);
       expect(
-        service['challongeService'].createBulkParticipants,
+        mockChallongeServiceImpl.createBulkParticipants,
       ).toHaveBeenCalled();
 
       // Verify that the stage update was not called due to the transaction error
       expect(service.update).not.toHaveBeenCalled();
       expect(
-        service['challongeService'].updateTournamentState,
+        mockChallongeServiceImpl.updateTournamentState,
       ).not.toHaveBeenCalled();
     });
   });
@@ -589,7 +613,7 @@ describe('StageService', () => {
         {
           type: notificationTypeEnum.TOURNAMENT_START,
           message: mockMessage,
-          link: `/tournaments/stages/${stageId}`,
+          link: `/stage/${stageId}`,
           image: null,
         },
         [1, 2, 3],

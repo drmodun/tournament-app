@@ -121,7 +121,7 @@ export class RosterService {
       rosterId: id,
     });
 
-    if (!results.length) {
+    if (!results || !results.length) {
       throw new NotFoundException(`Roster with ID ${id} not found`);
     }
 

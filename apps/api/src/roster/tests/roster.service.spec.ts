@@ -133,7 +133,6 @@ describe('RosterService', () => {
     challongeService = module.get(ChallongeService);
 
     jest.mock('src/challonge/challonge.service');
-    service.createChallongeParticipant = jest.fn();
     challongeService.deleteParticipant = jest.fn();
   });
 
@@ -289,19 +288,19 @@ describe('RosterService', () => {
 
   describe('findOne', () => {
     it('should return a single roster', async () => {
-      repository.getSingleQuery.mockResolvedValue([mockRosterWithPlayers]);
+      repository.getWithPlayers.mockResolvedValue([mockRosterWithPlayers]);
 
       const result = await service.findOne(1, RosterResponsesEnum.BASE);
 
       expect(result).toEqual(mockRosterWithPlayers);
-      expect(repository.getSingleQuery).toHaveBeenCalledWith(
-        1,
-        RosterResponsesEnum.BASE,
-      );
+      expect(repository.getWithPlayers).toHaveBeenCalledWith({
+        responseType: 'base',
+        rosterId: 1,
+      });
     });
 
     it('should throw NotFoundException when roster not found', async () => {
-      repository.getSingleQuery.mockResolvedValue([]);
+      repository.getWithPlayers.mockResolvedValue([]);
 
       await expect(
         service.findOne(1, RosterResponsesEnum.BASE),
@@ -748,7 +747,7 @@ describe('RosterService', () => {
       expect(result).toBe(true);
     });
 
-    it('should return undefined if all conditions are met and fake players not allowed', async () => {
+    it('should return false if all conditions are met and fake players not allowed', async () => {
       tournamentService.findOne.mockResolvedValue(mockTournament);
       careerService.getMultipleCareers.mockResolvedValue([
         {
@@ -770,7 +769,7 @@ describe('RosterService', () => {
           createdAt: new Date(),
           user: {
             id: 2,
-            isFake: false,
+            isFake: true,
             profilePicture: 'test.jpg',
             username: 'testuser',
           },
@@ -782,7 +781,7 @@ describe('RosterService', () => {
         mockStage as any,
       );
 
-      expect(result).toBeUndefined();
+      expect(result).toBe(false);
     });
   });
 });

@@ -36,10 +36,15 @@ export class ParticipationService {
       groupId,
     });
 
+    if (!action[0])
+      throw new BadRequestException(
+        'You are not able to participate at the moment, please try again later',
+      );
+
     if (userId) {
       await this.rosterService.createForSinglePlayer(
         tournamentId,
-        action[0].id as number,
+        action[0]?.id as number,
       );
     }
 

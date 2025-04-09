@@ -6,14 +6,14 @@ import { ParticipationResponsesEnum } from '@tournament-app/types';
 import { QueryParticipationDto } from '../dto/requests.dto';
 import { TournamentParticipantArgument } from '../types';
 import { RosterService } from '../../roster/roster.service';
-import { mock } from 'node:test';
 describe('ParticipationService', () => {
   let service: ParticipationService;
   let repository: jest.Mocked<ParticipationDrizzleRepository>;
   let mockRosterService: jest.Mocked<RosterService>;
 
-  const mockRosterService = {
+  mockRosterService = {
     getRostersByStage: jest.fn(),
+    createForSinglePlayer: jest.fn(),
   } as unknown as jest.Mocked<RosterService>;
 
   const mockParticipation = {
@@ -42,6 +42,10 @@ describe('ParticipationService', () => {
         {
           provide: ParticipationDrizzleRepository,
           useValue: mockRepository,
+        },
+        {
+          provide: RosterService,
+          useValue: mockRosterService,
         },
       ],
     }).compile();

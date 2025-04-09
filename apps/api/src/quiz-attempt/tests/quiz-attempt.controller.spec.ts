@@ -131,7 +131,7 @@ describe('QuizAttemptController', () => {
   });
 
   describe('create', () => {
-    const createDto = { quizId: 1 };
+    const createDto = { quizId: { id: 1 } };
     const mockUser = { id: 1 };
     const mockAttempt = { id: 1 };
 
@@ -139,7 +139,7 @@ describe('QuizAttemptController', () => {
       mockService.create.mockResolvedValue(mockAttempt);
 
       const result = await controller.create(
-        createDto,
+        createDto as any,
         mockUser as any,
         mockUser as any,
       );
@@ -170,7 +170,11 @@ describe('QuizAttemptController', () => {
   describe('createAnswer', () => {
     const attemptId = 1;
     const questionId = 1;
-    const createAnswerDto = { quizQuestionId: 1, answer: 'Test answer' };
+    const createAnswerDto = {
+      quizQuestionId: 1,
+      attemptId: 1,
+      answer: 'Test answer',
+    };
     const mockUser = { id: 1 };
     const mockAnswer = { id: 1 };
 

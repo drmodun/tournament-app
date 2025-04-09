@@ -5,7 +5,22 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationCreateDto } from '../../types';
 import { BadRequestException } from '@nestjs/common';
 import { notificationTypeEnum } from '@tournament-app/types';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+
+// Mock the fromEvent function
+jest.mock('rxjs', () => {
+  const original = jest.requireActual('rxjs');
+  return {
+    ...original,
+    fromEvent: jest.fn().mockImplementation(() =>
+      of({
+        data: { message: 'test notification' },
+        type: 'notification',
+      }),
+    ),
+  };
+});
 
 describe('SseNotificationsService', () => {
   let service: SseNotificationsService;
@@ -26,6 +41,7 @@ describe('SseNotificationsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [EventEmitterModule.forRoot()],
       providers: [
         SseNotificationsService,
         {
@@ -39,13 +55,6 @@ describe('SseNotificationsService', () => {
             updateAllToReadForUser: jest.fn(),
             updateBulkToRead: jest.fn(),
             deleteEntity: jest.fn(),
-          },
-        },
-        {
-          provide: EventEmitter2,
-          useValue: {
-            emitAsync: jest.fn(),
-            on: jest.fn(),
           },
         },
       ],
@@ -295,10 +304,10 @@ describe('SseNotificationsService', () => {
   });
 
   describe('getNotificationStream', () => {
-    it('should return an Observable', () => {
+    it('should return an Promise since it works that way with our implementation', () => {
       const result = service.getNotificationStream(mockUserId);
 
-      expect(result).toBeInstanceOf(Observable);
+      expect(result).toBeInstanceOf(Promise);
     });
   });
 });

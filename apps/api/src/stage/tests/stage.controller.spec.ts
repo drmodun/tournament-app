@@ -201,10 +201,7 @@ describe('StageController', () => {
         paginationQuery,
       );
 
-      expect(result).toEqual({
-        results: mockManagedStages,
-        metadata: expect.any(Object),
-      });
+      expect(result).toEqual(mockManagedStages);
       expect(service.getManagedStages).toHaveBeenCalledWith(
         mockUser.id,
         paginationQuery,

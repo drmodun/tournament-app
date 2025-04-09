@@ -196,6 +196,10 @@ describe('GroupMembershipService', () => {
         { role: groupRoleEnum.MEMBER },
       ]);
 
+      jest
+        .spyOn(service, 'sendNotificationAboutPromotion')
+        .mockResolvedValue({} as any);
+
       await service.update(1, 1, updateDto);
 
       expect(mockRepository.updateEntity).toHaveBeenCalledWith(

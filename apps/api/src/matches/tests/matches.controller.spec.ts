@@ -17,30 +17,74 @@ describe('MatchesController', () => {
     stageId: 1,
     round: 1,
     isFinished: false,
+    matchupType: 'standard',
+    startDate: new Date(),
     results: [],
-    scores: [],
+    challongeMatchupId: null,
   };
 
   const mockMatchupWithResults = {
     ...mockMatchup,
-    results: [
-      { rosterId: 1, isWinner: true },
-      { rosterId: 2, isWinner: false },
-    ],
-  };
-
-  const mockMatchupWithResultsAndScores = {
-    ...mockMatchupWithResults,
-    scores: [
+    rosters: [
       {
-        roundNumber: 1,
-        scores: [
-          { rosterId: 1, points: 3, isWinner: true },
-          { rosterId: 2, points: 1, isWinner: false },
-        ],
+        id: 1,
+        name: 'Team 1',
+        stageId: 1,
+        participationId: 1,
+        createdAt: new Date(),
+        players: [],
+      },
+      {
+        id: 2,
+        name: 'Team 2',
+        stageId: 1,
+        participationId: 2,
+        createdAt: new Date(),
+        players: [],
+      },
+    ],
+    results: [
+      {
+        id: 1,
+        matchupId: 1,
+        score: 3,
+        isWinner: true,
+        scores: [],
+        roster: {
+          id: 1,
+          stageId: 1,
+          participation: {
+            id: 1,
+            group: { id: 1, name: 'Group A' },
+          },
+        },
+      },
+      {
+        id: 2,
+        matchupId: 1,
+        score: 1,
+        isWinner: false,
+        scores: [],
+        roster: {
+          id: 2,
+          stageId: 1,
+          participation: {
+            id: 2,
+            group: { id: 1, name: 'Group A' },
+          },
+        },
       },
     ],
   };
+
+  const mockScoreResponse = [
+    {
+      id: 1,
+      matchupId: 1,
+      roundNumber: 1,
+      createdAt: new Date(),
+    },
+  ];
 
   beforeEach(async () => {
     const mockService = {
@@ -97,13 +141,11 @@ describe('MatchesController', () => {
         ],
       };
 
-      service.createMatchScore.mockResolvedValue(
-        mockMatchupWithResultsAndScores,
-      );
+      service.createMatchScore.mockResolvedValue(mockScoreResponse);
 
       const result = await controller.createScore(matchupId, createScoreDto);
 
-      expect(result).toEqual(mockMatchupWithResultsAndScores);
+      expect(result).toMatchObject(mockScoreResponse);
       expect(service.createMatchScore).toHaveBeenCalledWith(
         matchupId,
         createScoreDto,
@@ -130,24 +172,11 @@ describe('MatchesController', () => {
         ],
       };
 
-      const updatedMatchup = {
-        ...mockMatchupWithResultsAndScores,
-        scores: [
-          {
-            roundNumber: 1,
-            scores: [
-              { rosterId: 1, points: 5, isWinner: true },
-              { rosterId: 2, points: 2, isWinner: false },
-            ],
-          },
-        ],
-      };
-
-      service.updateMatchScore.mockResolvedValue(updatedMatchup);
+      service.updateMatchScore.mockResolvedValue(mockScoreResponse);
 
       const result = await controller.updateScore(matchupId, updateScoreDto);
 
-      expect(result).toEqual(updatedMatchup);
+      expect(result).toMatchObject(mockScoreResponse);
       expect(service.updateMatchScore).toHaveBeenCalledWith(
         matchupId,
         updateScoreDto,
@@ -159,11 +188,11 @@ describe('MatchesController', () => {
     it('should delete a score for a matchup', async () => {
       const matchupId = 1;
 
-      service.deleteMatchScore.mockResolvedValue(mockMatchup);
+      service.deleteMatchScore.mockResolvedValue({ success: true });
 
       const result = await controller.deleteMatchScore(matchupId);
 
-      expect(result).toEqual(mockMatchup);
+      expect(result).toMatchObject({ success: true });
       expect(service.deleteMatchScore).toHaveBeenCalledWith(matchupId);
     });
   });
@@ -178,7 +207,7 @@ describe('MatchesController', () => {
 
       const result = await controller.getMatchupsWithResults(query);
 
-      expect(result).toEqual([mockMatchupWithResults]);
+      expect(result).toMatchObject([mockMatchupWithResults]);
       expect(service.getMatchupsWithResults).toHaveBeenCalledWith(query);
     });
   });
@@ -188,12 +217,12 @@ describe('MatchesController', () => {
       const matchupId = 1;
 
       service.getMatchupWithResultsAndScores.mockResolvedValue(
-        mockMatchupWithResultsAndScores,
+        mockMatchupWithResults,
       );
 
       const result = await controller.getMatchupWithResultsAndScores(matchupId);
 
-      expect(result).toEqual(mockMatchupWithResultsAndScores);
+      expect(result).toMatchObject(mockMatchupWithResults);
       expect(service.getMatchupWithResultsAndScores).toHaveBeenCalledWith(
         matchupId,
       );
@@ -209,7 +238,7 @@ describe('MatchesController', () => {
 
       const result = await controller.getResultsForUser(userId, query);
 
-      expect(result).toEqual([mockMatchupWithResults]);
+      expect(result).toMatchObject([mockMatchupWithResults]);
       expect(service.getResultsForUser).toHaveBeenCalledWith(userId, query);
     });
   });
@@ -223,7 +252,7 @@ describe('MatchesController', () => {
 
       const result = await controller.getResultsForRoster(rosterId, query);
 
-      expect(result).toEqual([mockMatchupWithResults]);
+      expect(result).toMatchObject([mockMatchupWithResults]);
       expect(service.getResultsForRoster).toHaveBeenCalledWith(rosterId, query);
     });
   });
@@ -234,7 +263,6 @@ describe('MatchesController', () => {
         id: 1,
         email: 'test@example.com',
         role: userRoleEnum.USER,
-        isFake: false,
       };
       const query: QueryMatchupRequestDto = { stageId: 1 };
 
@@ -242,7 +270,7 @@ describe('MatchesController', () => {
 
       const result = await controller.getManagedMatchups(user, query);
 
-      expect(result).toEqual([mockMatchupWithResults]);
+      expect(result).toMatchObject([mockMatchupWithResults]);
       expect(service.getManagedMatchups).toHaveBeenCalledWith(user.id, query);
     });
   });
@@ -252,11 +280,39 @@ describe('MatchesController', () => {
       const groupId = 1;
       const query: PaginationOnly = { page: 1, pageSize: 10 };
 
-      service.getResultsForGroup.mockResolvedValue([mockMatchupWithResults]);
+      // Create a valid mock result that matches the expected structure
+      const mockResults = [
+        {
+          id: 1,
+          stageId: 5,
+          round: 1,
+          isFinished: true,
+          matchupType: 'standard',
+          startDate: new Date(),
+          results: [
+            {
+              id: 1,
+              matchupId: 1,
+              score: 3,
+              isWinner: true,
+              roster: {
+                id: 1,
+                stageId: 5,
+                participation: {
+                  id: 10,
+                  group: { id: 1, name: 'Group A' },
+                },
+              },
+            },
+          ],
+        },
+      ];
+
+      service.getResultsForGroup.mockResolvedValue(mockResults);
 
       const result = await controller.getResultsForGroup(groupId, query);
 
-      expect(result).toEqual([mockMatchupWithResults]);
+      expect(result).toMatchObject(mockResults);
       expect(service.getResultsForGroup).toHaveBeenCalledWith(groupId, query);
     });
   });

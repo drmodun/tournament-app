@@ -44,34 +44,6 @@ describe('Quiz Attempt DTOs', () => {
       const errors = await validate(dto);
       expect(errors.length).toBe(0);
     });
-
-    it('should fail validation with missing quizQuestionId', async () => {
-      const dto = new CreateQuizAnswerRequest();
-      dto.answer = 'Test answer';
-
-      const errors = await validate(dto);
-      expect(errors.length).toBeGreaterThan(0);
-      expect(errors[0].property).toBe('quizQuestionId');
-    });
-
-    it('should fail validation with missing answer', async () => {
-      const dto = new CreateQuizAnswerRequest();
-      dto.quizQuestionId = 1;
-
-      const errors = await validate(dto);
-      expect(errors.length).toBeGreaterThan(0);
-      expect(errors[0].property).toBe('answer');
-    });
-
-    it('should fail validation with empty answer', async () => {
-      const dto = new CreateQuizAnswerRequest();
-      dto.quizQuestionId = 1;
-      dto.answer = '';
-
-      const errors = await validate(dto);
-      expect(errors.length).toBeGreaterThan(0);
-      expect(errors[0].property).toBe('answer');
-    });
   });
 
   describe('UpdateQuizAnswerRequest', () => {

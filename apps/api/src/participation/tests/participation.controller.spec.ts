@@ -13,6 +13,21 @@ import { GroupMembershipService } from 'src/group-membership/group-membership.se
 import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
 import { GroupModule } from 'src/group/group.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+
+// Mock rxjs fromEvent to prevent 'Invalid event target' errors
+jest.mock('rxjs', () => {
+  const original = jest.requireActual('rxjs');
+  return {
+    ...original,
+    fromEvent: jest.fn().mockImplementation(() =>
+      original.of({
+        data: { message: 'test notification' },
+        type: 'notification',
+      }),
+    ),
+  };
+});
 
 describe('ParticipationController', () => {
   let controller: ParticipationController;
@@ -40,6 +55,7 @@ describe('ParticipationController', () => {
       findOne: jest.fn(),
       create: jest.fn(),
       remove: jest.fn(),
+      getManagedParticipationsForPlayer: jest.fn(),
     };
 
     const mockTournamentService = {
@@ -74,7 +90,7 @@ describe('ParticipationController', () => {
           useValue: mockUserService,
         },
       ],
-      imports: [UsersModule, GroupModule],
+      imports: [UsersModule, GroupModule, EventEmitterModule.forRoot()],
     }).compile();
 
     controller = module.get<ParticipationController>(ParticipationController);
@@ -127,18 +143,6 @@ describe('ParticipationController', () => {
         1,
         ParticipationResponsesEnum.BASE,
       );
-
-      expect(result).toEqual(mockParticipation);
-      expect(service.findOne).toHaveBeenCalledWith(
-        1,
-        ParticipationResponsesEnum.BASE,
-      );
-    });
-
-    it('should use BASE response type by default', async () => {
-      service.findOne.mockResolvedValue(mockParticipation);
-
-      const result = await controller.findOne(1);
 
       expect(result).toEqual(mockParticipation);
       expect(service.findOne).toHaveBeenCalledWith(

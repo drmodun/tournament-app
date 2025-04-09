@@ -50,14 +50,7 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   description: string;
 
   @IsString()
-  @MinLength(2)
-  @MaxLength(2)
-  @ApiProperty({
-    description: 'Two-letter country code where the tournament is held',
-    example: 'US',
-    minLength: 2,
-    maxLength: 2,
-  })
+  @ApiProperty()
   country: string;
 
   @IsEnum(tournamentTypeEnum)
@@ -264,8 +257,6 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
 
   @IsOptional()
   @IsString()
-  @MinLength(2)
-  @MaxLength(2)
   @ApiPropertyOptional()
   country?: string;
 

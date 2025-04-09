@@ -10,6 +10,9 @@ import {
   stageStatusEnum,
   stageTypeEnum,
 } from '@tournament-app/types';
+import { TournamentService } from '../../tournament/tournament.service';
+import { StageAdminGuard } from '../guards/stage-admin.guard';
+import { GroupMembershipService } from '../../group-membership/group-membership.service';
 
 describe('StageController', () => {
   let controller: StageController;
@@ -42,6 +45,20 @@ describe('StageController', () => {
       findOne: jest.fn(),
       update: jest.fn(),
       remove: jest.fn(),
+      generateBracket: jest.fn(),
+      startStage: jest.fn(),
+      finishStage: jest.fn(),
+      getRostersByStage: jest.fn(),
+      getMatchesForStage: jest.fn(),
+      getManagedStages: jest.fn(),
+    };
+
+    const mockTournamentService = {
+      findOne: jest.fn(),
+    };
+
+    const mockGroupMembershipService = {
+      findAll: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -51,11 +68,21 @@ describe('StageController', () => {
           provide: StageService,
           useValue: mockService,
         },
+        {
+          provide: TournamentService,
+          useValue: mockTournamentService,
+        },
+        {
+          provide: GroupMembershipService,
+          useValue: mockGroupMembershipService,
+        },
       ],
     })
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: jest.fn().mockReturnValue(true) })
       .overrideGuard(TournamentAdminGuard)
+      .useValue({ canActivate: jest.fn().mockReturnValue(true) })
+      .overrideGuard(StageAdminGuard)
       .useValue({ canActivate: jest.fn().mockReturnValue(true) })
       .compile();
 
@@ -170,11 +197,14 @@ describe('StageController', () => {
       service.getManagedStages.mockResolvedValue(mockManagedStages);
 
       const result = await controller.getManagedStages(
-        mockUser,
+        mockUser as any,
         paginationQuery,
       );
 
-      expect(result).toEqual(mockManagedStages);
+      expect(result).toEqual({
+        results: mockManagedStages,
+        metadata: expect.any(Object),
+      });
       expect(service.getManagedStages).toHaveBeenCalledWith(
         mockUser.id,
         paginationQuery,
@@ -184,7 +214,7 @@ describe('StageController', () => {
     it('should pass the correct user ID to the service', async () => {
       service.getManagedStages.mockResolvedValue([]);
 
-      await controller.getManagedStages(mockUser, paginationQuery);
+      await controller.getManagedStages(mockUser as any, paginationQuery);
 
       expect(service.getManagedStages).toHaveBeenCalledWith(
         1,

@@ -33,7 +33,7 @@ export class CreateRosterMemberDto implements ICreateRosterMemberRequest {
     default: false,
     type: Boolean,
   })
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @Transform(({ value }) => (value ? value === 'true' : false))
   @IsBoolean()
   isSubstitute: boolean = false;
 }

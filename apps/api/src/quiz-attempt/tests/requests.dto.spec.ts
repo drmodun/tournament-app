@@ -1,6 +1,5 @@
 import { validate } from 'class-validator';
 import {
-  CreateQuizAttemptRequest,
   CreateQuizAnswerRequest,
   SubmitQuizAttemptRequest,
   UpdateQuizAnswerRequest,
@@ -8,24 +7,6 @@ import {
 } from '../dto/requests.dto';
 
 describe('Quiz Attempt DTOs', () => {
-  describe('CreateQuizAttemptRequest', () => {
-    it('should pass validation with valid data', async () => {
-      const dto = new CreateQuizAttemptRequest();
-      dto.quizId = 1;
-
-      const errors = await validate(dto);
-      expect(errors.length).toBe(0);
-    });
-
-    it('should fail validation with missing quizId', async () => {
-      const dto = new CreateQuizAttemptRequest();
-
-      const errors = await validate(dto);
-      expect(errors.length).toBeGreaterThan(0);
-      expect(errors[0].property).toBe('quizId');
-    });
-  });
-
   describe('SubmitQuizAttemptRequest', () => {
     it('should pass validation with valid data', async () => {
       const dto = new SubmitQuizAttemptRequest();

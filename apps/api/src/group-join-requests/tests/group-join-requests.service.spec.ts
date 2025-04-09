@@ -95,10 +95,8 @@ describe('GroupJoinRequestsService', () => {
       };
       const groupData = { name: 'Test Group', id: 1 };
       const adminIds = [2, 3];
-      const mockUser = { username: 'testuser' };
 
       service.checkIfGroupIsPublic = jest.fn().mockResolvedValue(false);
-      service.getUser = jest.fn().mockResolvedValue(mockUser);
       mockGroupMembershipService.getAllAdmins.mockResolvedValue(adminIds);
       mockGroupService.findOne.mockResolvedValue(groupData);
       mockTemplatesFiller.fill.mockReturnValue(
@@ -124,16 +122,14 @@ describe('GroupJoinRequestsService', () => {
     it('should send notifications to all group admins', async () => {
       const groupData = { name: 'Test Group', id: 1 };
       const adminIds = [2, 3];
-      const mockUser = { username: 'testuser' };
 
       mockGroupMembershipService.getAllAdmins.mockResolvedValue(adminIds);
       mockGroupService.findOne.mockResolvedValue(groupData);
-      service.getUser = jest.fn().mockResolvedValue(mockUser);
       mockTemplatesFiller.fill.mockReturnValue(
         'User testuser wants to join your group Test Group',
       );
 
-      await service.sendNotificationsToAdmins(1, 1);
+      await service.createNotificationBodyForNewRequest(1, 1);
 
       expect(mockGroupMembershipService.getAllAdmins).toHaveBeenCalledWith(1);
       expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
@@ -272,7 +268,7 @@ describe('GroupJoinRequestsService', () => {
         'Your join request for the group Test Group has been approved',
       );
 
-      await service.sendAcceptanceNotification(1, 1);
+      await service.createNotificationBodyForApprovedJoin(1, 1);
 
       expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
       expect(mockTemplatesFiller.fill).toHaveBeenCalled();
@@ -288,7 +284,7 @@ describe('GroupJoinRequestsService', () => {
         'Your join request for the group Test Group has been rejected',
       );
 
-      await service.sendRejectionNotification(1, 1);
+      await service.createNotificationBodyForRejectedJoin(1, 1);
 
       expect(mockGroupService.findOne).toHaveBeenCalledWith(1);
       expect(mockTemplatesFiller.fill).toHaveBeenCalled();

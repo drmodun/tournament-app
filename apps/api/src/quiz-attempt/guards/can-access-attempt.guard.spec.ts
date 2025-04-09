@@ -1,6 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext, NotFoundException } from '@nestjs/common';
-import { CanAccessAttemptGuard } from '../guards/can-access-attempt.guard';
+import { Test, TestingModule } from '@nestjs/testing';
+import { CanAccessAttemptGuard } from './can-access-attempt.guard';
 import { QuizAttemptService } from '../quiz-attempt.service';
 
 describe('CanAccessAttemptGuard', () => {
@@ -35,7 +35,7 @@ describe('CanAccessAttemptGuard', () => {
   describe('canActivate', () => {
     it('should allow admin users without checking attempt', async () => {
       // Create a mock execution context
-      const context = {
+      const mockContext = {
         switchToHttp: jest.fn().mockReturnValue({
           getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'admin' },
@@ -44,9 +44,10 @@ describe('CanAccessAttemptGuard', () => {
         }),
       } as unknown as ExecutionContext;
 
-      const result = await guard.canActivate(context);
+      const result = await guard.canActivate(mockContext);
 
       expect(result).toBe(true);
+      // Admin should bypass the check
       expect(quizAttemptService.checkAttempter).not.toHaveBeenCalled();
     });
 
@@ -55,7 +56,7 @@ describe('CanAccessAttemptGuard', () => {
       quizAttemptService.checkAttempter.mockResolvedValue(undefined);
 
       // Create a mock execution context
-      const context = {
+      const mockContext = {
         switchToHttp: jest.fn().mockReturnValue({
           getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'user' },
@@ -64,7 +65,7 @@ describe('CanAccessAttemptGuard', () => {
         }),
       } as unknown as ExecutionContext;
 
-      const result = await guard.canActivate(context);
+      const result = await guard.canActivate(mockContext);
 
       expect(result).toBe(true);
       expect(quizAttemptService.checkAttempter).toHaveBeenCalledWith(1, 1);
@@ -72,7 +73,7 @@ describe('CanAccessAttemptGuard', () => {
 
     it('should throw NotFoundException when attempt ID is missing', async () => {
       // Create a mock execution context without attempt ID
-      const context = {
+      const mockContext = {
         switchToHttp: jest.fn().mockReturnValue({
           getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'user' },
@@ -81,7 +82,7 @@ describe('CanAccessAttemptGuard', () => {
         }),
       } as unknown as ExecutionContext;
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
+      await expect(guard.canActivate(mockContext)).rejects.toThrow(
         NotFoundException,
       );
       expect(quizAttemptService.checkAttempter).not.toHaveBeenCalled();
@@ -93,7 +94,7 @@ describe('CanAccessAttemptGuard', () => {
       quizAttemptService.checkAttempter.mockRejectedValue(mockError);
 
       // Create a mock execution context
-      const context = {
+      const mockContext = {
         switchToHttp: jest.fn().mockReturnValue({
           getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'user' },
@@ -102,8 +103,25 @@ describe('CanAccessAttemptGuard', () => {
         }),
       } as unknown as ExecutionContext;
 
-      await expect(guard.canActivate(context)).rejects.toThrow(mockError);
+      await expect(guard.canActivate(mockContext)).rejects.toThrow(mockError);
       expect(quizAttemptService.checkAttempter).toHaveBeenCalledWith(1, 1);
+    });
+
+    it('should handle non-numeric attempt IDs', async () => {
+      // Create a mock execution context with non-numeric attempt ID
+      const mockContext = {
+        switchToHttp: jest.fn().mockReturnValue({
+          getRequest: jest.fn().mockReturnValue({
+            user: { id: 1, role: 'user' },
+            params: { attemptId: 'abc' },
+          }),
+        }),
+      } as unknown as ExecutionContext;
+
+      await expect(guard.canActivate(mockContext)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(quizAttemptService.checkAttempter).not.toHaveBeenCalled();
     });
   });
 });

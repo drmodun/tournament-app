@@ -186,8 +186,8 @@ describe('TournamentController', () => {
       username: 'testuser',
       isFake: false,
       email: 'test@example.com',
-      role: 'user',
-    };
+      role: userRoleEnumType.USER,
+    } as any;
     const mockManagedTournaments = [mockTournament];
 
     beforeEach(() => {

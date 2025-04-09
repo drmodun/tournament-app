@@ -167,7 +167,7 @@ export class GroupMembershipService {
       {
         type: notificationTypeEnum.GROUP_ADMIN_PROMOTION,
         message,
-        link: `/groups/${groupId}`,
+        link: `/manageTeams`,
         image: null,
       },
       [userId],
@@ -188,7 +188,7 @@ export class GroupMembershipService {
       {
         type: notificationTypeEnum.GROUP_ADMIN_DEMOTION,
         message,
-        link: `/groups/${groupId}`,
+        link: `/manageTeams`,
         image: null,
       },
       [userId],
@@ -224,7 +224,6 @@ export class GroupMembershipService {
       {
         type: notificationTypeEnum.GROUP_REMOVAL,
         message,
-        link: `/groups`,
         image: null,
       },
       [userId],

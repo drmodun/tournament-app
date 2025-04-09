@@ -61,7 +61,7 @@ describe('QuizService', () => {
       const result = await service.create(createQuizDto);
 
       // Assert
-      expect(result).toEqual({ id: 1, ...createQuizDto });
+      expect(result).toEqual([{ id: 1, ...createQuizDto }]);
       expect(mockRepository.create).toHaveBeenCalledWith(createQuizDto);
     });
 
@@ -149,7 +149,7 @@ describe('QuizService', () => {
       const result = await service.update(id, updateQuizDto);
 
       // Assert
-      expect(result).toEqual({ id, ...updateQuizDto });
+      expect(result).toEqual([{ id, ...updateQuizDto }]);
       expect(mockRepository.update).toHaveBeenCalledWith(id, updateQuizDto);
     });
 

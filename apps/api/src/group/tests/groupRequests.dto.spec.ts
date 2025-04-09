@@ -19,6 +19,7 @@ describe('GroupRequestsDtos', () => {
         'description',
         'type',
         'focus',
+        'logo',
       ]);
     });
 

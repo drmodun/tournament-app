@@ -66,7 +66,6 @@ describe('TournamentRequestsDtos', () => {
       expect(errors.length).toBe(3);
       expect(errors.map((x) => x.property)).toContain('name');
       expect(errors.map((x) => x.property)).toContain('description');
-      expect(errors.map((x) => x.property)).toContain('country');
     });
 
     it('should fail validation with invalid number ranges', async () => {

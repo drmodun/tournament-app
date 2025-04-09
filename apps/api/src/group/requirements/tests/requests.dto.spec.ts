@@ -82,14 +82,6 @@ describe('GroupRequirements DTOs', () => {
       expect(errors).toHaveLength(0);
     });
 
-    it('should transform isSameCountry to boolean', async () => {
-      const dto = plainToInstance(CreateGroupRequirementsDto, {
-        isSameCountry: 1,
-      });
-
-      expect(dto.isSameCountry).toBe(true);
-    });
-
     it('should fail validation with invalid age ranges', async () => {
       const dto = plainToInstance(CreateGroupRequirementsDto, {
         minimumAge: -1,

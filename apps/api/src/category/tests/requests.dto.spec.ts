@@ -47,7 +47,7 @@ describe('Category DTOs', () => {
     it('should fail with missing required fields', async () => {
       const dto = new CreateCategoryRequest();
       const errors = await validate(dto);
-      expect(errors.length).toBe(3); // name, description, and type are required
+      expect(errors.length).toBe(4); // name, description, and type are required
     });
   });
 

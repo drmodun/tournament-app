@@ -20,7 +20,7 @@ describe('StageAdminGuard', () => {
     id: 1,
     name: 'Test Stage',
     tournamentId: 1,
-  };
+  } as any;
 
   const mockTournament: ITournamentWithRelations = {
     id: 1,
@@ -282,7 +282,7 @@ describe('StageAdminGuard', () => {
     it('should deny access when user is not creator and not group admin', async () => {
       const context = createMockExecutionContext(4, 1);
 
-      stageService.findOne.mockResolvedValue(mockStage);
+      stageService.findOne.mockResolvedValue(mockStage as any as any);
       tournamentService.findOne.mockResolvedValue(mockTournament);
       groupMembershipService.isAdmin.mockResolvedValue(false);
 

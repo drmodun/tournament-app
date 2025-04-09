@@ -79,7 +79,8 @@ const MatchupCard = ({
                 <img
                   src={
                     roster?.participation?.group?.logo ??
-                    roster?.participation?.user?.profilePicture
+                    roster?.participation?.user?.profilePicture ??
+                    "/profilePicture.png"
                   }
                   className={styles.userPfp}
                   onError={(e) => {

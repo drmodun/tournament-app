@@ -64,7 +64,7 @@ export default function AddRosterForm({
         ? prev.filter((id) => id !== member.id)
         : prev.length < (stage?.maxPlayersPerTeam ?? 99)
           ? [...prev, member.id]
-          : prev,
+          : prev
     );
   };
 
@@ -74,7 +74,7 @@ export default function AddRosterForm({
         ? prev.filter((id: number) => id !== member.id)
         : prev.length < (stage?.maxSubstitutes ?? 99)
           ? [...prev, member.id]
-          : prev,
+          : prev
     );
   };
 
@@ -97,11 +97,11 @@ export default function AddRosterForm({
 
                 selectedMembers.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${theme}Color`],
+                  : globals[`${theme}Color`]
               )}
             >
               <img
-                src={member.profilePicture}
+                src={member.profilePicture ?? "/profilePicture.png"}
                 onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                 className={styles.pfp}
               />
@@ -124,11 +124,11 @@ export default function AddRosterForm({
                 styles.userCard,
                 selectedSubstitutes.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${theme}Color`],
+                  : globals[`${theme}Color`]
               )}
             >
               <img
-                src={member.profilePicture}
+                src={member.profilePicture ?? "/profilePicture.png"}
                 onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                 className={styles.pfp}
               />
@@ -152,11 +152,11 @@ export default function AddRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}BackgroundColor`],
+                      globals[`${textColorTheme}BackgroundColor`]
                     )}
                   >
                     <img
-                      src={member.profilePicture}
+                      src={member.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
                         (e.currentTarget.src = "/profilePicture.png")
                       }
@@ -181,11 +181,11 @@ export default function AddRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}BackgroundColor`],
+                      globals[`${textColorTheme}BackgroundColor`]
                     )}
                   >
                     <img
-                      src={member.profilePicture}
+                      src={member.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
                         (e.currentTarget.src = "/profilePicture.png")
                       }

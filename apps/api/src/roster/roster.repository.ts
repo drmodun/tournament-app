@@ -325,11 +325,10 @@ export class RosterDrizzleRepository extends PrimaryRepository<
             .insert(roster)
             .values({ participationId: participation.id, stageId })
             .returning({ id: roster.id });
-          
+
           await tx
             .insert(userToRoster)
-            .values({ userId: participation.userId, rosterId: rosterId[0].id })
-            .returning({ id: userToRoster.id });
+            .values({ userId: participation.userId, rosterId: rosterId[0].id });
         });
 
       return rosterId;

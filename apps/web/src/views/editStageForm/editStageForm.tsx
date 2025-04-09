@@ -65,7 +65,7 @@ export default function EditStageForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
+    placeName?: string
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -85,12 +85,13 @@ export default function EditStageForm({
 
   useEffect(() => {
     editMethods.register("logo", { required: true });
-    imageUrlToFile(stage?.logo).then((file) => {
-      setFile(file);
-      toBase64(file).then((file) => {
-        editMethods.setValue("logo", file);
+    stage?.logo &&
+      imageUrlToFile(stage?.logo).then((file) => {
+        setFile(file);
+        toBase64(file).then((file) => {
+          editMethods.setValue("logo", file);
+        });
       });
-    });
   }, [stage]);
 
   return (
@@ -153,7 +154,6 @@ export default function EditStageForm({
               onFile={setFile}
               variant={textColorTheme}
               className={styles.imageDrop}
-              required={true}
               name="logo"
               isReactFormHook={true}
             />
@@ -237,7 +237,7 @@ export default function EditStageForm({
             isReactFormHook={true}
             type="datetime-local"
             defaultValue={formatDateTimeHTMLInput(
-              stage?.startDate ?? new Date(),
+              stage?.startDate ?? new Date()
             )}
             min={new Date()
               .toISOString()
@@ -254,7 +254,7 @@ export default function EditStageForm({
             placeholder="enter the tournament's ending time"
             name="endDate"
             defaultValue={formatDateTimeHTMLInput(
-              stage?.startDate ?? new Date(),
+              stage?.startDate ?? new Date()
             )}
             required={true}
             className={styles.input}
@@ -283,7 +283,7 @@ export default function EditStageForm({
                 fetchAutocomplete(e.target).then((autocomplete) => {
                   const tempListener = autocomplete.addListener(
                     "place_changed",
-                    () => handleAutocomplete(autocomplete, e.target.value),
+                    () => handleAutocomplete(autocomplete, e.target.value)
                   );
                   setListener(tempListener);
                 });

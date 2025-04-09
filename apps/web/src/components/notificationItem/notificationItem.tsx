@@ -50,8 +50,7 @@ export default function NotificationItem({
     if (item.image) {
       return (
         <img
-          src={item.image}
-          alt="Notification"
+            alt="Notification"
           width={40}
           height={40}
           className={styles.image}

@@ -5,7 +5,8 @@ import { clientApi } from "api/client/base";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { handleError } from "utils/mixins/helpers";
 
 export const registerUser = async (data: ICreateUserRequest) =>
   clientApi
@@ -22,7 +23,7 @@ export const useRegister = () => {
     onSuccess: async () => {
       toast.addToast(
         "verification email sent! verify your account then login.",
-        "success",
+        "success"
       );
 
       await queryClient.invalidateQueries({
@@ -31,19 +32,9 @@ export const useRegister = () => {
 
       setTimeout(() => navigate.push("/login"));
     },
-    onError: (error: any) => {
-      if (error.response?.status === 413) {
-        toast.addToast("image too large. must be less than 2mb", "error");
-        return;
-      }
-
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("creating account...", "info");

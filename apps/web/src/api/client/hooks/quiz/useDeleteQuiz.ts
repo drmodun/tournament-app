@@ -2,8 +2,10 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateQuizzes } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const deleteQuiz = async (id: number) =>
   clientApi
@@ -29,12 +31,12 @@ export const useDeleteQuiz = () => {
             query.queryKey[0] === "detailed-quiz" &&
             query.queryKey[1] === id),
       });
+      invalidateQuizzes();
       return data;
     },
-    onError: (error: any) => {
-      toast.addToast(error.message ?? "Failed to delete quiz", "error");
-      console.error(error);
-      return false;
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("Deleting quiz...", "info");

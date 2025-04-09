@@ -117,13 +117,13 @@ export default function AddMatchResult({
                     key={player.user.id}
                     className={clsx(
                       styles.userCard,
-                      globals[`${textColorTheme}BackgroundColor`],
+                      globals[`${textColorTheme}BackgroundColor`]
                     )}
                   >
                     <img
-                      src={player.user.profilePicture}
+                      src={player.user.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
-                        (e.currentTarget.src = "./profilePicture.png")
+                        (e.currentTarget.src = "/profilePicture.png")
                       }
                       className={styles.userPfp}
                     />
@@ -148,13 +148,13 @@ export default function AddMatchResult({
                     key={player.user.id}
                     className={clsx(
                       styles.userCard,
-                      globals[`${textColorTheme}BackgroundColor`],
+                      globals[`${textColorTheme}BackgroundColor`]
                     )}
                   >
                     <img
-                      src={player.user.profilePicture}
+                      src={player.user.profilePicture ?? "/profilePicture.png"}
                       onError={(e) =>
-                        (e.currentTarget.src = "./profilePicture.png")
+                        (e.currentTarget.src = "/profilePicture.png")
                       }
                       className={styles.userPfp}
                     />
@@ -176,7 +176,7 @@ export default function AddMatchResult({
               <p
                 className={clsx(
                   globals[`${textColorTheme}Color`],
-                  globals.label,
+                  globals.label
                 )}
               >
                 select winner

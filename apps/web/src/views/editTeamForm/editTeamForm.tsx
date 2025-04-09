@@ -48,7 +48,7 @@ export default function EditTeamForm({
 
   const editMethods = useForm<Partial<ICreateGroupRequest>>();
   const onEditSubmit: SubmitHandler<Partial<ICreateGroupRequest>> = async (
-    data,
+    data
   ) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
@@ -60,7 +60,7 @@ export default function EditTeamForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
+    placeName?: string
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -80,12 +80,13 @@ export default function EditTeamForm({
 
   useEffect(() => {
     editMethods.register("logo", { required: true });
-    imageUrlToFile(data?.logo).then((file) => {
-      setFile(file);
-      toBase64(file).then((file) => {
-        editMethods.setValue("logo", file);
+    data?.logo &&
+      imageUrlToFile(data?.logo).then((file) => {
+        setFile(file);
+        toBase64(file).then((file) => {
+          editMethods.setValue("logo", file);
+        });
       });
-    });
   }, [data]);
 
   if (isLoading || isError) {
@@ -280,7 +281,7 @@ export default function EditTeamForm({
                 fetchAutocomplete(e.target).then((autocomplete) => {
                   const tempListener = autocomplete.addListener(
                     "place_changed",
-                    () => handleAutocomplete(autocomplete, e.target.value),
+                    () => handleAutocomplete(autocomplete, e.target.value)
                   );
                   setListener(tempListener);
                 });

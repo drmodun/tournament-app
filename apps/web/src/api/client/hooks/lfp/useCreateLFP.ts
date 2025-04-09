@@ -7,8 +7,9 @@ import {
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { handleError } from "utils/mixins/helpers";
 
 export const createLFP = async (data: { groupId?: number; message?: string }) =>
   clientApi
@@ -35,15 +36,9 @@ export const useCreateLFP = () => {
       });
       return true;
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
-      return false;
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("creating LFP...", "info");

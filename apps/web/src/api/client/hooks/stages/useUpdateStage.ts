@@ -7,15 +7,18 @@ import {
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { revalidatePath } from "next/cache";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateStages } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export const updateStage = async (
   data: {
     data: IUpdateStageDto;
     stageId?: number;
   },
-  tournamentId?: number,
+  tournamentId?: number
 ) => {
   const { tournamentId: stageDataTournamentId, ..._data } = data.data;
 
@@ -41,16 +44,14 @@ export const useUpdateStage = (tournamentId?: number) => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("stage"),
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["stage"],
+      });
+      invalidateStages();
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
-      console.log(error.message);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("updating the stage...", "info");

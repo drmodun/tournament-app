@@ -2,6 +2,8 @@ import {
   IExtendedRosterResponse,
   IMiniGroupResponse,
 } from "@tournament-app/types";
+import { AxiosError } from "axios";
+import { useToastContext } from "utils/hooks/useToastContext";
 
 export const toBase64 = async (file: File) => {
   const reader = new FileReader();
@@ -22,7 +24,7 @@ export const imageUrlToFile = async (image: string | undefined) => {
 };
 
 export const extractUniqueGroupsFromRosters = (
-  rosters: IExtendedRosterResponse[],
+  rosters: IExtendedRosterResponse[]
 ) => {
   const groups: IMiniGroupResponse[] = [];
   const ids: number[] = [];
@@ -37,4 +39,22 @@ export const extractUniqueGroupsFromRosters = (
   }
 
   return groups;
+};
+export const handleError = (
+  error: AxiosError<{ message: string & string[] }>
+) => {
+  console.error(error);
+  if (typeof (error.response?.data?.message ?? error.message) === "string") {
+    return (
+      error.response?.data?.message ??
+      error.message ??
+      "an error occurred..."
+    ).toLowerCase();
+  } else {
+    return (
+      error.response?.data?.message[0] ??
+      error.message[0] ??
+      "an error occurred..."
+    ).toLowerCase();
+  }
 };

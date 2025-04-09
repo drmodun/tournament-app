@@ -98,7 +98,7 @@ export default function Teams() {
     console.log(
       data?.pages[activePage]?.results?.length,
       activePage,
-      activeTab,
+      activeTab
     );
   }, [activePage, activeTab]);
 
@@ -153,7 +153,7 @@ export default function Teams() {
         </div>
       ) : data?.pages?.[0]?.results?.length === 0 ? (
         <div className={styles.noTeams}>
-          <h1 className={globals[`${textColorTheme}Color`]}>no teams found</h1>
+          <h1 className={globals[`${textColorTheme}Color`]}>no groups found</h1>
           <Button
             label="create team"
             onClick={() => setDialogActive(true)}
@@ -165,7 +165,7 @@ export default function Teams() {
           <div
             className={clsx(
               styles.tabs,
-              globals[`${textColor(theme)}BackgroundColor`],
+              globals[`${textColor(theme)}BackgroundColor`]
             )}
           >
             <button
@@ -190,7 +190,7 @@ export default function Teams() {
                       key={index}
                       className={clsx(
                         styles.tab,
-                        activeTab === index && styles.active,
+                        activeTab === index && styles.active
                       )}
                       onClick={() => setActiveTab(index)}
                       label={tab.group.name}
@@ -199,7 +199,7 @@ export default function Teams() {
                       }
                     />
                   );
-                },
+                }
               )}
             </div>
             <button
@@ -218,7 +218,7 @@ export default function Teams() {
             </button>
             <button
               className={clsx(styles.button, styles.addButton)}
-              title="create team"
+              title="create group"
               onClick={() => setDialogActive(true)}
             >
               <AddIcon className={clsx(styles[`${theme}Fill`])} />
@@ -272,7 +272,7 @@ const SearchBar = ({
       className={clsx(
         styles.tabs,
         globals[`${textColorTheme}BackgroundColor`],
-        styles.searchBar,
+        styles.searchBar
       )}
     >
       <div className={styles.searchInputWrapper}>

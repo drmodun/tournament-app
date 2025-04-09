@@ -3,8 +3,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UpdateQuizDto } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { invalidateQuizzes } from "./serverFetches";
+import { handleError } from "utils/mixins/helpers";
 
 export interface UpdateQuizParams {
   id: number;
@@ -35,19 +37,12 @@ export const useUpdateQuiz = () => {
             query.queryKey[0] === "detailed-quiz" &&
             query.queryKey[1] === variables.id),
       });
+      invalidateQuizzes();
       return data;
     },
-    onError: (error: any) => {
-      if (error.response?.status === 413) {
-        toast.addToast(
-          "Image too large, please select an image under 2MB",
-          "error",
-        );
-      } else {
-        toast.addToast(error.message ?? "Failed to update quiz", "error");
-      }
-      console.error(error);
-      return false;
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("Updating quiz...", "info");

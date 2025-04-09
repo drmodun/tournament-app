@@ -62,7 +62,7 @@ export default function Dialog({
         onClose?.();
       }
     },
-    [onClose],
+    [onClose]
   );
 
   const handlePopState = useCallback(
@@ -70,7 +70,7 @@ export default function Dialog({
       event.preventDefault();
       onClose?.();
     },
-    [onClose],
+    [onClose]
   );
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export default function Dialog({
   return (
     <div
       className={styles.dialogWrapper}
-      onClick={() => {
+      onClick={(e) => {
         onClose && onClose();
       }}
     >
@@ -115,7 +115,7 @@ export default function Dialog({
                 styles.dialog,
                 globals[`${variant}BackgroundColor`],
                 globals[`${textColor(variant)}TextColor`],
-                className,
+                className
               )}
               style={{ ...style, ..._style }}
               onClick={(e) => e.stopPropagation()}

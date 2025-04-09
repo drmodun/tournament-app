@@ -58,7 +58,7 @@ export default function SingleCorrect({
           className={clsx(
             globals.largeText,
             styles.header,
-            globals[`${textColorTheme}Color`],
+            globals[`${textColorTheme}Color`]
           )}
         >
           {question}
@@ -110,7 +110,7 @@ export default function SingleCorrect({
             <p
               className={clsx(
                 globals.largeText,
-                globals[`${textColorTheme}Color`],
+                globals[`${textColorTheme}Color`]
               )}
             >
               correct!
@@ -121,7 +121,7 @@ export default function SingleCorrect({
             <p
               className={clsx(
                 globals.largeText,
-                globals[`${textColorTheme}Color`],
+                globals[`${textColorTheme}Color`]
               )}
             >
               incorrect!
@@ -130,7 +130,7 @@ export default function SingleCorrect({
               <p
                 className={clsx(
                   styles.explanation,
-                  globals[`${textColorTheme}Color`],
+                  globals[`${textColorTheme}Color`]
                 )}
               >
                 {explanation}

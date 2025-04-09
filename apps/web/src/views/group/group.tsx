@@ -81,7 +81,6 @@ export default function Group({ group }: { group: IGroupResponseExtended }) {
           <div className={styles.bannerContent}>
             <img
               src={group?.logo ?? "/noimg.jpg"}
-              alt="tournament logo"
               className={styles.bannerLogo}
               onError={(e) => {
                 e.currentTarget.src = "/noimg.jpg";
@@ -91,7 +90,7 @@ export default function Group({ group }: { group: IGroupResponseExtended }) {
               <h1
                 className={clsx(
                   styles.organiserName,
-                  globals[`${textColorTheme}Color`],
+                  globals[`${textColorTheme}Color`]
                 )}
               >
                 {group?.name}{" "}
@@ -161,7 +160,7 @@ export default function Group({ group }: { group: IGroupResponseExtended }) {
                 <p
                   className={clsx(
                     globals[`${textColorTheme}Color`],
-                    globals.label,
+                    globals.label
                   )}
                 >
                   join invite message
@@ -203,7 +202,7 @@ const SidebarSection = ({ name, children }: SidebarSectionProps) => {
         className={clsx(
           styles.sidebarSectionName,
           globals.label,
-          globals[`${textColorTheme}Color`],
+          globals[`${textColorTheme}Color`]
         )}
       >
         {name}

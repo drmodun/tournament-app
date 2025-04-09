@@ -2,8 +2,9 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { handleError } from "utils/mixins/helpers";
 
 export const followUser = async (userId: number) =>
   clientApi
@@ -23,14 +24,9 @@ export const useFollowUser = () => {
         predicate: (query) => query.queryKey.includes("follower"),
       });
     },
-    onError: (error: any) => {
-      toast.addToast(
-        error.response?.data?.message ??
-          error.message ??
-          "an error occurred...",
-        "error",
-      );
-      console.error(error);
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("following user...", "info");

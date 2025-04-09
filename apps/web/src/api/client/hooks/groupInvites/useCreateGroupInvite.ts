@@ -7,8 +7,9 @@ import {
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
+import { handleError } from "utils/mixins/helpers";
 
 export const createGroupInvite = async (data: {
   groupId?: number;
@@ -26,7 +27,7 @@ export const createGroupInvite = async (data: {
           groupId: data?.groupId,
           userId: data?.userId,
         },
-      },
+      }
     )
     .then((res) => res.data);
 };
@@ -49,22 +50,9 @@ export const useCreateGroupInvite = () => {
 
       return true;
     },
-    onError: (error: any) => {
-      if (error.response?.status === 409) {
-        toast.addToast(
-          "you have already invited this user to this group",
-          "error",
-        );
-      } else {
-        toast.addToast(
-          error.response?.data?.message ??
-            error.message ??
-            "an error occurred...",
-          "error",
-        );
-      }
-      console.error(error);
-      return false;
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
     },
     onMutate: () => {
       toast.addToast("creating group invite...", "info");

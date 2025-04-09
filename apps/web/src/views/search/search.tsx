@@ -71,12 +71,11 @@ export default function Search() {
                         className={clsx(
                           globals[`${theme}Color`],
                           globals[`${textColorTheme}BackgroundColor`],
-                          styles.userCard,
+                          styles.userCard
                         )}
                       >
                         <img
-                          src={result.profilePicture}
-                          alt="profile picture"
+                          src={result.profilePicture ?? "/profilePicture.png"}
                           onError={(e) =>
                             (e.currentTarget.src = "/profilePicture.png")
                           }
@@ -110,12 +109,11 @@ export default function Search() {
                         className={clsx(
                           globals[`${theme}Color`],
                           globals[`${textColorTheme}BackgroundColor`],
-                          styles.userCard,
+                          styles.userCard
                         )}
                       >
                         <img
-                          src={result.logo}
-                          alt="logo"
+                          src={result.logo ?? "/noimg.jpg"}
                           onError={(e) => (e.currentTarget.src = "/noimg.jpg")}
                           className={styles.pfp}
                         />
@@ -149,11 +147,11 @@ export default function Search() {
                         className={clsx(
                           globals[`${theme}Color`],
                           globals[`${textColorTheme}BackgroundColor`],
-                          styles.userCard,
+                          styles.userCard
                         )}
                       >
                         <img
-                          src={result.logo}
+                          src={result.logo ?? "/noimg.jpg"}
                           onError={(e) => (e.currentTarget.src = "/noimg.jpg")}
                           className={styles.pfp}
                         />

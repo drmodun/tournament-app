@@ -19,7 +19,7 @@ import ProgressWheel from "components/progressWheel";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
 import { countries } from "country-flag-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
@@ -55,7 +55,7 @@ export default function CreateTournamentForm({
     if (data.startDate > data.endDate) {
       toast.addToast(
         "the starting time cannot be greater than then ending time",
-        "error",
+        "error"
       );
       return;
     }
@@ -65,7 +65,6 @@ export default function CreateTournamentForm({
     data.isMultipleTeamsPerGroupAllowed = isMultipleTeamsPerGroupAllowed;
     data.categoryId = categoryId;
     data.creatorId = userId;
-    data.country = COUNTRY_NAMES_TO_CODES[data.country] ?? "ZZ";
     data.locationId = locationId;
     if (links.length > 0) data.links = links.join(",");
 
@@ -93,7 +92,7 @@ export default function CreateTournamentForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
+    placeName?: string
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -252,7 +251,7 @@ export default function CreateTournamentForm({
                   "place_changed",
                   () => {
                     return handleAutocomplete(autocomplete, e.target.value);
-                  },
+                  }
                 );
                 setListener(tempListener);
               });
@@ -446,7 +445,7 @@ export default function CreateTournamentForm({
                         return { label: category.name, id: category.id };
                       }) ?? []
                     );
-                  })[index].id ?? -1,
+                  })[index].id ?? -1
                 )
               }
             />

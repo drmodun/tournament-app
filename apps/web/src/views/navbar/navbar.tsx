@@ -76,7 +76,6 @@ export default function Navbar({ style, variant, className }: NavbarProps) {
                 <img
                   src={data?.profilePicture ?? "/profilePicture.png"}
                   className={styles.userImage}
-                  alt="User profile"
                   onError={(e) => {
                     e.currentTarget.src = "/profilePicture.png";
                   }}

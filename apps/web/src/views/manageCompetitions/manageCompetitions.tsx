@@ -98,13 +98,6 @@ export default function ManageCompetitions({
         <b className={clsx(globals[`${theme}Color`])}>
           competitions you participate in
         </b>
-        <button
-          title="add competition"
-          className={styles.addButton}
-          onClick={() => setIsAddDialogOpen(true)}
-        >
-          <AddIcon className={styles[`${theme}Fill`]} />
-        </button>
       </div>
       {isLoading ? (
         <ProgressWheel variant={textColorTheme} />

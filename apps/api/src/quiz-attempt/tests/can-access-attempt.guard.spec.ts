@@ -5,7 +5,7 @@ import { QuizAttemptService } from '../quiz-attempt.service';
 
 describe('CanAccessAttemptGuard', () => {
   let guard: CanAccessAttemptGuard;
-  let service: QuizAttemptService;
+  let quizAttemptService: jest.Mocked<QuizAttemptService>;
 
   beforeEach(async () => {
     const mockQuizAttemptService = {
@@ -23,7 +23,9 @@ describe('CanAccessAttemptGuard', () => {
     }).compile();
 
     guard = module.get<CanAccessAttemptGuard>(CanAccessAttemptGuard);
-    service = module.get<QuizAttemptService>(QuizAttemptService);
+    quizAttemptService = module.get(
+      QuizAttemptService,
+    ) as jest.Mocked<QuizAttemptService>;
   });
 
   it('should be defined', () => {
@@ -31,81 +33,77 @@ describe('CanAccessAttemptGuard', () => {
   });
 
   describe('canActivate', () => {
-    it('should return true for admin users without checking ownership', async () => {
-      // Create mock execution context with admin user
-      const context = createMock<ExecutionContext>({
-        switchToHttp: () => ({
-          getRequest: () => ({
+    it('should allow admin users without checking attempt', async () => {
+      // Create a mock execution context
+      const context = {
+        switchToHttp: jest.fn().mockReturnValue({
+          getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'admin' },
             params: { attemptId: '1' },
           }),
         }),
-      });
+      } as unknown as ExecutionContext;
 
       const result = await guard.canActivate(context);
 
-      // Admin should be allowed, and service should not be called
       expect(result).toBe(true);
-      expect(service.checkAttempter).not.toHaveBeenCalled();
+      expect(quizAttemptService.checkAttempter).not.toHaveBeenCalled();
     });
 
-    it('should check ownership for non-admin users and return true if owner', async () => {
-      // Create mock context with non-admin user
-      const context = createMock<ExecutionContext>({
-        switchToHttp: () => ({
-          getRequest: () => ({
+    it('should check attempt access for non-admin users', async () => {
+      // Mock the quiz attempt service to resolve successfully
+      quizAttemptService.checkAttempter.mockResolvedValue(undefined);
+
+      // Create a mock execution context
+      const context = {
+        switchToHttp: jest.fn().mockReturnValue({
+          getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'user' },
             params: { attemptId: '1' },
           }),
         }),
-      });
-
-      // Mock service response
-      jest.spyOn(service, 'checkAttempter').mockResolvedValue(undefined);
+      } as unknown as ExecutionContext;
 
       const result = await guard.canActivate(context);
 
-      // Should check ownership and return true
       expect(result).toBe(true);
-      expect(service.checkAttempter).toHaveBeenCalledWith(1, 1);
+      expect(quizAttemptService.checkAttempter).toHaveBeenCalledWith(1, 1);
     });
 
-    it('should throw error if attemptId is not provided', async () => {
-      // Create mock context without attemptId
-      const context = createMock<ExecutionContext>({
-        switchToHttp: () => ({
-          getRequest: () => ({
+    it('should throw NotFoundException when attempt ID is missing', async () => {
+      // Create a mock execution context without attempt ID
+      const context = {
+        switchToHttp: jest.fn().mockReturnValue({
+          getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'user' },
-            params: {}, // No attemptId
+            params: {},
           }),
         }),
-      });
+      } as unknown as ExecutionContext;
 
-      // Should throw error when attemptId is missing
       await expect(guard.canActivate(context)).rejects.toThrow(
         NotFoundException,
       );
-      expect(service.checkAttempter).not.toHaveBeenCalled();
+      expect(quizAttemptService.checkAttempter).not.toHaveBeenCalled();
     });
 
-    it('should propagate error if service throws error', async () => {
-      // Create mock context
-      const context = createMock<ExecutionContext>({
-        switchToHttp: () => ({
-          getRequest: () => ({
+    it('should throw error when attempt access check fails', async () => {
+      // Mock the quiz attempt service to reject with error
+      const mockError = new Error('Not the attempter');
+      quizAttemptService.checkAttempter.mockRejectedValue(mockError);
+
+      // Create a mock execution context
+      const context = {
+        switchToHttp: jest.fn().mockReturnValue({
+          getRequest: jest.fn().mockReturnValue({
             user: { id: 1, role: 'user' },
             params: { attemptId: '1' },
           }),
         }),
-      });
+      } as unknown as ExecutionContext;
 
-      // Mock service throwing error
-      const error = new Error('Not owner');
-      jest.spyOn(service, 'checkAttempter').mockRejectedValue(error);
-
-      // Should propagate error from service
-      await expect(guard.canActivate(context)).rejects.toThrow(error);
-      expect(service.checkAttempter).toHaveBeenCalledWith(1, 1);
+      await expect(guard.canActivate(context)).rejects.toThrow(mockError);
+      expect(quizAttemptService.checkAttempter).toHaveBeenCalledWith(1, 1);
     });
   });
 });

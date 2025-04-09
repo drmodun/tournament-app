@@ -180,9 +180,9 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
             username: user.username,
           },
           affiliatedGroup: {
-            id: user.id,
-            name: user.username,
-            abbreviation: user.username,
+            id: group.id,
+            name: group.name,
+            abbreviation: group.id,
           },
           endDate: tournament.endDate,
           maxParticipants: tournament.maxParticipants,

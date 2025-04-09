@@ -10,6 +10,9 @@ import {
   stageStatusEnum,
   stageTypeEnum,
 } from '@tournament-app/types';
+import { TournamentService } from '../../tournament/tournament.service';
+import { StageAdminGuard } from '../guards/stage-admin.guard';
+import { GroupMembershipService } from '../../group-membership/group-membership.service';
 
 describe('StageController', () => {
   let controller: StageController;
@@ -42,6 +45,20 @@ describe('StageController', () => {
       findOne: jest.fn(),
       update: jest.fn(),
       remove: jest.fn(),
+      generateBracket: jest.fn(),
+      startStage: jest.fn(),
+      finishStage: jest.fn(),
+      getRostersByStage: jest.fn(),
+      getMatchesForStage: jest.fn(),
+      getManagedStages: jest.fn(),
+    };
+
+    const mockTournamentService = {
+      findOne: jest.fn(),
+    };
+
+    const mockGroupMembershipService = {
+      findAll: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -51,11 +68,21 @@ describe('StageController', () => {
           provide: StageService,
           useValue: mockService,
         },
+        {
+          provide: TournamentService,
+          useValue: mockTournamentService,
+        },
+        {
+          provide: GroupMembershipService,
+          useValue: mockGroupMembershipService,
+        },
       ],
     })
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: jest.fn().mockReturnValue(true) })
       .overrideGuard(TournamentAdminGuard)
+      .useValue({ canActivate: jest.fn().mockReturnValue(true) })
+      .overrideGuard(StageAdminGuard)
       .useValue({ canActivate: jest.fn().mockReturnValue(true) })
       .compile();
 

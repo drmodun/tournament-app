@@ -3,7 +3,7 @@ import { SseNotificationsController } from '../sse-notifications.controller';
 import { SseNotificationsService } from '../sse-notifications.service';
 import { notificationTypeEnum } from '@tournament-app/types';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { NotificationQueryDto } from '../dto/requests';
 import { NotificationCreateDto } from '../../types';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
@@ -60,7 +60,9 @@ describe('SseNotificationsController', () => {
     controller = module.get<SseNotificationsController>(
       SseNotificationsController,
     );
-    service = module.get<SseNotificationsService>(SseNotificationsService);
+    service = module.get<SseNotificationsService>(
+      SseNotificationsService,
+    ) as jest.Mocked<SseNotificationsService>;
   });
 
   it('should be defined', () => {

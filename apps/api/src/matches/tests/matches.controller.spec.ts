@@ -6,7 +6,8 @@ import { CanEditMatchupGuard } from '../guards/can-edit-matchup.guard';
 import { EndMatchupRequestDto, QueryMatchupRequestDto } from '../dto/requests';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-import { userRoleEnum, userRoleEnumType } from '@tournament-app/types';
+import { userRoleEnum } from '@tournament-app/types';
+
 describe('MatchesController', () => {
   let controller: MatchesController;
   let service: jest.Mocked<MatchesService>;
@@ -97,7 +98,7 @@ describe('MatchesController', () => {
       };
 
       service.createMatchScore.mockResolvedValue(
-        mockMatchupWithResultsAndScores as any,
+        mockMatchupWithResultsAndScores,
       );
 
       const result = await controller.createScore(matchupId, createScoreDto);
@@ -142,7 +143,7 @@ describe('MatchesController', () => {
         ],
       };
 
-      service.updateMatchScore.mockResolvedValue(updatedMatchup as any);
+      service.updateMatchScore.mockResolvedValue(updatedMatchup);
 
       const result = await controller.updateScore(matchupId, updateScoreDto);
 
@@ -158,7 +159,7 @@ describe('MatchesController', () => {
     it('should delete a score for a matchup', async () => {
       const matchupId = 1;
 
-      service.deleteMatchScore.mockResolvedValue({ success: true } as any);
+      service.deleteMatchScore.mockResolvedValue(mockMatchup);
 
       const result = await controller.deleteMatchScore(matchupId);
 
@@ -187,7 +188,7 @@ describe('MatchesController', () => {
       const matchupId = 1;
 
       service.getMatchupWithResultsAndScores.mockResolvedValue(
-        mockMatchupWithResultsAndScores as any,
+        mockMatchupWithResultsAndScores,
       );
 
       const result = await controller.getMatchupWithResultsAndScores(matchupId);
@@ -233,12 +234,11 @@ describe('MatchesController', () => {
         id: 1,
         email: 'test@example.com',
         role: userRoleEnum.USER,
+        isFake: false,
       };
       const query: QueryMatchupRequestDto = { stageId: 1 };
 
-      service.getManagedMatchups.mockResolvedValue([
-        mockMatchupWithResults as any,
-      ]);
+      service.getManagedMatchups.mockResolvedValue([mockMatchupWithResults]);
 
       const result = await controller.getManagedMatchups(user, query);
 

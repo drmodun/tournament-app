@@ -19,6 +19,7 @@ describe('MatchesService', () => {
       insertMatchScore: jest.fn(),
       updateMatchScore: jest.fn(),
       deleteMatchScore: jest.fn(),
+      deleteScore: jest.fn(),
       getStageById: jest.fn(),
       getWithResults: jest.fn(),
       getWithResultsAndScores: jest.fn(),
@@ -29,7 +30,6 @@ describe('MatchesService', () => {
       getManagedMatchups: jest.fn(),
       canUserEditMatchup: jest.fn(),
       isMatchupInTournament: jest.fn(),
-      deleteScore: jest.fn(),
     };
 
     const mockChallongeService = {
@@ -285,40 +285,50 @@ describe('MatchesService', () => {
   });
 
   describe('getResultsForUser', () => {
-    it('should return results for a user', async () => {
+    it('should return matchups with results for a user', async () => {
       // Arrange
       const userId = 1;
+      const pagination: PaginationOnly = { page: 1, pageSize: 10 };
       const expectedResults = [
         {
           id: 1,
           stageId: 5,
           round: 1,
           isFinished: true,
-          rosterToMatchup: [
+          results: [
             {
+              id: 1,
               isWinner: true,
               matchupId: 1,
               score: 3,
               roster: {
                 id: 1,
                 stageId: 5,
-                participation: {
-                  id: 10,
-                  group: { id: 20, name: 'Team A' },
-                },
+                players: [
+                  {
+                    userId: 1,
+                    rosterId: 1,
+                  },
+                ],
               },
             },
           ],
+          matchupType: 'standard',
+          startDate: new Date(),
         },
       ];
 
-      matchesRepository.getResultsForUser.mockResolvedValue(
-        expectedResults as any,
+      // Mock the repository method
+      matchesRepository.getResultsForUser.mockResolvedValue(expectedResults);
+
+      // Act
+      const result = await service.getResultsForUser(userId, pagination);
+
+      // Assert
+      expect(matchesRepository.getResultsForUser).toHaveBeenCalledWith(
+        userId,
+        pagination,
       );
-
-      const result = await service.getResultsForUser(userId);
-
-      expect(matchesRepository.getResultsForUser).toHaveBeenCalledWith(userId);
       expect(result).toEqual(expectedResults);
     });
   });
@@ -367,18 +377,19 @@ describe('MatchesService', () => {
   });
 
   describe('getResultsForGroup', () => {
-    it('should return results for a group', async () => {
+    it('should return matchups with results for a group', async () => {
       // Arrange
-      const groupId = 20;
-      const matchupIds = [{ id: 1 }, { id: 2 }];
+      const groupId = 1;
+      const pagination: PaginationOnly = { page: 1, pageSize: 10 };
       const expectedResults = [
         {
           id: 1,
           stageId: 5,
           round: 1,
           isFinished: true,
-          rosterToMatchup: [
+          results: [
             {
+              id: 1,
               isWinner: true,
               matchupId: 1,
               score: 3,
@@ -387,29 +398,29 @@ describe('MatchesService', () => {
                 stageId: 5,
                 participation: {
                   id: 10,
-                  group: { id: 20, name: 'Team A' },
+                  group: { id: 1, name: 'Group A' },
                 },
               },
             },
           ],
+          matchupType: 'standard',
+          startDate: new Date(),
         },
       ];
 
-      matchesRepository.getResultsForGroupIds.mockResolvedValue(matchupIds);
-      matchesRepository.getWithResults.mockResolvedValue(
-        expectedResults as any,
-      );
+      // Mock the repository method to return expected results
+      matchesRepository.getResultsForGroupIds = jest
+        .fn()
+        .mockResolvedValue(expectedResults);
 
       // Act
-      const result = await service.getResultsForGroup(groupId);
+      const result = await service.getResultsForGroup(groupId, pagination);
 
       // Assert
       expect(matchesRepository.getResultsForGroupIds).toHaveBeenCalledWith(
-        groupId,
+        [groupId],
+        pagination,
       );
-      expect(matchesRepository.getWithResults).toHaveBeenCalledWith({
-        ids: [1, 2],
-      });
       expect(result).toEqual(expectedResults);
     });
   });
@@ -763,53 +774,6 @@ describe('MatchesService', () => {
     });
   });
 
-  describe('getResultsForUser', () => {
-    it('should return matchups with results for a user', async () => {
-      // Arrange
-      const userId = 1;
-      const pagination: PaginationOnly = { page: 1, pageSize: 10 };
-      const expectedResults = [
-        {
-          id: 1,
-          stageId: 5,
-          round: 1,
-          isFinished: true,
-          rosterToMatchup: [
-            {
-              isWinner: true,
-              matchupId: 1,
-              score: 3,
-              roster: {
-                id: 1,
-                stageId: 5,
-                players: [
-                  {
-                    userId: 1,
-                    rosterId: 1,
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      ];
-
-      matchesRepository.getResultsForUser.mockResolvedValue(
-        expectedResults as any,
-      );
-
-      // Act
-      const result = await service.getResultsForUser(userId, pagination);
-
-      // Assert
-      expect(matchesRepository.getResultsForUser).toHaveBeenCalledWith(
-        userId,
-        pagination,
-      );
-      expect(result).toEqual(expectedResults);
-    });
-  });
-
   describe('getResultsForRoster', () => {
     it('should return matchups with results for a roster', async () => {
       // Arrange
@@ -821,7 +785,6 @@ describe('MatchesService', () => {
           stageId: 5,
           round: 1,
           isFinished: true,
-          
         },
       ];
 
@@ -893,8 +856,9 @@ describe('MatchesService', () => {
           stageId: 5,
           round: 1,
           isFinished: true,
-          rosterToMatchup: [
+          results: [
             {
+              id: 1,
               isWinner: true,
               matchupId: 1,
               score: 3,
@@ -908,12 +872,15 @@ describe('MatchesService', () => {
               },
             },
           ],
+          matchupType: 'standard',
+          startDate: new Date(),
         },
       ];
 
-      matchesRepository.getResultsForGroup.mockResolvedValue(
-        expectedResults as any,
-      );
+      // Mock the repository method to return expected results
+      matchesRepository.getResultsForGroupIds = jest
+        .fn()
+        .mockResolvedValue(expectedResults);
 
       // Act
       const result = await service.getResultsForGroup(groupId, pagination);

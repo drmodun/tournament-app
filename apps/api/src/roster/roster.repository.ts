@@ -10,7 +10,7 @@ import {
 } from '../db/schema';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
 import { BaseQuery } from 'src/base/query/baseQuery';
-import { eq, SQL, desc, asc, inArray, and, or, isNotNull } from 'drizzle-orm';
+import { eq, SQL, desc, asc, inArray, and, or, isNotNull, InferInsertModel } from 'drizzle-orm';
 import {
   RosterResponsesEnum,
   RosterSortingEnum,
@@ -318,24 +318,36 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         ),
       });
 
-      console.log(participations);
+      if (participations.length === 0) {
+        return [];
+      }
 
-      const rosterId =
-        participations.length > 0 &&
-        participations.forEach(async (participation) => {
-          const rosterId = await tx
+      const createdRosters = await Promise.all(
+        participations.map(async (participation) => {
+          const rosterResult = await tx
             .insert(roster)
             .values({ participationId: participation.id, stageId })
             .returning({ id: roster.id });
 
+<<<<<<< HEAD
           await tx
+=======
+          if (!rosterResult[0]) {
+            console.error('Failed to create roster for participation', participation.id);
+            return null;
+          }
+
+          const rosterId = rosterResult[0].id;
+          
+           await tx
+>>>>>>> fcd2af323d871b01400cfaae72874c56eab3f749
             .insert(userToRoster)
-            .values({ userId: participation.userId, rosterId: rosterId[0].id })
-        });
+            .values({ userId: participation.userId, rosterId, isSubstitute: false } as InferInsertModel<typeof userToRoster>)
+            .returning();
+        })
+      );
 
-      console.log(rosterId, participations.length);
-
-      return rosterId;
+      return createdRosters.filter(result => result !== null);
     });
 
     return res;

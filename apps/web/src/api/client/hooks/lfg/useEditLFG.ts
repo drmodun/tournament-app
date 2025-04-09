@@ -16,10 +16,12 @@ export const UpdateLFG = async (data: {
   categoryIds?: number[];
   id?: number;
 }) => {
-  const { id, message, categoryIds } = data;
-  const updateData = { message, categoryIds: categoryIds ?? [] };
+  console.log("category ids", data.categoryIds ?? []);
   return clientApi
-    .patch<IUpdateLFGRequest, AxiosResponse>(`/lfg/${id}`, updateData)
+    .patch<
+      IUpdateLFGRequest,
+      AxiosResponse
+    >(`/lfg/${data.id}`, { id: data.id, categoryIds: data?.categoryIds ?? [], message: data?.message })
     .then((res) => res.data);
 };
 export const useUpdateLFG = () => {

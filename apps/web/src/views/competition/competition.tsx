@@ -18,7 +18,7 @@ import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -46,7 +46,7 @@ export default function Competition({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { data: groupMembershipData, isLoading: groupMembershipIsLoading } =
-    useCheckIfGroupMember(competition?.affiliatedGroup?.id);
+    useCheckIfGroupMember(competition?.affiliatedGroup?.id ?? -1);
 
   const deleteCompetitionMutation = useDeleteCompetition();
   const soloJoinCompetitionMutation = useCreateSoloParticipation();

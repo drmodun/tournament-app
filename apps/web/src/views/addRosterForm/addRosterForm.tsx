@@ -152,7 +152,7 @@ export default function AddRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}BackgroundColor`]
+                      globals[`${textColorTheme}Color`]
                     )}
                   >
                     <img
@@ -162,7 +162,9 @@ export default function AddRosterForm({
                       }
                       className={styles.pfp}
                     />
-                    <p>{member.username}</p>
+                    <p className={globals[`${textColorTheme}Color`]}>
+                      {member.username}
+                    </p>
                   </div>
                 );
               })
@@ -181,7 +183,7 @@ export default function AddRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}BackgroundColor`]
+                      globals[`${textColorTheme}Color`]
                     )}
                   >
                     <img
@@ -191,7 +193,9 @@ export default function AddRosterForm({
                       }
                       className={styles.pfp}
                     />
-                    <p>{member.username}</p>
+                    <p className={globals[`${textColorTheme}Color`]}>
+                      {member.username}
+                    </p>
                   </div>
                 );
               })

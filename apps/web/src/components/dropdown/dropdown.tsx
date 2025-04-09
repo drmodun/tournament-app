@@ -81,7 +81,7 @@ export default function Dropdown({
   const [isDropped, setIsDropped] = useState<boolean>(false);
   const [animate, setAnimate] = useState<boolean>(false);
   const [optionsActive, setOptionsActive] = useState<boolean[]>(
-    new Array(options.length).fill(true),
+    new Array(options.length).fill(true)
   );
   const [searchVal, setSearchVal] = useState<string>();
 
@@ -124,6 +124,13 @@ export default function Dropdown({
   };
 
   useEffect(() => {
+    if (defaultValue && onSelect && options) {
+      const res = options
+        .map((option) => option.label)
+        .findIndex((obj) => obj === defaultValue);
+      if (res !== -1) onSelect(res);
+    }
+
     for (let i = 0; i < options.length; i++) {
       if (options[i].label === defaultValue) {
         setSelected(i);
@@ -168,7 +175,7 @@ export default function Dropdown({
           <p
             className={clsx(
               globals[`${labelVariant ?? inverseTextColor(variant)}MutedColor`],
-              globals.label,
+              globals.label
             )}
             style={labelStyle}
           >
@@ -188,7 +195,7 @@ export default function Dropdown({
             className={clsx(
               styles.fullWidth,
               isDropped && styles.selectButtonActive,
-              styles.selectButton,
+              styles.selectButton
             )}
             labelClassName={globals.textAlignLeft}
           >
@@ -197,7 +204,7 @@ export default function Dropdown({
                 className={clsx(
                   isDropped && styles.selectArrowRotated,
                   styles.selectArrow,
-                  styles[`${textColor(variant)}Fill`],
+                  styles[`${textColor(variant)}Fill`]
                 )}
               />
             )}
@@ -208,7 +215,7 @@ export default function Dropdown({
           className={clsx(
             styles.optionsWrapper,
             isDropped && styles.zIndex,
-            optionsClassName,
+            optionsClassName
           )}
         >
           <div
@@ -222,7 +229,7 @@ export default function Dropdown({
               styles.options,
 
               globals[`${variant}MutedBackgroundColor`],
-              optionWrapperClassName,
+              optionWrapperClassName
             )}
           >
             {doesSearch && (
@@ -249,7 +256,7 @@ export default function Dropdown({
                     : styles.hidden,
 
                   styles.option,
-                  optionClassName,
+                  optionClassName
                 )}
               >
                 <Button
@@ -264,7 +271,7 @@ export default function Dropdown({
                       ? isDropped
                         ? styles.unhiddenAnimation
                         : styles.hiddenAnimation
-                      : styles.hidden,
+                      : styles.hidden
                   )}
                   labelClassName={globals.textAlignLeft}
                 />

@@ -79,6 +79,13 @@ export default function AddMatchResult({
 
         <Dropdown
           placeholder="select roster"
+          defaultValue={
+            rosters.length == 2
+              ? (rosters[0]?.participation?.group?.name ??
+                rosters[0]?.participation?.user?.username ??
+                undefined)
+              : undefined
+          }
           onSelect={(index: number) => {
             rosters && setRoster1(rosters[index]);
           }}
@@ -97,6 +104,13 @@ export default function AddMatchResult({
           onSelect={(index: number) => {
             rosters && setRoster2(rosters[index]);
           }}
+          defaultValue={
+            rosters.length == 2
+              ? (rosters[1]?.participation?.group?.name ??
+                rosters[1]?.participation?.user?.username ??
+                undefined)
+              : undefined
+          }
           options={rosters.map((roster) => {
             return {
               label:

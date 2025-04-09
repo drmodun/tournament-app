@@ -6,6 +6,9 @@ import styles from "./notificationItem.module.scss";
 import Image from "next/image";
 import { useNotificationContext } from "utils/hooks/useNotificationContext";
 import { clsx } from "clsx";
+import { useThemeContext } from "utils/hooks/useThemeContext";
+import globals from "styles/globals.module.scss";
+import { textColor } from "types/styleTypes";
 
 interface NotificationItemProps {
   notification: INotificationResponse;
@@ -16,6 +19,7 @@ export default function NotificationItem({
   notification,
   onClick,
 }: NotificationItemProps) {
+  const { theme } = useThemeContext();
   const { markAsRead, deleteNotification } = useNotificationContext();
   const { notification: item, isRead } = notification;
 
@@ -50,7 +54,7 @@ export default function NotificationItem({
     if (item.image) {
       return (
         <img
-            alt="Notification"
+          alt="Notification"
           width={40}
           height={40}
           className={styles.image}
@@ -96,13 +100,17 @@ export default function NotificationItem({
       onClick={handleClick}
     >
       {renderImage()}
-      <div className={styles.content}>
-        <div className={styles.message}>{item.message}</div>
+      <div className={clsx(styles.content, globals[`${theme}BackgroundColor`])}>
+        <div
+          className={clsx(styles.message, globals[`${textColor(theme)}Color`])}
+        >
+          {item.message.toLowerCase()}
+        </div>
         <div className={styles.time}>{formatDate(item.createdAt)}</div>
         {!isRead && (
           <div className={styles.actions}>
             <button className={styles.action} onClick={handleMarkAsRead}>
-              Mark as read
+              mark as read
             </button>
           </div>
         )}

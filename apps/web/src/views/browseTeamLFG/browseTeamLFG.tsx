@@ -52,7 +52,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                 className={clsx(
                   styles.userCard,
                   globals[`${textColorTheme}BackgroundColor`],
-                  globals[`${theme}Color`]
+                  globals[`${theme}Color`],
                 )}
               >
                 <img
@@ -75,7 +75,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                   <p
                     className={clsx(
                       globals.label,
-                      globals[`${textColorTheme}Color`]
+                      globals[`${textColorTheme}Color`],
                     )}
                   >
                     bio
@@ -103,7 +103,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                             <div
                               className={clsx(
                                 styles.careerCategory,
-                                globals[`${theme}Color`]
+                                globals[`${theme}Color`],
                               )}
                             >
                               {career.category.name}

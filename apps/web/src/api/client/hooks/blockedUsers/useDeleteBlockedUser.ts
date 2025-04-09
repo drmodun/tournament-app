@@ -22,7 +22,7 @@ export const deleteBlockedUser = async (data: {
           groupId: data?.groupId,
           userId: data?.userId,
         },
-      }
+      },
     )
     .then((res) => res.data);
 };

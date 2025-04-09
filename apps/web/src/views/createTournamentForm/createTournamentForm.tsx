@@ -55,7 +55,7 @@ export default function CreateTournamentForm({
     if (data.startDate > data.endDate) {
       toast.addToast(
         "the starting time cannot be greater than then ending time",
-        "error"
+        "error",
       );
       return;
     }
@@ -92,7 +92,7 @@ export default function CreateTournamentForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string
+    placeName?: string,
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -251,7 +251,7 @@ export default function CreateTournamentForm({
                   "place_changed",
                   () => {
                     return handleAutocomplete(autocomplete, e.target.value);
-                  }
+                  },
                 );
                 setListener(tempListener);
               });
@@ -445,7 +445,7 @@ export default function CreateTournamentForm({
                         return { label: category.name, id: category.id };
                       }) ?? []
                     );
-                  })[index].id ?? -1
+                  })[index].id ?? -1,
                 )
               }
             />

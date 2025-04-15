@@ -106,3 +106,8 @@ html,
 .jknkFS::before {
   display: none;
 }
+
+.nextjs-portal,
+.nextjs-toast-errors-parent {
+  display: none !important;
+}

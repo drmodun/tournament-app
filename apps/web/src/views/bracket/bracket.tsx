@@ -60,23 +60,13 @@ export default function BracketView({
       )}
     >
       {stage?.challongeTournamentId ? (
-        textColorTheme !== "light" ? (
-          <iframe
-            src={`https://challonge.com/${stage?.challongeTournamentId}/module?theme=8396`}
-            width="100%"
-            height="500"
-            style={{ border: "none" }}
-            allowTransparency={true}
-          />
-        ) : (
-          <iframe
-            src={`https://challonge.com/${stage?.challongeTournamentId}/module?theme=8397`}
-            width="100%"
-            height="500"
-            style={{ border: "none" }}
-            allowTransparency={true}
-          />
-        )
+        <iframe
+          src={`https://challonge.com/${stage?.challongeTournamentId}/module?theme=8396&show_standings=1&multiplier=1.75`}
+          width="100%"
+          height="500"
+          style={{ border: "none" }}
+          allowTransparency={true}
+        />
       ) : (
         <p className={`${globals[`${theme}Color`]}`}>no bracket data</p>
       )}

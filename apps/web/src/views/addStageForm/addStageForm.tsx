@@ -54,7 +54,7 @@ export default function AddStageForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
+    placeName?: string
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -216,7 +216,7 @@ export default function AddStageForm({
                 fetchAutocomplete(e.target).then((autocomplete) => {
                   const tempListener = autocomplete.addListener(
                     "place_changed",
-                    () => handleAutocomplete(autocomplete, e.target.value),
+                    () => handleAutocomplete(autocomplete, e.target.value)
                   );
                   setListener(tempListener);
                 });
@@ -265,7 +265,14 @@ export default function AddStageForm({
         </div>
         <div className={styles.dialogOption}>
           <Dropdown
-            options={Object.values(stageTypeEnum).map((type) => ({
+            options={[
+              stageTypeEnum.GROUP,
+              stageTypeEnum.KNOCKOUT,
+              stageTypeEnum.SWISS,
+              stageTypeEnum.ROUND_ROBIN,
+              stageTypeEnum.DOUBLE_ELIMINATION,
+              stageTypeEnum.TRIPLE_ELIMINATION,
+            ].map((type) => ({
               label: type,
             }))}
             searchPlaceholder="search..."

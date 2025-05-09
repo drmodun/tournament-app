@@ -8,11 +8,11 @@ export const fetchRosters = async (stageId?: number, page?: number) => {
     `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/roster/stage/${stageId}?responseType=${RosterResponsesEnum.EXTENDED}&page=${page ?? 1}&pageSize=10`,
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   ).then((res) =>
     res.json().then((res) => {
       return res;
-    })
+    }),
   );
 };
 

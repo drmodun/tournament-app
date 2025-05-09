@@ -65,7 +65,7 @@ export default function EditStageForm({
 
   const handleAutocomplete = async (
     autocomplete: google.maps.places.Autocomplete,
-    placeName?: string
+    placeName?: string,
   ) => {
     listener && google.maps.event.removeListener(listener);
 
@@ -237,7 +237,7 @@ export default function EditStageForm({
             isReactFormHook={true}
             type="datetime-local"
             defaultValue={formatDateTimeHTMLInput(
-              stage?.startDate ?? new Date()
+              stage?.startDate ?? new Date(),
             )}
             min={new Date()
               .toISOString()
@@ -254,7 +254,7 @@ export default function EditStageForm({
             placeholder="enter the tournament's ending time"
             name="endDate"
             defaultValue={formatDateTimeHTMLInput(
-              stage?.startDate ?? new Date()
+              stage?.startDate ?? new Date(),
             )}
             required={true}
             className={styles.input}
@@ -283,7 +283,7 @@ export default function EditStageForm({
                 fetchAutocomplete(e.target).then((autocomplete) => {
                   const tempListener = autocomplete.addListener(
                     "place_changed",
-                    () => handleAutocomplete(autocomplete, e.target.value)
+                    () => handleAutocomplete(autocomplete, e.target.value),
                   );
                   setListener(tempListener);
                 });

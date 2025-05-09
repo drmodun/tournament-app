@@ -44,10 +44,10 @@ export const useUpdateMatchupScore = () => {
       });
       invalidateMatchups();
     },
-   onError: (e: AxiosError<{ message: string & string[] }>) => {
-         const err = handleError(e);
-         err && toast.addToast(err, "error");
-       },
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
+    },
     onMutate: () => {
       toast.addToast("creating the score...", "info");
     },

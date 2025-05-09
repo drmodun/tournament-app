@@ -82,7 +82,7 @@ export default function EditRosterForm({
         ? prev.filter((id: number) => id !== member.id)
         : prev.length < (stage?.maxSubstitutes ?? 99)
           ? [...prev, member.id]
-          : prev
+          : prev,
     );
   };
 
@@ -105,7 +105,7 @@ export default function EditRosterForm({
 
                 selectedMembers.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${textColorTheme}Color`]
+                  : globals[`${textColorTheme}Color`],
               )}
             >
               <img
@@ -134,7 +134,7 @@ export default function EditRosterForm({
                 styles.userCard,
                 selectedSubstitutes.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${textColorTheme}Color`]
+                  : globals[`${textColorTheme}Color`],
               )}
             >
               <img
@@ -168,7 +168,7 @@ export default function EditRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}BackgroundColor`]
+                      globals[`${textColorTheme}BackgroundColor`],
                     )}
                   >
                     <img
@@ -187,7 +187,7 @@ export default function EditRosterForm({
         <h3
           className={clsx(
             globals[`${textColorTheme}Color`],
-            styles.substitutesTitle
+            styles.substitutesTitle,
           )}
         >
           substitutes
@@ -206,7 +206,7 @@ export default function EditRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}BackgroundColor`]
+                      globals[`${textColorTheme}BackgroundColor`],
                     )}
                   >
                     <img

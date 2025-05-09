@@ -74,7 +74,7 @@ export default function StageCard({
         styles[`${variant}Background`],
         className,
         globals.doublePaddingHorizontal,
-        globals.paddingVertical
+        globals.paddingVertical,
       )}
       style={style}
       onClick={handleClick}
@@ -85,7 +85,7 @@ export default function StageCard({
             className={clsx(
               styles.label,
               labelClassName,
-              globals[`${variant}TextColor`]
+              globals[`${variant}TextColor`],
             )}
             style={labelStyle}
           >
@@ -119,7 +119,7 @@ export default function StageCard({
                 <PlaceIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
               </div>
@@ -129,7 +129,7 @@ export default function StageCard({
                 <PublicIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
               </div>
@@ -141,7 +141,7 @@ export default function StageCard({
                 <PlaceIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
                 <p className={globals[`${textColor(variant)}Color`]}>
@@ -150,7 +150,7 @@ export default function StageCard({
                 <PublicIcon
                   className={clsx(
                     globals[`${textColor(variant)}FillChildren`],
-                    styles.flagIcon
+                    styles.flagIcon,
                   )}
                 />
               </div>

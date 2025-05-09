@@ -52,10 +52,10 @@ export default function Competition({
   const soloJoinCompetitionMutation = useCreateSoloParticipation();
   const { data: participationData } = useCheckIfUserIsParticipating(
     competition?.id,
-    data?.id
+    data?.id,
   );
   const { data: groupParticipationData } = useGetUserGroupParticipations(
-    competition?.id
+    competition?.id,
   );
 
   const [groupSelectModalOpen, setGroupSelectModalOpen] =
@@ -98,7 +98,7 @@ export default function Competition({
               <h1
                 className={clsx(
                   styles.organiserName,
-                  globals[`${textColorTheme}Color`]
+                  globals[`${textColorTheme}Color`],
                 )}
               >
                 {competition?.name}
@@ -257,7 +257,7 @@ const SidebarSection = ({ name, children }: SidebarSectionProps) => {
         className={clsx(
           styles.sidebarSectionName,
           globals.label,
-          globals[`${textColorTheme}Color`]
+          globals[`${textColorTheme}Color`],
         )}
       >
         {name}

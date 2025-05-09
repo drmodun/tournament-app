@@ -14,7 +14,7 @@ export const promoteUser = async (data: { groupId: number; userId: number }) =>
       `/group-membership/${data.groupId}/${data.userId}`,
       {
         role: groupRoleEnum.ADMIN,
-      }
+      },
     )
     .then((res) => res.data);
 

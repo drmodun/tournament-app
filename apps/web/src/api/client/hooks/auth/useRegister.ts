@@ -23,7 +23,7 @@ export const useRegister = () => {
     onSuccess: async () => {
       toast.addToast(
         "verification email sent! verify your account then login.",
-        "success"
+        "success",
       );
 
       await queryClient.invalidateQueries({

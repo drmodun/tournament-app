@@ -59,7 +59,7 @@ export default function ManageBlockedUsers() {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const currentRef = loadMoreRef.current;
@@ -76,7 +76,7 @@ export default function ManageBlockedUsers() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <div className={styles.competitionsTitle}>
@@ -103,7 +103,7 @@ export default function ManageBlockedUsers() {
             setSelectedGroup(
               (adminData?.pages?.flatMap((page) => {
                 return page.results?.flatMap((res) => res);
-              }) ?? [])[index]
+              }) ?? [])[index],
             );
           }}
         />
@@ -127,7 +127,7 @@ export default function ManageBlockedUsers() {
                       className={clsx(
                         styles.userCard,
                         globals[`${textColorTheme}Color`],
-                        globals[`${theme}BackgroundColor`]
+                        globals[`${theme}BackgroundColor`],
                       )}
                       key={index}
                     >
@@ -153,13 +153,13 @@ export default function ManageBlockedUsers() {
                         <DeleteIcon
                           className={clsx(
                             globals.lightFillChildren,
-                            styles.trashButton
+                            styles.trashButton,
                           )}
                         />
                       </Button>
                     </div>
                   );
-                })
+                }),
               )
             )}
           </div>

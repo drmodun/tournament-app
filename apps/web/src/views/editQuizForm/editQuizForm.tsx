@@ -249,7 +249,7 @@ export default function EditQuizForm({
                 ? Math.floor(
                     ((quiz?.timeLimitTotal ?? 0) -
                       Math.floor((quiz?.timeLimitTotal ?? 0) / 3600) * 3600) /
-                      60
+                      60,
                   )
                 : 0
               ).toString()}
@@ -306,7 +306,7 @@ export default function EditQuizForm({
           <div
             className={clsx(
               styles.quizQuestionForm,
-              globals[`${textColorTheme}BackgroundColor`]
+              globals[`${textColorTheme}BackgroundColor`],
             )}
           >
             <CreateQuizQuestionForm
@@ -329,7 +329,7 @@ export default function EditQuizForm({
                     className={clsx(
                       globals[`${textColorTheme}BackgroundColor`],
                       globals[`${theme}Color`],
-                      styles.question
+                      styles.question,
                     )}
                   >
                     <div className={styles.questionTop}>
@@ -342,7 +342,7 @@ export default function EditQuizForm({
                           }}
                         />
                       )}
-                      <p>{"question" in q ? q.question : (q?.name ?? "")}</p>
+                      <p>{"question" in q ? q.question : q?.name ?? ""}</p>
                     </div>
                     <div className={styles.questionBottom}>
                       {q.timeLimit && q.timeLimit > 0 && (
@@ -375,7 +375,7 @@ export default function EditQuizForm({
                       <div
                         className={clsx(
                           styles.questionProperty,
-                          styles.options
+                          styles.options,
                         )}
                       >
                         <b>options</b>
@@ -385,7 +385,7 @@ export default function EditQuizForm({
                               className={clsx(
                                 styles.questionOption,
                                 globals[`${theme}BackgroundColor`],
-                                globals[`${textColorTheme}Color`]
+                                globals[`${textColorTheme}Color`],
                               )}
                             >
                               <p>{options.option ?? options}</p>

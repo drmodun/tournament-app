@@ -9,7 +9,7 @@ import { handleError } from "utils/mixins/helpers";
 
 export const editGroup = async (
   data: Partial<ICreateGroupRequest>,
-  groupId: number
+  groupId: number,
 ) =>
   clientApi
     .patch<never, AxiosResponse<any>>(`/groups/${groupId}`, data)

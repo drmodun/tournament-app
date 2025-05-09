@@ -9,11 +9,11 @@ export const fetchQuiz = async (id: number | undefined) => {
     `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/quiz/detailed/${id}`,
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   ).then((res) =>
     res.json().then((res) => {
       return res;
-    })
+    }),
   );
 };
 

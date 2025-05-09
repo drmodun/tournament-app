@@ -12,7 +12,7 @@ import { handleError } from "utils/mixins/helpers";
 
 export const deleteGroupInterest = async (
   groupId?: number,
-  categoryId?: number
+  categoryId?: number,
 ) => {
   return clientApi
     .delete<never, AxiosResponse>(`/group-interests/${groupId}/${categoryId}`, {

@@ -10,13 +10,12 @@ import {
 } from "@tournament-app/types";
 import { useCreateGroup } from "api/client/hooks/groups/useCreateGroup";
 import { useSearchUserGroups } from "api/client/hooks/groups/useSearchUserGroups";
-import { useUserGroups } from "api/client/hooks/groups/useUserGroups";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dialog from "components/dialog";
 import Input from "components/input";
 import ProgressWheel from "components/progressWheel";
-import { act, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import useDebounce from "utils/hooks/useDebounce";
@@ -98,7 +97,7 @@ export default function Teams() {
     console.log(
       data?.pages[activePage]?.results?.length,
       activePage,
-      activeTab
+      activeTab,
     );
   }, [activePage, activeTab]);
 
@@ -144,6 +143,7 @@ export default function Teams() {
             (searchData?.[activeTab] ||
               data?.pages[Math.floor(activePage)]?.results[activeTab]) && (
               <ManageTeams
+                // @ts-ignore
                 team={
                   searchData?.[activeTab] ||
                   data?.pages[Math.floor(activePage)]?.results[activeTab]
@@ -165,7 +165,7 @@ export default function Teams() {
           <div
             className={clsx(
               styles.tabs,
-              globals[`${textColor(theme)}BackgroundColor`]
+              globals[`${textColor(theme)}BackgroundColor`],
             )}
           >
             <button
@@ -190,7 +190,7 @@ export default function Teams() {
                       key={index}
                       className={clsx(
                         styles.tab,
-                        activeTab === index && styles.active
+                        activeTab === index && styles.active,
                       )}
                       onClick={() => setActiveTab(index)}
                       label={tab.group.name}
@@ -199,7 +199,7 @@ export default function Teams() {
                       }
                     />
                   );
-                }
+                },
               )}
             </div>
             <button
@@ -272,7 +272,7 @@ const SearchBar = ({
       className={clsx(
         styles.tabs,
         globals[`${textColorTheme}BackgroundColor`],
-        styles.searchBar
+        styles.searchBar,
       )}
     >
       <div className={styles.searchInputWrapper}>

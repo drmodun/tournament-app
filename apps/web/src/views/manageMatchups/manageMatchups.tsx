@@ -42,7 +42,7 @@ export default function ManageMatchups({
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <h3 className={globals[`${theme}Color`]}>manage matchup</h3>
@@ -71,23 +71,30 @@ const MatchupCard = ({
             <div
               className={clsx(
                 styles.rosterWrapper,
-                globals[`${theme}BackgroundColor`]
+                globals[`${theme}BackgroundColor`],
               )}
             >
-              {(roster?.participation?.group?.logo ??
-                roster?.participation?.user?.profilePicture) && (
-                <img
-                  src={
-                    roster?.participation?.group?.logo ??
-                    roster?.participation?.user?.profilePicture ??
-                    "/profilePicture.png"
-                  }
-                  className={styles.userPfp}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/profilePicture.png";
-                  }}
-                />
-              )}
+              {
+                //@ts-ignore
+                roster?.participation?.group?.logo ??
+                  //@ts-ignore
+                  (roster?.participation?.user?.profilePicture && (
+                    <img
+                      src={
+                        //@ts-ignore
+                        roster?.participation?.group?.logo ??
+                        //@ts-ignore
+                        roster?.participation?.user?.profilePicture ??
+                        "/profilePicture.png"
+                      }
+                      className={styles.userPfp}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          "/profilePicture.png";
+                      }}
+                    />
+                  ))
+              }
               <p className={globals[`${textColorTheme}Color`]}>
                 {roster?.participation?.group?.name ??
                   roster?.participation?.user?.username}
@@ -103,7 +110,7 @@ const MatchupCard = ({
                         ? globals.primaryBackgroundColor
                         : globals.dangerBackgroundColor,
                       globals.lightColor,
-                      styles.scoreWrapper
+                      styles.scoreWrapper,
                     )}
                   >
                     <b className={globals.lightColor}>

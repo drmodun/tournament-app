@@ -45,7 +45,7 @@ export default function ManageQuizzes() {
                   globals[`${theme}Color`],
                   styles.userCard,
                 )}
-                href={`/quiz/${quiz.id}`}
+                href={`/`}
               >
                 <div className={styles.quizTop}>
                   {quiz.coverImage && (

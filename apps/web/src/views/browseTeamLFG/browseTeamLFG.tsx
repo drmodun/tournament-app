@@ -52,22 +52,22 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                 className={clsx(
                   styles.userCard,
                   globals[`${textColorTheme}BackgroundColor`],
-                  globals[`${theme}Color`]
+                  globals[`${theme}Color`],
                 )}
               >
                 <img
                   src={
-                    data[index]?.user.profilePicture ?? "/profilePicture.png"
+                    data?.[index]?.user.profilePicture ?? "/profilePicture.png"
                   }
                   onError={(e) => (e.currentTarget.src = "/profilePicture.png")}
                   className={styles.profilePicture}
                 />
                 <div className={styles.userCardText}>
                   <p className={styles.name}>
-                    {data && data[index]?.user.name}
+                    {data && data?.[index]?.user.name}
                   </p>
-                  <p>{data && data[index]?.user.username}</p>
-                  <p>{data && data[index]?.user.age.toString()}y</p>
+                  <p>{data && data?.[index]?.user.username}</p>
+                  <p>{data && data?.[index]?.user.age.toString()}</p>
                 </div>
               </div>
               <div className={styles.userInfo}>
@@ -75,7 +75,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                   <p
                     className={clsx(
                       globals.label,
-                      globals[`${textColorTheme}Color`]
+                      globals[`${textColorTheme}Color`],
                     )}
                   >
                     bio
@@ -103,7 +103,7 @@ export default function BrowseTeamLFG({ groupId }: { groupId: number }) {
                             <div
                               className={clsx(
                                 styles.careerCategory,
-                                globals[`${theme}Color`]
+                                globals[`${theme}Color`],
                               )}
                             >
                               {career.category.name}

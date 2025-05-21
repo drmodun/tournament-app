@@ -35,7 +35,7 @@ export default function BrowseLFPs() {
     <div
       className={clsx(
         styles.paginationWrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <button
@@ -61,11 +61,11 @@ export default function BrowseLFPs() {
                   className={clsx(
                     styles.userCard,
                     globals[`${theme}BackgroundColor`],
-                    globals[`${textColorTheme}Color`]
+                    globals[`${textColorTheme}Color`],
                   )}
                 >
                   <img
-                    src={data[index]?.group.logo ?? "/profilePicture.png"}
+                    src={data?.[index]?.group.logo ?? "/profilePicture.png"}
                     onError={(e) =>
                       (e.currentTarget.src = "/profilePicture.png")
                     }

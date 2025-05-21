@@ -55,7 +55,7 @@ export default function EditQuizForm({
 
   const editMethods = useForm<CreateQuizDto>();
   const onEditSubmit: SubmitHandler<CreateQuizDto> = async (data) => {
-    if (!quiz?.id) {
+    if (!quiz) {
       addToast("no id provided", "error");
       return;
     }
@@ -74,7 +74,7 @@ export default function EditQuizForm({
 
     if (coverImage) data.coverImage = coverImage;
 
-    await createQuizMutation.mutateAsync({ id: quiz?.id, data: data });
+    await createQuizMutation.mutateAsync({ id: -1, data: data });
 
     onClose && onClose();
   };
@@ -249,7 +249,7 @@ export default function EditQuizForm({
                 ? Math.floor(
                     ((quiz?.timeLimitTotal ?? 0) -
                       Math.floor((quiz?.timeLimitTotal ?? 0) / 3600) * 3600) /
-                      60
+                      60,
                   )
                 : 0
               ).toString()}
@@ -306,7 +306,7 @@ export default function EditQuizForm({
           <div
             className={clsx(
               styles.quizQuestionForm,
-              globals[`${textColorTheme}BackgroundColor`]
+              globals[`${textColorTheme}BackgroundColor`],
             )}
           >
             <CreateQuizQuestionForm
@@ -329,7 +329,7 @@ export default function EditQuizForm({
                     className={clsx(
                       globals[`${textColorTheme}BackgroundColor`],
                       globals[`${theme}Color`],
-                      styles.question
+                      styles.question,
                     )}
                   >
                     <div className={styles.questionTop}>
@@ -365,17 +365,10 @@ export default function EditQuizForm({
                           <p>{q.points}</p>
                         </div>
                       )}
-                      {q.questionType && (
-                        <div className={styles.questionProperty}>
-                          <b>question type</b>
-                          <p>{QUESTION_TYPE_MAP[q.questionType]}</p>
-                        </div>
-                      )}
-
                       <div
                         className={clsx(
                           styles.questionProperty,
-                          styles.options
+                          styles.options,
                         )}
                       >
                         <b>options</b>
@@ -385,7 +378,7 @@ export default function EditQuizForm({
                               className={clsx(
                                 styles.questionOption,
                                 globals[`${theme}BackgroundColor`],
-                                globals[`${textColorTheme}Color`]
+                                globals[`${textColorTheme}Color`],
                               )}
                             >
                               <p>{options.option ?? options}</p>

@@ -19,23 +19,23 @@ services:
     ports:
       - 5500:5500
 
-  docs:
-    container_name: docs
-    build:
-      context: .
-      dockerfile: ./apps/docs/Dockerfile
-    restart: always
-    ports:
-      - 4321:4321
+  # docs:
+  #   container_name: docs
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/docs/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 4321:4321
 
-  admin:
-    container_name: admin
-    build:
-      context: .
-      dockerfile: ./apps/admin/Dockerfile
-    restart: always
-    ports:
-      - 3001:3001
+  # admin:
+  #   container_name: admin
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/admin/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 3001:3001
 
 # Define a network, which allows containers to communicate
 # with each other, by using their container name as a hostname

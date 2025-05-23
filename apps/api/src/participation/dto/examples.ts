@@ -12,7 +12,7 @@ import {
   BaseParticipationResponseType,
   ParticipationResponsesEnum,
   tournamentTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { miniUserResponseWithProfilePictureExample } from 'src/users/dto/examples';
 import { withLogoExample } from 'src/group/dto/examples';
 import { QueryParticipationDto } from './requests.dto';

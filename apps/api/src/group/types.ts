@@ -5,7 +5,7 @@ import {
   IGroupResponse,
   IGroupResponseExtended,
   GroupResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 export interface IGroupWithTypeOnly {
   id: number;

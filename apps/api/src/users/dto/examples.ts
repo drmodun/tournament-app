@@ -8,7 +8,7 @@ import {
 } from './responses.dto';
 import { BaseQueryResponse } from 'src/base/query/baseResponse';
 import { UserQuery } from './requests.dto';
-import { BaseUserResponseType, UserResponsesEnum } from '@tournament-app/types';
+import { BaseUserResponseType, UserResponsesEnum } from '^tournament-app/types';
 
 export const miniUserResponseExample = {
   id: 1,

@@ -5,7 +5,7 @@ import {
   CreateGroupJoinRequestDto,
   UpdateGroupJoinRequestDto,
 } from '../dto/requests.dto';
-import { GroupJoinRequestResponsesEnum } from '@tournament-app/types';
+import { GroupJoinRequestResponsesEnum } from '^tournament-app/types';
 
 describe('GroupJoinRequestQuery', () => {
   it('should pass validation with valid data', async () => {

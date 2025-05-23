@@ -7,7 +7,7 @@ import {
   TournamentResponsesEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 describe('TournamentMaximumParticipantsGuard', () => {
   let guard: TournamentMaximumParticipantsGuard;

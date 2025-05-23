@@ -1,7 +1,7 @@
 import { ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TeamTypeTournamentParticipationGuard } from '../../guards/team-type-tournament-participation.guard';
-import { tournamentTeamTypeEnum } from '@tournament-app/types';
+import { tournamentTeamTypeEnum } from '^tournament-app/types';
 import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';
 
 describe('TeamTypeTournamentParticipationGuard', () => {

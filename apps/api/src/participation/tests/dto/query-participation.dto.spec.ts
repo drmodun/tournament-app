@@ -1,7 +1,7 @@
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { QueryParticipationDto } from '../../dto/requests.dto';
-import { ParticipationResponsesEnum } from '@tournament-app/types';
+import { ParticipationResponsesEnum } from '^tournament-app/types';
 
 describe('QueryParticipationDto', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

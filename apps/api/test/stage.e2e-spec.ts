@@ -9,7 +9,7 @@ import { AppModule } from './../src/app.module';
 import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
-import { stageTypeEnum } from '@tournament-app/types';
+import { stageTypeEnum } from '^tournament-app/types';
 import {
   CreateStageRequest,
   UpdateStageRequest,

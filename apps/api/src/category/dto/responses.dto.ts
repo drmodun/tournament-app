@@ -5,7 +5,7 @@ import {
   ICategoryMiniResponseWithLogo,
   ICategoryResponse,
   IExtendedCategoryResponse,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 export class CategoryMiniResponse implements ICategoryMiniResponse {
   @ApiResponseProperty()

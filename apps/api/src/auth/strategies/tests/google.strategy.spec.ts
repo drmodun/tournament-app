@@ -4,7 +4,7 @@ import { UsersService } from '../../../users/users.service';
 import { ValidatedUserDto } from '../../dto/validatedUser.dto';
 import { InternalServerErrorException } from '@nestjs/common';
 import { UserDtosEnum } from '../../../users/types';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 
 // Mock the passport-google-oauth20 Strategy
 

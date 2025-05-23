@@ -6,7 +6,7 @@ import {
   ICreateGroupInviteDto,
   IGroupInviteQuery,
   IUpdateGroupInviteDto,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { BaseQuery } from 'src/base/query/baseQuery';
 
 export class GroupInviteQuery

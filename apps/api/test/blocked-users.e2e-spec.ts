@@ -13,7 +13,7 @@ import {
   groupFocusEnum,
   groupTypeEnum,
   ICreateGroupRequest,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 describe('BlockedUsersController (e2e)', () => {
   let app: INestApplication;

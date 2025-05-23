@@ -1,5 +1,5 @@
 import { ForbiddenException } from '@nestjs/common';
-import { tournamentTeamTypeEnum } from '@tournament-app/types';
+import { tournamentTeamTypeEnum } from '^tournament-app/types';
 
 export class TeamTypeExtractor {
   public static getTeamTypeFromUrl(

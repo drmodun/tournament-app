@@ -8,7 +8,7 @@ import {
   GroupResponsesEnum,
   GroupSortingEnum,
   ILocationResponse,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { Type } from 'class-transformer';
 import { LocationResponse } from 'src/location/dto/responses';
 

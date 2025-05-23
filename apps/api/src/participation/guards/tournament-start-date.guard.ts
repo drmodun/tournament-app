@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { ITournamentResponse } from '@tournament-app/types';
+import { ITournamentResponse } from '^tournament-app/types';
 import { TournamentService } from 'src/tournament/tournament.service';
 import { TournamentMaximumParticipantsGuard } from './tournament-max-participants.guard';
 import { Injectable } from '@nestjs/common';

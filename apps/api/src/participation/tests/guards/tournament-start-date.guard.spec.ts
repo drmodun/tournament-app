@@ -7,7 +7,7 @@ import {
   TournamentResponsesEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 describe('TournamentStartDateGuard', () => {
   let guard: TournamentStartDateGuard;

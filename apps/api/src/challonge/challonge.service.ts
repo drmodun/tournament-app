@@ -17,7 +17,7 @@ import {
   stageStatusEnum,
   IStageResponse,
   IChallongeSimplifiedMatch,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { ReactBracketsResponseDto } from '../matches/dto/responses';
 
 @Injectable()

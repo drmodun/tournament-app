@@ -11,7 +11,7 @@ import {
   SwaggerExamples,
 } from 'src/base/swagger/example.generator';
 import { GroupQuery } from './requests.dto';
-import { GroupResponsesEnum, GroupSortingEnum } from '@tournament-app/types';
+import { GroupResponsesEnum, GroupSortingEnum } from '^tournament-app/types';
 
 export const baseExample: MiniGroupResponse = {
   id: 1,

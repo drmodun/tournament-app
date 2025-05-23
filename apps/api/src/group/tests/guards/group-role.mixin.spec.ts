@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext } from '@nestjs/common';
 import { GroupRoleGuardMixin } from '../../guards/group-role.mixin';
 import { GroupMembershipService } from '../../../group-membership/group-membership.service';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 
 describe('GroupRoleGuardMixin', () => {

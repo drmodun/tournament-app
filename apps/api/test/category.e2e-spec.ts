@@ -9,7 +9,7 @@ import { AppModule } from './../src/app.module';
 import { PostgresExceptionFilter } from '../src/base/exception/postgresExceptionFilter';
 import { Reflector } from '@nestjs/core';
 import { NoValuesToSetExceptionFilter } from '../src/base/exception/noValuesToSetExceptionFilter';
-import { categoryTypeEnum, Links } from '@tournament-app/types';
+import { categoryTypeEnum, Links } from '^tournament-app/types';
 import {
   CreateCategoryRequest,
   UpdateCategoryRequest,

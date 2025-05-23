@@ -41,7 +41,7 @@ import {
 import {
   GroupJoinRequestResponsesEnum,
   IQueryMetadata,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { GroupNonMemberGuard } from 'src/group/guards/group-non-member.guard';
 

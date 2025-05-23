@@ -10,7 +10,7 @@ import {
   IMiniLFGResponseWithCategory,
   ILFGResponse,
   IUserResponse,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   CategoryMiniResponse,
   CategoryMiniResponseWithLogo,

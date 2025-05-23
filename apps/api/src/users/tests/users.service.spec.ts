@@ -8,7 +8,7 @@ import {
 import { CreateUserRequest, UpdateUserInfo } from '../dto/requests.dto';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/infrastructure/email/email.service';
-import { UserResponsesEnum } from '@tournament-app/types';
+import { UserResponsesEnum } from '^tournament-app/types';
 
 jest.mock('bcrypt');
 

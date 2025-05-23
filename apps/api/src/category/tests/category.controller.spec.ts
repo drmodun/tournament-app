@@ -6,7 +6,7 @@ import {
   CategoryResponsesEnum,
   categoryTypeEnum,
   ICategoryMiniResponse,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   CreateCategoryRequest,
   UpdateCategoryRequest,

@@ -7,7 +7,7 @@ import {
   GroupResponsesEnum,
   groupTypeEnum,
   groupFocusEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   BadRequestException,
   NotFoundException,

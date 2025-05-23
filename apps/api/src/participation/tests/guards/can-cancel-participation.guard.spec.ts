@@ -7,7 +7,7 @@ import {
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { TournamentService } from 'src/tournament/tournament.service';
 
 describe('CanCancelParticipationGuard', () => {

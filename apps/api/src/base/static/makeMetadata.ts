@@ -1,4 +1,4 @@
-import { Links, Pagination } from '@tournament-app/types';
+import { Links, Pagination } from '^tournament-app/types';
 import { BaseQuery } from '../query/baseQuery';
 
 export class MetadataMaker {

@@ -19,7 +19,7 @@ import {
   LFGSortingEnum,
   UserResponsesEnum,
   CategoryResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { UserDrizzleRepository } from 'src/users/user.repository';
 import { CategoryDrizzleRepository } from 'src/category/category.repository';
 import {

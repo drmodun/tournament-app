@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {} from '@tournament-app/types';
+import {} from '^tournament-app/types';
 import {
   MiniUserResponseWithProfilePicture,
   UserResponse,

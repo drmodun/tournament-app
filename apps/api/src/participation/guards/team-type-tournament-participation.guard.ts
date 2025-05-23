@@ -8,7 +8,7 @@ import {
   ITournamentResponse,
   tournamentTeamTypeEnum,
   tournamentTeamTypeEnumType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';
 
 @Injectable()

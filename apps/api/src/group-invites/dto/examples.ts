@@ -3,7 +3,7 @@ import {
   GroupInviteResponsesEnum,
   IGroupInviteWithGroupResponse,
   IGroupInviteWithMiniGroupResponse,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   GroupInviteWithUserResponseDto,
   GroupInviteWithMiniUserResponseDto,

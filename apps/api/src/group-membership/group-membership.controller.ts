@@ -51,7 +51,7 @@ import {
   groupRoleEnum,
   GroupMembershipResponsesEnum,
   IQueryMetadata,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { PaginationOnly } from 'src/base/query/baseQuery';

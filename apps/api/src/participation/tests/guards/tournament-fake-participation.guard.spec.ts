@@ -8,7 +8,7 @@ import { TournamentIsFakePlayersAllowedGuard } from '../../guards/tournament-fak
 import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';
 import { UsersService } from '../../../users/users.service';
 import { GroupService } from '../../../group/group.service';
-import { tournamentTeamTypeEnum, groupTypeEnum } from '@tournament-app/types';
+import { tournamentTeamTypeEnum, groupTypeEnum } from '^tournament-app/types';
 
 describe('TournamentIsFakePlayersAllowedGuard', () => {
   let guard: TournamentIsFakePlayersAllowedGuard;

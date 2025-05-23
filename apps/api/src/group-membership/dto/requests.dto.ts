@@ -4,7 +4,7 @@ import {
   groupRoleEnum,
   groupRoleEnumType,
   IGroupMembershipQueryRequest,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { Transform } from 'class-transformer';
 import {
   IsEnum,

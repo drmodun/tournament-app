@@ -1,4 +1,4 @@
-import { tournamentTeamTypeEnum } from '@tournament-app/types';
+import { tournamentTeamTypeEnum } from '^tournament-app/types';
 import { TeamTypeExtractor } from '../teamTypeExtractor';
 
 describe('TeamTypeExtractor', () => {

@@ -10,7 +10,7 @@ import {
   CreateCategoryRequest,
   UpdateCategoryRequest,
 } from '../dto/requests.dto';
-import { CategoryResponsesEnum, categoryTypeEnum } from '@tournament-app/types';
+import { CategoryResponsesEnum, categoryTypeEnum } from '^tournament-app/types';
 
 describe('CategoryService', () => {
   let service: CategoryService;

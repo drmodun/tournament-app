@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { UserDrizzleRepository } from '../user.repository';
-import { UserResponsesEnum, userRoleEnum } from '@tournament-app/types';
+import { UserResponsesEnum, userRoleEnum } from '^tournament-app/types';
 import {
   CreateUserRequest,
   UpdateUserInfo,

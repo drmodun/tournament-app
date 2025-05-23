@@ -2,7 +2,7 @@ import { refs } from '@nestjs/swagger';
 import {
   BaseGroupMembershipResponseType,
   groupRoleEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   GroupMembershipKey,
   GroupMembershipResponse,

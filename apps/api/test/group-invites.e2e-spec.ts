@@ -7,7 +7,7 @@ import {
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
-import { groupFocusEnum, groupTypeEnum } from '@tournament-app/types';
+import { groupFocusEnum, groupTypeEnum } from '^tournament-app/types';
 import { Reflector } from '@nestjs/core';
 import { PostgresExceptionFilter } from 'src/base/exception/postgresExceptionFilter';
 import { NoValuesToSetExceptionFilter } from 'src/base/exception/noValuesToSetExceptionFilter';

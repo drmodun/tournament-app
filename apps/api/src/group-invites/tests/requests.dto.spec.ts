@@ -5,7 +5,7 @@ import {
   CreateGroupInviteDto,
   UpdateGroupInviteDto,
 } from '../dto/requests.dto';
-import { GroupInviteResponsesEnum } from '@tournament-app/types';
+import { GroupInviteResponsesEnum } from '^tournament-app/types';
 
 describe('GroupInviteQuery', () => {
   it('should pass validation with valid data', async () => {

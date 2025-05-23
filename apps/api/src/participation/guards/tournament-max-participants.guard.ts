@@ -7,7 +7,7 @@ import {
 import {
   IExtendedTournamentResponse,
   TournamentResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { TournamentService } from 'src/tournament/tournament.service';
 
 @Injectable()

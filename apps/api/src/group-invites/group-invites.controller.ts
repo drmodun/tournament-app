@@ -20,7 +20,7 @@ import {
 import {
   GroupInviteResponsesEnum,
   IQueryMetadata,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { ValidatedUserDto } from '../auth/dto/validatedUser.dto';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import {

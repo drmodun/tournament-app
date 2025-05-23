@@ -13,7 +13,7 @@ import {
   miniUserResponseExample,
   userResponseExamples,
 } from 'src/users/dto/examples';
-import { BaseLFGResponseType, LFGResponsesEnum } from '@tournament-app/types';
+import { BaseLFGResponseType, LFGResponsesEnum } from '^tournament-app/types';
 import { CreateLFGRequest, UpdateLFGRequest } from './requests';
 import {
   categoryMiniExample,

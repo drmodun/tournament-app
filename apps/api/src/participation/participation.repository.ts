@@ -15,7 +15,7 @@ import {
   ParticipationResponseEnumType,
   ParticipationSortingEnum,
   groupRoleEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { UserDrizzleRepository } from 'src/users/user.repository';
 import { GroupDrizzleRepository } from 'src/group/group.repository';
 import { TournamentDrizzleRepository } from 'src/tournament/tournament.repository';

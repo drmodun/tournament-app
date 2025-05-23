@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
-import { groupFocusEnum, groupTypeEnum } from '@tournament-app/types';
+import { groupFocusEnum, groupTypeEnum } from '^tournament-app/types';
 
 describe('GroupJoinRequestsController (e2e)', () => {
   let app: INestApplication;

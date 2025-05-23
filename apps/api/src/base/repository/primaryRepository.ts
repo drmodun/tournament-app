@@ -10,7 +10,7 @@ import { db } from '../../db/db';
 import { NoValuesToSetException } from '../exception/custom/noValuesToSetException.exception';
 import { BaseDrizzleRepository } from './baseRepository';
 import { BaseQuery } from '../query/baseQuery';
-import { LocationResponsesEnum } from '@tournament-app/types';
+import { LocationResponsesEnum } from '^tournament-app/types';
 export interface TableWithId extends PgTable<TableConfig> {
   id: PgColumn<ColumnBaseConfig<'number', 'PgSerial'>>;
 }

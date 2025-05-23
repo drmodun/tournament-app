@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 import { ValidatedUserDto } from '../dto/validatedUser.dto';
-import { IUserLoginResponse, userRoleEnum } from '@tournament-app/types';
+import { IUserLoginResponse, userRoleEnum } from '^tournament-app/types';
 import { UsersService } from 'src/users/users.service';
 import { UserDrizzleRepository } from 'src/users/user.repository';
 import { PasswordResetRequest } from '../dto';

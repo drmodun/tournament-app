@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IFollowerMiniResponse,
   IFollowerResponse,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { MiniUserResponse, UserResponse } from 'src/users/dto/responses.dto';
 
 export class FollowerMiniResponse

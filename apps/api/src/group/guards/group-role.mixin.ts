@@ -4,7 +4,7 @@ import {
   Injectable,
   Type,
 } from '@nestjs/common';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 import { GroupMembershipService } from '../../group-membership/group-membership.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 

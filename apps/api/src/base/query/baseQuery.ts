@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { BaseQueryType } from '@tournament-app/types';
+import { BaseQueryType } from '^tournament-app/types';
 import { Transform } from 'class-transformer';
 import {
   IsBoolean,

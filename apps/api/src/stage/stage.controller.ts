@@ -39,7 +39,7 @@ import {
   extendedStageExample,
   extendedStageWithTournamentExample,
 } from './dto/examples';
-import { StageResponsesEnum, IQueryMetadata } from '@tournament-app/types';
+import { StageResponsesEnum, IQueryMetadata } from '^tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';

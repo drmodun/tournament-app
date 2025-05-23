@@ -6,7 +6,7 @@ import {
   IGroupMembershipResponseWithDates,
   groupRoleEnumType,
   groupRoleEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   MiniGroupResponseWithLogo,
   MiniGroupResponseWithCountry,

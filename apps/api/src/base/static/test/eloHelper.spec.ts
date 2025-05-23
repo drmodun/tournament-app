@@ -5,7 +5,7 @@ import {
   LOW_VOLATILITY_K,
   MEDIUM_VOLATILITY_K,
   MEDIUM_VOLATILITY_MATCH_COUNT,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 describe('EloHelper', () => {
   describe('expectedScore', () => {

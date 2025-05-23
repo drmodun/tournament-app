@@ -9,15 +9,15 @@ import {
   groupTypeEnum,
   userRoleEnum,
   quizQuestionTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
-import { categoryTypeEnum } from '@tournament-app/types';
+import { categoryTypeEnum } from '^tournament-app/types';
 import {
   tournamentLocationEnum,
   tournamentTypeEnum,
   tournamentTeamTypeEnum,
-} from '@tournament-app/types';
-import { stageTypeEnum, stageStatusEnum } from '@tournament-app/types';
+} from '^tournament-app/types';
+import { stageTypeEnum, stageStatusEnum } from '^tournament-app/types';
 import { LocationHelper } from '../base/static/locationHelper';
 import { BracketGenerator } from '../matches/bracket.generator';
 import { RosterDrizzleRepository } from '../roster/roster.repository';

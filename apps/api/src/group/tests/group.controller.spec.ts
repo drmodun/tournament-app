@@ -11,7 +11,7 @@ import {
   groupTypeEnum,
   groupFocusEnum,
   userRoleEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 describe('GroupController', () => {
   let controller: GroupController;

@@ -4,7 +4,7 @@ import { GroupJoinRequestsService } from '../group-join-requests.service';
 import {
   GroupJoinRequestResponsesEnum,
   userRoleEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { GroupService } from 'src/group/group.service';
 

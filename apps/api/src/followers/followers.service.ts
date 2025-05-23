@@ -5,7 +5,7 @@ import { FollowerResponse } from './dto/responses.dto';
 import {
   FollowerResponsesEnum,
   notificationTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
 import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';

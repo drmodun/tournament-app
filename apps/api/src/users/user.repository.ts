@@ -5,7 +5,7 @@ import {
   UserResponsesEnum,
   UserSortingEnum,
   UserSortingEnumType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   category,
   categoryCareer,

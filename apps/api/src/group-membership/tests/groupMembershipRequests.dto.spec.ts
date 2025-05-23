@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { GroupMembershipQuery } from '../dto/requests.dto';
-import { groupRoleEnum } from '@tournament-app/types';
+import { groupRoleEnum } from '^tournament-app/types';
 
 describe('GroupMembershipRequestsDtos', () => {
   describe('GroupMembershipQuery', () => {

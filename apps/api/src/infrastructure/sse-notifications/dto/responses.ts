@@ -2,7 +2,7 @@ import { ApiResponseProperty } from '@nestjs/swagger';
 import {
   INotificationResponseDto,
   notificationTypeEnumType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 export class NotificationsResponse implements INotificationResponseDto {
   @ApiResponseProperty()

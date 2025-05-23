@@ -13,7 +13,7 @@ import {
   groupFocusEnum,
   groupTypeEnum,
   groupRoleEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { GroupMembershipUpdateRequest } from 'src/group-membership/dto/requests.dto';
 import { CreateGroupRequest } from 'src/group/dto/requests.dto';
 

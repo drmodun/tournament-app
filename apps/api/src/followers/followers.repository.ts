@@ -11,7 +11,7 @@ import {
   FollowerResponsesEnum,
   IMiniUserResponseWithProfilePicture,
   UserResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { and, asc, eq, ilike, sql, SQL } from 'drizzle-orm';
 import { db } from 'src/db/db';
 import { PaginationOnly } from 'src/base/query/baseQuery';

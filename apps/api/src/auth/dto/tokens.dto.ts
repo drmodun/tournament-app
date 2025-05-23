@@ -1,5 +1,5 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
-import { IUserLoginResponse } from '@tournament-app/types';
+import { IUserLoginResponse } from '^tournament-app/types';
 
 export class TokensResponse implements IUserLoginResponse {
   @ApiResponseProperty()

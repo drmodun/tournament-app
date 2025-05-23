@@ -10,7 +10,7 @@ import { GroupJoinRequestQuery } from './requests.dto';
 import {
   BaseGroupJoinRequestResponseType,
   GroupJoinRequestResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { defaultExample as userExample } from 'src/users/dto/examples';
 import { miniUserResponseWithProfilePictureExample } from 'src/users/dto/examples';
 import { baseResponseExample, withLogoExample } from 'src/group/dto/examples';

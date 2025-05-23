@@ -1,4 +1,4 @@
-import { notificationTypeEnumType } from '@tournament-app/types';
+import { notificationTypeEnumType } from '^tournament-app/types';
 
 export interface EmailGenerationData {
   to: string;

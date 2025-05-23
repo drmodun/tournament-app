@@ -24,7 +24,7 @@ import {
   pointConversionStrategyEnum,
   stageTypeEnum,
   stageStatusEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { relations, sql } from 'drizzle-orm';
 import {
   serial,

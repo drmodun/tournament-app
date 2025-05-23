@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GroupInvitesController } from '../group-invites.controller';
 import { GroupInvitesService } from '../group-invites.service';
-import { GroupInviteResponsesEnum } from '@tournament-app/types';
+import { GroupInviteResponsesEnum } from '^tournament-app/types';
 
 describe('GroupInvitesController', () => {
   let controller: GroupInvitesController;

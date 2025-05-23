@@ -1,4 +1,4 @@
-import { FollowerResponsesEnum } from '@tournament-app/types';
+import { FollowerResponsesEnum } from '^tournament-app/types';
 import { FollowerMiniResponse, FollowerResponse } from './responses.dto';
 import {
   generateQueryExamples,

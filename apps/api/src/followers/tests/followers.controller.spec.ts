@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FollowersController } from '../followers.controller';
 import { FollowersService } from '../followers.service';
 import { Request } from 'express';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 
 describe('FollowersController', () => {
   let controller: FollowersController;

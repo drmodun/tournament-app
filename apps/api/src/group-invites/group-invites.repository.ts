@@ -12,7 +12,7 @@ import {
   GroupInviteSortingEnum,
   GroupResponsesEnum,
   UserResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { user } from '../db/schema';
 import { group } from '../db/schema';
 import {

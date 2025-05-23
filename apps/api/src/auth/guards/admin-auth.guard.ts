@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 
 @Injectable()
 export class AdminAuthGuard extends AuthGuard('jwt') {

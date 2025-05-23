@@ -5,7 +5,7 @@ import { AppModule } from '../src/app.module';
 import { AuthModule } from '../src/auth/auth.module';
 import { UsersService } from '../src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { IUserLoginResponse } from '@tournament-app/types';
+import { IUserLoginResponse } from '^tournament-app/types';
 import bcrypt from 'bcrypt';
 
 describe('AuthController (e2e)', () => {

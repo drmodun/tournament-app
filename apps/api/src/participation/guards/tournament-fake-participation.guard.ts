@@ -10,7 +10,7 @@ import {
   IMiniUserResponse,
   tournamentTeamTypeEnum,
   UserResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { UsersService } from 'src/users/users.service';
 import { GroupService } from 'src/group/group.service';
 import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';

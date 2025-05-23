@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserDrizzleRepository } from '../user.repository';
-import { UserResponsesEnum, UserSortingEnum } from '@tournament-app/types';
+import { UserResponsesEnum, UserSortingEnum } from '^tournament-app/types';
 import { CreateUserRequest, UserQuery } from '../dto/requests.dto';
 import { PgSelect } from 'drizzle-orm/pg-core';
 

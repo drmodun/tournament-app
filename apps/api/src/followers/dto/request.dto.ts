@@ -4,7 +4,7 @@ import { IsInt, IsOptional, IsPositive } from 'class-validator';
 import {
   IFollowerQueryRequest,
   FollowerResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { BaseQuery } from 'src/base/query/baseQuery';
 
 export class FollowerQuery

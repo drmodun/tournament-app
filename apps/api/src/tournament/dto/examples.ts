@@ -19,7 +19,7 @@ import {
   tournamentTypeEnum,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { MiniUserResponse } from 'src/users/dto/responses.dto';
 import { MiniGroupResponse } from 'src/group/dto/responses.dto';
 import { CategoryMiniResponseWithLogo } from 'src/category/dto/responses.dto';

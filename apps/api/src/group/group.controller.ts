@@ -45,7 +45,7 @@ import {
   GroupResponsesEnum,
   groupTypeEnum,
   IQueryMetadata,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GroupOwnerGuard } from './guards/group-owner.guard';

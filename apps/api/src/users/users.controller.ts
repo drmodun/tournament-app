@@ -17,7 +17,7 @@ import {
   IQueryMetadata,
   UserResponseEnumType,
   UserResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { MetadataMaker } from '../base/static/makeMetadata';
 import {
   ApiBearerAuth,

@@ -20,7 +20,7 @@ import {
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
   tournamentTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { TournamentModule } from 'src/tournament/tournament.module';
 
 describe('ParticipationController (e2e)', () => {

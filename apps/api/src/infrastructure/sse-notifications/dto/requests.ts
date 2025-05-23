@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   INotificationQueryDto,
   notificationTypeEnumType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';

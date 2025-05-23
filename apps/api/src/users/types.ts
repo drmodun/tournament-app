@@ -1,7 +1,7 @@
 import {
   BaseUserResponseType,
   UserResponseEnumType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { UserCredentialsDto } from 'src/auth/dto/userCredentials.dto';
 import {
   EmailConfirmationTokenDto,

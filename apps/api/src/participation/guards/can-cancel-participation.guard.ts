@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { ParticipationService } from 'src/participation/participation.service';
-import { IParticipationResponse } from '@tournament-app/types';
+import { IParticipationResponse } from '^tournament-app/types';
 import { TournamentResponse } from 'src/tournament/dto/responses.dto';
 import { GroupMembershipService } from 'src/group-membership/group-membership.service';
 import { TournamentService } from 'src/tournament/tournament.service';

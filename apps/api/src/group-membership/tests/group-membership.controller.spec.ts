@@ -11,7 +11,7 @@ import {
   IQueryMetadata,
   Links,
   Pagination,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 
 jest.mock('src/base/static/makeMetadata');

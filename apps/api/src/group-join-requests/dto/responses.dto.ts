@@ -4,7 +4,7 @@ import {
   IGroupJoinRequestWithMiniUserResponse,
   IGroupJoinRequestWithGroupResponse,
   IGroupJoinRequestWithMiniGroupResponse,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   GroupResponse,
   MiniGroupResponseWithLogo,

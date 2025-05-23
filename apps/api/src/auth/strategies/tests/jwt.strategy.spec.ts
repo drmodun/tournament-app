@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 import { AccessTokenStrategy } from '../accessToken.strategy';
 import { UserDrizzleRepository } from 'src/users/user.repository';
 import { EmailModule } from 'src/infrastructure/email/email.module';

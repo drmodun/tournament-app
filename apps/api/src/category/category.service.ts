@@ -9,7 +9,7 @@ import {
   CategoryResponsesEnum,
   CategoryReturnTypesEnumType,
   BaseCategoryResponseType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { CategoryDrizzleRepository } from './category.repository';
 import { CategoryQuery } from './dto/requests.dto';
 

@@ -12,7 +12,7 @@ import {
   BaseCategoryResponseType,
   CategoryResponsesEnum,
   categoryTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   CategoryQuery,
   CreateCategoryRequest,

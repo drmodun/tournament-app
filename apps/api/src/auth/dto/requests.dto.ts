@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IChangePasswordRequest,
   IEmailPasswordLoginRequest,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
 
 export class LoginRequest implements IEmailPasswordLoginRequest {

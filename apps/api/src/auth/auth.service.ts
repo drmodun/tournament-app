@@ -11,7 +11,7 @@ import {
   IUserLoginResponse,
   userRoleEnum,
   userRoleEnumType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { UserDtosEnum } from 'src/users/types';
 import { PasswordResetTokenDto, SseTokenDto } from './dto/validatedUser.dto';
 @Injectable()

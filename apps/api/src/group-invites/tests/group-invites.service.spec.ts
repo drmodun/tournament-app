@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GroupInvitesService } from '../group-invites.service';
 import { GroupInviteDrizzleRepository } from '../group-invites.repository';
 import { GroupMembershipService } from '../../group-membership/group-membership.service';
-import { GroupInviteResponsesEnum } from '@tournament-app/types';
+import { GroupInviteResponsesEnum } from '^tournament-app/types';
 import { BadRequestException } from '@nestjs/common';
 import { GroupService } from '../../group/group.service';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';

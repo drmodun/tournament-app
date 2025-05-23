@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DoubleParticipationGuard } from '../../guards/double-participation.guard';
 import { ParticipationService } from '../../participation.service';
 import { GroupMembershipService } from '../../../group-membership/group-membership.service';
-import { tournamentTeamTypeEnum } from '@tournament-app/types';
+import { tournamentTeamTypeEnum } from '^tournament-app/types';
 import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';
 
 describe('DoubleParticipationGuard', () => {

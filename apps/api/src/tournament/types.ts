@@ -1,7 +1,7 @@
 import {
   BaseTournamentResponseType,
   TournamentResponseEnumType,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 
 export interface ITournamentWithRelations {
   id: number;

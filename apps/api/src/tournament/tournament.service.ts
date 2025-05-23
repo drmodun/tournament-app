@@ -9,7 +9,7 @@ import {
   TournamentResponsesEnum,
   BaseTournamentResponseType,
   IMiniTournamentResponseWithLogo,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { TournamentDrizzleRepository } from './tournament.repository';
 import { TournamentQuery } from './dto/requests.dto';
 import {

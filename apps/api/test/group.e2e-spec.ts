@@ -6,7 +6,7 @@ import {
   groupFocusEnum,
   GroupResponsesEnum,
   groupTypeEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import {
   CreateGroupRequest,
   UpdateGroupRequest,

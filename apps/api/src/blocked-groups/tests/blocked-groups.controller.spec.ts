@@ -3,7 +3,7 @@ import { BlockedGroupsController } from '../blocked-groups.controller';
 import { BlockedGroupsService } from '../blocked-groups.service';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { PaginationOnly } from 'src/base/query/baseQuery';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 import { MiniGroupResponseWithCountry } from 'src/group/dto/responses.dto';
 
 describe('BlockedGroupsController', () => {

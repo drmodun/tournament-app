@@ -8,7 +8,7 @@ import {
   BaseActionResponse,
   BaseUserResponseType,
   UserResponsesEnum,
-} from '@tournament-app/types';
+} from '^tournament-app/types';
 import { UserDrizzleRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
 import {

@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TournamentAdminGuard } from '../guards/tournament-admin.guard';
 import { TournamentService } from '../tournament.service';
 import { GroupMembershipService } from '../../group-membership/group-membership.service';
-import { userRoleEnum } from '@tournament-app/types';
+import { userRoleEnum } from '^tournament-app/types';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ITournamentWithRelations } from '../types';
 

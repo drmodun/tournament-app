@@ -190,7 +190,6 @@ export class GroupDrizzleRepository extends PrimaryRepository<
       if (!field) return;
       const parsed = value as string;
 
-
       switch (key) {
         case 'name':
           return eq(group.name, parsed);

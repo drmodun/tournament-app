@@ -342,7 +342,7 @@ export default function EditQuizForm({
                           }}
                         />
                       )}
-                      <p>{"question" in q ? q.question : (q?.name ?? "")}</p>
+                      <p>{"question" in q ? q.question : q?.name ?? ""}</p>
                     </div>
                     <div className={styles.questionBottom}>
                       {q.timeLimit && q.timeLimit > 0 && (

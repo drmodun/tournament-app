@@ -79,7 +79,7 @@ export default function NotificationIndicator() {
         <div
           className={clsx(
             styles.connectionStatus,
-            isConnected ? styles.connected : styles.disconnected
+            isConnected ? styles.connected : styles.disconnected,
           )}
         />
       </div>

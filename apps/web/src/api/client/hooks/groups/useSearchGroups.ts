@@ -19,7 +19,7 @@ export const searchGroups = async (page: number, search?: string) =>
           page: page,
           pageSize: 10,
         },
-      }
+      },
     )
     .then((res) => res.data);
 

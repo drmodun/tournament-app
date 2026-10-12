@@ -1,6 +1,5 @@
-import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import { useState } from "react";
+import { useLocationPicker } from "utils/hooks/useLocationPicker";
 import { useToastContext } from "utils/hooks/useToastContext";
 
 const LINK_PATTERN =
@@ -20,8 +19,6 @@ type TournamentFormStateFields = {
 // State shared by the create and edit tournament forms: toggles, links, category and location
 export function useTournamentFormState() {
   const toast = useToastContext();
-  const createLocationMutation = useCreateLocation();
-
   const [isRanked, setIsRanked] = useState<boolean>(false);
   const [isPublic, setIsPublic] = useState<boolean>(false);
   const [isMultipleTeamsPerGroupAllowed, setIsMultipleTeamsPerGroupAllowed] =
@@ -30,38 +27,7 @@ export function useTournamentFormState() {
     useState<boolean>(false);
   const [links, setLinks] = useState<string[]>([]);
   const [categoryId, setCategoryId] = useState<number>(-1);
-  const [listener, setListener] = useState<google.maps.MapsEventListener>();
-  const [locationId, setLocationId] = useState<number>();
-
-  const handleAutocomplete = async (
-    autocomplete: google.maps.places.Autocomplete,
-    placeName?: string,
-  ) => {
-    listener && google.maps.event.removeListener(listener);
-
-    const place = autocomplete.getPlace();
-
-    if (!place.geometry?.location || !placeName || !place.place_id) return;
-
-    const res = await createLocationMutation.mutateAsync({
-      lat: place.geometry?.location?.lat(),
-      lng: place.geometry?.location?.lng(),
-      name: placeName,
-      apiId: place.place_id,
-    });
-
-    setLocationId(res.id);
-  };
-
-  // Hooks Google Places autocomplete up to the location input
-  const watchLocationInput = (input: HTMLInputElement) => {
-    fetchAutocomplete(input).then((autocomplete) => {
-      const tempListener = autocomplete.addListener("place_changed", () => {
-        return handleAutocomplete(autocomplete, input.value);
-      });
-      setListener(tempListener);
-    });
-  };
+  const { locationId, selectPlace } = useLocationPicker();
 
   const addLink = (val: string) => {
     if (!val.match(new RegExp(LINK_PATTERN))) {
@@ -95,7 +61,7 @@ export function useTournamentFormState() {
     links,
     setLinks,
     setCategoryId,
-    watchLocationInput,
+    selectPlace,
     addLink,
     applyTo,
   };

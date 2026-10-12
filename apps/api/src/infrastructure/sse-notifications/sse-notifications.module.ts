@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { SseNotificationsService } from './sse-notifications.service';
 import { SseNotificationRepository } from './sse-notification.repository';
 import { SseNotificationsController } from './sse-notifications.controller';
-import { NotificationTemplatesFiller } from '../firebase-notifications/templates';
+import { NotificationTemplatesFiller } from './templates';
 @Module({
   providers: [
     SseNotificationRepository,

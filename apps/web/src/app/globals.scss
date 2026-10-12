@@ -24,48 +24,6 @@ html,
   width: 0px !important;
 }
 
-// google maps styles
-.pac-container {
-  border-radius: $borderRadius;
-  background-color: $dark;
-}
-
-.pac-container::after {
-  display: none !important;
-}
-
-.pac-matched {
-  background-color: $light;
-  color: $dark;
-}
-
-.pac-item-query {
-  color: $light;
-}
-
-.pac-item {
-  padding: $padding $doublePadding;
-  border: none;
-  color: $light;
-}
-
-.pac-item:hover {
-  color: $dark;
-  .pac-container {
-    background-color: $light;
-  }
-
-  .pac-matched {
-    background-color: $dark;
-    color: $light;
-  }
-
-  .pac-item-query {
-    color: $dark;
-  }
-}
-
-// react-brackets styles
 .dWYBbN {
   border-radius: $borderRadius !important;
   padding: $padding !important;

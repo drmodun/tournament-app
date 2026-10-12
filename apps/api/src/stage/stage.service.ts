@@ -24,7 +24,7 @@ import { ChallongeService } from 'src/challonge/challonge.service';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { RosterDrizzleRepository } from 'src/roster/roster.repository';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from 'src/infrastructure/sse-notifications/templates';
 import { TemplatesEnum } from 'src/infrastructure/types';
 import { MatchesService } from 'src/matches/matches.service';
 import { RosterService } from 'src/roster/roster.service';

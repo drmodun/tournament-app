@@ -157,7 +157,7 @@ const LocationInfo = ({ poi }: { poi: Poi }) => {
       <div className={styles.bottom}>
         <div className={styles.bottomLeft}>
           <Link
-            href={`https://www.google.com/maps/place/${poi.location.lat},${poi.location.lng}`}
+            href={`https://www.openstreetmap.org/?mlat=${poi.location.lat}&mlon=${poi.location.lng}#map=12/${poi.location.lat}/${poi.location.lng}`}
           >
             <PlaceIcon className={clsx(styles.primaryFill)} />
           </Link>

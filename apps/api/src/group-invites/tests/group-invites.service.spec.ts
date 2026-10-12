@@ -6,7 +6,7 @@ import { GroupInviteResponsesEnum } from '@tournament-app/types';
 import { BadRequestException } from '@nestjs/common';
 import { GroupService } from '../../group/group.service';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from '../../infrastructure/sse-notifications/templates';
 
 describe('GroupInvitesService', () => {
   let service: GroupInvitesService;

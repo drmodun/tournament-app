@@ -7,14 +7,13 @@ import {
   stageStatusEnum,
   stageTypeEnum,
 } from "@tournament-app/types";
-import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dropdown from "components/dropdown";
 import ImageDrop from "components/imageDrop";
 import ImagePicker from "components/imagePicker";
 import Input from "components/input";
+import LocationInput from "components/locationInput";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
 import { useEffect, useState } from "react";
@@ -25,6 +24,7 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTimeHTMLInput } from "utils/mixins/formatting";
 import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
 import styles from "./editStageForm.module.scss";
+import { useLocationPicker } from "utils/hooks/useLocationPicker";
 
 type EditStageFormProps = {
   mutation: UseMutationResult<
@@ -50,8 +50,7 @@ export default function EditStageForm({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
-  const [listener, setListener] = useState<google.maps.MapsEventListener>();
-  const [locationId, setLocationId] = useState<number>();
+  const { locationId, selectPlace } = useLocationPicker();
 
   const editMethods = useForm<IUpdateStageDto>();
   const onEditSubmit: SubmitHandler<IUpdateStageDto> = async (data) => {
@@ -59,28 +58,6 @@ export default function EditStageForm({
     await mutation.mutateAsync({ data, stageId: stage?.id ?? -1 });
 
     onClose && onClose();
-  };
-
-  const createLocationMutation = useCreateLocation();
-
-  const handleAutocomplete = async (
-    autocomplete: google.maps.places.Autocomplete,
-    placeName?: string
-  ) => {
-    listener && google.maps.event.removeListener(listener);
-
-    const place = autocomplete.getPlace();
-
-    if (!place.geometry?.location || !placeName || !place.place_id) return;
-
-    const res = await createLocationMutation.mutateAsync({
-      lat: place.geometry?.location?.lat(),
-      lng: place.geometry?.location?.lng(),
-      name: placeName,
-      apiId: place.place_id,
-    });
-
-    setLocationId(res.id);
   };
 
   useEffect(() => {
@@ -237,7 +214,7 @@ export default function EditStageForm({
             isReactFormHook={true}
             type="datetime-local"
             defaultValue={formatDateTimeHTMLInput(
-              stage?.startDate ?? new Date()
+              stage?.startDate ?? new Date(),
             )}
             min={new Date()
               .toISOString()
@@ -254,7 +231,7 @@ export default function EditStageForm({
             placeholder="enter the tournament's ending time"
             name="endDate"
             defaultValue={formatDateTimeHTMLInput(
-              stage?.startDate ?? new Date()
+              stage?.startDate ?? new Date(),
             )}
             required={true}
             className={styles.input}
@@ -270,7 +247,7 @@ export default function EditStageForm({
         </div>
         {stage?.location && (
           <div className={styles.dialogOption}>
-            <Input
+            <LocationInput
               variant={textColorTheme}
               label="location"
               placeholder="enter stage location"
@@ -279,15 +256,7 @@ export default function EditStageForm({
               className={styles.input}
               isReactFormHook={true}
               defaultValue={stage?.location?.name}
-              onChange={(e) => {
-                fetchAutocomplete(e.target).then((autocomplete) => {
-                  const tempListener = autocomplete.addListener(
-                    "place_changed",
-                    () => handleAutocomplete(autocomplete, e.target.value)
-                  );
-                  setListener(tempListener);
-                });
-              }}
+              onSelect={selectPlace}
             />
 
             {editMethods.formState.errors.locationId?.type === "required" && (

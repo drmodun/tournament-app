@@ -152,7 +152,10 @@ services:
       args:
         # Inlined into the browser bundle, so this must be the URL the browser can reach
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-${PUBLIC_URL:-http://localhost:${PROXY_HTTP_PORT:-80}}/api}
-        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+        # Optional: your own Photon geocoder and MapLibre styles (defaults: photon.komoot.io, OpenFreeMap)
+        NEXT_PUBLIC_GEOCODER_URL: ${NEXT_PUBLIC_GEOCODER_URL:-}
+        NEXT_PUBLIC_MAP_STYLE_URL: ${NEXT_PUBLIC_MAP_STYLE_URL:-}
+        NEXT_PUBLIC_MAP_STYLE_URL_DARK: ${NEXT_PUBLIC_MAP_STYLE_URL_DARK:-}
     image: tournament-app-web
     restart: unless-stopped
     environment:

@@ -5,7 +5,6 @@ import { ThemeProvider } from "utils/context/themeContext";
 import { ToastProvider } from "utils/context/toastContext";
 import { DrawerProvider } from "utils/context/drawerContext";
 import { NotificationProvider } from "utils/context/notificationContext";
-import { APIProvider } from "@vis.gl/react-google-maps";
 
 export function ClientProviders({ children }: { children: ReactNode }) {
   return (
@@ -13,11 +12,7 @@ export function ClientProviders({ children }: { children: ReactNode }) {
       <ToastProvider>
         <DrawerProvider>
           <NotificationProvider>
-            <APIProvider
-              apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-            >
-              {children}
-            </APIProvider>
+            {children}
           </NotificationProvider>
         </DrawerProvider>
       </ToastProvider>

@@ -49,7 +49,6 @@
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
     "drizzle-orm": "^0.45.4",
-    "firebase-admin": "^12.7.0",
     "handlebars": "^4.7.8",
     "mime-types": "^2.1.35",
     "nodemailer": "^10.1.0",

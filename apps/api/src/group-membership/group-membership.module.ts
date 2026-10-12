@@ -9,7 +9,7 @@ import { GroupService } from 'src/group/group.service';
 import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
 import { SseNotificationRepository } from 'src/infrastructure/sse-notifications/sse-notification.repository';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from 'src/infrastructure/sse-notifications/templates';
 
 @Module({
   imports: [forwardRef(() => GroupModule), SseNotificationsModule],

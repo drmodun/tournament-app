@@ -19,7 +19,7 @@ import {
 import { GroupJoinRequestWithUserResponse } from './dto/responses.dto';
 import { GroupMembershipService } from '../group-membership/group-membership.service';
 import { GroupService } from 'src/group/group.service';
-import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from 'src/infrastructure/sse-notifications/templates';
 import { NotificationCreateDto, TemplatesEnum } from 'src/infrastructure/types';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
 

@@ -92,14 +92,18 @@ it refuses to start. In Docker the API uses the bundled Mailpit inbox unless you
 The defaults point at the SeaweedFS container; its access key is defined in `docker/s3/s3.json`.
 The older `AWS_*` names are still read as a fallback.
 
+### Maps
+
+Maps need no key: the web app uses MapLibre GL with OpenFreeMap tiles (OpenStreetMap data) and the public Photon
+geocoder for location search. To use your own servers, set `NEXT_PUBLIC_MAP_STYLE_URL`,
+`NEXT_PUBLIC_MAP_STYLE_URL_DARK` and `NEXT_PUBLIC_GEOCODER_URL` (see `apps/web/.env.example`).
+
 ### Still mocked until you add a real key
 
 | Key | Without a real value |
 | --- | --- |
-| `FIREBASE_*` | Push notifications are disabled (in-app notifications do not depend on it) |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google sign-in fails |
 | `CHALLONGE_CLIENT_ID`, `CHALLONGE_CLIENT_SECRET` | Brackets are not mirrored to Challonge |
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Maps show "map unavailable"; location autocomplete is off |
 | `JWT_SECRET`, `JWT_REFRESH_SECRET` | Work as they are, but must be replaced outside local development |
 
 ## Local development

@@ -10,6 +10,7 @@ import {
 import { clsx } from "clsx";
 import Dropdown from "components/dropdown";
 import Input from "components/input";
+import LocationInput from "components/locationInput";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
 import { countries } from "country-flag-icons";
@@ -222,13 +223,13 @@ export default function TournamentFormFields({
         {errors.maxParticipants?.type === "required" && requiredError}
       </div>
       <div className={clsx(styles.inputWrapper)}>
-        <Input
+        <LocationInput
           variant={textColorTheme}
           label="location"
           placeholder="enter the location of the tournament"
           className={styles.input}
           defaultValue={competition?.actualLocation?.name}
-          onChange={(e) => state.watchLocationInput(e.target)}
+          onSelect={state.selectPlace}
         />
         {errors.location?.type === "required" && requiredError}
       </div>

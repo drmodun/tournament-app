@@ -6,7 +6,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { GroupJoinRequestResponsesEnum } from '@tournament-app/types';
 import { GroupService } from 'src/group/group.service';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from '../../infrastructure/sse-notifications/templates';
 
 describe('GroupJoinRequestsService', () => {
   let service: GroupJoinRequestsService;

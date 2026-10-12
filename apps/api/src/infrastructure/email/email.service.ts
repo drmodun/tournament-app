@@ -3,8 +3,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import Mailgun, { InputFormData, MailgunMessageData } from 'mailgun.js';
-import FormData from 'form-data';
+import { createTransport, Transporter } from 'nodemailer';
 import {
   EmailGenerationData,
   emailTemplateBodies,
@@ -14,51 +13,72 @@ import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { cwd } from 'process';
 import { join } from 'path';
-import 'form-data';
 
+export interface EmailMessage {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+}
+
+// Sends through any SMTP server, configured with SMTP_HOST, SMTP_PORT, SMTP_USER,
+// SMTP_PASSWORD and SMTP_SECURE. EMAIL_FROM is the sender, e.g. "winning.sh <noreply@example.com>".
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
-  public readonly mailgunClient;
-  // With the placeholder key from the tracked .env files, emails are logged instead of sent
-  private readonly isMocked: boolean;
+  public readonly transporter: Transporter;
+  // Without SMTP_HOST (local development, tests) emails are logged instead of sent
+  private readonly isSmtpConfigured = !!process.env.SMTP_HOST;
 
   constructor() {
-    if (!process.env.EMAIL_KEY || !process.env.EMAIL_DOMAIN) {
-      throw new InternalServerErrorException('Email credentials are not set');
+    if (!process.env.EMAIL_FROM) {
+      throw new InternalServerErrorException('Email sender is not set');
     }
 
-    this.isMocked =
-      process.env.EMAIL_KEY.startsWith('mock') &&
-      process.env.MODE !== 'production';
+    if (!this.isSmtpConfigured && process.env.MODE === 'production') {
+      throw new InternalServerErrorException('SMTP server is not set');
+    }
 
-    this.mailgunClient = this.createMailgunClient(
-      FormData,
-      process.env.EMAIL_KEY,
-    );
+    this.transporter = this.createTransporter();
   }
 
-  createMailgunClient(formData: InputFormData, key: string) {
-    return new Mailgun(formData).client({
-      key,
-      username: 'api',
+  createTransporter(): Transporter {
+    if (!this.isSmtpConfigured) {
+      return createTransport({ jsonTransport: true });
+    }
+
+    const port = Number(process.env.SMTP_PORT || 587);
+
+    return createTransport({
+      host: process.env.SMTP_HOST,
+      port,
+      // Port 465 is implicit TLS; other ports upgrade with STARTTLS when the server offers it
+      secure: process.env.SMTP_SECURE
+        ? process.env.SMTP_SECURE === 'true'
+        : port === 465,
+      auth: process.env.SMTP_USER
+        ? {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASSWORD,
+          }
+        : undefined,
     });
   }
 
-  async generateMailgunMessageData({
+  async generateMessageData({
     subject,
     template,
     to,
     data,
-  }: EmailGenerationData): Promise<MailgunMessageData> {
+  }: EmailGenerationData): Promise<EmailMessage> {
     const html = await this.renderEmail(template, data);
 
     return {
-      from: `noreply@${process.env.EMAIL_DOMAIN}`,
+      from: process.env.EMAIL_FROM,
       to,
       subject,
       html,
-    } satisfies MailgunMessageData;
+    } satisfies EmailMessage;
   }
 
   async getTemplate(templateName: TemplatesEnum): Promise<string> {
@@ -114,34 +134,24 @@ export class EmailService {
     return this.renderEmailTemplate(templateString, object);
   }
 
-  async sendMail(data: MailgunMessageData) {
-    if (this.isMocked) {
-      const links =
-        String(data.html ?? '').match(/https?:\/\/[^"'\s<]+/g) ?? [];
-      this.logger.warn(
-        `EMAIL_KEY is a mock, email not sent. To: ${data.to}, subject: ${data.subject}, links: ${links.join(' ')}`,
-      );
-      return;
-    }
-
+  async sendMail(data: EmailMessage) {
     try {
-      const action = await this.mailgunClient.messages.create(
-        process.env.EMAIL_DOMAIN,
-        data,
-      );
-
-      if (action.status !== 200) {
-        this.logger.error('Email could not be sent', action);
-        throw new InternalServerErrorException('Email could not be sent');
-      }
+      await this.transporter.sendMail(data);
     } catch (error) {
       this.logger.error('Error sending email', error.stack);
       throw new InternalServerErrorException('Error sending email');
     }
+
+    if (!this.isSmtpConfigured) {
+      const links = data.html.match(/https?:\/\/[^"'\s<]+/g) ?? [];
+      this.logger.warn(
+        `SMTP_HOST is not set, email not sent. To: ${data.to}, subject: ${data.subject}, links: ${links.join(' ')}`,
+      );
+    }
   }
 
   async generateAndSendEmail(sendObject: EmailGenerationData) {
-    const emailData = await this.generateMailgunMessageData(sendObject);
+    const emailData = await this.generateMessageData(sendObject);
     await this.sendMail(emailData);
   }
 }

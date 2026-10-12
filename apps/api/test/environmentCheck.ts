@@ -11,7 +11,7 @@ beforeAll(async () => {
 jest.mock('src/infrastructure/email/email.service', () => {
   const mockSendMail = jest.fn().mockResolvedValue(null);
   const mockGenerateAndSendEmail = jest.fn().mockResolvedValue(null);
-  const mockGenerateMailgunMessageData = jest.fn().mockResolvedValue({
+  const mockGenerateMessageData = jest.fn().mockResolvedValue({
     from: 'noreply@test-domain',
     to: 'test@example.com',
     subject: 'Test Subject',
@@ -28,21 +28,14 @@ jest.mock('src/infrastructure/email/email.service', () => {
     EmailService: jest.fn().mockImplementation(() => ({
       sendMail: mockSendMail,
       generateAndSendEmail: mockGenerateAndSendEmail,
-      generateMailgunMessageData: mockGenerateMailgunMessageData,
+      generateMessageData: mockGenerateMessageData,
       renderEmail: mockRenderEmail,
       getTemplate: mockGetTemplate,
       renderEmailTemplate: mockRenderEmailTemplate,
       checkObjectShape: mockCheckObjectShape,
-      mailgunClient: {
-        messages: {
-          create: jest.fn().mockResolvedValue({ status: 200 }),
-        },
+      transporter: {
+        sendMail: jest.fn().mockResolvedValue({}),
       },
-      createMailgunClient: jest.fn().mockReturnValue({
-        messages: {
-          create: jest.fn().mockResolvedValue({ status: 200 }),
-        },
-      }),
     })),
     ChallongeService: jest.fn().mockImplementation(() => ({
       createTournamentFunction: jest.fn().mockResolvedValue({

@@ -40,6 +40,82 @@ import { db } from '../db/db';
 import { QueryRosterDto } from './dto/requests';
 import { sql } from 'drizzle-orm';
 
+// Columns and relations returned for a roster with its players, their careers and its participation
+const rosterWithPlayersSelection = {
+  columns: {
+    id: true,
+    challongeParticipantId: true,
+    stageId: true,
+    participationId: true,
+    createdAt: true,
+  },
+  with: {
+    participation: {
+      columns: {
+        id: true,
+      },
+      with: {
+        tournament: {
+          columns: {
+            categoryId: true,
+          },
+        },
+        group: {
+          columns: {
+            id: true,
+            name: true,
+            locationId: true,
+            abbreviation: true,
+            logo: true,
+          },
+        },
+        user: {
+          columns: {
+            id: true,
+            username: true,
+            profilePicture: true,
+            country: true,
+          },
+        },
+      },
+    },
+    players: {
+      columns: {
+        isSubstitute: true,
+      },
+      with: {
+        user: {
+          columns: {
+            id: true,
+            username: true,
+            profilePicture: true,
+            country: true,
+            isFake: true,
+          },
+          with: {
+            career: {
+              columns: {
+                elo: true,
+                categoryId: true,
+                createdAt: true,
+              },
+              with: {
+                category: {
+                  columns: {
+                    id: true,
+                    name: true,
+                    image: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const;
+
 @Injectable()
 export class RosterDrizzleRepository extends PrimaryRepository<
   typeof roster,
@@ -158,100 +234,36 @@ export class RosterDrizzleRepository extends PrimaryRepository<
   }
 
   async getWithPlayers(query: QueryRosterDto & { ids?: number[] }) {
-    const isCorrectLimit = !!query.page && !!query.pageSize;
+    const hasPagination = !!query.page && !!query.pageSize;
 
-    const result = await db.query.roster.findMany({
-      where: and(
-        query.ids?.length ? inArray(roster.id, query.ids) : undefined,
-        query.stageId ? eq(roster.stageId, query.stageId) : undefined,
-        query.rosterId ? eq(roster.id, query.rosterId) : undefined,
-        query.participationId
-          ? eq(roster.participationId, query.participationId)
-          : undefined,
-        query.rosterId ? eq(roster.id, query.rosterId) : undefined,
-      ),
-      limit: isCorrectLimit ? query.pageSize : 12,
-      offset: isCorrectLimit ? query.pageSize * (query.page - 1) : 0,
-      orderBy: query.field
-        ? query.order === 'asc'
-          ? asc(this.sortRecord[query.field])
-          : desc(this.sortRecord[query.field])
-        : undefined,
-      columns: {
-        id: true,
-        challongeParticipantId: true,
-        stageId: true,
-        participationId: true,
-        createdAt: true,
-      },
-      with: {
-        participation: {
-          columns: {
-            id: true,
-          },
-          with: {
-            tournament: {
-              columns: {
-                categoryId: true,
-              },
-            },
-            group: {
-              columns: {
-                id: true,
-                name: true,
-                locationId: true,
-                abbreviation: true,
-                logo: true,
-              },
-            },
-            user: {
-              columns: {
-                id: true,
-                username: true,
-                profilePicture: true,
-                country: true,
-              },
-            },
-          },
-        },
-        players: {
-          columns: {
-            isSubstitute: true,
-          },
-          with: {
-            user: {
-              columns: {
-                id: true,
-                username: true,
-                profilePicture: true,
-                country: true,
-                isFake: true,
-              },
-              with: {
-                career: {
-                  columns: {
-                    elo: true,
-                    categoryId: true,
-                    createdAt: true,
-                  },
-                  with: {
-                    category: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        image: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+    return db.query.roster.findMany({
+      where: this.getWithPlayersFilter(query),
+      limit: hasPagination ? query.pageSize : 12,
+      offset: hasPagination ? query.pageSize * (query.page - 1) : 0,
+      orderBy: this.getWithPlayersOrder(query),
+      ...rosterWithPlayersSelection,
     });
+  }
 
-    return result;
+  private getWithPlayersFilter(query: QueryRosterDto & { ids?: number[] }) {
+    return and(
+      query.ids?.length ? inArray(roster.id, query.ids) : undefined,
+      query.stageId ? eq(roster.stageId, query.stageId) : undefined,
+      query.rosterId ? eq(roster.id, query.rosterId) : undefined,
+      query.participationId
+        ? eq(roster.participationId, query.participationId)
+        : undefined,
+    );
+  }
+
+  private getWithPlayersOrder(query: QueryRosterDto) {
+    if (!query.field) {
+      return undefined;
+    }
+
+    const column = this.sortRecord[query.field];
+
+    return query.order === 'asc' ? asc(column) : desc(column);
   }
 
   async getOnlyPlayers(

@@ -1,0 +1,22 @@
+# Front door for the stack: one address for the web app and the API.
+#
+# SITE_ADDRESS decides how it listens:
+#   :80           plain HTTP on any hostname (the local default)
+#   example.com   Caddy obtains and renews an HTTPS certificate for that domain by itself
+#                 (ports 80 and 443 must be reachable from the internet)
+{$SITE_ADDRESS::80} {
+	encode zstd gzip
+
+	# API under /api, with the prefix stripped: REST, Swagger UI at /api/swagger,
+	# and the notification stream (flushed immediately, as it is server-sent events)
+	handle_path /api/* {
+		reverse_proxy api:5500 {
+			flush_interval -1
+		}
+	}
+
+	# Everything else is the Next.js app
+	handle {
+		reverse_proxy web:3000
+	}
+}

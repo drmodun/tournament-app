@@ -4,7 +4,6 @@ import {
   GetObjectCommandInput,
   GetObjectCommandOutput,
   PutObjectCommand,
-  PutObjectCommandInput,
   PutObjectCommandOutput,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -15,13 +14,14 @@ import {
   Logger,
 } from '@nestjs/common';
 import { File } from 'buffer';
+import { getS3Settings } from './blob.provider';
 import { DirectoriesEnum } from './types';
 import * as mime from 'mime-types';
 
 @Injectable()
 export class BlobService {
   private readonly logger = new Logger(BlobService.name);
-  private readonly bucket = process.env.AWS_S3_BUCKET;
+  private readonly bucket = getS3Settings().bucket;
 
   constructor(@Inject('AWS_S3') private readonly s3: S3Client) {}
 
@@ -43,8 +43,9 @@ export class BlobService {
         new PutObjectCommand({
           Bucket: this.bucket,
           Key: generatedKey,
-          // node's File and the SDK's Blob type disagree on typed-array generics
-          Body: body as PutObjectCommandInput['Body'],
+          // The SDK cannot hash a File's stream in Node, so send the bytes
+          Body: Buffer.from(await body.arrayBuffer()),
+          ContentType: body.type || undefined,
         }),
       );
       this.logger.log(`File uploaded successfully: ${generatedKey}`);

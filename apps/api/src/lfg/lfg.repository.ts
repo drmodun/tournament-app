@@ -434,23 +434,14 @@ export class LFGDrizzleRepository extends PrimaryRepository<
   ): SQL[] {
     const conditions: SQL[] = [];
     const age = sql`date_part('year', age(${user.dateOfBirth}))`;
-    const yearsAgo = (years: number) =>
-      new Date(new Date().setFullYear(new Date().getFullYear() - years));
 
-    if (requirements?.minimumAge !== undefined) {
-      conditions.push(lte(age, requirements.minimumAge));
+    // A missing bound (null in the database) means no limit on that side
+    if (requirements?.minimumAge != null) {
+      conditions.push(gte(age, requirements.minimumAge));
     }
 
-    if (requirements?.maximumAge !== undefined) {
-      conditions.push(gte(age, requirements.maximumAge));
-    }
-
-    if (requirements?.minimumAge) {
-      conditions.push(gte(user.dateOfBirth, yearsAgo(requirements.minimumAge)));
-    }
-
-    if (requirements?.maximumAge) {
-      conditions.push(lte(user.dateOfBirth, yearsAgo(requirements.maximumAge)));
+    if (requirements?.maximumAge != null) {
+      conditions.push(lte(age, requirements.maximumAge));
     }
 
     return conditions;

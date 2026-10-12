@@ -2,8 +2,9 @@
 # Smoke test for a running API with seeded data (the seed creates admin@example.com).
 #   scripts/smoke-api.sh [api-url]        (default http://localhost:5500)
 #
-# Set SMOKE_LOGS_CMD to a command that prints the API logs (for example "docker compose logs api")
-# to also exercise email confirmation: with a mock EMAIL_KEY the API logs the link instead of sending it.
+# To also exercise email confirmation, tell the script where the confirmation email ends up:
+#   MAILPIT_URL=http://localhost:8025        the Mailpit inbox from docker compose
+#   SMOKE_LOGS_CMD="docker compose logs api" the API logs, where emails go when no SMTP server is set
 set -u
 
 API="${1:-${API_URL:-http://localhost:5500}}"
@@ -62,9 +63,17 @@ check 'register duplicate email' 409 POST /users -d "{\"name\":\"Smoke Test\",\"
 check 'login as the new user' 201 POST /auth/login -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}"
 NEW_USER_ACCESS=$(field 'd.accessToken')
 
-if [ -n "${SMOKE_LOGS_CMD:-}" ]; then
+TOKEN=""
+if [ -n "${MAILPIT_URL:-}" ]; then
+  sleep 1
+  MESSAGE_ID=$(curl -s "$MAILPIT_URL/api/v1/search?query=to:$EMAIL" | node -e 'let s="";process.stdin.on("data",c=>s+=c).on("end",()=>{try{console.log(JSON.parse(s).messages[0].ID)}catch{console.log("")}})')
+  TOKEN=$(curl -s "$MAILPIT_URL/api/v1/message/$MESSAGE_ID" | grep -o 'email-confirmation/[0-9a-f-]\{36\}' | head -1 | cut -d/ -f2)
+elif [ -n "${SMOKE_LOGS_CMD:-}" ]; then
   TOKEN=$($SMOKE_LOGS_CMD 2>&1 | grep "To: $EMAIL" | grep -o 'email-confirmation/[0-9a-f-]\{36\}' | head -1 | cut -d/ -f2)
-  check 'confirm email with the logged token' 201 POST "/auth/email-confirmation/$TOKEN"
+fi
+
+if [ -n "${MAILPIT_URL:-}${SMOKE_LOGS_CMD:-}" ]; then
+  check 'confirm email with the emailed token' 201 POST "/auth/email-confirmation/$TOKEN"
   check 'new user can use the API once confirmed' 200 GET /users/me -H "Authorization: Bearer $NEW_USER_ACCESS"
   expect 'new user is the registered one' "d.username === '$USERNAME'"
 fi

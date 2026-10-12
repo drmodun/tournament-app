@@ -1,0 +1,14 @@
+{
+  "identities": [
+    {
+      "name": "tournament",
+      "credentials": [
+        {
+          "accessKey": "tournament",
+          "secretKey": "tournament-secret"
+        }
+      ],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    }
+  ]
+}

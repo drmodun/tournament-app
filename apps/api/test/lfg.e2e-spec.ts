@@ -128,6 +128,46 @@ describe('LFGController (e2e)', () => {
         expect(player.careers.length).toBeGreaterThan(0);
       }
     });
+
+    it('should only return players within the age range the group requires', async () => {
+      const { body: everyone } = await request(app.getHttpServer())
+        .get('/lfg/1')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      const ages = everyone.map((player) => player.user.age);
+      const minimumAge = Math.min(...ages) + 1;
+      const maximumAge = Math.max(...ages) - 1;
+      const expected = ages.filter(
+        (age) => age >= minimumAge && age <= maximumAge,
+      );
+
+      // The seed gives this group no requirements, so the bounds exclude someone on each side
+      expect(expected.length).toBeGreaterThan(0);
+      expect(expected.length).toBeLessThan(ages.length);
+
+      await request(app.getHttpServer())
+        .post('/group-requirements/1')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ minimumAge, maximumAge })
+        .expect(201);
+
+      try {
+        const { body: players } = await request(app.getHttpServer())
+          .get('/lfg/1')
+          .set('Authorization', `Bearer ${authToken}`)
+          .expect(200);
+
+        expect(players.map((player) => player.user.age).sort()).toEqual(
+          expected.sort(),
+        );
+      } finally {
+        await request(app.getHttpServer())
+          .delete('/group-requirements/1')
+          .set('Authorization', `Bearer ${authToken}`)
+          .expect(200);
+      }
+    });
   });
 
   describe('PATCH /lfg/:id', () => {

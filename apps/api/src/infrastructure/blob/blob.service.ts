@@ -4,6 +4,7 @@ import {
   GetObjectCommandInput,
   GetObjectCommandOutput,
   PutObjectCommand,
+  PutObjectCommandInput,
   PutObjectCommandOutput,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -42,7 +43,8 @@ export class BlobService {
         new PutObjectCommand({
           Bucket: this.bucket,
           Key: generatedKey,
-          Body: body,
+          // node's File and the SDK's Blob type disagree on typed-array generics
+          Body: body as PutObjectCommandInput['Body'],
         }),
       );
       this.logger.log(`File uploaded successfully: ${generatedKey}`);

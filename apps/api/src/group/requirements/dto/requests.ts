@@ -30,9 +30,7 @@ export class EloRequirementDto implements IEloRequirement {
   maximumElo: number;
 }
 
-export class CreateGroupRequirementsDto
-  implements ICreateGroupRequirementsRequest
-{
+export class CreateGroupRequirementsDto implements ICreateGroupRequirementsRequest {
   @IsOptional()
   @IsNumber()
   @Min(0)
@@ -59,9 +57,7 @@ export class CreateGroupRequirementsDto
   eloRequirements?: EloRequirementDto[];
 }
 
-export class UpdateGroupRequirementsDto
-  implements IUpdateGroupRequirementsRequest
-{
+export class UpdateGroupRequirementsDto implements IUpdateGroupRequirementsRequest {
   @IsOptional()
   @IsNumber()
   @Min(0)

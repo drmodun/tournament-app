@@ -70,7 +70,7 @@
     "@storybook/test": "^8.2.9",
     "@tanstack/eslint-plugin-query": "^5.62.9",
     "@types/dateformat": "^5.0.2",
-    "@types/node": "^20.11.24",
+    "@types/node": "^22.20.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "eslint": "^8.57.0",
@@ -78,6 +78,6 @@
     "react-brackets": "^0.4.7",
     "sass": "^1.77.6",
     "storybook": "^8.2.9",
-    "typescript": "^5.3.3"
+    "typescript": "^5.9.3"
   }
 }

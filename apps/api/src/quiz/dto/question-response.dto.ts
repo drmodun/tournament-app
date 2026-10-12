@@ -70,9 +70,7 @@ export class QuizQuestionExtendedResponse
   correctAnswers: string[];
 }
 
-export class QuizAnswerWithCountResponse
-  implements IQuizAnswerWithCountResponse
-{
+export class QuizAnswerWithCountResponse implements IQuizAnswerWithCountResponse {
   @ApiResponseProperty()
   answer: string;
 

@@ -22,9 +22,7 @@ export type TournamentDtosEnumType =
   (typeof TournamentDtosEnum)[keyof typeof TournamentDtosEnum];
 
 export type AnyTournamentReturnType =
-  | ITournamentWithRelations
-  | BaseTournamentResponseType;
+  ITournamentWithRelations | BaseTournamentResponseType;
 
 export type TournamentReturnTypesEnumType =
-  | TournamentDtosEnumType
-  | TournamentResponseEnumType;
+  TournamentDtosEnumType | TournamentResponseEnumType;

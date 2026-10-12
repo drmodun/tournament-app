@@ -8,9 +8,7 @@ import {
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'IsNumberGreaterThan', async: false })
-export class IsNumberGreaterThanConstraint
-  implements ValidatorConstraintInterface
-{
+export class IsNumberGreaterThanConstraint implements ValidatorConstraintInterface {
   validate(value: any, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;
     const relatedValue: number = (args.object as any)[

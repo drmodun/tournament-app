@@ -68,16 +68,16 @@ export class GroupJoinRequestsService {
   }
 
   async findAll<
-    TResponseType extends
-      BaseGroupJoinRequestResponseType = GroupJoinRequestWithUserResponse,
+    TResponseType extends BaseGroupJoinRequestResponseType =
+      GroupJoinRequestWithUserResponse,
   >(query: GroupJoinRequestQuery): Promise<TResponseType[]> {
     const results = await this.groupJoinRequestRepository.getQuery(query);
     return results as TResponseType[];
   }
 
   async findOne<
-    TResponseType extends
-      BaseGroupJoinRequestResponseType = GroupJoinRequestWithUserResponse,
+    TResponseType extends BaseGroupJoinRequestResponseType =
+      GroupJoinRequestWithUserResponse,
   >(
     groupId: number,
     userId: number,

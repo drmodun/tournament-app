@@ -98,5 +98,4 @@ export class MiniParticipationWithGroup
   group: MiniGroupResponseWithLogo;
 }
 
-export class ExtendedParticipationResponse
-  implements IExtendedParticipationResponse {}
+export class ExtendedParticipationResponse implements IExtendedParticipationResponse {}

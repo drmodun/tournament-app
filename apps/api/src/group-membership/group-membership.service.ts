@@ -43,8 +43,8 @@ export class GroupMembershipService {
   }
 
   async findAll<
-    TResponseType extends
-      BaseGroupMembershipResponseType = GroupMembershipResponse,
+    TResponseType extends BaseGroupMembershipResponseType =
+      GroupMembershipResponse,
   >(query: GroupMembershipQuery): Promise<TResponseType[]> {
     const results = await this.groupMembershipRepository.getQuery(query);
 
@@ -63,8 +63,8 @@ export class GroupMembershipService {
   }
 
   async findOne<
-    TResponseType extends
-      BaseGroupMembershipResponseType = GroupMembershipResponse,
+    TResponseType extends BaseGroupMembershipResponseType =
+      GroupMembershipResponse,
   >(
     groupId: number,
     userId: number,

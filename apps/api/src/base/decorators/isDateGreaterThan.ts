@@ -8,9 +8,7 @@ import {
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'IsDateGreaterThan', async: false })
-export class IsDateGreaterThanConstraint
-  implements ValidatorConstraintInterface
-{
+export class IsDateGreaterThanConstraint implements ValidatorConstraintInterface {
   validate(value: any, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;
     const relatedValue = (args.object as any)[relatedPropertyName];

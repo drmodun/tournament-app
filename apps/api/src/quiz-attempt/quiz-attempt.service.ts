@@ -90,8 +90,7 @@ export class QuizAttemptService {
 
   async findOne<
     TResponseType extends
-      | IQuizAttemptResponse
-      | IQuizAttemptWithAnswersResponse,
+      IQuizAttemptResponse | IQuizAttemptWithAnswersResponse,
   >(
     id: number,
     responseType: QuizAttemptResponseEnumType = QuizAttemptResponsesEnum.BASE,

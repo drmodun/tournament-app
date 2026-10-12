@@ -21,7 +21,7 @@ export default function User() {
 
   const { data, isLoading, isError } = useAuth();
 
-  const tabs: { component: JSX.Element; name: string }[] = [
+  const tabs: { component: React.JSX.Element; name: string }[] = [
     { component: <ManageUser data={data} />, name: "manage user" },
     { component: <ManageSettings />, name: "manage settings" },
   ];

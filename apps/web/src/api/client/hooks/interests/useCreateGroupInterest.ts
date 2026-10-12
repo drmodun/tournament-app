@@ -28,7 +28,7 @@ export const useCreateGroupInterest = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createGroupInterest,
+    mutationFn: (groupId?: number) => createGroupInterest(groupId),
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
     onSuccess: async () => {

@@ -73,5 +73,6 @@ export class CategoryQuery extends BaseQuery implements ICategoryQuery {
 
 export class UploadCategoryLogoRequest {
   @ApiProperty()
+  @IsString()
   logo: string;
 }

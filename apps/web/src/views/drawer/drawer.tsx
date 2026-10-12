@@ -92,7 +92,7 @@ export default function Drawer({ style, variant, className }: DrawerProps) {
             <DrawerElement
               icon={HelpIcon}
               label="logout"
-              href="/logout"
+              href="/"
               onClick={logout}
             />
           </>

@@ -43,3 +43,6 @@ junit.xml
 
 # typescript incremental build info
 *.tsbuildinfo
+
+# storybook build output
+storybook-static

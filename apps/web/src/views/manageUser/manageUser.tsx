@@ -7,6 +7,7 @@ import { clsx } from "clsx";
 import Button from "components/button";
 import Dialog from "components/dialog";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -28,6 +29,7 @@ export default function ManageUser({
     useState<boolean>(false);
 
   const { theme } = useThemeContext();
+  const router = useRouter();
   const textColorTheme = textColor(theme);
 
   const deleteUserMutation = useDeleteUser(data?.id);
@@ -123,7 +125,7 @@ export default function ManageUser({
         <Button
           label="change password"
           variant="warning"
-          onClick={() => (location.href = "/requestPasswordReset")}
+          onClick={() => router.push("/requestPasswordReset")}
         />
         <Button
           label="delete user"

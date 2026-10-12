@@ -5,21 +5,38 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # The tracked .env.test points at this database (localhost:5433, tournament_test)
+    services:
+      db:
+        image: postgis/postgis:16-3.4-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tournament_test
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d tournament_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-      - run: yarn install --ignore-engines --immutable
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
       - run: yarn build
       - run: yarn test:e2e
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: e2e
           fail_ci_if_error: true
+
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/test-results-action@v1

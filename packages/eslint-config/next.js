@@ -14,7 +14,7 @@ module.exports = [
     ignores: [".next/**", "node_modules/**", "storybook-static/**", "next-env.d.ts"],
   },
   js.configs.recommended,
-  nextPlugin.flatConfig.recommended,
+  nextPlugin.configs.recommended,
   ...turbo,
   prettier,
   {

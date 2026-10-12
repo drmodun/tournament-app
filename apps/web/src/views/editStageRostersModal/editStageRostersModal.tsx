@@ -1,6 +1,6 @@
 import styles from "./editStageRostersModal.module.scss";
 import globals from "styles/globals.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGetStageRostersManagedByUser } from "api/client/hooks/rosters/useGetStageRostersManagedByUser";
 import EditRosterForm from "views/editRosterForm";
 import { IExtendedStageResponseWithTournament } from "@tournament-app/types";
@@ -9,7 +9,6 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { clsx } from "clsx";
 import { textColor } from "types/styleTypes";
 import AddIcon from "@mui/icons-material/Add";
-import Dialog from "components/dialog";
 
 export default function EditStageRostersModal({
   stage,
@@ -23,8 +22,6 @@ export default function EditStageRostersModal({
   const { data, isLoading } = useGetStageRostersManagedByUser(stage?.id);
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [addRosterModalActive, setAddRosterModalActive] =
-    useState<boolean>(false);
 
   return (
     <div className={styles.wrapper}>

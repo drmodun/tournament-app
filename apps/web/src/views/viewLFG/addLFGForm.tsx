@@ -9,7 +9,7 @@ import Button from "components/button";
 import Dropdown from "components/dropdown";
 import MultilineInput from "components/multilineInput";
 import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider,useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -19,13 +19,11 @@ export default function AddLFGForm() {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  const [name, setName] = useState<string>();
+  const [name] = useState<string>();
 
   const createLFGMutation = useCreateLFG();
-  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
-    useGetCategoriesInfinite();
-  const { data: searchData, isLoading: searchLoading } =
-    useGetCategoriesFilter(name);
+  const { data } = useGetCategoriesInfinite();
+  const { data: searchData } = useGetCategoriesFilter(name);
 
   const methods = useForm<ICreateLFGRequest>();
   const onSubmit = (data: ICreateLFGRequest) => {

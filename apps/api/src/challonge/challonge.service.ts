@@ -16,7 +16,6 @@ import {
   stageStatusToTournamentStateRequest,
   stageStatusEnum,
   IStageResponse,
-  IChallongeSimplifiedMatch,
 } from '@tournament-app/types';
 import { ReactBracketsResponseDto } from '../matches/dto/responses';
 

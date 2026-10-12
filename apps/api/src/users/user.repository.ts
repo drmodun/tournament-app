@@ -18,7 +18,6 @@ import {
   user,
 } from '../db/schema';
 import {
-  alias,
   AnyPgSelectQueryBuilder,
   PgColumn,
   PgSelect,

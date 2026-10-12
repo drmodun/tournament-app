@@ -10,7 +10,6 @@ import { QuizResponsesEnum } from '@tournament-app/types';
 
 describe('QuizService', () => {
   let service: QuizService;
-  let repository: QuizDrizzleRepository;
 
   const mockRepository = {
     create: jest.fn(),
@@ -34,7 +33,6 @@ describe('QuizService', () => {
     }).compile();
 
     service = module.get<QuizService>(QuizService);
-    repository = module.get<QuizDrizzleRepository>(QuizDrizzleRepository);
   });
 
   afterEach(() => {

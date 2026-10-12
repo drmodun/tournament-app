@@ -26,9 +26,12 @@ export default function TableRow({
   const renderChildren = () => {
     return React.Children.map(children, (child) => {
       if (!child) return null;
-      return React.cloneElement(child as React.ReactElement, {
-        variant: variant,
-      });
+      return React.cloneElement(
+        child as React.ReactElement<Record<string, unknown>>,
+        {
+          variant: variant,
+        },
+      );
     });
   };
 

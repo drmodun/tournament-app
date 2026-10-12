@@ -1,6 +1,5 @@
 "use client";
 
-import { IQuizResponseExtended } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -8,9 +7,9 @@ import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import {
-  calculateBestFutureDateFormat,
-  formatDateTime,
-  QUESTION_TYPE_MAP,
+calculateBestFutureDateFormat,
+formatDateTime,
+QUESTION_TYPE_MAP,
 } from "utils/mixins/formatting";
 import styles from "./manageQuiz.module.scss";
 import CheckIcon from "@mui/icons-material/Check";

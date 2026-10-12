@@ -16,7 +16,7 @@ export const fetchRosters = async (stageId?: number, page?: number) => {
   );
 };
 
-export const invalidateRosters = () => {
+export const invalidateRosters = async () => {
   revalidatePath("/stage");
   revalidatePath("/stages");
   revalidatePath("/manageStages");

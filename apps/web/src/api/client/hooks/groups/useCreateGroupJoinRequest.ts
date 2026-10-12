@@ -1,8 +1,8 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation,useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError,AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateGroups } from "./serverFetches";
 import { handleError } from "utils/mixins/helpers";
@@ -25,7 +25,7 @@ export const useCreateGroupJoinRequest = () => {
   return useMutation({
     mutationFn: createGroupJoinRequest,
     retryDelay: 5000,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully created a group join request", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("gjr"),

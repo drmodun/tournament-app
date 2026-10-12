@@ -2,14 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  IExtendedRosterResponse,
-  RosterResponsesEnum,
-} from "@tournament-app/types";
-import {
-  clientApi,
-  getAccessToken,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
+clientApi,
+getAccessToken,
+SMALL_QUERY_RETRY_ATTEMPTS,
+SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 

@@ -33,7 +33,7 @@ export const fetchStageWithChallonge = async (stageId: number | undefined) => {
   );
 };
 
-export const invalidateStages = () => {
+export const invalidateStages = async () => {
   revalidatePath("/stage");
   revalidatePath("/stages");
   revalidatePath("/manageStages");

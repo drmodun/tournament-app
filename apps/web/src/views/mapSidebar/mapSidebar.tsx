@@ -8,15 +8,14 @@ import Chip from "components/chip";
 import MapElement from "components/map";
 import ProgressWheel from "components/progressWheel";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect,useRef,useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { MarkerLocation, Poi } from "utils/mixins/maps";
+import { MarkerLocation,Poi } from "utils/mixins/maps";
 import styles from "./mapSidebar.module.scss";
 import { useGetCompetitionsQuery } from "api/client/hooks/competitions/useGetCompetitionsQuery";
 import CardExpanded from "components/cardExpanded";
-import { formatDateTimeHTMLInput } from "utils/mixins/formatting";
 
 export default function MapSidebar() {
   const [selectedLocation, setSelectedLocation] = useState<MarkerLocation>();
@@ -28,8 +27,9 @@ export default function MapSidebar() {
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  const { data: competitionsData, isLoading: competitionsIsLoading } =
-    useGetCompetitionsQuery(selectedLocation?.id);
+  const { data: competitionsData } = useGetCompetitionsQuery(
+    selectedLocation?.id,
+  );
 
   useEffect(() => {
     sidebarRef?.current?.addEventListener("wheel", (e) => {

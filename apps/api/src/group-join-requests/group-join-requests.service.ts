@@ -52,7 +52,7 @@ export class GroupJoinRequestsService {
     await this.saveAndEmitNotificationsForNewRequest(groupId, userId);
   }
 
-  async checkIfGroupIsPublic(groupId: number, relatedLFPId?: number) {
+  async checkIfGroupIsPublic(groupId: number, _relatedLFPId?: number) {
     const group = await this.groupService.findOne(groupId);
 
     if (group.type == groupTypeEnum.PUBLIC) {

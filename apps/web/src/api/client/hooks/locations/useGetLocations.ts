@@ -2,15 +2,13 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  IBaseQueryResponse,
-  IExtendedLocationResponse,
-  ILocationResponse,
-  LocationResponsesEnum,
+IBaseQueryResponse,
+IExtendedLocationResponse,LocationResponsesEnum
 } from "@tournament-app/types";
 import {
-  clientApi,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
+clientApi,
+MEDIUM_QUERY_RETRY_ATTEMPTS,
+MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 

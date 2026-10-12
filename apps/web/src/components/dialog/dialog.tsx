@@ -1,16 +1,16 @@
 "use client";
 
 import {
-  clearAllBodyScrollLocks,
-  disableBodyScroll,
-  enableBodyScroll,
+clearAllBodyScrollLocks,
+disableBodyScroll,
+enableBodyScroll,
 } from "body-scroll-lock";
 import { clsx } from "clsx";
-import { useCallback, useEffect } from "react";
+import { useCallback,useEffect } from "react";
 import globals from "styles/globals.module.scss";
-import { Variants, textColor } from "types/styleTypes";
+import { Variants,textColor } from "types/styleTypes";
 import styles from "./dialog.module.scss";
-import { useSpring, animated, useTransition } from "@react-spring/web";
+import { animated,useTransition } from "@react-spring/web";
 
 interface DialogProps {
   children?: React.ReactNode;
@@ -103,7 +103,7 @@ export default function Dialog({
   return (
     <div
       className={styles.dialogWrapper}
-      onClick={(e) => {
+      onClick={() => {
         onClose && onClose();
       }}
     >

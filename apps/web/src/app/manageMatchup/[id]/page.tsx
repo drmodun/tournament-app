@@ -1,5 +1,3 @@
-import { fetchStage } from "api/client/hooks/stages/serverFetches";
-import ManageStage from "views/manageStage";
 import Navbar from "views/navbar";
 import styles from "./index.module.scss";
 import ManageMatchup from "views/manageMatchups";

@@ -11,7 +11,7 @@ export const fetchUser = async (userId: number) =>
     }
   ).then((res) => res.json().then((res) => res));
 
-export const invalidateUser = () => {
+export const invalidateUser = async () => {
   revalidatePath("/user");
   revalidatePath("/userManagedMatchups");
   revalidatePath("/manageUserManagedMatchups");

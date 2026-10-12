@@ -12,7 +12,7 @@ import styles from "./manageSettings.module.scss";
 
 export default function ManageSettings() {
   const { theme, setTheme } = useThemeContext();
-  const [activeCheckboxes, setActiveCheckboxes] = useState<boolean[]>([
+  const [, setActiveCheckboxes] = useState<boolean[]>([
     false,
     false,
     false,

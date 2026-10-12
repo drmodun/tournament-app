@@ -212,10 +212,11 @@ export class MatchesService {
         const stage = await this.matchesRepository.getStageById(stageId);
 
         if (stage && stage.challongeTournamentId) {
-          const challongeMatches = await this.challongeService.getMatchesFiltered(
-            stage.challongeTournamentId.toString(),
-            round + 1,
-          );
+          const challongeMatches =
+            await this.challongeService.getMatchesFiltered(
+              stage.challongeTournamentId.toString(),
+              round + 1,
+            );
 
           const nextRoundMatches = challongeMatches.filter(
             (match) =>

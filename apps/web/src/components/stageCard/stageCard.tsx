@@ -4,19 +4,18 @@ import ArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import PeopleIcon from "@mui/icons-material/People";
 import PlaceIcon from "@mui/icons-material/Place";
 import PublicIcon from "@mui/icons-material/Public";
-import { stageStatusEnumType, stageTypeEnumType } from "@tournament-app/types";
+import { stageStatusEnumType,stageTypeEnumType } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Chip from "components/chip";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler } from "react";
 import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
+import { textColor,TextVariants } from "types/styleTypes";
 import {
-  calculateBestFutureDateFormat,
-  calculateBestValueFormat,
-  formatDateTime,
-  STAGE_STATUS_VARIANT_MAP,
-  STAGE_TYPE_NAME_MAP,
+calculateBestValueFormat,
+formatDateTime,
+STAGE_STATUS_VARIANT_MAP,
+STAGE_TYPE_NAME_MAP
 } from "utils/mixins/formatting";
 import styles from "./stageCard.module.scss";
 

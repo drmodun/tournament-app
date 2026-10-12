@@ -3,9 +3,9 @@
 import CheckIcon from "@mui/icons-material/Check";
 import { UseMutationResult } from "@tanstack/react-query";
 import {
-  CreateQuizDto,
-  ICreateQuizOptionDto,
-  ICreateQuizQuestionDto,
+CreateQuizDto,
+ICreateQuizOptionDto,
+ICreateQuizQuestionDto,
 } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Button from "components/button";
@@ -15,7 +15,7 @@ import Input from "components/input";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
 import { useState } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider,SubmitHandler,useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -25,7 +25,6 @@ import styles from "./createQuizForm.module.scss";
 import { useCreateQuiz } from "api/client/hooks/quiz";
 
 export default function CreateQuizForm({
-  mutation,
   onClose,
 }: {
   mutation?: UseMutationResult<any, any, CreateQuizDto, void>;

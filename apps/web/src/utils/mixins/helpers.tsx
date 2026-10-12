@@ -1,9 +1,8 @@
 import {
-  IExtendedRosterResponse,
-  IMiniGroupResponse,
+IExtendedRosterResponse,
+IMiniGroupResponse,
 } from "@tournament-app/types";
 import { AxiosError } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 
 export const toBase64 = async (file: File) => {
   const reader = new FileReader();

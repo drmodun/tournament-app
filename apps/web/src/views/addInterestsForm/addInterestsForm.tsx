@@ -1,15 +1,11 @@
 "use client";
 
 import { ICreateLFGRequest } from "@tournament-app/types";
-import { useGetUserInterests } from "api/client/hooks/interests/useGetUserInterests";
-import { useCreateLFG } from "api/client/hooks/lfg/useCreateLFG";
 import { clsx } from "clsx";
 import Button from "components/button";
-import CheckboxGroup from "components/checkboxGroup";
-import MultilineInput from "components/multilineInput";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useEffect,useState } from "react";
+import { FormProvider,useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -17,9 +13,7 @@ import styles from "./addInterestsForm.module.scss";
 import { useGetPaginatedCategories } from "api/client/hooks/categories/useGetPaginatedCategories";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Link from "next/link";
 import { InterestCard } from "views/manageInterests/manageInterests";
-import { Interest } from "api/client/hooks/interests/useGetPaginatedUserInterests";
 import { useCreateUserInterests } from "api/client/hooks/interests/useCreateUserInterests";
 
 export default function AddInterestsForm({

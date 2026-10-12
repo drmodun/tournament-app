@@ -30,7 +30,7 @@ export default function ManagedUserManagedMatchups({
   const [active, setActive] = useState<IMatchupsWithMiniRostersResponse>();
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
 
   useEffect(() => {
     if (observerRef.current) {

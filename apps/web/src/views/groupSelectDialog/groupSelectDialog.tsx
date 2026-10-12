@@ -28,17 +28,15 @@ export default function GroupSelectDialog({
 
   const [adminPage, setAdminPage] = useState<number>(0);
   const [creatorPage, setCreatorPage] = useState<number>(0);
-  const [adminFetchLimit, setAdminFetchLimit] = useState<number>(-1);
-  const [creatorFetchLimit, setCreatorFetchLimit] = useState<number>(-1);
+  const [, setAdminFetchLimit] = useState<number>(-1);
+  const [, setCreatorFetchLimit] = useState<number>(-1);
   const [selectedGroup, setSelectedGroup] = useState<number>(-1);
   const {
     data: adminData,
     isLoading: adminIsLoading,
     fetchNextPage: adminFetchNextPage,
     isFetchingNextPage: adminIsFetchingNextPage,
-    isFetchingPreviousPage: adminIsFetchingPreviousPage,
     isFetchNextPageError: adminIsFetchNextPageError,
-    isFetchPreviousPageError: adminIsFetchPreviousPageError,
     fetchPreviousPage: adminFetchPreviousPage,
   } = useAdminUserGroups();
   const {
@@ -46,9 +44,7 @@ export default function GroupSelectDialog({
     isLoading: creatorIsLoading,
     fetchNextPage: creatorFetchNextPage,
     isFetchingNextPage: creatorIsFetchingNextPage,
-    isFetchingPreviousPage: creatorIsFetchingPreviousPage,
     isFetchNextPageError: creatorIsFetchNextPageError,
-    isFetchPreviousPageError: creatorIsFetchPreviousPageError,
     fetchPreviousPage: creatorFetchPreviousPage,
   } = useCreatorUserGroups();
   const { data } = useAuth();

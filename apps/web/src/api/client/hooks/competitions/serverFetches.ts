@@ -15,7 +15,7 @@ export const fetchCompetition = async (competitionId: number | undefined) =>
     })
   );
 
-export const invalidateCompetitions = () => {
+export const invalidateCompetitions = async () => {
   revalidatePath("/contest");
   revalidatePath("/manageCompetitions");
   revalidatePath("/stage");

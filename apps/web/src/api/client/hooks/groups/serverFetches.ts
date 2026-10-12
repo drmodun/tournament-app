@@ -12,7 +12,7 @@ export const fetchGroup = async (groupId: number | undefined) => {
   ).then((res) => res.json().then((res) => res));
 };
 
-export const invalidateGroups = () => {
+export const invalidateGroups = async () => {
   revalidatePath("/lfp");
   revalidatePath("/manageTeams");
   revalidatePath("/group");

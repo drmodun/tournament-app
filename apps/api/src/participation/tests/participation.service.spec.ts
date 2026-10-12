@@ -9,9 +9,7 @@ import { RosterService } from '../../roster/roster.service';
 describe('ParticipationService', () => {
   let service: ParticipationService;
   let repository: jest.Mocked<ParticipationDrizzleRepository>;
-  let mockRosterService: jest.Mocked<RosterService>;
-
-  mockRosterService = {
+  const mockRosterService: jest.Mocked<RosterService> = {
     getRostersByStage: jest.fn(),
     createForSinglePlayer: jest.fn(),
   } as unknown as jest.Mocked<RosterService>;

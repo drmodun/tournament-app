@@ -10,7 +10,7 @@ export const fetchFormattedBracket = async (stageId: number) =>
     }
   ).then((res) => res.json().then((res) => res));
 
-export const invalidateMatches = () => {
+export const invalidateMatches = async () => {
   revalidatePath("/manageMatchup");
   revalidatePath("/match");
   revalidatePath("/manageUserManagedMatchups");

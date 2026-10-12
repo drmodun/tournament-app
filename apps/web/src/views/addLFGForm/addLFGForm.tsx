@@ -8,8 +8,8 @@ import Button from "components/button";
 import CheckboxGroup from "components/checkboxGroup";
 import MultilineInput from "components/multilineInput";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useEffect,useState } from "react";
+import { FormProvider,useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -43,7 +43,7 @@ export default function AddLFGForm({ onClose }: { onClose?: () => void }) {
   const methods = useForm<ICreateLFGRequest>();
   const onSubmit = async (_data: ICreateLFGRequest) => {
     _data.categoryIds = returnIdsFromIndexes();
-    const a = await createLFGMutation.mutateAsync(_data);
+    await createLFGMutation.mutateAsync(_data);
     onClose && onClose();
   };
 

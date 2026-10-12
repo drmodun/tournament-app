@@ -3,25 +3,23 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDeleteUserInterest } from "api/client/hooks/interests/useDeleteUserInterest";
 import {
-  Interest,
-  useGetPaginatedUserInterests,
+Interest,
+useGetPaginatedUserInterests,
 } from "api/client/hooks/interests/useGetPaginatedUserInterests";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Chip from "components/chip";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useRef, useState } from "react";
+import { useEffect,useRef,useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
-import { textColor, TextVariants } from "types/styleTypes";
+import { textColor,TextVariants } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import AddInterestsForm from "views/addInterestsForm";
 import styles from "./manageInterests.module.scss";
 import { useDeleteGroupInterest } from "api/client/hooks/interests/useDeleteGroupInterest";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useCreateUserInterests } from "api/client/hooks/interests/useCreateUserInterests";
 
 export default function ManageInterests() {
   const { theme } = useThemeContext();
@@ -37,7 +35,7 @@ export default function ManageInterests() {
   } = useGetPaginatedUserInterests();
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
 
   useEffect(() => {
     if (observerRef.current) {

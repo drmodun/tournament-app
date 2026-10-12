@@ -2,18 +2,16 @@
 
 import { clsx } from "clsx";
 import {
-  ChangeEventHandler,
-  HTMLInputTypeAttribute,
-  useEffect,
-  useState,
+ChangeEventHandler,
+HTMLInputTypeAttribute,useState
 } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller,useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import {
-  TextVariants,
-  Variants,
-  inverseTextColor,
-  textColor,
+TextVariants,
+Variants,
+inverseTextColor,
+textColor,
 } from "types/styleTypes";
 import styles from "./input.module.scss";
 

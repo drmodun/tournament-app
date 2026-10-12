@@ -9,7 +9,7 @@ import CardExpanded from "components/cardExpanded";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect,useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -25,10 +25,7 @@ export default function ManageCompetitions({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { isLoading, data } = useGetUserOrganizedCompetitions();
-  const {
-    isLoading: isLoadingUserParticipations,
-    data: userParticipationsData,
-  } = useGetUserParticipations();
+  const { data: userParticipationsData } = useGetUserParticipations();
   const { isLoading: isLoadingUser, data: userData } = useAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const router = useRouter();

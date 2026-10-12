@@ -1,9 +1,8 @@
 import {
-  SingleEliminationBracket,
-  Match,
-  SVGViewer,
+SingleEliminationBracket,
+Match,
+SVGViewer,
 } from "@g-loot/react-tournament-brackets";
-import React from "react";
 /**
  * Interface for the bracket data response from the API
  */
@@ -72,18 +71,13 @@ export const renderSingleEliminationBracket = (
     svgWrapperClassName?: string;
   } = {},
 ) => {
-  const {
-    width = 1000,
-    height = 500,
-    svgWrapperClassName = "bracket-wrapper",
-  } = options;
+  const { svgWrapperClassName = "bracket-wrapper" } = options;
 
   return (
     <SingleEliminationBracket
       matches={matches}
       matchComponent={({
         match,
-        onMatchClick,
         onParticipantClick,
         onMouseEnter,
         onMouseLeave,

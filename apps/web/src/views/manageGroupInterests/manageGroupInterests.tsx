@@ -32,7 +32,7 @@ export default function ManageGroupInterests({
   } = useGetGroupInterests(groupId);
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
 
   useEffect(() => {
     if (observerRef.current) {

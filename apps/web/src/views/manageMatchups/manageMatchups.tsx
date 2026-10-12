@@ -1,21 +1,18 @@
 "use client";
 
 import {
-  IMatchupResponseWithResultsAndScores,
-  IResultsResponseWithScores,
-  IRosterResponse,
-  matchupTypeEnum,
+IMatchupResponseWithResultsAndScores,
+IResultsResponseWithScores,
+IRosterResponse,
+matchupTypeEnum,
 } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Chip from "components/chip";
-import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTime } from "utils/mixins/formatting";
 import styles from "./manageMatchups.module.scss";
-import { useGetUserManagedMatchups } from "api/client/hooks/matchups/useGetUserManagedMatchups";
-import ProgressWheel from "components/progressWheel";
 
 interface IMatchupResponse {
   id: number;

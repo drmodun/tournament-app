@@ -1,16 +1,16 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  CategoryResponsesEnum,
-  IBaseQueryResponse,
-  ICategoryResponse,
+CategoryResponsesEnum,
+IBaseQueryResponse,
+ICategoryResponse,
 } from "@tournament-app/types";
 import {
-  clientApi,
-  getAccessToken,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
+clientApi,
+getAccessToken,
+MEDIUM_QUERY_RETRY_ATTEMPTS,
+MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 

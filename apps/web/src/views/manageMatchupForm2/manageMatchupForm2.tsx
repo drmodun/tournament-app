@@ -2,12 +2,7 @@
 
 import AddIcon from "@mui/icons-material/Add";
 import {
-  ICreateScoreRequest,
-  ICreateTeamScore,
-  IExtendedRosterResponse,
-  IMatchupResponseWithResults,
-  IMatchupResponseWithResultsAndScores,
-  IRosterResponse,
+ICreateScoreRequest,IMatchupResponseWithResults
 } from "@tournament-app/types";
 import { useUpdateMatchScore } from "api/client/hooks/matchups/useUpdateMatchupScore";
 import { clsx } from "clsx";
@@ -15,7 +10,7 @@ import Button from "components/button";
 import CheckboxGroup from "components/checkboxGroup";
 import Chip from "components/chip";
 import Dialog from "components/dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";

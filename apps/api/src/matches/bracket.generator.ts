@@ -141,7 +141,7 @@ export class BracketGenerator {
     const firstRoundMatches = await db
       .insert(matchup)
       .values(
-        Array.from({ length: firstRoundMatchCount }, (_, i) => ({
+        Array.from({ length: firstRoundMatchCount }, () => ({
           stageId,
           roundId: sortedRounds[0].id,
           matchupType: 'one_vs_one',

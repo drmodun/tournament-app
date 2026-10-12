@@ -51,7 +51,7 @@ export default function SingleCorrect({
           <img
             src={image}
             className={styles.questionLogo}
-            onError={(e) => (image = undefined)}
+            onError={() => (image = undefined)}
           />
         )}
         <h2

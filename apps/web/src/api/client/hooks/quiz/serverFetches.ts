@@ -17,7 +17,7 @@ export const fetchQuiz = async (id: number | undefined) => {
   );
 };
 
-export const invalidateQuizzes = () => {
+export const invalidateQuizzes = async () => {
   revalidatePath("/quiz");
   revalidatePath("/manageQuizzes");
 };

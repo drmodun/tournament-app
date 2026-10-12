@@ -8,7 +8,6 @@ import { GroupAdminGuard } from './guards/group-admin.guard';
 import { GroupMemberGuard } from './guards/group-member.guard';
 import { GroupOwnerGuard } from './guards/group-owner.guard';
 import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
-import { RosterModule } from 'src/roster/roster.module';
 @Module({
   controllers: [GroupController],
   providers: [

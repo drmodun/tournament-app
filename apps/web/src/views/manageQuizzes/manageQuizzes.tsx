@@ -1,22 +1,14 @@
 "use client";
 
-import EditIcon from "@mui/icons-material/Edit";
 import {
-  IExtendedStageResponseWithTournament,
-  IQuizResponse,
-  IRosterResponse,
+IQuizResponse
 } from "@tournament-app/types";
 import { useAuthoredQuizzes } from "api/client/hooks/quiz";
 import { clsx } from "clsx";
-import Button from "components/button";
-import Chip from "components/chip";
-import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
-import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import EditRosterForm from "views/editRosterForm";
 import styles from "./manageQuizzes.module.scss";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";

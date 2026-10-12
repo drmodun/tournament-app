@@ -16,7 +16,7 @@ export const fetchMatchup = async (matchupId: number | undefined) => {
   );
 };
 
-export const invalidateMatchups = () => {
+export const invalidateMatchups = async () => {
   revalidatePath("/manageMatchup");
   revalidatePath("/match");
   revalidatePath("/manageUserManagedMatchups");

@@ -2,15 +2,15 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  GroupJoinRequestResponsesEnum,
-  IBaseQueryResponse,
-  IGroupJoinRequestWithMiniUserResponse,
+GroupJoinRequestResponsesEnum,
+IBaseQueryResponse,
+IGroupJoinRequestWithMiniUserResponse,
 } from "@tournament-app/types";
 import {
-  clientApi,
-  getAccessToken,
-  LARGE_QUERY_RETRY_ATTEMPTS,
-  LARGE_QUERY_RETRY_DELAY,
+clientApi,
+getAccessToken,
+LARGE_QUERY_RETRY_ATTEMPTS,
+LARGE_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosResponse } from "axios";
 
@@ -41,7 +41,7 @@ export const useGroupJoinRequests = (groupId: number | undefined) => {
     retryDelay: LARGE_QUERY_RETRY_DELAY,
     retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (page, pages) => {
+    getNextPageParam: (page) => {
       return page.results.length < 5
         ? undefined
         : page.metadata.pagination.page + 1;

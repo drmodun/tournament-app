@@ -5,7 +5,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationCreateDto } from '../../types';
 import { BadRequestException } from '@nestjs/common';
 import { notificationTypeEnum } from '@tournament-app/types';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 // Mock the fromEvent function

@@ -1,7 +1,5 @@
 import {
-  quizQuestionTypeEnum,
-  stageStatusEnumType,
-  stageTypeEnumType,
+stageStatusEnumType
 } from "@tournament-app/types";
 import dateFormat from "dateformat";
 import { Variants } from "types/styleTypes";

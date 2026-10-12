@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useRequestPasswordReset } from "api/client/hooks/auth/useRequestPasswordReset";
 import Button from "components/button";
 import globals from "styles/globals.module.scss";

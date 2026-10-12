@@ -1,21 +1,19 @@
 "use client";
 
 import EditIcon from "@mui/icons-material/Edit";
-import LaunchIcon from "@mui/icons-material/Launch";
 import { IExtendedUserResponse } from "@tournament-app/types";
 import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dialog from "components/dialog";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import Link from "next/link";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
+import { COUNTRY_NAMES_TO_CODES,formatDate } from "utils/mixins/formatting";
 import UserEditForm from "views/userEditForm";
 import UserFollowersDialog from "views/userFollowersModal";
 import styles from "./manageUser.module.scss";

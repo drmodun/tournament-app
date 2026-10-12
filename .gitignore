@@ -37,3 +37,6 @@ yarn-error.log*
 
 *storybook.log
 .qodo
+
+# generated test reports
+junit.xml

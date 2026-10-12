@@ -19,11 +19,11 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "prettier": "^3.2.5",
-    "turbo": "latest"
+    "turbo": "^2.11.7"
   },
-  "packageManager": "yarn@1.22.19",
+  "packageManager": "yarn@1.22.22",
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=22.0.0",
     "npm": ">=7.0.0"
   }
 }

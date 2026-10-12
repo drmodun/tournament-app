@@ -20,9 +20,6 @@ import { GroupService } from '../../group/group.service';
 
 describe('GroupMembershipService', () => {
   let service: GroupMembershipService;
-  let sseNotificationsService: SseNotificationsService;
-  let templatesFiller: NotificationTemplatesFiller;
-  let groupService: GroupService;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -68,13 +65,6 @@ describe('GroupMembershipService', () => {
     }).compile();
 
     service = module.get<GroupMembershipService>(GroupMembershipService);
-    sseNotificationsService = module.get<SseNotificationsService>(
-      SseNotificationsService,
-    );
-    templatesFiller = module.get<NotificationTemplatesFiller>(
-      NotificationTemplatesFiller,
-    );
-    groupService = module.get<GroupService>(GroupService);
 
     jest.clearAllMocks();
   });

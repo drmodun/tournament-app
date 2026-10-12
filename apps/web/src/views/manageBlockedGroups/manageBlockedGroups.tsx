@@ -30,7 +30,7 @@ export default function ManageBlockedGroups() {
   const deleteBlockedGroupMutation = useDeleteBlockedGroup();
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
 
   useEffect(() => {
     if (!data || !hasNextPage || isFetching || isFetchNextPageError) return;

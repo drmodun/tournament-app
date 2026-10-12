@@ -38,7 +38,7 @@ export default function ManageBlockedUsers() {
   const deleteBlockedUserMutation = useDeleteBlockedUser();
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
 
   useEffect(() => {
     if (!adminData || !hasNextPage || isFetching || isFetchNextPageError)

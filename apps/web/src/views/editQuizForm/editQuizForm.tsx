@@ -3,10 +3,10 @@
 import CheckIcon from "@mui/icons-material/Check";
 import { UseMutationResult } from "@tanstack/react-query";
 import {
-  CreateQuizDto,
-  ICreateQuizOptionDto,
-  ICreateQuizQuestionDto,
-  IQuizResponseExtended,
+CreateQuizDto,
+ICreateQuizOptionDto,
+ICreateQuizQuestionDto,
+IQuizResponseExtended,
 } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Button from "components/button";
@@ -15,16 +15,14 @@ import ImagePicker from "components/imagePicker";
 import Input from "components/input";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
-import { useEffect, useState } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { useEffect,useState } from "react";
+import { FormProvider,SubmitHandler,useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { QUESTION_TYPE_MAP } from "utils/mixins/formatting";
 import CreateQuizQuestionForm from "views/createQuizQuestionForm";
 import styles from "./createQuizForm.module.scss";
-import { UpdateQuizParams, useUpdateQuiz } from "api/client/hooks/quiz";
-import { formatDateHTMLInput } from "utils/mixins/formatting";
+import { UpdateQuizParams,useUpdateQuiz } from "api/client/hooks/quiz";
 import { imageUrlToFile } from "utils/mixins/helpers";
 import { useToastContext } from "utils/hooks/useToastContext";
 

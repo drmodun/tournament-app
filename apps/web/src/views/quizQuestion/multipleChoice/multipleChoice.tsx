@@ -48,7 +48,7 @@ export default function MultipleChoice({
           <img
             src={image}
             className={styles.questionLogo}
-            onError={(e) => (image = undefined)}
+            onError={() => (image = undefined)}
           />
         )}
         <h2

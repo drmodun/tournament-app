@@ -11,8 +11,6 @@ import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notif
 describe('GroupJoinRequestsService', () => {
   let service: GroupJoinRequestsService;
   let repository: GroupJoinRequestDrizzleRepository;
-  let sseNotificationsService: SseNotificationsService;
-  let templatesFiller: NotificationTemplatesFiller;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -71,12 +69,6 @@ describe('GroupJoinRequestsService', () => {
     service = module.get<GroupJoinRequestsService>(GroupJoinRequestsService);
     repository = module.get<GroupJoinRequestDrizzleRepository>(
       GroupJoinRequestDrizzleRepository,
-    );
-    sseNotificationsService = module.get<SseNotificationsService>(
-      SseNotificationsService,
-    );
-    templatesFiller = module.get<NotificationTemplatesFiller>(
-      NotificationTemplatesFiller,
     );
 
     // Clear mocks before each test

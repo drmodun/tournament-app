@@ -103,7 +103,7 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
     query: TSelect,
     typeEnum: string = GroupMembershipResponsesEnum.BASE,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case GroupMembershipResponsesEnum.BASE:

@@ -140,7 +140,7 @@ export class ParticipationDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: string,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case ParticipationResponsesEnum.BASE:

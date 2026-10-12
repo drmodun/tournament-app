@@ -53,7 +53,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: TournamentResponseEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case TournamentResponsesEnum.BASE:

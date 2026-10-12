@@ -60,7 +60,7 @@ export class FollowerDrizzleRepository extends CompositeRepository<
     query: TSelect,
     typeEnum: string = FollowerResponsesEnum.FOLLOWER,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case FollowerResponsesEnum.FOLLOWER:

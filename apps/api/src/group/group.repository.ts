@@ -54,7 +54,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: GroupReturnTypesEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case GroupResponsesEnum.BASE:

@@ -1,4 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { DrizzleQueryError } from 'drizzle-orm/errors';
 import { PostgresError } from 'postgres';
 
 export interface TranslatedError {
@@ -16,16 +17,21 @@ enum PostgresErrorCode {
   DatabaseTimeout = '57014',
 }
 
-@Catch(PostgresError)
+// Drizzle wraps driver errors in DrizzleQueryError, with the PostgresError as its cause
+@Catch(PostgresError, DrizzleQueryError)
 export class PostgresExceptionFilter implements ExceptionFilter {
-  catch(exception: PostgresError, host: ArgumentsHost) {
+  catch(exception: PostgresError | DrizzleQueryError, host: ArgumentsHost) {
     console.log(exception);
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
 
-    const translatedError = this.errorTranslations.get(exception.code) || {
+    const postgresError =
+      exception instanceof DrizzleQueryError ? exception.cause : exception;
+    const code = (postgresError as PostgresError | undefined)?.code;
+
+    const translatedError = this.errorTranslations.get(code) || {
       message: 'Internal Server Error',
       statusCode: 500,
     };

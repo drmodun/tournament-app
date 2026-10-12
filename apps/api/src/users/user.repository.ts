@@ -55,7 +55,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: UserReturnTypesEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:

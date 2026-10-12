@@ -47,7 +47,7 @@ export class GroupInviteDrizzleRepository extends CompositeRepository<
     query: TSelect,
     typeEnum: GroupInviteResponsesEnum,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case GroupInviteResponsesEnum.WITH_USER:

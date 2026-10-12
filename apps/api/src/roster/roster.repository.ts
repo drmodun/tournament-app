@@ -54,7 +54,7 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: RosterResponseEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case RosterResponsesEnum.BASE:

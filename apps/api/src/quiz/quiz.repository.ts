@@ -45,7 +45,7 @@ export class QuizDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: QuizReturnTypesEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case QuizResponsesEnum.BASE:

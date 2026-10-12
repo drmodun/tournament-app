@@ -21,7 +21,7 @@ export abstract class BaseDrizzleRepository<
     query: TSelect,
     typeEnum: string,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect;
 
   abstract getValidWhereClause(query: BaseQuery): SQL[];
@@ -32,7 +32,7 @@ export abstract class BaseDrizzleRepository<
         .select({
           value: sql`cast(count(*) as int)`.as('value'),
         })
-        .from(this.model),
+        .from(this.model as PgTable),
     );
   }
 
@@ -43,12 +43,12 @@ export abstract class BaseDrizzleRepository<
       ? (db
           .with(this.getCount())
           .select(selectedType)
-          .from(this.model)
+          .from(this.model as PgTable)
           .$dynamic() as PgSelect<string, typeof selectedType>)
-      : (db.select(selectedType).from(this.model).$dynamic() as PgSelect<
-          string,
-          typeof selectedType
-        >);
+      : (db
+          .select(selectedType)
+          .from(this.model as PgTable)
+          .$dynamic() as PgSelect<string, typeof selectedType>);
 
     const filterQuery = baseQuery
       .where(and(...this.getValidWhereClause(query)))

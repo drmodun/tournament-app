@@ -21,7 +21,7 @@ export abstract class CompositeRepository<
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
       .select(selectedType)
-      .from(this.model)
+      .from(this.model as PgTable)
       .where(
         and(
           ...Object.entries(id).map(([key, value]) =>
@@ -80,7 +80,7 @@ export abstract class CompositeRepository<
   async entityExists(id: TCompositeKey) {
     return await db
       .select({})
-      .from(this.model)
+      .from(this.model as PgTable)
       .where(
         and(
           ...Object.entries(id).map(([key, value]) =>

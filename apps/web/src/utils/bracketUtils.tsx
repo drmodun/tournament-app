@@ -1,7 +1,7 @@
 import {
-SingleEliminationBracket,
-Match,
-SVGViewer,
+  SingleEliminationBracket,
+  Match,
+  SVGViewer,
 } from "@g-loot/react-tournament-brackets";
 /**
  * Interface for the bracket data response from the API

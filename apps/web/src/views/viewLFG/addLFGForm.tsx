@@ -9,7 +9,7 @@ import Button from "components/button";
 import Dropdown from "components/dropdown";
 import MultilineInput from "components/multilineInput";
 import { useState } from "react";
-import { FormProvider,useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";

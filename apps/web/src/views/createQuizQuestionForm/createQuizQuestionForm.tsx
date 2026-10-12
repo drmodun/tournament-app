@@ -5,9 +5,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-ICreateQuizQuestionDto,
-quizQuestionTypeEnum,
-quizQuestionTypeEnumType,
+  ICreateQuizQuestionDto,
+  quizQuestionTypeEnum,
+  quizQuestionTypeEnumType,
 } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Button from "components/button";
@@ -17,10 +17,10 @@ import ImagePicker from "components/imagePicker";
 import Input from "components/input";
 import MultilineInput from "components/multilineInput";
 import SlideButton from "components/slideButton";
-import { Dispatch,SetStateAction,useState } from "react";
-import { FormProvider,useForm } from "react-hook-form";
+import { Dispatch, SetStateAction, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
-import { textColor,TextVariants } from "types/styleTypes";
+import { textColor, TextVariants } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { useToastContext } from "utils/hooks/useToastContext";
 import styles from "./createQuizQuestionForm.module.scss";

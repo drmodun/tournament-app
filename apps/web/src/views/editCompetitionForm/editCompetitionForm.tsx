@@ -1,11 +1,11 @@
 "use client";
 
 import {
-IExtendedTournamentResponse,
-IUpdateTournamentRequest,
-tournamentLocationEnum,
-tournamentTeamTypeEnum,
-tournamentTypeEnum,
+  IExtendedTournamentResponse,
+  IUpdateTournamentRequest,
+  tournamentLocationEnum,
+  tournamentTeamTypeEnum,
+  tournamentTypeEnum,
 } from "@tournament-app/types";
 import { useGetCategories } from "api/client/hooks/categories/useGetCategories";
 import { useEditCompetition } from "api/client/hooks/competitions/useEditCompetition";
@@ -19,15 +19,13 @@ import ProgressWheel from "components/progressWheel";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
 import { countries } from "country-flag-icons";
-import { useEffect,useState } from "react";
-import { FormProvider,SubmitHandler,useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { useToastContext } from "utils/hooks/useToastContext";
-import {
-COUNTRY_CODES_TO_NAMES
-} from "utils/mixins/formatting";
+import { COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
 import styles from "./editCompetitionForm.module.scss";
 
 export default function EditCompetitionForm({

@@ -5,14 +5,14 @@ import clsx from "clsx";
 import Button from "components/button";
 import { ButtonProps } from "components/button/button";
 import Input from "components/input";
-import { ChangeEvent,useEffect,useRef,useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import {
-inverseTextColor,
-textColor,
-TextVariants,
-Variants,
+  inverseTextColor,
+  textColor,
+  TextVariants,
+  Variants,
 } from "types/styleTypes";
 import styles from "./infiniteDropdown.module.scss";
 import ProgressWheel from "components/progressWheel";

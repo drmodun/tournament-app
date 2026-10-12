@@ -1,8 +1,6 @@
 "use client";
 
-import {
-IQuizResponse
-} from "@tournament-app/types";
+import { IQuizResponse } from "@tournament-app/types";
 import { useAuthoredQuizzes } from "api/client/hooks/quiz";
 import { clsx } from "clsx";
 import ProgressWheel from "components/progressWheel";

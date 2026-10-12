@@ -1,9 +1,9 @@
 "use client";
 
 import {
-groupRoleEnum,
-IExtendedTournamentResponse,
-tournamentTeamTypeEnum,
+  groupRoleEnum,
+  IExtendedTournamentResponse,
+  tournamentTeamTypeEnum,
 } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useDeleteCompetition } from "api/client/hooks/competitions/useDeleteCompetition";
@@ -25,8 +25,8 @@ import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import {
-COUNTRY_NAMES_TO_CODES,
-formatDateTime,
+  COUNTRY_NAMES_TO_CODES,
+  formatDateTime,
 } from "utils/mixins/formatting";
 import EditCompetitionForm from "views/editCompetitionForm";
 import GroupSelectDialog from "views/groupSelectDialog";

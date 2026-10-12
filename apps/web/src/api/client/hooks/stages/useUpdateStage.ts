@@ -1,13 +1,13 @@
 "use client";
 
-import { useMutation,useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IUpdateStageDto } from "@tournament-app/types";
 import {
-clientApi,
-SMALL_QUERY_RETRY_ATTEMPTS,
-SMALL_QUERY_RETRY_DELAY,
+  clientApi,
+  SMALL_QUERY_RETRY_ATTEMPTS,
+  SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError,AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateStages } from "./serverFetches";
 import { handleError } from "utils/mixins/helpers";

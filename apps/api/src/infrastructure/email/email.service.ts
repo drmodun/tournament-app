@@ -20,11 +20,17 @@ import 'form-data';
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
   public readonly mailgunClient;
+  // With the placeholder key from the tracked .env files, emails are logged instead of sent
+  private readonly isMocked: boolean;
 
   constructor() {
     if (!process.env.EMAIL_KEY || !process.env.EMAIL_DOMAIN) {
       throw new InternalServerErrorException('Email credentials are not set');
     }
+
+    this.isMocked =
+      process.env.EMAIL_KEY.startsWith('mock') &&
+      process.env.MODE !== 'production';
 
     this.mailgunClient = this.createMailgunClient(
       FormData,
@@ -109,6 +115,15 @@ export class EmailService {
   }
 
   async sendMail(data: MailgunMessageData) {
+    if (this.isMocked) {
+      const links =
+        String(data.html ?? '').match(/https?:\/\/[^"'\s<]+/g) ?? [];
+      this.logger.warn(
+        `EMAIL_KEY is a mock, email not sent. To: ${data.to}, subject: ${data.subject}, links: ${links.join(' ')}`,
+      );
+      return;
+    }
+
     try {
       const action = await this.mailgunClient.messages.create(
         process.env.EMAIL_DOMAIN,

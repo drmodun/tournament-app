@@ -1,10 +1,10 @@
 "use client";
 
 import {
-IMatchupResponseWithResultsAndScores,
-IResultsResponseWithScores,
-IRosterResponse,
-matchupTypeEnum,
+  IMatchupResponseWithResultsAndScores,
+  IResultsResponseWithScores,
+  IRosterResponse,
+  matchupTypeEnum,
 } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Chip from "components/chip";

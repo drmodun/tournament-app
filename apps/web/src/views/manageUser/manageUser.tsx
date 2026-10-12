@@ -13,7 +13,7 @@ import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { COUNTRY_NAMES_TO_CODES,formatDate } from "utils/mixins/formatting";
+import { COUNTRY_NAMES_TO_CODES, formatDate } from "utils/mixins/formatting";
 import UserEditForm from "views/userEditForm";
 import UserFollowersDialog from "views/userFollowersModal";
 import styles from "./manageUser.module.scss";

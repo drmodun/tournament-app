@@ -1,6 +1,4 @@
-import {
-stageStatusEnumType
-} from "@tournament-app/types";
+import { stageStatusEnumType } from "@tournament-app/types";
 import dateFormat from "dateformat";
 import { Variants } from "types/styleTypes";
 
@@ -416,7 +414,7 @@ export const COUNTRY_CODES_TO_NAMES = {
 };
 
 export const COUNTRY_NAMES_TO_CODES = Object.fromEntries(
-  Object.entries(COUNTRY_CODES_TO_NAMES).map(([code, name]) => [name, code])
+  Object.entries(COUNTRY_CODES_TO_NAMES).map(([code, name]) => [name, code]),
 );
 
 export enum COUNTRY_CODES_ENUM {

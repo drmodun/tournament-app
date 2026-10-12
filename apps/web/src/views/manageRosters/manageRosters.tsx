@@ -1,9 +1,9 @@
 "use client";
 
 import {
-IExtendedStageResponseWithTournament,
-IMiniParticipationResponseWithGroup,
-IRosterResponse,
+  IExtendedStageResponseWithTournament,
+  IMiniParticipationResponseWithGroup,
+  IRosterResponse,
 } from "@tournament-app/types";
 import { useGetUserGroupParticipations } from "api/client/hooks/participations/useGetUserGroupParticipations";
 import { useGetParticipationRosters } from "api/client/hooks/rosters/useGetParticipationRosters";

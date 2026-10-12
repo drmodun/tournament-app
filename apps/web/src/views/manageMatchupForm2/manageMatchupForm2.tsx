@@ -2,7 +2,8 @@
 
 import AddIcon from "@mui/icons-material/Add";
 import {
-ICreateScoreRequest,IMatchupResponseWithResults
+  ICreateScoreRequest,
+  IMatchupResponseWithResults,
 } from "@tournament-app/types";
 import { useUpdateMatchScore } from "api/client/hooks/matchups/useUpdateMatchupScore";
 import { clsx } from "clsx";

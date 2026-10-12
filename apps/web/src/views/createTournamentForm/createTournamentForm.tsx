@@ -1,10 +1,10 @@
 "use client";
 
 import {
-ICreateTournamentRequest,
-tournamentLocationEnum,
-tournamentTeamTypeEnum,
-tournamentTypeEnum,
+  ICreateTournamentRequest,
+  tournamentLocationEnum,
+  tournamentTeamTypeEnum,
+  tournamentTypeEnum,
 } from "@tournament-app/types";
 import { useGetCategoriesInfinite } from "api/client/hooks/categories/useGetCategoriesInfinite";
 import { useCreateCompetition } from "api/client/hooks/competitions/useCreateCompetition";
@@ -20,14 +20,12 @@ import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
 import { countries } from "country-flag-icons";
 import { useState } from "react";
-import { FormProvider,SubmitHandler,useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { useToastContext } from "utils/hooks/useToastContext";
-import {
-COUNTRY_CODES_TO_NAMES
-} from "utils/mixins/formatting";
+import { COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
 import styles from "./createTournamentForm.module.scss";
 
 export default function CreateTournamentForm({

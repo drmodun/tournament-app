@@ -16,7 +16,7 @@ interface MapLocationProps {
   props?: MapProps;
   className?: string;
   locations?: MarkerLocation[];
-  // eslint-disable-next-line no-unused-vars
+   
   onMarkerClick?: (location: MarkerLocation) => void;
 }
 

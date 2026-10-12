@@ -250,9 +250,9 @@ const SearchBar = ({
   setIsSearching,
 }: {
   data?: IMiniGroupResponseWithLogo[];
-  // eslint-disable-next-line no-unused-vars
+   
   setSearchVal?: (val: string) => void;
-  // eslint-disable-next-line no-unused-vars
+   
   setDialogActive?: (val: boolean) => void;
   setIsSearching?: Dispatch<SetStateAction<boolean>>;
 }) => {

@@ -24,7 +24,7 @@ const handleMarkerClick = (location: MarkerLocation) => {
 
 export const PoiMarkers = (props: {
   locations: MarkerLocation[];
-  // eslint-disable-next-line no-unused-vars
+   
   onMarkerClick?: (location: MarkerLocation) => void;
 }) => {
   const { theme } = useThemeContext();

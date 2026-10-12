@@ -20,7 +20,7 @@ export abstract class CompositeRepository<
   getSingleQuery(id: TCompositeKey, responseType: string = 'base') {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
-      .select(this.getMappingObject(responseType))
+      .select(selectedType)
       .from(this.model)
       .where(
         and(

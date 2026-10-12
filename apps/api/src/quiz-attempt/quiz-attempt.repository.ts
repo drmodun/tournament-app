@@ -71,7 +71,6 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
 
   getValidWhereClause(query: BaseQuery): SQL[] {
     const clauses = Object.entries(query).filter(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ([_, value]) => value !== undefined,
     );
 

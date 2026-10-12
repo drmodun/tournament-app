@@ -1,48 +1,119 @@
-version: "3"
+# Local stack: PostGIS + API + web.
+#
+#   docker compose up --build                     # db, migrations, api, web
+#   docker compose --profile seed run --rm seed   # wipe and fill the database with sample data
+#   docker compose --profile tools up --build     # also start the dormant docs and admin apps
+#   docker compose up -d db                       # just the database, for `yarn dev` and the test suites
+#
+# Host ports can be moved when they are taken: DB_PORT (5433), API_HOST_PORT (5500), WEB_PORT (3000).
+# When API_HOST_PORT changes, set NEXT_PUBLIC_API_URL to match before building web.
+
+x-api-env: &api-env
+  DATABASE_URL: postgres://postgres:postgres@db:5432/tournament
+  API_PORT: "5500"
 
 services:
+  db:
+    image: postgis/postgis:16-3.4-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tournament
+    ports:
+      # 5433 on the host so it does not collide with a locally installed Postgres
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/20-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tournament"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    build: &api-build
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    image: tournament-app-api
+    command: ["yarn", "migrate"]
+    env_file: .env
+    environment: *api-env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  # Destructive: the seed script empties every table first, so it only runs on request.
+  seed:
+    build: *api-build
+    image: tournament-app-api
+    profiles: ["seed"]
+    command: ["yarn", "seed"]
+    env_file: .env
+    environment: *api-env
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: "no"
+
+  api:
+    build: *api-build
+    image: tournament-app-api
+    restart: unless-stopped
+    env_file: .env
+    environment: *api-env
+    ports:
+      - "${API_HOST_PORT:-5500}:5500"
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5500/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
   web:
-    container_name: web
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
-    restart: always
+      args:
+        # Inlined into the browser bundle, so this must be the URL the browser can reach
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:5500}
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+    image: tournament-app-web
+    restart: unless-stopped
+    environment:
+      # Server-side fetches go straight to the api container
+      API_INTERNAL_URL: http://api:5500
     ports:
-      - 3000:3000
+      - "${WEB_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
 
-  api:
-    container_name: api
+  docs:
     build:
       context: .
-      dockerfile: ./apps/api/Dockerfile
-    restart: always
+      dockerfile: ./apps/docs/Dockerfile
+    image: tournament-app-docs
+    profiles: ["tools"]
     ports:
-      - 5500:5500
+      - "4321:4321"
 
-  # docs:
-  #   container_name: docs
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/docs/Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 4321:4321
-
-  # admin:
-  #   container_name: admin
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/admin/Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 3001:3001
-
-# Define a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
-networks:
-  app_network:
-    external: true
-#Possibly use later
+  admin:
+    build:
+      context: .
+      dockerfile: ./apps/admin/Dockerfile
+    image: tournament-app-admin
+    profiles: ["tools"]
+    ports:
+      - "3001:3001"
 
 volumes:
   db_data:

@@ -40,3 +40,6 @@ yarn-error.log*
 
 # generated test reports
 junit.xml
+
+# typescript incremental build info
+*.tsbuildinfo

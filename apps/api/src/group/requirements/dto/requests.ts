@@ -47,7 +47,6 @@ export class CreateGroupRequirementsDto
 
   @IsOptional()
   @IsBoolean()
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
   isSameCountry?: boolean;
 
   @IsOptional()

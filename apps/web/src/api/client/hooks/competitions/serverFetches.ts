@@ -1,11 +1,12 @@
 "use server";
 
+import { serverApiUrl } from "api/serverApiUrl";
 import { TournamentResponsesEnum } from "@tournament-app/types";
 import { revalidatePath } from "next/cache";
 
 export const fetchCompetition = async (competitionId: number | undefined) =>
   fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5500"}/tournaments/${competitionId}?responseType=${TournamentResponsesEnum.EXTENDED}`,
+    `${serverApiUrl}/tournaments/${competitionId}?responseType=${TournamentResponsesEnum.EXTENDED}`,
     {
       headers: { "Content-Type": "application/json" },
     }

@@ -304,6 +304,11 @@ export class RosterDrizzleRepository extends PrimaryRepository<
       const stages = await tx.query.stage.findMany({
         where: eq(stage.tournamentId, tournamentId),
       });
+      // A tournament without stages yet has no rosters to create
+      if (!stages.length) {
+        return [];
+      }
+
       const rosterId = await tx
         .insert(roster)
         .values(stages.map((stage) => ({ participationId, stageId: stage.id })))

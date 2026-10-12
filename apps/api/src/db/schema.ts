@@ -1317,8 +1317,12 @@ export const quiz = pgTable('quiz', {
   coverImage: text('cover_image'),
   isTest: boolean('is_test').default(true), //If it is a test, you can see all questions at once and move back and forth
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  matchupId: integer('matchup_id').references(() => matchup.id),
-  stageId: integer('stage_id').references(() => stage.id),
+  matchupId: integer('matchup_id').references(() => matchup.id, {
+    onDelete: 'set null',
+  }),
+  stageId: integer('stage_id').references(() => stage.id, {
+    onDelete: 'set null',
+  }),
   userId: integer('user_id')
     .references(() => user.id, {
       onDelete: 'cascade',

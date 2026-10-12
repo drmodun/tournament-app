@@ -141,14 +141,15 @@ export class GroupJoinRequestsService {
       throw new BadRequestException('Group join request not found');
     }
 
-    await this.groupMembershipService.create(groupId, userId);
-
-    await this.remove(groupId, userId);
-
+    // The notification is built from the request, so read it before the request is removed
     const notification = await this.createNotificationBodyForApprovedJoin(
       groupId,
       userId,
     );
+
+    await this.groupMembershipService.create(groupId, userId);
+
+    await this.remove(groupId, userId);
 
     await this.notificationService.createWithUsers(notification, [userId]);
   }

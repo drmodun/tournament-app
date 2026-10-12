@@ -295,6 +295,13 @@
       "when": 1744051852087,
       "tag": "0041_lean_piledriver",
       "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1791830299591,
+      "tag": "0042_petite_psylocke",
+      "breakpoints": true
     }
   ]
 }

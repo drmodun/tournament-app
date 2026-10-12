@@ -1,42 +1,36 @@
-FROM node:18-alpine AS base
-
-# The web Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
-# Make sure you update this Dockerfile, the Dockerfile in the web workspace and copy that over to Dockerfile in the docs.
-
-FROM base AS builder
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+FROM node:22-alpine AS base
+# https://github.com/nodejs/docker-node/tree/main#nodealpine explains why libc6-compat may be needed
 RUN apk add --no-cache libc6-compat
-# Set working directory
+
+# Reduce the monorepo to the api workspace and what it depends on
+FROM base AS pruner
 WORKDIR /app
-RUN yarn global add turbo
+RUN yarn global add turbo@^2
 COPY . .
 RUN turbo prune api --docker
 
-# Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
+# Toolchain for native modules (bcrypt) when no prebuilt binary matches
+RUN apk add --no-cache python3 make g++
 
-# First install dependencies (as they change less often)
-COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
-RUN yarn install --ignore-engines
+# Install dependencies first, as they change less often than the source
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/yarn.lock ./yarn.lock
+RUN yarn install --frozen-lockfile
 
-# Build the project and its dependencies
-COPY --from=builder /app/out/full/ .
-COPY turbo.json turbo.json
-
+COPY --from=pruner /app/out/full/ .
 RUN yarn turbo build --filter=api...
 
 FROM base AS runner
-WORKDIR /app
+# Email templates and drizzle migrations are resolved relative to the api workspace
+WORKDIR /app/apps/api
 
 # Don't run production as root
-RUN addgroup --system --gid 1004 nestjs
-RUN adduser --system --uid 1004 nestjs
+RUN addgroup --system --gid 1004 nestjs \
+  && adduser --system --uid 1004 --ingroup nestjs nestjs
+COPY --from=installer --chown=nestjs:nestjs /app /app
 USER nestjs
-COPY --from=installer /app .
 
 EXPOSE 5500
-CMD node apps/api/dist/main.js
+CMD ["node", "dist/main.js"]

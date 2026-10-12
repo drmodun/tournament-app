@@ -10,6 +10,19 @@ import {
 import { QueryMatchupRequestDto } from './dto/requests';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { RosterService } from 'src/roster/roster.service';
+import {
+  mapMatchupsWithResults,
+  mapMatchupWithResultsAndScores,
+  RawMatchupWithScores,
+} from './matches.mappers';
+
+type Matchup = Awaited<ReturnType<MatchesDrizzleRepository['getMatchupById']>>;
+
+type RosterScoreData = Parameters<typeof matchScoreToChallongeScoreRequest>[0];
+
+// Used when a roster was never registered with Challonge
+const FALLBACK_CHALLONGE_PARTICIPANT_ID = '1111';
+
 @Injectable()
 export class MatchesService {
   constructor(
@@ -29,55 +42,11 @@ export class MatchesService {
       createMatchResult,
     );
 
-    if (matchup.matchup.challongeMatchupId) {
-      try {
-        const stage = await this.matchesRepository.getStageById(
-          matchup.matchup.stageId,
-        );
-
-        if (stage && stage.challongeTournamentId) {
-          const rosterPromises = createMatchResult.results.map((result) =>
-            this.rosterService.findOne<IMiniRosterResponse>(result.rosterId),
-          );
-
-          const rosters = await Promise.all(rosterPromises);
-
-          const rosterScoreData = createMatchResult.results.map(
-            (result, index) => {
-              return {
-                rosterId: parseInt(
-                  rosters[index].challongeParticipantId?.toString() || '1111',
-                ),
-                score: createMatchResult.scores
-                  .map(
-                    (score) =>
-                      score.scores.find((s) => s.rosterId === result.rosterId)
-                        ?.points || 0,
-                  )
-                  .join(','),
-                isWinner: result.isWinner,
-              };
-            },
-          );
-
-          await this.challongeService.updateMatchup(
-            matchup.matchup.challongeMatchupId?.toString(),
-            stage.challongeTournamentId?.toString(),
-            matchScoreToChallongeScoreRequest(rosterScoreData),
-          );
-
-          await this.checkRoundCompletionAndUpdateNextRound(
-            matchup.matchup.stageId,
-            matchup.matchup.round,
-          );
-        }
-      } catch (error) {
-        console.error(
-          `Failed to update Challonge matchup ${matchup.matchup.challongeMatchupId}:`,
-          error,
-        );
-      }
-    }
+    await this.syncMatchupToChallonge(matchup, {
+      action: 'update',
+      advancesRound: true,
+      buildScoreData: () => this.buildResultScoreData(createMatchResult),
+    });
 
     return scores;
   }
@@ -87,40 +56,11 @@ export class MatchesService {
 
     const result = await this.matchesRepository.deleteMatchScore(matchupId);
 
-    if (matchup.matchup.challongeMatchupId) {
-      try {
-        const stage = await this.matchesRepository.getStageById(
-          matchup.matchup.stageId,
-        );
-
-        if (stage && stage.challongeTournamentId) {
-          const rosterPromises = matchup.rosterToMatchup.map((rm) =>
-            this.rosterService.findOne(rm.rosterId),
-          );
-
-          const rosters = await Promise.all(rosterPromises);
-
-          const rosterScoreData = rosters.map((roster) => ({
-            rosterId: parseInt(
-              roster.challongeParticipantId?.toString() || '1111',
-            ),
-            score: '0',
-            isWinner: false,
-          }));
-
-          await this.challongeService.updateMatchup(
-            matchup.matchup.challongeMatchupId?.toString(),
-            stage.challongeTournamentId?.toString(),
-            matchScoreToChallongeScoreRequest(rosterScoreData),
-          );
-        }
-      } catch (error) {
-        console.error(
-          `Failed to reset Challonge matchup ${matchup.matchup.challongeMatchupId}:`,
-          error,
-        );
-      }
-    }
+    await this.syncMatchupToChallonge(matchup, {
+      action: 'reset',
+      advancesRound: false,
+      buildScoreData: () => this.buildResetScoreData(matchup),
+    });
 
     return result;
   }
@@ -136,56 +76,11 @@ export class MatchesService {
       createMatchResult,
     );
 
-    if (matchup.matchup.challongeMatchupId) {
-      try {
-        const stage = await this.matchesRepository.getStageById(
-          matchup.matchup.stageId,
-        );
-
-        if (stage && stage.challongeTournamentId) {
-          const rosterPromises = createMatchResult.results.map((result) =>
-            this.rosterService.findOne(result.rosterId),
-          );
-
-          const rosters = await Promise.all(rosterPromises);
-
-          const rosterScoreData = createMatchResult.results.map(
-            (result, index) => {
-              return {
-                rosterId: parseInt(
-                  rosters[index].challongeParticipantId?.toString() || '1111',
-                ),
-                score: createMatchResult.scores
-                  .map(
-                    (score) =>
-                      score.scores.find((s) => s.rosterId === result.rosterId)
-                        ?.points || 0,
-                  )
-                  .join(','),
-                isWinner: result.isWinner,
-              };
-            },
-          );
-
-          await this.challongeService.updateMatchup(
-            matchup.matchup.challongeMatchupId?.toString(),
-            stage.challongeTournamentId?.toString(),
-            matchScoreToChallongeScoreRequest(rosterScoreData),
-          );
-
-          // Check if round is complete and update next round
-          await this.checkRoundCompletionAndUpdateNextRound(
-            matchup.matchup.stageId,
-            matchup.matchup.round,
-          );
-        }
-      } catch (error) {
-        console.error(
-          `Failed to update Challonge matchup ${matchup.matchup.challongeMatchupId}:`,
-          error,
-        );
-      }
-    }
+    await this.syncMatchupToChallonge(matchup, {
+      action: 'update',
+      advancesRound: true,
+      buildScoreData: () => this.buildResultScoreData(createMatchResult),
+    });
 
     return scores;
   }
@@ -200,45 +95,25 @@ export class MatchesService {
         round,
       );
 
-      const allMatchupsFinished = matchups.every(
-        (matchup) => matchup.isFinished,
+      if (!matchups.every((matchup) => matchup.isFinished)) {
+        return;
+      }
+
+      console.log(
+        `All matchups in round ${round} for stage ${stageId} are complete. Updating next round...`,
       );
 
-      if (allMatchupsFinished) {
-        console.log(
-          `All matchups in round ${round} for stage ${stageId} are complete. Updating next round...`,
-        );
+      const stage = await this.matchesRepository.getStageById(stageId);
 
-        const stage = await this.matchesRepository.getStageById(stageId);
-
-        if (stage && stage.challongeTournamentId) {
-          const challongeMatches =
-            await this.challongeService.getMatchesFiltered(
-              stage.challongeTournamentId.toString(),
-              round + 1,
-            );
-
-          const nextRoundMatches = challongeMatches.filter(
-            (match) =>
-              match.attributes.round === round + 1 &&
-              match.attributes.state !== 'pending',
-          );
-
-          if (nextRoundMatches.length > 0) {
-            console.log(
-              `Found ${nextRoundMatches.length} matches in next round from Challonge. Updating local database...`,
-            );
-
-            await this.importChallongeMatchesToStage(stageId, nextRoundMatches);
-
-            console.log(`Successfully updated matches for round ${round + 1}`);
-          } else {
-            console.log(
-              `No matches found for round ${round + 1} in Challonge yet.`,
-            );
-          }
-        }
+      if (!stage?.challongeTournamentId) {
+        return;
       }
+
+      await this.importNextRoundFromChallonge(
+        stageId,
+        stage.challongeTournamentId.toString(),
+        round + 1,
+      );
     } catch (error) {
       console.error(
         `Error checking round completion and updating next round:`,
@@ -274,113 +149,15 @@ export class MatchesService {
 
   async getMatchupsWithResults(query: QueryMatchupRequestDto = {}) {
     const results = await this.matchesRepository.getWithResults(query);
-    return this.mapRepositoryResultsToDto(results);
+    return mapMatchupsWithResults(results);
   }
 
   async getMatchupWithResultsAndScores(matchupId: number) {
-    type MatchupResult = {
-      id: number;
-      stageId: number;
-      round: number;
-      isFinished: boolean;
-      challongeMatchupId?: string;
-      score?: Array<{
-        id: number;
-        roundNumber: number;
-        matchupId: number;
-        isWinner?: boolean;
-        scoreToRoster?: Array<{
-          id: number;
-          scoreId: number;
-          rosterId: number;
-          points: number;
-          isWinner: boolean;
-        }>;
-      }>;
-      rosterToMatchup?: Array<{
-        isWinner: boolean;
-        matchupId: number;
-        score: number;
-        roster?: any;
-      }>;
-    };
-
     const rawResult = (await this.matchesRepository.getWithResultsAndScores(
       matchupId,
-    )) as MatchupResult;
+    )) as RawMatchupWithScores;
 
-    if (!rawResult) {
-      return null;
-    }
-
-    const scoresMap = new Map<number, any[]>();
-
-    if (rawResult.score && Array.isArray(rawResult.score)) {
-      rawResult.score.forEach((scoreEntry) => {
-        const roundNumber = scoreEntry.roundNumber;
-
-        if (!scoresMap.has(roundNumber)) {
-          scoresMap.set(roundNumber, []);
-        }
-
-        if (
-          scoreEntry.scoreToRoster &&
-          Array.isArray(scoreEntry.scoreToRoster)
-        ) {
-          scoreEntry.scoreToRoster.forEach((scoreToRoster) => {
-            scoresMap.get(roundNumber).push({
-              matchupId: scoreEntry.matchupId,
-              roundNumber: scoreEntry.roundNumber,
-              points: scoreToRoster.points,
-              isWinner: scoreToRoster.isWinner,
-              rosterId: scoreToRoster.rosterId,
-            });
-          });
-        }
-      });
-    }
-
-    const results = Array.isArray(rawResult.rosterToMatchup)
-      ? rawResult.rosterToMatchup.map((rtm) => {
-          const result = {
-            id: rtm.roster?.id || 0,
-            matchupId: rtm.matchupId,
-            score: rtm.score,
-            isWinner: rtm.isWinner,
-            roster: rtm.roster || null,
-          };
-
-          const rosterScores = [];
-          scoresMap.forEach((roundScores, roundNumber) => {
-            const rosterScore = roundScores.find(
-              (score) => score.rosterId === rtm.roster?.id,
-            );
-            if (rosterScore) {
-              rosterScores.push({
-                matchupId: rawResult.id,
-                roundNumber,
-                points: rosterScore.points,
-                isWinner: rosterScore.isWinner,
-              });
-            }
-          });
-
-          return {
-            ...result,
-            scores: rosterScores,
-          };
-        })
-      : [];
-
-    return {
-      id: rawResult.id,
-      stageId: rawResult.stageId,
-      round: rawResult.round,
-      matchupType: 'standard',
-      startDate: new Date(),
-      isFinished: rawResult.isFinished,
-      results: results,
-    };
+    return mapMatchupWithResultsAndScores(rawResult);
   }
 
   async getResultsForUser(userId: number, pagination?: PaginationOnly) {
@@ -389,7 +166,7 @@ export class MatchesService {
       pagination,
     );
 
-    return this.mapRepositoryResultsToDto(results);
+    return mapMatchupsWithResults(results);
   }
 
   async getResultsForRoster(rosterId: number, pagination?: PaginationOnly) {
@@ -398,7 +175,7 @@ export class MatchesService {
       pagination,
     );
 
-    return this.mapRepositoryResultsToDto(results);
+    return mapMatchupsWithResults(results);
   }
 
   async getResultsForGroup(groupId: number, pagination?: PaginationOnly) {
@@ -407,7 +184,7 @@ export class MatchesService {
       pagination,
     );
 
-    return this.mapRepositoryResultsToDto(results);
+    return mapMatchupsWithResults(results);
   }
 
   async importChallongeMatchesToStage(
@@ -424,41 +201,121 @@ export class MatchesService {
     return this.matchesRepository.getManagedMatchups(userId, query);
   }
 
-  private mapRepositoryResultsToDto(repositoryResults: any[] | null): any[] {
-    if (!repositoryResults || !Array.isArray(repositoryResults)) {
-      return [];
+  // Challonge is a mirror of our own data, so a failed sync is logged and never fails the request
+  private async syncMatchupToChallonge(
+    matchup: Matchup,
+    options: {
+      action: 'update' | 'reset';
+      advancesRound: boolean;
+      buildScoreData: () => Promise<RosterScoreData>;
+    },
+  ) {
+    const { challongeMatchupId, stageId, round } = matchup.matchup;
+
+    if (!challongeMatchupId) {
+      return;
     }
 
-    return repositoryResults
-      .map((rawMatch) => {
-        if (!rawMatch) {
-          return null;
-        }
+    try {
+      const stage = await this.matchesRepository.getStageById(stageId);
 
-        const matchupBase = {
-          id: rawMatch.id || 0,
-          stageId: rawMatch.stageId || 0,
-          round: rawMatch.round || 0,
-          matchupType: rawMatch.matchupType || 'standard',
-          startDate: rawMatch.startDate || new Date(),
-          isFinished: !!rawMatch.isFinished,
-        };
+      if (!stage?.challongeTournamentId) {
+        return;
+      }
 
-        const results = Array.isArray(rawMatch.rosterToMatchup)
-          ? rawMatch.rosterToMatchup.map((rtm) => ({
-              id: rtm?.roster?.id || 0,
-              matchupId: rtm?.matchupId || rawMatch.id || 0,
-              score: rtm?.score || 0,
-              isWinner: !!rtm?.isWinner,
-              roster: rtm?.roster || null,
-            }))
-          : [];
+      const rosterScoreData = await options.buildScoreData();
 
-        return {
-          ...matchupBase,
-          results,
-        };
-      })
-      .filter(Boolean);
+      await this.challongeService.updateMatchup(
+        challongeMatchupId?.toString(),
+        stage.challongeTournamentId?.toString(),
+        matchScoreToChallongeScoreRequest(rosterScoreData),
+      );
+
+      if (options.advancesRound) {
+        await this.checkRoundCompletionAndUpdateNextRound(stageId, round);
+      }
+    } catch (error) {
+      console.error(
+        `Failed to ${options.action} Challonge matchup ${challongeMatchupId}:`,
+        error,
+      );
+    }
+  }
+
+  private async buildResultScoreData(
+    matchResult: IEndMatchupRequest,
+  ): Promise<RosterScoreData> {
+    const rosters = await Promise.all(
+      matchResult.results.map((result) =>
+        this.rosterService.findOne<IMiniRosterResponse>(result.rosterId),
+      ),
+    );
+
+    return matchResult.results.map((result, index) => ({
+      rosterId: this.toChallongeParticipantId(rosters[index]),
+      score: matchResult.scores
+        .map(
+          (score) =>
+            score.scores.find((s) => s.rosterId === result.rosterId)?.points ||
+            0,
+        )
+        .join(','),
+      isWinner: result.isWinner,
+    }));
+  }
+
+  private async buildResetScoreData(
+    matchup: Matchup,
+  ): Promise<RosterScoreData> {
+    const rosters = await Promise.all(
+      matchup.rosterToMatchup.map((rosterToMatchup) =>
+        this.rosterService.findOne<IMiniRosterResponse>(
+          rosterToMatchup.rosterId,
+        ),
+      ),
+    );
+
+    return rosters.map((roster) => ({
+      rosterId: this.toChallongeParticipantId(roster),
+      score: '0',
+      isWinner: false,
+    }));
+  }
+
+  private toChallongeParticipantId(roster: IMiniRosterResponse): number {
+    return parseInt(
+      roster.challongeParticipantId?.toString() ||
+        FALLBACK_CHALLONGE_PARTICIPANT_ID,
+    );
+  }
+
+  private async importNextRoundFromChallonge(
+    stageId: number,
+    challongeTournamentId: string,
+    nextRound: number,
+  ) {
+    const challongeMatches = await this.challongeService.getMatchesFiltered(
+      challongeTournamentId,
+      nextRound,
+    );
+
+    const nextRoundMatches = challongeMatches.filter(
+      (match) =>
+        match.attributes.round === nextRound &&
+        match.attributes.state !== 'pending',
+    );
+
+    if (nextRoundMatches.length === 0) {
+      console.log(`No matches found for round ${nextRound} in Challonge yet.`);
+      return;
+    }
+
+    console.log(
+      `Found ${nextRoundMatches.length} matches in next round from Challonge. Updating local database...`,
+    );
+
+    await this.importChallongeMatchesToStage(stageId, nextRoundMatches);
+
+    console.log(`Successfully updated matches for round ${nextRound}`);
   }
 }

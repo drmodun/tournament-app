@@ -100,6 +100,7 @@
   }
 }
 
-.submitButton {
+/* login stacks its buttons; register has a single one */
+.submitButtonSpaced {
   margin-top: $padding;
 }

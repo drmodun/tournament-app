@@ -1,56 +1,54 @@
-FROM node:18-alpine AS base
-
-# This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
-# Make sure you update both files!
-
-FROM base AS builder
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+FROM node:22-alpine AS base
+# https://github.com/nodejs/docker-node/tree/main#nodealpine explains why libc6-compat may be needed
 RUN apk add --no-cache libc6-compat
-# Set working directory
+
+# Reduce the monorepo to the web workspace and what it depends on
+FROM base AS pruner
 WORKDIR /app
-RUN yarn global add turbo
+RUN yarn global add turbo@^2
 COPY . .
 RUN turbo prune web --docker
 
-# Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# First install the dependencies (as they change less often)
-COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
-RUN yarn install --ignore-engines
+# Install dependencies first, as they change less often than the source
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/yarn.lock ./yarn.lock
+RUN yarn install --frozen-lockfile
 
-# Build the project
-COPY --from=builder /app/out/full/ .
-COPY turbo.json turbo.json
+COPY --from=pruner /app/out/full/ .
 
-# Uncomment and use build args to enable remote caching
-# ARG TURBO_TEAM
-# ENV TURBO_TEAM=$TURBO_TEAM
-
-# ARG TURBO_TOKEN
-# ENV TURBO_TOKEN=$TURBO_TOKEN
+# NEXT_PUBLIC_* values are inlined into the browser bundle at build time
+ARG NEXT_PUBLIC_API_URL=http://localhost:5500
+ARG NEXT_PUBLIC_GEOCODER_URL=
+ARG NEXT_PUBLIC_MAP_STYLE_URL=
+ARG NEXT_PUBLIC_MAP_STYLE_URL_DARK=
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+  NEXT_PUBLIC_GEOCODER_URL=$NEXT_PUBLIC_GEOCODER_URL \
+  NEXT_PUBLIC_MAP_STYLE_URL=$NEXT_PUBLIC_MAP_STYLE_URL \
+  NEXT_PUBLIC_MAP_STYLE_URL_DARK=$NEXT_PUBLIC_MAP_STYLE_URL_DARK \
+  NEXT_TELEMETRY_DISABLED=1
 
 RUN yarn turbo build --filter=web...
 
 FROM base AS runner
 WORKDIR /app
+ENV NODE_ENV=production \
+  NEXT_TELEMETRY_DISABLED=1 \
+  PORT=3000 \
+  HOSTNAME=0.0.0.0
 
 # Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs \
+  && adduser --system --uid 1001 --ingroup nodejs nextjs
 USER nextjs
 
-COPY --from=installer /app/apps/web/next.config.js .
-COPY --from=installer /app/apps/web/package.json .
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
+# Standalone output keeps the monorepo layout: the server lives at apps/web/server.js
+# https://nextjs.org/docs/app/api-reference/config/next-config-js/output
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
-CMD node apps/web/server.js
+EXPOSE 3000
+CMD ["node", "apps/web/server.js"]

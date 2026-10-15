@@ -3,7 +3,6 @@
 import { useCallback } from "react";
 import { INotificationResponse } from "api/client/hooks/notifications/types";
 import styles from "./notificationItem.module.scss";
-import Image from "next/image";
 import { useNotificationContext } from "utils/hooks/useNotificationContext";
 import { clsx } from "clsx";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -20,7 +19,7 @@ export default function NotificationItem({
   onClick,
 }: NotificationItemProps) {
   const { theme } = useThemeContext();
-  const { markAsRead, deleteNotification } = useNotificationContext();
+  const { markAsRead } = useNotificationContext();
   const { notification: item, isRead } = notification;
 
   const handleClick = () => {
@@ -30,11 +29,6 @@ export default function NotificationItem({
   const handleMarkAsRead = (e: React.MouseEvent) => {
     e.stopPropagation();
     markAsRead(item.id);
-  };
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    deleteNotification(item.id);
   };
 
   const getDefaultIcon = () => {

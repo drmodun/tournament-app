@@ -4,7 +4,6 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   IBaseQueryResponse,
   IExtendedLocationResponse,
-  ILocationResponse,
   LocationResponsesEnum,
 } from "@tournament-app/types";
 import {
@@ -24,7 +23,7 @@ export const getLocations = async (pageParam?: number) =>
           page: pageParam ?? 1,
           returnType: LocationResponsesEnum.EXTENDED,
         },
-      }
+      },
     )
     .then((res) => res.data);
 

@@ -28,8 +28,8 @@ export abstract class PrimaryRepository<
   ) {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
-      .select(this.getMappingObject(responseType))
-      .from(this.model)
+      .select(selectedType)
+      .from(this.model as PgTable)
       .where(eq(this.model.id, id))
       .$dynamic() as PgSelect<string, typeof selectedType>;
 

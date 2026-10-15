@@ -17,7 +17,7 @@ import {
 import { GroupMembershipResponse } from './dto/responses.dto';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { SseNotificationsService } from '../infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from '../infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from '../infrastructure/sse-notifications/templates';
 import { TemplatesEnum } from '../infrastructure/types';
 import { notificationTypeEnum } from '@tournament-app/types';
 import { GroupService } from 'src/group/group.service';
@@ -43,8 +43,8 @@ export class GroupMembershipService {
   }
 
   async findAll<
-    TResponseType extends
-      BaseGroupMembershipResponseType = GroupMembershipResponse,
+    TResponseType extends BaseGroupMembershipResponseType =
+      GroupMembershipResponse,
   >(query: GroupMembershipQuery): Promise<TResponseType[]> {
     const results = await this.groupMembershipRepository.getQuery(query);
 
@@ -63,8 +63,8 @@ export class GroupMembershipService {
   }
 
   async findOne<
-    TResponseType extends
-      BaseGroupMembershipResponseType = GroupMembershipResponse,
+    TResponseType extends BaseGroupMembershipResponseType =
+      GroupMembershipResponse,
   >(
     groupId: number,
     userId: number,

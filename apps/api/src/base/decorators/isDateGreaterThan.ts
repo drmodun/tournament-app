@@ -8,14 +8,14 @@ import {
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'IsDateGreaterThan', async: false })
-export class IsDateGreaterThanConstraint
-  implements ValidatorConstraintInterface
-{
-  validate(value: any, args: ValidationArguments) {
+export class IsDateGreaterThanConstraint implements ValidatorConstraintInterface {
+  validate(value: unknown, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;
-    const relatedValue = (args.object as any)[relatedPropertyName];
-    const valueDate = new Date(value);
-    const relatedValueDate = new Date(relatedValue);
+    const relatedValue = (args.object as Record<string, unknown>)[
+      relatedPropertyName
+    ];
+    const valueDate = new Date(value as string | number | Date);
+    const relatedValueDate = new Date(relatedValue as string | number | Date);
     return valueDate > relatedValueDate; // for greater than comparison
   }
 

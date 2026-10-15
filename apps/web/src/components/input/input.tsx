@@ -1,12 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import {
-  ChangeEventHandler,
-  HTMLInputTypeAttribute,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEventHandler, HTMLInputTypeAttribute, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import {
@@ -131,7 +126,7 @@ export default function Input({
             value={
               (controlledValue ?? value) == ""
                 ? defaultValue
-                : controlledValue ?? value
+                : (controlledValue ?? value)
             }
             placeholder={placeholder}
             className={clsx(

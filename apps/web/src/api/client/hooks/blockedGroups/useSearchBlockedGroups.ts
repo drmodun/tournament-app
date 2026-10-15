@@ -1,11 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  CategoryResponsesEnum,
-  IMiniGroupResponseWithCountry,
-  IMiniUserResponseWithProfilePicture,
-} from "@tournament-app/types";
+import { IMiniGroupResponseWithCountry } from "@tournament-app/types";
 import {
   clientApi,
   getAccessToken,

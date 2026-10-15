@@ -47,7 +47,7 @@ export class GroupInviteDrizzleRepository extends CompositeRepository<
     query: TSelect,
     typeEnum: GroupInviteResponsesEnum,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case GroupInviteResponsesEnum.WITH_USER:
@@ -113,7 +113,6 @@ export class GroupInviteDrizzleRepository extends CompositeRepository<
   };
 
   getValidWhereClause(query: BaseQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses

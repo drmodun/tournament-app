@@ -17,7 +17,7 @@ interface ImagePickerProps {
   reactFormHookProps?: Object;
   required?: boolean;
   className?: string;
-  // eslint-disable-next-line no-unused-vars
+
   onChange?: (e: string) => void;
   file?: File | string;
 }

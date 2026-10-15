@@ -1,14 +1,13 @@
 "use client";
 
 import EditIcon from "@mui/icons-material/Edit";
-import LaunchIcon from "@mui/icons-material/Launch";
 import { IExtendedUserResponse } from "@tournament-app/types";
 import { useDeleteUser } from "api/client/hooks/user/useDeleteUser";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dialog from "components/dialog";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -30,6 +29,7 @@ export default function ManageUser({
     useState<boolean>(false);
 
   const { theme } = useThemeContext();
+  const router = useRouter();
   const textColorTheme = textColor(theme);
 
   const deleteUserMutation = useDeleteUser(data?.id);
@@ -72,7 +72,7 @@ export default function ManageUser({
         <div
           className={clsx(
             styles.editWrapper,
-            globals[`${textColorTheme}Color`]
+            globals[`${textColorTheme}Color`],
           )}
         >
           <div className={styles.usernameEdit}>
@@ -80,7 +80,7 @@ export default function ManageUser({
               className={clsx(
                 styles.username,
                 globals.largeText,
-                styles.infoText
+                styles.infoText,
               )}
             >
               {data?.name}{" "}
@@ -125,7 +125,7 @@ export default function ManageUser({
         <Button
           label="change password"
           variant="warning"
-          onClick={() => (location.href = "/requestPasswordReset")}
+          onClick={() => router.push("/requestPasswordReset")}
         />
         <Button
           label="delete user"

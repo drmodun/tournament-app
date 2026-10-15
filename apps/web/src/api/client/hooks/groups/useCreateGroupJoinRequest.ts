@@ -25,7 +25,7 @@ export const useCreateGroupJoinRequest = () => {
   return useMutation({
     mutationFn: createGroupJoinRequest,
     retryDelay: 5000,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.addToast("successfully created a group join request", "success");
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey.includes("gjr"),

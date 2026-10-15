@@ -1,42 +1,48 @@
-const { resolve } = require("node:path");
+const js = require("@eslint/js");
+const tseslint = require("typescript-eslint");
+const nextPlugin = require("@next/eslint-plugin-next");
+const turbo = require("eslint-config-turbo/flat").default;
+const prettier = require("eslint-config-prettier");
+const globals = require("globals");
 
-const project = resolve(process.cwd(), "tsconfig.json");
-
-/** @type {import("eslint").Linter.Config} */
-module.exports = {
-  extends: [
-    "eslint:recommended",
-    "prettier",
-    require.resolve("@vercel/style-guide/eslint/next"),
-    "turbo",
-  ],
-  globals: {
-    React: true,
-    JSX: true,
+/**
+ * Shared flat config for the Next.js app.
+ * @type {import("eslint").Linter.Config[]}
+ */
+module.exports = [
+  {
+    ignores: [".next/**", "node_modules/**", "storybook-static/**", "next-env.d.ts"],
   },
-  env: {
-    node: true,
-  },
-  plugins: ["only-warn"],
-  settings: {
-    "import/resolver": {
-      typescript: {
-        project,
+  js.configs.recommended,
+  nextPlugin.configs.recommended,
+  ...turbo,
+  prettier,
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        React: true,
+        JSX: true,
       },
     },
   },
-  ignorePatterns: [
-    // Ignore dotfiles
-    ".*.js",
-    "node_modules/",
-  ],
-  overrides: [
-    { files: ["*.js?(x)", "*.ts?(x)"] },
-    {
-      files: ["*.ts", "*.tsx"],
-      rules: {
-        "no-undef": "off",
-      },
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parser: tseslint.parser,
     },
-  ],
-};
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
+    rules: {
+      // TypeScript checks these itself
+      "no-undef": "off",
+      // The base rule crashes on some TypeScript syntax; use the TS-aware one.
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "error",
+      // Images come from user uploads on arbitrary hosts, so plain <img> is intentional.
+      "@next/next/no-img-element": "off",
+    },
+  },
+];

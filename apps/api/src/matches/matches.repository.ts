@@ -59,7 +59,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: MatchupResponsesEnum,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case MatchupResponsesEnum.BASE:

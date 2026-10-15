@@ -13,7 +13,6 @@ import { CanCreateRosterGuard } from '../guards/can-create-roster.guard';
 describe('RosterController', () => {
   let controller: RosterController;
   let service: jest.Mocked<RosterService>;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const mockRoster = {
     id: 1,

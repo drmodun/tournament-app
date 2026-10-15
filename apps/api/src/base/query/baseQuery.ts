@@ -12,9 +12,9 @@ import {
 } from 'class-validator';
 import { PaginationInstance } from './baseResponse';
 
-export abstract class BaseQuery<TResponseType extends string = string>
-  implements Partial<BaseQueryType<TResponseType>>
-{
+export abstract class BaseQuery<
+  TResponseType extends string = string,
+> implements Partial<BaseQueryType<TResponseType>> {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()

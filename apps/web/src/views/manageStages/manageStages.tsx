@@ -7,13 +7,10 @@ import Button from "components/button";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
+import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { formatDateTime } from "utils/mixins/formatting";
 import AddStageForm from "views/addStageForm";
 import styles from "./manageStages.module.scss";
 import StageCard from "components/stageCard";
@@ -42,7 +39,7 @@ export default function ManageStages({
       className={clsx(
         styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
-        globals[`${theme}Color`]
+        globals[`${theme}Color`],
       )}
     >
       <Dialog
@@ -79,7 +76,7 @@ export default function ManageStages({
                     key={i}
                     className={clsx(
                       styles.stagesContainer,
-                      styles[`${theme}Color`]
+                      styles[`${theme}Color`],
                     )}
                   >
                     {page.results.map((stage) => (

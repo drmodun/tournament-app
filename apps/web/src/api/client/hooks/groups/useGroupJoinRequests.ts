@@ -41,7 +41,7 @@ export const useGroupJoinRequests = (groupId: number | undefined) => {
     retryDelay: LARGE_QUERY_RETRY_DELAY,
     retry: LARGE_QUERY_RETRY_ATTEMPTS,
     enabled: getAccessToken() !== null,
-    getNextPageParam: (page, pages) => {
+    getNextPageParam: (page) => {
       return page.results.length < 5
         ? undefined
         : page.metadata.pagination.page + 1;

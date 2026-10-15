@@ -8,7 +8,6 @@ import {
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
 import { AxiosError, AxiosResponse } from "axios";
-import { revalidatePath } from "next/cache";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateStages } from "./serverFetches";
 import { handleError } from "utils/mixins/helpers";
@@ -18,7 +17,7 @@ export const updateStage = async (
     data: IUpdateStageDto;
     stageId?: number;
   },
-  tournamentId?: number
+  tournamentId?: number,
 ) => {
   const { tournamentId: stageDataTournamentId, ..._data } = data.data;
 

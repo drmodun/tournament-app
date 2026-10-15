@@ -60,7 +60,7 @@ export class FollowerDrizzleRepository extends CompositeRepository<
     query: TSelect,
     typeEnum: string = FollowerResponsesEnum.FOLLOWER,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case FollowerResponsesEnum.FOLLOWER:
@@ -133,7 +133,6 @@ export class FollowerDrizzleRepository extends CompositeRepository<
       )) as IMiniUserResponseWithProfilePicture[];
   }
   getValidWhereClause(query: FollowerQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {

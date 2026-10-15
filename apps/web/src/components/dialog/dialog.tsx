@@ -10,7 +10,7 @@ import { useCallback, useEffect } from "react";
 import globals from "styles/globals.module.scss";
 import { Variants, textColor } from "types/styleTypes";
 import styles from "./dialog.module.scss";
-import { useSpring, animated, useTransition } from "@react-spring/web";
+import { animated, useTransition } from "@react-spring/web";
 
 interface DialogProps {
   children?: React.ReactNode;
@@ -62,7 +62,7 @@ export default function Dialog({
         onClose?.();
       }
     },
-    [onClose]
+    [onClose],
   );
 
   const handlePopState = useCallback(
@@ -70,7 +70,7 @@ export default function Dialog({
       event.preventDefault();
       onClose?.();
     },
-    [onClose]
+    [onClose],
   );
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export default function Dialog({
   return (
     <div
       className={styles.dialogWrapper}
-      onClick={(e) => {
+      onClick={() => {
         onClose && onClose();
       }}
     >
@@ -115,7 +115,7 @@ export default function Dialog({
                 styles.dialog,
                 globals[`${variant}BackgroundColor`],
                 globals[`${textColor(variant)}TextColor`],
-                className
+                className,
               )}
               style={{ ...style, ..._style }}
               onClick={(e) => e.stopPropagation()}

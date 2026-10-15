@@ -45,7 +45,7 @@ export class QuizDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: QuizReturnTypesEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case QuizResponsesEnum.BASE:
@@ -78,7 +78,6 @@ export class QuizDrizzleRepository extends PrimaryRepository<
 
   getValidWhereClause(query: BaseQuery): SQL[] {
     const clauses = Object.entries(query).filter(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ([_, value]) => value !== undefined,
     );
 

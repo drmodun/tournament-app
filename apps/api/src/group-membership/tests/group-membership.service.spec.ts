@@ -15,14 +15,11 @@ import {
 } from '../dto/responses.dto';
 import { NotFoundException } from '@nestjs/common';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from '../../infrastructure/sse-notifications/templates';
 import { GroupService } from '../../group/group.service';
 
 describe('GroupMembershipService', () => {
   let service: GroupMembershipService;
-  let sseNotificationsService: SseNotificationsService;
-  let templatesFiller: NotificationTemplatesFiller;
-  let groupService: GroupService;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -68,13 +65,6 @@ describe('GroupMembershipService', () => {
     }).compile();
 
     service = module.get<GroupMembershipService>(GroupMembershipService);
-    sseNotificationsService = module.get<SseNotificationsService>(
-      SseNotificationsService,
-    );
-    templatesFiller = module.get<NotificationTemplatesFiller>(
-      NotificationTemplatesFiller,
-    );
-    groupService = module.get<GroupService>(GroupService);
 
     jest.clearAllMocks();
   });

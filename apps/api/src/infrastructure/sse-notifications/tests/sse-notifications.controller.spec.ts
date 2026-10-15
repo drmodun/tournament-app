@@ -3,7 +3,7 @@ import { SseNotificationsController } from '../sse-notifications.controller';
 import { SseNotificationsService } from '../sse-notifications.service';
 import { notificationTypeEnum } from '@tournament-app/types';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NotificationQueryDto } from '../dto/requests';
 import { NotificationCreateDto } from '../../types';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
@@ -28,7 +28,6 @@ describe('SseNotificationsController', () => {
 
   const mockToken = 'mock-token';
   const mockNotificationId = 1;
-  const mockUserIds = [1, 2, 3];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

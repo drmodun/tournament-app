@@ -1,8 +1,4 @@
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-  ApiResponseProperty,
-} from '@nestjs/swagger';
+import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import {
   IQuizAnswerWithCountResponse,
   IQuizQuestionExtendedResponse,
@@ -74,9 +70,7 @@ export class QuizQuestionExtendedResponse
   correctAnswers: string[];
 }
 
-export class QuizAnswerWithCountResponse
-  implements IQuizAnswerWithCountResponse
-{
+export class QuizAnswerWithCountResponse implements IQuizAnswerWithCountResponse {
   @ApiResponseProperty()
   answer: string;
 

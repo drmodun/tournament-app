@@ -15,19 +15,34 @@ describe('BlobService', () => {
   let service: BlobService;
   let s3Client: S3Client;
 
-  it('should throw an error if AWS credentials are not set', () => {
-    process.env.AWS_REGION = '';
-    process.env.AWS_ACCESS_KEY_ID = '';
-    process.env.AWS_SECRET_ACCESS_KEY = '';
+  it('should throw an error if S3 credentials are not set', () => {
+    for (const prefix of ['S3', 'AWS']) {
+      process.env[`${prefix}_REGION`] = '';
+      process.env[`${prefix}_ACCESS_KEY_ID`] = '';
+      process.env[`${prefix}_SECRET_ACCESS_KEY`] = '';
+    }
 
     expect(() => AwsS3Provider.useFactory()).toThrow(Error);
   });
 
+  it('should use path-style addressing for a custom endpoint', async () => {
+    process.env.S3_ENDPOINT = 'http://localhost:8333';
+
+    try {
+      const client = AwsS3Provider.useFactory();
+
+      expect(client.config.forcePathStyle).toBe(true);
+      expect((await client.config.endpoint()).hostname).toBe('localhost');
+    } finally {
+      delete process.env.S3_ENDPOINT;
+    }
+  });
+
   beforeEach(async () => {
-    process.env.AWS_REGION = 'test-region';
-    process.env.AWS_ACCESS_KEY_ID = 'test-access-key';
-    process.env.AWS_SECRET_ACCESS_KEY = 'test-secret';
-    process.env.AWS_S3_BUCKET = 'test-bucket';
+    process.env.S3_REGION = 'test-region';
+    process.env.S3_ACCESS_KEY_ID = 'test-access-key';
+    process.env.S3_SECRET_ACCESS_KEY = 'test-secret';
+    process.env.S3_BUCKET = 'test-bucket';
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [AwsS3Provider, BlobService],

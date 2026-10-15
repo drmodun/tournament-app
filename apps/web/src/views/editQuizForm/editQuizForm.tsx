@@ -20,11 +20,9 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { QUESTION_TYPE_MAP } from "utils/mixins/formatting";
 import CreateQuizQuestionForm from "views/createQuizQuestionForm";
 import styles from "./createQuizForm.module.scss";
 import { UpdateQuizParams, useUpdateQuiz } from "api/client/hooks/quiz";
-import { formatDateHTMLInput } from "utils/mixins/formatting";
 import { imageUrlToFile } from "utils/mixins/helpers";
 import { useToastContext } from "utils/hooks/useToastContext";
 

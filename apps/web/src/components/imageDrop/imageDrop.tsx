@@ -18,7 +18,7 @@ interface ImageDropProps {
   reactFormHookProps?: Object;
   required?: boolean;
   className?: string;
-  // eslint-disable-next-line no-unused-vars
+
   onFile?: (file: File) => void;
 }
 

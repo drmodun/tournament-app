@@ -1,1 +1,15 @@
-node_modules
+**/node_modules
+.git
+.github
+.vscode
+.claude
+.repowise
+**/.next
+**/dist
+**/.turbo
+**/.astro
+**/coverage
+**/junit.xml
+**/storybook-static
+# Real credentials never go into an image; the tracked .env files hold mocks only
+**/.env*.local

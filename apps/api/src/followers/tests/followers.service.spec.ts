@@ -7,7 +7,7 @@ import {
   notificationTypeEnum,
 } from '@tournament-app/types';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from '../../infrastructure/sse-notifications/templates';
 import { TemplatesEnum } from '../../infrastructure/types';
 
 describe('FollowersService', () => {

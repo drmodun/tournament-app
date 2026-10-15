@@ -11,7 +11,7 @@ export abstract class CompositeRepository<
   TCreateRequest extends Partial<InferInsertModel<TTable>> = Partial<
     InferInsertModel<TTable>
   >,
-  TCompositeKey extends Record<string, any> = Record<string, any>,
+  TCompositeKey extends Record<string, unknown> = Record<string, unknown>,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
   constructor(model: TTable) {
     super(model);
@@ -20,8 +20,8 @@ export abstract class CompositeRepository<
   getSingleQuery(id: TCompositeKey, responseType: string = 'base') {
     const selectedType = this.getMappingObject(responseType);
     const baseQuery = db
-      .select(this.getMappingObject(responseType))
-      .from(this.model)
+      .select(selectedType)
+      .from(this.model as PgTable)
       .where(
         and(
           ...Object.entries(id).map(([key, value]) =>
@@ -80,7 +80,7 @@ export abstract class CompositeRepository<
   async entityExists(id: TCompositeKey) {
     return await db
       .select({})
-      .from(this.model)
+      .from(this.model as PgTable)
       .where(
         and(
           ...Object.entries(id).map(([key, value]) =>

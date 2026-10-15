@@ -1,6 +1,5 @@
 "use client";
 
-import AddIcon from "@mui/icons-material/Add";
 import { IExtendedTournamentResponse } from "@tournament-app/types";
 import { useGetTournamentStages } from "api/client/hooks/stages/useGetTournamentStages";
 import { clsx } from "clsx";
@@ -8,7 +7,6 @@ import Button from "components/button";
 import ProgressWheel from "components/progressWheel";
 import StageCard from "components/stageCard";
 import Link from "next/link";
-import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -36,7 +34,7 @@ export default function ViewStages({
       className={clsx(
         styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
-        globals[`${theme}Color`]
+        globals[`${theme}Color`],
       )}
     >
       <h2 className={globals[`${theme}Color`]}>
@@ -56,7 +54,7 @@ export default function ViewStages({
                     key={i}
                     className={clsx(
                       styles.stagesContainer,
-                      styles[`${theme}Color`]
+                      styles[`${theme}Color`],
                     )}
                   >
                     {page.results.map((stage) => (

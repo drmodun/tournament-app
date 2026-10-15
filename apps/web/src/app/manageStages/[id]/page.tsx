@@ -9,7 +9,7 @@ export default async function Stages({
   params: Promise<{ id: number }>;
 }) {
   const id = (await params).id;
-  const res = await fetchCompetition(id);
+  await fetchCompetition(id);
 
   return (
     <div className={styles.wrapper}>

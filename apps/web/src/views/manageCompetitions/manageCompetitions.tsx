@@ -25,10 +25,7 @@ export default function ManageCompetitions({
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const { isLoading, data } = useGetUserOrganizedCompetitions();
-  const {
-    isLoading: isLoadingUserParticipations,
-    data: userParticipationsData,
-  } = useGetUserParticipations();
+  const { data: userParticipationsData } = useGetUserParticipations();
   const { isLoading: isLoadingUser, data: userData } = useAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -41,7 +38,7 @@ export default function ManageCompetitions({
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <Dialog
@@ -114,7 +111,7 @@ export default function ManageCompetitions({
                   key={index}
                   label={card.tournament.name}
                   startDate={new Date(
-                    card?.tournament?.startDate?.toString()
+                    card?.tournament?.startDate?.toString(),
                   ).getTime()}
                   category={card.tournament.type}
                   variant={theme}

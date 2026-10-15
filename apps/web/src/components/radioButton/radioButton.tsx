@@ -3,7 +3,7 @@
 import { clsx } from "clsx";
 import { MouseEventHandler } from "react";
 import globals from "styles/globals.module.scss";
-import { TextVariants, Variants } from "types/styleTypes";
+import { Variants } from "types/styleTypes";
 import styles from "./radioButton.module.scss";
 
 export interface RadioButtonProps {

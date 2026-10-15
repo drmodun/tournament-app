@@ -9,7 +9,7 @@ import { clsx } from "clsx";
 import Button from "components/button";
 import Chip from "components/chip";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";

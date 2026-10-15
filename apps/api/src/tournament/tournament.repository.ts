@@ -53,7 +53,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: TournamentResponseEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case TournamentResponsesEnum.BASE:
@@ -77,7 +77,6 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {

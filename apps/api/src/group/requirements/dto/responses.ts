@@ -24,9 +24,7 @@ export class EloRequirementResponseDto implements IEloRequirementResponse {
   category: ICategoryMiniResponseWithLogo;
 }
 
-export class GroupRequirementsResponseDto
-  implements IGroupRequirementsResponse
-{
+export class GroupRequirementsResponseDto implements IGroupRequirementsResponse {
   @ApiResponseProperty()
   id: number;
 

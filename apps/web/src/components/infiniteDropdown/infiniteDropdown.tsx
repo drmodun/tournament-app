@@ -30,7 +30,7 @@ interface InfiniteDropdownProps {
   labelVariant?: TextVariants;
   labelStyle?: React.CSSProperties;
   options?: ButtonProps[];
-  // eslint-disable-next-line no-unused-vars
+
   onSelect?: (index: number) => void;
   children?: React.ReactNode;
   arrowed?: boolean;
@@ -78,7 +78,6 @@ export default function InfiniteDropdown({
   optionsClassName,
   innerWrapperClassName,
   className,
-  defaultValue,
   loadMore,
   isFetching,
 }: InfiniteDropdownProps) {

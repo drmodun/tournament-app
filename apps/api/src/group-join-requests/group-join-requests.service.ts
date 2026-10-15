@@ -19,7 +19,7 @@ import {
 import { GroupJoinRequestWithUserResponse } from './dto/responses.dto';
 import { GroupMembershipService } from '../group-membership/group-membership.service';
 import { GroupService } from 'src/group/group.service';
-import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from 'src/infrastructure/sse-notifications/templates';
 import { NotificationCreateDto, TemplatesEnum } from 'src/infrastructure/types';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
 
@@ -52,7 +52,7 @@ export class GroupJoinRequestsService {
     await this.saveAndEmitNotificationsForNewRequest(groupId, userId);
   }
 
-  async checkIfGroupIsPublic(groupId: number, relatedLFPId?: number) {
+  async checkIfGroupIsPublic(groupId: number, _relatedLFPId?: number) {
     const group = await this.groupService.findOne(groupId);
 
     if (group.type == groupTypeEnum.PUBLIC) {
@@ -68,16 +68,16 @@ export class GroupJoinRequestsService {
   }
 
   async findAll<
-    TResponseType extends
-      BaseGroupJoinRequestResponseType = GroupJoinRequestWithUserResponse,
+    TResponseType extends BaseGroupJoinRequestResponseType =
+      GroupJoinRequestWithUserResponse,
   >(query: GroupJoinRequestQuery): Promise<TResponseType[]> {
     const results = await this.groupJoinRequestRepository.getQuery(query);
     return results as TResponseType[];
   }
 
   async findOne<
-    TResponseType extends
-      BaseGroupJoinRequestResponseType = GroupJoinRequestWithUserResponse,
+    TResponseType extends BaseGroupJoinRequestResponseType =
+      GroupJoinRequestWithUserResponse,
   >(
     groupId: number,
     userId: number,
@@ -141,14 +141,15 @@ export class GroupJoinRequestsService {
       throw new BadRequestException('Group join request not found');
     }
 
-    await this.groupMembershipService.create(groupId, userId);
-
-    await this.remove(groupId, userId);
-
+    // The notification is built from the request, so read it before the request is removed
     const notification = await this.createNotificationBodyForApprovedJoin(
       groupId,
       userId,
     );
+
+    await this.groupMembershipService.create(groupId, userId);
+
+    await this.remove(groupId, userId);
 
     await this.notificationService.createWithUsers(notification, [userId]);
   }

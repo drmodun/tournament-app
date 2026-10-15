@@ -35,9 +35,9 @@ export class LinksInstance implements Links {
   next: string;
 }
 
-export class QueryMetadata<IQuery extends Partial<BaseQueryType>>
-  implements IQueryMetadata
-{
+export class QueryMetadata<
+  IQuery extends Partial<BaseQueryType>,
+> implements IQueryMetadata {
   @ApiResponseProperty()
   pagination: PaginationInstance;
 
@@ -50,9 +50,10 @@ export class QueryMetadata<IQuery extends Partial<BaseQueryType>>
   query?: IQuery;
 }
 
-export class BaseQueryResponse<Entity, IQuery extends Partial<BaseQueryType>>
-  implements IBaseQueryResponse<Entity>
-{
+export class BaseQueryResponse<
+  Entity,
+  IQuery extends Partial<BaseQueryType>,
+> implements IBaseQueryResponse<Entity> {
   @ApiProperty({ isArray: true })
   results: Entity[];
 

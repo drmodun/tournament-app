@@ -1,0 +1,38 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  position: relative;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 110;
+  margin: calc($halfPadding / 2) 0 0;
+  padding: 0;
+  list-style: none;
+  min-width: 100%;
+  border-radius: $borderRadius;
+  background-color: $dark;
+  overflow: hidden;
+}
+
+.suggestion {
+  display: block;
+  width: 100%;
+  padding: $padding $doublePadding;
+  border: none;
+  background: transparent;
+  color: $light;
+  font-size: $fontSize;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background-color: $light;
+    color: $dark;
+    outline: none;
+  }
+}

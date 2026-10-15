@@ -12,7 +12,7 @@ import Navbar from "views/navbar";
 import styles from "./index.module.scss";
 
 export default function BlockedGroups() {
-  const { data, isLoading, isError } = useAuth();
+  const { isLoading, isError } = useAuth();
   const { theme } = useThemeContext();
   const router = useRouter();
 

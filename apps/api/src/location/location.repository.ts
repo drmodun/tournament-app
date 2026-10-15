@@ -32,13 +32,12 @@ export class LocationDrizzleRepository extends PrimaryRepository<
   conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     return query;
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {

@@ -6,18 +6,6 @@ import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./bracket.module.scss";
-import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
-import {
-  IExtendedStageResponseWithTournament,
-  IStageResponse,
-  IStageResponseWithTournament,
-} from "@tournament-app/types";
-import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
-import { useEffect } from "react";
-
-interface TournamentBracketProps {
-  stageId: number;
-}
 
 interface ReactBracketsTeam {
   id?: number;
@@ -56,7 +44,7 @@ export default function BracketView({
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       {stage?.challongeTournamentId ? (

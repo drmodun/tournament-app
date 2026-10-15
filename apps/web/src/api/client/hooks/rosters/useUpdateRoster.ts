@@ -1,10 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  ICreateRosterRequest,
-  IUpdateRosterMemberRequest,
-} from "@tournament-app/types";
+import { ICreateRosterRequest } from "@tournament-app/types";
 import {
   clientApi,
   MEDIUM_QUERY_RETRY_ATTEMPTS,

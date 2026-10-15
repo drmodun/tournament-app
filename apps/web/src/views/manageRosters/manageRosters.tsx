@@ -5,7 +5,6 @@ import {
   IMiniParticipationResponseWithGroup,
   IRosterResponse,
 } from "@tournament-app/types";
-import { useGetManagedForPlayer } from "api/client/hooks/participations/useGetManagedForPlayer";
 import { useGetUserGroupParticipations } from "api/client/hooks/participations/useGetUserGroupParticipations";
 import { useGetParticipationRosters } from "api/client/hooks/rosters/useGetParticipationRosters";
 import { useGetStageRostersManagedByUser } from "api/client/hooks/rosters/useGetStageRostersManagedByUser";
@@ -15,14 +14,13 @@ import Chip from "components/chip";
 import Dialog from "components/dialog";
 import Dropdown from "components/dropdown";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import AddRosterForm from "views/addRosterForm";
 import EditRosterForm from "views/editRosterForm";
 import styles from "./manageRosters.module.scss";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 export default function ManageRosters({
@@ -30,9 +28,7 @@ export default function ManageRosters({
 }: {
   stage: IExtendedStageResponseWithTournament;
 }) {
-  const { data: rosters, isLoading } = useGetStageRostersManagedByUser(
-    stage.id,
-  );
+  useGetStageRostersManagedByUser(stage.id);
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
   const [activeParticipation, setActiveParticipation] =
@@ -41,8 +37,9 @@ export default function ManageRosters({
   const { data: groupsData, isLoading: groupsIsLoading } =
     useGetUserGroupParticipations(stage?.tournament?.id);
 
-  const { data: rostersData, isLoading: isLoadingRosters } =
-    useGetParticipationRosters(activeParticipation?.id);
+  const { data: rostersData } = useGetParticipationRosters(
+    activeParticipation?.id,
+  );
 
   const [createRosterModalActive, setCreateRosterModalActive] =
     useState<boolean>(false);

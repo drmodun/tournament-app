@@ -19,7 +19,7 @@ import { StagesWithDates } from '../types';
 import { ChallongeService } from 'src/challonge/challonge.service';
 import { RosterDrizzleRepository } from '../../roster/roster.repository';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from '../../infrastructure/sse-notifications/templates';
 import { TemplatesEnum } from 'src/infrastructure/types';
 import { MatchesService } from 'src/matches/matches.service';
 import { RosterService } from 'src/roster/roster.service';

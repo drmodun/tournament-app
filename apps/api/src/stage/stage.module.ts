@@ -8,7 +8,7 @@ import { ChallongeModule } from 'src/challonge/challonge.module';
 import { RosterModule } from 'src/roster/roster.module';
 import { StageAdminGuard } from './guards/stage-admin.guard';
 import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
-import { NotificationTemplatesFiller } from 'src/infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from 'src/infrastructure/sse-notifications/templates';
 import { MatchesModule } from 'src/matches/matches.module';
 
 @Module({

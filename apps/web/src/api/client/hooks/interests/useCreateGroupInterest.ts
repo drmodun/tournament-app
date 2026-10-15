@@ -12,7 +12,7 @@ import { handleError } from "utils/mixins/helpers";
 
 export const createGroupInterest = async (
   groupId?: number,
-  categoryId?: number
+  categoryId?: number,
 ) => {
   return clientApi
     .post<never, AxiosResponse>(`/group-interests/${groupId}/${categoryId}`, {
@@ -28,7 +28,7 @@ export const useCreateGroupInterest = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createGroupInterest,
+    mutationFn: (groupId?: number) => createGroupInterest(groupId),
     retryDelay: SMALL_QUERY_RETRY_DELAY,
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
     onSuccess: async () => {

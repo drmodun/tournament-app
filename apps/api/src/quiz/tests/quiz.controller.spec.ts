@@ -24,7 +24,6 @@ jest.mock('src/base/static/makeMetadata', () => ({
 
 describe('QuizController', () => {
   let controller: QuizController;
-  let service: QuizService;
 
   const mockQuizService = {
     create: jest.fn(),
@@ -48,7 +47,6 @@ describe('QuizController', () => {
     }).compile();
 
     controller = module.get<QuizController>(QuizController);
-    service = module.get<QuizService>(QuizService);
   });
 
   afterEach(() => {

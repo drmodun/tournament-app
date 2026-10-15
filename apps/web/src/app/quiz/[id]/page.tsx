@@ -1,9 +1,5 @@
-import { fetchStage } from "api/client/hooks/stages/serverFetches";
-import ManageStage from "views/manageStage";
 import Navbar from "views/navbar";
 import styles from "./index.module.scss";
-import { fetchQuiz } from "api/client/hooks/quiz/serverFetches";
-import { IQuizResponseExtended } from "@tournament-app/types";
 import ManageQuiz from "views/manageQuiz";
 
 export default async function Quiz({

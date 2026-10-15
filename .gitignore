@@ -37,3 +37,12 @@ yarn-error.log*
 
 *storybook.log
 .qodo
+
+# generated test reports
+junit.xml
+
+# typescript incremental build info
+*.tsbuildinfo
+
+# storybook build output
+storybook-static

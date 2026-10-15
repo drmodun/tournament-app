@@ -6,7 +6,7 @@ import { TextVariants } from "types/styleTypes";
 
 export const ThemeContext = React.createContext<{
   theme: TextVariants;
-  // eslint-disable-next-line no-unused-vars
+
   setTheme: (val: TextVariants) => void;
 }>({
   theme: "light",

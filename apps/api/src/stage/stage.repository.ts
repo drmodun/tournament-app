@@ -55,7 +55,7 @@ export class StageDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: StageResponsesEnum,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case StageResponsesEnum.EXTENDED:
@@ -93,7 +93,6 @@ export class StageDrizzleRepository extends PrimaryRepository<
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses

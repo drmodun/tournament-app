@@ -1,10 +1,7 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import {
-  IMiniGroupResponseWithLogo,
-  IMiniTournamentResponseWithLogo,
-} from "@tournament-app/types";
+import { IMiniTournamentResponseWithLogo } from "@tournament-app/types";
 import {
   clientApi,
   getAccessToken,

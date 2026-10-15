@@ -23,12 +23,15 @@ export default function Table({
   const renderChildren = () => {
     return React.Children.map(children, (child, index) => {
       if (!child) return null;
-      return React.cloneElement(child as React.ReactElement, {
-        variant: variant,
-        isNumbered: isNumbered,
-        index: index == 0 ? -1 : index,
-        className: styles.td_table,
-      });
+      return React.cloneElement(
+        child as React.ReactElement<Record<string, unknown>>,
+        {
+          variant: variant,
+          isNumbered: isNumbered,
+          index: index == 0 ? -1 : index,
+          className: styles.td_table,
+        },
+      );
     });
   };
 

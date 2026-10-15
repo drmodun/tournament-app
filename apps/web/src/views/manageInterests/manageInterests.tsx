@@ -20,8 +20,6 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import AddInterestsForm from "views/addInterestsForm";
 import styles from "./manageInterests.module.scss";
 import { useDeleteGroupInterest } from "api/client/hooks/interests/useDeleteGroupInterest";
-import { UseMutationResult } from "@tanstack/react-query";
-import { useCreateUserInterests } from "api/client/hooks/interests/useCreateUserInterests";
 
 export default function ManageInterests() {
   const { theme } = useThemeContext();
@@ -37,7 +35,7 @@ export default function ManageInterests() {
   } = useGetPaginatedUserInterests();
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
 
   useEffect(() => {
     if (observerRef.current) {
@@ -56,7 +54,7 @@ export default function ManageInterests() {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const currentRef = loadMoreRef.current;
@@ -77,7 +75,7 @@ export default function ManageInterests() {
       className={clsx(
         styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
-        globals[`${theme}Color`]
+        globals[`${theme}Color`],
       )}
     >
       <Dialog
@@ -115,7 +113,7 @@ export default function ManageInterests() {
                 key={i}
                 className={clsx(
                   styles.invitesContainer,
-                  styles[`${theme}Color`]
+                  styles[`${theme}Color`],
                 )}
               >
                 {page.results.map((interest) => (
@@ -170,7 +168,7 @@ export function InterestCard({
           : [
               globals[`${variant}BackgroundColor`],
               globals[`${textColor(variant)}Color`],
-            ]
+            ],
       )}
     >
       <div className={styles.top}>
@@ -209,7 +207,7 @@ export function InterestCard({
       <Markdown
         className={clsx(
           globals[`${selected ? "light" : textColor(variant)}Color`],
-          styles.bio
+          styles.bio,
         )}
         rehypePlugins={[rehypeRaw]}
       >

@@ -27,7 +27,6 @@ import {
   GroupSortingEnum,
   GroupSortingEnumType,
   groupRoleEnum,
-  ICategoryMiniResponseWithLogo,
   IMiniGroupResponseWithLogo,
 } from '@tournament-app/types';
 import { PrimaryRepository } from '../base/repository/primaryRepository';
@@ -55,7 +54,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: GroupReturnTypesEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case GroupResponsesEnum.BASE:
@@ -141,9 +140,7 @@ export class GroupDrizzleRepository extends PrimaryRepository<
   ) {
     const userId = createGroupDto.userId;
 
-
     const newGroup = db.transaction(async (tx) => {
-
       const [createdGroup] = await tx
         .insert(group)
         .values({
@@ -182,14 +179,12 @@ export class GroupDrizzleRepository extends PrimaryRepository<
   };
 
   getValidWhereClause(query: BaseQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {
       const field = group[key];
       if (!field) return;
       const parsed = value as string;
-
 
       switch (key) {
         case 'name':

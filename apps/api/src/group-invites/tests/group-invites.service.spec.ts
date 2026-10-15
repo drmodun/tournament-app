@@ -6,13 +6,11 @@ import { GroupInviteResponsesEnum } from '@tournament-app/types';
 import { BadRequestException } from '@nestjs/common';
 import { GroupService } from '../../group/group.service';
 import { SseNotificationsService } from '../../infrastructure/sse-notifications/sse-notifications.service';
-import { NotificationTemplatesFiller } from '../../infrastructure/firebase-notifications/templates';
+import { NotificationTemplatesFiller } from '../../infrastructure/sse-notifications/templates';
 
 describe('GroupInvitesService', () => {
   let service: GroupInvitesService;
   let repository: GroupInviteDrizzleRepository;
-  let sseNotificationsService: SseNotificationsService;
-  let templatesFiller: NotificationTemplatesFiller;
 
   const mockRepository = {
     createEntity: jest.fn(),
@@ -70,12 +68,6 @@ describe('GroupInvitesService', () => {
     service = module.get<GroupInvitesService>(GroupInvitesService);
     repository = module.get<GroupInviteDrizzleRepository>(
       GroupInviteDrizzleRepository,
-    );
-    sseNotificationsService = module.get<SseNotificationsService>(
-      SseNotificationsService,
-    );
-    templatesFiller = module.get<NotificationTemplatesFiller>(
-      NotificationTemplatesFiller,
     );
 
     // Clear mocks before each test

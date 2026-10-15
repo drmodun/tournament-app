@@ -2,10 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  IExtendedRosterResponse,
-  RosterResponsesEnum,
-} from "@tournament-app/types";
-import {
   clientApi,
   getAccessToken,
   SMALL_QUERY_RETRY_ATTEMPTS,

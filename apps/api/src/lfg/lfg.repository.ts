@@ -10,7 +10,6 @@ import {
   groupUserBlockList,
   groupRequirements,
   group,
-  eloRequirement,
   follower,
 } from 'src/db/schema';
 import {
@@ -31,7 +30,6 @@ import {
   InferSelectModel,
   lte,
   notInArray,
-  or,
   sql,
   SQL,
 } from 'drizzle-orm';
@@ -225,7 +223,7 @@ export class LFGDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: string,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case LFGResponsesEnum.BASE:
@@ -277,7 +275,6 @@ export class LFGDrizzleRepository extends PrimaryRepository<
   }
 
   getValidWhereClause(query: BaseQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {
@@ -364,160 +361,95 @@ export class LFGDrizzleRepository extends PrimaryRepository<
   }
 
   async getPlayers(groupId: number) {
-    // 1. Forbidden Users (Blocked and Group Members) - Correct
-    const [blockedIdsResult, groupMembersIdsResult, groupReqsResult] =
-      await Promise.all([
-        db
-          .select({ id: user.id })
-          .from(user)
-          .innerJoin(
-            groupUserBlockList,
-            and(
-              eq(user.id, groupUserBlockList.blockedUserId),
-              eq(groupUserBlockList.groupId, groupId),
-            ),
-          ),
-        db
-          .select({ id: user.id })
-          .from(user)
-          .innerJoin(
-            groupToUser,
-            and(
-              eq(user.id, groupToUser.userId),
-              eq(groupToUser.groupId, groupId),
-            ),
-          ),
-        db
-          .select({
-            //best approach: select nested objects
-            groupRequirements: {
-              minimumAge: groupRequirements.minimumAge,
-              maximumAge: groupRequirements.maximumAge,
-              isSameCountry: groupRequirements.isSameCountry,
-            },
-            group: {
-              country: group.country,
-            },
-            eloRequirement: {
-              categoryId: eloRequirement.categoryId,
-              minimumElo: eloRequirement.minimumElo,
-              maximumElo: eloRequirement.maximumElo,
-            },
-          })
-          .from(groupRequirements)
-          .leftJoin(group, eq(groupRequirements.groupId, group.id))
-          .leftJoin(
-            eloRequirement,
-            eq(groupRequirements.groupId, eloRequirement.groupRequirementId),
-          )
-          .where(eq(groupRequirements.groupId, groupId)),
-      ]);
+    const [forbiddenUserIds, requirementRows] = await Promise.all([
+      this.getUserIdsHiddenFromGroup(groupId),
+      this.getGroupRequirementRows(groupId),
+    ]);
 
-    const blockedIds = blockedIdsResult.map((player) => player.id);
-    const groupMemberIds = groupMembersIdsResult.map((player) => player.id);
-    const forbiddenIdsArray = [...blockedIds, ...groupMemberIds];
+    const requirements = requirementRows[0]?.groupRequirements ?? null;
+    const groupCountry = requirementRows[0]?.group?.country;
 
-    // Extract relevant data from the results.
-    const groupReqs = groupReqsResult[0]
-      ? groupReqsResult[0].groupRequirements
-      : null;
-    const groupCountry = groupReqsResult[0]?.group?.country;
-
-    // 2. ELO Requirements (Prepare for "at least one category" logic)
-    // Build a Map to store requirements per category
-    const eloReqsMap = new Map<
-      number,
-      { minElo?: number; maxElo?: number }[]
-    >();
-
-    // Populate the map with ELO requirements, grouped by category
-    for (const req of groupReqsResult) {
-      //make sure requirement exists
-      if (req.eloRequirement) {
-        const categoryId = req.eloRequirement.categoryId;
-        if (!eloReqsMap.has(categoryId)) {
-          eloReqsMap.set(categoryId, []);
-        }
-        //push new requirement to eloReqsMap
-        eloReqsMap.get(categoryId)!.push({
-          minElo: req.eloRequirement.minimumElo,
-          maxElo: req.eloRequirement.maximumElo,
-        });
-      }
+    // A same-country requirement cannot be applied to a group without a country
+    if (requirements?.isSameCountry && !groupCountry) {
+      return [];
     }
 
-    const eloConditions = [];
-    // Iterate through each category in the map
-    for (const [categoryId, ranges] of eloReqsMap) {
-      // For each category, build conditions to check if user meets ANY of the ranges
-      const categoryConditions = ranges.map((range) => {
-        const rangeConditions = [];
-        if (range.minElo !== undefined) {
-          rangeConditions.push(gte(categoryCareer.elo, range.minElo));
-        }
-        if (range.maxElo !== undefined) {
-          rangeConditions.push(lte(categoryCareer.elo, range.maxElo));
-        }
-        return and(...rangeConditions);
-      });
+    const rows = await this.getPlayerRows([
+      notInArray(user.id, forbiddenUserIds),
+      ...(requirements?.isSameCountry ? [eq(user.country, groupCountry)] : []),
+      ...this.getAgeConditions(requirements),
+    ]);
 
-      // Ensure the category ID matches and the user's ELO is within ANY of the valid ranges
-      eloConditions.push(
-        and(
-          eq(categoryCareer.categoryId, categoryId),
-          or(...categoryConditions), // Match ANY of the ranges for this category
+    return this.groupPlayerRows(rows);
+  }
+
+  // Users the group has blocked, plus those who are already members
+  private async getUserIdsHiddenFromGroup(groupId: number): Promise<number[]> {
+    const [blockedUsers, groupMembers] = await Promise.all([
+      db
+        .select({ id: user.id })
+        .from(user)
+        .innerJoin(
+          groupUserBlockList,
+          and(
+            eq(user.id, groupUserBlockList.blockedUserId),
+            eq(groupUserBlockList.groupId, groupId),
+          ),
         ),
-      );
-    }
-
-    // 3. Age and Country Conditions (Prepare for conditional application)
-    const minDOB = groupReqs?.minimumAge
-      ? new Date(
-          new Date().setFullYear(
-            new Date().getFullYear() - groupReqs.minimumAge,
+      db
+        .select({ id: user.id })
+        .from(user)
+        .innerJoin(
+          groupToUser,
+          and(
+            eq(user.id, groupToUser.userId),
+            eq(groupToUser.groupId, groupId),
           ),
-        )
-      : undefined;
-
-    const maxDOB = groupReqs?.maximumAge
-      ? new Date(
-          new Date().setFullYear(
-            new Date().getFullYear() - (groupReqs.maximumAge ?? 100),
-          ),
-        )
-      : undefined;
-
-    // 4. Apply Age Filters (Conditional)
-    const ageConditions = [];
-    if (groupReqs?.minimumAge !== undefined) {
-      ageConditions.push(
-        lte(
-          sql`date_part('year', age(${user.dateOfBirth}))`,
-          groupReqs?.minimumAge,
         ),
-      );
-    }
-    if (groupReqs?.maximumAge !== undefined) {
-      ageConditions.push(
-        gte(
-          sql`date_part('year', age(${user.dateOfBirth}))`,
-          groupReqs?.maximumAge,
-        ),
-      );
+    ]);
+
+    return [...blockedUsers, ...groupMembers].map((player) => player.id);
+  }
+
+  private getGroupRequirementRows(groupId: number) {
+    return db
+      .select({
+        //best approach: select nested objects
+        groupRequirements: {
+          minimumAge: groupRequirements.minimumAge,
+          maximumAge: groupRequirements.maximumAge,
+          isSameCountry: groupRequirements.isSameCountry,
+        },
+        group: {
+          country: group.country,
+        },
+      })
+      .from(groupRequirements)
+      .leftJoin(group, eq(groupRequirements.groupId, group.id))
+      .where(eq(groupRequirements.groupId, groupId));
+  }
+
+  private getAgeConditions(
+    requirements: { minimumAge?: number; maximumAge?: number } | null,
+  ): SQL[] {
+    const conditions: SQL[] = [];
+    const age = sql`date_part('year', age(${user.dateOfBirth}))`;
+
+    // A missing bound (null in the database) means no limit on that side
+    if (requirements?.minimumAge != null) {
+      conditions.push(gte(age, requirements.minimumAge));
     }
 
-    // 5. Prepare and Apply Country Filter (Conditional)
-    const countryConditions = [];
-    if (groupReqs?.isSameCountry) {
-      //check if country is set
-      if (!groupCountry) {
-        return []; // Or throw error, depending on how you want to handle this
-      }
-      countryConditions.push(eq(user.country, groupCountry));
+    if (requirements?.maximumAge != null) {
+      conditions.push(lte(age, requirements.maximumAge));
     }
-    // 6. Main Query Construction
 
-    const players = await db
+    return conditions;
+  }
+
+  // One row per looking-for-group post and category the player listed on it
+  private getPlayerRows(conditions: SQL[]) {
+    return db
       .select({
         user: {
           id: user.id,
@@ -557,16 +489,7 @@ export class LFGDrizzleRepository extends PrimaryRepository<
         ),
       )
       .leftJoin(follower, eq(follower.userId, user.id))
-      .where(
-        and(
-          notInArray(user.id, forbiddenIdsArray), // Use user.id here
-          ...countryConditions,
-          ...ageConditions,
-          minDOB ? gte(user.dateOfBirth, minDOB) : undefined,
-          maxDOB ? lte(user.dateOfBirth, maxDOB) : undefined,
-          // eloConditions.length > 0 ? or(...eloConditions) : undefined,
-        ),
-      )
+      .where(and(...conditions))
       .groupBy(
         user.id,
         user.name,
@@ -587,9 +510,14 @@ export class LFGDrizzleRepository extends PrimaryRepository<
         category.name,
         category.image,
       ); // Group by user and categoryCareer ID
+  }
 
+  private groupPlayerRows(
+    rows: Awaited<ReturnType<LFGDrizzleRepository['getPlayerRows']>>,
+  ) {
     const playerMap = new Map<number, any>();
-    for (const row of players) {
+
+    for (const row of rows) {
       if (!playerMap.has(row.user.id)) {
         playerMap.set(row.user.id, {
           user: row.user,

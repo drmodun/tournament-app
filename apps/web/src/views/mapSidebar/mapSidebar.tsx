@@ -16,7 +16,6 @@ import { MarkerLocation, Poi } from "utils/mixins/maps";
 import styles from "./mapSidebar.module.scss";
 import { useGetCompetitionsQuery } from "api/client/hooks/competitions/useGetCompetitionsQuery";
 import CardExpanded from "components/cardExpanded";
-import { formatDateTimeHTMLInput } from "utils/mixins/formatting";
 
 export default function MapSidebar() {
   const [selectedLocation, setSelectedLocation] = useState<MarkerLocation>();
@@ -28,8 +27,9 @@ export default function MapSidebar() {
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  const { data: competitionsData, isLoading: competitionsIsLoading } =
-    useGetCompetitionsQuery(selectedLocation?.id);
+  const { data: competitionsData } = useGetCompetitionsQuery(
+    selectedLocation?.id,
+  );
 
   useEffect(() => {
     sidebarRef?.current?.addEventListener("wheel", (e) => {
@@ -157,7 +157,7 @@ const LocationInfo = ({ poi }: { poi: Poi }) => {
       <div className={styles.bottom}>
         <div className={styles.bottomLeft}>
           <Link
-            href={`https://www.google.com/maps/place/${poi.location.lat},${poi.location.lng}`}
+            href={`https://www.openstreetmap.org/?mlat=${poi.location.lat}&mlon=${poi.location.lng}#map=12/${poi.location.lat}/${poi.location.lng}`}
           >
             <PlaceIcon className={clsx(styles.primaryFill)} />
           </Link>

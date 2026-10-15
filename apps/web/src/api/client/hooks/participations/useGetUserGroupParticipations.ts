@@ -2,9 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  IBaseQueryResponse,
   IMiniParticipationResponseWithGroup,
-  IParticipationResponse,
   ParticipationResponsesEnum,
 } from "@tournament-app/types";
 import {

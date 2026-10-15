@@ -19,13 +19,11 @@ export default function AddLFGForm() {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
-  const [name, setName] = useState<string>();
+  const [name] = useState<string>();
 
   const createLFGMutation = useCreateLFG();
-  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
-    useGetCategoriesInfinite();
-  const { data: searchData, isLoading: searchLoading } =
-    useGetCategoriesFilter(name);
+  const { data } = useGetCategoriesInfinite();
+  const { data: searchData } = useGetCategoriesFilter(name);
 
   const methods = useForm<ICreateLFGRequest>();
   const onSubmit = (data: ICreateLFGRequest) => {

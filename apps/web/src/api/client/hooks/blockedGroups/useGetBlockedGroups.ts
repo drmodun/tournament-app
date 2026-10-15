@@ -4,7 +4,6 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   IBaseQueryResponse,
   IMiniGroupResponseWithCountry,
-  IMiniUserResponseWithProfilePicture,
 } from "@tournament-app/types";
 import {
   clientApi,

@@ -18,7 +18,6 @@ import {
   user,
 } from '../db/schema';
 import {
-  alias,
   AnyPgSelectQueryBuilder,
   PgColumn,
   PgSelect,
@@ -56,7 +55,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
     query: TSelect,
     typeEnum: UserReturnTypesEnumType,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     switch (typeEnum) {
       case UserResponsesEnum.BASE:
@@ -218,7 +217,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
   };
 
   getValidWhereClause(query: UserQuery): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(([_, value]) => value);
 
     return clauses.map(([key, value]) => {

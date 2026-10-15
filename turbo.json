@@ -1,12 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["PORT"],
+  "globalEnv": ["PORT", "NODE_ENV"],
   "tasks": {
     "build": {
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"],
       "dependsOn": ["^build"],
-      "env": ["NEXT_PUBLIC_API_HOST", "GOOGLE_MAPS_API_KEY"]
+      "env": ["NEXT_PUBLIC_API_URL", "NEXT_PUBLIC_GEOCODER_URL", "NEXT_PUBLIC_MAP_STYLE_URL", "NEXT_PUBLIC_MAP_STYLE_URL_DARK", "API_INTERNAL_URL"]
     },
     "test": {
       "outputs": ["coverage/**"],

@@ -43,7 +43,7 @@ export default function AddLFGForm({ onClose }: { onClose?: () => void }) {
   const methods = useForm<ICreateLFGRequest>();
   const onSubmit = async (_data: ICreateLFGRequest) => {
     _data.categoryIds = returnIdsFromIndexes();
-    const a = await createLFGMutation.mutateAsync(_data);
+    await createLFGMutation.mutateAsync(_data);
     onClose && onClose();
   };
 

@@ -4,14 +4,13 @@ import { UseMutationResult } from "@tanstack/react-query";
 import { ICreateGroupRequest } from "@tournament-app/types";
 import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
 import { useGetGroup } from "api/client/hooks/groups/useGetGroup";
-import { useCreateLocation } from "api/client/hooks/locations/useCreateLocation";
-import { fetchAutocomplete } from "api/googleMapsAPI/places";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dropdown from "components/dropdown";
 import ImageDrop from "components/imageDrop";
 import ImagePicker from "components/imagePicker";
 import Input from "components/input";
+import LocationInput from "components/locationInput";
 import ProgressWheel from "components/progressWheel";
 import RichEditor from "components/richEditor";
 import SlideButton from "components/slideButton";
@@ -24,6 +23,7 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
 import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
 import styles from "./editTeamForm.module.scss";
+import { useLocationPicker } from "utils/hooks/useLocationPicker";
 
 type EditTeamFormProps = {
   mutation: UseMutationResult<any, any, Partial<ICreateGroupRequest>, void>;
@@ -40,42 +40,19 @@ export default function EditTeamForm({
   const { data, isLoading, isError } = useGetGroup(groupId);
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
-  const [listener, setListener] = useState<google.maps.MapsEventListener>();
-  const [locationId, setLocationId] = useState<number>();
+  const { locationId, selectPlace } = useLocationPicker();
   const [logo, setLogo] = useState<string>();
 
   const deleteGroupMutation = useDeleteGroup();
 
   const editMethods = useForm<Partial<ICreateGroupRequest>>();
   const onEditSubmit: SubmitHandler<Partial<ICreateGroupRequest>> = async (
-    data
+    data,
   ) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
     await mutation.mutateAsync(data);
     onClose && onClose();
-  };
-
-  const createLocationMutation = useCreateLocation();
-
-  const handleAutocomplete = async (
-    autocomplete: google.maps.places.Autocomplete,
-    placeName?: string
-  ) => {
-    listener && google.maps.event.removeListener(listener);
-
-    const place = autocomplete.getPlace();
-
-    if (!place.geometry?.location || !placeName || !place.place_id) return;
-
-    const res = await createLocationMutation.mutateAsync({
-      lat: place.geometry?.location?.lat(),
-      lng: place.geometry?.location?.lng(),
-      name: placeName,
-      apiId: place.place_id,
-    });
-
-    setLocationId(res.id);
   };
 
   useEffect(() => {
@@ -268,7 +245,7 @@ export default function EditTeamForm({
             )}
           </div>
           <div className={styles.dialogOption}>
-            <Input
+            <LocationInput
               variant={textColorTheme}
               label="location"
               placeholder="enter your place of residence"
@@ -277,15 +254,7 @@ export default function EditTeamForm({
               className={styles.input}
               isReactFormHook={true}
               defaultValue={data?.location?.name}
-              onChange={(e) => {
-                fetchAutocomplete(e.target).then((autocomplete) => {
-                  const tempListener = autocomplete.addListener(
-                    "place_changed",
-                    () => handleAutocomplete(autocomplete, e.target.value)
-                  );
-                  setListener(tempListener);
-                });
-              }}
+              onSelect={selectPlace}
             />
 
             {editMethods.formState.errors.locationId?.type === "required" && (

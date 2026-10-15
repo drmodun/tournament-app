@@ -2,7 +2,6 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  IMatchupResponseWithResultsAndScores,
   IMatchupsWithMiniRostersResponse,
   IQueryRosterRequest,
 } from "@tournament-app/types";

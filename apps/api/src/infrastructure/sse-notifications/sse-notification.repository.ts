@@ -55,7 +55,7 @@ export class SseNotificationRepository extends PrimaryRepository<
   conditionallyJoin<TSelect extends AnyPgSelectQueryBuilder>(
     query: TSelect,
   ):
-    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right'>
+    | PgSelectJoinFn<TSelect, true, 'left' | 'full' | 'inner' | 'right', false>
     | TSelect {
     return query;
   }
@@ -85,7 +85,6 @@ export class SseNotificationRepository extends PrimaryRepository<
   }
 
   getValidWhereClause(query: NotificationQueryDto): SQL[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const clauses = Object.entries(query).filter(
       ([_, value]) => value !== undefined,
     );

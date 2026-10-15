@@ -3,8 +3,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmailService } from '../email.service';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
-import Mailgun from 'mailgun.js';
-import FormData from 'form-data';
 import { EmailGenerationData, TemplatesEnum } from '../../types';
 import Handlebars from 'handlebars';
 import 'reflect-metadata';
@@ -18,21 +16,14 @@ describe('EmailService', () => {
   let logger: Logger;
 
   beforeEach(async () => {
-    process.env.EMAIL_KEY = 'test-key';
-    process.env.EMAIL_DOMAIN = 'test-domain';
+    process.env.EMAIL_FROM = 'noreply@test-domain';
+    delete process.env.SMTP_HOST;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [EmailService],
     }).compile();
 
     service = module.get<EmailService>(EmailService);
-
-    jest.spyOn(service, 'createMailgunClient').mockImplementation(() => {
-      return new Mailgun(FormData).client({
-        key: 'test-key',
-        username: 'api',
-      });
-    });
 
     logger = new Logger(EmailService.name);
   });
@@ -41,14 +32,47 @@ describe('EmailService', () => {
     jest.clearAllMocks();
   });
 
-  it('should throw an error if email credentials are not set', () => {
-    delete process.env.EMAIL_KEY;
-    delete process.env.EMAIL_DOMAIN;
+  it('should throw an error if the email sender is not set', () => {
+    delete process.env.EMAIL_FROM;
 
     expect(() => new EmailService()).toThrow(InternalServerErrorException);
   });
 
-  it('should generate Mailgun message data', async () => {
+  it('should throw an error in production if no SMTP server is set', () => {
+    const mode = process.env.MODE;
+    process.env.MODE = 'production';
+
+    try {
+      expect(() => new EmailService()).toThrow(InternalServerErrorException);
+    } finally {
+      process.env.MODE = mode;
+    }
+  });
+
+  it('should connect to the configured SMTP server', () => {
+    process.env.SMTP_HOST = 'smtp.example.com';
+    process.env.SMTP_PORT = '465';
+    process.env.SMTP_USER = 'user';
+    process.env.SMTP_PASSWORD = 'password';
+
+    try {
+      const { options } = new EmailService().transporter;
+
+      expect(options).toMatchObject({
+        host: 'smtp.example.com',
+        port: 465,
+        secure: true,
+        auth: { user: 'user', pass: 'password' },
+      });
+    } finally {
+      delete process.env.SMTP_HOST;
+      delete process.env.SMTP_PORT;
+      delete process.env.SMTP_USER;
+      delete process.env.SMTP_PASSWORD;
+    }
+  });
+
+  it('should generate message data', async () => {
     const data: EmailGenerationData = {
       subject: 'Test Subject',
       template: TemplatesEnum.TEST_TEMPLATE,
@@ -58,7 +82,7 @@ describe('EmailService', () => {
 
     jest.spyOn(service, 'renderEmail').mockResolvedValue('Test HTML');
 
-    const result = await service.generateMailgunMessageData(data);
+    const result = await service.generateMessageData(data);
 
     expect(result).toEqual({
       from: 'noreply@test-domain',
@@ -127,11 +151,11 @@ describe('EmailService', () => {
       html: 'Test HTML',
     };
 
-    jest.spyOn(service.mailgunClient.messages, 'create').mockResolvedValue({
-      status: 200,
-    });
+    const sendMail = jest.fn().mockResolvedValue({});
+    service.transporter.sendMail = sendMail;
 
     await expect(service.sendMail(data)).resolves.not.toThrow();
+    expect(sendMail).toHaveBeenCalledWith(data);
   });
 
   it('should throw an error if the email could not be sent', async () => {
@@ -142,9 +166,9 @@ describe('EmailService', () => {
       html: 'Test HTML',
     };
 
-    jest.spyOn(service.mailgunClient.messages, 'create').mockResolvedValue({
-      status: 500,
-    });
+    service.transporter.sendMail = jest
+      .fn()
+      .mockRejectedValue(new Error('Connection refused'));
 
     jest.spyOn(logger, 'error').mockImplementation(() => {});
 

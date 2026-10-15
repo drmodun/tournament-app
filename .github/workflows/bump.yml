@@ -19,9 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
       - name: Deploy API documentation
-        uses: bump-sh/github-action@v1
+        uses: bump-sh/github-action@3cfa0288007867bad2515ca467cc01d8291a3301 # v1
         with:
           doc: winning-api
           token: ${{ secrets.BUMP_TOKEN }}
@@ -32,9 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
       - name: Comment pull request with API diff
-        uses: bump-sh/github-action@v1
+        uses: bump-sh/github-action@3cfa0288007867bad2515ca467cc01d8291a3301 # v1
         with:
           doc: winning-api
           token: ${{ secrets.BUMP_TOKEN }}

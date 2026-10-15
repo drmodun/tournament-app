@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageManage.module.scss";
 import ManageBlockedUsers from "views/manageBlockedUsers";
 
 export default function BlockedUsers() {

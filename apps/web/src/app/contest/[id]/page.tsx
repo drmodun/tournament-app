@@ -2,7 +2,7 @@ import { fetchCompetition } from "api/client/hooks/competitions/serverFetches";
 import { clsx } from "clsx";
 import Competition from "views/competition";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageCentered.module.scss";
 
 export default async function Contest({
   params,

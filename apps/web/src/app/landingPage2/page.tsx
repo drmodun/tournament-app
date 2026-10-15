@@ -9,7 +9,7 @@ import Hero from "views/hero";
 import Navbar from "views/navbar";
 import ProfileAchievements from "views/profileAchievements";
 import Promote from "views/promote";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageLanding.module.scss";
 
 export default function LandingPage() {
   const { theme } = useThemeContext();

@@ -3,7 +3,7 @@
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import LoginForm from "views/loginForm";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageLanding.module.scss";
 
 export default function LoginPage() {
   const { theme } = useThemeContext();

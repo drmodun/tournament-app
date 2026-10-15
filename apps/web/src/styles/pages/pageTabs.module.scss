@@ -1,15 +1,16 @@
-@import "../../styles/";
+@import "../";
 
 .screen {
-  padding-top: $doublePadding * 4;
-  padding-bottom: $doublePadding * 2;
   width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding-left: $horizontalMargin;
   padding-right: $horizontalMargin;
+  padding-top: 4 * $doublePadding;
+  padding-bottom: $doublePadding * 2;
 
   @media screen and (max-width: $tabletBreakpoint) {
     padding-left: $doublePadding;
@@ -22,4 +23,13 @@
   left: 50%;
   top: 0;
   transform: translate(-50%, 0);
+}
+
+.tabs {
+  width: 100%;
+  display: flex;
+  margin-bottom: $doublePadding;
+  gap: $halfPadding;
+  padding: $padding;
+  border-radius: $borderRadius;
 }

@@ -2,7 +2,7 @@ import { fetchGroup } from "api/client/hooks/groups/serverFetches";
 import { clsx } from "clsx";
 import Group from "views/group";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageCentered.module.scss";
 
 export default async function GroupPage({
   params,

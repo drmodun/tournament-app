@@ -1,7 +1,7 @@
 import { fetchStage } from "api/client/hooks/stages/serverFetches";
 import ManageStage from "views/manageStage";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageTabs.module.scss";
 
 export default async function Stages({
   params,

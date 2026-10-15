@@ -2,7 +2,7 @@
 
 import ManageGroupInvites from "views/manageGroupInvites";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageManage.module.scss";
 
 export default async function GroupInvites() {
   return (

@@ -1,6 +1,6 @@
 import ManageUserManagedMatchups from "views/manageUserManagedMatchups";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageTabs.module.scss";
 
 export default async function Matchups({
   params,

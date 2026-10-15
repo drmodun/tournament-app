@@ -3,7 +3,7 @@
 import { fetchStage } from "api/client/hooks/stages/serverFetches";
 import ManageRosters from "views/manageRosters";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageDetail.module.scss";
 
 export default async function Rosters({
   params,

@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import Navbar from "views/navbar";
 import RequestPasswordReset from "views/requestPasswordReset";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageSearch.module.scss";
 
 export default async function ResetPasswordRequest() {
   return (

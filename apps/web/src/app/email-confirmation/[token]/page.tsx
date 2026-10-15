@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import Navbar from "views/navbar";
 import VerifyUser from "views/verifyUser";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageCentered.module.scss";
 
 export default async function EmailConfirmation({
   params,

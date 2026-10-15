@@ -1,6 +1,6 @@
 import ManageQuizzes from "views/manageQuizzes";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageManageTabs.module.scss";
 import { Suspense } from "react";
 
 export default async function Quizzes() {

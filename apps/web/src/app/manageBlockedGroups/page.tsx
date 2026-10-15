@@ -9,7 +9,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import ManageBlockedGroups from "views/manageBlockedGroups/manageBlockedGroups";
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageManage.module.scss";
 
 export default function BlockedGroups() {
   const { isLoading, isError } = useAuth();

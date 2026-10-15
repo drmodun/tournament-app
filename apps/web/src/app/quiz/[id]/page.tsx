@@ -1,5 +1,5 @@
 import Navbar from "views/navbar";
-import styles from "./index.module.scss";
+import styles from "styles/pages/pageTabs.module.scss";
 import ManageQuiz from "views/manageQuiz";
 
 export default async function Quiz({

@@ -11,7 +11,6 @@ import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMe
 import { useCheckIfUserIsParticipating } from "api/client/hooks/participations/useCheckIfUserIsParticipating";
 import { useCreateSoloParticipation } from "api/client/hooks/participations/useCreateSoloParticipation";
 import { useGetUserGroupParticipations } from "api/client/hooks/participations/useGetUserGroupParticipations";
-import { clsx } from "clsx";
 import Button from "components/button";
 import Chip from "components/chip";
 import Dialog from "components/dialog";
@@ -19,8 +18,6 @@ import ProgressWheel from "components/progressWheel";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import Link from "next/link";
 import { useState } from "react";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -30,12 +27,8 @@ import {
 } from "utils/mixins/formatting";
 import EditCompetitionForm from "views/editCompetitionForm";
 import GroupSelectDialog from "views/groupSelectDialog";
+import DetailPage, { SidebarSection } from "components/detailPage";
 import styles from "./competition.module.scss";
-
-type SidebarSectionProps = {
-  name: string;
-  children?: React.ReactNode;
-};
 
 export default function Competition({
   competition,
@@ -64,62 +57,37 @@ export default function Competition({
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
 
   return (
-    <div className={clsx(styles.wrapper)}>
-      <Dialog
-        active={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        variant={theme}
-        className={styles.dialog}
-      >
-        <EditCompetitionForm
-          competition={competition}
-          onClose={() => setEditModalOpen(false)}
-        />
-      </Dialog>
-      <Dialog
-        active={groupSelectModalOpen}
-        onClose={() => setGroupSelectModalOpen(false)}
-        variant={theme}
-        className={styles.dialog}
-      >
-        <GroupSelectDialog competitionId={competition?.id} />
-      </Dialog>
-      <div className={clsx(styles.left)}>
-        <div className={clsx(styles.banner)}>
-          <div className={styles.bannerContent}>
-            <img
-              src={competition?.logo ?? "/noimg.jpg"}
-              className={styles.bannerLogo}
-              onError={(e) => {
-                e.currentTarget.src = "/noimg.jpg";
-              }}
-            />
-            <div className={styles.bannerText}>
-              <h1
-                className={clsx(
-                  styles.organiserName,
-                  globals[`${textColorTheme}Color`],
-                )}
-              >
-                {competition?.name}
-              </h1>
-              <p className={clsx(styles.organiserName, styles.mutedColor)}>
-                {competition?.creator?.username}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className={clsx(styles.content)}>
-          <Markdown
-            className={globals[`${textColorTheme}Color`]}
-            rehypePlugins={[rehypeRaw]}
+    <DetailPage
+      logo={competition?.logo}
+      title={competition?.name}
+      subtitle={competition?.creator?.username}
+      description={competition?.description}
+      spacedSidebar
+      dialogs={
+        <>
+          <Dialog
+            active={editModalOpen}
+            onClose={() => setEditModalOpen(false)}
+            variant={theme}
+            className={styles.dialog}
           >
-            {competition?.description}
-          </Markdown>
-        </div>
-      </div>
-      <div className={clsx(styles.right)}>
-        <div className={styles.sidebarContent}>
+            <EditCompetitionForm
+              competition={competition}
+              onClose={() => setEditModalOpen(false)}
+            />
+          </Dialog>
+          <Dialog
+            active={groupSelectModalOpen}
+            onClose={() => setGroupSelectModalOpen(false)}
+            variant={theme}
+            className={styles.dialog}
+          >
+            <GroupSelectDialog competitionId={competition?.id} />
+          </Dialog>
+        </>
+      }
+      sidebar={
+        <>
           {competition?.startDate && competition?.endDate && (
             <SidebarSection name="date">
               <div className={styles.dates}>
@@ -179,90 +147,77 @@ export default function Competition({
               <Chip label={competition?.category?.name}></Chip>
             </SidebarSection>
           )}
-        </div>
-        {groupMembershipIsLoading || isLoading ? (
-          <ProgressWheel variant={textColorTheme} />
-        ) : (
-          data &&
-          (groupMembershipData?.role === groupRoleEnum.ADMIN ||
-          groupMembershipData?.role === groupRoleEnum.OWNER ||
-          competition?.creator?.id == data?.id ? (
-            <div className={styles.manageCompetitionButtonsWrapper}>
-              <Button
-                variant="warning"
-                label="edit competition"
-                onClick={() => setEditModalOpen(true)}
-              />
-              <Button
-                variant="danger"
-                label="delete competition"
-                onClick={() => deleteCompetitionMutation.mutate(competition.id)}
-              />
-              <Link
-                href={`/manageStages/${competition?.id}`}
-                className={styles.linkStage}
-              >
-                <Button variant={textColorTheme} label="view stages" />
-              </Link>
-            </div>
-          ) : (participationData?.results?.length ?? -1) > 0 ||
-            !competition?.isPublic ||
-            (groupParticipationData?.length ?? -1) > 0 ? (
-            <div className={styles.manageCompetitionButtonsWrapper}>
-              <Link
-                href={`/stages/${competition?.id}`}
-                className={styles.linkStage}
-              >
-                <Button variant={textColorTheme} label="view stages" />
-              </Link>
-            </div>
+        </>
+      }
+      actions={
+        <>
+          {groupMembershipIsLoading || isLoading ? (
+            <ProgressWheel variant={textColorTheme} />
           ) : (
-            <div className={styles.manageCompetitionButtonsWrapper}>
-              {competition.teamType !== tournamentTeamTypeEnum.TEAM && (
+            data &&
+            (groupMembershipData?.role === groupRoleEnum.ADMIN ||
+            groupMembershipData?.role === groupRoleEnum.OWNER ||
+            competition?.creator?.id == data?.id ? (
+              <div className={styles.manageCompetitionButtonsWrapper}>
                 <Button
-                  variant="primary"
-                  label="join competition"
+                  variant="warning"
+                  label="edit competition"
+                  onClick={() => setEditModalOpen(true)}
+                />
+                <Button
+                  variant="danger"
+                  label="delete competition"
                   onClick={() =>
-                    soloJoinCompetitionMutation.mutate(competition?.id)
+                    deleteCompetitionMutation.mutate(competition.id)
                   }
                 />
-              )}
-              {competition.teamType !== tournamentTeamTypeEnum.SOLO && (
-                <Button
-                  variant="primary"
-                  label="join competition with group"
-                  onClick={() => setGroupSelectModalOpen(true)}
-                />
-              )}
-              <Link
-                href={`/stages/${competition?.id}`}
-                className={styles.linkStage}
-              >
-                <Button variant={textColorTheme} label="view stages" />
-              </Link>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
+                <Link
+                  href={`/manageStages/${competition?.id}`}
+                  className={styles.linkStage}
+                >
+                  <Button variant={textColorTheme} label="view stages" />
+                </Link>
+              </div>
+            ) : (participationData?.results?.length ?? -1) > 0 ||
+              !competition?.isPublic ||
+              (groupParticipationData?.length ?? -1) > 0 ? (
+              <div className={styles.manageCompetitionButtonsWrapper}>
+                <Link
+                  href={`/stages/${competition?.id}`}
+                  className={styles.linkStage}
+                >
+                  <Button variant={textColorTheme} label="view stages" />
+                </Link>
+              </div>
+            ) : (
+              <div className={styles.manageCompetitionButtonsWrapper}>
+                {competition.teamType !== tournamentTeamTypeEnum.TEAM && (
+                  <Button
+                    variant="primary"
+                    label="join competition"
+                    onClick={() =>
+                      soloJoinCompetitionMutation.mutate(competition?.id)
+                    }
+                  />
+                )}
+                {competition.teamType !== tournamentTeamTypeEnum.SOLO && (
+                  <Button
+                    variant="primary"
+                    label="join competition with group"
+                    onClick={() => setGroupSelectModalOpen(true)}
+                  />
+                )}
+                <Link
+                  href={`/stages/${competition?.id}`}
+                  className={styles.linkStage}
+                >
+                  <Button variant={textColorTheme} label="view stages" />
+                </Link>
+              </div>
+            ))
+          )}
+        </>
+      }
+    />
   );
 }
-
-const SidebarSection = ({ name, children }: SidebarSectionProps) => {
-  const { theme } = useThemeContext();
-  const textColorTheme = textColor(theme);
-  return (
-    <div className={styles.sidebarSection}>
-      <p
-        className={clsx(
-          styles.sidebarSectionName,
-          globals.label,
-          globals[`${textColorTheme}Color`],
-        )}
-      >
-        {name}
-      </p>
-      {children}
-    </div>
-  );
-};

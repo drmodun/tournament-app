@@ -11,7 +11,7 @@ export abstract class CompositeRepository<
   TCreateRequest extends Partial<InferInsertModel<TTable>> = Partial<
     InferInsertModel<TTable>
   >,
-  TCompositeKey extends Record<string, any> = Record<string, any>,
+  TCompositeKey extends Record<string, unknown> = Record<string, unknown>,
 > extends BaseDrizzleRepository<TTable, TQueryRequest> {
   constructor(model: TTable) {
     super(model);

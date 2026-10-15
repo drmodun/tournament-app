@@ -5,6 +5,12 @@ import { UsersService } from 'src/users/users.service';
 import { UserDtosEnum } from 'src/users/types';
 import { ValidatedUserDto } from '../dto/validatedUser.dto';
 
+interface GoogleProfile {
+  emails: { value: string }[];
+  name: { givenName: string };
+  photos: { value: string }[];
+}
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(private readonly usersService: UsersService) {
@@ -21,7 +27,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     this.usersService = usersService;
   }
 
-  async validate(profile: any, done: VerifyCallback): Promise<VerifyCallback> {
+  async validate(
+    profile: GoogleProfile,
+    done: VerifyCallback,
+  ): Promise<VerifyCallback> {
     const { emails } = profile;
 
     const check = await this.usersService.findOneByEmail<ValidatedUserDto>(
@@ -34,7 +43,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done(null, user);
   }
 
-  async createAndGet(profile: any): Promise<ValidatedUserDto> {
+  async createAndGet(profile: GoogleProfile): Promise<ValidatedUserDto> {
     const userId = await this.createIfNotExist(profile);
 
     if (!userId) {
@@ -55,7 +64,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     return user;
   }
 
-  async createIfNotExist(profile: any): Promise<number> {
+  async createIfNotExist(profile: GoogleProfile): Promise<number> {
     const { name, emails, photos } = profile;
 
     const user = await this.usersService.create({

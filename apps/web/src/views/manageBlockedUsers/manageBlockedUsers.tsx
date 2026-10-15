@@ -1,18 +1,12 @@
 "use client";
 
 import { IGroupMembershipResponse } from "@tournament-app/types";
-import { clsx } from "clsx";
-import ProgressWheel from "components/progressWheel";
+import BlockedList from "components/blockedList";
 import { useState } from "react";
-import globals from "styles/globals.module.scss";
-import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import styles from "./manageBlockedUsers.module.scss";
 import { useGetBlockedUsers } from "api/client/hooks/blockedUsers/useGetBlockedUsers";
 import InfiniteDropdown from "components/infiniteDropdown";
 import { useAdminUserGroups } from "api/client/hooks/groups/useAdminUserGroups";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "components/button";
 import { useDeleteBlockedUser } from "api/client/hooks/blockedUsers/useDeleteBlockedUser";
 import { useInfiniteScrollTrigger } from "utils/hooks/useInfiniteScrollTrigger";
 
@@ -34,7 +28,6 @@ export default function ManageBlockedUsers() {
     isFetching: adminIsFetching,
     isLoading: adminIsLoading,
   } = useAdminUserGroups();
-  const textColorTheme = textColor(theme);
 
   const deleteBlockedUserMutation = useDeleteBlockedUser();
 
@@ -47,16 +40,11 @@ export default function ManageBlockedUsers() {
   });
 
   return (
-    <div
-      className={clsx(
-        styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`],
-      )}
-    >
-      <div className={styles.competitionsTitle}>
-        <b className={clsx(globals[`${theme}Color`], styles.title)}>
-          blocked users
-        </b>
+    <BlockedList
+      variant={theme}
+      title="blocked users"
+      emptyText="there are no blocked users for this group!"
+      header={
         <InfiniteDropdown
           options={
             adminData?.pages?.flatMap((page) => {
@@ -81,67 +69,23 @@ export default function ManageBlockedUsers() {
             );
           }}
         />
-      </div>
-      {adminIsLoading ? (
-        <ProgressWheel variant={textColorTheme} />
-      ) : (
-        <div className={styles.blockedUsersWrapper}>
-          <div className={styles.blockedUsers}>
-            {(blockedUsers?.pages[0].results.length ?? -1) <= 0 ? (
-              <div>
-                <p className={globals[`${theme}Color`]}>
-                  there are no blocked users for this group!
-                </p>
-              </div>
-            ) : (
-              blockedUsers?.pages.map((page) =>
-                page?.results.map((card, index) => {
-                  return (
-                    <div
-                      className={clsx(
-                        styles.userCard,
-                        globals[`${textColorTheme}Color`],
-                        globals[`${theme}BackgroundColor`],
-                      )}
-                      key={index}
-                    >
-                      <div className={styles.leftContent}>
-                        <img
-                          src={card.profilePicture ?? "/profilePicture.png"}
-                          onError={(e) => {
-                            e.currentTarget.src = "/profilePicture.png";
-                          }}
-                          className={styles.pfp}
-                        />
-                        <p>{card.username}</p>
-                      </div>
-                      <Button
-                        variant="danger"
-                        onClick={() =>
-                          deleteBlockedUserMutation.mutate({
-                            groupId: selectedGroup?.group?.id,
-                            userId: card.id,
-                          })
-                        }
-                      >
-                        <DeleteIcon
-                          className={clsx(
-                            globals.lightFillChildren,
-                            styles.trashButton,
-                          )}
-                        />
-                      </Button>
-                    </div>
-                  );
-                }),
-              )
-            )}
-          </div>
-          <div ref={loadMoreRef} className={styles.loadMore}>
-            {isFetching && <ProgressWheel variant={textColorTheme} />}
-          </div>
-        </div>
+      }
+      items={blockedUsers?.pages.flatMap((page) =>
+        page?.results.map((card) => ({
+          id: card.id,
+          name: card.username,
+          image: card.profilePicture,
+        })),
       )}
-    </div>
+      isLoading={adminIsLoading}
+      isFetching={isFetching}
+      loadMoreRef={loadMoreRef}
+      onRemove={(userId) =>
+        deleteBlockedUserMutation.mutate({
+          groupId: selectedGroup?.group?.id,
+          userId,
+        })
+      }
+    />
   );
 }

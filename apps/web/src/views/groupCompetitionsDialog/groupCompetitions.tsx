@@ -2,12 +2,10 @@
 
 import { useGetGroupTournaments } from "api/client/hooks/groups/useGetGroupTournaments";
 import { clsx } from "clsx";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import Link from "next/link";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import { COUNTRY_NAMES_TO_CODES } from "utils/mixins/formatting";
+import LinkCard from "components/linkCard";
 import styles from "./groupCompetitions.module.scss";
 
 export default function GroupMembersDialog({
@@ -32,40 +30,16 @@ export default function GroupMembersDialog({
         ) : (
           data?.results.map((comp) => {
             return (
-              <Link
+              <LinkCard
+                key={comp.id}
                 href={`/contest/${comp.id}`}
-                className={clsx(
-                  styles.noTextDecoration,
-                  styles.userCardLink,
-                  globals[`${textColorTheme}BackgroundColor`],
-                )}
-              >
-                <div className={styles.userCardInnerWrapper}>
-                  <img
-                    src={comp.logo ?? "/noimg.jpg"}
-                    className={styles.userCardProfilePicture}
-                    onError={(e) => {
-                      e.currentTarget.src = "/noimg.jpg";
-                    }}
-                  />
-                  <div
-                    className={clsx(
-                      globals[`${theme}Color`],
-                      styles.userCardTextWrapper,
-                    )}
-                    title={comp.name}
-                  >
-                    <b className={styles.userCardText}>{comp.name} </b>
-                    <p className={styles.userCardText}>
-                      {comp.country &&
-                        getUnicodeFlagIcon(
-                          COUNTRY_NAMES_TO_CODES[comp.country] ?? "ZZ",
-                        )}
-                    </p>
-                    <p className={styles.userCardText}>{comp.type}</p>
-                  </div>
-                </div>
-              </Link>
+                image={comp.logo}
+                fallbackImage="/noimg.jpg"
+                name={comp.name}
+                country={comp.country}
+                detail={comp.type ?? ""}
+                variant={theme}
+              />
             );
           })
         )}

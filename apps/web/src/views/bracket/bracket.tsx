@@ -44,7 +44,7 @@ export default function BracketView({
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       {stage?.challongeTournamentId ? (

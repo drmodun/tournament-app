@@ -11,9 +11,7 @@ export function ClientProviders({ children }: { children: ReactNode }) {
     <ThemeProvider>
       <ToastProvider>
         <DrawerProvider>
-          <NotificationProvider>
-            {children}
-          </NotificationProvider>
+          <NotificationProvider>{children}</NotificationProvider>
         </DrawerProvider>
       </ToastProvider>
     </ThemeProvider>

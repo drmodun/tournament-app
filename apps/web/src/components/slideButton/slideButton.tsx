@@ -14,7 +14,7 @@ export interface SlideButtonProps {
   variant?: Variants;
   className?: string;
   labelClassName?: string;
-   
+
   onChange?: (val: string) => void;
   disabled?: boolean;
   options: string[];

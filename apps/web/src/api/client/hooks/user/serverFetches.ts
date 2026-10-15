@@ -9,7 +9,7 @@ export const fetchUser = async (userId: number) =>
     `${serverApiUrl}/users/${userId}?responseType=${UserResponsesEnum.EXTENDED}`,
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   ).then((res) => res.json().then((res) => res));
 
 export const invalidateUser = async () => {

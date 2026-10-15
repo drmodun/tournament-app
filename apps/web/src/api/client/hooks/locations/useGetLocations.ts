@@ -23,7 +23,7 @@ export const getLocations = async (pageParam?: number) =>
           page: pageParam ?? 1,
           returnType: LocationResponsesEnum.EXTENDED,
         },
-      }
+      },
     )
     .then((res) => res.data);
 

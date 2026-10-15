@@ -37,7 +37,7 @@
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "lowlight": "^3.2.0",
-    "maplibre-gl": "^5.24.0",
+    "maplibre-gl": "^6.4.1",
     "next": "^16.4.0",
     "react": "^19.3.0",
     "react-avatar-editor": "^13.0.2",
@@ -48,7 +48,7 @@
     "react-material-symbols": "^4.4.0",
     "react-svg-pan-zoom": "^3.13.1",
     "rehype-raw": "^7.0.0",
-    "sharp": "^0.33.5",
+    "sharp": "^0.35.5",
     "styled-components": "^6.1.15",
     "tiptap-markdown": "^0.8.10"
   },

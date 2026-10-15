@@ -78,7 +78,7 @@ export default function AddInterestsForm({
     if (
       (data?.pages?.[page]?.results?.length ?? -1) > 0 &&
       data?.pages[page]?.results?.filter(
-        (category) => !userInterestIds?.includes(category.id)
+        (category) => !userInterestIds?.includes(category.id),
       ).length == 0
     ) {
       forward();
@@ -94,7 +94,7 @@ export default function AddInterestsForm({
         {isLoading ? (
           <ProgressWheel variant={textColorTheme} />
         ) : data?.pages[page]?.results?.filter(
-            (category) => !userInterestIds?.includes(category.id)
+            (category) => !userInterestIds?.includes(category.id),
           ).length == 0 ? (
           <div>
             <p className={globals[`${textColorTheme}Color`]}>
@@ -122,7 +122,7 @@ export default function AddInterestsForm({
               <div className={styles.userCardWrapper}>
                 {data?.pages[page]?.results
                   ?.filter(
-                    (category) => !userInterestIds?.includes(category.id)
+                    (category) => !userInterestIds?.includes(category.id),
                   )
                   .map((category) => (
                     <div
@@ -130,7 +130,7 @@ export default function AddInterestsForm({
                         setSelectedIds((prev) =>
                           selectedIds.includes(category.id)
                             ? prev.filter((e) => e != category.id)
-                            : [...prev, category.id]
+                            : [...prev, category.id],
                         )
                       }
                     >
@@ -181,7 +181,7 @@ export default function AddInterestsForm({
                   ) : (
                     selectedIds.map((id) => {
                       const category = data?.pages[page]?.results.find(
-                        (category) => category.id == id
+                        (category) => category.id == id,
                       );
                       return (
                         <InterestCard

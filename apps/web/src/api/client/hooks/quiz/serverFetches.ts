@@ -6,15 +6,12 @@ import { revalidatePath } from "next/cache";
 export const fetchQuiz = async (id: number | undefined) => {
   if (!id) return undefined;
 
-  return fetch(
-    `${serverApiUrl}/quiz/detailed/${id}`,
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  ).then((res) =>
+  return fetch(`${serverApiUrl}/quiz/detailed/${id}`, {
+    headers: { "Content-Type": "application/json" },
+  }).then((res) =>
     res.json().then((res) => {
       return res;
-    })
+    }),
   );
 };
 

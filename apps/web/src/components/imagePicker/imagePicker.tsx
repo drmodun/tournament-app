@@ -17,7 +17,7 @@ interface ImagePickerProps {
   reactFormHookProps?: Object;
   required?: boolean;
   className?: string;
-   
+
   onChange?: (e: string) => void;
   file?: File | string;
 }

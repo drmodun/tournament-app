@@ -11,11 +11,11 @@ export const fetchStage = async (stageId: number | undefined) => {
     `${serverApiUrl}/stages/${stageId}?responseType=${StageResponsesEnum.WITH_EXTENDED_TOURNAMENT}`,
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   ).then((res) =>
     res.json().then((res) => {
       return res;
-    })
+    }),
   );
 };
 
@@ -26,11 +26,11 @@ export const fetchStageWithChallonge = async (stageId: number | undefined) => {
     `${serverApiUrl}/stages/${stageId}?responseType=${StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT}`,
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   ).then((res) =>
     res.json().then((res) => {
       return res;
-    })
+    }),
   );
 };
 

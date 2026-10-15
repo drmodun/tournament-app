@@ -35,7 +35,7 @@ export default function ManageMatchupForm2({
   const [addMatchModalOpen, setAddMatchModalOpen] = useState<boolean>(false);
 
   const [winners, setWinners] = useState<boolean[]>(
-    matchup?.results ? new Array(matchup?.results.length).fill(false) : []
+    matchup?.results ? new Array(matchup?.results.length).fill(false) : [],
   );
 
   const rosters = matchup?.results.map((res) => res.roster);
@@ -95,7 +95,7 @@ export default function ManageMatchupForm2({
                       <div
                         className={clsx(
                           styles.userCard,
-                          globals[`${textColorTheme}BackgroundColor`]
+                          globals[`${textColorTheme}BackgroundColor`],
                         )}
                       >
                         <img
@@ -139,7 +139,7 @@ export default function ManageMatchupForm2({
               <div
                 className={clsx(
                   styles.resultsCard,
-                  globals[`${textColorTheme}BackgroundColor`]
+                  globals[`${textColorTheme}BackgroundColor`],
                 )}
               >
                 <p className={globals[`${theme}Color`]}>{score.roundNumber}.</p>
@@ -150,12 +150,12 @@ export default function ManageMatchupForm2({
                       globals.lightColor,
                       score?.scores?.[0].isWinner
                         ? globals.primaryBackgroundColor
-                        : globals.dangerBackgroundColor
+                        : globals.dangerBackgroundColor,
                     )}
                   >
                     {rosters
                       ?.filter(
-                        (elem) => elem.id === score?.scores?.[0].rosterId
+                        (elem) => elem.id === score?.scores?.[0].rosterId,
                       )
                       .map((roster) => {
                         return (
@@ -173,12 +173,12 @@ export default function ManageMatchupForm2({
                       globals.lightColor,
                       score?.scores?.[1].isWinner
                         ? globals.primaryBackgroundColor
-                        : globals.dangerBackgroundColor
+                        : globals.dangerBackgroundColor,
                     )}
                   >
                     {rosters
                       ?.filter(
-                        (elem) => elem.id === score?.scores?.[1].rosterId
+                        (elem) => elem.id === score?.scores?.[1].rosterId,
                       )
                       .map((roster) => {
                         return (

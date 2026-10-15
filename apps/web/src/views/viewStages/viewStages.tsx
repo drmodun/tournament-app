@@ -34,7 +34,7 @@ export default function ViewStages({
       className={clsx(
         styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
-        globals[`${theme}Color`]
+        globals[`${theme}Color`],
       )}
     >
       <h2 className={globals[`${theme}Color`]}>
@@ -54,7 +54,7 @@ export default function ViewStages({
                     key={i}
                     className={clsx(
                       styles.stagesContainer,
-                      styles[`${theme}Color`]
+                      styles[`${theme}Color`],
                     )}
                   >
                     {page.results.map((stage) => (

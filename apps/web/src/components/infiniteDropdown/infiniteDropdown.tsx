@@ -30,7 +30,7 @@ interface InfiniteDropdownProps {
   labelVariant?: TextVariants;
   labelStyle?: React.CSSProperties;
   options?: ButtonProps[];
-   
+
   onSelect?: (index: number) => void;
   children?: React.ReactNode;
   arrowed?: boolean;

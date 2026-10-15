@@ -18,7 +18,7 @@ interface ImageDropProps {
   reactFormHookProps?: Object;
   required?: boolean;
   className?: string;
-   
+
   onFile?: (file: File) => void;
 }
 

@@ -50,7 +50,7 @@ export default function ManageBlockedGroups() {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const currentRef = loadMoreRef.current;
@@ -67,7 +67,7 @@ export default function ManageBlockedGroups() {
     <div
       className={clsx(
         styles.wrapper,
-        globals[`${textColorTheme}BackgroundColor`]
+        globals[`${textColorTheme}BackgroundColor`],
       )}
     >
       <div className={styles.competitionsTitle}>
@@ -94,7 +94,7 @@ export default function ManageBlockedGroups() {
                       className={clsx(
                         styles.userCard,
                         globals[`${textColorTheme}Color`],
-                        globals[`${theme}BackgroundColor`]
+                        globals[`${theme}BackgroundColor`],
                       )}
                       key={index}
                     >
@@ -117,13 +117,13 @@ export default function ManageBlockedGroups() {
                         <DeleteIcon
                           className={clsx(
                             globals.lightFillChildren,
-                            styles.trashButton
+                            styles.trashButton,
                           )}
                         />
                       </Button>
                     </div>
                   );
-                })
+                }),
               )
             )}
           </div>

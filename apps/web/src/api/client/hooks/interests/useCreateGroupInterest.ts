@@ -12,7 +12,7 @@ import { handleError } from "utils/mixins/helpers";
 
 export const createGroupInterest = async (
   groupId?: number,
-  categoryId?: number
+  categoryId?: number,
 ) => {
   return clientApi
     .post<never, AxiosResponse>(`/group-interests/${groupId}/${categoryId}`, {

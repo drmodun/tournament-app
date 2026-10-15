@@ -49,7 +49,7 @@ export default function ManagedUserManagedMatchups({
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const currentRef = loadMoreRef.current;
@@ -75,7 +75,7 @@ export default function ManagedUserManagedMatchups({
       <div
         className={clsx(
           styles.contentWrapper,
-          globals[`${textColorTheme}BackgroundColor`]
+          globals[`${textColorTheme}BackgroundColor`],
         )}
       >
         {data &&
@@ -90,7 +90,7 @@ export default function ManagedUserManagedMatchups({
                     className={clsx(
                       styles.matchupCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}Color`]
+                      globals[`${textColorTheme}Color`],
                     )}
                     href={`/manageMatchup/${elem.id}`}
                   >
@@ -122,7 +122,7 @@ export default function ManagedUserManagedMatchups({
                                 <p
                                   className={clsx(
                                     globals[`${textColorTheme}Color`],
-                                    styles.versus
+                                    styles.versus,
                                   )}
                                 >
                                   vs

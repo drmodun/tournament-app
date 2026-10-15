@@ -132,7 +132,7 @@ export default function GroupSelectDialog({
               className={clsx(
                 styles.arrow,
                 creatorPage == 0 ? styles.disabled : styles.enabled,
-                globals[`${textColorTheme}FillChildren`]
+                globals[`${textColorTheme}FillChildren`],
               )}
             />
           </button>
@@ -151,7 +151,7 @@ export default function GroupSelectDialog({
                             globals[`${textColorTheme}BackgroundColor`],
                             globals[`${theme}Color`],
                           ],
-                      styles.groupInfoWrapper
+                      styles.groupInfoWrapper,
                     )}
                   >
                     <img
@@ -162,7 +162,7 @@ export default function GroupSelectDialog({
                     <div
                       className={clsx(
                         styles.inherit,
-                        styles.groupInfoTextWrapper
+                        styles.groupInfoTextWrapper,
                       )}
                     >
                       <p className={styles.inherit}>{group?.group?.name}</p>
@@ -180,7 +180,7 @@ export default function GroupSelectDialog({
               className={clsx(
                 styles.arrow,
                 adminPage == 0 ? styles.disabled : styles.enabled,
-                globals[`${textColorTheme}FillChildren`]
+                globals[`${textColorTheme}FillChildren`],
               )}
             />
           </button>
@@ -206,7 +206,7 @@ export default function GroupSelectDialog({
             className={clsx(
               styles.arrow,
               adminPage == 0 ? styles.disabled : styles.enabled,
-              globals[`${textColorTheme}FillChildren`]
+              globals[`${textColorTheme}FillChildren`],
             )}
           />
           <div className={styles.groupsInnerWrapper}>
@@ -224,7 +224,7 @@ export default function GroupSelectDialog({
                             globals[`${textColorTheme}BackgroundColor`],
                             globals[`${theme}Color`],
                           ],
-                      styles.groupInfoWrapper
+                      styles.groupInfoWrapper,
                     )}
                   >
                     <img
@@ -237,7 +237,7 @@ export default function GroupSelectDialog({
                     <div
                       className={clsx(
                         styles.inherit,
-                        styles.groupInfoTextWrapper
+                        styles.groupInfoTextWrapper,
                       )}
                     >
                       <p className={styles.inherit}>{group?.group?.name}</p>
@@ -255,7 +255,7 @@ export default function GroupSelectDialog({
             className={clsx(
               styles.arrow,
               adminPage == 0 ? styles.disabled : styles.enabled,
-              globals[`${textColorTheme}FillChildren`]
+              globals[`${textColorTheme}FillChildren`],
             )}
           />
         </div>

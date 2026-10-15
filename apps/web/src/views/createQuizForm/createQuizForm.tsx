@@ -316,7 +316,7 @@ export default function CreateQuizForm({
           <div
             className={clsx(
               styles.quizQuestionForm,
-              globals[`${textColorTheme}BackgroundColor`]
+              globals[`${textColorTheme}BackgroundColor`],
             )}
           >
             <CreateQuizQuestionForm
@@ -339,7 +339,7 @@ export default function CreateQuizForm({
                     className={clsx(
                       globals[`${textColorTheme}BackgroundColor`],
                       globals[`${theme}Color`],
-                      styles.question
+                      styles.question,
                     )}
                   >
                     <div className={styles.questionTop}>
@@ -385,7 +385,7 @@ export default function CreateQuizForm({
                       <div
                         className={clsx(
                           styles.questionProperty,
-                          styles.options
+                          styles.options,
                         )}
                       >
                         <b>options</b>
@@ -395,7 +395,7 @@ export default function CreateQuizForm({
                               className={clsx(
                                 styles.questionOption,
                                 globals[`${theme}BackgroundColor`],
-                                globals[`${textColorTheme}Color`]
+                                globals[`${textColorTheme}Color`],
                               )}
                             >
                               <p>{options.option ?? options}</p>

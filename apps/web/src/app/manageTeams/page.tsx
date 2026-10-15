@@ -250,9 +250,9 @@ const SearchBar = ({
   setIsSearching,
 }: {
   data?: IMiniGroupResponseWithLogo[];
-   
+
   setSearchVal?: (val: string) => void;
-   
+
   setDialogActive?: (val: boolean) => void;
   setIsSearching?: Dispatch<SetStateAction<boolean>>;
 }) => {

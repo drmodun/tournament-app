@@ -9,11 +9,11 @@ export const fetchCompetition = async (competitionId: number | undefined) =>
     `${serverApiUrl}/tournaments/${competitionId}?responseType=${TournamentResponsesEnum.EXTENDED}`,
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   ).then((res) =>
     res.json().then((res) => {
       return res;
-    })
+    }),
   );
 
 export const invalidateCompetitions = async () => {

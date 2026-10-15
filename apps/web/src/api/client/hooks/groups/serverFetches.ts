@@ -9,7 +9,7 @@ export const fetchGroup = async (groupId: number | undefined) => {
     `${serverApiUrl}/groups/${groupId}?responseType=${GroupResponsesEnum.EXTENDED}`,
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   ).then((res) => res.json().then((res) => res));
 };
 

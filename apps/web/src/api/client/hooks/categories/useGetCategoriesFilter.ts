@@ -16,10 +16,17 @@ import { AxiosResponse } from "axios";
 
 export const getCategoriesFilter = async (pageParam: number, name?: string) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IBaseQueryResponse<ICategoryResponse>>
-    >(`/categories`, { params: { responseType: CategoryResponsesEnum.EXTENDED, page: pageParam, pageSize: 20, name } })
+    .get<never, AxiosResponse<IBaseQueryResponse<ICategoryResponse>>>(
+      `/categories`,
+      {
+        params: {
+          responseType: CategoryResponsesEnum.EXTENDED,
+          page: pageParam,
+          pageSize: 20,
+          name,
+        },
+      },
+    )
     .then((res) => res.data);
 
 export const useGetCategoriesFilter = (name?: string) => {

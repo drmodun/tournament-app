@@ -3,9 +3,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { groupRoleEnum } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { handleError } from "utils/mixins/helpers";
 
 export const demoteUser = async (data: { groupId: number; userId: number }) =>
   clientApi
@@ -30,12 +30,6 @@ export const useDemoteUser = () => {
         predicate: (query) => query.queryKey.includes("group"),
       });
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("demoting user...", "info");
-    },
+    ...toastHandlers(toast, "demoting user..."),
   });
 };

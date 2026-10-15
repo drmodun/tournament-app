@@ -2,9 +2,9 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { handleError } from "utils/mixins/helpers";
 
 export const unfollowUser = async (userId: number) =>
   clientApi
@@ -25,12 +25,6 @@ export const useUnfollowUser = () => {
       });
       return true;
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("unfollowing user...", "info");
-    },
+    ...toastHandlers(toast, "unfollowing user..."),
   });
 };

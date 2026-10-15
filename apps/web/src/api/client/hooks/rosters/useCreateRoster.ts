@@ -7,10 +7,10 @@ import {
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateRosters } from "./serverFetches";
-import { handleError } from "utils/mixins/helpers";
 
 export const createRoster = async (data: {
   participationId?: number;
@@ -18,10 +18,10 @@ export const createRoster = async (data: {
   members?: { userId?: number; isSubstitute?: boolean }[];
 }) => {
   return clientApi
-    .post<
-      ICreateRosterRequest,
-      AxiosResponse<{ id: number }>
-    >(`/roster/${data.participationId}/${data.stageId}`, { members: data.members })
+    .post<ICreateRosterRequest, AxiosResponse<{ id: number }>>(
+      `/roster/${data.participationId}/${data.stageId}`,
+      { members: data.members },
+    )
     .then((res) => res.data);
 };
 
@@ -40,12 +40,6 @@ export const useCreateRoster = () => {
       });
       invalidateRosters();
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("creating the roster...", "info");
-    },
+    ...toastHandlers(toast, "creating the roster..."),
   });
 };

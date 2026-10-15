@@ -12,10 +12,15 @@ import { AxiosResponse } from "axios";
 
 export const getStage = async (stageId: number | undefined) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IExtendedStageResponseWithTournament>
-    >(`/stages/${stageId}`, { params: { id: stageId, responseType: StageResponsesEnum.WITH_EXTENDED_TOURNAMENT } })
+    .get<never, AxiosResponse<IExtendedStageResponseWithTournament>>(
+      `/stages/${stageId}`,
+      {
+        params: {
+          id: stageId,
+          responseType: StageResponsesEnum.WITH_EXTENDED_TOURNAMENT,
+        },
+      },
+    )
     .then((res) => res.data);
 
 export const useGetStage = (stageId?: number) => {

@@ -12,10 +12,9 @@ import { AxiosResponse } from "axios";
 
 export const getUserLFGs = async () =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<ILFGResponse[]>
-    >(`/lfg/me`, { params: { pageSize: 20, page: 1 } })
+    .get<never, AxiosResponse<ILFGResponse[]>>(`/lfg/me`, {
+      params: { pageSize: 20, page: 1 },
+    })
     .then((res) => {
       return res.data;
     });

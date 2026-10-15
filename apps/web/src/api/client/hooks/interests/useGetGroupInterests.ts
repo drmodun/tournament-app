@@ -21,10 +21,10 @@ export type Interest = {
 export const getGroupInterests = async (groupId?: number, page?: number) => {
   console.log(groupId, page, "aaaa");
   return clientApi
-    .get<
-      never,
-      AxiosResponse<IBaseQueryResponse<Interest>>
-    >(`/group-interests/${groupId}`, { params: { pageSize: 10, page: page } })
+    .get<never, AxiosResponse<IBaseQueryResponse<Interest>>>(
+      `/group-interests/${groupId}`,
+      { params: { pageSize: 10, page: page } },
+    )
     .then((res) => res.data);
 };
 

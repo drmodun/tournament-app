@@ -32,11 +32,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_CHECKOV: false
           FIX_CSS: true
-          VALIDATE_NATURAL_LANGAUGE: false
+          VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_JAVASCRIPT_ES: false # No need since we have typescript es
           VALIDATE_JAVASCRIPT_STANDARD: false # No need since we have other linters, uses too much memory
           VALIDATE_TYPESCRIPT_STANDARD: false
           VALIDATE_SQLFLUFF: false # No need since we use orm
+          VALIDATE_BIOME_FORMAT: false # Prettier is the formatter
+          VALIDATE_BIOME_LINT: false # ESLint is the linter
+          VALIDATE_TSX: false # `yarn lint` runs ESLint with the workspace config
+          VALIDATE_TYPESCRIPT_ES: false # same as above
 
       - name: Commit and push linting fixes
         # Run only on:

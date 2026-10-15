@@ -20,10 +20,9 @@ type Interest = {
 
 export const getUserInterests = async () =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IBaseQueryResponse<Interest>>
-    >(`/interest`, { params: { pageSize: 50, page: 1 } })
+    .get<never, AxiosResponse<IBaseQueryResponse<Interest>>>(`/interest`, {
+      params: { pageSize: 50, page: 1 },
+    })
     .then((res) => res.data);
 
 export const useGetUserInterests = () => {

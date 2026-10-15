@@ -18,7 +18,13 @@ export const getCompetitions = async (page?: number) =>
     .get<
       TournamentQueryType,
       AxiosResponse<IBaseQueryResponse<IExtendedTournamentResponse>>
-    >(`/tournaments`, { params: { responseType: TournamentResponsesEnum.EXTENDED, page: page ?? 1, pageSize: 10 } })
+    >(`/tournaments`, {
+      params: {
+        responseType: TournamentResponsesEnum.EXTENDED,
+        page: page ?? 1,
+        pageSize: 10,
+      },
+    })
     .then((res) => {
       return res.data;
     });

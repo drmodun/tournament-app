@@ -6,9 +6,9 @@ import {
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { handleError } from "utils/mixins/helpers";
 
 export const startStage = async (stageId?: number) => {
   return clientApi
@@ -30,12 +30,6 @@ export const useStartStage = () => {
         predicate: (query) => query.queryKey.includes("stage"),
       });
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("starting the stage...", "info");
-    },
+    ...toastHandlers(toast, "starting the stage..."),
   });
 };

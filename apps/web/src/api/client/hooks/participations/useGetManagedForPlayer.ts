@@ -10,10 +10,9 @@ import { AxiosResponse } from "axios";
 
 export const getManagedForPlayer = async (tournamentId?: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse
-    >(`/participations/managed-for-player/${tournamentId}`)
+    .get<never, AxiosResponse>(
+      `/participations/managed-for-player/${tournamentId}`,
+    )
     .then((res) => res.data);
 
 export const useGetManagedForPlayer = (tournamentId?: number) => {

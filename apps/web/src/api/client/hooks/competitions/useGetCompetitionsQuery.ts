@@ -22,7 +22,14 @@ export const getCompetitionsQuery = async (
     .get<
       TournamentQueryType,
       AxiosResponse<IBaseQueryResponse<IExtendedTournamentResponse>>
-    >(`/tournaments`, { params: { responseType: TournamentResponsesEnum.EXTENDED, page: page ?? 1, pageSize: 10, locationId } })
+    >(`/tournaments`, {
+      params: {
+        responseType: TournamentResponsesEnum.EXTENDED,
+        page: page ?? 1,
+        pageSize: 10,
+        locationId,
+      },
+    })
     .then((res) => {
       return res.data;
     });

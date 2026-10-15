@@ -12,10 +12,9 @@ import { AxiosResponse } from "axios";
 
 export const getLFPs = async (groupId: number, query?: IGetLFPRequest) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<ILFPResponse[]>
-    >(`/lfp/${groupId}`, { params: query })
+    .get<never, AxiosResponse<ILFPResponse[]>>(`/lfp/${groupId}`, {
+      params: query,
+    })
     .then((res) => res.data);
 
 export const useGetGroupLFPs = (groupId: number, query?: IGetLFPRequest) => {

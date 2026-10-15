@@ -12,10 +12,9 @@ import { AxiosResponse } from "axios";
 
 export const searchBlockedGroups = async (val?: string) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IMiniGroupResponseWithCountry[]>
-    >(`/blocked-groups/auto-complete/${val}`)
+    .get<never, AxiosResponse<IMiniGroupResponseWithCountry[]>>(
+      `/blocked-groups/auto-complete/${val}`,
+    )
     .then((res) => res.data);
 
 export const useSearchBlockedGroups = () => {

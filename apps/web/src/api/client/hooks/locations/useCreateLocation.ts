@@ -9,10 +9,10 @@ import { handleError } from "utils/mixins/helpers";
 
 export const createLocation = async (data: ICreateLocationRequest) =>
   clientApi
-    .post<
-      ICreateLocationRequest,
-      AxiosResponse<{ id: number }>
-    >(`/locations`, data)
+    .post<ICreateLocationRequest, AxiosResponse<{ id: number }>>(
+      `/locations`,
+      data,
+    )
     .then((res) => res.data);
 
 export const useCreateLocation = () => {

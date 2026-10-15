@@ -6,17 +6,16 @@ import {
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { handleError } from "utils/mixins/helpers";
 
 export const deleteCompetition = async (id: number) =>
   clientApi
-    .delete<
-      never,
-      AxiosResponse<{ id: number }>
-    >(`/tournaments/${id}`, { params: { id } })
+    .delete<never, AxiosResponse<{ id: number }>>(`/tournaments/${id}`, {
+      params: { id },
+    })
     .then((res) => res.data);
 
 export const useDeleteCompetition = () => {
@@ -35,12 +34,6 @@ export const useDeleteCompetition = () => {
       });
       router.push("/manageCompetitions");
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("deleting competition...", "info");
-    },
+    ...toastHandlers(toast, "deleting competition..."),
   });
 };

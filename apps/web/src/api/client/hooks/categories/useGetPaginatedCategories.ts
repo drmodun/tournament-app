@@ -16,10 +16,16 @@ import { AxiosResponse } from "axios";
 
 export const getPaginatedCategories = async (page?: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IBaseQueryResponse<ICategoryResponse>>
-    >(`/categories`, { params: { responseType: CategoryResponsesEnum.EXTENDED, pageSize: 10, page: page } })
+    .get<never, AxiosResponse<IBaseQueryResponse<ICategoryResponse>>>(
+      `/categories`,
+      {
+        params: {
+          responseType: CategoryResponsesEnum.EXTENDED,
+          pageSize: 10,
+          page: page,
+        },
+      },
+    )
     .then((res) => res.data);
 
 export const useGetPaginatedCategories = () => {

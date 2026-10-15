@@ -16,10 +16,16 @@ import { AxiosResponse } from "axios";
 
 export const getCategoriesInfinite = async (page: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IBaseQueryResponse<ICategoryResponse>>
-    >(`/categories`, { params: { responseType: CategoryResponsesEnum.EXTENDED, pageSize: 20, page } })
+    .get<never, AxiosResponse<IBaseQueryResponse<ICategoryResponse>>>(
+      `/categories`,
+      {
+        params: {
+          responseType: CategoryResponsesEnum.EXTENDED,
+          pageSize: 20,
+          page,
+        },
+      },
+    )
     .then((res) => res.data);
 
 export const useGetCategoriesInfinite = () => {

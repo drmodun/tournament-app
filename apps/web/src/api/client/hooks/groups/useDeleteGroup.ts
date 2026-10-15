@@ -6,17 +6,16 @@ import {
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateGroups } from "./serverFetches";
-import { handleError } from "utils/mixins/helpers";
 
 export const deleteGroup = async (groupId?: number) =>
   clientApi
-    .delete<
-      never,
-      AxiosResponse
-    >(`/groups/${groupId}`, { params: { groupId: groupId } })
+    .delete<never, AxiosResponse>(`/groups/${groupId}`, {
+      params: { groupId: groupId },
+    })
     .then((res) => res.data);
 
 export const useDeleteGroup = () => {
@@ -35,12 +34,6 @@ export const useDeleteGroup = () => {
       invalidateGroups();
       return true;
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("deleting the group...", "info");
-    },
+    ...toastHandlers(toast, "deleting the group..."),
   });
 };

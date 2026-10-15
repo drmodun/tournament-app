@@ -12,10 +12,9 @@ import { AxiosResponse } from "axios";
 
 export const searchBlockedUsers = async (groupId?: string, val?: string) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IMiniUserResponseWithProfilePicture[]>
-    >(`/blocked-users/auto-complete/${groupId}/${val}`)
+    .get<never, AxiosResponse<IMiniUserResponseWithProfilePicture[]>>(
+      `/blocked-users/auto-complete/${groupId}/${val}`,
+    )
     .then((res) => res.data);
 
 export const useSearchBlockedUsers = (groupId?: string) => {

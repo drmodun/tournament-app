@@ -19,7 +19,12 @@ export const getGroupTournaments = async (groupId: number | undefined) =>
     .get<
       never,
       AxiosResponse<IBaseQueryResponse<IMiniTournamentResponseWithLogo>>
-    >(`/tournaments`, { params: { affiliatedGroupId: groupId, responseType: TournamentResponsesEnum.MINI_WITH_LOGO } })
+    >(`/tournaments`, {
+      params: {
+        affiliatedGroupId: groupId,
+        responseType: TournamentResponsesEnum.MINI_WITH_LOGO,
+      },
+    })
     .then((res) => res.data);
 
 export const useGetGroupTournaments = (groupId: number | undefined) => {

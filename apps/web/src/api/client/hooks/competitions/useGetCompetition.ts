@@ -12,10 +12,15 @@ import { AxiosResponse } from "axios";
 
 export const getCompetition = async (competitionId: number | undefined) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IExtendedTournamentResponse>
-    >(`/tournaments/${competitionId}`, { params: { id: competitionId, responseType: TournamentResponsesEnum.EXTENDED } })
+    .get<never, AxiosResponse<IExtendedTournamentResponse>>(
+      `/tournaments/${competitionId}`,
+      {
+        params: {
+          id: competitionId,
+          responseType: TournamentResponsesEnum.EXTENDED,
+        },
+      },
+    )
     .then((res) => res.data);
 
 export const useGetCompetition = (competitionId?: number) => {

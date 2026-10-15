@@ -5,11 +5,11 @@ import {
   LARGE_QUERY_RETRY_DELAY,
   SMALL_QUERY_RETRY_ATTEMPTS,
 } from "api/client/base";
+import { toastHandlers } from "api/client/toastHandlers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
-import { AxiosError, AxiosResponse } from "axios";
-import { handleError } from "utils/mixins/helpers";
+import { AxiosResponse } from "axios";
 
 export const requestPasswordReset = async (email?: string) =>
   clientApi
@@ -34,13 +34,7 @@ export const useRequestPasswordReset = () => {
 
       setTimeout(() => navigate.push("/login"), 1000);
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("sending mail...", "info");
-    },
+    ...toastHandlers(toast, "sending mail..."),
     retry: SMALL_QUERY_RETRY_ATTEMPTS,
     retryDelay: LARGE_QUERY_RETRY_DELAY,
   });

@@ -12,10 +12,9 @@ import { AxiosResponse } from "axios";
 
 export const getLFGTeam = async (groupId?: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<ILFGResponse[]>
-    >(`/lfg/${groupId}`, { params: { groupId } })
+    .get<never, AxiosResponse<ILFGResponse[]>>(`/lfg/${groupId}`, {
+      params: { groupId },
+    })
     .then((res) => res.data);
 
 export const useGetLFGTeam = (groupId?: number) => {

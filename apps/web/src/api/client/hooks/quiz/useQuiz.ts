@@ -14,10 +14,9 @@ export const getQuiz = async (
   responseType: QuizResponsesEnum = QuizResponsesEnum.BASE,
 ) => {
   return clientApi
-    .get<
-      never,
-      AxiosResponse<IQuizResponse>
-    >(`/quiz/${id}?responseType=${responseType}`)
+    .get<never, AxiosResponse<IQuizResponse>>(
+      `/quiz/${id}?responseType=${responseType}`,
+    )
     .then((res) => res.data);
 };
 

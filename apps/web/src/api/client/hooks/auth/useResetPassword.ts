@@ -2,18 +2,18 @@
 
 import { IResetPasswordRequest } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
+import { toastHandlers } from "api/client/toastHandlers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
-import { AxiosError, AxiosResponse } from "axios";
-import { handleError } from "utils/mixins/helpers";
+import { AxiosResponse } from "axios";
 
 export const resetPassword = async (token?: string, password?: string) =>
   clientApi
-    .post<
-      IResetPasswordRequest,
-      AxiosResponse
-    >(`/auth/password-reset/${token}`, { password })
+    .post<IResetPasswordRequest, AxiosResponse>(
+      `/auth/password-reset/${token}`,
+      { password },
+    )
     .then((res) => res.data);
 
 export const useResetPassword = (token?: string) => {
@@ -31,13 +31,7 @@ export const useResetPassword = (token?: string) => {
 
       setTimeout(() => navigate.push("/login"), 1000);
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("resetting password...", "info");
-    },
+    ...toastHandlers(toast, "resetting password..."),
     retryDelay: 5000,
   });
 };

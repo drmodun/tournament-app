@@ -2,11 +2,11 @@
 
 import { ICreateUserRequest } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
+import { toastHandlers } from "api/client/toastHandlers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
-import { AxiosError, AxiosResponse } from "axios";
-import { handleError } from "utils/mixins/helpers";
+import { AxiosResponse } from "axios";
 
 export const registerUser = async (data: ICreateUserRequest) =>
   clientApi
@@ -32,12 +32,6 @@ export const useRegister = () => {
 
       setTimeout(() => navigate.push("/login"));
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("creating account...", "info");
-    },
+    ...toastHandlers(toast, "creating account..."),
   });
 };

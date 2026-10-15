@@ -5,19 +5,19 @@ import {
   IUserLoginResponse,
 } from "@tournament-app/types";
 import { clientApi, setAuthTokens } from "api/client/base";
+import { toastHandlers } from "api/client/toastHandlers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
-import { AxiosError, AxiosResponse } from "axios";
-import { handleError } from "utils/mixins/helpers";
+import { AxiosResponse } from "axios";
 
 export const loginUser = async (data: IEmailPasswordLoginRequest) =>
   clientApi
-    .post<
-      IEmailPasswordLoginRequest,
-      AxiosResponse<IUserLoginResponse>
-    >("/auth/login", data)
+    .post<IEmailPasswordLoginRequest, AxiosResponse<IUserLoginResponse>>(
+      "/auth/login",
+      data,
+    )
     .then((res) => res.data);
 
 export const useLogin = () => {
@@ -38,13 +38,7 @@ export const useLogin = () => {
 
       setTimeout(() => navigate.push("/main"), 1000);
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("logging in...", "info");
-    },
+    ...toastHandlers(toast, "logging in..."),
     retryDelay: 5000,
   });
 };

@@ -2,17 +2,17 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateGroups } from "./serverFetches";
-import { handleError } from "utils/mixins/helpers";
 
 export const joinGroup = async (data: { groupId?: number; userId?: number }) =>
   clientApi
-    .post<
-      never,
-      AxiosResponse
-    >(`/group-membership/${data?.groupId}/${data?.userId}`, data)
+    .post<never, AxiosResponse>(
+      `/group-membership/${data?.groupId}/${data?.userId}`,
+      data,
+    )
     .then((res) => res.data);
 
 export const useJoinGroup = () => {
@@ -30,12 +30,6 @@ export const useJoinGroup = () => {
       invalidateGroups();
       return true;
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("joining the group...", "info");
-    },
+    ...toastHandlers(toast, "joining the group..."),
   });
 };

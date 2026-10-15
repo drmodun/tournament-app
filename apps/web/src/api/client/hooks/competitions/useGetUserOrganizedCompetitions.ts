@@ -19,10 +19,15 @@ export const getUserOrganizedCompetitions = async (
   userId: number | undefined,
 ) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IBaseQueryResponse<IExtendedTournamentResponse>>
-    >(`/tournaments`, { params: { creatorId: userId, responseType: TournamentResponsesEnum.EXTENDED } })
+    .get<never, AxiosResponse<IBaseQueryResponse<IExtendedTournamentResponse>>>(
+      `/tournaments`,
+      {
+        params: {
+          creatorId: userId,
+          responseType: TournamentResponsesEnum.EXTENDED,
+        },
+      },
+    )
     .then((res) => res.data);
 
 export const useGetUserOrganizedCompetitions = () => {

@@ -10,10 +10,9 @@ import { AxiosResponse } from "axios";
 
 export const verifyUser = async (token?: string) =>
   clientApi
-    .post<
-      never,
-      AxiosResponse<{ id: number }>
-    >(`/auth/email-confirmation/${token}`)
+    .post<never, AxiosResponse<{ id: number }>>(
+      `/auth/email-confirmation/${token}`,
+    )
     .then((res) => res.data);
 
 export const useVerifyUser = (token?: string) => {

@@ -1,0 +1,13 @@
+{
+  "threshold": 100,
+  "ignore": [
+    "**/*.spec.ts",
+    "**/*.e2e-spec.ts",
+    "**/drizzle/**",
+    "**/*.scss",
+    "**/*.html",
+    "**/stories/**",
+    "**/test/**",
+    "**/tests/**"
+  ]
+}

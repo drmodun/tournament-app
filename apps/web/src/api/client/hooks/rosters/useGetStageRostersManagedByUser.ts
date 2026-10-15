@@ -12,10 +12,9 @@ import { AxiosResponse } from "axios";
 
 export const getStageRostersManagedByUser = async (stageId?: number) =>
   clientApi
-    .get<
-      IQueryRosterRequest,
-      AxiosResponse<IRosterResponse[]>
-    >(`/roster/managed-by-user/${stageId}`)
+    .get<IQueryRosterRequest, AxiosResponse<IRosterResponse[]>>(
+      `/roster/managed-by-user/${stageId}`,
+    )
     .then((res) => res.data);
 
 export const useGetStageRostersManagedByUser = (stageId?: number) => {

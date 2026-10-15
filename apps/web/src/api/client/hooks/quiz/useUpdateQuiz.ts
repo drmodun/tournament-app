@@ -3,10 +3,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UpdateQuizDto } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateQuizzes } from "./serverFetches";
-import { handleError } from "utils/mixins/helpers";
 
 export interface UpdateQuizParams {
   id: number;
@@ -40,12 +40,6 @@ export const useUpdateQuiz = () => {
       invalidateQuizzes();
       return data;
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("Updating quiz...", "info");
-    },
+    ...toastHandlers(toast, "Updating quiz..."),
   });
 };

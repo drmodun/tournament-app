@@ -3,9 +3,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICreateGroupRequest } from "@tournament-app/types";
 import { clientApi } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { handleError } from "utils/mixins/helpers";
 
 export const editGroup = async (
   data: Partial<ICreateGroupRequest>,
@@ -30,12 +30,6 @@ export const useEditGroup = (groupId: number) => {
       });
       return true;
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("updating group...", "info");
-    },
+    ...toastHandlers(toast, "updating group..."),
   });
 };

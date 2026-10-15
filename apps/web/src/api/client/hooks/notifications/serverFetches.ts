@@ -6,18 +6,16 @@ import { INotificationResponse, NotificationQueryParams } from "./types";
 
 export const getNotifications = async (params: NotificationQueryParams) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<INotificationResponse[]>
-    >("/notifications", { params })
+    .get<never, AxiosResponse<INotificationResponse[]>>("/notifications", {
+      params,
+    })
     .then((res) => res.data);
 
 export const requestNewToken = async () =>
   clientApi
-    .post<
-      never,
-      AxiosResponse<{ id: number; sseToken: string }>
-    >("/notifications/token")
+    .post<never, AxiosResponse<{ id: number; sseToken: string }>>(
+      "/notifications/token",
+    )
     .then((res) => res.data);
 
 export const markNotificationAsRead = async (id: number) =>
@@ -32,10 +30,9 @@ export const markAllNotificationsAsRead = async () =>
 
 export const markBulkNotificationsAsRead = async (ids: number[]) =>
   clientApi
-    .patch<
-      { ids: number[] },
-      AxiosResponse<void>
-    >("/notifications/read/bulk", { ids })
+    .patch<{ ids: number[] }, AxiosResponse<void>>("/notifications/read/bulk", {
+      ids,
+    })
     .then(() => {});
 
 export const deleteNotification = async (id: number) =>

@@ -7,10 +7,10 @@ import {
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateRosters } from "./serverFetches";
-import { handleError } from "utils/mixins/helpers";
 
 export const editRoster = async (data: {
   id?: number;
@@ -18,10 +18,10 @@ export const editRoster = async (data: {
 }) => {
   console.log(data);
   return clientApi
-    .patch<
-      ICreateRosterRequest,
-      AxiosResponse<{ id: number }>
-    >(`/roster/${data.id}`, { members: data.members })
+    .patch<ICreateRosterRequest, AxiosResponse<{ id: number }>>(
+      `/roster/${data.id}`,
+      { members: data.members },
+    )
     .then((res) => res.data);
 };
 
@@ -40,12 +40,6 @@ export const useEditRoster = () => {
       });
       invalidateRosters();
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("updating the roster...", "info");
-    },
+    ...toastHandlers(toast, "updating the roster..."),
   });
 };

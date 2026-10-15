@@ -15,10 +15,9 @@ import { AxiosResponse } from "axios";
 
 export const getCategory = async (id: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<ICategoryResponse>
-    >(`/categories/${id}`, { params: { responseType: CategoryResponsesEnum.EXTENDED, id } })
+    .get<never, AxiosResponse<ICategoryResponse>>(`/categories/${id}`, {
+      params: { responseType: CategoryResponsesEnum.EXTENDED, id },
+    })
     .then((res) => res.data);
 
 export const useGetCategory = (id: number) => {

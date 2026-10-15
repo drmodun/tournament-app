@@ -20,10 +20,9 @@ export type Interest = {
 
 export const getPaginatedUserInterests = async (page?: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IBaseQueryResponse<Interest>>
-    >(`/interest`, { params: { pageSize: 10, page: page } })
+    .get<never, AxiosResponse<IBaseQueryResponse<Interest>>>(`/interest`, {
+      params: { pageSize: 10, page: page },
+    })
     .then((res) => res.data);
 
 export const useGetPaginatedUserInterests = () => {

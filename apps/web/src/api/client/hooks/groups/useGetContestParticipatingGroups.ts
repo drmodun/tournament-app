@@ -12,10 +12,9 @@ import { AxiosResponse } from "axios";
 
 export const getContestParticipatingGroups = async (tournamentId?: number) =>
   clientApi
-    .get<
-      never,
-      AxiosResponse<IMiniGroupResponseWithLogo[]>
-    >(`/groups/for-roster/${tournamentId}`)
+    .get<never, AxiosResponse<IMiniGroupResponseWithLogo[]>>(
+      `/groups/for-roster/${tournamentId}`,
+    )
     .then((res) => res.data);
 
 export const useGetContestParticipatingGroups = (tournamentId?: number) => {

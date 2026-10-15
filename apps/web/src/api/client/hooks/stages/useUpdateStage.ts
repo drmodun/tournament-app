@@ -7,10 +7,10 @@ import {
   SMALL_QUERY_RETRY_ATTEMPTS,
   SMALL_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateStages } from "./serverFetches";
-import { handleError } from "utils/mixins/helpers";
 
 export const updateStage = async (
   data: {
@@ -22,10 +22,16 @@ export const updateStage = async (
   const { tournamentId: stageDataTournamentId, ..._data } = data.data;
 
   return clientApi
-    .patch<
-      IUpdateStageDto,
-      AxiosResponse<{ id: number }>
-    >(`/stages/${tournamentId}/${data.stageId}`, { ..._data, params: { stageId: data?.stageId, tournamentId: tournamentId || stageDataTournamentId } })
+    .patch<IUpdateStageDto, AxiosResponse<{ id: number }>>(
+      `/stages/${tournamentId}/${data.stageId}`,
+      {
+        ..._data,
+        params: {
+          stageId: data?.stageId,
+          tournamentId: tournamentId || stageDataTournamentId,
+        },
+      },
+    )
     .then((res) => res.data);
 };
 
@@ -48,12 +54,6 @@ export const useUpdateStage = (tournamentId?: number) => {
       });
       invalidateStages();
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("updating the stage...", "info");
-    },
+    ...toastHandlers(toast, "updating the stage..."),
   });
 };

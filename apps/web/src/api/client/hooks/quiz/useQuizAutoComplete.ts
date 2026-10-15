@@ -28,10 +28,9 @@ export const getQuizAutoComplete = async ({
   }
 
   return clientApi
-    .get<
-      never,
-      AxiosResponse<IQuizResponse[]>
-    >(`/quiz/auto-complete/${search}?page=${page}&pageSize=${pageSize}`)
+    .get<never, AxiosResponse<IQuizResponse[]>>(
+      `/quiz/auto-complete/${search}?page=${page}&pageSize=${pageSize}`,
+    )
     .then((res) => res.data);
 };
 

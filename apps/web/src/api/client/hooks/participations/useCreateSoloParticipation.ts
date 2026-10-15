@@ -7,16 +7,16 @@ import {
   MEDIUM_QUERY_RETRY_ATTEMPTS,
   MEDIUM_QUERY_RETRY_DELAY,
 } from "api/client/base";
-import { AxiosError, AxiosResponse } from "axios";
+import { toastHandlers } from "api/client/toastHandlers";
+import { AxiosResponse } from "axios";
 import { useToastContext } from "utils/hooks/useToastContext";
-import { handleError } from "utils/mixins/helpers";
 
 export const createSoloParticipation = async (id: number) => {
   return clientApi
-    .post<
-      IUpdateTournamentRequest,
-      AxiosResponse<{ id: number }>
-    >(`/participations/apply-solo/${id}`, { params: { tournamentId: id } })
+    .post<IUpdateTournamentRequest, AxiosResponse<{ id: number }>>(
+      `/participations/apply-solo/${id}`,
+      { params: { tournamentId: id } },
+    )
     .then((res) => res.data);
 };
 
@@ -34,12 +34,6 @@ export const useCreateSoloParticipation = () => {
         predicate: (query) => query.queryKey.includes("participation"),
       });
     },
-    onError: (e: AxiosError<{ message: string & string[] }>) => {
-      const err = handleError(e);
-      err && toast.addToast(err, "error");
-    },
-    onMutate: () => {
-      toast.addToast("joining the competition...", "info");
-    },
+    ...toastHandlers(toast, "joining the competition..."),
   });
 };

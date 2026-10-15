@@ -104,7 +104,7 @@ export default function GroupJoinRequests({
                   className={clsx(
                     styles.noTextDecoration,
                     styles.userCardLink,
-                    globals[`${textColorTheme}BackgroundColor`]
+                    globals[`${textColorTheme}BackgroundColor`],
                   )}
                 >
                   <div className={styles.userCardInnerWrapper}>
@@ -118,7 +118,7 @@ export default function GroupJoinRequests({
                     <div
                       className={clsx(
                         globals[`${theme}Color`],
-                        styles.userCardTextWrapper
+                        styles.userCardTextWrapper,
                       )}
                       title={user?.username}
                     >
@@ -132,7 +132,7 @@ export default function GroupJoinRequests({
                         <DoneIcon
                           className={clsx(
                             globals[`${textColorTheme}FillChildren`],
-                            styles.decisionButtonContent
+                            styles.decisionButtonContent,
                           )}
                         />
                       </Button>
@@ -143,7 +143,7 @@ export default function GroupJoinRequests({
                         <ClearIcon
                           className={clsx(
                             globals[`${textColorTheme}FillChildren`],
-                            styles.decisionButtonContent
+                            styles.decisionButtonContent,
                           )}
                         />
                       </Button>

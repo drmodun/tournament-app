@@ -55,14 +55,14 @@ export default function ManageStages(stage?: {
 
   const { data: participationData, isLoading: isParticipationDataLoading } =
     useGetManagedForPlayer(
-      stage?.stage?.tournamentId ?? stage?.stage?.tournament.id
+      stage?.stage?.tournamentId ?? stage?.stage?.tournament.id,
     );
 
   const { data: tData } = useGetCompetition(
-    stage?.stage?.tournamentId ?? stage?.stage?.tournament.id ?? -1
+    stage?.stage?.tournamentId ?? stage?.stage?.tournament.id ?? -1,
   );
   const { data, isLoading } = useCheckIfGroupMember(
-    (tData && tData.affiliatedGroup?.id) ?? -1
+    (tData && tData.affiliatedGroup?.id) ?? -1,
   );
 
   const { data: userData } = useAuth();
@@ -74,7 +74,7 @@ export default function ManageStages(stage?: {
       className={clsx(
         styles.wrapper,
         globals[`${textColorTheme}BackgroundColor`],
-        globals[`${theme}Color`]
+        globals[`${theme}Color`],
       )}
     >
       <Dialog
@@ -107,7 +107,7 @@ export default function ManageStages(stage?: {
         key={stage?.stage?.id}
         className={clsx(
           styles.stageItem,
-          globals[`${textColorTheme}MutedBackgroundColor`]
+          globals[`${textColorTheme}MutedBackgroundColor`],
         )}
       >
         <h4 className={styles.title}>
@@ -140,7 +140,7 @@ export default function ManageStages(stage?: {
             className={clsx(
               globals[`${textColorTheme}Color`],
               globals[`${theme}BackgroundColor`],
-              styles.description
+              styles.description,
             )}
             rehypePlugins={[rehypeRaw]}
           >

@@ -3,7 +3,7 @@
 import { IMatchupsWithMiniRostersResponse } from "@tournament-app/types";
 import { useGetUserManagedMatchups } from "api/client/hooks/matchups/useGetUserManagedMatchups";
 import Dialog from "components/dialog";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./manageUserManagedMatchups.module.scss";
@@ -24,43 +24,11 @@ export default function ManagedUserManagedMatchups({
   const [dialogActive, setDialogActive] = useState<boolean>(false);
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
-  const { data, fetchNextPage, isFetching, hasNextPage, isFetchNextPageError } =
-    stageId ? useGetStageMatchups(stageId) : useGetUserManagedMatchups();
+  const { data } = stageId
+    ? useGetStageMatchups(stageId)
+    : useGetUserManagedMatchups();
 
   const [active, setActive] = useState<IMatchupsWithMiniRostersResponse>();
-
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
-
-  useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (
-          first.isIntersecting &&
-          !isFetching &&
-          !isFetchNextPageError &&
-          hasNextPage
-        ) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const currentRef = loadMoreRef.current;
-    if (currentRef) {
-      observerRef.current.observe(currentRef);
-    }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [isFetching, isFetchNextPageError, fetchNextPage, hasNextPage]);
 
   return (
     <div className={styles.wrapper}>

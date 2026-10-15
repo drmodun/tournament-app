@@ -74,7 +74,7 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
             className={clsx(
               styles.username,
               globals.largeText,
-              styles.infoText
+              styles.infoText,
             )}
           >
             {user?.name}{" "}
@@ -85,7 +85,7 @@ export default function UserProfile({ user }: { user: IExtendedUserResponse }) {
       <div
         className={clsx(
           styles.detailsWrapper,
-          globals[`${textColorTheme}Color`]
+          globals[`${textColorTheme}Color`],
         )}
       >
         <div className={styles.userInfo}>

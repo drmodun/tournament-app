@@ -3,7 +3,7 @@
 import { IGroupMembershipResponse } from "@tournament-app/types";
 import { clsx } from "clsx";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
@@ -14,6 +14,7 @@ import { useAdminUserGroups } from "api/client/hooks/groups/useAdminUserGroups";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "components/button";
 import { useDeleteBlockedUser } from "api/client/hooks/blockedUsers/useDeleteBlockedUser";
+import { useInfiniteScrollTrigger } from "utils/hooks/useInfiniteScrollTrigger";
 
 export default function ManageBlockedUsers() {
   const { theme } = useThemeContext();
@@ -37,40 +38,13 @@ export default function ManageBlockedUsers() {
 
   const deleteBlockedUserMutation = useDeleteBlockedUser();
 
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
-
-  useEffect(() => {
-    if (!adminData || !hasNextPage || isFetching || isFetchNextPageError)
-      return;
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (
-          first.isIntersecting &&
-          !isFetching &&
-          !isFetchNextPageError &&
-          hasNextPage
-        ) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const currentRef = loadMoreRef.current;
-    if (currentRef) {
-      observerRef.current.observe(currentRef);
-    }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [isFetching, isFetchNextPageError, fetchNextPage, hasNextPage]);
+  const loadMoreRef = useInfiniteScrollTrigger({
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchNextPageError,
+    enabled: !!adminData,
+  });
 
   return (
     <div

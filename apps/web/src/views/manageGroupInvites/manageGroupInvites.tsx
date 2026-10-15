@@ -6,13 +6,13 @@ import { useGetUserGroupInvites } from "api/client/hooks/groupInvites/useGetUser
 import { clsx } from "clsx";
 import Button from "components/button";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./manageGroupInvites.module.scss";
+import { useInfiniteScrollTrigger } from "utils/hooks/useInfiniteScrollTrigger";
 
 export default function ManageGroupInvites() {
   const { theme } = useThemeContext();
@@ -26,38 +26,12 @@ export default function ManageGroupInvites() {
     hasNextPage,
   } = useGetUserGroupInvites();
 
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
-
-  useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (
-          first.isIntersecting &&
-          !isFetching &&
-          !isFetchNextPageError &&
-          hasNextPage
-        ) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const currentRef = loadMoreRef.current;
-    if (currentRef) {
-      observerRef.current.observe(currentRef);
-    }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [isFetching, isFetchNextPageError, fetchNextPage, hasNextPage]);
+  const loadMoreRef = useInfiniteScrollTrigger({
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchNextPageError,
+  });
 
   const acceptInviteMutation = useAcceptGroupInvite();
   const declineInviteMutation = useDeclineGroupInvite();

@@ -33,7 +33,7 @@ export default function EditLFGForm({
     setValues(
       data?.results.map((elem) => {
         return lfg?.careers.some((e) => e.category.id == elem.id) ?? false;
-      }) ?? []
+      }) ?? [],
     );
   }, [data]);
 
@@ -124,7 +124,7 @@ export default function EditLFGForm({
                     setValues((prev) => {
                       if (!prev) return [];
                       return prev.map((value, index) =>
-                        index === i ? !value : value
+                        index === i ? !value : value,
                       );
                     });
                   },

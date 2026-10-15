@@ -14,13 +14,19 @@ import { useGetPaginatedCategories } from "api/client/hooks/categories/useGetPag
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { InterestCard } from "views/manageInterests/manageInterests";
+import { useCreateGroupInterests } from "api/client/hooks/interests/useCreateGroupInterests";
 import { useCreateUserInterests } from "api/client/hooks/interests/useCreateUserInterests";
 
 export default function AddInterestsForm({
   onClose,
+  group = false,
+  groupId,
   userInterestIds,
 }: {
   onClose?: () => void;
+  /** Adds interests to a group (`groupId`) instead of the current user. */
+  group?: boolean;
+  groupId?: number;
   userInterestIds?: number[];
 }) {
   const { theme } = useThemeContext();
@@ -41,13 +47,17 @@ export default function AddInterestsForm({
 
   const [page, setPage] = useState<number>(0);
   const [fetchLimit, setFetchLimit] = useState<number>(-1);
+  const [fetchLimitEffect, setFetchLimitEffect] = useState<number>(-1);
 
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const createUserInterestsMutation = useCreateUserInterests();
+  const createGroupInterestsMutation = useCreateGroupInterests(groupId);
 
   const methods = useForm<ICreateLFGRequest>();
   const onSubmit = async () => {
-    await createUserInterestsMutation.mutateAsync(selectedIds);
+    await (
+      group ? createGroupInterestsMutation : createUserInterestsMutation
+    ).mutateAsync(selectedIds);
     onClose && onClose();
   };
 
@@ -79,9 +89,11 @@ export default function AddInterestsForm({
       (data?.pages?.[page]?.results?.length ?? -1) > 0 &&
       data?.pages[page]?.results?.filter(
         (category) => !userInterestIds?.includes(category.id),
-      ).length == 0
+      ).length == 0 &&
+      (!group || fetchLimitEffect <= 10)
     ) {
       forward();
+      group && setFetchLimitEffect((prev) => prev + 1);
     }
   }, [userInterestIds, data]);
 
@@ -145,6 +157,7 @@ export default function AddInterestsForm({
                         }}
                         variant={textColorTheme}
                         selected={selectedIds.includes(category.id)}
+                        group={group}
                       />
                     </div>
                   ))}

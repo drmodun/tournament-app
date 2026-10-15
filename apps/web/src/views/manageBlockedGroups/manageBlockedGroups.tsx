@@ -6,12 +6,12 @@ import { useGetUserOrganizedCompetitions } from "api/client/hooks/competitions/u
 import { clsx } from "clsx";
 import Button from "components/button";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useRef } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import styles from "./manageBlockedGroups.module.scss";
 import { useDeleteBlockedGroup } from "api/client/hooks/blockedGroups/useDeleteBlockedGroup";
+import { useInfiniteScrollTrigger } from "utils/hooks/useInfiniteScrollTrigger";
 
 export default function ManageBlockedGroups() {
   const { theme } = useThemeContext();
@@ -29,39 +29,13 @@ export default function ManageBlockedGroups() {
 
   const deleteBlockedGroupMutation = useDeleteBlockedGroup();
 
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
-
-  useEffect(() => {
-    if (!data || !hasNextPage || isFetching || isFetchNextPageError) return;
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (
-          first.isIntersecting &&
-          !isFetching &&
-          !isFetchNextPageError &&
-          hasNextPage
-        ) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const currentRef = loadMoreRef.current;
-    if (currentRef) {
-      observerRef.current.observe(currentRef);
-    }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [isFetching, isFetchNextPageError, fetchNextPage, hasNextPage]);
+  const loadMoreRef = useInfiniteScrollTrigger({
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchNextPageError,
+    enabled: !!data,
+  });
 
   return (
     <div

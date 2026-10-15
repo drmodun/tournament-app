@@ -6,12 +6,14 @@ import {
   Interest,
   useGetPaginatedUserInterests,
 } from "api/client/hooks/interests/useGetPaginatedUserInterests";
+import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
+import { IBaseQueryResponse } from "@tournament-app/types";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Chip from "components/chip";
 import Dialog from "components/dialog";
 import ProgressWheel from "components/progressWheel";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import globals from "styles/globals.module.scss";
@@ -20,8 +22,31 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import AddInterestsForm from "views/addInterestsForm";
 import styles from "./manageInterests.module.scss";
 import { useDeleteGroupInterest } from "api/client/hooks/interests/useDeleteGroupInterest";
+import { useInfiniteScrollTrigger } from "utils/hooks/useInfiniteScrollTrigger";
 
 export default function ManageInterests() {
+  return (
+    <InterestsManager
+      query={useGetPaginatedUserInterests()}
+      title="manage your interests"
+    />
+  );
+}
+
+/** Interest list with infinite scroll and an add dialog, for a user or a group. */
+export function InterestsManager({
+  query,
+  title,
+  group = false,
+  groupId,
+  className,
+}: {
+  query: UseInfiniteQueryResult<InfiniteData<IBaseQueryResponse<Interest>>>;
+  title: string;
+  group?: boolean;
+  groupId?: number;
+  className?: string;
+}) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
 
@@ -32,40 +57,14 @@ export default function ManageInterests() {
     isFetching,
     hasNextPage,
     isFetchNextPageError,
-  } = useGetPaginatedUserInterests();
+  } = query;
 
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | undefined>(undefined);
-
-  useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (
-          first.isIntersecting &&
-          !isFetching &&
-          !isFetchNextPageError &&
-          hasNextPage
-        ) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const currentRef = loadMoreRef.current;
-    if (currentRef) {
-      observerRef.current.observe(currentRef);
-    }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [isFetching, isFetchNextPageError, fetchNextPage, hasNextPage]);
+  const loadMoreRef = useInfiniteScrollTrigger({
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchNextPageError,
+  });
 
   const [addInterestsDialogOpen, setAddInterestsDialogOpen] =
     useState<boolean>(false);
@@ -74,6 +73,7 @@ export default function ManageInterests() {
     <div
       className={clsx(
         styles.wrapper,
+        className,
         globals[`${textColorTheme}BackgroundColor`],
         globals[`${theme}Color`],
       )}
@@ -84,6 +84,8 @@ export default function ManageInterests() {
         variant={theme}
       >
         <AddInterestsForm
+          group={group}
+          groupId={groupId}
           onClose={() => setAddInterestsDialogOpen(false)}
           userInterestIds={data?.pages.flatMap((page) => {
             return page.results.flatMap((interest: Interest) => interest.id);
@@ -91,7 +93,7 @@ export default function ManageInterests() {
         />
       </Dialog>
       <div className={styles.header}>
-        <h3 className={globals[`${theme}Color`]}>manage your interests</h3>
+        <h3 className={globals[`${theme}Color`]}>{title}</h3>
         <Button
           label="add interests"
           variant="primary"
@@ -121,6 +123,8 @@ export default function ManageInterests() {
                     interest={interest}
                     variant={theme}
                     deletable={true}
+                    group={group}
+                    groupId={groupId}
                   />
                 ))}
               </div>

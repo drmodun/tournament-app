@@ -24,9 +24,7 @@ export default function AddRosterForm({
   variant,
 }: {
   group?:
-    | GroupParticipationType
-    | IMiniGroupResponse
-    | IMiniGroupResponseWithLogo;
+    GroupParticipationType | IMiniGroupResponse | IMiniGroupResponseWithLogo;
   stage?: IExtendedStageResponseWithTournament;
   participationId?: number;
   onClose?: () => void;
@@ -64,7 +62,7 @@ export default function AddRosterForm({
         ? prev.filter((id) => id !== member.id)
         : prev.length < (stage?.maxPlayersPerTeam ?? 99)
           ? [...prev, member.id]
-          : prev
+          : prev,
     );
   };
 
@@ -74,7 +72,7 @@ export default function AddRosterForm({
         ? prev.filter((id: number) => id !== member.id)
         : prev.length < (stage?.maxSubstitutes ?? 99)
           ? [...prev, member.id]
-          : prev
+          : prev,
     );
   };
 
@@ -97,7 +95,7 @@ export default function AddRosterForm({
 
                 selectedMembers.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${theme}Color`]
+                  : globals[`${theme}Color`],
               )}
             >
               <img
@@ -124,7 +122,7 @@ export default function AddRosterForm({
                 styles.userCard,
                 selectedSubstitutes.includes(member.id)
                   ? [globals.primaryBackgroundColor, globals.lightColor]
-                  : globals[`${theme}Color`]
+                  : globals[`${theme}Color`],
               )}
             >
               <img
@@ -152,7 +150,7 @@ export default function AddRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}Color`]
+                      globals[`${textColorTheme}Color`],
                     )}
                   >
                     <img
@@ -183,7 +181,7 @@ export default function AddRosterForm({
                     className={clsx(
                       styles.userCard,
                       globals[`${theme}BackgroundColor`],
-                      globals[`${textColorTheme}Color`]
+                      globals[`${textColorTheme}Color`],
                     )}
                   >
                     <img

@@ -95,7 +95,7 @@ export default function UserFollowersDialog() {
                         className={clsx(
                           styles.noTextDecoration,
                           styles.userCardLink,
-                          globals[`${textColorTheme}BackgroundColor`]
+                          globals[`${textColorTheme}BackgroundColor`],
                         )}
                       >
                         <div className={styles.userCardInnerWrapper}>
@@ -109,7 +109,7 @@ export default function UserFollowersDialog() {
                           <div
                             className={clsx(
                               globals[`${theme}Color`],
-                              styles.userCardTextWrapper
+                              styles.userCardTextWrapper,
                             )}
                             title={user.username}
                           >
@@ -119,7 +119,7 @@ export default function UserFollowersDialog() {
                             <p className={styles.userCardText}>
                               {user.country &&
                                 getUnicodeFlagIcon(
-                                  COUNTRY_NAMES_TO_CODES[user.country] ?? "ZZ"
+                                  COUNTRY_NAMES_TO_CODES[user.country] ?? "ZZ",
                                 )}
                             </p>
                           </div>

@@ -37,7 +37,7 @@ export default function GroupMembersDialog({
                 className={clsx(
                   styles.noTextDecoration,
                   styles.userCardLink,
-                  globals[`${textColorTheme}BackgroundColor`]
+                  globals[`${textColorTheme}BackgroundColor`],
                 )}
               >
                 <div className={styles.userCardInnerWrapper}>
@@ -51,7 +51,7 @@ export default function GroupMembersDialog({
                   <div
                     className={clsx(
                       globals[`${theme}Color`],
-                      styles.userCardTextWrapper
+                      styles.userCardTextWrapper,
                     )}
                     title={comp.name}
                   >
@@ -59,7 +59,7 @@ export default function GroupMembersDialog({
                     <p className={styles.userCardText}>
                       {comp.country &&
                         getUnicodeFlagIcon(
-                          COUNTRY_NAMES_TO_CODES[comp.country] ?? "ZZ"
+                          COUNTRY_NAMES_TO_CODES[comp.country] ?? "ZZ",
                         )}
                     </p>
                     <p className={styles.userCardText}>{comp.type}</p>

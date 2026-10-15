@@ -71,7 +71,7 @@ export default function Search() {
                         className={clsx(
                           globals[`${theme}Color`],
                           globals[`${textColorTheme}BackgroundColor`],
-                          styles.userCard
+                          styles.userCard,
                         )}
                       >
                         <img
@@ -109,7 +109,7 @@ export default function Search() {
                         className={clsx(
                           globals[`${theme}Color`],
                           globals[`${textColorTheme}BackgroundColor`],
-                          styles.userCard
+                          styles.userCard,
                         )}
                       >
                         <img
@@ -147,7 +147,7 @@ export default function Search() {
                         className={clsx(
                           globals[`${theme}Color`],
                           globals[`${textColorTheme}BackgroundColor`],
-                          styles.userCard
+                          styles.userCard,
                         )}
                       >
                         <img

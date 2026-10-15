@@ -9,9 +9,7 @@ import RedoIcon from "@mui/icons-material/Redo";
 import TitleIcon from "@mui/icons-material/Title";
 import UndoIcon from "@mui/icons-material/Undo";
 import { Color } from "@tiptap/extension-color";
-import Heading from "@tiptap/extension-heading";
-import TextStyle from "@tiptap/extension-text-style";
-import Underline from "@tiptap/extension-underline";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { clsx } from "clsx";
@@ -60,10 +58,9 @@ export default function RichEditor({
     onUpdate: handleChange,
     editable: editable,
     extensions: [
-      StarterKit,
-      Underline,
-      Heading.configure({
-        levels: [1, 2, 3],
+      // StarterKit v3 bundles Underline and Heading
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3] },
       }),
       Markdown,
       TextStyle,
@@ -73,6 +70,8 @@ export default function RichEditor({
     ],
     content: startingContent,
     immediatelyRender: !isSSR,
+    // v3 stops re-rendering on every transaction; the toolbar relies on it
+    shouldRerenderOnTransaction: true,
     editorProps: {
       attributes: {
         class: clsx(

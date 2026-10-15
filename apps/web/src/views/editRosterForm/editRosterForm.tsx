@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
-import styles from "./editRosterForm.module.scss";
+import styles from "styles/forms/rosterForm.module.scss";
 
 export default function EditRosterForm({
   roster,

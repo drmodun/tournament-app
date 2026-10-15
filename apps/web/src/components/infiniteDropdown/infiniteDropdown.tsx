@@ -14,7 +14,8 @@ import {
   TextVariants,
   Variants,
 } from "types/styleTypes";
-import styles from "./infiniteDropdown.module.scss";
+import styles from "components/dropdown/dropdown.module.scss";
+import infiniteStyles from "./infiniteDropdown.module.scss";
 import ProgressWheel from "components/progressWheel";
 
 interface InfiniteDropdownProps {
@@ -293,7 +294,7 @@ export default function InfiniteDropdown({
             {loadMore && (
               <div ref={loadMoreRef} className={styles.loadMoreTrigger}>
                 {isFetching && (
-                  <div className={styles.wheelWrapper}>
+                  <div className={infiniteStyles.wheelWrapper}>
                     <ProgressWheel variant={textColor(variant)} />
                   </div>
                 )}

@@ -22,7 +22,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
 import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
-import styles from "./editTeamForm.module.scss";
+import styles from "styles/forms/editEntityForm.module.scss";
 import { useLocationPicker } from "utils/hooks/useLocationPicker";
 
 type EditTeamFormProps = {

@@ -21,7 +21,7 @@ import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import CreateQuizQuestionForm from "views/createQuizQuestionForm";
-import styles from "./createQuizForm.module.scss";
+import styles from "styles/forms/quizForm.module.scss";
 import { UpdateQuizParams, useUpdateQuiz } from "api/client/hooks/quiz";
 import { imageUrlToFile } from "utils/mixins/helpers";
 import { useToastContext } from "utils/hooks/useToastContext";

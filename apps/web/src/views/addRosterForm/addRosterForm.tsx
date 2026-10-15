@@ -14,7 +14,7 @@ import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { GroupParticipationType } from "views/manageStage/manageStage";
-import styles from "./addRosterForm.module.scss";
+import styles from "styles/forms/rosterForm.module.scss";
 
 export default function AddRosterForm({
   stage,

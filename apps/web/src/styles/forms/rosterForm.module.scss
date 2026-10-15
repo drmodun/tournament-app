@@ -1,4 +1,4 @@
-@import "../../styles/";
+@import "../";
 
 .error {
   font-size: $fontSize * 0.875;
@@ -48,4 +48,10 @@
 
 .substitutesTitle {
   margin-top: $padding;
+}
+
+.bottomTitles {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
 }

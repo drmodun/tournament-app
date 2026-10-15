@@ -23,7 +23,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTimeHTMLInput } from "utils/mixins/formatting";
 import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
-import styles from "./editStageForm.module.scss";
+import styles from "styles/forms/editEntityForm.module.scss";
 import { useLocationPicker } from "utils/hooks/useLocationPicker";
 
 type EditStageFormProps = {

@@ -21,7 +21,7 @@ import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { QUESTION_TYPE_MAP } from "utils/mixins/formatting";
 import CreateQuizQuestionForm from "views/createQuizQuestionForm";
-import styles from "./createQuizForm.module.scss";
+import styles from "styles/forms/quizForm.module.scss";
 import { useCreateQuiz } from "api/client/hooks/quiz";
 
 export default function CreateQuizForm({

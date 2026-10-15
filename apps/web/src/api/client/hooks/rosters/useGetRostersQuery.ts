@@ -17,7 +17,7 @@ import { AxiosResponse } from "axios";
 
 export const getRostersQuery = async (
   page: number,
-  query?: IQueryRosterRequest
+  query?: IQueryRosterRequest,
 ) =>
   clientApi
     .get<

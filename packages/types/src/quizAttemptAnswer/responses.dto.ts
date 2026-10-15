@@ -7,8 +7,7 @@ export interface IQuizAttemptAnswerResponse {
   updatedAt: Date | string;
 }
 
-export interface IQuizAttemptAnswerWithFeedbackResponse
-  extends IQuizAttemptAnswerResponse {
+export interface IQuizAttemptAnswerWithFeedbackResponse extends IQuizAttemptAnswerResponse {
   isCorrect: boolean | null;
   explanation: string | null;
 }
@@ -19,8 +18,7 @@ export enum IQuizAttemptAnswerEnum {
 }
 
 export type QuizAttemptAnswerResponseType =
-  | IQuizAttemptAnswerResponse
-  | IQuizAttemptAnswerWithFeedbackResponse;
+  IQuizAttemptAnswerResponse | IQuizAttemptAnswerWithFeedbackResponse;
 
 export type IQuizAttemptAnswerResponseTypeEnumType =
   (typeof IQuizAttemptAnswerEnum)[keyof typeof IQuizAttemptAnswerEnum];

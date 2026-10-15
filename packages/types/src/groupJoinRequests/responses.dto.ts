@@ -14,8 +14,7 @@ export interface IGroupJoinRequestWithUserResponse extends IUserResponse {
   message: string;
 }
 
-export interface IGroupJoinRequestWithMiniUserResponse
-  extends IMiniUserResponseWithProfilePicture {
+export interface IGroupJoinRequestWithMiniUserResponse extends IMiniUserResponseWithProfilePicture {
   createdAt: Date;
 }
 
@@ -24,8 +23,7 @@ export interface IGroupJoinRequestWithGroupResponse extends IGroupResponse {
   message: string;
 }
 
-export interface IGroupJoinRequestWithMiniGroupResponse
-  extends IMiniGroupResponseWithLogo {
+export interface IGroupJoinRequestWithMiniGroupResponse extends IMiniGroupResponseWithLogo {
   createdAt: Date;
 }
 

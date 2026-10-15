@@ -1,5 +1,8 @@
 import { ICategoryMiniResponseWithLogo } from "src/category";
-import { IMiniUserResponseWithCountry, IMiniUserResponseWithProfilePicture } from "src/user";
+import {
+  IMiniUserResponseWithCountry,
+  IMiniUserResponseWithProfilePicture,
+} from "src/user";
 
 export interface IMiniCareerResponse {
   userId: number;

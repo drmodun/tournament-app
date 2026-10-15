@@ -13,9 +13,7 @@ export interface IExtendedLocationResponse extends ILocationResponse {
 }
 
 export type BaseLocationResponse =
-  | IMiniLocationResponse
-  | ILocationResponse
-  | IExtendedLocationResponse;
+  IMiniLocationResponse | ILocationResponse | IExtendedLocationResponse;
 
 export enum LocationResponsesEnum {
   MINI = "mini",

@@ -284,7 +284,7 @@ export type questionAnswerStateEnumType =
   (typeof questionAnswerStateEnum)[keyof typeof questionAnswerStateEnum];
 
 export const exportEnumValues = (
-  enumToExport: object
+  enumToExport: object,
 ): [string, ...string[]] => {
   const values = Object.values(enumToExport);
   if (!values.length) {

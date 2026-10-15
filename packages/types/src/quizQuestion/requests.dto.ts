@@ -15,5 +15,4 @@ export interface ICreateQuizQuestionDto {
   image: string | null;
 }
 
-export interface IUpdateQuizQuestionDto
-  extends Partial<ICreateQuizQuestionDto> {}
+export interface IUpdateQuizQuestionDto extends Partial<ICreateQuizQuestionDto> {}

@@ -9,8 +9,7 @@ export interface IGroupInviteWithUserResponse extends IUserResponse {
   groupId: number;
 }
 
-export interface IGroupInviteWithMiniUserResponse
-  extends IMiniUserResponseWithProfilePicture {
+export interface IGroupInviteWithMiniUserResponse extends IMiniUserResponseWithProfilePicture {
   createdAt: Date;
 }
 
@@ -19,8 +18,7 @@ export interface IGroupInviteWithGroupResponse extends IGroupResponse {
   userId: number;
 }
 
-export interface IGroupInviteWithMiniGroupResponse
-  extends IMiniGroupResponseWithLogo {
+export interface IGroupInviteWithMiniGroupResponse extends IMiniGroupResponseWithLogo {
   createdAt: Date;
 }
 

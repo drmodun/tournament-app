@@ -13,8 +13,7 @@ export interface IUpdateLocationRequest {
 }
 
 export type BaseLocationRequest =
-  | ICreateLocationRequest
-  | IUpdateLocationRequest;
+  ICreateLocationRequest | IUpdateLocationRequest;
 
 export interface ILocationQuery {
   name?: string;

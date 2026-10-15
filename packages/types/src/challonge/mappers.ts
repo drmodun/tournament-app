@@ -147,7 +147,7 @@ export function stageToUpdateTournamentRequest(stage: {
 }
 
 export function stageStatusToTournamentStateRequest(
-  status: stageStatusEnum
+  status: stageStatusEnum,
 ): ITournamentStateRequest {
   const stateMap: Record<
     stageStatusEnum,
@@ -199,7 +199,7 @@ export function rosterToChallongeParticipant(roster: {
 }
 
 export function rosterToBulkCreateParticipantRequest(
-  rosters: IRosterInfoToCreateChallongeParticipant[]
+  rosters: IRosterInfoToCreateChallongeParticipant[],
 ): IBulkCreateChallongeParticipantRequest {
   const rostersWithUniqueNames = checkAndHandleDuplicateChallongeTeams(rosters);
 
@@ -214,11 +214,11 @@ export function rosterToBulkCreateParticipantRequest(
 }
 
 export function checkAndHandleDuplicateChallongeTeams(
-  rosters: IRosterInfoToCreateChallongeParticipant[]
+  rosters: IRosterInfoToCreateChallongeParticipant[],
 ): IRosterInfoToCreateChallongeParticipant[] {
   for (const roster of rosters) {
     const duplicateRoster = rosters.find(
-      (r) => r.name === roster.name && r.id !== roster.id
+      (r) => r.name === roster.name && r.id !== roster.id,
     );
     if (duplicateRoster) {
       roster.name = `${sanitizeForChallonge(roster.name)}_${roster.id}`;
@@ -228,7 +228,7 @@ export function checkAndHandleDuplicateChallongeTeams(
 }
 
 function rosterToParticipantDetails(
-  roster: IRosterInfoToCreateChallongeParticipant
+  roster: IRosterInfoToCreateChallongeParticipant,
 ): IParticipantDetails {
   return {
     name: sanitizeForChallonge(roster.name),
@@ -310,12 +310,12 @@ export function challongeTournamentToStage(tournament: IChallongeTournament): {
   const stageType =
     (Object.entries(stageTypeToChallongeType).find(
       ([_, challongeType]) =>
-        challongeType === tournament.attributes.tournament_type
+        challongeType === tournament.attributes.tournament_type,
     )?.[0] as stageTypeEnum) || "group";
 
   const stageStatus =
     (Object.entries(stageStatusToChallongeState).find(
-      ([_, challongeState]) => challongeState === tournament.attributes.state
+      ([_, challongeState]) => challongeState === tournament.attributes.state,
     )?.[0] as stageStatusEnum) || "upcoming";
 
   return {
@@ -328,7 +328,7 @@ export function challongeTournamentToStage(tournament: IChallongeTournament): {
 }
 
 export function challongeParticipantToRoster(
-  participant: IChallongeParticipant
+  participant: IChallongeParticipant,
 ): {
   challongeParticipantId: string;
   points: number;
@@ -365,7 +365,7 @@ export function matchScoreToChallongeScoreRequest(
     rosterId: number;
     score: string;
     isWinner: boolean;
-  }>
+  }>,
 ): IMatchScoreRequest {
   return {
     data: {

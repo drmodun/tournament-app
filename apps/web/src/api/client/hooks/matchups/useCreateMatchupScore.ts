@@ -22,10 +22,10 @@ export const updateMatchupScore = async ({
   data?: ICreateScoreRequest;
 }) => {
   return clientApi
-    .patch<
-      ICreateScoreRequest,
-      AxiosResponse
-    >(`/matches/${tournamentId}/${id}/score`, { params: { matchupId: id, tournamentId: tournamentId }, data: data })
+    .patch<ICreateScoreRequest, AxiosResponse>(
+      `/matches/${tournamentId}/${id}/score`,
+      { params: { matchupId: id, tournamentId: tournamentId }, data: data },
+    )
     .then((res) => res.data);
 };
 
@@ -44,10 +44,10 @@ export const useUpdateMatchupScore = () => {
       });
       invalidateMatchups();
     },
-   onError: (e: AxiosError<{ message: string & string[] }>) => {
-         const err = handleError(e);
-         err && toast.addToast(err, "error");
-       },
+    onError: (e: AxiosError<{ message: string & string[] }>) => {
+      const err = handleError(e);
+      err && toast.addToast(err, "error");
+    },
     onMutate: () => {
       toast.addToast("creating the score...", "info");
     },

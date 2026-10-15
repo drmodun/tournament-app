@@ -16,14 +16,12 @@ export interface IQuizQuestionResponse {
   image?: string;
 }
 
-export interface IQuizQuestionWithCorrectAnswerAndExplanationResponse
-  extends IQuizQuestionResponse {
+export interface IQuizQuestionWithCorrectAnswerAndExplanationResponse extends IQuizQuestionResponse {
   correctAnswers: string[];
   explanation: string | null;
 }
 
-export interface IQuizQuestionExtendedResponse
-  extends IQuizQuestionWithCorrectAnswerAndExplanationResponse {
+export interface IQuizQuestionExtendedResponse extends IQuizQuestionWithCorrectAnswerAndExplanationResponse {
   isImmediateFeedback: boolean;
   correctAnswers: string[];
 }
@@ -33,8 +31,7 @@ export interface IQuizAnswerWithCountResponse {
   count: number;
 }
 
-export interface IQuizQuestionWithStatistics
-  extends IQuizQuestionExtendedResponse {
+export interface IQuizQuestionWithStatistics extends IQuizQuestionExtendedResponse {
   options: IQuizOptionWithAnswerCountResponse[];
   answers: IQuizAnswerWithCountResponse[];
 }

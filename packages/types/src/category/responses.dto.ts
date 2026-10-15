@@ -22,9 +22,7 @@ export interface IExtendedCategoryResponse extends ICategoryResponse {
 }
 
 export type BaseCategoryResponseType =
-  | ICategoryMiniResponse
-  | ICategoryResponse
-  | ICategoryResponse;
+  ICategoryMiniResponse | ICategoryResponse | ICategoryResponse;
 
 export enum CategoryResponsesEnum {
   MINI = "mini",

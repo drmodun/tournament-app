@@ -1,6 +1,6 @@
-import { stageStatusEnumType, stageTypeEnumType } from "src/enums";
-import { ILocationResponse } from "src/location/responses.dto";
-import {
+import type { stageStatusEnumType, stageTypeEnumType } from "src/enums";
+import type { ILocationResponse } from "src/location/responses.dto";
+import type {
   IMiniTournamentResponseWithLogo,
   ITournamentResponse,
 } from "src/tournament";
@@ -31,16 +31,14 @@ export interface IStageResponseWithChallongeTournament extends IStageResponse {
   challongeTournamentId?: string;
 }
 
-export interface IExtendedStageResponse
-  extends IStageResponseWithChallongeTournament {
+export interface IExtendedStageResponse extends IStageResponseWithChallongeTournament {
   minPlayersPerTeam: number;
   maxPlayersPerTeam?: number;
   maxSubstitutes?: number;
   maxChanges?: number;
 }
 
-export interface IExtendedStageResponseWithTournament
-  extends IExtendedStageResponse {
+export interface IExtendedStageResponseWithTournament extends IExtendedStageResponse {
   tournament: ITournamentResponse;
 }
 

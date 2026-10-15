@@ -1,4 +1,4 @@
-import { userRoleEnum } from "src/enums";
+import type { userRoleEnum } from "src/enums";
 
 export interface IMiniUserResponse {
   id: number;
@@ -10,8 +10,7 @@ export interface IMiniUserResponseWithProfilePicture extends IMiniUserResponse {
   profilePicture: string;
 }
 
-export interface IMiniUserResponseWithCountry
-  extends IMiniUserResponseWithProfilePicture {
+export interface IMiniUserResponseWithCountry extends IMiniUserResponseWithProfilePicture {
   country: string;
 }
 

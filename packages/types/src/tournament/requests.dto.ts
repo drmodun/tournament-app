@@ -1,4 +1,4 @@
-import {
+import type {
   tournamentTypeEnum,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
@@ -55,8 +55,7 @@ export interface IUpdateTournamentRequest {
 }
 
 export type BaseTournamentUpdateRequest =
-  | IUpdateTournamentRequest
-  | ICreateTournamentRequest;
+  IUpdateTournamentRequest | ICreateTournamentRequest;
 
 export interface TournamentParticipationRequest {
   tournamentId: number;

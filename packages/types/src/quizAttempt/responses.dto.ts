@@ -31,8 +31,7 @@ export interface PostQuizAttemptResponse extends QuizAttemptInProgressResponse {
 }
 
 export type QuizAttemptResponseType =
-  | QuizAttemptInProgressResponse
-  | PostQuizAttemptResponse;
+  QuizAttemptInProgressResponse | PostQuizAttemptResponse;
 
 export enum QuizAttemptResponseTypeEnum {
   IN_PROGRESS = "inProgress",

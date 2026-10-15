@@ -26,14 +26,12 @@ export interface IGroupMembershipResponse extends IMinimalMembershipResponse {
   createdAt: string;
 }
 
-export interface IUserMembershipResponseWithDates
-  extends IMiniUserResponseWithCountry {
+export interface IUserMembershipResponseWithDates extends IMiniUserResponseWithCountry {
   createdAt: Date;
   role: groupRoleEnumType;
 }
 
-export interface IGroupMembershipResponseWithDates
-  extends IMiniGroupResponseWithCountry {
+export interface IGroupMembershipResponseWithDates extends IMiniGroupResponseWithCountry {
   createdAt: Date;
   role: groupRoleEnumType;
 }

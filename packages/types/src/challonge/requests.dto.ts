@@ -40,8 +40,7 @@ export interface ICreateChallongeTournamentRequest {
   };
 }
 
-export interface IUpdateChallongeTournamentRequest
-  extends ICreateChallongeTournamentRequest {}
+export interface IUpdateChallongeTournamentRequest extends ICreateChallongeTournamentRequest {}
 
 export interface ITournamentStateRequest {
   data: {
@@ -91,8 +90,7 @@ export interface IBulkCreateChallongeParticipantRequest {
   };
 }
 
-export interface IUpdateParticipantRequest
-  extends ICreateChallongeParticipantRequest {}
+export interface IUpdateParticipantRequest extends ICreateChallongeParticipantRequest {}
 
 export interface IBulkCreateParticipantsRequest {
   data: {

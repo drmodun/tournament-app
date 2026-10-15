@@ -12,7 +12,7 @@ import { handleError } from "utils/mixins/helpers";
 
 export const createGroupInterests = async (
   groupId?: number,
-  categoryIds?: number[]
+  categoryIds?: number[],
 ) => {
   const responses: AxiosResponse[] = [];
   for (const categoryId of categoryIds ?? []) {

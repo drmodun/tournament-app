@@ -1,12 +1,12 @@
-import { ICategoryMiniResponseWithLogo } from "src/category";
-import {
+import type { ICategoryMiniResponseWithLogo } from "src/category";
+import type {
   tournamentTypeEnum,
   tournamentLocationEnum,
   tournamentTeamTypeEnum,
 } from "../enums";
-import { IMiniUserResponse } from "../user/responses.dto";
-import { IMiniGroupResponse } from "src/group";
-import { ILocationResponse } from "src/location/responses.dto";
+import type { IMiniUserResponse } from "../user/responses.dto";
+import type { IMiniGroupResponse } from "src/group";
+import type { ILocationResponse } from "src/location/responses.dto";
 
 export interface IMiniTournamentResponse {
   id: number;
@@ -16,8 +16,7 @@ export interface IMiniTournamentResponse {
   locationId?: number;
 }
 
-export interface IMiniTournamentResponseWithLogo
-  extends IMiniTournamentResponse {
+export interface IMiniTournamentResponseWithLogo extends IMiniTournamentResponse {
   location?: tournamentLocationEnum;
   logo: string;
   country: string;
@@ -43,7 +42,7 @@ export interface IExtendedTournamentResponse extends ITournamentResponse {
   isMultipleTeamsPerGroupAllowed: boolean;
   isFakePlayersAllowed: boolean;
   parentTournament?: IMiniTournamentResponseWithLogo;
-  conversionRuleId: number; 
+  conversionRuleId: number;
   isRanked: boolean;
   maximumMMR?: number;
   minimumMMR?: number;
@@ -77,7 +76,6 @@ export enum TournamentSortingEnum {
   TOURNAMENT_TYPE = "tournamentType",
   TOURNAMENT_LOCATION = "tournamentLocation",
   COUNTRY = "country",
-
 }
 
 export interface TournamentQueryType {

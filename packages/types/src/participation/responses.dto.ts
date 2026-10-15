@@ -13,13 +13,11 @@ export interface IMiniParticipationResponse {
   tournamentId: number;
 }
 
-export interface IMiniParticipationResponseWithGroup
-  extends IMiniParticipationResponse {
+export interface IMiniParticipationResponseWithGroup extends IMiniParticipationResponse {
   group: IMiniGroupResponseWithLogo;
 }
 
-export interface IMiniParticipationResponseWithUser
-  extends IMiniParticipationResponse {
+export interface IMiniParticipationResponseWithUser extends IMiniParticipationResponse {
   user: IMiniUserResponse;
 }
 

@@ -51,9 +51,7 @@ export interface IQuizResponseWithAuthor extends IQuizResponse {
 }
 
 export type BaseQuizResponse =
-  | IQuizResponse
-  | IQuizResponseWithAuthor
-  | IQuizResponseExtended;
+  IQuizResponse | IQuizResponseWithAuthor | IQuizResponseExtended;
 
 export enum QuizResponsesEnum {
   BASE = "BASE",

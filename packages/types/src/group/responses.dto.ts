@@ -11,8 +11,7 @@ export interface IMiniGroupResponseWithLogo extends IMiniGroupResponse {
   logo: string;
 }
 
-export interface IMiniGroupResponseWithCountry
-  extends IMiniGroupResponseWithLogo {
+export interface IMiniGroupResponseWithCountry extends IMiniGroupResponseWithLogo {
   country: string;
 }
 
@@ -61,4 +60,3 @@ export type GroupReturnTypesEnumType =
 
 export type GroupSortingEnumType =
   (typeof GroupSortingEnum)[keyof typeof GroupSortingEnum];
-

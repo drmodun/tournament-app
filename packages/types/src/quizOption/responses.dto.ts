@@ -8,8 +8,7 @@ export interface IQuizOptionExtendedResponse extends IQuizOptionResponse {
   createdAt: Date | string;
 }
 
-export interface IQuizOptionWithAnswerCountResponse
-  extends IQuizOptionExtendedResponse {
+export interface IQuizOptionWithAnswerCountResponse extends IQuizOptionExtendedResponse {
   answerCount: number;
 }
 

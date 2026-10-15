@@ -6,8 +6,7 @@ import {
   IMiniUserResponseWithProfilePicture,
 } from "src/user";
 
-export interface IMiniRosterResponseWithChallongeId
-  extends IMiniRosterResponse {
+export interface IMiniRosterResponseWithChallongeId extends IMiniRosterResponse {
   challongeId: string;
 }
 

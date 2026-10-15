@@ -27,7 +27,7 @@ export const createGroupInvite = async (data: {
           groupId: data?.groupId,
           userId: data?.userId,
         },
-      }
+      },
     )
     .then((res) => res.data);
 };

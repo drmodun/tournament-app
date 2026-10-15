@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
+import type {
   IChangePasswordRequest,
   IEmailPasswordLoginRequest,
 } from '@tournament-app/types';

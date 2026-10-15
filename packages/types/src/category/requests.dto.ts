@@ -15,8 +15,7 @@ export interface IUpdateCategoryRequest {
 }
 
 export type BaseUpdateCategoryRequest =
-  | ICreateCategoryRequest
-  | IUpdateCategoryRequest;
+  ICreateCategoryRequest | IUpdateCategoryRequest;
 
 export interface ICategoryQuery {
   name?: string;

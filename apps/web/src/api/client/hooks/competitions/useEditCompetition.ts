@@ -13,17 +13,17 @@ import { invalidateCompetitions } from "./serverFetches";
 import { handleError } from "utils/mixins/helpers";
 
 export const editCompetition = async (
-  data: IUpdateTournamentRequest & { id?: number; categoryId?: number }
+  data: IUpdateTournamentRequest & { id?: number; categoryId?: number },
 ) => {
   const { id, categoryId, ..._data } = data;
   if (categoryId != -1 && categoryId !== undefined) {
     (_data as any).categoryId = categoryId;
   }
   return clientApi
-    .patch<
-      IUpdateTournamentRequest,
-      AxiosResponse<{ id: number }>
-    >(`/tournaments/${id}`, _data)
+    .patch<IUpdateTournamentRequest, AxiosResponse<{ id: number }>>(
+      `/tournaments/${id}`,
+      _data,
+    )
     .then((res) => res.data);
 };
 

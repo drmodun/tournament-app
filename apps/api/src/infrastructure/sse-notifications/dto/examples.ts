@@ -87,5 +87,5 @@ export const sseEventExample = {
 
 export const tokenResponseExample = {
   id: 1,
-  sseToken: '1234567890-abcdef-1234567890',
+  sseToken: '1234567890-abcdef-1234567890', // gitleaks:allow
 };

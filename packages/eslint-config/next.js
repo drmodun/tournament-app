@@ -11,7 +11,12 @@ const globals = require("globals");
  */
 module.exports = [
   {
-    ignores: [".next/**", "node_modules/**", "storybook-static/**", "next-env.d.ts"],
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "storybook-static/**",
+      "next-env.d.ts",
+    ],
   },
   js.configs.recommended,
   nextPlugin.configs.recommended,

@@ -1,15 +1,9 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICreateLFPRequest } from "@tournament-app/types";
-import {
-  clientApi,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const createLFP = async (data: { groupId?: number; message?: string }) =>
   clientApi
@@ -21,21 +15,11 @@ export const createLFP = async (data: { groupId?: number; message?: string }) =>
     })
     .then((res) => res.data);
 
-export const useCreateLFP = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useCreateLFP = () =>
+  useApiMutation({
     mutationFn: createLFP,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully created LFP", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("lfp"),
-      });
-      return true;
-    },
-    ...toastHandlers(toast, "creating LFP..."),
+    size: "small",
+    pending: "creating LFP...",
+    success: "successfully created LFP",
+    invalidate: ["lfp"],
   });
-};

@@ -1,15 +1,9 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICreateLFPRequest } from "@tournament-app/types";
-import {
-  clientApi,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const editLFP = async (data: {
   id?: number;
@@ -29,21 +23,11 @@ export const editLFP = async (data: {
     )
     .then((res) => res.data);
 
-export const useEditLFP = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useEditLFP = () =>
+  useApiMutation({
     mutationFn: editLFP,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully edited LFP", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("lfp"),
-      });
-      return true;
-    },
-    ...toastHandlers(toast, "editing LFP..."),
+    size: "small",
+    pending: "editing LFP...",
+    success: "successfully edited LFP",
+    invalidate: ["lfp"],
   });
-};

@@ -1,15 +1,9 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  clientApi,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateGroups } from "./serverFetches";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const deleteGroup = async (groupId?: number) =>
   clientApi
@@ -18,22 +12,12 @@ export const deleteGroup = async (groupId?: number) =>
     })
     .then((res) => res.data);
 
-export const useDeleteGroup = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useDeleteGroup = () =>
+  useApiMutation({
     mutationFn: deleteGroup,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully deleted the group", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("group"),
-      });
-      invalidateGroups();
-      return true;
-    },
-    ...toastHandlers(toast, "deleting the group..."),
+    size: "small",
+    pending: "deleting the group...",
+    success: "successfully deleted the group",
+    invalidate: ["group"],
+    afterSuccess: invalidateGroups,
   });
-};

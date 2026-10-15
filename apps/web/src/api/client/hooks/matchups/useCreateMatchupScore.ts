@@ -1,16 +1,10 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICreateScoreRequest } from "@tournament-app/types";
-import {
-  clientApi,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateMatchups } from "./serverFetches";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const updateMatchupScore = async ({
   id,
@@ -29,21 +23,12 @@ export const updateMatchupScore = async ({
     .then((res) => res.data);
 };
 
-export const useUpdateMatchupScore = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useUpdateMatchupScore = () =>
+  useApiMutation({
     mutationFn: updateMatchupScore,
-    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
-    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully created score", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("matchup"),
-      });
-      invalidateMatchups();
-    },
-    ...toastHandlers(toast, "creating the score..."),
+    size: "medium",
+    pending: "creating the score...",
+    success: "successfully created score",
+    invalidate: ["matchup"],
+    afterSuccess: invalidateMatchups,
   });
-};

@@ -5,12 +5,8 @@ import {
   IMatchupsWithMiniRostersResponse,
   IQueryRosterRequest,
 } from "@tournament-app/types";
-import {
-  clientApi,
-  getAccessToken,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
-} from "api/client/base";
+import { clientApi } from "api/client/base";
+import { pagedArrayQueryOptions } from "api/client/queryOptions";
 import { AxiosResponse } from "axios";
 
 export const getUserManagedMatchups = async (page: number) => {
@@ -35,14 +31,6 @@ export const useGetUserManagedMatchups = () => {
     queryKey: ["matchup", "me"],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getUserManagedMatchups(pageParam),
-    staleTime: Infinity,
-    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
-    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    enabled: getAccessToken() !== null,
-    getNextPageParam: (lastPage, allPages) =>
-      allPages[allPages.length - 1].length < 10
-        ? undefined
-        : allPages.length + 1,
-    initialPageParam: 1,
+    ...pagedArrayQueryOptions("medium"),
   });
 };

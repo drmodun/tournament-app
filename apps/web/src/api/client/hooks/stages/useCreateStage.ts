@@ -1,19 +1,13 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ICreateStageDto,
   IUpdateTournamentRequest,
 } from "@tournament-app/types";
-import {
-  clientApi,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateStages } from "./serverFetches";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const createStage = async (data: ICreateStageDto) => {
   return clientApi
@@ -24,21 +18,12 @@ export const createStage = async (data: ICreateStageDto) => {
     .then((res) => res.data);
 };
 
-export const useCreateStage = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useCreateStage = () =>
+  useApiMutation({
     mutationFn: createStage,
-    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
-    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully created stage", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("stage"),
-      });
-      invalidateStages();
-    },
-    ...toastHandlers(toast, "creating the stage..."),
+    size: "medium",
+    pending: "creating the stage...",
+    success: "successfully created stage",
+    invalidate: ["stage"],
+    afterSuccess: invalidateStages,
   });
-};

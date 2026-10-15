@@ -6,12 +6,8 @@ import {
   IQueryRosterRequest,
   IRosterResponse,
 } from "@tournament-app/types";
-import {
-  clientApi,
-  getAccessToken,
-  LARGE_QUERY_RETRY_ATTEMPTS,
-  LARGE_QUERY_RETRY_DELAY,
-} from "api/client/base";
+import { clientApi } from "api/client/base";
+import { pagedQueryOptions } from "api/client/queryOptions";
 import { AxiosResponse } from "axios";
 
 export const getGroupRosters = async (page: number, groupId?: number) =>
@@ -33,12 +29,6 @@ export const useGetGroupRosters = (groupId?: number) => {
     queryKey: ["roster", groupId ?? "", "group"],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getGroupRosters(pageParam, groupId),
-    staleTime: Infinity,
-    retryDelay: LARGE_QUERY_RETRY_DELAY,
-    retry: LARGE_QUERY_RETRY_ATTEMPTS,
-    enabled: getAccessToken() !== null,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.results.length < 10 ? undefined : allPages.length + 1,
-    initialPageParam: 1,
+    ...pagedQueryOptions("large"),
   });
 };

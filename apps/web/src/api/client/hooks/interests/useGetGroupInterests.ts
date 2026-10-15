@@ -2,12 +2,8 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { IBaseQueryResponse } from "@tournament-app/types";
-import {
-  clientApi,
-  getAccessToken,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
-} from "api/client/base";
+import { clientApi } from "api/client/base";
+import { pagedQueryOptions } from "api/client/queryOptions";
 import { AxiosResponse } from "axios";
 
 export type Interest = {
@@ -33,12 +29,6 @@ export const useGetGroupInterests = (groupId?: number) => {
     queryKey: ["interest", groupId],
     queryFn: ({ pageParam }: { pageParam?: number }) =>
       getGroupInterests(groupId, pageParam),
-    staleTime: Infinity,
-    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
-    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    enabled: getAccessToken() !== null,
-    getNextPageParam: (page, pages) =>
-      page.results.length < 10 ? undefined : pages.length + 1,
-    initialPageParam: 1,
+    ...pagedQueryOptions("medium"),
   });
 };

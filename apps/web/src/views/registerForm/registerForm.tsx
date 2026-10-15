@@ -20,7 +20,7 @@ import {
   COUNTRY_CODES_TO_NAMES,
   formatDateHTMLInput,
 } from "utils/mixins/formatting";
-import styles from "./registerForm.module.scss";
+import styles from "styles/forms/authForm.module.scss";
 
 export default function RegisterForm() {
   const { theme } = useThemeContext();

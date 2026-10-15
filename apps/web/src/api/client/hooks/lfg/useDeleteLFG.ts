@@ -1,35 +1,19 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  clientApi,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const deleteLFG = async (id?: number) =>
   clientApi
     .delete<never, AxiosResponse>(`/lfg/${id}`, { params: { id } })
     .then((res) => res.data);
 
-export const useDeleteLFG = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useDeleteLFG = () =>
+  useApiMutation({
     mutationFn: deleteLFG,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully deleted LFG", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("lfg"),
-      });
-      return true;
-    },
-    ...toastHandlers(toast, "deleting LFG..."),
+    size: "small",
+    pending: "deleting LFG...",
+    success: "successfully deleted LFG",
+    invalidate: ["lfg"],
   });
-};

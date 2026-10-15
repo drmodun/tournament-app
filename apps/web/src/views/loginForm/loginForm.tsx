@@ -7,7 +7,7 @@ import Input from "components/input";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor, TextVariants } from "types/styleTypes";
-import styles from "./loginForm.module.scss";
+import styles from "styles/forms/authForm.module.scss";
 import Link from "next/link";
 
 type LoginInputs = {

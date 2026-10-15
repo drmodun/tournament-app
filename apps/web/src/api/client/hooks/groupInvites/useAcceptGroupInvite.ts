@@ -1,14 +1,8 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  clientApi,
-  SMALL_QUERY_RETRY_ATTEMPTS,
-  SMALL_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const acceptGroupInvite = async (groupId?: number) => {
   return clientApi
@@ -19,24 +13,11 @@ export const acceptGroupInvite = async (groupId?: number) => {
     })
     .then((res) => res.data);
 };
-export const useAcceptGroupInvite = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useAcceptGroupInvite = () =>
+  useApiMutation({
     mutationFn: acceptGroupInvite,
-    retryDelay: SMALL_QUERY_RETRY_DELAY,
-    retry: SMALL_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully accepted group invite", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("groupInvite"),
-      });
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("group"),
-      });
-      return true;
-    },
-    ...toastHandlers(toast, "accepting group invite..."),
+    size: "small",
+    pending: "accepting group invite...",
+    success: "successfully accepted group invite",
+    invalidate: ["groupInvite", "group"],
   });
-};

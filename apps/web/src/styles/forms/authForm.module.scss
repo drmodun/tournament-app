@@ -1,4 +1,4 @@
-@use "../../styles/" as *;
+@use "../" as *;
 
 .header {
   @media screen and (max-width: $desktopBreakpoint) {

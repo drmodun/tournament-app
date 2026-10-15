@@ -1,16 +1,10 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICreateRosterRequest } from "@tournament-app/types";
-import {
-  clientApi,
-  MEDIUM_QUERY_RETRY_ATTEMPTS,
-  MEDIUM_QUERY_RETRY_DELAY,
-} from "api/client/base";
-import { toastHandlers } from "api/client/toastHandlers";
+import { clientApi } from "api/client/base";
 import { AxiosResponse } from "axios";
-import { useToastContext } from "utils/hooks/useToastContext";
 import { invalidateRosters } from "./serverFetches";
+import { useApiMutation } from "api/client/useApiMutation";
 
 export const createRoster = async (data: {
   participationId?: number;
@@ -25,21 +19,12 @@ export const createRoster = async (data: {
     .then((res) => res.data);
 };
 
-export const useCreateRoster = () => {
-  const toast = useToastContext();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useCreateRoster = () =>
+  useApiMutation({
     mutationFn: createRoster,
-    retryDelay: MEDIUM_QUERY_RETRY_DELAY,
-    retry: MEDIUM_QUERY_RETRY_ATTEMPTS,
-    onSuccess: async () => {
-      toast.addToast("successfully created roster", "success");
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey.includes("roster"),
-      });
-      invalidateRosters();
-    },
-    ...toastHandlers(toast, "creating the roster..."),
+    size: "medium",
+    pending: "creating the roster...",
+    success: "successfully created roster",
+    invalidate: ["roster"],
+    afterSuccess: invalidateRosters,
   });
-};

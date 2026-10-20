@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GroupRequirementsService } from '../group-requirements.service';
 import { GroupRequirementsRepository } from '../group-requirements.repository';
 import { GroupDrizzleRepository } from '../../group.repository';
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { groupRoleEnum } from '@tournament-app/types';
 
 describe('GroupRequirementsService', () => {
@@ -15,6 +15,8 @@ describe('GroupRequirementsService', () => {
     updateRequirements: jest.fn(),
     getRequirementsWithElo: jest.fn(),
     deleteRequirements: jest.fn(),
+    getRequirementSubject: jest.fn(),
+    getGroupCountry: jest.fn(),
   };
 
   const mockGroupRepository = {
@@ -163,6 +165,109 @@ describe('GroupRequirementsService', () => {
 
       await expect(service.deleteRequirements(1)).rejects.toThrow(
         NotFoundException,
+      );
+    });
+  });
+
+  describe('checkUserMeetsRequirements', () => {
+    const requirements = (overrides = {}) => ({
+      id: 1,
+      groupId: 1,
+      minimumAge: 18,
+      maximumAge: 30,
+      isSameCountry: true,
+      eloRequirements: [
+        {
+          id: 1,
+          categoryId: 7,
+          minimumElo: 900,
+          maximumElo: 1200,
+          category: { id: 7, name: 'Chess' },
+        },
+      ],
+      ...overrides,
+    });
+
+    const subject = (overrides = {}) => ({
+      country: 'HR',
+      age: 20,
+      careers: [{ categoryId: 7, elo: 1000 }],
+      ...overrides,
+    });
+
+    beforeEach(() => {
+      mockGroupRequirementsRepository.getGroupCountry.mockResolvedValue('HR');
+    });
+
+    it('accepts anyone when the group has no requirements', async () => {
+      mockGroupRequirementsRepository.getRequirementsWithElo.mockResolvedValue(
+        null,
+      );
+
+      await expect(service.checkUserMeetsRequirements(1, 2)).resolves.toBe(
+        undefined,
+      );
+      expect(
+        mockGroupRequirementsRepository.getRequirementSubject,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('accepts a user who meets every requirement', async () => {
+      mockGroupRequirementsRepository.getRequirementsWithElo.mockResolvedValue(
+        requirements(),
+      );
+      mockGroupRequirementsRepository.getRequirementSubject.mockResolvedValue(
+        subject(),
+      );
+
+      await expect(
+        service.checkUserMeetsRequirements(1, 2),
+      ).resolves.toBeUndefined();
+    });
+
+    it.each([
+      ['another country', subject({ country: 'DE' })],
+      ['too young', subject({ age: 16 })],
+      ['too old', subject({ age: 31 })],
+      ['rating too low', subject({ careers: [{ categoryId: 7, elo: 800 }] })],
+      ['rating too high', subject({ careers: [{ categoryId: 7, elo: 1300 }] })],
+    ])('rejects a user from %s', async (_, user) => {
+      mockGroupRequirementsRepository.getRequirementsWithElo.mockResolvedValue(
+        requirements(),
+      );
+      mockGroupRequirementsRepository.getRequirementSubject.mockResolvedValue(
+        user,
+      );
+
+      await expect(service.checkUserMeetsRequirements(1, 2)).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+
+    it('uses the base rating for a user without a career in the category', async () => {
+      mockGroupRequirementsRepository.getRequirementsWithElo.mockResolvedValue(
+        requirements(),
+      );
+      mockGroupRequirementsRepository.getRequirementSubject.mockResolvedValue(
+        subject({ careers: [] }),
+      );
+
+      await expect(
+        service.checkUserMeetsRequirements(1, 2),
+      ).resolves.toBeUndefined();
+    });
+
+    it('rejects everyone for a same-country requirement on a group without a country', async () => {
+      mockGroupRequirementsRepository.getRequirementsWithElo.mockResolvedValue(
+        requirements(),
+      );
+      mockGroupRequirementsRepository.getRequirementSubject.mockResolvedValue(
+        subject(),
+      );
+      mockGroupRequirementsRepository.getGroupCountry.mockResolvedValue(null);
+
+      await expect(service.checkUserMeetsRequirements(1, 2)).rejects.toThrow(
+        ForbiddenException,
       );
     });
   });

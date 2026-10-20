@@ -201,6 +201,37 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     return { id: attemptId };
   }
 
+  async hasSubmittedAttempt(userId: number, quizId: number) {
+    const result = await db
+      .select({ id: quizAttempt.id })
+      .from(quizAttempt)
+      .where(
+        and(
+          eq(quizAttempt.userId, userId),
+          eq(quizAttempt.quizId, quizId),
+          eq(quizAttempt.isSubmitted, true),
+        ),
+      )
+      .limit(1);
+
+    return result.length > 0;
+  }
+
+  async getAttemptTiming(attemptId: number) {
+    const result = await db
+      .select({
+        startedAt: quizAttempt.createdAt,
+        quizStartDate: quiz.startDate,
+        quizEndDate: quiz.endDate,
+        timeLimitTotal: quiz.timeLimitTotal,
+      })
+      .from(quizAttempt)
+      .innerJoin(quiz, eq(quizAttempt.quizId, quiz.id))
+      .where(eq(quizAttempt.id, attemptId));
+
+    return result[0];
+  }
+
   async getQuizAttemptForUser(userId: number, quizId: number): Promise<any> {
     const result = await db
       .select({

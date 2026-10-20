@@ -19,6 +19,8 @@ import {
   stageStatusEnum,
 } from '@tournament-app/types';
 
+const inOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
 describe('CanRosterBeUsedGuard', () => {
   let guard: CanRosterBeUsedGuard;
   let participationService: jest.Mocked<ParticipationService>;
@@ -198,7 +200,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -314,7 +316,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -367,7 +369,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -425,7 +427,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -481,7 +483,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -540,7 +542,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -599,7 +601,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -659,7 +661,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -719,7 +721,7 @@ describe('CanRosterBeUsedGuard', () => {
         minPlayersPerTeam: 1,
         stageType: stageTypeEnum.GROUP,
         description: 'Test Description',
-        startDate: new Date(),
+        startDate: inOneDay,
         endDate: new Date(),
         name: 'Test Stage',
         stageStatus: stageStatusEnum.FINISHED,
@@ -735,6 +737,65 @@ describe('CanRosterBeUsedGuard', () => {
         [1],
         expect.anything(),
       );
+    });
+  });
+
+  describe('checkIfMembersAreEligibleForStage', () => {
+    const baseStage = {
+      id: 3,
+      tournamentId: 1,
+      startDate: inOneDay,
+      minPlayersPerTeam: 2,
+      maxPlayersPerTeam: 3,
+      maxSubstitutes: 1,
+    } as any;
+
+    const membersOf = (count: number, substitutes = 0) =>
+      Array.from({ length: count }, (_, i) => ({
+        userId: i + 1,
+        isSubstitute: i < substitutes,
+      }));
+
+    it('accepts a roster within the limits', () => {
+      expect(() =>
+        guard.checkIfMembersAreEligibleForStage(membersOf(3, 1), baseStage),
+      ).not.toThrow();
+    });
+
+    it('rejects a roster for a stage that has started', () => {
+      expect(() =>
+        guard.checkIfMembersAreEligibleForStage(membersOf(2), {
+          ...baseStage,
+          startDate: new Date(Date.now() - 1000),
+        }),
+      ).toThrow('Stage has already started');
+    });
+
+    it('rejects too many players', () => {
+      expect(() =>
+        guard.checkIfMembersAreEligibleForStage(membersOf(4), baseStage),
+      ).toThrow('Roster size is too large');
+    });
+
+    it('rejects too few players', () => {
+      expect(() =>
+        guard.checkIfMembersAreEligibleForStage(membersOf(1), baseStage),
+      ).toThrow('Roster size is too small');
+    });
+
+    it('rejects too many substitutes', () => {
+      expect(() =>
+        guard.checkIfMembersAreEligibleForStage(membersOf(3, 2), baseStage),
+      ).toThrow('Substitute amount is too large');
+    });
+
+    it('does not limit substitutes when the stage sets no limit', () => {
+      expect(() =>
+        guard.checkIfMembersAreEligibleForStage(membersOf(3, 3), {
+          ...baseStage,
+          maxSubstitutes: null,
+        }),
+      ).not.toThrow();
     });
   });
 });

@@ -9,10 +9,12 @@ import {
   groupToUser,
   groupUserBlockList,
   groupRequirements,
+  eloRequirement,
   group,
   follower,
 } from 'src/db/schema';
 import {
+  BASE_ELO,
   LFGResponsesEnum,
   LFGResponsesEnumType,
   LFGSortingEnum,
@@ -374,10 +376,15 @@ export class LFGDrizzleRepository extends PrimaryRepository<
       return [];
     }
 
+    const eloRequirements = requirements
+      ? await this.getEloRequirementRows(requirements.id)
+      : [];
+
     const rows = await this.getPlayerRows([
       notInArray(user.id, forbiddenUserIds),
       ...(requirements?.isSameCountry ? [eq(user.country, groupCountry)] : []),
       ...this.getAgeConditions(requirements),
+      ...this.getEloConditions(eloRequirements),
     ]);
 
     return this.groupPlayerRows(rows);
@@ -416,6 +423,7 @@ export class LFGDrizzleRepository extends PrimaryRepository<
       .select({
         //best approach: select nested objects
         groupRequirements: {
+          id: groupRequirements.id,
           minimumAge: groupRequirements.minimumAge,
           maximumAge: groupRequirements.maximumAge,
           isSameCountry: groupRequirements.isSameCountry,
@@ -427,6 +435,43 @@ export class LFGDrizzleRepository extends PrimaryRepository<
       .from(groupRequirements)
       .leftJoin(group, eq(groupRequirements.groupId, group.id))
       .where(eq(groupRequirements.groupId, groupId));
+  }
+
+  private getEloRequirementRows(groupRequirementId: number) {
+    return db
+      .select({
+        categoryId: eloRequirement.categoryId,
+        minimumElo: eloRequirement.minimumElo,
+        maximumElo: eloRequirement.maximumElo,
+      })
+      .from(eloRequirement)
+      .where(eq(eloRequirement.groupRequirementId, groupRequirementId));
+  }
+
+  // A player without a career in the category is rated at the base rating
+  private getEloConditions(
+    eloRequirements: {
+      categoryId: number;
+      minimumElo: number | null;
+      maximumElo: number | null;
+    }[],
+  ): SQL[] {
+    return eloRequirements.flatMap((requirement) => {
+      const elo = sql`coalesce((
+        select ${categoryCareer.elo} from ${categoryCareer}
+        where ${categoryCareer.userId} = ${user.id}
+          and ${categoryCareer.categoryId} = ${requirement.categoryId}
+      ), ${BASE_ELO})`;
+
+      return [
+        ...(requirement.minimumElo != null
+          ? [gte(elo, requirement.minimumElo)]
+          : []),
+        ...(requirement.maximumElo != null
+          ? [lte(elo, requirement.maximumElo)]
+          : []),
+      ];
+    });
   }
 
   private getAgeConditions(

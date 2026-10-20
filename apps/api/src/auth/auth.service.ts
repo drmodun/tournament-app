@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -35,6 +36,12 @@ export class AuthService {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) throw new UnauthorizedException('Invalid password');
+
+    // Unverified accounts cannot use any guarded endpoint, so say why instead of handing out useless tokens
+    if (!user.isEmailVerified)
+      throw new ForbiddenException(
+        'Confirm your email address before logging in',
+      );
 
     return await this.getTokens(
       user.id,

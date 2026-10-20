@@ -22,6 +22,9 @@ import { PaginationOnly } from 'src/base/query/baseQuery';
 import { QuizAttemptDrizzleRepository } from './quiz-attempt.repository';
 import { QuizService } from 'src/quiz/quiz.service';
 
+// Allowance for network latency when the last answer arrives right at the time limit
+const ANSWER_GRACE_SECONDS = 10;
+
 @Injectable()
 export class QuizAttemptService {
   constructor(
@@ -38,6 +41,16 @@ export class QuizAttemptService {
       throw new NotFoundException(
         `Quiz with ID ${createQuizAttemptDto.quizId} not found`,
       );
+    }
+
+    const now = Date.now();
+
+    if (new Date(quiz.startDate).getTime() > now) {
+      throw new ForbiddenException('This quiz has not started yet');
+    }
+
+    if (quiz.endDate && new Date(quiz.endDate).getTime() < now) {
+      throw new ForbiddenException('This quiz has ended');
     }
 
     if (!quiz.isAnonymousAllowed && !createQuizAttemptDto.userId) {
@@ -183,11 +196,40 @@ export class QuizAttemptService {
     }
   }
 
+  // An unfinished attempt can always be resumed; only a submitted one counts as taken
   async checkForPreviousAttempt(quizId: number, userId: number) {
-    const attempt = await this.repository.getQuizAttemptForUser(userId, quizId);
+    const hasSubmitted = await this.repository.hasSubmittedAttempt(
+      userId,
+      quizId,
+    );
 
-    if (attempt) {
+    if (hasSubmitted) {
       throw new ForbiddenException('You have already attempted this quiz');
+    }
+  }
+
+  // Answers are accepted until the quiz ends and, for timed quizzes, until the attempt's time runs out
+  async checkAttemptIsOpen(attemptId: number) {
+    const timing = await this.repository.getAttemptTiming(attemptId);
+
+    if (!timing) {
+      throw new NotFoundException(`Quiz attempt with ID ${attemptId} not found`);
+    }
+
+    const now = Date.now();
+
+    if (timing.quizEndDate && new Date(timing.quizEndDate).getTime() < now) {
+      throw new ForbiddenException('This quiz has ended');
+    }
+
+    if (timing.timeLimitTotal) {
+      const deadline =
+        new Date(timing.startedAt).getTime() +
+        (timing.timeLimitTotal + ANSWER_GRACE_SECONDS) * 1000;
+
+      if (deadline < now) {
+        throw new ForbiddenException('The time for this attempt is up');
+      }
     }
   }
 

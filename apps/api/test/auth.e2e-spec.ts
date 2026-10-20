@@ -18,6 +18,7 @@ describe('AuthController (e2e)', () => {
     email: 'test@example.com',
     password: 'hashedPassword123',
     role: 'USER',
+    isEmailVerified: true,
   };
 
   beforeAll(async () => {

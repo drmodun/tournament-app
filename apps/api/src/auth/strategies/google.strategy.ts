@@ -67,16 +67,20 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   async createIfNotExist(profile: GoogleProfile): Promise<number> {
     const { name, emails, photos } = profile;
 
-    const user = await this.usersService.create({
-      email: emails[0].value,
-      username: name.givenName,
-      profilePicture: photos[0].value,
-      country: 'None',
-      dateOfBirth: new Date(),
-      isFake: false,
-      name: name.givenName,
-      password: crypto.randomUUID(),
-    });
+    // Google has already verified the address, so no confirmation email is needed
+    const user = await this.usersService.create(
+      {
+        email: emails[0].value,
+        username: name.givenName,
+        profilePicture: photos[0].value,
+        country: 'None',
+        dateOfBirth: new Date(),
+        isFake: false,
+        name: name.givenName,
+        password: crypto.randomUUID(),
+      },
+      { isEmailVerified: true },
+    );
 
     return user?.id as number;
   }

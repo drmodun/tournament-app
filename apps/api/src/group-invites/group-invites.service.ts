@@ -16,6 +16,7 @@ import {
 } from '@tournament-app/types';
 import { GroupInviteWithUserResponseDto } from './dto/responses.dto';
 import { GroupService } from 'src/group/group.service';
+import { GroupRequirementsService } from 'src/group/requirements/group-requirements.service';
 import { SseNotificationsService } from '../infrastructure/sse-notifications/sse-notifications.service';
 import { NotificationTemplatesFiller } from '../infrastructure/sse-notifications/templates';
 import { TemplatesEnum } from '../infrastructure/types';
@@ -29,6 +30,7 @@ export class GroupInvitesService {
     private readonly groupService: GroupService,
     private readonly sseNotificationsService: SseNotificationsService,
     private readonly templatesFiller: NotificationTemplatesFiller,
+    private readonly groupRequirementsService: GroupRequirementsService,
   ) {}
 
   async create(groupId: number, userId: number, dto: CreateGroupInviteDto) {
@@ -133,6 +135,11 @@ export class GroupInvitesService {
 
   async accept(groupId: number, userId: number) {
     await this.findOne(groupId, userId);
+
+    await this.groupRequirementsService.checkUserMeetsRequirements(
+      groupId,
+      userId,
+    );
 
     await this.groupMembershipService.create(groupId, userId);
     await this.remove(groupId, userId);

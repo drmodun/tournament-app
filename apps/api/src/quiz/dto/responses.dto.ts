@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IQuizResponse,
   IQuizResponseExtended,
@@ -50,6 +50,13 @@ export class QuizResponse implements IQuizResponse {
     readOnly: true,
   })
   startDate: Date;
+
+  @ApiPropertyOptional({
+    description: 'Date and time after which the quiz no longer accepts answers',
+    example: '2023-07-08T10:00:00Z',
+    readOnly: true,
+  })
+  endDate?: Date;
 
   @ApiProperty({
     description: 'Total time limit for completing the quiz in seconds',

@@ -117,6 +117,7 @@ export class UserDrizzleRepository extends PrimaryRepository<
           role: user.role,
           email: user.email,
           password: user.password,
+          isEmailVerified: user.isEmailVerified,
         };
       case UserDtosEnum.PASSWORD_RESET_TOKEN:
         return {

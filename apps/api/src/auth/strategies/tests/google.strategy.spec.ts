@@ -74,16 +74,20 @@ describe('GoogleStrategy', () => {
       const done = jest.fn();
       await strategy.validate(mockProfile, done);
 
-      expect(mockUsersService.create).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        username: 'Test',
-        isFake: false,
-        profilePicture: 'photo-url',
-        country: 'None',
-        name: 'Test',
-        dateOfBirth: expect.any(Date),
-        password: expect.any(String),
-      });
+      expect(mockUsersService.create).toHaveBeenCalledWith(
+        {
+          email: 'test@example.com',
+          username: 'Test',
+          isFake: false,
+          profilePicture: 'photo-url',
+          country: 'None',
+          name: 'Test',
+          dateOfBirth: expect.any(Date),
+          password: expect.any(String),
+        },
+        // Google verified the address, so the account starts verified
+        { isEmailVerified: true },
+      );
       expect(done).toHaveBeenCalledWith(null, mockValidatedUser);
     });
 

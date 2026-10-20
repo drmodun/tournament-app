@@ -12,6 +12,7 @@ export interface ITagResponse {
 export interface IQuizResponse {
   name: string;
   startDate: Date | string;
+  endDate?: Date | string | null;
   timeLimitTotal?: number | null; // Time limit (in seconds)
   passingScore?: number | null; // Percentage
   isRetakeable: boolean;

@@ -7,12 +7,14 @@ import { GroupModule } from '../group/group.module';
 import { UsersModule } from 'src/users/users.module';
 import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
+import { GroupRequirementsModule } from 'src/group/requirements/group-requirements.module';
 @Module({
   imports: [
     GroupMembershipModule,
     GroupModule,
     UsersModule,
     SseNotificationsModule,
+    GroupRequirementsModule,
   ],
   controllers: [GroupInvitesController],
   providers: [

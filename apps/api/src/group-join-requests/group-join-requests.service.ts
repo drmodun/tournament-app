@@ -19,6 +19,7 @@ import {
 import { GroupJoinRequestWithUserResponse } from './dto/responses.dto';
 import { GroupMembershipService } from '../group-membership/group-membership.service';
 import { GroupService } from 'src/group/group.service';
+import { GroupRequirementsService } from 'src/group/requirements/group-requirements.service';
 import { NotificationTemplatesFiller } from 'src/infrastructure/sse-notifications/templates';
 import { NotificationCreateDto, TemplatesEnum } from 'src/infrastructure/types';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
@@ -31,6 +32,7 @@ export class GroupJoinRequestsService {
     private readonly notificationTemplateFiller: NotificationTemplatesFiller,
     private readonly notificationService: SseNotificationsService,
     private readonly groupService: GroupService,
+    private readonly groupRequirementsService: GroupRequirementsService,
   ) {}
 
   async create(
@@ -39,6 +41,11 @@ export class GroupJoinRequestsService {
     createDto: CreateGroupJoinRequestDto,
   ) {
     await this.checkIfGroupIsPublic(groupId, createDto.relatedLFPId);
+
+    await this.groupRequirementsService.checkUserMeetsRequirements(
+      groupId,
+      userId,
+    );
 
     const action = this.groupJoinRequestRepository.createEntity({
       groupId,

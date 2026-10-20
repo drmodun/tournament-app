@@ -23,6 +23,8 @@ describe('QuizAttemptService', () => {
     updateAnswer: jest.fn(),
     getQuizAttemptForUser: jest.fn(),
     getUserAttempts: jest.fn(),
+    hasSubmittedAttempt: jest.fn(),
+    getAttemptTiming: jest.fn(),
   };
 
   const mockQuizService = {
@@ -111,6 +113,31 @@ describe('QuizAttemptService', () => {
         ForbiddenException,
       );
       expect(repository.getQuizAttemptForUser).not.toHaveBeenCalled();
+    });
+
+    it('should refuse to start a quiz before its start date', async () => {
+      mockQuizService.findOne.mockResolvedValue({
+        ...mockQuiz,
+        startDate: new Date(Date.now() + 60_000),
+      });
+
+      await expect(service.create(createDto)).rejects.toThrow(
+        'This quiz has not started yet',
+      );
+      expect(repository.createQuizAttempt).not.toHaveBeenCalled();
+    });
+
+    it('should refuse to start a quiz after its end date', async () => {
+      mockQuizService.findOne.mockResolvedValue({
+        ...mockQuiz,
+        startDate: new Date(Date.now() - 120_000),
+        endDate: new Date(Date.now() - 60_000),
+      });
+
+      await expect(service.create(createDto)).rejects.toThrow(
+        'This quiz has ended',
+      );
+      expect(repository.createQuizAttempt).not.toHaveBeenCalled();
     });
 
     it('should throw UnprocessableEntityException if attempt creation fails', async () => {
@@ -301,6 +328,86 @@ describe('QuizAttemptService', () => {
 
       await expect(service.checkAttempter(attemptId, userId)).rejects.toThrow(
         ForbiddenException,
+      );
+    });
+  });
+
+  describe('checkForPreviousAttempt', () => {
+    it('allows a user without a submitted attempt, so an unfinished one can be resumed', async () => {
+      mockRepository.hasSubmittedAttempt.mockResolvedValue(false);
+
+      await expect(service.checkForPreviousAttempt(1, 2)).resolves.toBe(
+        undefined,
+      );
+      expect(repository.hasSubmittedAttempt).toHaveBeenCalledWith(2, 1);
+    });
+
+    it('refuses a user who already submitted an attempt', async () => {
+      mockRepository.hasSubmittedAttempt.mockResolvedValue(true);
+
+      await expect(service.checkForPreviousAttempt(1, 2)).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+  });
+
+  describe('checkAttemptIsOpen', () => {
+    const minutesAgo = (minutes: number) =>
+      new Date(Date.now() - minutes * 60_000);
+
+    it('accepts answers for an untimed quiz without an end date', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue({
+        startedAt: minutesAgo(600),
+        quizStartDate: minutesAgo(700),
+        quizEndDate: null,
+        timeLimitTotal: null,
+      });
+
+      await expect(service.checkAttemptIsOpen(1)).resolves.toBeUndefined();
+    });
+
+    it('accepts answers within the time limit', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue({
+        startedAt: minutesAgo(5),
+        quizStartDate: minutesAgo(10),
+        quizEndDate: null,
+        timeLimitTotal: 600,
+      });
+
+      await expect(service.checkAttemptIsOpen(1)).resolves.toBeUndefined();
+    });
+
+    it('refuses answers once the time limit has passed', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue({
+        startedAt: minutesAgo(11),
+        quizStartDate: minutesAgo(20),
+        quizEndDate: null,
+        timeLimitTotal: 600,
+      });
+
+      await expect(service.checkAttemptIsOpen(1)).rejects.toThrow(
+        'The time for this attempt is up',
+      );
+    });
+
+    it('refuses answers after the quiz has ended', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue({
+        startedAt: minutesAgo(5),
+        quizStartDate: minutesAgo(20),
+        quizEndDate: minutesAgo(1),
+        timeLimitTotal: null,
+      });
+
+      await expect(service.checkAttemptIsOpen(1)).rejects.toThrow(
+        'This quiz has ended',
+      );
+    });
+
+    it('throws NotFoundException for an unknown attempt', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(undefined);
+
+      await expect(service.checkAttemptIsOpen(1)).rejects.toThrow(
+        NotFoundException,
       );
     });
   });

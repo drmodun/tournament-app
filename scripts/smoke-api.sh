@@ -14,7 +14,8 @@ PASS=0
 FAIL=0
 USERNAME="smoke$(date +%s)"
 EMAIL="$USERNAME@example.com"
-PASSWORD='Password123!'
+# Password of the seeded accounts (and of the user this script registers); override for other data
+PASSWORD="${SMOKE_PASSWORD:-Password123!}"
 
 # check <label> <expected status> <method> <path> [curl args...]
 check() {
@@ -60,8 +61,7 @@ check 'register' 201 POST /users -d "{\"name\":\"Smoke Test\",\"username\":\"$US
 USER_ID=$(field 'd.id')
 check 'register with invalid body' 400 POST /users -d '{"email":"nope"}'
 check 'register duplicate email' 409 POST /users -d "{\"name\":\"Smoke Test\",\"username\":\"${USERNAME}b\",\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\",\"country\":\"HR\",\"dateOfBirth\":\"1995-05-05\"}"
-check 'login as the new user' 201 POST /auth/login -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}"
-NEW_USER_ACCESS=$(field 'd.accessToken')
+check 'login before confirming the email' 403 POST /auth/login -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}"
 
 TOKEN=""
 if [ -n "${MAILPIT_URL:-}" ]; then
@@ -74,6 +74,8 @@ fi
 
 if [ -n "${MAILPIT_URL:-}${SMOKE_LOGS_CMD:-}" ]; then
     check 'confirm email with the emailed token' 201 POST "/auth/email-confirmation/$TOKEN"
+    check 'login as the new user once confirmed' 201 POST /auth/login -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}"
+    NEW_USER_ACCESS=$(field 'd.accessToken')
     check 'new user can use the API once confirmed' 200 GET /users/me -H "Authorization: Bearer $NEW_USER_ACCESS"
     expect 'new user is the registered one' "d.username === '$USERNAME'"
 fi

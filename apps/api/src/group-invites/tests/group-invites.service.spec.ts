@@ -1,4 +1,6 @@
+import { ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { GroupRequirementsService } from '../../group/requirements/group-requirements.service';
 import { GroupInvitesService } from '../group-invites.service';
 import { GroupInviteDrizzleRepository } from '../group-invites.repository';
 import { GroupMembershipService } from '../../group-membership/group-membership.service';
@@ -38,6 +40,10 @@ describe('GroupInvitesService', () => {
     fill: jest.fn(),
   };
 
+  const mockGroupRequirementsService = {
+    checkUserMeetsRequirements: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -53,6 +59,10 @@ describe('GroupInvitesService', () => {
         {
           provide: GroupService,
           useValue: mockGroupService,
+        },
+        {
+          provide: GroupRequirementsService,
+          useValue: mockGroupRequirementsService,
         },
         {
           provide: SseNotificationsService,
@@ -189,6 +199,16 @@ describe('GroupInvitesService', () => {
   });
 
   describe('accept', () => {
+    it('should not add the member when they do not meet the requirements', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([{ id: 1 }]);
+      mockGroupRequirementsService.checkUserMeetsRequirements.mockRejectedValueOnce(
+        new ForbiddenException('requirements'),
+      );
+
+      await expect(service.accept(1, 1)).rejects.toThrow(ForbiddenException);
+      expect(mockGroupMembershipService.create).not.toHaveBeenCalled();
+    });
+
     it('should accept invite, create membership, remove invite and send notification', async () => {
       const mockInvite = { id: 1, message: 'test' };
       const groupData = { name: 'Test Group', id: 1 };

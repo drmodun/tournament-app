@@ -3,4 +3,5 @@ export interface UserCredentialsDto {
   password: string;
   role: string;
   id: number;
+  isEmailVerified?: boolean;
 }

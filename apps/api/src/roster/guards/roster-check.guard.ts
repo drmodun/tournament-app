@@ -8,7 +8,6 @@ import {
 import {
   ICreateRosterMemberRequest,
   IParticipationResponse,
-  IExtendedStageResponseWithTournament,
   StageResponsesEnum,
   IExtendedStageResponse,
   userRoleEnum,
@@ -114,6 +113,8 @@ export class CanRosterBeUsedGuard implements CanActivate {
       throw new ForbiddenException('Stage does not belong to tournament');
     }
 
+    this.checkIfMembersAreEligibleForStage(members, stage);
+
     const memberIds = members?.map((member) => member.userId);
 
     const isAnyMemberInAnotherRoster =
@@ -185,18 +186,15 @@ export class CanRosterBeUsedGuard implements CanActivate {
 
   checkIfMembersAreEligibleForStage(
     members: ICreateRosterMemberRequest[],
-    stage: IExtendedStageResponseWithTournament,
+    stage: IExtendedStageResponse,
   ) {
     const rosterSize = members?.length;
-    const maxPlayersPerStage = stage.maxPlayersPerTeam;
 
-    const currentTime = new Date().getTime();
-
-    if (stage.startDate.getTime() < currentTime) {
+    if (new Date(stage.startDate).getTime() < Date.now()) {
       throw new ForbiddenException('Stage has already started');
     }
 
-    if (maxPlayersPerStage && rosterSize > maxPlayersPerStage) {
+    if (stage.maxPlayersPerTeam && rosterSize > stage.maxPlayersPerTeam) {
       throw new ForbiddenException('Roster size is too large');
     }
 
@@ -208,7 +206,8 @@ export class CanRosterBeUsedGuard implements CanActivate {
       (member) => member.isSubstitute,
     ).length;
 
-    if (substituteAmount && substituteAmount > stage.maxSubstitutes) {
+    // An unset limit means substitutes are not restricted
+    if (stage.maxSubstitutes != null && substituteAmount > stage.maxSubstitutes) {
       throw new ForbiddenException('Substitute amount is too large');
     }
   }

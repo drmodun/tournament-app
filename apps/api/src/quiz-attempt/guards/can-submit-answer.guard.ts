@@ -27,6 +27,7 @@ export class CanSubmitAnswerGuard implements CanActivate {
     }
 
     await this.quizAttemptService.checkAttempter(attemptId, user.id);
+    await this.quizAttemptService.checkAttemptIsOpen(attemptId);
 
     if (request.method === 'POST') {
       await this.checkForPostAttempt(attemptId, questionId);

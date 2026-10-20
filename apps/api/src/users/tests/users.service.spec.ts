@@ -102,6 +102,29 @@ describe('UsersService', () => {
     expect(result).toEqual({ id: 1 });
   });
 
+  it('should create an already verified user without sending a confirmation email', async () => {
+    jest.clearAllMocks();
+    mockUserRepository.createEntity.mockResolvedValue([{ id: 2 }]);
+
+    const request: CreateUserRequest = {
+      username: 'google_user',
+      email: 'google@example.com',
+      password: 'Password123!',
+      name: 'Google User',
+      country: 'None',
+      dateOfBirth: new Date(),
+    };
+
+    const result = await service.create(request, { isEmailVerified: true });
+
+    expect(result).toEqual({ id: 2 });
+    expect(mockUserRepository.createEntity).toHaveBeenCalledWith(
+      expect.objectContaining({ isEmailVerified: true }),
+    );
+    expect(mockUserRepository.insertEmailConfirmationToken).not.toHaveBeenCalled();
+    expect(mockEmailService.generateAndSendEmail).not.toHaveBeenCalled();
+  });
+
   it('should throw an unprocessable entity exception when creating a user fails', async () => {
     mockUserRepository.createEntity.mockResolvedValue([]);
     const request: CreateUserRequest = {

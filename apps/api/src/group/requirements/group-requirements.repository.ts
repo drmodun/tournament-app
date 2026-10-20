@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { groupRequirements, eloRequirement, category } from '../../db/schema';
+import {
+  groupRequirements,
+  eloRequirement,
+  category,
+  categoryCareer,
+  group,
+  user,
+} from '../../db/schema';
 import { db } from '../../db/db';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { IEloRequirement } from '@tournament-app/types';
 
 @Injectable()
@@ -138,5 +145,36 @@ export class GroupRequirementsRepository {
     });
 
     return requirements[0];
+  }
+
+  // What the requirements are checked against: the user's age, country and ratings
+  async getRequirementSubject(userId: number) {
+    const [subject] = await db
+      .select({
+        country: user.country,
+        age: sql<number>`date_part('year', age(${user.dateOfBirth}))::int`,
+      })
+      .from(user)
+      .where(eq(user.id, userId));
+
+    if (!subject) {
+      return null;
+    }
+
+    const careers = await db
+      .select({ categoryId: categoryCareer.categoryId, elo: categoryCareer.elo })
+      .from(categoryCareer)
+      .where(eq(categoryCareer.userId, userId));
+
+    return { ...subject, careers };
+  }
+
+  async getGroupCountry(groupId: number) {
+    const [result] = await db
+      .select({ country: group.country })
+      .from(group)
+      .where(eq(group.id, groupId));
+
+    return result?.country ?? null;
   }
 }

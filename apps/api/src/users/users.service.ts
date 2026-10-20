@@ -33,20 +33,25 @@ export class UsersService {
     private readonly emailService: EmailService,
   ) {}
 
-  async create(createUserDto: CreateUserRequest) {
+  // isEmailVerified is for sign-ups whose address a provider already verified (Google)
+  async create(
+    createUserDto: CreateUserRequest,
+    { isEmailVerified = false }: { isEmailVerified?: boolean } = {},
+  ) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
     createUserDto.password = hashedPassword;
 
-    const action: BaseActionResponse[] = (await this.repository.createEntity(
-      createUserDto,
-    )) as BaseActionResponse[];
+    const action: BaseActionResponse[] = (await this.repository.createEntity({
+      ...createUserDto,
+      ...(isEmailVerified && { isEmailVerified }),
+    })) as BaseActionResponse[];
 
     if (!action || !action[0]) {
       throw new UnprocessableEntityException('User creation failed');
     }
 
-    if (createUserDto.isFake) {
+    if (createUserDto.isFake || isEmailVerified) {
       return action[0];
     }
 

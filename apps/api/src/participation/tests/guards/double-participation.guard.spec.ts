@@ -9,11 +9,7 @@ import { TeamTypeExtractor } from 'src/base/static/teamTypeExtractor';
 describe('DoubleParticipationGuard', () => {
   let guard: DoubleParticipationGuard;
   let participationService: jest.Mocked<ParticipationService>;
-  const mockTournament = {
-    id: 1,
-    name: 'Test Tournament',
-    teamType: tournamentTeamTypeEnum.SOLO,
-  };
+  let mockTournament: Record<string, unknown>;
 
   const createMockExecutionContext = (
     userId: number,
@@ -32,6 +28,13 @@ describe('DoubleParticipationGuard', () => {
     }) as ExecutionContext;
 
   beforeEach(async () => {
+    mockTournament = {
+      id: 1,
+      name: 'Test Tournament',
+      teamType: tournamentTeamTypeEnum.SOLO,
+      isMultipleTeamsPerGroupAllowed: false,
+    };
+
     const mockParticipationService = {
       isParticipant: jest.fn(),
     };
@@ -74,7 +77,6 @@ describe('DoubleParticipationGuard', () => {
       expect(result).toBe(true);
       expect(participationService.isParticipant).toHaveBeenCalledWith(1, {
         userId: 1,
-        groupId: undefined,
       });
     });
 
@@ -90,7 +92,6 @@ describe('DoubleParticipationGuard', () => {
       );
       expect(participationService.isParticipant).toHaveBeenCalledWith(1, {
         userId: 1,
-        groupId: undefined,
       });
     });
 
@@ -110,7 +111,6 @@ describe('DoubleParticipationGuard', () => {
 
       expect(result).toBe(true);
       expect(participationService.isParticipant).toHaveBeenCalledWith(1, {
-        userId: 1,
         groupId: 1,
       });
     });
@@ -130,9 +130,36 @@ describe('DoubleParticipationGuard', () => {
         ForbiddenException,
       );
       expect(participationService.isParticipant).toHaveBeenCalledWith(1, {
-        userId: 1,
         groupId: 1,
       });
+    });
+
+    it('should allow another team from the same group when the tournament allows it', async () => {
+      mockTournament.isMultipleTeamsPerGroupAllowed = true;
+      const context = createMockExecutionContext(
+        1,
+        1,
+        '/tournaments/1/apply-group',
+      );
+      (TeamTypeExtractor.getTeamTypeFromUrl as jest.Mock).mockReturnValue(
+        tournamentTeamTypeEnum.TEAM,
+      );
+
+      await expect(guard.canActivate(context)).resolves.toBe(true);
+      expect(participationService.isParticipant).not.toHaveBeenCalled();
+    });
+
+    it('should still refuse a second solo entry when multiple teams per group are allowed', async () => {
+      mockTournament.isMultipleTeamsPerGroupAllowed = true;
+      const context = createMockExecutionContext(1);
+      (TeamTypeExtractor.getTeamTypeFromUrl as jest.Mock).mockReturnValue(
+        tournamentTeamTypeEnum.SOLO,
+      );
+      participationService.isParticipant.mockResolvedValue(true);
+
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
   });
 });

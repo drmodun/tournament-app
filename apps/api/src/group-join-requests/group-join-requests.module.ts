@@ -9,8 +9,13 @@ import { GroupService } from 'src/group/group.service';
 import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
 import { SseNotificationRepository } from 'src/infrastructure/sse-notifications/sse-notification.repository';
 import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
+import { GroupRequirementsModule } from 'src/group/requirements/group-requirements.module';
 @Module({
-  imports: [GroupMembershipModule, SseNotificationsModule],
+  imports: [
+    GroupMembershipModule,
+    SseNotificationsModule,
+    GroupRequirementsModule,
+  ],
   controllers: [GroupJoinRequestsController],
   providers: [
     GroupJoinRequestsService,

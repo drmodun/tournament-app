@@ -1,4 +1,6 @@
+import { ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { GroupRequirementsService } from '../../group/requirements/group-requirements.service';
 import { GroupJoinRequestsService } from '../group-join-requests.service';
 import { GroupJoinRequestDrizzleRepository } from '../group-join-requests.repository';
 import { GroupMembershipService } from '../../group-membership/group-membership.service';
@@ -39,6 +41,10 @@ describe('GroupJoinRequestsService', () => {
     fill: jest.fn(),
   };
 
+  const mockGroupRequirementsService = {
+    checkUserMeetsRequirements: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -54,6 +60,10 @@ describe('GroupJoinRequestsService', () => {
         {
           provide: GroupService,
           useValue: mockGroupService,
+        },
+        {
+          provide: GroupRequirementsService,
+          useValue: mockGroupRequirementsService,
         },
         {
           provide: SseNotificationsService,
@@ -80,6 +90,18 @@ describe('GroupJoinRequestsService', () => {
   });
 
   describe('create', () => {
+    it('should not create a request when the user does not meet the requirements', async () => {
+      service.checkIfGroupIsPublic = jest.fn().mockResolvedValue(undefined);
+      mockGroupRequirementsService.checkUserMeetsRequirements.mockRejectedValueOnce(
+        new ForbiddenException('requirements'),
+      );
+
+      await expect(service.create(1, 1, { message: 'hi' })).rejects.toThrow(
+        ForbiddenException,
+      );
+      expect(repository.createEntity).not.toHaveBeenCalled();
+    });
+
     it('should create a group join request and send notifications to admins', async () => {
       const createDto = {
         message: 'test message',

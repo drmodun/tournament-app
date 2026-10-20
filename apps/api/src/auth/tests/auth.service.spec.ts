@@ -2,7 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
 import { UsersService } from '../../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/infrastructure/email/email.service';
 
@@ -106,11 +110,27 @@ describe('AuthService', () => {
       ).rejects.toThrow(UnauthorizedException);
     });
 
+    it('should throw ForbiddenException for an unverified account with the right password', async () => {
+      mockUsersService.findOneByEmail.mockResolvedValue({
+        id: 1,
+        email: 'test@example.com',
+        password: 'hashedPassword',
+        isEmailVerified: false,
+      });
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+
+      await expect(
+        service.verifyWithCredentials('test@example.com', 'correctPassword'),
+      ).rejects.toThrow(ForbiddenException);
+      expect(mockJwtService.signAsync).not.toHaveBeenCalled();
+    });
+
     it('should return tokens if credentials are valid', async () => {
       mockUsersService.findOneByEmail.mockResolvedValue({
         id: 1,
         email: 'test@example.com',
         password: 'hashedPassword',
+        isEmailVerified: true,
       });
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
       mockJwtService.signAsync.mockReturnValueOnce('accessToken');

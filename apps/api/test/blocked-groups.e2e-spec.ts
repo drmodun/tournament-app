@@ -44,7 +44,21 @@ describe('BlockedGroupsController (e2e)', () => {
 
     authToken = loginResponse.body.accessToken;
 
-    testGroupId = 5;
+    // The seed blocks random groups, so use one this user had not blocked
+    // (chosen once: later tests rely on what earlier ones blocked)
+    if (testGroupId === undefined) {
+      const { body: blocked } = await request(app.getHttpServer())
+        .get('/blocked-groups?pageSize=100')
+        .set('Authorization', `Bearer ${authToken}`);
+      const blockedIds = new Set(
+        blocked.results.map((g: { id: number }) => g.id),
+      );
+
+      testGroupId = 5;
+      while (blockedIds.has(testGroupId)) {
+        testGroupId++;
+      }
+    }
   });
 
   afterEach(async () => {
@@ -92,7 +106,7 @@ describe('BlockedGroupsController (e2e)', () => {
 
       // Verify the group is now blocked
       const response = await request(app.getHttpServer())
-        .get('/blocked-groups')
+        .get('/blocked-groups?pageSize=100')
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 

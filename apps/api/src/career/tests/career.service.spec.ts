@@ -119,6 +119,7 @@ describe('CareerService.applyMatchResult', () => {
     getRatings: jest.fn(),
     getFinishedMatchCounts: jest.fn(),
     saveRatings: jest.fn(),
+    revertRatings: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -168,9 +169,20 @@ describe('CareerService.applyMatchResult', () => {
     const changes = await service.applyMatchResult(1);
 
     expect(changes).toEqual([
-      { userId: 1, elo: 1010 },
-      { userId: 2, elo: 990 },
+      { userId: 1, elo: 1010, delta: 10 },
+      { userId: 2, elo: 990, delta: -10 },
     ]);
-    expect(repository.saveRatings).toHaveBeenCalledWith(changes, 3);
+    expect(repository.saveRatings).toHaveBeenCalledWith(1, changes, 3);
+  });
+
+  it('reverts the recorded changes of a matchup', async () => {
+    repository.revertRatings.mockResolvedValue([
+      { userId: 1, categoryId: 3, delta: 10 },
+    ]);
+
+    await expect(service.revertMatchResult(4)).resolves.toEqual([
+      { userId: 1, categoryId: 3, delta: 10 },
+    ]);
+    expect(repository.revertRatings).toHaveBeenCalledWith(4);
   });
 });

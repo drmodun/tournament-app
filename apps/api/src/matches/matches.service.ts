@@ -47,15 +47,7 @@ export class MatchesService {
       createMatchResult,
     );
 
-    // Ratings change once, when the result is first recorded; corrections do not re-rate
-    try {
-      await this.careerService.applyMatchResult(matchupId);
-    } catch (error) {
-      this.logger.error(
-        `Failed to update ratings for matchup ${matchupId}`,
-        error,
-      );
-    }
+    await this.updateRatings(matchupId, { revert: false, apply: true });
 
     await this.syncMatchupToChallonge(matchup, {
       action: 'update',
@@ -74,6 +66,8 @@ export class MatchesService {
     await this.checkResultCanChange(matchup);
 
     const result = await this.matchesRepository.deleteMatchScore(matchupId);
+
+    await this.updateRatings(matchupId, { revert: true, apply: false });
 
     await this.syncMatchupToChallonge(matchup, {
       action: 'reset',
@@ -97,6 +91,8 @@ export class MatchesService {
       createMatchResult,
     );
 
+    await this.updateRatings(matchupId, { revert: true, apply: true });
+
     await this.syncMatchupToChallonge(matchup, {
       action: 'update',
       advancesRound: true,
@@ -106,6 +102,28 @@ export class MatchesService {
     await this.advanceLocalBracketAfter(matchup);
 
     return scores;
+  }
+
+  // A corrected result is re-rated from scratch: the old changes are undone, then the new result is applied.
+  // Rating problems are logged and never undo the saved result.
+  private async updateRatings(
+    matchupId: number,
+    { revert, apply }: { revert: boolean; apply: boolean },
+  ) {
+    try {
+      if (revert) {
+        await this.careerService.revertMatchResult(matchupId);
+      }
+
+      if (apply) {
+        await this.careerService.applyMatchResult(matchupId);
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to update ratings for matchup ${matchupId}`,
+        error,
+      );
+    }
   }
 
   // Draws round 1 of a stage that has no Challonge tournament, seeding rosters by rating

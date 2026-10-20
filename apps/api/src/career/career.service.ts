@@ -12,6 +12,10 @@ export interface RatingChange {
   elo: number;
 }
 
+export interface AppliedRatingChange extends RatingChange {
+  delta: number;
+}
+
 /**
  * New ratings for a finished one-on-one matchup. Each player is rated against the
  * opposing roster's average, with a K-factor from their own match count. A matchup
@@ -72,7 +76,7 @@ export class CareerService {
   }
 
   // Updates the players' ratings after a result is recorded; only ranked tournaments count
-  async applyMatchResult(matchupId: number): Promise<RatingChange[]> {
+  async applyMatchResult(matchupId: number): Promise<AppliedRatingChange[]> {
     const context =
       await this.careerRepository.getMatchupRatingContext(matchupId);
 
@@ -98,14 +102,30 @@ export class CareerService {
       counts.map((c) => [c.userId, Math.max(0, Number(c.matches) - 1)]),
     );
 
-    const changes = computeRatingChanges(
-      context.rosters,
-      new Map(ratings.map((r) => [r.userId, r.elo ?? BASE_ELO])),
-      matchesPlayed,
+    const currentRatings = new Map(
+      ratings.map((r) => [r.userId, r.elo ?? BASE_ELO]),
     );
 
-    await this.careerRepository.saveRatings(changes, context.categoryId);
+    const changes = computeRatingChanges(
+      context.rosters,
+      currentRatings,
+      matchesPlayed,
+    ).map((change) => ({
+      ...change,
+      delta: change.elo - (currentRatings.get(change.userId) ?? BASE_ELO),
+    }));
+
+    await this.careerRepository.saveRatings(
+      matchupId,
+      changes,
+      context.categoryId,
+    );
 
     return changes;
+  }
+
+  // Undoes what applyMatchResult did for a matchup, before its result is corrected or deleted
+  async revertMatchResult(matchupId: number) {
+    return this.careerRepository.revertRatings(matchupId);
   }
 }

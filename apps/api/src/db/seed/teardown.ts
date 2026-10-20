@@ -17,6 +17,7 @@ export async function teardown() {
       tables.quiz,
 
       // Relationship tables first
+      tables.ratingChange,
       tables.scoreToRoster,
       tables.score,
       tables.rosterToMatchup,

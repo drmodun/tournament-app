@@ -13,7 +13,10 @@ describe('MatchesService', () => {
   let matchesRepository: jest.Mocked<MatchesDrizzleRepository>;
   let challongeService: jest.Mocked<ChallongeService>;
   let rosterService: jest.Mocked<RosterService>;
-  let careerService: { applyMatchResult: jest.Mock };
+  let careerService: {
+    applyMatchResult: jest.Mock;
+    revertMatchResult: jest.Mock;
+  };
 
   beforeEach(async () => {
     const mockMatchesRepository = {
@@ -48,7 +51,10 @@ describe('MatchesService', () => {
       findOne: jest.fn(),
     };
 
-    careerService = { applyMatchResult: jest.fn().mockResolvedValue([]) };
+    careerService = {
+      applyMatchResult: jest.fn().mockResolvedValue([]),
+      revertMatchResult: jest.fn().mockResolvedValue([]),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -112,6 +118,36 @@ describe('MatchesService', () => {
       await service.createMatchScore(1, result);
 
       expect(careerService.applyMatchResult).toHaveBeenCalledWith(1);
+    });
+
+    it('should re-rate a corrected result: revert first, then apply', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: { id: 1, stageId: 5, challongeMatchupId: null },
+      } as any);
+      matchesRepository.updateMatchScore.mockResolvedValue([] as any);
+      const calls: string[] = [];
+      careerService.revertMatchResult.mockImplementation(async () => {
+        calls.push('revert');
+      });
+      careerService.applyMatchResult.mockImplementation(async () => {
+        calls.push('apply');
+      });
+
+      await service.updateMatchScore(1, result);
+
+      expect(calls).toEqual(['revert', 'apply']);
+    });
+
+    it('should revert ratings when a result is deleted', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: { id: 1, stageId: 5, challongeMatchupId: null },
+      } as any);
+      matchesRepository.deleteMatchScore.mockResolvedValue(undefined as any);
+
+      await service.deleteMatchScore(1);
+
+      expect(careerService.revertMatchResult).toHaveBeenCalledWith(1);
+      expect(careerService.applyMatchResult).not.toHaveBeenCalled();
     });
 
     it('should keep the result when updating ratings fails', async () => {

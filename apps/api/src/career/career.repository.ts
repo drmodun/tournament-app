@@ -4,6 +4,7 @@ import { db } from '../db/db';
 import {
   categoryCareer,
   matchup,
+  ratingChange,
   participation,
   roster,
   rosterToMatchup,
@@ -113,20 +114,63 @@ export class CareerDrizzleRepository {
       .groupBy(userToRoster.userId);
   }
 
+  // Saves the new ratings and records how much each one moved, for a later revert
   async saveRatings(
-    ratings: { userId: number; elo: number }[],
+    matchupId: number,
+    ratings: { userId: number; elo: number; delta: number }[],
     categoryId: number,
   ) {
     if (!ratings.length) {
       return;
     }
 
-    await db
-      .insert(categoryCareer)
-      .values(ratings.map((r) => ({ ...r, categoryId })))
-      .onConflictDoUpdate({
-        target: [categoryCareer.categoryId, categoryCareer.userId],
-        set: { elo: sql`excluded.elo` },
-      });
+    await db.transaction(async (tx) => {
+      await tx
+        .insert(categoryCareer)
+        .values(ratings.map(({ userId, elo }) => ({ userId, elo, categoryId })))
+        .onConflictDoUpdate({
+          target: [categoryCareer.categoryId, categoryCareer.userId],
+          set: { elo: sql`excluded.elo` },
+        });
+
+      await tx.insert(ratingChange).values(
+        ratings.map(({ userId, delta }) => ({
+          matchupId,
+          userId,
+          categoryId,
+          delta,
+        })),
+      );
+    });
+  }
+
+  // Undoes the rating changes recorded for a matchup and forgets them
+  async revertRatings(matchupId: number) {
+    return db.transaction(async (tx) => {
+      const changes = await tx
+        .delete(ratingChange)
+        .where(eq(ratingChange.matchupId, matchupId))
+        .returning({
+          userId: ratingChange.userId,
+          categoryId: ratingChange.categoryId,
+          delta: ratingChange.delta,
+        });
+
+      for (const change of changes) {
+        await tx
+          .update(categoryCareer)
+          .set({
+            elo: sql`greatest(0, ${categoryCareer.elo} - ${change.delta})`,
+          })
+          .where(
+            and(
+              eq(categoryCareer.userId, change.userId),
+              eq(categoryCareer.categoryId, change.categoryId),
+            ),
+          );
+      }
+
+      return changes;
+    });
   }
 }

@@ -302,6 +302,13 @@
       "when": 1791830299591,
       "tag": "0042_petite_psylocke",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1792475604065,
+      "tag": "0043_large_juggernaut",
+      "breakpoints": true
     }
   ]
 }

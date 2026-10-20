@@ -1032,6 +1032,28 @@ export const categoryCareer = pgTable(
   }),
 );
 
+// Rating changes applied for each matchup, so a corrected or deleted result can be undone
+export const ratingChange = pgTable(
+  'rating_change',
+  {
+    id: serial('id').primaryKey(),
+    matchupId: integer('matchup_id')
+      .references(() => matchup.id, { onDelete: 'cascade' })
+      .notNull(),
+    userId: integer('user_id')
+      .references(() => user.id, { onDelete: 'cascade' })
+      .notNull(),
+    categoryId: integer('category_id')
+      .references(() => category.id, { onDelete: 'cascade' })
+      .notNull(),
+    delta: integer('delta').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    matchupIndex: index('rating_change_matchup_index').on(t.matchupId),
+  }),
+);
+
 export const careerSingleRelations = relations(categoryCareer, ({ one }) => ({
   user: one(user, {
     fields: [categoryCareer.userId],

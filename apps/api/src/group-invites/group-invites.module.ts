@@ -16,10 +16,7 @@ import { GroupRequirementsModule } from 'src/group/requirements/group-requiremen
     GroupRequirementsModule,
   ],
   controllers: [GroupInvitesController],
-  providers: [
-    GroupInvitesService,
-    GroupInviteDrizzleRepository,
-  ],
+  providers: [GroupInvitesService, GroupInviteDrizzleRepository],
   exports: [GroupInvitesService],
 })
 export class GroupInvitesModule {}

@@ -20,6 +20,8 @@ x-api-env: &api-env
   S3_ENDPOINT: ${S3_ENDPOINT_INTERNAL:-http://s3:8333}
   # Links in emails point at the proxy
   FRONTEND_URL: ${PUBLIC_URL:-http://localhost:${PROXY_HTTP_PORT:-80}}
+  # Uploaded images are served by the API under /api/files, behind the proxy
+  API_PUBLIC_URL: ${PUBLIC_URL:-http://localhost:${PROXY_HTTP_PORT:-80}}/api
 
 services:
   # Reverse proxy: the single entry point. Configuration in docker/caddy/Caddyfile.

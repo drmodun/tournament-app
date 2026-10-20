@@ -12,6 +12,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { File } from 'buffer';
 import { getS3Settings } from './blob.provider';
@@ -56,6 +57,31 @@ export class BlobService {
     }
   }
 
+  // Stores bytes under a new key in the directory and returns the key
+  async uploadBuffer(
+    body: Buffer,
+    contentType: string,
+    directory: DirectoriesEnum,
+  ): Promise<string> {
+    const key = this.generateKey(directory, contentType);
+
+    try {
+      await this.s3.send(
+        new PutObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+          Body: body,
+          ContentType: contentType,
+        }),
+      );
+      this.logger.log(`File uploaded successfully: ${key}`);
+      return key;
+    } catch (error) {
+      this.logger.error(`Failed to upload file: ${error.message}`);
+      throw new InternalServerErrorException('Failed to upload file');
+    }
+  }
+
   async deleteFile(key: string): Promise<void> {
     const command = new DeleteObjectCommand({
       Bucket: this.bucket,
@@ -86,6 +112,13 @@ export class BlobService {
       this.logger.log(`File retrieved successfully: ${key}`);
       return result;
     } catch (error) {
+      if (
+        error?.name === 'NoSuchKey' ||
+        error?.$metadata?.httpStatusCode === 404
+      ) {
+        throw new NotFoundException('File not found');
+      }
+
       this.logger.error(`Failed to retrieve file: ${error.message}`);
       throw new InternalServerErrorException('Failed to retrieve file');
     }

@@ -5,7 +5,16 @@ export enum DirectoriesEnum {
   TOURNAMENT_AVATAR = 'tournament-avatar',
   GROUP = 'group',
   GROUP_BANNER = 'group-banner',
-  SUBSCRIPTION_ICON = 'subscription-icon',
+  QUIZ = 'quiz',
   TEST = 'test',
-  SUBMISSION_THUMBNAIL = 'submission-thumbnail',
 }
+
+// Directories anyone signed in may upload images to
+export const UPLOAD_DIRECTORIES: string[] = [
+  DirectoriesEnum.AVATAR,
+  DirectoriesEnum.GROUP_AVATAR,
+  DirectoriesEnum.GROUP_BANNER,
+  DirectoriesEnum.TOURNAMENT_BANNER,
+  DirectoriesEnum.TOURNAMENT_AVATAR,
+  DirectoriesEnum.QUIZ,
+];

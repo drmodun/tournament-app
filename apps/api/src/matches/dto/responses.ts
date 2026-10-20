@@ -302,6 +302,16 @@ export class MatchupResponseDto {
   round: number;
 
   @ApiProperty({
+    description:
+      'Double-elimination stages run by the API: winners, losers or grand_final',
+    example: 'winners',
+    required: false,
+    nullable: true,
+    readOnly: true,
+  })
+  bracket?: 'winners' | 'losers' | 'grand_final' | null;
+
+  @ApiProperty({
     description: 'Type of the matchup',
     example: 'SINGLE_ELIMINATION',
     readOnly: true,
@@ -419,4 +429,78 @@ export class MatchupResponseWithResultsAndScoresDto extends MatchupResponseDto {
     readOnly: true,
   })
   results: ResultsResponseWithScoresDto[];
+}
+
+export class StageStandingDto {
+  @ApiProperty({ example: 12, readOnly: true })
+  rosterId: number;
+
+  @ApiProperty({
+    description: 'Rosters with equal records share a place',
+    example: 1,
+    readOnly: true,
+  })
+  place: number;
+
+  @ApiProperty({ example: 3, readOnly: true })
+  played: number;
+
+  @ApiProperty({ example: 2, readOnly: true })
+  wins: number;
+
+  @ApiProperty({ example: 1, readOnly: true })
+  draws: number;
+
+  @ApiProperty({ example: 0, readOnly: true })
+  losses: number;
+
+  @ApiProperty({ example: 0, readOnly: true })
+  byes: number;
+
+  @ApiProperty({
+    description: 'Points brought in from an earlier stage by a conversion rule',
+    example: 0,
+    readOnly: true,
+  })
+  carriedPoints: number;
+
+  @ApiProperty({
+    description: 'carriedPoints plus 3 per win or bye and 1 per draw',
+    example: 7,
+    readOnly: true,
+  })
+  points: number;
+
+  @ApiProperty({
+    description: "Sum of the opponents' points, the Swiss tie-breaker",
+    example: 9,
+    readOnly: true,
+  })
+  buchholz: number;
+
+  @ApiProperty({
+    description:
+      "Elimination formats: the round of the roster's last allowed loss, null while it is still in",
+    example: null,
+    nullable: true,
+    readOnly: true,
+  })
+  eliminatedInRound: number | null;
+}
+
+export class StageStandingsResponseDto {
+  @ApiProperty({ example: 4, readOnly: true })
+  stageId: number;
+
+  @ApiProperty({
+    enum: ['single_elimination', 'double_elimination', 'round_robin', 'swiss'],
+    readOnly: true,
+  })
+  format: 'single_elimination' | 'double_elimination' | 'round_robin' | 'swiss';
+
+  @ApiProperty({ example: false, readOnly: true })
+  isFinished: boolean;
+
+  @ApiProperty({ type: [StageStandingDto], readOnly: true })
+  standings: StageStandingDto[];
 }

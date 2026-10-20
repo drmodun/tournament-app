@@ -46,6 +46,7 @@ import {
 import { QueryMatchupRequestDto } from './dto/requests';
 import { participation } from '../db/schema';
 import { PaginationOnly } from 'src/base/query/baseQuery';
+import { LocalMatchup, Pairing } from './bracketFormats';
 
 @Injectable()
 export class MatchesDrizzleRepository extends PrimaryRepository<
@@ -546,6 +547,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         id: tables.stage.id,
         name: tables.stage.name,
         stageType: tables.stage.stageType,
+        stageStatus: tables.stage.stageStatus,
         tournamentId: tables.stage.tournamentId,
         challongeTournamentId: tables.stage.challongeTournamentId,
       })
@@ -739,11 +741,13 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       ),
       orderBy: [desc(matchup.startDate)],
       limit: query.pageSize ?? 10,
-      offset: query.pageSize * (query.page || 1 - 1),
+      offset: (query.pageSize ?? 10) * ((query.page || 1) - 1),
       columns: {
         id: true,
         stageId: true,
         round: true,
+        bracket: true,
+        startDate: true,
         isFinished: true,
         challongeMatchupId: true,
       },
@@ -928,16 +932,21 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
   async insertLocalRound(
     stageId: number,
     round: number,
-    pairings: number[][],
+    pairings: Pairing[],
     startDate: Date,
   ) {
+    if (!pairings.length) {
+      return [];
+    }
+
     return db.transaction(async (tx) => {
       const created = await tx
         .insert(matchup)
         .values(
-          pairings.map((rosterIds) => ({
+          pairings.map(({ rosterIds, bracket }) => ({
             stageId,
             round,
+            bracket: bracket ?? null,
             startDate,
             isFinished: rosterIds.length < 2,
             endDate: rosterIds.length < 2 ? startDate : null,
@@ -946,7 +955,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         .returning({ id: matchup.id });
 
       await tx.insert(rosterToMatchup).values(
-        pairings.flatMap((rosterIds, index) =>
+        pairings.flatMap(({ rosterIds }, index) =>
           rosterIds.map((rosterId) => ({
             rosterId,
             matchupId: created[index].id,
@@ -959,40 +968,56 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     });
   }
 
-  // Each matchup of a round in bracket order (insertion order), with the rosters that won it
-  async getRoundWinners(stageId: number, round: number) {
+  // Every matchup of a locally run stage, in the order it was drawn, with its rosters and winners
+  async getLocalMatchups(stageId: number): Promise<LocalMatchup[]> {
     const rows = await db
       .select({
         matchupId: matchup.id,
+        round: matchup.round,
+        bracket: matchup.bracket,
         isFinished: matchup.isFinished,
         rosterId: rosterToMatchup.rosterId,
         isWinner: rosterToMatchup.isWinner,
       })
       .from(matchup)
       .leftJoin(rosterToMatchup, eq(rosterToMatchup.matchupId, matchup.id))
-      .where(and(eq(matchup.stageId, stageId), eq(matchup.round, round)))
+      .where(and(eq(matchup.stageId, stageId), isNotNull(matchup.round)))
       .orderBy(asc(matchup.id));
 
-    const byMatchup = new Map<
-      number,
-      { matchupId: number; isFinished: boolean; winners: number[] }
-    >();
+    const byMatchup = new Map<number, LocalMatchup>();
 
     for (const row of rows) {
       const entry = byMatchup.get(row.matchupId) ?? {
-        matchupId: row.matchupId,
+        id: row.matchupId,
+        round: row.round,
+        bracket: row.bracket,
         isFinished: !!row.isFinished,
+        rosterIds: [],
         winners: [],
       };
 
-      if (row.isWinner && row.rosterId) {
-        entry.winners.push(row.rosterId);
+      if (row.rosterId) {
+        entry.rosterIds.push(row.rosterId);
+
+        if (row.isWinner) {
+          entry.winners.push(row.rosterId);
+        }
       }
 
       byMatchup.set(row.matchupId, entry);
     }
 
     return [...byMatchup.values()];
+  }
+
+  // Points each roster of a stage brought in from an earlier stage
+  async getCarriedPoints(stageId: number) {
+    const rows = await db
+      .select({ rosterId: roster.id, points: roster.points })
+      .from(roster)
+      .where(eq(roster.stageId, stageId));
+
+    return new Map(rows.map((row) => [row.rosterId, row.points ?? 0]));
   }
 
   async hasRound(stageId: number, round: number) {
@@ -1014,7 +1039,8 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       .where(eq(stage.id, stageId));
   }
 
-  // Every roster of a stage, strongest first by its players' average rating in the tournament's category
+  // Every roster of a stage: seeded rosters in seed order, then the rest strongest first by their
+  // players' average rating in the tournament's category
   async getRostersBySeed(stageId: number): Promise<number[]> {
     const rows = await db
       .select({
@@ -1041,6 +1067,7 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       .where(eq(roster.stageId, stageId))
       .groupBy(roster.id)
       .orderBy(
+        sql`${roster.seed} asc nulls last`,
         desc(sql`avg(coalesce(${tables.categoryCareer.elo}, ${BASE_ELO}))`),
         asc(roster.id),
       );

@@ -29,6 +29,7 @@ import { MatchesModule } from './matches/matches.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { QuizModule } from './quiz/quiz.module';
 import { QuizAttemptModule } from './quiz-attempt/quiz-attempt.module';
+import { ConversionRuleModule } from './conversion-rule/conversion-rule.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { QuizAttemptModule } from './quiz-attempt/quiz-attempt.module';
     MatchesModule,
     QuizModule,
     QuizAttemptModule,
+    ConversionRuleModule,
     EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],

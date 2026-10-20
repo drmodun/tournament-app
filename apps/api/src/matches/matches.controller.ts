@@ -26,6 +26,7 @@ import {
   MatchupResponseWithResultsAndScoresDto,
   ResultsResponseDto,
   ScoreResponseDto,
+  StageStandingsResponseDto,
 } from './dto/responses';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
@@ -82,6 +83,16 @@ export class MatchesController {
   })
   async getMatchupsWithResults(@Query() query: QueryMatchupRequestDto) {
     return await this.matchesService.getMatchupsWithResults(query);
+  }
+
+  @Get('stage/:stageId/standings')
+  @ApiOkResponse({
+    description:
+      'Standings of a stage run by the API, best first, in the format its stage type names',
+    type: StageStandingsResponseDto,
+  })
+  async getStageStandings(@Param('stageId', ParseIntPipe) stageId: number) {
+    return await this.matchesService.getStandings(stageId);
   }
 
   @Get('matchup/:matchupId/results')

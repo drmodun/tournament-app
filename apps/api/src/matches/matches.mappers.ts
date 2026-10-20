@@ -151,7 +151,8 @@ function mapMatchupWithResults(rawMatch: any) {
   return {
     id: rawMatch.id || 0,
     stageId: rawMatch.stageId || 0,
-    round: rawMatch.round || 0,
+    round: rawMatch.round ?? null,
+    bracket: rawMatch.bracket ?? null,
     matchupType: rawMatch.matchupType || 'standard',
     startDate: rawMatch.startDate || new Date(),
     isFinished: !!rawMatch.isFinished,

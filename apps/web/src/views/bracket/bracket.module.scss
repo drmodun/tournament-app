@@ -65,3 +65,48 @@
   font-style: italic;
   opacity: 0.6;
 }
+
+.local {
+  display: flex;
+  flex-direction: column;
+  gap: $doublePadding;
+  width: 100%;
+}
+
+.bracket {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.standings {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  overflow-x: auto;
+
+  h3 {
+    margin: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+    min-width: 320px;
+  }
+
+  th,
+  td {
+    padding: $halfPadding $padding;
+    text-align: left;
+    border-bottom: 1px solid $primaryMuted;
+  }
+
+  td:not(:nth-child(2)),
+  th:not(:nth-child(2)) {
+    text-align: right;
+  }
+}

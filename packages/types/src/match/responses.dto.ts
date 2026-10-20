@@ -10,6 +10,8 @@ export interface IMatchupResponse {
   id: number;
   stageId: number;
   round: number;
+  // Set for matchups of a double-elimination stage run by the API
+  bracket?: "winners" | "losers" | "grand_final" | null;
   matchupType: string;
   startDate: Date;
   isFinished: boolean;
@@ -77,4 +79,30 @@ export enum MatchupSortingEnum {
   ROUND_NUMBER = "ROUND_NUMBER",
   START_DATE = "START_DATE",
   IS_FINISHED = "IS_FINISHED",
+}
+
+// One roster's line in a stage's standings, best first
+export interface IStageStandingResponse {
+  rosterId: number;
+  place: number;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  byes: number;
+  // Points brought in from an earlier stage by a conversion rule
+  carriedPoints: number;
+  // carriedPoints plus 3 per win or bye and 1 per draw
+  points: number;
+  // Sum of the opponents' points, the Swiss tie-breaker
+  buchholz: number;
+  // Elimination formats: the round of the roster's last allowed loss, or null while still in
+  eliminatedInRound: number | null;
+}
+
+export interface IStageStandingsResponse {
+  stageId: number;
+  format: "single_elimination" | "double_elimination" | "round_robin" | "swiss";
+  isFinished: boolean;
+  standings: IStageStandingResponse[];
 }

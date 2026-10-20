@@ -19,6 +19,7 @@ import {
   GroupMembershipUpdateRequest,
 } from './dto/requests.dto';
 import { GroupMemberGuard } from 'src/group/guards/group-member.guard';
+import { GroupOwnerGuard } from 'src/group/guards/group-owner.guard';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import {
@@ -127,6 +128,16 @@ export class GroupMembershipController {
       results,
       metadata,
     };
+  }
+
+  @UseGuards(GroupOwnerGuard)
+  @ApiBearerAuth()
+  @Post(':groupId/transfer-ownership/:userId')
+  async transferOwnership(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return await this.groupMembershipService.transferOwnership(groupId, userId);
   }
 
   @UseGuards(GroupMemberGuard)

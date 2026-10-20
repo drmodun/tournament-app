@@ -7,6 +7,7 @@ import {
   GroupMembershipSortingEnum,
   GroupMembershipSortType,
   GroupResponsesEnum,
+  groupRoleEnum,
   IMiniGroupResponseWithLogo,
   IMiniUserResponseWithProfilePicture,
   UserResponsesEnum,
@@ -220,4 +221,34 @@ export class GroupMembershipDrizzleRepository extends CompositeRepository<
     [GroupMembershipSortingEnum.CREATED_AT]: groupToUser.createdAt,
     [GroupMembershipSortingEnum.ROLE]: groupToUser.role,
   };
+
+  // The current owner steps down to admin and the given member becomes the owner, atomically
+  async transferOwnership(groupId: number, newOwnerId: number) {
+    return db.transaction(async (tx) => {
+      await tx
+        .update(groupToUser)
+        .set({ role: groupRoleEnum.ADMIN } as Partial<
+          InferSelectModel<typeof groupToUser>
+        >)
+        .where(
+          and(
+            eq(groupToUser.groupId, groupId),
+            eq(groupToUser.role, groupRoleEnum.OWNER),
+          ),
+        );
+
+      return tx
+        .update(groupToUser)
+        .set({ role: groupRoleEnum.OWNER } as Partial<
+          InferSelectModel<typeof groupToUser>
+        >)
+        .where(
+          and(
+            eq(groupToUser.groupId, groupId),
+            eq(groupToUser.userId, newOwnerId),
+          ),
+        )
+        .returning({ userId: groupToUser.userId });
+    });
+  }
 }

@@ -25,6 +25,7 @@ export enum TemplatesEnum {
   GROUP_ADMIN_DEMOTION = 'group-admin-demotion',
   TEST_TEMPLATE = 'test-template',
   NEW_FOLLOWER = 'new-follower',
+  GROUP_OWNERSHIP_TRANSFER = 'group-ownership-transfer',
 }
 
 class WelcomeInfo {
@@ -101,6 +102,7 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   'bet-outcome': BetOutcomeInfo,
   'group-admin-demotion': GroupAdminDemotionInfo,
   'group-admin-promotion': GroupAdminPromotionInfo,
+  'group-ownership-transfer': GroupAdminPromotionInfo,
   'group-invitation': GroupInvitationInfo,
   'group-join-approval': GroupJoinApprovalInfo,
   'group-join-rejection': GroupJoinRejectionInfo,

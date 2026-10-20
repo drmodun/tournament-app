@@ -28,6 +28,7 @@ describe('GroupMembershipService', () => {
     updateEntity: jest.fn(),
     deleteEntity: jest.fn(),
     getUnpaginatedUsersInfoOnly: jest.fn(),
+    transferOwnership: jest.fn(),
   };
 
   const mockSseNotificationsService = {
@@ -400,6 +401,44 @@ describe('GroupMembershipService', () => {
         groupId: 5,
         role: groupRoleEnum.OWNER,
       });
+    });
+  });
+
+  describe('transferOwnership', () => {
+    it('makes a member the owner and notifies them', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { userId: 2, groupId: 5, role: groupRoleEnum.MEMBER },
+      ]);
+      mockGroupService.findOne.mockResolvedValue({ id: 5, name: 'Team' });
+      mockTemplatesFiller.fill.mockReturnValue('You are now the owner');
+
+      await service.transferOwnership(5, 2);
+
+      expect(mockRepository.transferOwnership).toHaveBeenCalledWith(5, 2);
+      expect(mockSseNotificationsService.createWithUsers).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'group-ownership-transfer' }),
+        [2],
+      );
+    });
+
+    it('refuses a user who is not a member', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([]);
+
+      await expect(service.transferOwnership(5, 2)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(mockRepository.transferOwnership).not.toHaveBeenCalled();
+    });
+
+    it('refuses the current owner', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { userId: 2, groupId: 5, role: groupRoleEnum.OWNER },
+      ]);
+
+      await expect(service.transferOwnership(5, 2)).rejects.toThrow(
+        'already owns',
+      );
+      expect(mockRepository.transferOwnership).not.toHaveBeenCalled();
     });
   });
 });

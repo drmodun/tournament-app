@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { ParticipationService } from 'src/participation/participation.service';
-import { IParticipationResponse } from '@tournament-app/types';
+import { IParticipationResponse, userRoleEnum } from '@tournament-app/types';
 import { TournamentResponse } from 'src/tournament/dto/responses.dto';
 import { GroupMembershipService } from 'src/group-membership/group-membership.service';
 import { TournamentService } from 'src/tournament/tournament.service';
@@ -22,6 +22,10 @@ export class CanCancelParticipationGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const participationId = request.params.participationId;
     const user = request.user;
+
+    if (user?.role === userRoleEnum.ADMIN) {
+      return true;
+    }
 
     const participation =
       await this.participationService.findOne<IParticipationResponse>(

@@ -1,5 +1,6 @@
 import {
   Injectable,
+  BadRequestException,
   NotFoundException,
   forwardRef,
   Inject,
@@ -151,6 +152,41 @@ export class GroupMembershipService {
     ) {
       await this.sendNotificationAboutDemotion(groupId, userId);
     }
+  }
+
+  async transferOwnership(groupId: number, newOwnerId: number) {
+    const membership = await this.findOneWithoutThrow(
+      groupId,
+      newOwnerId,
+      GroupMembershipResponsesEnum.MINI,
+    );
+
+    if (!membership) {
+      throw new NotFoundException(
+        'Ownership can only be transferred to a member of the group',
+      );
+    }
+
+    if (membership.role === groupRoleEnum.OWNER) {
+      throw new BadRequestException('This member already owns the group');
+    }
+
+    await this.groupMembershipRepository.transferOwnership(groupId, newOwnerId);
+
+    const group = await this.groupService.findOne(groupId);
+
+    await this.sseNotificationsService.createWithUsers(
+      {
+        type: notificationTypeEnum.GROUP_OWNERSHIP_TRANSFER,
+        message: this.templatesFiller.fill(
+          TemplatesEnum.GROUP_OWNERSHIP_TRANSFER,
+          { group: group.name },
+        ),
+        link: `/group/${groupId}`,
+        image: null,
+      },
+      [newOwnerId],
+    );
   }
 
   async sendNotificationAboutPromotion(groupId: number, userId: number) {

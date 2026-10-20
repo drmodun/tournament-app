@@ -51,6 +51,7 @@ export enum notificationTypeEnum {
   GROUP_ADMIN_DEMOTION = "group-admin-demotion",
   TEST = "test-template",
   NEW_FOLLOWER = "new-follower",
+  GROUP_OWNERSHIP_TRANSFER = "group-ownership-transfer",
 }
 
 export type OrganizerRoleEnumType =

@@ -80,6 +80,16 @@ describe('CanCancelParticipationGuard', () => {
   });
 
   describe('canActivate', () => {
+    it('should allow site admins without looking anything up', async () => {
+      const context = createMockExecutionContext(1, 1, {
+        id: 99,
+        role: 'admin',
+      });
+
+      await expect(guard.canActivate(context)).resolves.toBe(true);
+      expect(participationService.findOne).not.toHaveBeenCalled();
+    });
+
     it('should allow tournament creator to cancel any participation', async () => {
       const tournament = {
         id: 1,

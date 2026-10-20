@@ -7,6 +7,7 @@ import { NoValuesToSetExceptionFilter } from './base/exception/noValuesToSetExce
 import * as fs from 'fs';
 import * as yaml from 'yaml';
 import { env } from 'process';
+import { getCorsOrigin } from './base/static/corsOrigin';
 
 process.env.TZ = 'UTC'; // TODO: if this is not set, the date will be off by 2 hours, maybe fix that later with a special lib
 
@@ -19,11 +20,7 @@ async function bootstrap() {
     new PostgresExceptionFilter(),
     new NoValuesToSetExceptionFilter(),
   );
-  // CORS_ORIGIN is a comma-separated allow-list; unset allows every origin (local development)
-  const corsOrigins = process.env.CORS_ORIGIN?.split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-  app.enableCors({ origin: corsOrigins?.length ? corsOrigins : true });
+  app.enableCors({ origin: getCorsOrigin() });
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('winning.sh API')

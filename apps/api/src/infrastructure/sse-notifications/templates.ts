@@ -21,6 +21,7 @@ export const templates: Record<TemplatesEnum, string> = {
   [TemplatesEnum.EMAIL_CONFIRMATION]: `Click this link to confirm your email: {{link}}`,
   [TemplatesEnum.NOTIFICATION_OF_BAN]: `You have been banned for the following reason: {{reason}}`,
   [TemplatesEnum.NEW_FOLLOWER]: `The user {{follower}} has started following you`,
+  [TemplatesEnum.GROUP_OWNERSHIP_TRANSFER]: `You are now the owner of the group {{group}}`,
 };
 
 @Injectable()

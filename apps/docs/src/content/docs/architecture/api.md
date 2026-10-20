@@ -28,12 +28,12 @@ src/
 ├── base/                   # shared building blocks (see below)
 ├── db/                     # schema.ts, drizzle/ migrations, seed/
 ├── infrastructure/
-│   ├── blob/               # S3 client
+│   ├── blob/               # S3 client and the /files upload endpoint
 │   ├── email/              # Nodemailer + Handlebars templates
 │   └── sse-notifications/  # notification storage and the SSE stream
 ├── users/  group/  group-membership/  group-invites/  group-join-requests/
 ├── blocked-groups/  followers/  interest/  category/  location/  career/
-├── tournament/  stage/  participation/  roster/  matches/  challonge/
+├── tournament/  stage/  participation/  roster/  matches/  challonge/  conversion-rule/
 ├── lfg/  lfp/
 └── quiz/  quiz-attempt/
 ```
@@ -103,6 +103,8 @@ autocomplete inputs.
 - `base/static/teamTypeExtractor.ts` derives solo vs team from the participation URL.
 - `base/static/locationHelper.ts` builds PostGIS WKT / geography expressions.
 - `base/static/eloHelper.ts` implements the ELO formula (see [Careers and ELO](/docs/features/careers/)).
+- `base/static/toBoolean.ts` is the `@Transform` for boolean body fields: it accepts JSON booleans as well as the
+  `"true"`/`"false"` strings of query strings and form data.
 
 ### Error translation
 
@@ -137,6 +139,23 @@ Authorisation is done with guards. The full list is in [Permissions](/docs/refer
 `EventEmitterModule.forRoot()` provides an in-process event bus. Open SSE connections subscribe to an event named
 after their user's id. Notifications reach that bus through Postgres `LISTEN/NOTIFY`, so they arrive whichever API
 instance created them. See [Notifications](/docs/features/notifications/#several-api-instances).
+
+When a stage run by the API finishes, `MatchesService` emits `stage.finished` with the stage id and waits for the
+listeners; `ConversionRuleService` applies that stage's [conversion rules](/docs/features/matches/#point-conversion-rules)
+there, which keeps the matches module free of a dependency on conversion rules.
+
+## File uploads
+
+`POST /files/:directory` (signed in) takes a multipart form with one `file` field of up to 5 MB, and stores it in the
+S3 bucket under `<directory>/<uuid>.<ext>`. The directory is one of `avatar`, `group-avatar`, `group-banner`,
+`tournament`, `tournament-avatar` or `quiz`. The type is read from the file's first bytes, not from what the client
+claims: only PNG, JPEG, GIF and WebP are accepted (`400` otherwise, `413` when too large). SVG is refused because it
+can carry scripts.
+
+The response has the object `key` and a `url`, `<API_PUBLIC_URL>/files/<key>`, to put in any image field (a user's
+`profilePicture`, a group's or tournament's `logo`, a quiz's `coverImage`, ...). `GET /files/:directory/:name` serves
+the image from the bucket with a long cache lifetime, `nosniff` and a `default-src 'none'` content security policy, so
+the bucket itself never needs to be public. Image fields still accept any URL, so links to other sites keep working.
 
 ## Adding a feature module
 

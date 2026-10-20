@@ -22,23 +22,23 @@ players, and enter scores. `GET /tournaments/managed` lists the tournaments the 
 
 ### Settings
 
-| Field                                         | Default              | Effect                                                                                     |
-| --------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
-| `name`, `description`, `logo`, `links`        |                      | Display                                                                                    |
-| `categoryId`                                  | required             | The game or discipline; also selects which ELO rating is checked                           |
-| `startDate`, `endDate`                        | `startDate` required | Entry closes at `startDate`. Participations cannot be cancelled by players after `endDate` |
-| `tournamentType`                              | `league`             | `league`, `competition`, `seasonal`, `contest`, `event` (descriptive)                      |
-| `tournamentTeamType`                          | `team`               | `solo`: only individual entries. `team`: only group entries. `mixed`: both                 |
-| `tournamentLocation`                          | `online`             | `online`, `offline`, `hybrid`; offline and hybrid events can set `locationId`              |
-| `isPublic`                                    | `true`               | Only public tournaments accept self-entry. Private ones are filled by managers             |
-| `maxParticipants`                             | 32                   | Entry is refused once this many participations exist                                       |
-| `minimumMMR`, `maximumMMR`                    | 0, 999999            | ELO bounds checked when rosters are built (see below)                                      |
-| `isFakePlayersAllowed`                        | `false`              | Allows managers to enter fake users and fake groups                                        |
-| `isRanked`                                    | `false`              | A ranked tournament never accepts fake entries, even with `isFakePlayersAllowed`           |
-| `isMultipleTeamsPerGroupAllowed`              | `false`              | Lets one group enter the tournament more than once, as separate teams                      |
-| `affiliatedGroupId`                           |                      | Group whose admins co-manage the tournament                                                |
-| `parentTournamentId`                          |                      | Nest tournaments, for example events in a league                                           |
-| `minimumLevel`, `conversionRuleId`, `country` |                      | Stored for future use                                                                      |
+| Field                                  | Default              | Effect                                                                                     |
+| -------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
+| `name`, `description`, `logo`, `links` |                      | Display                                                                                    |
+| `categoryId`                           | required             | The game or discipline; also selects which ELO rating is checked                           |
+| `startDate`, `endDate`                 | `startDate` required | Entry closes at `startDate`. Participations cannot be cancelled by players after `endDate` |
+| `tournamentType`                       | `league`             | `league`, `competition`, `seasonal`, `contest`, `event` (descriptive)                      |
+| `tournamentTeamType`                   | `team`               | `solo`: only individual entries. `team`: only group entries. `mixed`: both                 |
+| `tournamentLocation`                   | `online`             | `online`, `offline`, `hybrid`; offline and hybrid events can set `locationId`              |
+| `isPublic`                             | `true`               | Only public tournaments accept self-entry. Private ones are filled by managers             |
+| `maxParticipants`                      | 32                   | Entry is refused once this many participations exist                                       |
+| `minimumMMR`, `maximumMMR`             | 0, 999999            | ELO bounds checked when rosters are built (see below)                                      |
+| `isFakePlayersAllowed`                 | `false`              | Allows managers to enter fake users and fake groups                                        |
+| `isRanked`                             | `false`              | A ranked tournament never accepts fake entries, even with `isFakePlayersAllowed`           |
+| `isMultipleTeamsPerGroupAllowed`       | `false`              | Lets one group enter the tournament more than once, as separate teams                      |
+| `affiliatedGroupId`                    |                      | Group whose admins co-manage the tournament                                                |
+| `parentTournamentId`                   |                      | Nest tournaments, for example events in a league                                           |
+| `minimumLevel`, `country`              |                      | Stored for future use                                                                      |
 
 ### Reading tournaments
 
@@ -57,7 +57,7 @@ A stage is one phase of a tournament: a group stage, a knockout bracket, a quiz 
 | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `name`, `description`, `logo`                                          | Display                                                                                                                                        |
 | `stageType`                                                            | `group`, `knockout`, `swiss`, `round_robin`, `fixture`, `double_elimination`, `quiz`, `compass`, `triple_elimination`, `evaluated_competition` |
-| `stageStatus`                                                          | `upcoming` → `ongoing` → `finished`, or `cancelled`                                                                                            |
+| `stageStatus`                                                          | `upcoming` (the default) → `ongoing` → `finished`, or `cancelled`                                                                              |
 | `startDate`, `endDate`                                                 | Ordering and schedule                                                                                                                          |
 | `stageLocation`, `locationId`                                          | Like the tournament's location                                                                                                                 |
 | `minPlayersPerTeam` (default 1), `maxPlayersPerTeam`, `maxSubstitutes` | Roster size limits                                                                                                                             |
@@ -101,8 +101,8 @@ the Challonge tournament.
    - **With a Challonge tournament**: adds every roster to Challonge as a participant in one bulk call, stores the
      returned participant ids, sets the stage to `ongoing` here and in Challonge (which seeds and starts the
      bracket), and imports Challonge's round 1 matches as matchups.
-   - **Without one** (mock credentials, or the Challonge call failed when the stage was created): the API runs a
-     single-elimination bracket itself and draws round 1. See
+   - **Without one** (mock credentials, or the Challonge call failed when the stage was created): the API runs the
+     bracket itself, in the format of the stage type (single or double elimination, round robin or Swiss). See
      [Brackets run by the API](/docs/features/matches/#brackets-run-by-the-api).
 4. Sends a `tournament-start` notification, linking to `/stage/<id>`, to every user in a roster of the stage.
 

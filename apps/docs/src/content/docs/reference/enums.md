@@ -30,6 +30,7 @@ the only accepted values everywhere.
 | `categoryTypeEnum`            | `programming`, `sports`, `other`                                                                                                               |
 | `pointConversionTypeEnum`     | `stage_to_stage`, `stage_to_tournament`, `tournament_to_tournament`                                                                            |
 | `pointConversionStrategyEnum` | `qualification`, `ranking`, `elimination`, `hybrid`, `seed`, `tie_breaker`, `qualification_with_lcq`                                           |
+| `matchupBracketEnum`          | `winners`, `losers`, `grand_final`                                                                                                             |
 | `OrganizerRoleEnum`           | `owner`, `admin`, `moderator` (no feature yet)                                                                                                 |
 | `tournamentPromotionTypeEnum` | `side_promotion`, `main_promotion`, `video_promotion`, `full_page_promotion` (no feature yet)                                                  |
 

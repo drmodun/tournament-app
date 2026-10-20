@@ -15,8 +15,9 @@ quizzes, and find teams or players.
 - **Tournaments**: solo, team or mixed competitions with participant limits, rating (MMR) bounds, an optional
   affiliated group, and an ordered list of stages.
 - **Rosters**: the concrete line-up a participant fields in a stage, with substitute and change limits.
-- **Matches**: score entry by tournament managers, with single-elimination brackets advanced through Challonge, or by
-  the API itself when Challonge is not configured. Ranked results update ELO ratings.
+- **Matches**: score entry by tournament managers, with brackets advanced through Challonge, or by the API itself
+  when Challonge is not configured (single or double elimination, round robin or Swiss, with standings). Point
+  conversion rules carry placings into later stages and tournaments. Ranked results update ELO ratings.
 - **Quizzes**: timed or untimed quizzes with several question types, retake rules, automatic scoring and a
   leaderboard.
 - **LFG / LFP**: "looking for group" posts by players and "looking for players" posts by groups, matched with group
@@ -41,8 +42,6 @@ quizzes, and find teams or players.
 
 ## Status of the project
 
-The README is explicit that this is work in progress. Some tables in the schema (bets, sponsors, chat rooms,
-subscriptions, achievements, programming-contest submissions, posts and reviews) exist ahead of the features that
-would use them and have no API surface. Brackets run by the API are single elimination; other formats depend on Challonge. The `apps/admin` panel is
-a placeholder: site admins currently use the normal web app with every permission. See
+The README is explicit that this is work in progress. The web app has no screen for taking a quiz yet, and its forms
+take image URLs rather than uploads, although the API supports both. The `apps/admin` panel is a placeholder: site admins currently use the normal web app with every permission. See
 [Known limitations](/docs/reference/known-limitations/) for behaviour that differs from what you might expect.

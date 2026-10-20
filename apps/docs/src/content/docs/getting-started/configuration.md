@@ -52,6 +52,8 @@ refuses to start without it. In Docker the API uses the bundled Mailpit inbox un
 | `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_BUCKET` | As usual                                                                             |
 | `S3_FORCE_PATH_STYLE`                                                | Defaults to `true` when `S3_ENDPOINT` is set, which is what self-hosted servers need |
 
+| `API_PUBLIC_URL` | Address browsers reach the API at, for the URLs of uploaded images. Without it they are built from the request's host, which is wrong behind a proxy that adds a path (Docker sets it to `<PUBLIC_URL>/api`) |
+
 The defaults point at the SeaweedFS container; its access key is defined in `docker/s3/s3.json`. The older
 `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_S3_BUCKET` names are still read as fallbacks.
 

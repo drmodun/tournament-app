@@ -93,7 +93,7 @@ Before exposing the stack, replace the development values:
 4. With `MODE=production` only `FRONTEND_URL` (your `PUBLIC_URL` in Compose) may call the API from a browser; set
    `CORS_ORIGIN` to allow other origins.
 5. Add Google credentials for Google sign-in, and Challonge credentials if you want brackets on Challonge
-   (without them the API runs single-elimination brackets itself).
+   (without them the API runs the brackets itself).
 6. Put secrets in an untracked file or your platform's secret store, never in the tracked `.env`.
 
 ## Images

@@ -5,8 +5,9 @@ description: Matchups, score entry, round progression through Challonge, and bra
 
 ## Concepts
 
-- A **matchup** is one match in a stage. It has a `round` number, start and end dates, `isFinished`, and a
-  `challongeMatchupId` when it came from Challonge.
+- A **matchup** is one match in a stage. It has a `round` number, start and end dates, `isFinished`, a
+  `challongeMatchupId` when it came from Challonge, and a `bracket` (`winners`, `losers` or `grand_final`) in
+  double-elimination stages run by the API.
 - `roster_matchup` links the competing rosters and records `isWinner`.
 - A matchup's result is a list of **scores**, one per played round (game), each with points per roster.
 
@@ -16,8 +17,8 @@ description: Matchups, score entry, round progression through Challonge, and bra
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Challonge round 1   | Imported when a stage with a Challonge tournament is started                                                                                                      |
 | Challonge round N+1 | Imported when every matchup of round N is finished                                                                                                                |
-| Local round 1       | Drawn by the API when a stage without a Challonge tournament is started                                                                                           |
-| Local round N+1     | Drawn by the API when every matchup of round N has a winner                                                                                                       |
+| Local round 1       | Drawn by the API when a stage without a Challonge tournament is started (every round at once for a round robin)                                                   |
+| Local round N+1     | Drawn by the API when every matchup of round N has a result                                                                                                       |
 | `BracketGenerator`  | Used by the seed to build single-elimination brackets locally, with rosters sorted by average ELO in the tournament's category (1000 when a player has no career) |
 
 ## Entering results
@@ -79,25 +80,126 @@ The API authenticates to Challonge with the OAuth client-credentials flow (`CHAL
 ## Brackets run by the API
 
 A stage without a Challonge tournament (no credentials, or Challonge failed when the stage was created) still
-starts. The API then runs a single-elimination bracket itself:
+starts. The API then runs the bracket itself, in the format its `stageType` names:
 
-1. **Seeding**: rosters are ordered by their players' average rating in the tournament's category (1000 for a player
-   without a career), ties by roster id.
-2. **Round 1**: the bracket is padded to a power of two and paired in standard order (1 v 8, 4 v 5, 2 v 7, 3 v 6), so
-   the top seeds can only meet late. Seeds without an opponent get a bye: their matchup is finished on creation and
-   they advance.
-3. **Next rounds**: when every matchup of a round has exactly one winner, the winners are paired in bracket order into
+| Stage type                                                       | Format             |
+| ---------------------------------------------------------------- | ------------------ |
+| `knockout`                                                       | Single elimination |
+| `double_elimination`                                             | Double elimination |
+| `round_robin`, `group` (the default), `fixture`                  | Round robin        |
+| `swiss`                                                          | Swiss              |
+| `compass`, `triple_elimination`, `quiz`, `evaluated_competition` | Single elimination |
+
+**Seeding** is the same for every format: rosters with a `seed` (set by a [seeding conversion
+rule](#point-conversion-rules)) come first in seed order, then the rest by their players' average rating in the
+tournament's category (1000 for a player without a career), ties by roster id.
+
+A matchup with a single roster is a **bye**: it is finished on creation and counts as a win.
+
+### Single elimination
+
+1. **Round 1**: the bracket is padded to a power of two and paired in standard order (1 v 8, 4 v 5, 2 v 7, 3 v 6), so
+   the top seeds can only meet late. Seeds without an opponent get a bye.
+2. **Next rounds**: when every matchup of a round has exactly one winner, the winners are paired in bracket order into
    the next round. An odd one out gets a bye.
-4. **Final**: when a round leaves a single winner, the stage is set to `finished`.
+3. **Final**: when a round leaves a single winner, the stage is `finished`.
 
-Because each round is drawn from the previous results, a result can be changed or deleted only until the next round
-has been drawn. After that, `PUT` and `DELETE` return `400`. Results of the final can be corrected at any time.
+### Double elimination
+
+Round 1 is the seeded single-elimination round above, in the winners bracket. After that each round has two parts:
+
+- Rosters without a loss play each other in the **winners bracket**, in bracket order.
+- Rosters with one loss play each other in the **losers bracket**, avoiding rematches where possible. With an odd
+  number, the lowest seed that has not had a bye yet gets one.
+- A second loss knocks a roster out. A roster alone in its bracket waits for the other bracket to catch up.
+
+When one roster is left in each bracket they meet in the **grand final**. If the losers-bracket roster wins it, both
+have one loss and the grand final is played again. The last roster standing wins the stage.
+
+### Round robin
+
+Every round is drawn when the stage starts (circle method): each roster meets every other once, and with an odd
+number of rosters one sits out each round. Rounds can be played in any order, and the stage finishes when every
+matchup has a result.
+
+### Swiss
+
+The stage plays `ceil(log2(rosters))` rounds (3 for 5 to 8 rosters). Round 1 pairs the top half of the seeds with the
+bottom half (1 v 5, 2 v 6, ...). Each later round is drawn from the [standings](#standings): rosters are paired from
+the top down with the next one they have not met, and with an odd number the lowest-placed roster without a bye gets
+one.
+
+### Draws
+
+A result with no winner, or with every roster marked as winner, is a draw. Round robin and Swiss count draws;
+elimination formats need exactly one winner per matchup and do not advance until it is set.
+
+### Standings
+
+`GET /matches/stage/:stageId/standings` returns the stage's `format`, whether it is `isFinished`, and one row per
+roster, best first: `place`, `played`, `wins`, `draws`, `losses`, `byes`, `carriedPoints`, `points`, `buchholz` and
+`eliminatedInRound`.
+
+- **Round robin and Swiss** rank by `points` (carried points, plus 3 per win or bye and 1 per draw), then wins, then
+  Buchholz (the sum of the opponents' points).
+- **Elimination formats** rank by how long a roster lasted: rosters still in first, then by the round of their last
+  allowed loss (`eliminatedInRound`), latest first.
+
+Rosters with equal records share a place.
+
+### Changing results
+
+Because later rounds are drawn from earlier results, a result can be changed or deleted only until the next round
+has been drawn; round robin results, which nothing depends on, can change at any time. Once the stage is finished,
+its conversion rules have run, so every result is frozen. In both cases `PUT` and `DELETE` return `400`.
+
+## Point conversion rules
+
+A conversion rule turns the final placings of a stage or tournament (the **source**) into points or entries in
+another one (the **destination**). Rules are applied once, automatically, when their source finishes: a stage run by
+the API when its last matchup is played, a tournament when its last stage is finished. `appliedAt` records when.
+
+```text
+POST   /conversion-rules                 create (organisers of both the source and the destination)
+GET    /conversion-rules?source=&type=   list
+GET    /conversion-rules/:ruleId         one rule
+POST   /conversion-rules/:ruleId/apply   apply by hand, once the source has finished
+DELETE /conversion-rules/:ruleId         delete (organisers of the source)
+```
+
+| `type`                     | Source placings                                 | Destination                                               |
+| -------------------------- | ----------------------------------------------- | --------------------------------------------------------- |
+| `stage_to_stage`           | The stage's [standings](#standings)             | Rosters in another stage of the same tournament           |
+| `stage_to_tournament`      | The stage's standings, by participation         | Participations (the same group or player) in a tournament |
+| `tournament_to_tournament` | Participations by `points` (ties share a place) | Participations in another tournament                      |
+
+| `strategy`      | Effect on the places in range                                                                   |
+| --------------- | ----------------------------------------------------------------------------------------------- |
+| `ranking`       | Adds points to the entry the same group or player already has in the destination                |
+| `qualification` | Gives each one an entry in the destination (a roster with the same players, or a participation) |
+| `elimination`   | Qualification, and removes the other source entries' rosters from the destination stage         |
+| `seed`          | Qualification, with the destination rosters' `seed` set in order of place                       |
+| `hybrid`        | Qualification plus ranking points                                                               |
+
+`tie_breaker` and `qualification_with_lcq` are refused with `400`. `elimination` and `seed` need a `stage_to_stage`
+rule, and strategies that add entries need a destination stage that is still `upcoming`.
+
+The places in range are `from` to `to` (both included; by default every place). Points start at `maxPoints` (or
+`points`) for place `from` and drop by `pointsPerPlace` per place, never below `minPoints` (default 0). For example
+`maxPoints: 10, pointsPerPlace: 3` gives 10, 7, 4, 1, 0, ...
+
+Points given to a roster are its `carriedPoints` in the destination stage's standings; points given to a participation
+add to its `points`, which `tournament_to_tournament` rules rank by.
+
+Stages run on Challonge are not tracked to their end, so their rules are applied with `POST
+/conversion-rules/:ruleId/apply` after the stage is set to `finished`.
 
 ## Reading results
 
 | Endpoint                                  | Returns                                                         |
 | ----------------------------------------- | --------------------------------------------------------------- |
 | `GET /matches/results`                    | Matchups with results, filterable (stage, round, finished, ...) |
+| `GET /matches/stage/:stageId/standings`   | The stage's [standings](#standings)                             |
 | `GET /matches/matchup/:matchupId/results` | One matchup with all its scores                                 |
 | `GET /matches/user/:userId/results`       | Matchups a user played                                          |
 | `GET /matches/roster/:rosterId/results`   | Matchups of a roster                                            |
@@ -108,8 +210,9 @@ has been drawn. After that, `PUT` and `DELETE` return `400`. Results of the fina
 
 `/stage/[id]/bracket` loads the stage (with `responseType=withChallongeTournament`) during server rendering and
 embeds Challonge's own bracket widget in an iframe (`https://challonge.com/<challongeTournamentId>/module`). For a
-stage run by the API it loads the stage's matchups (`GET /matches/results?stageId=`) and draws the rounds side by
-side, marking winners and byes.
+stage run by the API it loads every matchup of the stage (`GET /matches/results?stageId=`, 100 per page) and its
+standings, draws the rounds side by side (one row per bracket for double elimination), marks winners and byes, and
+shows the standings table below.
 
 `utils/bracketUtils.tsx` and `ChallongeService.getChallongeBracketData` are groundwork for drawing brackets natively
 with `@g-loot/react-tournament-brackets`; no page uses them yet.

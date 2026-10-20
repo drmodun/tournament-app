@@ -68,7 +68,8 @@ optional `location`, and optionally a `parent_tournament` (for leagues and seaso
 
 `participation` links a tournament to either a user (solo) or a group (team). A `roster` is that participation's
 line-up in one stage; `user_roster` lists its players with `isSubstitute`. A `matchup` belongs to a stage and a round
-and has `isFinished`. `roster_matchup` connects rosters to matchups with `isWinner`. Each played round of a matchup is
+and has `isFinished`, plus a `bracket` (`winners`, `losers`, `grand_final`) in double-elimination stages the API
+runs. `roster_matchup` connects rosters to matchups with `isWinner`. Each played round of a matchup is
 a `score` row with per-roster points in `score_to_roster`. Challonge ids are stored on stage, roster, round and
 matchup to keep the mirror in sync.
 
@@ -82,22 +83,31 @@ matchup, so a corrected or deleted result can be undone.
 `quiz` has scheduling (`startDate`, `endDate`, `timeLimitTotal` in seconds) and behaviour flags (`isTest`,
 `isImmediateFeedback`, `isAnonymousAllowed`, `isRandomizedQuestions`, `isRetakeable`, `passingScore` as a
 percentage). It can be attached to a stage or a matchup. Questions carry `points` (default 5), a `type`, an optional
-`timeLimit`, and either options (`quiz_option.isCorrect`) or `correctAnswers` as a comma-separated list.
+`timeLimit`, and either options (`quiz_option.isCorrect`) or `correctAnswers` as a comma-separated list. A
+`quiz_attempt` stores its `questionOrder` (shuffled for randomised quizzes), the `currentQuestion` and when it was
+shown (`questionStartedAt`), for quizzes shown one question at a time.
 
 ### Notifications
 
 `notification` stores type, message, link and image; `notification_to_user` fans it out per recipient with a read
 flag.
 
+### Point conversion
+
+`conversion_rule` holds a rule's `type`, `strategy`, `source` and `destination` ids, its range and point settings,
+`appliedAt` once it has run, and `createdBy`. `roster.points` holds points carried in by a rule and `roster.seed` a
+seed it set; `participation.points` holds tournament points. See
+[Point conversion rules](/docs/features/matches/#point-conversion-rules).
+
 ## Tables without features yet
 
-These tables exist in the schema but no module reads or writes them: `subscription`, `subscription_benefits`,
-`subscription_user`, `achievement`, `achievement_user`, `chat_room`, `chat_room_user`, `chatRoomMessage`,
-`direct_message`, `group_follower` (read by the group followers endpoint, but nothing writes it), `subcategory`,
-`conversion_rule` (accepted on create, but no logic applies it), `sponsor`, `sponsor_tournament`, `bets`,
-`reports`, `tournament_post`, `result_post`, their images, `like`, `tournament_promotion`, `sponsor_promotion`,
-`review`, `roster_round`, the competitive programming tables (`problem`, `test_cluster`, `testcase`,
-`submission`, ...), `user_notification_settings` and `user_to_notification_tokens`.
+These tables exist in the schema but no module reads or writes them: `group_follower` (read by the group followers
+endpoint, but nothing writes it), `subcategory`, `roster_round`, `user_notification_settings` and
+`user_to_notification_tokens`.
+
+Migration `0045` dropped the tables of features that were never built: subscriptions, achievements, chat rooms and
+direct messages, bets, sponsors, promotions, reports, tournament and result posts with their images, likes,
+reviews, and the competitive programming tables (problems, test clusters, testcases, submissions).
 
 ## Indexes
 

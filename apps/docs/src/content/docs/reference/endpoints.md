@@ -204,6 +204,7 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 | ------ | ------------------------------------- | -------------- | ----------------------------------------------------- |
 | GET    | `/matches/results`                    | –              | Matchups with results, filterable                     |
 | GET    | `/matches/matchup/:matchupId/results` | –              | One matchup with scores                               |
+| GET    | `/matches/stage/:stageId/standings`   | –              | Standings of a stage run by the API                   |
 | GET    | `/matches/user/:userId/results`       | –              | A user's matchups                                     |
 | GET    | `/matches/roster/:rosterId/results`   | –              | A roster's matchups                                   |
 | GET    | `/matches/group/:groupId/results`     | –              | A group's matchups                                    |
@@ -228,10 +229,28 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 | GET    | `/quiz-attempt/my-attempts`                    | JWT                             | Your attempts                     |
 | GET    | `/quiz-attempt/:attemptId`                     | attempt owner                   | One attempt                       |
 | POST   | `/quiz-attempt/:quizId`                        | JWT + retake rule               | Start or resume                   |
+| GET    | `/quiz-attempt/:attemptId/current-question`    | attempt owner                   | Question to answer now (non-test) |
 | PUT    | `/quiz-attempt/:attemptId/submit`              | attempt owner                   | Submit and score                  |
 | POST   | `/quiz-attempt/answers/:attemptId/:questionId` | attempt owner                   | Answer                            |
 | PUT    | `/quiz-attempt/answers/:attemptId/:answerId`   | attempt owner, answer not final | Change answer                     |
 | GET    | `/quiz-attempt/leaderboard/:quizId`            | –                               | Ranking                           |
+
+## Conversion rules: `/conversion-rules`
+
+| Method | Path                              | Auth                              | Purpose                    |
+| ------ | --------------------------------- | --------------------------------- | -------------------------- |
+| GET    | `/conversion-rules`               | –                                 | List (`source`, `type`)    |
+| GET    | `/conversion-rules/:ruleId`       | –                                 | One rule                   |
+| POST   | `/conversion-rules`               | organiser of source + destination | Create                     |
+| POST   | `/conversion-rules/:ruleId/apply` | organiser of the source           | Apply once source finished |
+| DELETE | `/conversion-rules/:ruleId`       | organiser of the source           | Delete                     |
+
+## Files: `/files`
+
+| Method | Path                      | Auth | Purpose                                             |
+| ------ | ------------------------- | ---- | --------------------------------------------------- |
+| POST   | `/files/:directory`       | JWT  | Upload an image (`file` form field) and get its URL |
+| GET    | `/files/:directory/:name` | –    | Serve an uploaded image                             |
 
 ## LFG and LFP
 

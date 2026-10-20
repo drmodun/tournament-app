@@ -25,13 +25,15 @@ post "looking for players" listings, and invite players.
 
 Site admins pass every group role check.
 
-The creator of a group becomes its `owner`. Ownership cannot be handed over through the API:
-`PATCH /group-membership/:groupId/:userId` refuses to set the `owner` role.
+The creator of a group becomes its `owner`. The owner can hand the group to another member with
+`POST /group-membership/:groupId/transfer-ownership/:userId`: that member becomes the owner (and is notified), and
+the previous owner stays on as an admin. `PATCH /group-membership/:groupId/:userId` cannot set the `owner` role.
 
 ## Creating a group
 
 `POST /groups` (any signed-in user) creates the group and the creator's `owner` membership in one transaction.
-`POST /groups/fake` creates a fake group (type `fake`) for tournament managers who need placeholder teams.
+`POST /groups/fake` creates a fake group (type `fake`) for placeholder teams. Only tournament organisers (users who
+created a tournament or administer a group that has one) and site admins may create them.
 
 ## Invitations
 
@@ -71,13 +73,14 @@ The requester can edit (`PATCH`) or withdraw (`DELETE /group-join-requests/:grou
 
 ## Membership
 
-| Endpoint                                    | Who         | Effect                                                                              |
-| ------------------------------------------- | ----------- | ----------------------------------------------------------------------------------- |
-| `GET /group-membership`                     | anyone      | List memberships, filter by group or user                                           |
-| `DELETE /group-membership/:groupId/leave`   | member      | Leave the group                                                                     |
-| `PATCH /group-membership/:groupId/:userId`  | group admin | Change role between `member` and `admin`. Promotion and demotion send notifications |
-| `DELETE /group-membership/:groupId/:userId` | group admin | Remove a member; they get a `group-removal` notification                            |
-| `POST /group-membership/:groupId/:userId`   | site admin  | Add someone directly, skipping invitations                                          |
+| Endpoint                                                     | Who         | Effect                                                                              |
+| ------------------------------------------------------------ | ----------- | ----------------------------------------------------------------------------------- |
+| `GET /group-membership`                                      | anyone      | List memberships, filter by group or user                                           |
+| `DELETE /group-membership/:groupId/leave`                    | member      | Leave the group                                                                     |
+| `PATCH /group-membership/:groupId/:userId`                   | group admin | Change role between `member` and `admin`. Promotion and demotion send notifications |
+| `DELETE /group-membership/:groupId/:userId`                  | group admin | Remove a member; they get a `group-removal` notification                            |
+| `POST /group-membership/:groupId/:userId`                    | site admin  | Add someone directly, skipping invitations                                          |
+| `POST /group-membership/:groupId/transfer-ownership/:userId` | owner       | Make another member the owner; the old owner becomes an admin                       |
 
 ## Requirements
 

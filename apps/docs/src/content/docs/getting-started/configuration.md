@@ -19,15 +19,16 @@ root `.env` and then override a few values (database, SMTP, S3 endpoint, fronten
 
 ### Core
 
-| Variable             | Meaning                                                                                                                                |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`       | Postgres connection string. Locally `postgres://postgres:postgres@localhost:5433/tournament`                                           |
-| `API_PORT`           | Port the API listens on (default `5500`)                                                                                               |
-| `MODE`               | `production` turns off writing `openapi.yml`, hides the seed's database URL log, and makes the API refuse to start without `SMTP_HOST` |
-| `CORS_ORIGIN`        | Comma-separated origins allowed to call the API from a browser, for example `https://example.com`. Empty allows any origin             |
-| `FRONTEND_URL`       | Base for links in emails (confirmation, password reset). Default `http://localhost:3000`                                               |
-| `JWT_SECRET`         | Signs access tokens (valid 8 hours)                                                                                                    |
-| `JWT_REFRESH_SECRET` | Signs refresh tokens (valid 7 days)                                                                                                    |
+| Variable             | Meaning                                                                                                                                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`       | Postgres connection string. Locally `postgres://postgres:postgres@localhost:5433/tournament`                                                                                                               |
+| `API_PORT`           | Port the API listens on (default `5500`)                                                                                                                                                                   |
+| `MODE`               | `production` turns off writing `openapi.yml`, hides the seed's database URL log, and makes the API refuse to start without `SMTP_HOST`                                                                     |
+| `CORS_ORIGIN`        | Comma-separated origins allowed to call the API from a browser, for example `https://example.com`. When empty, production (`MODE=production`) allows only `FRONTEND_URL` and development allows any origin |
+| `SSE_TOKEN_SECRET`   | Signs the 5-minute notification stream tokens. Defaults to a value derived from `JWT_SECRET`                                                                                                               |
+| `FRONTEND_URL`       | Base for links in emails (confirmation, password reset). Default `http://localhost:3000`                                                                                                                   |
+| `JWT_SECRET`         | Signs access tokens (valid 8 hours)                                                                                                                                                                        |
+| `JWT_REFRESH_SECRET` | Signs refresh tokens (valid 7 days)                                                                                                                                                                        |
 
 The API process forces `TZ=UTC` at startup so stored timestamps do not shift.
 

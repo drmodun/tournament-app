@@ -10,16 +10,17 @@ flows only).
 
 ### What triggers one
 
-| Event                                    | Recipients                           | Type                                             |
-| ---------------------------------------- | ------------------------------------ | ------------------------------------------------ |
-| Someone follows you                      | the followed user                    | `new-follower`                                   |
-| A group invites you                      | the invited user                     | `group-invitation`                               |
-| An invitation is accepted / rejected     | the invited user                     | `group-join-approval` / `group-join-rejection`   |
-| A user requests to join a group          | the owner and every admin            | `group-join-request`                             |
-| A join request is accepted / rejected    | the requester                        | `group-join-approval` / `group-join-rejection`   |
-| You are promoted to / demoted from admin | that member                          | `group-admin-promotion` / `group-admin-demotion` |
-| You are removed from a group             | that member                          | `group-removal`                                  |
-| A stage starts                           | every user in a roster of that stage | `tournament-start`, linking to `/stage/<id>`     |
+| Event                                      | Recipients                           | Type                                             |
+| ------------------------------------------ | ------------------------------------ | ------------------------------------------------ |
+| Someone follows you                        | the followed user                    | `new-follower`                                   |
+| A group invites you                        | the invited user                     | `group-invitation`                               |
+| An invitation is accepted / rejected       | the invited user                     | `group-join-approval` / `group-join-rejection`   |
+| Ownership of a group is transferred to you | the new owner                        | `group-ownership-transfer`                       |
+| A user requests to join a group            | the owner and every admin            | `group-join-request`                             |
+| A join request is accepted / rejected      | the requester                        | `group-join-approval` / `group-join-rejection`   |
+| You are promoted to / demoted from admin   | that member                          | `group-admin-promotion` / `group-admin-demotion` |
+| You are removed from a group               | that member                          | `group-removal`                                  |
+| A stage starts                             | every user in a roster of that stage | `tournament-start`, linking to `/stage/<id>`     |
 
 Messages are filled from short templates in `infrastructure/sse-notifications/templates.ts`, for example
 `You have been invited to join the group {{group}}`.
@@ -46,25 +47,31 @@ it.
 ### Live stream
 
 ```text
-GET /auth/sse-token                       → "3f2c…"   (requires JWT)
-GET /notifications/stream?token=3f2c…     → text/event-stream
-POST /notifications/token                 → rotate the SSE token (requires JWT)
+POST /notifications/token                 → { id, sseToken: "eyJ…" }   (requires JWT)
+GET  /notifications/stream?token=eyJ…     → text/event-stream
 ```
 
-Browsers cannot attach an `Authorization` header to `EventSource`, so the stream is authenticated with the user's
-`sseToken`, a UUID stored on the user row. It does not expire; rotate it with `POST /notifications/token`.
+`GET /auth/sse-token` returns the same kind of token as a plain string.
 
-Each event has the type `notification` and the notification as JSON data. Internally the API uses the Nest event
-emitter: publishing emits an event named after the user id, and each open stream subscribes to its user's event.
-Behind Caddy, `flush_interval -1` keeps events from being buffered.
+Browsers cannot attach an `Authorization` header to `EventSource`, so the stream is authenticated with a token in the
+query string. Because URLs end up in logs, that token is a JWT that expires after **5 minutes** and is signed with
+its own secret (`SSE_TOKEN_SECRET`, by default derived from `JWT_SECRET`). It cannot be used as an access token, and
+an access token is refused on the stream (`401`). Expiry is only checked when the stream opens, so an open stream
+stays connected; a client requests a new token when it reconnects.
 
-:::note
-Because the event bus is in-process, live delivery only reaches streams connected to the same API instance that
-created the notification. With more than one API replica, notifications are still stored but may not arrive live.
-:::
+Each event has the type `notification` and the notification as JSON data. Behind Caddy, `flush_interval -1` keeps
+events from being buffered.
 
-In the web app, `NotificationProvider` opens the stream after login, shows a toast for each event, and reconnects
-five seconds after an error. `/notifications` lists the stored ones.
+### Several API instances
+
+Live delivery goes through Postgres `LISTEN/NOTIFY` (`NotificationBus` in
+`infrastructure/sse-notifications/notification-bus.ts`). Publishing sends a `NOTIFY` on the `notifications`
+channel; every API instance listens on it and passes each message to its own open streams through the Nest event
+emitter. A user therefore receives a notification whichever instance their stream is connected to. If an instance
+cannot open its listener connection it logs an error and delivers only to its own streams.
+
+In the web app, `NotificationProvider` opens the stream after login, shows a toast for each event, and five
+seconds after an error requests a fresh token, which reconnects the stream. `/notifications` lists the stored ones.
 
 ## Email
 

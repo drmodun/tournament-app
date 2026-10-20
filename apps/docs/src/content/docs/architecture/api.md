@@ -134,9 +134,9 @@ Authorisation is done with guards. The full list is in [Permissions](/docs/refer
 
 ## Events
 
-`EventEmitterModule.forRoot()` provides an in-process event bus. The notification service emits an event named
-after the recipient's user id; open SSE connections for that user subscribe to it. See
-[Notifications](/docs/features/notifications/).
+`EventEmitterModule.forRoot()` provides an in-process event bus. Open SSE connections subscribe to an event named
+after their user's id. Notifications reach that bus through Postgres `LISTEN/NOTIFY`, so they arrive whichever API
+instance created them. See [Notifications](/docs/features/notifications/#several-api-instances).
 
 ## Adding a feature module
 

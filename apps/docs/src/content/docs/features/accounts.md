@@ -15,7 +15,8 @@ description: Registration, email confirmation, login, token refresh, Google sign
 5. If sending the email fails, the new user is deleted again and the request returns `500`, so there are no
    half-registered accounts.
 
-Fake users (`isFake: true`, created through `POST /users/fake` by any signed-in user) skip the email step.
+Fake users (`isFake: true`, created through `POST /users/fake` by tournament organisers and site admins) skip the
+email step.
 
 ## Email confirmation
 
@@ -74,7 +75,7 @@ confirmed the address, and no confirmation email is sent. Configure `GOOGLE_CLIE
 | `GET /users/me`       | Your profile (`extended` projection)                                                   |
 | `PATCH /users`        | Update your own profile                                                                |
 | `DELETE /users`       | Delete your own account; cascades to memberships, participations, rosters and the rest |
-| `GET /auth/sse-token` | Your token for the notification stream                                                 |
+| `GET /auth/sse-token` | A 5-minute token for the notification stream                                           |
 
 Site admins can also update and delete any user through `PATCH /users/:id` and `DELETE /users/:id`.
 

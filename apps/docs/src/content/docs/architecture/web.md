@@ -81,11 +81,11 @@ Some routes fetch data during server rendering (`serverFetches.ts` files next to
 
 `NotificationProvider` (in `utils/context/notificationContext.tsx`) uses `useSseNotifications`:
 
-1. Fetch the user's SSE token with `GET /auth/sse-token`.
+1. Request a stream token with `POST /notifications/token`.
 2. Open `new EventSource(<API>/notifications/stream?token=<sseToken>)`. `EventSource` cannot send headers, which is
-   why a separate long-lived token is used instead of the JWT.
+   why a separate short-lived token is used instead of the JWT.
 3. Listen for `notification` events and show a toast.
-4. On error, close and reconnect after 5 seconds.
+4. On error, close the stream and, after 5 seconds, request a new token; the new token opens a new stream.
 
 ## Maps and location
 

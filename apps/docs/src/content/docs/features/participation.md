@@ -36,6 +36,7 @@ endpoints, which only verify the fake-player rule for fake entries.
 
 `DELETE /participations/:participationId` is allowed for:
 
+- site admins, at any time;
 - the tournament's creator or an admin of its affiliated group, at any time;
 - otherwise, the entered user (solo) or an admin of the entered group (team), as long as the tournament has not ended
   (`endDate` in the past returns `403`).

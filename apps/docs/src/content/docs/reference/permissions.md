@@ -17,11 +17,12 @@ email-verified user) with a domain check. The table lists them all.
 | `GroupAdminGuard`                      | `group/guards`         | Caller is `admin` or `owner` of the group                                                                                                               | ✓                                                           |
 | `GroupOwnerGuard`                      | `group/guards`         | Caller is `owner` of the group                                                                                                                          | ✓                                                           |
 | `GroupNonMemberGuard`                  | `group/guards`         | Caller is **not** in the group                                                                                                                          | ✗, and admins are treated as members, so they cannot use it |
+| `TournamentManagerGuard`               | `tournament/guards`    | Caller organises at least one tournament (its creator, or an admin of its affiliated group)                                                             | ✓                                                           |
 | `ConditionalAdminGuard`                | `tournament/guards`    | No `affiliatedGroupId` in the body, or caller is admin of that group                                                                                    | ✓                                                           |
 | `TournamentAdminGuard`                 | `tournament/guards`    | Caller created the tournament or administers its affiliated group                                                                                       | ✓                                                           |
 | `StageAdminGuard`                      | `stage/guards`         | Same as above, for the stage's tournament                                                                                                               | ✓                                                           |
 | `CanEditMatchupGuard`                  | `matches/guards`       | Caller created the matchup's tournament or administers its affiliated group                                                                             | ✓                                                           |
-| `CanCancelParticipationGuard`          | `participation/guards` | Tournament creator or affiliated group admin; or, before `endDate`, the entered user or an admin of the entered group                                   | ✗ †                                                         |
+| `CanCancelParticipationGuard`          | `participation/guards` | Tournament creator or affiliated group admin; or, before `endDate`, the entered user or an admin of the entered group                                   | ✓                                                           |
 | `TournamentMaximumParticipantsGuard`   | `participation/guards` | Fewer than `maxParticipants` entries                                                                                                                    | ✗                                                           |
 | `PublicTournamentParticipationGuard`   | `participation/guards` | Tournament `isPublic`                                                                                                                                   | ✗                                                           |
 | `TeamTypeTournamentParticipationGuard` | `participation/guards` | Entry type allowed by `tournamentTeamType`                                                                                                              | ✗                                                           |
@@ -36,10 +37,7 @@ email-verified user) with a domain check. The table lists them all.
 | `CanAccessAttemptGuard`                | `quiz-attempt/guards`  | Caller owns the attempt                                                                                                                                 | ✓                                                           |
 | `CanSubmitAnswerGuard`                 | `quiz-attempt/guards`  | Caller owns the attempt, the quiz has not ended and the time limit has not run out; `POST` only if no answer yet, `PUT` only if the answer is not final | ✓                                                           |
 
-† Site admins have no special access here, unlike almost everywhere else: withdrawing someone else's entry is left to the people who run the tournament.
-
-Rule-type guards (participant limit, start date, team type) have no admin bypass by design: they describe the
-tournament, not the caller.
+Rule-type guards have no admin bypass by design: they describe the tournament, not the caller.
 
 ## Where the group id comes from
 
@@ -50,7 +48,7 @@ The group role guards look for the group id in this order: route parameter `grou
 
 | Thing                       | Managed by                                                                         |
 | --------------------------- | ---------------------------------------------------------------------------------- |
-| A group                     | Its `admin`s and `owner`; deletion by the `owner` only                             |
+| A group                     | Its `admin`s and `owner`; deletion and ownership transfer by the `owner` only      |
 | A tournament and its stages | Its creator, the `admin`s and `owner` of its affiliated group, site admins         |
 | Match results               | The tournament's creator, the affiliated group's `admin`s and `owner`, site admins |
 | A solo entry and its roster | The entered user                                                                   |

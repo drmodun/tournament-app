@@ -66,7 +66,7 @@ Details in [API (NestJS)](/docs/architecture/api/).
 | Language      | TypeScript everywhere                                                             |
 | API framework | NestJS 11, Passport (JWT, refresh JWT, Google OAuth)                              |
 | ORM / DB      | Drizzle ORM 0.45, Postgres 16 with PostGIS 3.4                                    |
-| Events        | `@nestjs/event-emitter` for in-process notification fan-out                       |
+| Events        | `@nestjs/event-emitter` locally, Postgres `LISTEN/NOTIFY` between API instances   |
 | Email         | Nodemailer + Handlebars templates                                                 |
 | Storage       | AWS SDK v3 S3 client, any S3-compatible server                                    |
 | Frontend      | Next.js 16 App Router, React 19, TanStack Query 5, axios, SCSS modules, MUI icons |

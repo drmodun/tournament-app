@@ -91,7 +91,7 @@ starts. The API then runs a single-elimination bracket itself:
 4. **Final**: when a round leaves a single winner, the stage is set to `finished`.
 
 Because each round is drawn from the previous results, a result can be changed or deleted only until the next round
-has been drawn. After that, `PUT` and `DELETE` return `400`.
+has been drawn. After that, `PUT` and `DELETE` return `400`. Results of the final can be corrected at any time.
 
 ## Reading results
 
@@ -107,9 +107,9 @@ has been drawn. After that, `PUT` and `DELETE` return `400`.
 ## Brackets in the web app
 
 `/stage/[id]/bracket` loads the stage (with `responseType=withChallongeTournament`) during server rendering and
-embeds Challonge's own bracket widget in an iframe (`https://challonge.com/<challongeTournamentId>/module`). A stage
-run by the API has no Challonge widget and shows "no bracket data"; its matchups are listed on the stage page and in
-score entry.
+embeds Challonge's own bracket widget in an iframe (`https://challonge.com/<challongeTournamentId>/module`). For a
+stage run by the API it loads the stage's matchups (`GET /matches/results?stageId=`) and draws the rounds side by
+side, marking winners and byes.
 
 `utils/bracketUtils.tsx` and `ChallongeService.getChallongeBracketData` are groundwork for drawing brackets natively
 with `@g-loot/react-tournament-brackets`; no page uses them yet.
@@ -118,5 +118,5 @@ Score entry for managers is at `/manageMatchup/[id]` and `/manageUserManagedMatc
 
 ## ELO
 
-In ranked tournaments, recording a result updates the players' ratings. See
+In ranked tournaments, recording a result updates the players' ratings, and correcting or deleting it re-rates them. See
 [Careers and ELO](/docs/features/careers/#rating-updates).

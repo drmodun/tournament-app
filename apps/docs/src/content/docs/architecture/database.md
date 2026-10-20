@@ -40,7 +40,8 @@ location (PostGIS point) ◀── tournament.location_id, stage.location_id, gr
 ### Users
 
 `user` holds profile fields, the bcrypt `password`, `role` (`user` / `admin`), `isFake`, `isEmailVerified`,
-`emailConfirmationToken`, `passwordResetToken` with its expiry, and `sseToken` (a UUID for the notification
+`emailConfirmationToken`, `passwordResetToken` with its expiry, and `sseToken` (unused since stream tokens became
+short-lived JWTs; formerly a UUID for the notification
 stream). `dateOfBirth` and `country` feed group requirements. Location is deliberately not stored for users (a code
 comment cites GDPR); distance searches take coordinates as query parameters instead.
 
@@ -70,6 +71,11 @@ line-up in one stage; `user_roster` lists its players with `isSubstitute`. A `ma
 and has `isFinished`. `roster_matchup` connects rosters to matchups with `isWinner`. Each played round of a matchup is
 a `score` row with per-roster points in `score_to_roster`. Challonge ids are stored on stage, roster, round and
 matchup to keep the mirror in sync.
+
+### Ratings
+
+`category_career` holds each user's rating per category. `rating_change` records how much each rating moved for each
+matchup, so a corrected or deleted result can be undone.
 
 ### Quizzes
 

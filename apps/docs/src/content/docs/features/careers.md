@@ -64,7 +64,8 @@ tournament's category change:
 - "Matches played" for the K-factor is the player's number of finished matchups in that category before this one.
 - A matchup where neither or both rosters won counts as a draw.
 - Fake players are left out. A player without a career in the category gets one, starting from 1000.
-- Ratings change once, when the result is first recorded. Correcting (`PUT`) or deleting a result does not re-rate.
+- Every change is stored per matchup (`rating_change`). Correcting a result (`PUT`) undoes the stored changes and
+  rates the new result; deleting it undoes them.
 - Unranked tournaments never change ratings.
 
 A failure while updating ratings is logged and does not undo the result.

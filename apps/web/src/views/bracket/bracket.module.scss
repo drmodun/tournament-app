@@ -19,3 +19,49 @@
   }
   overflow: auto;
 }
+
+.rounds {
+  display: flex;
+  gap: $doublePadding;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: $padding;
+  min-width: 200px;
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.matchup {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: $baseBorderSize solid $primaryMuted;
+  border-radius: $halfPadding;
+  overflow: hidden;
+
+  li {
+    padding: $halfPadding $padding;
+  }
+
+  li + li {
+    border-top: 1px solid $primaryMuted;
+  }
+}
+
+.winner {
+  font-weight: bold;
+  background-color: rgba($primary, 0.25);
+}
+
+.bye {
+  font-style: italic;
+  opacity: 0.6;
+}

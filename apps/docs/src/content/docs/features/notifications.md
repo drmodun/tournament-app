@@ -15,7 +15,7 @@ flows only).
 | Someone follows you                      | the followed user                    | `new-follower`                                   |
 | A group invites you                      | the invited user                     | `group-invitation`                               |
 | An invitation is accepted / rejected     | the invited user                     | `group-join-approval` / `group-join-rejection`   |
-| A user requests to join a group          | every member with the `admin` role   | `group-join-request`                             |
+| A user requests to join a group          | the owner and every admin            | `group-join-request`                             |
 | A join request is accepted / rejected    | the requester                        | `group-join-approval` / `group-join-rejection`   |
 | You are promoted to / demoted from admin | that member                          | `group-admin-promotion` / `group-admin-demotion` |
 | You are removed from a group             | that member                          | `group-removal`                                  |
@@ -37,7 +37,11 @@ recipient (with a read flag), then publishes it to each recipient's live stream.
 | `PATCH /notifications/:id/read`  | Mark one as read                                        |
 | `PATCH /notifications/read/all`  | Mark all of yours as read                               |
 | `PATCH /notifications/read/bulk` | Mark a list of ids as read                              |
-| `DELETE /notifications/:id`      | Delete one                                              |
+| `DELETE /notifications/:id`      | Remove one from your list                               |
+
+Read state is per recipient: marking a notification read or removing it only affects your own copy, and ids of
+notifications you did not receive return `404`. A notification is deleted for good once every recipient has removed
+it.
 
 ### Live stream
 

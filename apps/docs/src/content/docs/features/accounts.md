@@ -23,10 +23,10 @@ The web route `/email-confirmation/[token]` calls `POST /auth/email-confirmation
 `isEmailVerified = true`. An unknown token returns `401`.
 
 :::caution[Unverified accounts]
-`POST /auth/login` succeeds for an unverified account and returns tokens, but every guarded endpoint then returns
-`401`. The JWT strategy looks the user up with a query that only matches verified users, and the same filter applies
-to `GET /users/:id`. Check the inbox (Mailpit at http://localhost:8025 in Docker, or the API log without SMTP) for the
-confirmation link.
+`POST /auth/login` returns `403` ("Confirm your email address before logging in") for an account whose email is not
+confirmed yet; the password is checked first, so this does not reveal anything to someone without it. Unverified
+users are also invisible to `GET /users/:id` and to the JWT guard. Check the inbox (Mailpit at http://localhost:8025
+in Docker, or the API log without SMTP) for the confirmation link.
 :::
 
 ## Login and tokens
@@ -56,7 +56,8 @@ not the one baked into the token.
 `GET /auth/google` starts the OAuth flow with the `email` and `profile` scopes. On callback
 (`GET /auth/google/callback`) the API looks the user up by email. If there is none, it creates one with the Google
 first name as name and username, the Google photo as profile picture, country `None` and a random password, then
-returns the same token pair as a normal login. Configure `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` and
+returns the same token pair as a normal login. Accounts created this way start verified, since Google has already
+confirmed the address, and no confirmation email is sent. Configure `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` and
 `GOOGLE_CALLBACK_URL` for this to work.
 
 ## Password reset

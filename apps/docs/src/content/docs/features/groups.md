@@ -25,15 +25,12 @@ post "looking for players" listings, and invite players.
 
 Site admins pass every group role check.
 
-:::note[Who becomes owner]
-`POST /groups` adds the creator as `admin`, not `owner`, and `PATCH /group-membership/:groupId/:userId` refuses to
-set the `owner` role. Only seeded groups have an owner. In practice that means deleting a group created through the
-API needs a site admin. See [Known limitations](/docs/reference/known-limitations/).
-:::
+The creator of a group becomes its `owner`. Ownership cannot be handed over through the API:
+`PATCH /group-membership/:groupId/:userId` refuses to set the `owner` role.
 
 ## Creating a group
 
-`POST /groups` (any signed-in user) creates the group and the creator's membership in one transaction.
+`POST /groups` (any signed-in user) creates the group and the creator's `owner` membership in one transaction.
 `POST /groups/fake` creates a fake group (type `fake`) for tournament managers who need placeholder teams.
 
 ## Invitations
@@ -62,8 +59,8 @@ A user asks to join with `POST /group-join-requests/:groupId` and an optional me
 - Only **public** groups accept requests. Private groups return `400` ("cannot create a group join request for a
   private group"), fake groups `400` too.
 - The caller must not already be a member.
-- Every member with the `admin` role receives a `group-join-request` notification. The owner is not included, since
-  the lookup filters on `admin` only.
+- The requester must meet the group's [requirements](#requirements), otherwise `403` with the reason.
+- The owner and every admin receive a `group-join-request` notification.
 
 The requester can edit (`PATCH`) or withdraw (`DELETE /group-join-requests/:groupId`) the request. An admin decides:
 
@@ -93,9 +90,15 @@ Admins can attach requirements to a group with `POST /group-requirements/:groupI
 | `isSameCountry`            | Player's `country` must equal the group's        |
 | ELO requirements           | Per category, a `minimumElo` and/or `maximumElo` |
 
-Requirements are applied when a group browses LFG players (`GET /lfg/:groupId`): age and country filter the results.
-A same-country requirement on a group without a country returns no players at all. ELO requirements are stored and
-shown with LFP posts but are not used to filter. Requirements are not enforced when inviting or accepting members.
+Requirements are applied in two places:
+
+- **Joining**: a join request is refused (`403`, with the failed requirement in the message) when the requester does
+  not meet them, and so is accepting an invitation. Admins can still send invitations to anyone; the check happens
+  when the invited user accepts.
+- **LFG search** (`GET /lfg/:groupId`): players who do not meet them are left out of the results.
+
+A player without a career in a required category counts as the base rating, 1000. A same-country requirement on a
+group without a country matches nobody.
 
 ## Interests
 

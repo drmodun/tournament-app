@@ -45,7 +45,9 @@ MAILPIT_URL=http://localhost:8025 scripts/smoke-api.sh http://localhost/api   # 
 SMOKE_LOGS_CMD="docker compose logs api" scripts/smoke-api.sh           # find confirmation links in the API log
 ```
 
-With `MAILPIT_URL` or `SMOKE_LOGS_CMD` set, it also completes the email confirmation of the user it registers.
+It checks that the new user cannot log in before confirming the email. With `MAILPIT_URL` or `SMOKE_LOGS_CMD` set,
+it also completes the confirmation and logs in as that user. `SMOKE_PASSWORD` overrides the password of the seeded
+accounts (default `Password123!`).
 
 ## Web components
 

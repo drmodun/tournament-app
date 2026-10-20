@@ -48,7 +48,7 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 | GET    | `/groups/:groupId/tournaments`     | –           | Tournaments the group is in                              |
 | GET    | `/groups/:groupId/followers`       | –           | Followers                                                |
 | GET    | `/groups/for-roster/:tournamentId` | JWT         | Groups you administer that are entered in the tournament |
-| POST   | `/groups`                          | JWT         | Create; you become its admin                             |
+| POST   | `/groups`                          | JWT         | Create; you become its owner                             |
 | POST   | `/groups/fake`                     | JWT         | Create a fake group                                      |
 | PATCH  | `/groups/:groupId`                 | group admin | Update                                                   |
 | DELETE | `/groups/:groupId`                 | group owner | Delete                                                   |
@@ -132,19 +132,19 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 | GET    | `/categories/:categoryId`           | –          | One         |
 | GET    | `/categories/auto-complete/:search` | –          | Name search |
 | POST   | `/categories`                       | Site admin | Create      |
-| PATCH  | `/categories/:categoryId`           | JWT        | Update      |
+| PATCH  | `/categories/:categoryId`           | Site admin | Update      |
 | DELETE | `/categories/:categoryId`           | Site admin | Delete      |
 
 ## Locations: `/locations`
 
-| Method | Path                     | Auth | Purpose                                                      |
-| ------ | ------------------------ | ---- | ------------------------------------------------------------ |
-| GET    | `/locations`             | –    | List; distance filter with `lat`, `lng`, `distance` (metres) |
-| GET    | `/locations/map`         | –    | All locations as map points                                  |
-| GET    | `/locations/:locationId` | –    | One                                                          |
-| POST   | `/locations`             | JWT  | Create (or return existing by `apiId`)                       |
-| PATCH  | `/locations/:locationId` | JWT  | Update                                                       |
-| DELETE | `/locations/:locationId` | JWT  | Delete                                                       |
+| Method | Path                     | Auth       | Purpose                                                      |
+| ------ | ------------------------ | ---------- | ------------------------------------------------------------ |
+| GET    | `/locations`             | –          | List; distance filter with `lat`, `lng`, `distance` (metres) |
+| GET    | `/locations/map`         | –          | All locations as map points                                  |
+| GET    | `/locations/:locationId` | –          | One                                                          |
+| POST   | `/locations`             | JWT        | Create (or return existing by `apiId`)                       |
+| PATCH  | `/locations/:locationId` | Site admin | Update                                                       |
+| DELETE | `/locations/:locationId` | Site admin | Delete                                                       |
 
 ## Tournaments: `/tournaments`
 
@@ -168,7 +168,7 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 | POST   | `/stages/:tournamentId`          | tournament manager | Create (also creates rosters for solo entries and a Challonge tournament) |
 | PATCH  | `/stages/:tournamentId/:stageId` | stage manager      | Update                                                                    |
 | DELETE | `/stages/:tournamentId/:stageId` | stage manager      | Delete                                                                    |
-| PATCH  | `/stages/start/:stageId`         | stage manager      | Start the stage                                                           |
+| PATCH  | `/stages/start/:stageId`         | stage manager      | Start the stage (Challonge or a bracket run by the API)                   |
 
 ## Participations: `/participations`
 
@@ -199,17 +199,17 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 
 ## Matches: `/matches`
 
-| Method | Path                                  | Auth           | Purpose                           |
-| ------ | ------------------------------------- | -------------- | --------------------------------- |
-| GET    | `/matches/results`                    | –              | Matchups with results, filterable |
-| GET    | `/matches/matchup/:matchupId/results` | –              | One matchup with scores           |
-| GET    | `/matches/user/:userId/results`       | –              | A user's matchups                 |
-| GET    | `/matches/roster/:rosterId/results`   | –              | A roster's matchups               |
-| GET    | `/matches/group/:groupId/results`     | –              | A group's matchups                |
-| GET    | `/matches/managed`                    | JWT            | Matchups you can score            |
-| POST   | `/matches/:matchupId/score`           | matchup editor | Record result                     |
-| PUT    | `/matches/:matchupId/update-score`    | matchup editor | Replace result                    |
-| DELETE | `/matches/:matchupId/delete-score`    | matchup editor | Remove result                     |
+| Method | Path                                  | Auth           | Purpose                                               |
+| ------ | ------------------------------------- | -------------- | ----------------------------------------------------- |
+| GET    | `/matches/results`                    | –              | Matchups with results, filterable                     |
+| GET    | `/matches/matchup/:matchupId/results` | –              | One matchup with scores                               |
+| GET    | `/matches/user/:userId/results`       | –              | A user's matchups                                     |
+| GET    | `/matches/roster/:rosterId/results`   | –              | A roster's matchups                                   |
+| GET    | `/matches/group/:groupId/results`     | –              | A group's matchups                                    |
+| GET    | `/matches/managed`                    | JWT            | Matchups you can score                                |
+| POST   | `/matches/:matchupId/score`           | matchup editor | Record result (updates ratings in ranked tournaments) |
+| PUT    | `/matches/:matchupId/update-score`    | matchup editor | Replace result                                        |
+| DELETE | `/matches/:matchupId/delete-score`    | matchup editor | Remove result                                         |
 
 ## Quizzes: `/quiz` and `/quiz-attempt`
 
@@ -249,15 +249,15 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 
 ## Notifications: `/notifications`
 
-| Method | Path                           | Auth      | Purpose              |
-| ------ | ------------------------------ | --------- | -------------------- |
-| GET    | `/notifications`               | JWT       | Your notifications   |
-| GET    | `/notifications/stream?token=` | SSE token | Live event stream    |
-| POST   | `/notifications/token`         | JWT       | Rotate the SSE token |
-| PATCH  | `/notifications/:id/read`      | JWT       | Mark as read         |
-| PATCH  | `/notifications/read/all`      | JWT       | Mark all as read     |
-| PATCH  | `/notifications/read/bulk`     | JWT       | Mark several as read |
-| DELETE | `/notifications/:id`           | JWT       | Delete               |
+| Method | Path                           | Auth            | Purpose                      |
+| ------ | ------------------------------ | --------------- | ---------------------------- |
+| GET    | `/notifications`               | JWT             | Your notifications           |
+| GET    | `/notifications/stream?token=` | SSE token       | Live event stream            |
+| POST   | `/notifications/token`         | JWT             | Rotate the SSE token         |
+| PATCH  | `/notifications/:id/read`      | JWT (recipient) | Mark as read for you         |
+| PATCH  | `/notifications/read/all`      | JWT             | Mark all as read             |
+| PATCH  | `/notifications/read/bulk`     | JWT (recipient) | Mark several as read for you |
+| DELETE | `/notifications/:id`           | JWT (recipient) | Remove it for you            |
 
 ## Misc
 

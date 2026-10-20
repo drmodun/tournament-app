@@ -22,23 +22,23 @@ players, and enter scores. `GET /tournaments/managed` lists the tournaments the 
 
 ### Settings
 
-| Field                                         | Default              | Effect                                                                                      |
-| --------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
-| `name`, `description`, `logo`, `links`        |                      | Display                                                                                     |
-| `categoryId`                                  | required             | The game or discipline; also selects which ELO rating is checked                            |
-| `startDate`, `endDate`                        | `startDate` required | Entry closes at `startDate`. Participations cannot be cancelled by players after `endDate`  |
-| `tournamentType`                              | `league`             | `league`, `competition`, `seasonal`, `contest`, `event` (descriptive)                       |
-| `tournamentTeamType`                          | `team`               | `solo`: only individual entries. `team`: only group entries. `mixed`: both                  |
-| `tournamentLocation`                          | `online`             | `online`, `offline`, `hybrid`; offline and hybrid events can set `locationId`               |
-| `isPublic`                                    | `true`               | Only public tournaments accept self-entry. Private ones are filled by managers              |
-| `maxParticipants`                             | 32                   | Entry is refused once this many participations exist                                        |
-| `minimumMMR`, `maximumMMR`                    | 0, 999999            | ELO bounds checked when rosters are built (see below)                                       |
-| `isFakePlayersAllowed`                        | `false`              | Allows managers to enter fake users and fake groups                                         |
-| `isRanked`                                    | `false`              | A ranked tournament never accepts fake entries, even with `isFakePlayersAllowed`            |
-| `isMultipleTeamsPerGroupAllowed`              | `false`              | Stored; the roster guard currently allows one roster per participation per stage regardless |
-| `affiliatedGroupId`                           |                      | Group whose admins co-manage the tournament                                                 |
-| `parentTournamentId`                          |                      | Nest tournaments, for example events in a league                                            |
-| `minimumLevel`, `conversionRuleId`, `country` |                      | Stored for future use                                                                       |
+| Field                                         | Default              | Effect                                                                                     |
+| --------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
+| `name`, `description`, `logo`, `links`        |                      | Display                                                                                    |
+| `categoryId`                                  | required             | The game or discipline; also selects which ELO rating is checked                           |
+| `startDate`, `endDate`                        | `startDate` required | Entry closes at `startDate`. Participations cannot be cancelled by players after `endDate` |
+| `tournamentType`                              | `league`             | `league`, `competition`, `seasonal`, `contest`, `event` (descriptive)                      |
+| `tournamentTeamType`                          | `team`               | `solo`: only individual entries. `team`: only group entries. `mixed`: both                 |
+| `tournamentLocation`                          | `online`             | `online`, `offline`, `hybrid`; offline and hybrid events can set `locationId`              |
+| `isPublic`                                    | `true`               | Only public tournaments accept self-entry. Private ones are filled by managers             |
+| `maxParticipants`                             | 32                   | Entry is refused once this many participations exist                                       |
+| `minimumMMR`, `maximumMMR`                    | 0, 999999            | ELO bounds checked when rosters are built (see below)                                      |
+| `isFakePlayersAllowed`                        | `false`              | Allows managers to enter fake users and fake groups                                        |
+| `isRanked`                                    | `false`              | A ranked tournament never accepts fake entries, even with `isFakePlayersAllowed`           |
+| `isMultipleTeamsPerGroupAllowed`              | `false`              | Lets one group enter the tournament more than once, as separate teams                      |
+| `affiliatedGroupId`                           |                      | Group whose admins co-manage the tournament                                                |
+| `parentTournamentId`                          |                      | Nest tournaments, for example events in a league                                           |
+| `minimumLevel`, `conversionRuleId`, `country` |                      | Stored for future use                                                                      |
 
 ### Reading tournaments
 
@@ -96,12 +96,14 @@ the Challonge tournament.
 `PATCH /stages/start/:stageId` (stage managers) moves a stage from `upcoming` to `ongoing`:
 
 1. Refuses if the stage is already `ongoing` or `finished` (`400`).
-2. Refuses if the stage has no Challonge tournament (`400`). With mock Challonge credentials every stage ends up
-   here, so starting stages needs real `CHALLONGE_CLIENT_ID` / `CHALLONGE_CLIENT_SECRET`.
-3. Refuses if the stage has no rosters (`400`).
-4. Adds every roster to Challonge as a participant in one bulk call and stores the returned participant ids.
-5. Sets the stage to `ongoing` here and in Challonge (which seeds and starts the bracket).
-6. Sends a `tournament-start` notification, linking to `/stage/<id>`, to every user in a roster of the stage.
-7. Imports Challonge's round 1 matches as matchups.
+2. Refuses if the stage has no rosters (`400`).
+3. Starts the bracket, in one of two ways:
+   - **With a Challonge tournament**: adds every roster to Challonge as a participant in one bulk call, stores the
+     returned participant ids, sets the stage to `ongoing` here and in Challonge (which seeds and starts the
+     bracket), and imports Challonge's round 1 matches as matchups.
+   - **Without one** (mock credentials, or the Challonge call failed when the stage was created): the API runs a
+     single-elimination bracket itself and draws round 1. See
+     [Brackets run by the API](/docs/features/matches/#brackets-run-by-the-api).
+4. Sends a `tournament-start` notification, linking to `/stage/<id>`, to every user in a roster of the stage.
 
 From there, results drive the bracket: see [Matches and brackets](/docs/features/matches/).

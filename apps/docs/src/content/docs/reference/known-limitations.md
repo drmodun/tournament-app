@@ -1,96 +1,75 @@
 ---
 title: Known limitations
-description: Behaviour in the current code that is surprising, incomplete or worth fixing, found while writing these docs.
+description: Behaviour that is still incomplete or worth knowing about, and what has already been fixed.
 ---
 
-These were found by reading the code while writing this documentation (as of commit `05b42ee`). Each entry names the
-place to look. None of them is fixed by the documentation change itself.
+These were found by reading the code while writing this documentation. Most have since been fixed; what remains is
+listed first, each with the place to look.
 
-## Behaviour that surprises users
+## Still open
 
-### Group creators are admins, not owners
+### Behaviour
 
-`GroupDrizzleRepository.createEntityWithUser` (`apps/api/src/group/group.repository.ts`) inserts the creator with
-role `admin`. `DELETE /groups/:groupId` requires `owner`, and `PATCH /group-membership/...` refuses to assign
-`owner`. As a result, only site admins can delete a group created through the API; only seeded groups have owners.
-
-### Unverified users get tokens, then 401s
-
-`POST /auth/login` does not check `isEmailVerified`, but the JWT strategy's user lookup only returns verified users.
-An unverified user can log in, then every authenticated call fails with `401` and no hint about the cause.
-
-### Starting a stage needs real Challonge credentials
-
-`StageService.startStage` refuses stages without a `challongeTournamentId`, and stages only get one when the
-Challonge API call at creation succeeds. With the mock credentials in `.env`, no stage can be started, so locally the
-only matches are the seeded ones.
-
-### Join-request notifications skip the owner
-
-`GroupMembershipService.getAllAdmins` filters on role `admin` only, so a group's `owner` is not notified about new
-join requests.
-
-### Marking a notification read affects every recipient
-
-`PATCH /notifications/:id/read` and `/read/bulk` update `notification_to_user` by notification id only. For a
-notification sent to several users (for example a stage start), one user marking it read marks it read for all.
-
-## Rules that exist but are not enforced
-
-- **Roster size and timing**: `CanRosterBeUsedGuard.checkIfMembersAreEligibleForStage`
-  (`apps/api/src/roster/guards/roster-check.guard.ts`) checks `minPlayersPerTeam`, `maxPlayersPerTeam`,
-  `maxSubstitutes` and that the stage has not started, but nothing calls it.
-- **ELO updates**: `EloHelper` (`apps/api/src/base/static/eloHelper.ts`) implements the rating formula, but match
-  results never call it, so careers do not change.
-- **Group ELO requirements**: stored and returned with LFP posts, but not used to filter LFG players.
-- **Group requirements on joining**: age, country and ELO requirements are not checked when inviting or accepting
-  members.
-- **Quiz timing**: `timeLimitTotal`, per-question `timeLimit`, `startDate` and `endDate` are enforced only by the web
-  client.
-- **Multiple teams per group**: `isMultipleTeamsPerGroupAllowed` is stored, but rosters are limited to one per
-  participation per stage regardless.
+- **Ownership cannot be transferred**: a group's creator is its owner, and `PATCH /group-membership/...` refuses to
+  assign `owner`, so there is no way to hand a group over except through the database.
+- **Corrections do not re-rate**: ratings change when a result is first recorded. Updating or deleting the result
+  afterwards leaves ratings as they are (`CareerService.applyMatchResult`).
+- **Brackets run by the API are single elimination only**, whatever the stage type. Other formats need Challonge.
+- **The bracket page needs Challonge**: `/stage/[id]/bracket` embeds Challonge's widget, so stages run by the API show
+  "no bracket data" there; their matchups are on the stage page.
+- **Quiz timing per question**: the API enforces the quiz's dates and total time limit, but per-question time limits,
+  randomisation and test mode are only applied by the web client.
 - **Point conversion rules**: tournaments and stages accept `conversionRuleId`, but no logic applies the rules.
 
-## Authorisation gaps
+### Authorisation
 
-- **LFP edit and delete** (`PATCH`/`DELETE /lfp/:groupId/:id`): the guard checks that the caller administers
-  `:groupId`, but the service updates or deletes by `:id` alone, so an admin of any group can change another group's
-  post by passing their own group id.
-- **Notifications** (`PATCH /notifications/:id/read`, `DELETE /notifications/:id`): any signed-in user can act on any
-  notification id.
-- **Categories**: `PATCH /categories/:id` only requires a signed-in user, while create and delete require a site
-  admin.
-- **Locations**: update and delete only require a signed-in user, and locations are shared between tournaments,
-  stages and groups.
-- **Fake users and groups**: any signed-in user can create them (`POST /users/fake`, `POST /groups/fake`).
-- **Site admins and matches/quizzes**: `CanEditMatchupGuard` and `CanEditQuizGuard` have no admin exception, so site
-  admins cannot fix results or quizzes they do not own.
+- **Fake users and groups**: any signed-in user can create them (`POST /users/fake`, `POST /groups/fake`). Tournament
+  managers need them for brackets, and fake entries are refused by ranked tournaments, but the endpoints are not
+  limited to managers.
+- **Withdrawing entries**: `CanCancelParticipationGuard` has no site-admin exception.
 
-## Bugs
-
-- **LFP distance filter**: `LFPDrizzleRepository.getGroups` (`apps/api/src/lfp/lfp.repository.ts`) tests
-  `distanceInKm & lat & lng` with bitwise AND. For non-integer coordinates the result is often `0`, so the distance
-  filter is silently skipped. It should be `&&`.
-- **Bracket hook points at a removed route**: `useGetBracket` (`apps/web/src/api/client/hooks/bracket`) calls
-  `GET /matches/stage/:stageId/bracket`, which no longer exists. Nothing uses the hook; the bracket page embeds
-  Challonge's iframe instead.
-- **Misleading guard message**: `CanSubmitAnswerGuard.checkForPutAttempt` rejects final answers with the message
-  "Answer is not final, you cannot change it".
-
-## Operational
+### Operational
 
 - **Live notifications are per instance**: SSE fan-out uses the in-process event emitter. With several API replicas,
   a user connected to one replica does not receive live events created on another (they are still stored).
 - **SSE tokens never expire**: the stream token is a long-lived UUID in the query string; rotate it with
   `POST /notifications/token`.
-- **CORS is open**: `app.enableCors()` allows every origin.
+- **CORS is open by default**: without `CORS_ORIGIN`, every origin may call the API. Set it in production.
 - **S3 is configured but unused**: `BlobModule` is wired up and the bucket is created, but no endpoint uploads files
   yet. Images (logos, avatars, covers) are stored as URLs.
-- **Hard-coded credential in the smoke script**: `scripts/smoke-api.sh` contains the seeded admin password
-  (`Password123!`). It only matches seeded development data, but it should not be reused anywhere real.
+- **Random seed data**: the seed creates group requirements with `Math.random`, so seeded groups differ between runs.
 
-## Not built yet
+### Not built yet
 
 The schema already holds tables for subscriptions, achievements, chat, direct messages, bets, sponsors, promotions,
 reports, posts and likes, reviews and competitive programming problems and submissions, with no API on top of them.
-Brackets beyond single elimination depend on Challonge's support for the mapped type. `apps/admin` is a placeholder.
+`apps/admin` is a placeholder.
+
+## Fixed
+
+| Was                                                                              | Now                                                         |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Group creators became admins, so only site admins could delete their groups      | Creators become owners                                      |
+| Join-request notifications skipped the owner                                     | The owner and every admin are notified                      |
+| Unverified users got tokens, then `401` everywhere                               | Login returns `403` and says to confirm the email           |
+| Google sign-ups stayed unverified and failed                                     | Google accounts start verified                              |
+| Stages could not start without real Challonge credentials                        | The API runs a single-elimination bracket itself            |
+| Marking a notification read marked it for every recipient                        | Read state and removal are per recipient                    |
+| Any signed-in user could mark or delete any notification                         | Only recipients, others get `404`                           |
+| Any group admin could edit or delete another group's LFP post                    | The post must belong to the group in the URL                |
+| Any signed-in user could edit categories, and edit or delete locations           | Site admins only                                            |
+| Site admins could not fix results or quizzes they did not own                    | They pass `CanEditMatchupGuard` and `CanEditQuizGuard`      |
+| Roster size, substitute and start-time limits were never checked                 | Checked on roster create and update                         |
+| Results never changed ratings                                                    | Ranked results update ELO                                   |
+| Group ELO requirements were not used                                             | They filter LFG search and are checked when joining         |
+| Group requirements were not checked on joining                                   | Checked on join requests and invitation acceptance          |
+| Quiz dates and time limits were only enforced by the client                      | The API refuses attempts and answers outside them           |
+| Non-retakeable quizzes could be retaken after submitting, and not resumed before | Only a submitted attempt counts                             |
+| A group could enter the same tournament repeatedly                               | One entry per group unless `isMultipleTeamsPerGroupAllowed` |
+| `isMultipleTeamsPerGroupAllowed` was stored but ignored                          | It allows a group to enter several teams                    |
+| LFP distance filter used a bitwise `&` and was often skipped                     | Fixed                                                       |
+| Bracket seeding stopped at the first 12 rosters (default page size)              | All rosters are seeded                                      |
+| `useGetBracket` called a removed route                                           | Removed                                                     |
+| Final-answer guard said "Answer is not final"                                    | Message corrected                                           |
+| CORS could not be restricted                                                     | `CORS_ORIGIN`                                               |
+| The smoke script hard-coded the seeded password                                  | `SMOKE_PASSWORD` overrides it                               |

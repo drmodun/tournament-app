@@ -90,8 +90,10 @@ Before exposing the stack, replace the development values:
 2. Configure a real SMTP server (`SMTP_HOST`, ...) and `EMAIL_FROM`. With `MODE=production` the API refuses to start
    without SMTP.
 3. Change the database password and the S3 keys in `docker/s3/s3.json`, or point `S3_*` at a managed bucket.
-4. Add Google and Challonge credentials if you want those features.
-5. Put secrets in an untracked file or your platform's secret store, never in the tracked `.env`.
+4. Set `CORS_ORIGIN` to your `PUBLIC_URL` so other sites cannot call the API from a browser.
+5. Add Google credentials for Google sign-in, and Challonge credentials if you want brackets on Challonge
+   (without them the API runs single-elimination brackets itself).
+6. Put secrets in an untracked file or your platform's secret store, never in the tracked `.env`.
 
 ## Images
 

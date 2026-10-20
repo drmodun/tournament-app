@@ -78,5 +78,5 @@ yarn storybook        # http://localhost:6006
 - **Port already in use**: for `yarn dev`, set `API_PORT` and `DATABASE_URL` in `.env.local`. For Docker, see the
   port variables.
 - **Migrations cannot connect**: check that the `db` container is healthy with `docker compose ps`.
-- **Logged in but every page says unauthorised**: the email is not confirmed. Without `SMTP_HOST` the API logs the
+- **Login says to confirm the email address**: the account is not verified yet. Without `SMTP_HOST` the API logs the
   confirmation email (with its link) to the console instead of sending it.

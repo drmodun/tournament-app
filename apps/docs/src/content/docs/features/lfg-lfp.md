@@ -30,10 +30,10 @@ A user can have several LFG posts. Update and delete only touch posts whose `use
 3. if the group has requirements:
    - `isSameCountry`: users whose `country` differs from the group's. If the group has no country set, the result is
      empty;
-   - `minimumAge` / `maximumAge`: users outside the age range, computed from `dateOfBirth`.
+   - `minimumAge` / `maximumAge`: users outside the age range, computed from `dateOfBirth`;
+   - ELO requirements: users whose rating in the category is outside the bounds (1000 when they have no career there).
 
-ELO requirements are not applied here. An invitation sent from this list can carry the LFG post id
-(`relatedLFGId`).
+An invitation sent from this list can carry the LFG post id (`relatedLFGId`).
 
 The web app's `/manageLFG` is where players manage their post, and the group page shows matching players to admins.
 
@@ -57,12 +57,9 @@ requirements and their categories, excluding:
 3. when `lat`, `lng` and `distance` (kilometres) are given: groups whose location is farther away than `distance`
    (PostGIS `ST_DWithin` on the group's location).
 
-Requirements are returned so the client can show them, not used to filter on this side. A join request sent from a
-post can carry its id (`relatedLFPId`). `/lfp/[...slug]` in the web app is the browsing screen.
+Requirements are returned so the client can show them, not used to filter on this side; a join request from a player
+who does not meet them is refused. A join request sent from a post can carry its id (`relatedLFPId`).
+`/lfp/[...slug]` in the web app is the browsing screen.
 
-:::caution
-Two rough edges in the current implementation: the distance filter combines its three inputs with a bitwise `&`
-instead of `&&`, so it can be skipped for some coordinate values. And editing or deleting an LFP post checks that you
-administer the group in the URL, not that the post belongs to that group. Both are listed in
-[Known limitations](/docs/reference/known-limitations/).
-:::
+Editing or deleting a post (`/lfp/:groupId/:id`) only works when the post belongs to `:groupId`; another group's post
+returns `404`.

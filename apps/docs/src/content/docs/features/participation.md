@@ -27,7 +27,7 @@ The guards run in order and each can refuse with `403`:
 | Fake user or group only if `isFakePlayersAllowed` and not `isRanked`                                                                    | –          | ✓             |
 | Entry type matches `tournamentTeamType` (solo entries refused by `team` tournaments, team entries by `solo` ones; `mixed` accepts both) | ✓          | ✓             |
 | Tournament has not started (`now < startDate`)                                                                                          | ✓          | ✓             |
-| The user or group is not already entered                                                                                                | ✓          | ✓             |
+| The user or group is not already entered (a group may enter again when the tournament sets `isMultipleTeamsPerGroupAllowed`)            | ✓          | ✓             |
 
 Self-entry into a private tournament is not possible; managers fill private tournaments through the admin
 endpoints, which only verify the fake-player rule for fake entries.
@@ -88,11 +88,12 @@ the "already in another roster" check) and then `CanUpdateRosterGuard`:
 - In later stages, the number of changes must not exceed the stage's `maxChanges`. Changes are counted as
   `added + removed + |old size − new size|`.
 
-:::note
-The roster size limits (`minPlayersPerTeam`, `maxPlayersPerTeam`, `maxSubstitutes`) and the "stage has already
-started" rule are implemented in `checkIfMembersAreEligibleForStage`, but no guard calls that method yet, so they are
-not enforced by the API. See [Known limitations](/docs/reference/known-limitations/).
-:::
+Both creating and updating a roster also check the stage's limits (site admins skip these, like the rest of this
+guard):
+
+- the stage must not have started yet;
+- the roster must have between `minPlayersPerTeam` and `maxPlayersPerTeam` players (when set);
+- it may have at most `maxSubstitutes` substitutes (when set; unset means no limit).
 
 ### Reading rosters
 

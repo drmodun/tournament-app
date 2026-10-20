@@ -14,14 +14,16 @@ description: Matchups, score entry, round progression through Challonge, and bra
 
 | Source              | When                                                                                                                                                              |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Challonge round 1   | Imported when a stage is started                                                                                                                                  |
+| Challonge round 1   | Imported when a stage with a Challonge tournament is started                                                                                                      |
 | Challonge round N+1 | Imported when every matchup of round N is finished                                                                                                                |
+| Local round 1       | Drawn by the API when a stage without a Challonge tournament is started                                                                                           |
+| Local round N+1     | Drawn by the API when every matchup of round N has a winner                                                                                                       |
 | `BracketGenerator`  | Used by the seed to build single-elimination brackets locally, with rosters sorted by average ELO in the tournament's category (1000 when a player has no career) |
 
 ## Entering results
 
-Tournament managers enter results. `CanEditMatchupGuard` allows the tournament's creator and the `admin` or `owner`
-members of the tournament's affiliated group. It does not grant site admins anything extra.
+Tournament managers enter results. `CanEditMatchupGuard` allows site admins, the tournament's creator and the
+`admin` or `owner` members of the tournament's affiliated group.
 
 | Endpoint                                  | Effect                                   |
 | ----------------------------------------- | ---------------------------------------- |
@@ -74,6 +76,23 @@ Any Challonge error is logged and swallowed; the request still succeeds with the
 The API authenticates to Challonge with the OAuth client-credentials flow (`CHALLONGE_CLIENT_ID` /
 `CHALLONGE_CLIENT_SECRET`) and retries each call once after fetching a new token.
 
+## Brackets run by the API
+
+A stage without a Challonge tournament (no credentials, or Challonge failed when the stage was created) still
+starts. The API then runs a single-elimination bracket itself:
+
+1. **Seeding**: rosters are ordered by their players' average rating in the tournament's category (1000 for a player
+   without a career), ties by roster id.
+2. **Round 1**: the bracket is padded to a power of two and paired in standard order (1 v 8, 4 v 5, 2 v 7, 3 v 6), so
+   the top seeds can only meet late. Seeds without an opponent get a bye: their matchup is finished on creation and
+   they advance.
+3. **Next rounds**: when every matchup of a round has exactly one winner, the winners are paired in bracket order into
+   the next round. An odd one out gets a bye.
+4. **Final**: when a round leaves a single winner, the stage is set to `finished`.
+
+Because each round is drawn from the previous results, a result can be changed or deleted only until the next round
+has been drawn. After that, `PUT` and `DELETE` return `400`.
+
 ## Reading results
 
 | Endpoint                                  | Returns                                                         |
@@ -89,15 +108,15 @@ The API authenticates to Challonge with the OAuth client-credentials flow (`CHAL
 
 `/stage/[id]/bracket` loads the stage (with `responseType=withChallongeTournament`) during server rendering and
 embeds Challonge's own bracket widget in an iframe (`https://challonge.com/<challongeTournamentId>/module`). A stage
-without a Challonge tournament shows "no bracket data".
+run by the API has no Challonge widget and shows "no bracket data"; its matchups are listed on the stage page and in
+score entry.
 
-There is also groundwork for drawing brackets natively with `@g-loot/react-tournament-brackets`
-(`utils/bracketUtils.tsx`, the `useGetBracket` hook, `ChallongeService.getChallongeBracketData` in the API), but it
-is not wired up: the hook calls `GET /matches/stage/:stageId/bracket`, which the API no longer exposes, and no page
-uses it.
+`utils/bracketUtils.tsx` and `ChallongeService.getChallongeBracketData` are groundwork for drawing brackets natively
+with `@g-loot/react-tournament-brackets`; no page uses them yet.
 
 Score entry for managers is at `/manageMatchup/[id]` and `/manageUserManagedMatchups`.
 
 ## ELO
 
-Match results do not update ELO ratings yet. See [Careers and ELO](/docs/features/careers/).
+In ranked tournaments, recording a result updates the players' ratings. See
+[Careers and ELO](/docs/features/careers/#rating-updates).

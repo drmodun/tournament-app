@@ -17,7 +17,8 @@ User locations are not stored. Distance searches take the user's coordinates as 
 already exists, that one is returned instead of creating a duplicate, so picking the same place twice reuses one
 row.
 
-`PATCH /locations/:id` and `DELETE /locations/:id` are also open to any signed-in user.
+`PATCH /locations/:id` and `DELETE /locations/:id` are for site admins only, because one location can be shared by
+several tournaments, stages and groups.
 
 ## Querying
 

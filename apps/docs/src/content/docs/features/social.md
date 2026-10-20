@@ -34,11 +34,10 @@ Groups have their own interests; see [Groups](/docs/features/groups/#interests).
 Categories are the games or disciplines everything else hangs off. Each has a `name`, `description`, `image` and a
 `type` (`programming`, `sports`, `other`).
 
-| Endpoint                                                                          | Who                                                                              |
-| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `GET /categories`, `GET /categories/:id`, `GET /categories/auto-complete/:search` | anyone                                                                           |
-| `POST /categories`, `DELETE /categories/:id`                                      | site admin                                                                       |
-| `PATCH /categories/:id`                                                           | any signed-in user (see [Known limitations](/docs/reference/known-limitations/)) |
+| Endpoint                                                                          | Who        |
+| --------------------------------------------------------------------------------- | ---------- |
+| `GET /categories`, `GET /categories/:id`, `GET /categories/auto-complete/:search` | anyone     |
+| `POST /categories`, `PATCH /categories/:id`, `DELETE /categories/:id`             | site admin |
 
 ## Block lists
 

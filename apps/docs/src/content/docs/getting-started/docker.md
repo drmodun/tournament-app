@@ -33,9 +33,8 @@ After seeding, sign in with `admin@example.com` / `Password123!`. That account i
 
 ## Registering a new account
 
-Registration sends a confirmation email. Open Mailpit at http://localhost:8025, click the link, and only then log in.
-Until the email is confirmed the account can obtain tokens but every authenticated request returns `401`, because the
-user lookup behind the JWT guard only returns verified users.
+Registration sends a confirmation email. Open Mailpit at http://localhost:8025, click the link, and only then log in;
+before that, login returns `403` ("Confirm your email address before logging in").
 
 ## When a port is taken
 

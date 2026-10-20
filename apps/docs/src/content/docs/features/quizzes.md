@@ -10,7 +10,7 @@ a single matchup.
 
 `POST /quiz` creates a quiz with its questions and options in one request; the caller becomes the author.
 `PUT /quiz/:quizId` replaces it and `DELETE /quiz/:quizId` removes it. Only the **author** may edit, delete or read
-the detailed version with answers (`GET /quiz/detailed/:quizId`). `CanEditQuizGuard` has no site-admin exception.
+the detailed version with answers (`GET /quiz/detailed/:quizId`), along with site admins.
 `GET /quiz/authored` lists your quizzes.
 
 ### Quiz settings
@@ -28,8 +28,8 @@ the detailed version with answers (`GET /quiz/detailed/:quizId`). `CanEditQuizGu
 | `passingScore`                      | none                 | Pass mark as a percentage                                                                   |
 | `stageId`, `matchupId`              |                      | Attach the quiz to a stage or matchup                                                       |
 
-Time limits, dates, randomisation and test mode are enforced by the web client; the API stores and returns them
-but does not reject late answers.
+The API enforces the schedule and the total time limit (see [Attempts](#attempts)). Per-question time limits,
+randomisation and test mode are handled by the web client.
 
 ### Question types
 
@@ -53,8 +53,10 @@ GET  /quiz-attempt/leaderboard/:quizId         ranking
 
 ### Starting
 
-- If the quiz is not retakeable and the user already has an attempt, `403` ("You have already attempted this quiz").
-  Site admins skip this check.
+- Before `startDate` the quiz refuses attempts (`403`, "This quiz has not started yet"), and after `endDate` too
+  ("This quiz has ended").
+- If the quiz is not retakeable and the user has already **submitted** an attempt, `403` ("You have already attempted
+  this quiz"). Site admins skip this check.
 - If the user has an attempt that is **not yet submitted**, that attempt is returned instead of creating a new one,
   so reloading the page resumes it.
 
@@ -66,6 +68,9 @@ GET  /quiz-attempt/leaderboard/:quizId         ranking
 - The answer is checked immediately and `isCorrect` is stored.
 - If the question has `isImmediateFeedback`, the answer is **final**: it cannot be changed afterwards, and the
   attempt's `currentQuestion` moves forward.
+- Answers are refused once the quiz's `endDate` has passed, and for timed quizzes once `timeLimitTotal` seconds (plus
+  10 seconds of grace for latency) have passed since the attempt started (`403`, "The time for this attempt is up").
+  Submitting still works, so the answers given in time are scored.
 
 ### Submitting
 

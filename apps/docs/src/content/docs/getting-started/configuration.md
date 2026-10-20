@@ -24,6 +24,7 @@ root `.env` and then override a few values (database, SMTP, S3 endpoint, fronten
 | `DATABASE_URL`       | Postgres connection string. Locally `postgres://postgres:postgres@localhost:5433/tournament`                                           |
 | `API_PORT`           | Port the API listens on (default `5500`)                                                                                               |
 | `MODE`               | `production` turns off writing `openapi.yml`, hides the seed's database URL log, and makes the API refuse to start without `SMTP_HOST` |
+| `CORS_ORIGIN`        | Comma-separated origins allowed to call the API from a browser, for example `https://example.com`. Empty allows any origin             |
 | `FRONTEND_URL`       | Base for links in emails (confirmation, password reset). Default `http://localhost:3000`                                               |
 | `JWT_SECRET`         | Signs access tokens (valid 8 hours)                                                                                                    |
 | `JWT_REFRESH_SECRET` | Signs refresh tokens (valid 7 days)                                                                                                    |
@@ -55,10 +56,10 @@ The defaults point at the SeaweedFS container; its access key is defined in `doc
 
 ### Third parties (mocked by default)
 
-| Variable                                                          | Without a real value                                                                                                                |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL` | Google sign-in fails. The callback defaults to `http://localhost:3000/auth/google/callback`                                         |
-| `CHALLONGE_CLIENT_ID`, `CHALLONGE_CLIENT_SECRET`                  | Stages are created without a Challonge tournament, and starting a stage fails (see [Matches and brackets](/docs/features/matches/)) |
+| Variable                                                          | Without a real value                                                                                                                                                      |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL` | Google sign-in fails. The callback defaults to `http://localhost:3000/auth/google/callback`                                                                               |
+| `CHALLONGE_CLIENT_ID`, `CHALLONGE_CLIENT_SECRET`                  | Stages are created without a Challonge tournament and the API runs their brackets itself (see [Brackets run by the API](/docs/features/matches/#brackets-run-by-the-api)) |
 
 ## Web app
 

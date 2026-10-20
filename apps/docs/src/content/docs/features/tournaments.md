@@ -1,0 +1,107 @@
+---
+title: Tournaments and stages
+description: Creating tournaments, the settings that control entry, stages and their lifecycle.
+---
+
+## Tournaments
+
+A tournament is a competition in one category. Create it with `POST /tournaments` while signed in; the caller
+becomes `creatorId`.
+
+### Who manages a tournament
+
+A user manages a tournament (passes `TournamentAdminGuard`) when any of these holds:
+
+- they are a site admin,
+- they created it,
+- it has an `affiliatedGroupId` and they are an `admin` or `owner` of that group.
+
+Setting `affiliatedGroupId` on create requires being an admin of that group (`ConditionalAdminGuard`); without it,
+anyone signed in can create a tournament. Managers can `PATCH` and `DELETE` the tournament, add stages, enter fake
+players, and enter scores. `GET /tournaments/managed` lists the tournaments the caller manages.
+
+### Settings
+
+| Field                                         | Default              | Effect                                                                                      |
+| --------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
+| `name`, `description`, `logo`, `links`        |                      | Display                                                                                     |
+| `categoryId`                                  | required             | The game or discipline; also selects which ELO rating is checked                            |
+| `startDate`, `endDate`                        | `startDate` required | Entry closes at `startDate`. Participations cannot be cancelled by players after `endDate`  |
+| `tournamentType`                              | `league`             | `league`, `competition`, `seasonal`, `contest`, `event` (descriptive)                       |
+| `tournamentTeamType`                          | `team`               | `solo`: only individual entries. `team`: only group entries. `mixed`: both                  |
+| `tournamentLocation`                          | `online`             | `online`, `offline`, `hybrid`; offline and hybrid events can set `locationId`               |
+| `isPublic`                                    | `true`               | Only public tournaments accept self-entry. Private ones are filled by managers              |
+| `maxParticipants`                             | 32                   | Entry is refused once this many participations exist                                        |
+| `minimumMMR`, `maximumMMR`                    | 0, 999999            | ELO bounds checked when rosters are built (see below)                                       |
+| `isFakePlayersAllowed`                        | `false`              | Allows managers to enter fake users and fake groups                                         |
+| `isRanked`                                    | `false`              | A ranked tournament never accepts fake entries, even with `isFakePlayersAllowed`            |
+| `isMultipleTeamsPerGroupAllowed`              | `false`              | Stored; the roster guard currently allows one roster per participation per stage regardless |
+| `affiliatedGroupId`                           |                      | Group whose admins co-manage the tournament                                                 |
+| `parentTournamentId`                          |                      | Nest tournaments, for example events in a league                                            |
+| `minimumLevel`, `conversionRuleId`, `country` |                      | Stored for future use                                                                       |
+
+### Reading tournaments
+
+`GET /tournaments` supports the base query parameters and tournament-specific filters (category, type, team type,
+location, dates, creator, affiliated group, ...). `GET /tournaments/:id` takes `responseType`; the `extended`
+projection includes `currentParticipants`. `GET /tournaments/auto-complete/:search` searches by name.
+
+## Stages
+
+A stage is one phase of a tournament: a group stage, a knockout bracket, a quiz round. Stages are ordered by
+`startDate`; the earliest is the **first stage**, which matters for rosters.
+
+### Stage fields
+
+| Field                                                                  | Effect                                                                                                                                         |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`, `description`, `logo`                                          | Display                                                                                                                                        |
+| `stageType`                                                            | `group`, `knockout`, `swiss`, `round_robin`, `fixture`, `double_elimination`, `quiz`, `compass`, `triple_elimination`, `evaluated_competition` |
+| `stageStatus`                                                          | `upcoming` → `ongoing` → `finished`, or `cancelled`                                                                                            |
+| `startDate`, `endDate`                                                 | Ordering and schedule                                                                                                                          |
+| `stageLocation`, `locationId`                                          | Like the tournament's location                                                                                                                 |
+| `minPlayersPerTeam` (default 1), `maxPlayersPerTeam`, `maxSubstitutes` | Roster size limits                                                                                                                             |
+| `maxChanges`                                                           | How many roster changes are allowed in later stages                                                                                            |
+
+### Who manages a stage
+
+`StageAdminGuard` resolves the stage's tournament and applies the same rule as for tournaments: site admin, the
+tournament's creator, or an admin of its affiliated group. `GET /stages/managed` lists stages the caller manages.
+
+### Creating a stage
+
+`POST /stages/:tournamentId` (tournament managers) does three things:
+
+1. Inserts the stage.
+2. Creates a roster in the new stage for every **solo** participation already in the tournament, with that player
+   as its only member. Team participations build their rosters themselves.
+3. Creates a private Challonge tournament for the stage and stores its id. The stage type is mapped to a Challonge
+   type:
+
+| Stage type                                                                     | Challonge type     |
+| ------------------------------------------------------------------------------ | ------------------ |
+| `group`, `knockout`                                                            | single elimination |
+| `double_elimination`, `triple_elimination`, `compass`, `evaluated_competition` | double elimination |
+| `round_robin`, `fixture`, `quiz`                                               | round robin        |
+| `swiss`                                                                        | swiss              |
+
+If the Challonge call fails (for example with the mock credentials), the stage is still created, just without a
+Challonge id, and the error is logged.
+
+Updating a stage (`PATCH /stages/:tournamentId/:stageId`) also updates the Challonge tournament; deleting it deletes
+the Challonge tournament.
+
+### Starting a stage
+
+`PATCH /stages/start/:stageId` (stage managers) moves a stage from `upcoming` to `ongoing`:
+
+1. Refuses if the stage is already `ongoing` or `finished` (`400`).
+2. Refuses if the stage has no Challonge tournament (`400`). With mock Challonge credentials every stage ends up
+   here, so starting stages needs real `CHALLONGE_CLIENT_ID` / `CHALLONGE_CLIENT_SECRET`.
+3. Refuses if the stage has no rosters (`400`).
+4. Adds every roster to Challonge as a participant in one bulk call and stores the returned participant ids.
+5. Sets the stage to `ongoing` here and in Challonge (which seeds and starts the bracket).
+6. Sends a `tournament-start` notification, linking to `/stage/<id>`, to every user in a roster of the stage.
+7. Imports Challonge's round 1 matches as matchups.
+
+From there, results drive the bracket: see [Matches and brackets](/docs/features/matches/).

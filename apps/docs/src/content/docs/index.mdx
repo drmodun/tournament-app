@@ -1,36 +1,64 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: winning.sh
+description: Documentation for the tournament app, a platform for running tournaments, groups, quizzes and team finding.
 template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: A tournament platform with groups, multi-stage tournaments, Challonge-backed brackets, quizzes and team finding. These docs cover how to run it, how it is built, and the rules each feature follows.
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Quick start
+      link: /docs/getting-started/docker/
       icon: right-arrow
       variant: primary
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
+    - text: Architecture
+      link: /docs/architecture/overview/
+      icon: open-book
+      variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from "@astrojs/starlight/components";
 
-## Next steps
+## What is in the repository
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+<CardGrid>
+  <Card title="API" icon="setting">
+    NestJS 11 on Postgres with PostGIS through Drizzle ORM. REST, Swagger UI,
+    and a server-sent events stream for notifications. Lives in `apps/api`.
+  </Card>
+  <Card title="Web app" icon="laptop">
+    Next.js 16 with React 19, TanStack Query and SCSS modules. Maps use MapLibre
+    with OpenFreeMap tiles. Lives in `apps/web`.
+  </Card>
+  <Card title="Shared types" icon="puzzle">
+    `@tournament-app/types` holds the enums, request and response interfaces and
+    constants that both apps import.
+  </Card>
+  <Card title="Infrastructure" icon="rocket">
+    One Docker Compose file starts PostGIS, the API, the web app, these docs, a
+    Mailpit inbox and SeaweedFS S3 storage, with Caddy in front.
+  </Card>
+</CardGrid>
+
+## Start here
+
+<CardGrid>
+  <LinkCard
+    title="Run the whole stack"
+    href="/docs/getting-started/docker/"
+    description="docker compose up, seeded logins and where everything is served."
+  />
+  <LinkCard
+    title="Develop locally"
+    href="/docs/getting-started/local-development/"
+    description="yarn dev against a containerised database."
+  />
+  <LinkCard
+    title="Who can do what"
+    href="/docs/reference/permissions/"
+    description="Every guard and the role it checks, in one table."
+  />
+  <LinkCard
+    title="Known limitations"
+    href="/docs/reference/known-limitations/"
+    description="Behaviour that is easy to trip over, found while writing these docs."
+  />
 </CardGrid>

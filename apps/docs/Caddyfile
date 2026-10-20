@@ -1,0 +1,11 @@
+# Serves the static docs build. Files live under /srv/docs to match the Astro base path /docs.
+:4321 {
+	root * /srv
+	encode zstd gzip
+	file_server
+
+	handle_errors 404 {
+		rewrite * /docs/404.html
+		file_server
+	}
+}

@@ -20,15 +20,8 @@ RUN yarn install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
 RUN yarn turbo build --filter=docs...
 
-FROM base AS runner
-WORKDIR /app/apps/docs
-
-# Don't run as root
-RUN addgroup --system --gid 1002 app \
-  && adduser --system --uid 1002 --ingroup app app
-COPY --from=installer --chown=app:app /app /app
-USER app
-
-# Serves the built docs site with astro preview
+# The site is static: serve it with Caddy, under /docs like the Astro base path
+FROM caddy:2-alpine AS runner
+COPY apps/docs/Caddyfile /etc/caddy/Caddyfile
+COPY --from=installer /app/apps/docs/dist /srv/docs
 EXPOSE 4321
-CMD ["yarn", "astro", "preview", "--host", "0.0.0.0", "--port", "4321"]

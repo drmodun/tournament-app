@@ -1,0 +1,151 @@
+---
+title: API (NestJS)
+description: How the API is organised, the conventions every module follows, and how to add a new one.
+---
+
+The API lives in `apps/api`. Its entry point is `src/main.ts`, and `src/app.module.ts` imports one Nest module per
+feature.
+
+## Bootstrapping (`src/main.ts`)
+
+- Sets `process.env.TZ = 'UTC'`.
+- Registers the global `ValidationPipe({ whitelist: true, transform: true })`.
+- Registers the global `ClassSerializerInterceptor`.
+- Registers two exception filters: `PostgresExceptionFilter` and `NoValuesToSetExceptionFilter` (an update with no
+  fields becomes a `400` instead of a crash).
+- Enables CORS for every origin.
+- Builds the OpenAPI document (title "winning.sh API", bearer auth), serves Swagger UI at `/swagger`, and writes
+  `openapi.yml` when `MODE` is not `production`. The `bump.yml` workflow publishes that spec to Bump.sh.
+- Listens on `API_PORT` (default 5500). `GET /` returns `Hello World!` and is used as the container health check.
+
+## Source layout
+
+```text
+src/
+├── app.module.ts           # imports every feature module
+├── main.ts
+├── auth/                   # login, refresh, Google OAuth, password reset, email confirmation
+├── base/                   # shared building blocks (see below)
+├── db/                     # schema.ts, drizzle/ migrations, seed/
+├── infrastructure/
+│   ├── blob/               # S3 client
+│   ├── email/              # Nodemailer + Handlebars templates
+│   └── sse-notifications/  # notification storage and the SSE stream
+├── users/  group/  group-membership/  group-invites/  group-join-requests/
+├── blocked-groups/  followers/  interest/  category/  location/  career/
+├── tournament/  stage/  participation/  roster/  matches/  challonge/
+├── lfg/  lfp/
+└── quiz/  quiz-attempt/
+```
+
+Each feature folder follows the same shape:
+
+| File                    | Role                                                                  |
+| ----------------------- | --------------------------------------------------------------------- |
+| `*.module.ts`           | Nest module wiring                                                    |
+| `*.controller.ts`       | Routes, guards, Swagger annotations                                   |
+| `*.service.ts`          | Business rules; throws Nest HTTP exceptions                           |
+| `*.repository.ts`       | Drizzle queries, extending a base repository                          |
+| `dto/`                  | `class-validator` request classes, response classes, Swagger examples |
+| `guards/`               | Feature-specific authorisation                                        |
+| `tests/` or `*.spec.ts` | Jest unit tests                                                       |
+
+## Base building blocks (`src/base`)
+
+### Repositories
+
+`base/repository/baseRepository.ts` defines `BaseDrizzleRepository<Table, Query>`. A concrete repository supplies:
+
+- `getMappingObject(responseType)`: the `select` shape for each response type (`mini`, `base`, `extended`, ...).
+- `conditionallyJoin(query, responseType)`: the joins that response type needs.
+- `getValidWhereClause(query)`: turns query parameters into SQL conditions.
+- `sortRecord`: which `field` values are sortable and the column or expression behind each.
+
+From those, the base class builds list queries with filtering, sorting, pagination and an optional total count.
+`primaryRepository.ts` adds create/update/delete for tables with a serial `id`; `compositeRepository.ts` does the
+same for join tables keyed by two columns (for example group membership).
+
+### Queries and responses
+
+Every list endpoint accepts the `BaseQuery` parameters in addition to its own filters:
+
+| Parameter          | Meaning                                                                   |
+| ------------------ | ------------------------------------------------------------------------- |
+| `page`, `pageSize` | Pagination. `page` defaults to 1, `pageSize` to 12, maximum 100           |
+| `field`, `order`   | Sort column (must be in the repository's `sortRecord`) and `asc` / `desc` |
+| `responseType`     | Which projection to return, for example `mini`, `base`, `extended`        |
+| `returnFullCount`  | `true` adds `pagination.total`                                            |
+| `search`           | Free-text filter where the repository supports it                         |
+
+List responses have this shape (built by `base/static/makeMetadata.ts`):
+
+```json
+{
+  "results": [ ... ],
+  "metadata": {
+    "pagination": { "page": 1, "pageSize": 12, "total": 40 },
+    "links": { "first": "/tournaments?page=1", "prev": "/tournaments?page=0", "next": "/tournaments?page=2" },
+    "query": { ... echo of the parsed query ... }
+  }
+}
+```
+
+Single-entity `GET` endpoints accept `responseType` too. Creates return `{ id }` (`ActionResponsePrimary`).
+
+Many modules also expose `GET /<resource>/auto-complete/:search`, a lightweight name search used by the web app's
+autocomplete inputs.
+
+### Decorators and helpers
+
+- `@CurrentUser()` injects `request.user` (a `ValidatedUserDto`: id, email, role and a few profile fields).
+- `@RefreshToken()` injects the refresh token from the `Authorization` header.
+- `@IsDateGreaterThan()` / `@IsNumberGreaterThan()` cross-field validators (for example `endDate > startDate`).
+- `base/static/teamTypeExtractor.ts` derives solo vs team from the participation URL.
+- `base/static/locationHelper.ts` builds PostGIS WKT / geography expressions.
+- `base/static/eloHelper.ts` implements the ELO formula (see [Careers and ELO](/docs/features/careers/)).
+
+### Error translation
+
+`PostgresExceptionFilter` catches driver errors (also when Drizzle wraps them) and maps SQLSTATE codes:
+
+| Postgres code                 | HTTP status | Message                    |
+| ----------------------------- | ----------- | -------------------------- |
+| `23505` unique violation      | 409         | Unique Entity Violation    |
+| `23503` foreign key violation | 422         | Foreign Key Constraint     |
+| `42P01` undefined table       | 400         | Undefined Table            |
+| `42703` undefined column      | 422         | Undefined column mentioned |
+| `08006` connection error      | 503         | Database Connection Error  |
+| anything else                 | 500         | Internal Server Error      |
+
+## Authentication strategies
+
+Passport strategies live in `src/auth/strategies`:
+
+| Strategy               | Name          | Token source                                                       | Used by                                     |
+| ---------------------- | ------------- | ------------------------------------------------------------------ | ------------------------------------------- |
+| `AccessTokenStrategy`  | `jwt`         | `Authorization: Bearer <access>` signed with `JWT_SECRET`          | `JwtAuthGuard` and everything built on it   |
+| `RefreshTokenStrategy` | `jwt-refresh` | `Authorization: Bearer <refresh>` signed with `JWT_REFRESH_SECRET` | `GET /auth/refresh`                         |
+| `GoogleStrategy`       | `google`      | Google OAuth 2                                                     | `GET /auth/google`, `/auth/google/callback` |
+
+The access strategy reloads the user from the database on every request, so role changes and deletions take effect
+immediately even though the token itself carries the role.
+
+Authorisation is done with guards. The full list is in [Permissions](/docs/reference/permissions/).
+
+## Events
+
+`EventEmitterModule.forRoot()` provides an in-process event bus. The notification service emits an event named
+after the recipient's user id; open SSE connections for that user subscribe to it. See
+[Notifications](/docs/features/notifications/).
+
+## Adding a feature module
+
+1. Add tables to `src/db/schema.ts`, then `yarn generate` and `yarn migrate` in `apps/api`.
+2. Add shared enums and request/response interfaces to `packages/types/src/<feature>` and export them from
+   `packages/types/src/index.ts`.
+3. Create `src/<feature>/` with module, controller, service and a repository extending `PrimaryRepository` or
+   `CompositeRepository`.
+4. Implement `getMappingObject`, `conditionallyJoin`, `getValidWhereClause` and `sortRecord`.
+5. Protect routes with `JwtAuthGuard` plus the feature or group guards you need.
+6. Import the module in `app.module.ts`.
+7. Add a seed file under `src/db/seed/` if the feature needs sample data, and wire it in `seedDefinition.ts`.

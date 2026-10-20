@@ -1,4 +1,4 @@
-# Front door for the stack: one address for the web app and the API.
+# Front door for the stack: one address for the web app, the API and the docs.
 #
 # SITE_ADDRESS decides how it listens:
 #   :80           plain HTTP on any hostname (the local default)
@@ -13,6 +13,12 @@
 		reverse_proxy api:5500 {
 			flush_interval -1
 		}
+	}
+
+	# Documentation site, built with base path /docs, so the prefix is kept
+	redir /docs /docs/
+	handle /docs/* {
+		reverse_proxy docs:4321
 	}
 
 	# Everything else is the Next.js app

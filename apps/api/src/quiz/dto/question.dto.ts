@@ -1,3 +1,4 @@
+import { toBoolean } from 'src/base/static/toBoolean';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type, Transform } from 'class-transformer';
 import {
@@ -22,7 +23,7 @@ import { PartialType } from '@nestjs/mapped-types';
 export class CreateQuizQuestionDto implements ICreateQuizQuestionDto {
   @ApiPropertyOptional()
   @IsNumber()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value == null ? value : parseInt(value)))
   @IsOptional()
   quizId?: number;
 
@@ -41,13 +42,13 @@ export class CreateQuizQuestionDto implements ICreateQuizQuestionDto {
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value == null ? value : parseInt(value)))
   timeLimit: number | null;
 
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value == null ? value : parseInt(value)))
   points?: number | null;
 
   @ApiPropertyOptional()
@@ -65,7 +66,7 @@ export class CreateQuizQuestionDto implements ICreateQuizQuestionDto {
   @ApiPropertyOptional()
   @IsBoolean()
   @IsOptional()
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @Transform(toBoolean)
   isImmediateFeedback?: boolean;
 
   @ApiPropertyOptional()

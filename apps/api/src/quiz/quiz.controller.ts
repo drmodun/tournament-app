@@ -114,7 +114,7 @@ export class QuizController {
     @Param('quizId', ParseIntPipe) id: number,
     @Query('responseType') responseType?: QuizResponsesEnum,
   ) {
-    return await this.quizService.findOne(id, responseType);
+    return await this.quizService.findOnePublic(id, responseType);
   }
 
   @Post()

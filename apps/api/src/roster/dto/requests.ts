@@ -1,3 +1,4 @@
+import { toBoolean } from 'src/base/static/toBoolean';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ICreateRosterMemberRequest,
@@ -33,7 +34,7 @@ export class CreateRosterMemberDto implements ICreateRosterMemberRequest {
     default: false,
     type: Boolean,
   })
-  @Transform(({ value }) => (value ? value === 'true' : false))
+  @Transform(toBoolean)
   @IsBoolean()
   isSubstitute: boolean = false;
 }

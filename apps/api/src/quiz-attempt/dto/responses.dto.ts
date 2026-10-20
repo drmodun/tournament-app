@@ -48,6 +48,12 @@ export class QuizAttemptResponse implements IQuizAttemptResponse {
   @ApiResponseProperty()
   currentQuestion: number;
 
+  @ApiResponseProperty({ type: [Number] })
+  questionOrder?: number[];
+
+  @ApiResponseProperty()
+  questionStartedAt?: Date;
+
   @ApiResponseProperty()
   endTime?: Date;
 
@@ -109,4 +115,53 @@ export class QuizLeaderboardResponse {
     pageSize: number;
     totalPages: number;
   };
+}
+
+export class TakerQuizOption {
+  @ApiResponseProperty()
+  id: number;
+
+  @ApiResponseProperty()
+  option: string;
+}
+
+// A question without its correct answers or explanation
+export class TakerQuizQuestion {
+  @ApiResponseProperty()
+  id: number;
+
+  @ApiResponseProperty()
+  question: string;
+
+  @ApiResponseProperty()
+  questionImage?: string;
+
+  @ApiResponseProperty()
+  type: string;
+
+  @ApiResponseProperty()
+  points: number;
+
+  @ApiResponseProperty()
+  timeLimit?: number;
+
+  @ApiResponseProperty({ type: [TakerQuizOption] })
+  options: TakerQuizOption[];
+}
+
+export class CurrentQuestionResponse {
+  @ApiResponseProperty()
+  index: number;
+
+  @ApiResponseProperty()
+  total: number;
+
+  @ApiResponseProperty()
+  startedAt?: Date;
+
+  @ApiResponseProperty()
+  deadline?: Date;
+
+  @ApiResponseProperty({ type: TakerQuizQuestion })
+  question?: TakerQuizQuestion;
 }

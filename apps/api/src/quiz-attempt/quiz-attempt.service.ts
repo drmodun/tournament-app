@@ -21,9 +21,11 @@ import {
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { QuizAttemptDrizzleRepository } from './quiz-attempt.repository';
 import { QuizService } from 'src/quiz/quiz.service';
-
-// Allowance for network latency when the last answer arrives right at the time limit
-const ANSWER_GRACE_SECONDS = 10;
+import {
+  ANSWER_GRACE_SECONDS,
+  questionOrderFor,
+  resolveQuestionPosition,
+} from './questionTiming';
 
 @Injectable()
 export class QuizAttemptService {
@@ -68,9 +70,18 @@ export class QuizAttemptService {
       return existingAttempt;
     }
 
+    const [questions, settings] = await Promise.all([
+      this.repository.getOrderedQuestions(createQuizAttemptDto.quizId, null),
+      this.repository.getQuizSettings(createQuizAttemptDto.quizId),
+    ]);
+
     const attempt = await this.repository.createQuizAttempt(
       createQuizAttemptDto.userId,
       createQuizAttemptDto.quizId,
+      questionOrderFor(
+        questions.map((question) => question.id),
+        !!settings?.isRandomizedQuestions,
+      ),
     );
 
     if (!attempt) {
@@ -138,17 +149,126 @@ export class QuizAttemptService {
     userId: number,
     createAnswerDto: CreateQuizAnswerRequest,
   ) {
+    const progress = await this.getQuestionProgress(attemptId);
+
     const answer = await this.repository.createAnswer(
       userId,
       attemptId,
       createAnswerDto,
+      { isFinal: progress.isOneAtATime },
     );
 
     if (!answer) {
       throw new UnprocessableEntityException('Answer creation failed');
     }
 
+    // The next question is shown as soon as this one is answered
+    if (progress.isOneAtATime) {
+      await this.repository.setQuestionPosition(
+        attemptId,
+        progress.position.index + 1,
+        new Date(),
+      );
+    }
+
     return answer;
+  }
+
+  // Where an attempt stands. Quizzes that are not tests show one question at a time, in the
+  // attempt's order, each within its own time limit.
+  async getQuestionProgress(attemptId: number) {
+    const timing = await this.repository.getAttemptTiming(attemptId);
+
+    if (!timing) {
+      throw new NotFoundException(
+        `Quiz attempt with ID ${attemptId} not found`,
+      );
+    }
+
+    const questions = await this.repository.getOrderedQuestions(
+      timing.quizId,
+      timing.questionOrder,
+    );
+
+    const index = timing.currentQuestion ?? 0;
+    const position = resolveQuestionPosition(
+      questions,
+      index,
+      new Date(timing.questionStartedAt ?? timing.startedAt),
+      Date.now(),
+    );
+
+    // Questions skipped because their time ran out are recorded, so they stay skipped
+    if (!timing.isTest && position.index !== index) {
+      await this.repository.setQuestionPosition(
+        attemptId,
+        position.index,
+        position.startedAt,
+      );
+    }
+
+    return { isOneAtATime: !timing.isTest, questions, position };
+  }
+
+  async getCurrentQuestion(attemptId: number) {
+    const { isOneAtATime, questions, position } =
+      await this.getQuestionProgress(attemptId);
+
+    if (!isOneAtATime) {
+      throw new BadRequestException(
+        'This quiz is a test: all of its questions are shown at once',
+      );
+    }
+
+    const current = questions[position.index];
+
+    return {
+      index: position.index,
+      total: questions.length,
+      startedAt: current ? position.startedAt : null,
+      deadline: position.deadline,
+      question: current
+        ? await this.repository.getQuestionForTaker(current.id)
+        : null,
+    };
+  }
+
+  // In a quiz shown one question at a time only the current question can be answered, and only once
+  async checkQuestionIsCurrent(attemptId: number, questionId: number) {
+    const { isOneAtATime, questions, position } =
+      await this.getQuestionProgress(attemptId);
+
+    if (!isOneAtATime) {
+      return;
+    }
+
+    const asked = questions.findIndex((question) => question.id === questionId);
+
+    if (asked === -1) {
+      throw new NotFoundException(
+        `Quiz question with ID ${questionId} not found in this quiz`,
+      );
+    }
+
+    if (asked < position.index) {
+      throw new ForbiddenException(
+        'This question is closed: it was answered or its time ran out',
+      );
+    }
+
+    if (asked > position.index) {
+      throw new ForbiddenException('Only the current question can be answered');
+    }
+  }
+
+  async checkAnswersCanChange(attemptId: number) {
+    const timing = await this.repository.getAttemptTiming(attemptId);
+
+    if (timing && !timing.isTest) {
+      throw new ForbiddenException(
+        'Answers cannot be changed in a quiz shown one question at a time',
+      );
+    }
   }
 
   async updateAnswer(

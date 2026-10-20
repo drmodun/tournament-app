@@ -1,3 +1,4 @@
+import { toBoolean } from 'src/base/static/toBoolean';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Type, Transform } from 'class-transformer';
 import {
@@ -44,7 +45,7 @@ export class CreateQuizRequest implements CreateQuizDto {
   @IsOptional()
   @IsNumber()
   @Min(60)
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value == null ? value : parseInt(value)))
   timeLimitTotal?: number | null;
 
   @ApiPropertyOptional({
@@ -55,7 +56,7 @@ export class CreateQuizRequest implements CreateQuizDto {
     nullable: true,
   })
   @IsNumber()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value == null ? value : parseInt(value)))
   @IsOptional()
   @Min(0)
   @Max(100)
@@ -66,7 +67,7 @@ export class CreateQuizRequest implements CreateQuizDto {
     example: true,
     nullable: true,
   })
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @Transform(toBoolean)
   @IsBoolean()
   @IsOptional()
   isImmediateFeedback?: boolean | null;
@@ -76,7 +77,7 @@ export class CreateQuizRequest implements CreateQuizDto {
     example: true,
     nullable: true,
   })
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @Transform(toBoolean)
   @IsBoolean()
   @IsOptional()
   isRandomizedQuestions?: boolean | null;
@@ -85,7 +86,7 @@ export class CreateQuizRequest implements CreateQuizDto {
     description: 'Whether anonymous users can take the quiz',
     example: false,
   })
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @Transform(toBoolean)
   @IsBoolean()
   @IsOptional()
   isAnonymousAllowed?: boolean;
@@ -94,7 +95,7 @@ export class CreateQuizRequest implements CreateQuizDto {
     description: 'Whether users can retake the quiz after completion',
     example: true,
   })
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @Transform(toBoolean)
   @IsBoolean()
   @IsOptional()
   isRetakeable?: boolean;
@@ -119,7 +120,7 @@ export class CreateQuizRequest implements CreateQuizDto {
     nullable: true,
   })
   @IsNumber()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value == null ? value : parseInt(value)))
   @IsOptional()
   matchupId?: number | null;
 
@@ -129,7 +130,7 @@ export class CreateQuizRequest implements CreateQuizDto {
     nullable: true,
   })
   @IsNumber()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => (value == null ? value : parseInt(value)))
   @IsOptional()
   stageId?: number | null;
 
@@ -139,7 +140,7 @@ export class CreateQuizRequest implements CreateQuizDto {
   })
   @IsBoolean()
   @IsOptional()
-  @Transform(({ value }) => (value ? value === 'true' : undefined))
+  @Transform(toBoolean)
   isTest?: boolean;
 
   @ApiPropertyOptional({

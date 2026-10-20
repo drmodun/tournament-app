@@ -32,7 +32,7 @@ export class CanSubmitAnswerGuard implements CanActivate {
     if (request.method === 'POST') {
       await this.checkForPostAttempt(attemptId, questionId);
     } else if (request.method === 'PUT') {
-      await this.checkForPutAttempt(answerId);
+      await this.checkForPutAttempt(attemptId, answerId);
     }
 
     return true;
@@ -40,9 +40,12 @@ export class CanSubmitAnswerGuard implements CanActivate {
 
   async checkForPostAttempt(attemptId: number, questionId: number) {
     await this.quizAttemptService.checkIfAnswerExists(attemptId, questionId);
+    await this.quizAttemptService.checkQuestionIsCurrent(attemptId, questionId);
   }
 
-  async checkForPutAttempt(answerId: number) {
+  async checkForPutAttempt(attemptId: number, answerId: number) {
+    await this.quizAttemptService.checkAnswersCanChange(attemptId);
+
     const isFinal =
       await this.quizAttemptService.checkIfTheAnswerIsFinal(answerId);
 

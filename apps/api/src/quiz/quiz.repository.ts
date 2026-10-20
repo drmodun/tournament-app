@@ -30,6 +30,7 @@ import {
   QuizReturnTypesEnumType,
 } from '@tournament-app/types';
 import { CreateQuizRequest, UpdateQuizRequest } from './dto/requests.dto';
+import { CreateQuizQuestionDto } from './dto/question.dto';
 
 @Injectable()
 export class QuizDrizzleRepository extends PrimaryRepository<
@@ -127,7 +128,8 @@ export class QuizDrizzleRepository extends PrimaryRepository<
           attempts: sql`(SELECT COUNT(*) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id})`,
           averageScore: sql`(SELECT AVG(score) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id})`,
           medianScore: sql`(SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY score) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id})`,
-          passingRate: sql`(SELECT COUNT(*) * 100.0 / NULLIF(COUNT(*), 0) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id} AND quiz_attempt.score >= ${quiz.passingScore})`,
+          // passingScore is a percentage of the quiz's total points; only submitted attempts count
+          passingRate: sql`(SELECT COUNT(*) FILTER (WHERE quiz_attempt.score * 100 >= ${quiz.passingScore} * (SELECT COALESCE(SUM(points), 0) FROM quiz_question WHERE quiz_question.quiz_id = ${quiz.id})) * 100.0 / NULLIF(COUNT(*), 0) FROM quiz_attempt WHERE quiz_attempt.quiz_id = ${quiz.id} AND quiz_attempt.is_submitted)`,
           isRandomizedQuestions: quiz.isRandomizedQuestions,
           isImmediateFeedback: quiz.isImmediateFeedback,
           isTest: quiz.isTest,
@@ -170,9 +172,8 @@ export class QuizDrizzleRepository extends PrimaryRepository<
             'options', (
               SELECT ARRAY_AGG(JSONB_BUILD_OBJECT(
                 'id', qo.id,
-                'option', qo.option,
-                'isCorrect', qo.is_correct,
-              ))
+                'option', qo.option
+              ) ORDER BY qo.id)
               FROM quiz_option qo
               WHERE qo.quiz_question_id = ${quizQuestion.id}
             )
@@ -237,26 +238,8 @@ export class QuizDrizzleRepository extends PrimaryRepository<
 
       await tx.delete(quizQuestion).where(eq(quizQuestion.quizId, id));
 
-      for (const question of updateRequest.questions) {
-        const questionId = await tx
-          .insert(quizQuestion)
-          .values({
-            ...question,
-            quizId: id,
-            correctAnswers: question.correctAnswers?.join(','),
-          } as InferInsertModel<typeof quizQuestion>)
-          .returning({ id: quizQuestion.id });
-
-        await tx
-          .delete(quizOption)
-          .where(eq(quizOption.quizQuestionId, questionId[0].id));
-
-        await tx.insert(quizOption).values(
-          question.options.map((option) => ({
-            ...option,
-            quizQuestionId: questionId[0].id,
-          })),
-        );
+      for (const question of updateRequest.questions ?? []) {
+        await this.insertQuestion(tx, id, question);
       }
 
       const updatedQuiz = await tx
@@ -280,23 +263,44 @@ export class QuizDrizzleRepository extends PrimaryRepository<
         .returning({ id: quiz.id });
 
       for (const question of createRequest.questions) {
-        const questionId = await tx
-          .insert(quizQuestion)
-          .values({
-            ...question,
-            quizId: quizToCreate[0].id,
-            correctAnswers: question.correctAnswers?.join(','),
-          } as InferInsertModel<typeof quizQuestion>)
-          .returning({ id: quizQuestion.id });
-
-        await tx.insert(quizOption).values(
-          question.options.map((option) => ({
-            ...option,
-            quizQuestionId: questionId[0].id,
-          })),
-        );
+        await this.insertQuestion(tx, quizToCreate[0].id, question);
       }
       return quizToCreate[0];
     });
+  }
+
+  // The request names the type and image questionType and image; questions without options (short
+  // answers and the like) have none to insert
+  private async insertQuestion(
+    tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
+    quizId: number,
+    {
+      questionType,
+      image,
+      options,
+      correctAnswers,
+      ...question
+    }: CreateQuizQuestionDto,
+  ) {
+    const [created] = await tx
+      .insert(quizQuestion)
+      .values({
+        ...question,
+        quizId,
+        type: questionType,
+        questionImage: image,
+        correctAnswers: correctAnswers?.join(','),
+      } as InferInsertModel<typeof quizQuestion>)
+      .returning({ id: quizQuestion.id });
+
+    if (options?.length) {
+      await tx.insert(quizOption).values(
+        options.map(({ option, isCorrect }) => ({
+          option,
+          isCorrect,
+          quizQuestionId: created.id,
+        })),
+      );
+    }
   }
 }

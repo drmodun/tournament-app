@@ -1,3 +1,4 @@
+import { toBoolean } from 'src/base/static/toBoolean';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNumber, IsBoolean, IsOptional } from 'class-validator';
 import { ICreateQuizOptionDto } from '@tournament-app/types';
@@ -10,7 +11,7 @@ export class CreateQuizOptionDto implements ICreateQuizOptionDto {
 
   @ApiProperty()
   @IsBoolean()
-  @Transform(({ value }) => value === 'true')
+  @Transform(toBoolean)
   isCorrect: boolean;
 
   @ApiPropertyOptional()

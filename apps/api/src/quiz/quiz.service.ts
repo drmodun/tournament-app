@@ -4,6 +4,7 @@ import {
   UnprocessableEntityException,
   ForbiddenException,
   NotImplementedException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   QuizResponsesEnum,
@@ -37,9 +38,13 @@ export class QuizService {
   ): Promise<TResponseType[]> {
     const { responseType = QuizResponsesEnum.BASE, ...queryParams } = query;
 
-    if (responseType == QuizResponsesEnum.EXTENDED) {
+    // Both carry the questions; the extended one also their answers
+    if (
+      responseType == QuizResponsesEnum.EXTENDED ||
+      responseType == QuizResponsesEnum.FOR_ATTEMPT
+    ) {
       throw new NotImplementedException(
-        'Extended response type not allowed from this endpoint',
+        `${responseType} response type not allowed from this endpoint`,
       );
     }
 
@@ -71,6 +76,40 @@ export class QuizService {
     }
 
     return results[0] as TResponseType;
+  }
+
+  // What anyone may read. Correct answers stay with the author (GET /quiz/detailed/:quizId). The
+  // questions are listed once the quiz has started, and only for tests: other quizzes show one
+  // question at a time through the attempt.
+  async findOnePublic<TResponseType extends BaseQuizResponse>(
+    id: number,
+    responseType: QuizReturnTypesEnumType = QuizResponsesEnum.BASE,
+  ): Promise<TResponseType> {
+    if (responseType === QuizResponsesEnum.EXTENDED) {
+      throw new BadRequestException(
+        'The extended quiz includes the answers; its author can read it at GET /quiz/detailed/:quizId',
+      );
+    }
+
+    const quiz = await this.findOne<TResponseType>(id, responseType);
+
+    if (responseType !== QuizResponsesEnum.FOR_ATTEMPT) {
+      return quiz;
+    }
+
+    const settings = quiz as unknown as { startDate: Date; isTest: boolean };
+
+    if (new Date(settings.startDate).getTime() > Date.now()) {
+      throw new ForbiddenException('This quiz has not started yet');
+    }
+
+    if (!settings.isTest) {
+      throw new BadRequestException(
+        'This quiz shows one question at a time: use GET /quiz-attempt/:attemptId/current-question',
+      );
+    }
+
+    return quiz;
   }
 
   async update(id: number, updateQuizDto: UpdateQuizRequest) {

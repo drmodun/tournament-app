@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   quizAttempt,
   quizAnswer,
@@ -15,6 +19,7 @@ import {
   ColumnBaseConfig,
   ColumnDataType,
   and,
+  asc,
   eq,
   InferSelectModel,
   SQL,
@@ -96,6 +101,8 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
           userId: quizAttempt.userId,
           quizId: quizAttempt.quizId,
           currentQuestion: quizAttempt.currentQuestion,
+          questionOrder: quizAttempt.questionOrder,
+          questionStartedAt: quizAttempt.questionStartedAt,
           endTime: quizAttempt.endTime,
           score: quizAttempt.score,
           isSubmitted: quizAttempt.isSubmitted,
@@ -142,12 +149,15 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
   async createQuizAttempt(
     userId: number,
     quizId: number,
+    questionOrder: number[],
   ): Promise<{ id: number }> {
     const result = await db
       .insert(quizAttempt)
       .values({
         userId,
         quizId,
+        questionOrder,
+        questionStartedAt: new Date(),
         currentQuestion: 0,
         score: 0,
         isSubmitted: false,
@@ -224,12 +234,132 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
         quizStartDate: quiz.startDate,
         quizEndDate: quiz.endDate,
         timeLimitTotal: quiz.timeLimitTotal,
+        quizId: quiz.id,
+        isTest: quiz.isTest,
+        currentQuestion: quizAttempt.currentQuestion,
+        questionOrder: quizAttempt.questionOrder,
+        questionStartedAt: quizAttempt.questionStartedAt,
       })
       .from(quizAttempt)
       .innerJoin(quiz, eq(quizAttempt.quizId, quiz.id))
       .where(eq(quizAttempt.id, attemptId));
 
     return result[0];
+  }
+
+  async getQuizSettings(quizId: number) {
+    const [result] = await db
+      .select({
+        isTest: quiz.isTest,
+        isRandomizedQuestions: quiz.isRandomizedQuestions,
+      })
+      .from(quiz)
+      .where(eq(quiz.id, quizId));
+
+    return result;
+  }
+
+  // The quiz's questions with their time limits, in the attempt's order. Attempts started before
+  // the order was stored see the questions by id.
+  async getOrderedQuestions(quizId: number, questionOrder: number[] | null) {
+    const questions = await db
+      .select({ id: quizQuestion.id, timeLimit: quizQuestion.timeLimit })
+      .from(quizQuestion)
+      .where(eq(quizQuestion.quizId, quizId))
+      .orderBy(asc(quizQuestion.id));
+
+    if (!questionOrder?.length) {
+      return questions;
+    }
+
+    const position = new Map(questionOrder.map((id, index) => [id, index]));
+
+    // Questions added after the attempt started go last
+    return [...questions].sort(
+      (a, b) =>
+        (position.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+        (position.get(b.id) ?? Number.MAX_SAFE_INTEGER),
+    );
+  }
+
+  async setQuestionPosition(attemptId: number, index: number, startedAt: Date) {
+    await db
+      .update(quizAttempt)
+      .set({
+        currentQuestion: index,
+        questionStartedAt: startedAt,
+      } as Partial<InferInsertModel<typeof quizAttempt>>)
+      .where(eq(quizAttempt.id, attemptId));
+  }
+
+  // A question as the person taking the quiz sees it: no correct answers or explanation
+  async getQuestionForTaker(questionId: number) {
+    const [question] = await db
+      .select({
+        id: quizQuestion.id,
+        question: quizQuestion.question,
+        questionImage: quizQuestion.questionImage,
+        type: quizQuestion.type,
+        points: quizQuestion.points,
+        timeLimit: quizQuestion.timeLimit,
+      })
+      .from(quizQuestion)
+      .where(eq(quizQuestion.id, questionId));
+
+    if (!question) {
+      return null;
+    }
+
+    const options = await db
+      .select({ id: quizOption.id, option: quizOption.option })
+      .from(quizOption)
+      .where(eq(quizOption.quizQuestionId, questionId))
+      .orderBy(asc(quizOption.id));
+
+    return { ...question, options };
+  }
+
+  // Refuses answers to another quiz's question, or naming another question's option
+  private async checkAnswerTarget(
+    quizId: number,
+    quizQuestionId: number,
+    selectedOptionId?: number,
+  ) {
+    const [question] = await db
+      .select({ id: quizQuestion.id })
+      .from(quizQuestion)
+      .where(
+        and(
+          eq(quizQuestion.id, quizQuestionId),
+          eq(quizQuestion.quizId, quizId),
+        ),
+      );
+
+    if (!question) {
+      throw new NotFoundException(
+        `Quiz question with ID ${quizQuestionId} not found in this quiz`,
+      );
+    }
+
+    if (selectedOptionId == null) {
+      return;
+    }
+
+    const [option] = await db
+      .select({ id: quizOption.id })
+      .from(quizOption)
+      .where(
+        and(
+          eq(quizOption.id, selectedOptionId),
+          eq(quizOption.quizQuestionId, quizQuestionId),
+        ),
+      );
+
+    if (!option) {
+      throw new BadRequestException(
+        `Option ${selectedOptionId} does not belong to question ${quizQuestionId}`,
+      );
+    }
   }
 
   async getQuizAttemptForUser(userId: number, quizId: number): Promise<any> {
@@ -256,6 +386,7 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     userId: number,
     attemptId: number,
     createAnswerDto: CreateQuizAnswerRequest,
+    { isFinal = false }: { isFinal?: boolean } = {},
   ): Promise<{ id: number }> {
     // Check if the attempt exists and if it belongs to the user
     const attemptData = await db
@@ -284,6 +415,12 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
       );
     }
 
+    await this.checkAnswerTarget(
+      attemptData[0].quizId,
+      createAnswerDto.quizQuestionId,
+      createAnswerDto.selectedOptionId,
+    );
+
     // Check if there's already an answer for this question in this attempt
     const existingAnswer = await db
       .select({ id: quizAnswer.id })
@@ -303,71 +440,24 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
       });
     }
 
-    // Get the question to check if we should provide immediate feedback
-    const questionData = await db
-      .select({
-        id: quizQuestion.id,
-        isImmediateFeedback: quizQuestion.isImmediateFeedback,
-        correctAnswers: quizQuestion.correctAnswers,
-        type: quizQuestion.type,
-      })
-      .from(quizQuestion)
-      .where(eq(quizQuestion.id, createAnswerDto.quizQuestionId));
+    const { isCorrect, isImmediateFeedback } = await this.checkAnswer(
+      createAnswerDto.quizQuestionId,
+      createAnswerDto,
+    );
 
-    if (!questionData.length) {
-      throw new NotFoundException(
-        `Quiz question with ID ${createAnswerDto.quizQuestionId} not found`,
-      );
-    }
-
-    // Determine if the answer is correct
-    let isCorrect = false;
-    const question = questionData[0];
-
-    if (
-      question.type === 'multiple_choice' &&
-      createAnswerDto.selectedOptionId
-    ) {
-      // For multiple choice, check if the selected option is correct
-      const optionData = await db
-        .select({ isCorrect: quizOption.isCorrect })
-        .from(quizOption)
-        .where(eq(quizOption.id, createAnswerDto.selectedOptionId));
-
-      if (optionData.length) {
-        isCorrect = optionData[0].isCorrect;
-      }
-    } else if (question.correctAnswers) {
-      // For other question types, check against correct answers
-      const correctAnswers = question.correctAnswers.split(',');
-      isCorrect = correctAnswers.includes(createAnswerDto.answer.trim());
-    }
-
-    // For immediate feedback questions, mark the answer as final
-    const isFinal = question.isImmediateFeedback;
-
-    // Insert the answer
+    // Immediate-feedback answers are final, as are all answers in a quiz shown one question at a time
     const result = await db
       .insert(quizAnswer)
       .values({
         userId,
         quizAttemptId: attemptId,
         quizQuestionId: createAnswerDto.quizQuestionId,
-        answer: createAnswerDto.answer,
+        answer: createAnswerDto.answer ?? '',
         selectedOptionId: createAnswerDto.selectedOptionId,
         isCorrect,
-        isFinal,
+        isFinal: isFinal || isImmediateFeedback,
       } as InferInsertModel<typeof quizAnswer>)
       .returning({ id: quizAnswer.id });
-
-    if (isFinal) {
-      await db
-        .update(quizAttempt)
-        .set({
-          currentQuestion: sql`${quizAttempt.currentQuestion} + 1`,
-        })
-        .where(eq(quizAttempt.id, attemptId));
-    }
 
     return result[0];
   }
@@ -401,7 +491,10 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     }
 
     const attemptData = await db
-      .select({ isSubmitted: quizAttempt.isSubmitted })
+      .select({
+        isSubmitted: quizAttempt.isSubmitted,
+        quizId: quizAttempt.quizId,
+      })
       .from(quizAttempt)
       .where(eq(quizAttempt.id, answerData[0].quizAttemptId));
 
@@ -411,37 +504,16 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
       );
     }
 
-    const questionData = await db
-      .select({
-        id: quizQuestion.id,
-        isImmediateFeedback: quizQuestion.isImmediateFeedback,
-        correctAnswers: quizQuestion.correctAnswers,
-        type: quizQuestion.type,
-      })
-      .from(quizQuestion)
-      .where(eq(quizQuestion.id, answerData[0].quizQuestionId));
+    await this.checkAnswerTarget(
+      attemptData[0].quizId,
+      answerData[0].quizQuestionId,
+      updateAnswerDto.selectedOptionId,
+    );
 
-    let isCorrect = false;
-    const question = questionData[0];
-
-    if (
-      question.type === 'multiple_choice' &&
-      updateAnswerDto.selectedOptionId
-    ) {
-      const optionData = await db
-        .select({ isCorrect: quizOption.isCorrect })
-        .from(quizOption)
-        .where(eq(quizOption.id, updateAnswerDto.selectedOptionId));
-
-      if (optionData.length) {
-        isCorrect = optionData[0].isCorrect;
-      }
-    } else if (question.correctAnswers && updateAnswerDto.answer) {
-      const correctAnswers = question.correctAnswers.split(',');
-      isCorrect = correctAnswers.includes(updateAnswerDto.answer.trim());
-    }
-
-    const isFinal = question.isImmediateFeedback;
+    const { isCorrect, isImmediateFeedback } = await this.checkAnswer(
+      answerData[0].quizQuestionId,
+      updateAnswerDto,
+    );
 
     const result = await db
       .update(quizAnswer)
@@ -449,21 +521,43 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
         answer: updateAnswerDto.answer,
         selectedOptionId: updateAnswerDto.selectedOptionId,
         isCorrect,
-        isFinal,
+        isFinal: isImmediateFeedback,
       } as Partial<InferInsertModel<typeof quizAnswer>>)
       .where(eq(quizAnswer.id, answerId))
       .returning({ id: quizAnswer.id });
 
-    if (isFinal) {
-      await db
-        .update(quizAttempt)
-        .set({
-          currentQuestion: sql`${quizAttempt.currentQuestion} + 1`,
-        })
-        .where(eq(quizAttempt.id, answerData[0].quizAttemptId));
+    return result[0];
+  }
+
+  // Multiple choice: the selected option's isCorrect. Other types: the trimmed answer must equal
+  // one of the comma-separated correct answers.
+  private async checkAnswer(
+    quizQuestionId: number,
+    { answer, selectedOptionId }: UpdateQuizAnswerRequest,
+  ) {
+    const [question] = await db
+      .select({
+        isImmediateFeedback: quizQuestion.isImmediateFeedback,
+        correctAnswers: quizQuestion.correctAnswers,
+        type: quizQuestion.type,
+      })
+      .from(quizQuestion)
+      .where(eq(quizQuestion.id, quizQuestionId));
+
+    let isCorrect = false;
+
+    if (question.type === 'multiple_choice' && selectedOptionId) {
+      const optionData = await db
+        .select({ isCorrect: quizOption.isCorrect })
+        .from(quizOption)
+        .where(eq(quizOption.id, selectedOptionId));
+
+      isCorrect = !!optionData[0]?.isCorrect;
+    } else if (question.correctAnswers && answer) {
+      isCorrect = question.correctAnswers.split(',').includes(answer.trim());
     }
 
-    return result[0];
+    return { isCorrect, isImmediateFeedback: !!question.isImmediateFeedback };
   }
 
   async checkIfAnswerIsFinal(answerId: number): Promise<boolean> {
@@ -471,6 +565,10 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
       .select({ isFinal: quizAnswer.isFinal })
       .from(quizAnswer)
       .where(eq(quizAnswer.id, answerId));
+
+    if (!answerData.length) {
+      throw new NotFoundException(`Answer with ID ${answerId} not found`);
+    }
 
     return answerData[0].isFinal;
   }

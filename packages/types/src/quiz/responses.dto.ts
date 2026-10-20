@@ -81,6 +81,8 @@ export interface IQuizAttemptResponse {
   userId: number;
   quizId: number;
   currentQuestion: number;
+  questionOrder?: number[];
+  questionStartedAt?: Date;
   endTime?: Date;
   score: number;
   isSubmitted: boolean;

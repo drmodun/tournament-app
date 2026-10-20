@@ -17,6 +17,7 @@ import {
   UpdateQuizAnswerRequest,
 } from './dto/requests.dto';
 import {
+  CurrentQuestionResponse,
   QuizAnswerResponse,
   QuizAttemptResponse,
   QuizAttemptWithAnswersResponse,
@@ -119,6 +120,18 @@ export class QuizAttemptController {
     @Query('responseType') responseType?: QuizAttemptResponsesEnum,
   ) {
     return await this.quizAttemptService.findOne(id, responseType);
+  }
+
+  @Get(':attemptId/current-question')
+  @UseGuards(JwtAuthGuard, CanAccessAttemptGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description:
+      'For a quiz shown one question at a time: the question to answer now and when its time runs out. `question` is null once every question is done',
+    type: CurrentQuestionResponse,
+  })
+  async getCurrentQuestion(@Param('attemptId', ParseIntPipe) id: number) {
+    return await this.quizAttemptService.getCurrentQuestion(id);
   }
 
   @Post(':quizId')

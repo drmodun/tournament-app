@@ -25,6 +25,10 @@ describe('QuizAttemptService', () => {
     getUserAttempts: jest.fn(),
     hasSubmittedAttempt: jest.fn(),
     getAttemptTiming: jest.fn(),
+    getOrderedQuestions: jest.fn(),
+    getQuizSettings: jest.fn(),
+    setQuestionPosition: jest.fn(),
+    getQuestionForTaker: jest.fn(),
   };
 
   const mockQuizService = {
@@ -71,6 +75,13 @@ describe('QuizAttemptService', () => {
       mockQuizService.findOne.mockResolvedValue(mockQuiz);
       mockRepository.getQuizAttemptForUser.mockResolvedValue(null);
       mockRepository.createQuizAttempt.mockResolvedValue(mockAttempt);
+      mockRepository.getOrderedQuestions.mockResolvedValue([
+        { id: 4, timeLimit: null },
+        { id: 2, timeLimit: 30 },
+      ]);
+      mockRepository.getQuizSettings.mockResolvedValue({
+        isRandomizedQuestions: false,
+      });
 
       const result = await service.create(createDto);
 
@@ -80,7 +91,11 @@ describe('QuizAttemptService', () => {
         userId,
         quizId,
       );
-      expect(repository.createQuizAttempt).toHaveBeenCalledWith(userId, quizId);
+      expect(repository.createQuizAttempt).toHaveBeenCalledWith(
+        userId,
+        quizId,
+        [2, 4],
+      );
     });
 
     it('should return existing attempt if one exists', async () => {
@@ -142,6 +157,8 @@ describe('QuizAttemptService', () => {
 
     it('should throw UnprocessableEntityException if attempt creation fails', async () => {
       mockQuizService.findOne.mockResolvedValue(mockQuiz);
+      mockRepository.getOrderedQuestions.mockResolvedValue([]);
+      mockRepository.getQuizSettings.mockResolvedValue({});
       mockRepository.getQuizAttemptForUser.mockResolvedValue(null);
       mockRepository.createQuizAttempt.mockResolvedValue(null);
 
@@ -222,8 +239,24 @@ describe('QuizAttemptService', () => {
     const userId = 1;
     const createAnswerDto = { quizQuestionId: 1, answer: 'Test answer' };
     const mockAnswer = { id: 1 };
+    const timing = (isTest: boolean) => ({
+      quizId: 3,
+      isTest,
+      currentQuestion: 0,
+      questionOrder: [1, 2],
+      startedAt: new Date(),
+      questionStartedAt: new Date(),
+    });
 
-    it('should create answer successfully', async () => {
+    beforeEach(() => {
+      mockRepository.getOrderedQuestions.mockResolvedValue([
+        { id: 1, timeLimit: 60 },
+        { id: 2, timeLimit: null },
+      ]);
+    });
+
+    it('should create answer successfully in a test', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(timing(true));
       mockRepository.createAnswer.mockResolvedValue(mockAnswer);
 
       const result = await service.createAnswer(
@@ -237,15 +270,151 @@ describe('QuizAttemptService', () => {
         userId,
         attemptId,
         createAnswerDto,
+        { isFinal: false },
+      );
+      expect(repository.setQuestionPosition).not.toHaveBeenCalled();
+    });
+
+    it('makes the answer final and shows the next question in a quiz shown one at a time', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(timing(false));
+      mockRepository.createAnswer.mockResolvedValue(mockAnswer);
+
+      await service.createAnswer(attemptId, userId, createAnswerDto);
+
+      expect(repository.createAnswer).toHaveBeenCalledWith(
+        userId,
+        attemptId,
+        createAnswerDto,
+        { isFinal: true },
+      );
+      expect(repository.setQuestionPosition).toHaveBeenCalledWith(
+        attemptId,
+        1,
+        expect.any(Date),
       );
     });
 
     it('should throw UnprocessableEntityException if answer creation fails', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(timing(true));
       mockRepository.createAnswer.mockResolvedValue(null);
 
       await expect(
         service.createAnswer(attemptId, userId, createAnswerDto),
       ).rejects.toThrow(UnprocessableEntityException);
+    });
+  });
+
+  describe('one question at a time', () => {
+    const questions = [
+      { id: 7, timeLimit: 30 },
+      { id: 5, timeLimit: null },
+    ];
+    const attemptAt = (secondsAgo: number, isTest = false) => ({
+      quizId: 3,
+      isTest,
+      currentQuestion: 0,
+      questionOrder: [7, 5],
+      startedAt: new Date(Date.now() - secondsAgo * 1000),
+      questionStartedAt: new Date(Date.now() - secondsAgo * 1000),
+    });
+
+    beforeEach(() => {
+      mockRepository.getOrderedQuestions.mockResolvedValue(questions);
+    });
+
+    it('returns the current question without its answers, with its deadline', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(5));
+      mockRepository.getQuestionForTaker.mockResolvedValue({
+        id: 7,
+        question: 'Q',
+        options: [{ id: 1, option: 'A' }],
+      });
+
+      const result = await service.getCurrentQuestion(1);
+
+      expect(result).toMatchObject({ index: 0, total: 2 });
+      expect(result.deadline).toBeInstanceOf(Date);
+      expect(result.question).toEqual({
+        id: 7,
+        question: 'Q',
+        options: [{ id: 1, option: 'A' }],
+      });
+      expect(repository.getQuestionForTaker).toHaveBeenCalledWith(7);
+      expect(repository.setQuestionPosition).not.toHaveBeenCalled();
+    });
+
+    it('moves past a question whose time ran out and records it', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(60));
+      mockRepository.getQuestionForTaker.mockResolvedValue({ id: 5 });
+
+      const result = await service.getCurrentQuestion(1);
+
+      expect(result.index).toBe(1);
+      expect(result.deadline).toBeNull();
+      expect(repository.setQuestionPosition).toHaveBeenCalledWith(
+        1,
+        1,
+        expect.any(Date),
+      );
+    });
+
+    it('returns no question once every question is done', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue({
+        ...attemptAt(5),
+        currentQuestion: 2,
+      });
+
+      const result = await service.getCurrentQuestion(1);
+
+      expect(result).toMatchObject({ index: 2, total: 2, question: null });
+    });
+
+    it('refuses for a test, which shows every question', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(5, true));
+
+      await expect(service.getCurrentQuestion(1)).rejects.toThrow(
+        'all of its questions are shown at once',
+      );
+    });
+
+    it('accepts an answer to the current question only', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(5));
+
+      await expect(
+        service.checkQuestionIsCurrent(1, 7),
+      ).resolves.toBeUndefined();
+      await expect(service.checkQuestionIsCurrent(1, 5)).rejects.toThrow(
+        'Only the current question can be answered',
+      );
+      await expect(service.checkQuestionIsCurrent(1, 99)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('refuses an answer after the question time ran out', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(60));
+
+      await expect(service.checkQuestionIsCurrent(1, 7)).rejects.toThrow(
+        'This question is closed',
+      );
+    });
+
+    it('accepts any question in a test', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(60, true));
+
+      await expect(
+        service.checkQuestionIsCurrent(1, 5),
+      ).resolves.toBeUndefined();
+    });
+
+    it('refuses changed answers only outside tests', async () => {
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(5));
+      await expect(service.checkAnswersCanChange(1)).rejects.toThrow(
+        ForbiddenException,
+      );
+
+      mockRepository.getAttemptTiming.mockResolvedValue(attemptAt(5, true));
+      await expect(service.checkAnswersCanChange(1)).resolves.toBeUndefined();
     });
   });
 

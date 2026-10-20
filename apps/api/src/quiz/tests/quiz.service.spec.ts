@@ -136,6 +136,53 @@ describe('QuizService', () => {
     });
   });
 
+  describe('findOnePublic', () => {
+    const past = new Date(Date.now() - 60_000);
+    const future = new Date(Date.now() + 60_000);
+
+    it('never returns the extended quiz with its answers', async () => {
+      await expect(
+        service.findOnePublic(1, QuizResponsesEnum.EXTENDED),
+      ).rejects.toThrow('GET /quiz/detailed/:quizId');
+      expect(mockRepository.getSingleQuery).not.toHaveBeenCalled();
+    });
+
+    it('lists the questions of a started test', async () => {
+      const quiz = { id: 1, startDate: past, isTest: true, questions: [] };
+      mockRepository.getSingleQuery.mockResolvedValue([quiz]);
+
+      await expect(
+        service.findOnePublic(1, QuizResponsesEnum.FOR_ATTEMPT),
+      ).resolves.toEqual(quiz);
+    });
+
+    it('hides the questions before the quiz starts', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { id: 1, startDate: future, isTest: true },
+      ]);
+
+      await expect(
+        service.findOnePublic(1, QuizResponsesEnum.FOR_ATTEMPT),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('hides the questions of a quiz shown one question at a time', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { id: 1, startDate: past, isTest: false },
+      ]);
+
+      await expect(
+        service.findOnePublic(1, QuizResponsesEnum.FOR_ATTEMPT),
+      ).rejects.toThrow('current-question');
+    });
+
+    it('returns the base quiz as before', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([{ id: 1 }]);
+
+      await expect(service.findOnePublic(1)).resolves.toEqual({ id: 1 });
+    });
+  });
+
   describe('update', () => {
     it('should update a quiz successfully', async () => {
       // Arrange

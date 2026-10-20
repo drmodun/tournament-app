@@ -29,6 +29,7 @@ describe('QuizController', () => {
     create: jest.fn(),
     findAll: jest.fn(),
     findOne: jest.fn(),
+    findOnePublic: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
     autoComplete: jest.fn(),
@@ -96,14 +97,17 @@ describe('QuizController', () => {
       const id = 1;
       const responseType = QuizResponsesEnum.BASE;
       const quiz = { id, name: 'Quiz 1' };
-      mockQuizService.findOne.mockResolvedValue(quiz);
+      mockQuizService.findOnePublic.mockResolvedValue(quiz);
 
       // Act
       const result = await controller.findOne(id, responseType as any);
 
       // Assert
       expect(result).toEqual(quiz);
-      expect(mockQuizService.findOne).toHaveBeenCalledWith(id, responseType);
+      expect(mockQuizService.findOnePublic).toHaveBeenCalledWith(
+        id,
+        responseType,
+      );
     });
   });
 

@@ -1,3 +1,4 @@
+import { TournamentManagerGuard } from 'src/tournament/guards/tournament-manager.guard';
 import {
   Controller,
   Get,
@@ -61,7 +62,7 @@ import { PaginationOnly } from 'src/base/query/baseQuery';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(TournamentManagerGuard)
   @ApiBearerAuth()
   @Post('fake')
   @ApiCreatedResponse({ type: ActionResponsePrimary })

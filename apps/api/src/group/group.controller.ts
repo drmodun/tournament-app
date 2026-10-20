@@ -1,3 +1,4 @@
+import { TournamentManagerGuard } from 'src/tournament/guards/tournament-manager.guard';
 import {
   Controller,
   Get,
@@ -125,7 +126,7 @@ export class GroupController {
     return await this.groupService.findOne(id, responseType);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(TournamentManagerGuard)
   @ApiBearerAuth()
   @Post('fake')
   @ApiCreatedResponse({

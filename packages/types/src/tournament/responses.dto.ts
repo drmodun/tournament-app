@@ -42,7 +42,6 @@ export interface IExtendedTournamentResponse extends ITournamentResponse {
   isMultipleTeamsPerGroupAllowed: boolean;
   isFakePlayersAllowed: boolean;
   parentTournament?: IMiniTournamentResponseWithLogo;
-  conversionRuleId: number;
   isRanked: boolean;
   maximumMMR?: number;
   minimumMMR?: number;

@@ -593,7 +593,6 @@ describe('RosterService', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       isMultipleTeamsPerGroupAllowed: false,
-      conversionRuleId: 1,
       isPublic: true,
       endDate: new Date(),
       maxParticipants: 100,

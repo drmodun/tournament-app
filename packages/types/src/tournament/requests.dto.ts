@@ -15,7 +15,6 @@ export interface ICreateTournamentRequest {
   isMultipleTeamsPerGroupAllowed?: boolean;
   isFakePlayersAllowed?: boolean;
   parentTournamentId?: number;
-  conversionRuleId?: number;
   maxParticipants: number;
   startDate: Date;
   endDate: Date;
@@ -40,7 +39,6 @@ export interface IUpdateTournamentRequest {
   isMultipleTeamsPerGroupAllowed?: boolean;
   isFakePlayersAllowed?: boolean;
   parentTournamentId?: number;
-  conversionRuleId?: number;
   startDate?: Date;
   endDate?: Date;
   maxParticipants?: number;

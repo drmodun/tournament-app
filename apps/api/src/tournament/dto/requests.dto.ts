@@ -104,16 +104,6 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   })
   parentTournamentId?: number;
 
-  @IsOptional()
-  @IsInt()
-  @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional({
-    description: 'ID of the conversion rule to apply to this tournament',
-    example: 456,
-    nullable: true,
-  })
-  conversionRuleId?: number;
-
   @IsInt()
   @Min(2)
   @Max(1024)
@@ -290,12 +280,6 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
   @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   parentTournamentId?: number;
-
-  @IsOptional()
-  @IsInt()
-  @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional()
-  conversionRuleId?: number;
 
   @IsOptional()
   @Type(() => Date)

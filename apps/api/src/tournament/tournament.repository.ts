@@ -221,7 +221,6 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
             logo: tournament.logo,
             country: tournament.country,
           },
-          conversionRuleId: tournament.conversionRuleId,
           isRanked: tournament.isRanked,
           maximumMMR: tournament.maximumMMR,
           minimumMMR: tournament.minimumMMR,

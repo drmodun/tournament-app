@@ -217,14 +217,6 @@ export class ExtendedTournamentResponse
   parentTournament: MiniTournamentResponseWithLogo;
 
   @ApiProperty({
-    description: 'ID of the conversion rule applied to this tournament',
-    example: 789,
-    nullable: true,
-    readOnly: true,
-  })
-  conversionRuleId: number;
-
-  @ApiProperty({
     description: 'Whether the tournament is ranked',
     example: true,
     readOnly: true,

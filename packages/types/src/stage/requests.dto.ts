@@ -6,7 +6,6 @@ import {
 
 export interface ICreateStageDto {
   tournamentId: number;
-  conversionRuleId?: number;
   stageStatus?: stageStatusEnum;
   stageType?: stageTypeEnum;
   name: string;
@@ -23,7 +22,6 @@ export interface ICreateStageDto {
 
 export interface IUpdateStageDto {
   tournamentId?: number;
-  conversionRuleId?: number;
   stageStatus?: stageStatusEnum;
   stageType?: stageTypeEnum;
   name?: string;

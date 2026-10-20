@@ -84,7 +84,6 @@ export const extendedExample: ExtendedTournamentResponse = {
   isMultipleTeamsPerGroupAllowed: false,
   isFakePlayersAllowed: false,
   parentTournament: withLogoExample,
-  conversionRuleId: 1,
   isRanked: true,
   maximumMMR: 2500,
   minimumMMR: 1500,

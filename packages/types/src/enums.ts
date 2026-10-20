@@ -137,6 +137,16 @@ export enum stageTypeEnum {
 export type stageTypeEnumType =
   (typeof stageTypeEnum)[keyof typeof stageTypeEnum];
 
+// Which part of a double-elimination bracket a matchup belongs to
+export enum matchupBracketEnum {
+  WINNERS = "winners",
+  LOSERS = "losers",
+  GRAND_FINAL = "grand_final",
+}
+
+export type matchupBracketEnumType =
+  (typeof matchupBracketEnum)[keyof typeof matchupBracketEnum];
+
 export enum tournamentLocationEnum {
   ONLINE = "online",
   ONSITE = "offline",

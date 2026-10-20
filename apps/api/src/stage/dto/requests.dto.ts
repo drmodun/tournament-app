@@ -30,17 +30,6 @@ export class CreateStageRequest implements ICreateStageDto {
   tournamentId: number;
 
   @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional({
-    description: 'ID of the conversion rule to apply to this stage',
-    example: 456,
-    nullable: true,
-  })
-  conversionRuleId?: number;
-
-  @IsOptional()
   @IsEnum(stageStatusEnum)
   @ApiPropertyOptional({
     description: 'Current status of the stage',
@@ -165,17 +154,6 @@ export class CreateStageRequest implements ICreateStageDto {
 }
 
 export class UpdateStageRequest implements IUpdateStageDto {
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Transform(({ value }) => parseInt(value))
-  @ApiPropertyOptional({
-    description: 'ID of the conversion rule to apply to this stage',
-    example: 456,
-    nullable: true,
-  })
-  conversionRuleId?: number;
-
   @IsOptional()
   @IsEnum(stageStatusEnum)
   @ApiPropertyOptional({

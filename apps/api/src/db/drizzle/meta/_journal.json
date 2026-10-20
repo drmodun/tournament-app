@@ -309,6 +309,34 @@
       "when": 1792475604065,
       "tag": "0043_large_juggernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1792518203044,
+      "tag": "0044_quiz_question_timing",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1792519016525,
+      "tag": "0045_drop_unused_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1792519017677,
+      "tag": "0046_brackets_and_conversion_rules",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1792519728135,
+      "tag": "0047_fix_stage_status_default",
+      "breakpoints": true
     }
   ]
 }

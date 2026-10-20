@@ -130,6 +130,11 @@ describe('LFGController (e2e)', () => {
     });
 
     it('should only return players within the age range the group requires', async () => {
+      // Start from a group without requirements, whatever the seed gave it
+      await request(app.getHttpServer())
+        .delete('/group-requirements/1')
+        .set('Authorization', `Bearer ${authToken}`);
+
       const { body: everyone } = await request(app.getHttpServer())
         .get('/lfg/1')
         .set('Authorization', `Bearer ${authToken}`)
@@ -142,7 +147,7 @@ describe('LFGController (e2e)', () => {
         (age) => age >= minimumAge && age <= maximumAge,
       );
 
-      // The seed gives this group no requirements, so the bounds exclude someone on each side
+      // Without requirements everyone is listed, so these bounds exclude someone on each side
       expect(expected.length).toBeGreaterThan(0);
       expect(expected.length).toBeLessThan(ages.length);
 

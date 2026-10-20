@@ -2,11 +2,15 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { NotificationQueryDto } from './dto/requests';
 import { NotificationCreateDto } from '../types';
 import { SseNotificationRepository } from './sse-notification.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { NotificationBus } from './notification-bus';
+import { JwtService } from '@nestjs/jwt';
+import { signSseToken, verifySseToken } from './sse-token';
 import { Observable, fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -15,6 +19,8 @@ export class SseNotificationsService {
   constructor(
     private readonly sseNotificationRepository: SseNotificationRepository,
     private readonly eventEmitter: EventEmitter2,
+    private readonly notificationBus: NotificationBus,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findAllForUser(query: NotificationQueryDto) {
@@ -30,23 +36,24 @@ export class SseNotificationsService {
     await this.publishManyNotifications(users, notification);
   }
 
+  // A fresh short-lived token for the notification stream
   async requestNewToken(userId: number) {
-    const updatedUser = await this.sseNotificationRepository.updateUserToken(
-      userId,
-      crypto.randomUUID(),
-    );
-
-    return updatedUser;
+    return {
+      id: userId,
+      sseToken: await signSseToken(this.jwtService, userId),
+    };
   }
 
   async getUserIdByToken(token: string) {
-    const user = await this.sseNotificationRepository.getUserByToken(token);
+    const userId = await verifySseToken(this.jwtService, token);
 
-    if (!user || !user[0]) {
-      throw new BadRequestException('User not found');
+    if (!userId) {
+      throw new UnauthorizedException(
+        'The notification token is invalid or has expired',
+      );
     }
 
-    return user[0].id;
+    return userId;
   }
 
   public async publishNotification(
@@ -54,7 +61,7 @@ export class SseNotificationsService {
     message: NotificationCreateDto,
   ) {
     try {
-      await this.eventEmitter.emitAsync(userId.toString(), message);
+      await this.notificationBus.publish(userId, message);
     } catch (error) {
       console.error('Error publishing notification', error);
       throw new BadRequestException(error);

@@ -5,9 +5,17 @@ import { baseApiUrl } from "api/client/base";
 import { INotificationBase } from "./types";
 import { useToastContext } from "utils/hooks/useToastContext";
 
-export const useSseNotifications = (token: string | null) => {
+// Stream tokens are short-lived, so after a dropped connection a fresh one is requested through
+// onConnectionLost; the new token then reconnects the stream.
+export const useSseNotifications = (
+  token: string | null,
+  onConnectionLost: () => void,
+) => {
   const [isConnected, setIsConnected] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
+  // Kept in a ref so a new callback identity does not reopen the stream
+  const onConnectionLostRef = useRef(onConnectionLost);
+  onConnectionLostRef.current = onConnectionLost;
   const toast = useToastContext();
 
   const handleNotification = useCallback(
@@ -50,14 +58,10 @@ export const useSseNotifications = (token: string | null) => {
       eventSource.onerror = (error) => {
         console.error("SSE connection error:", error);
         setIsConnected(false);
+        eventSource.close();
+        eventSourceRef.current = null;
 
-        setTimeout(() => {
-          if (eventSourceRef.current) {
-            eventSourceRef.current.close();
-            eventSourceRef.current = null;
-          }
-          connect();
-        }, 5000);
+        setTimeout(() => onConnectionLostRef.current(), 5000);
       };
 
       eventSource.addEventListener("notification", handleNotification);

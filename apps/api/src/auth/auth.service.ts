@@ -14,7 +14,8 @@ import {
   userRoleEnumType,
 } from '@tournament-app/types';
 import { UserDtosEnum } from 'src/users/types';
-import { PasswordResetTokenDto, SseTokenDto } from './dto/validatedUser.dto';
+import { PasswordResetTokenDto } from './dto/validatedUser.dto';
+import { signSseToken } from 'src/infrastructure/sse-notifications/sse-token';
 @Injectable()
 export class AuthService {
   constructor(
@@ -127,14 +128,8 @@ export class AuthService {
     if (!result) throw new UnauthorizedException();
   }
 
+  // Same short-lived token as POST /notifications/token, for the notification stream
   async getSseToken(userId: number) {
-    const user: SseTokenDto = await this.userService.findOne(
-      userId,
-      UserDtosEnum.SSE_TOKEN,
-    );
-
-    if (!user) throw new NotFoundException();
-
-    return user.sseToken;
+    return signSseToken(this.jwtService, userId);
   }
 }

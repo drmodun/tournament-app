@@ -1,9 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotificationBus } from '../notification-bus';
+import { JwtService } from '@nestjs/jwt';
 import { SseNotificationsService } from '../sse-notifications.service';
 import { SseNotificationRepository } from '../sse-notification.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationCreateDto } from '../../types';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { notificationTypeEnum } from '@tournament-app/types';
 import { of } from 'rxjs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -39,7 +45,11 @@ describe('SseNotificationsService', () => {
   const mockToken = 'mock-token';
   const mockNotificationId = 1;
 
+  const notificationBus = { publish: jest.fn() };
+  const jwtService = new JwtService({});
+
   beforeEach(async () => {
+    notificationBus.publish.mockReset();
     const module: TestingModule = await Test.createTestingModule({
       imports: [EventEmitterModule.forRoot()],
       providers: [
@@ -57,6 +67,14 @@ describe('SseNotificationsService', () => {
             deleteEntity: jest.fn(),
             deleteForUser: jest.fn(),
           },
+        },
+        {
+          provide: NotificationBus,
+          useValue: notificationBus,
+        },
+        {
+          provide: JwtService,
+          useValue: jwtService,
         },
       ],
     }).compile();
@@ -195,60 +213,63 @@ describe('SseNotificationsService', () => {
   });
 
   describe('requestNewToken', () => {
-    it('should update user token and return the updated user', async () => {
-      const mockUpdatedUser = { id: mockUserId, sseToken: 'new-token' };
-      jest
-        .spyOn(repository, 'updateUserToken')
-        .mockResolvedValue(mockUpdatedUser);
-
+    it('should issue a stream token that resolves to the user', async () => {
       const result = await service.requestNewToken(mockUserId);
 
-      expect(repository.updateUserToken).toHaveBeenCalledWith(
+      expect(result.id).toBe(mockUserId);
+      await expect(service.getUserIdByToken(result.sseToken)).resolves.toBe(
         mockUserId,
-        expect.any(String),
       );
-      expect(result).toEqual(mockUpdatedUser);
     });
   });
 
   describe('getUserIdByToken', () => {
-    it('should return the user id when token is valid', async () => {
-      jest
-        .spyOn(repository, 'getUserByToken')
-        .mockResolvedValue([{ id: mockUserId }]);
-
-      const result = await service.getUserIdByToken(mockToken);
-
-      expect(repository.getUserByToken).toHaveBeenCalledWith(mockToken);
-      expect(result).toEqual(mockUserId);
+    it('should reject a token that is not a stream token', async () => {
+      await expect(service.getUserIdByToken(mockToken)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
-    it('should throw BadRequestException when token is invalid', async () => {
-      jest.spyOn(repository, 'getUserByToken').mockResolvedValue([]);
+    it('should reject an access token signed for logging in', async () => {
+      const accessToken = await jwtService.signAsync(
+        { sub: mockUserId },
+        { secret: process.env.JWT_SECRET },
+      );
 
-      await expect(service.getUserIdByToken(mockToken)).rejects.toThrow(
-        BadRequestException,
+      await expect(service.getUserIdByToken(accessToken)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    it('should reject an expired stream token', async () => {
+      const expired = await jwtService.signAsync(
+        { sub: mockUserId, purpose: 'sse' },
+        {
+          secret: `${process.env.JWT_SECRET}:sse`,
+          expiresIn: -10,
+        },
+      );
+
+      await expect(service.getUserIdByToken(expired)).rejects.toThrow(
+        UnauthorizedException,
       );
     });
   });
 
   describe('publishNotification', () => {
-    it('should emit notification to user', async () => {
-      jest
-        .spyOn(eventEmitter, 'emitAsync')
-        .mockResolvedValue(Promise.resolve([]));
+    it('should publish the notification on the bus', async () => {
+      notificationBus.publish.mockResolvedValue(undefined);
 
       await service.publishNotification(mockUserId, mockNotification);
 
-      expect(eventEmitter.emitAsync).toHaveBeenCalledWith(
-        mockUserId.toString(),
+      expect(notificationBus.publish).toHaveBeenCalledWith(
+        mockUserId,
         mockNotification,
       );
     });
 
-    it('should handle errors when emitting notification', async () => {
-      const mockError = new Error('Emit failed');
-      jest.spyOn(eventEmitter, 'emitAsync').mockRejectedValue(mockError);
+    it('should handle errors when publishing', async () => {
+      notificationBus.publish.mockRejectedValue(new Error('Publish failed'));
       jest.spyOn(console, 'error').mockImplementation();
 
       await expect(

@@ -53,7 +53,6 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     pageSize: 50,
   });
 
-  const { isConnected } = useSseNotifications(token);
   const { data: authData } = useAuth();
 
   const markAsReadMutation = useMarkNotificationAsRead();
@@ -88,6 +87,8 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       refreshToken();
     }
   }, [authData]);
+
+  const { isConnected } = useSseNotifications(token, refreshToken);
 
   const fetchNotifications = useCallback(async () => {
     await refetch();

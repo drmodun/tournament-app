@@ -8,7 +8,6 @@ import { GroupMembershipModule } from '../group-membership/group-membership.modu
 import { GroupService } from 'src/group/group.service';
 import { SseNotificationsModule } from 'src/infrastructure/sse-notifications/sse-notifications.module';
 import { SseNotificationRepository } from 'src/infrastructure/sse-notifications/sse-notification.repository';
-import { SseNotificationsService } from 'src/infrastructure/sse-notifications/sse-notifications.service';
 import { GroupRequirementsModule } from 'src/group/requirements/group-requirements.module';
 @Module({
   imports: [
@@ -24,7 +23,6 @@ import { GroupRequirementsModule } from 'src/group/requirements/group-requiremen
     GroupDrizzleRepository,
     GroupService,
     SseNotificationRepository,
-    SseNotificationsService,
   ],
   exports: [GroupJoinRequestsService],
 })

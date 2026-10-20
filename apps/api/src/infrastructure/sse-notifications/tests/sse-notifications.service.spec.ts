@@ -3,7 +3,7 @@ import { SseNotificationsService } from '../sse-notifications.service';
 import { SseNotificationRepository } from '../sse-notification.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationCreateDto } from '../../types';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { notificationTypeEnum } from '@tournament-app/types';
 import { of } from 'rxjs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -55,6 +55,7 @@ describe('SseNotificationsService', () => {
             updateAllToReadForUser: jest.fn(),
             updateBulkToRead: jest.fn(),
             deleteEntity: jest.fn(),
+            deleteForUser: jest.fn(),
           },
         },
       ],
@@ -259,12 +260,25 @@ describe('SseNotificationsService', () => {
   });
 
   describe('setAsRead', () => {
-    it('should call repository.updateToRead with the notification id', async () => {
-      jest.spyOn(repository, 'updateToRead').mockResolvedValue(undefined);
+    it('should mark only the caller\'s copy as read', async () => {
+      jest
+        .spyOn(repository, 'updateToRead')
+        .mockResolvedValue([{ notificationId: mockNotificationId }]);
 
-      await service.setAsRead(mockNotificationId);
+      await service.setAsRead(mockNotificationId, mockUserId);
 
-      expect(repository.updateToRead).toHaveBeenCalledWith(mockNotificationId);
+      expect(repository.updateToRead).toHaveBeenCalledWith(
+        mockNotificationId,
+        mockUserId,
+      );
+    });
+
+    it('should throw NotFoundException for a notification the caller did not receive', async () => {
+      jest.spyOn(repository, 'updateToRead').mockResolvedValue([]);
+
+      await expect(
+        service.setAsRead(mockNotificationId, mockUserId),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -287,19 +301,35 @@ describe('SseNotificationsService', () => {
       const notificationIds = [1, 2, 3];
       jest.spyOn(repository, 'updateBulkToRead').mockResolvedValue(undefined);
 
-      await service.setBulkAsRead(notificationIds);
+      await service.setBulkAsRead(notificationIds, mockUserId);
 
-      expect(repository.updateBulkToRead).toHaveBeenCalledWith(notificationIds);
+      expect(repository.updateBulkToRead).toHaveBeenCalledWith(
+        notificationIds,
+        mockUserId,
+      );
     });
   });
 
   describe('remove', () => {
-    it('should call repository.deleteEntity with the notification id', async () => {
-      jest.spyOn(repository, 'deleteEntity').mockResolvedValue(undefined);
+    it('should remove the notification for the caller', async () => {
+      jest
+        .spyOn(repository, 'deleteForUser')
+        .mockResolvedValue([{ notificationId: mockNotificationId }]);
 
-      await service.remove(mockNotificationId);
+      await service.remove(mockNotificationId, mockUserId);
 
-      expect(repository.deleteEntity).toHaveBeenCalledWith(mockNotificationId);
+      expect(repository.deleteForUser).toHaveBeenCalledWith(
+        mockNotificationId,
+        mockUserId,
+      );
+    });
+
+    it('should throw NotFoundException for a notification the caller did not receive', async () => {
+      jest.spyOn(repository, 'deleteForUser').mockResolvedValue([]);
+
+      await expect(
+        service.remove(mockNotificationId, mockUserId),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 

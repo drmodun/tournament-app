@@ -5,6 +5,7 @@ import {
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
+import { userRoleEnum } from '@tournament-app/types';
 import { QuizService } from '../quiz.service';
 
 @Injectable()
@@ -18,6 +19,10 @@ export class CanEditQuizGuard implements CanActivate {
 
     if (!user) {
       throw new ForbiddenException('User not authenticated');
+    }
+
+    if (user.role === userRoleEnum.ADMIN) {
+      return true;
     }
 
     if (isNaN(quizId)) {

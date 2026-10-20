@@ -81,10 +81,11 @@ export class LFPController {
     description: 'LFP post updated successfully',
   })
   async updateLFP(
+    @Param('groupId', ParseIntPipe) groupId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDto: UpdateLFPDto,
   ) {
-    return await this.lfpService.updateLFP(id, updateDto);
+    return await this.lfpService.updateLFP(id, groupId, updateDto);
   }
 
   @Delete(':groupId/:id')
@@ -95,7 +96,10 @@ export class LFPController {
     status: 200,
     description: 'LFP post deleted successfully',
   })
-  async deleteLFP(@Param('id', ParseIntPipe) id: number) {
-    return await this.lfpService.deleteLFP(id);
+  async deleteLFP(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return await this.lfpService.deleteLFP(id, groupId);
   }
 }

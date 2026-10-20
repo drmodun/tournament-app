@@ -355,6 +355,24 @@ describe('LocationController (e2e)', () => {
       await request(app.getHttpServer()).delete('/locations/1').expect(401);
     });
 
+    it('should return 403 when changing a location as a non-admin', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: 'nonadmin@example', password: 'Password123!' });
+      const nonAdminToken = loginResponse.body.accessToken;
+
+      await request(app.getHttpServer())
+        .patch('/locations/1')
+        .set('Authorization', `Bearer ${nonAdminToken}`)
+        .send({ name: 'Not allowed' })
+        .expect(403);
+
+      await request(app.getHttpServer())
+        .delete('/locations/1')
+        .set('Authorization', `Bearer ${nonAdminToken}`)
+        .expect(403);
+    });
+
     it('should return 404 when deleting non-existent location', async () => {
       await request(app.getHttpServer())
         .delete('/locations/999999')

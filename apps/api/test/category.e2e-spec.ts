@@ -195,6 +195,18 @@ describe('CategoryController (e2e)', () => {
         .send(updateData)
         .expect(401);
     });
+
+    it('should return 403 when updating category as a non-admin', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: 'nonadmin@example', password: 'Password123!' });
+
+      await request(app.getHttpServer())
+        .patch('/categories/1')
+        .set('Authorization', `Bearer ${loginResponse.body.accessToken}`)
+        .send({ name: 'Not allowed' })
+        .expect(403);
+    });
   });
 
   describe('DELETE /categories/:id', () => {

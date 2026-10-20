@@ -15,12 +15,9 @@ export class LFPService {
     return lfp?.[0];
   }
 
-  async updateLFP(id: number, updateDto: UpdateLFPDto) {
-    const lfp = await this.lfpRepository.getSingleQuery(id, 'mini');
+  async updateLFP(id: number, groupId: number, updateDto: UpdateLFPDto) {
+    await this.checkLFPBelongsToGroup(id, groupId);
 
-    if (!(lfp?.length > 0)) {
-      throw new NotFoundException('LFP not found');
-    }
     const result = await this.lfpRepository.updateEntity(id, updateDto);
 
     return result?.[0];
@@ -37,13 +34,18 @@ export class LFPService {
     return await this.lfpRepository.getGroups(userId, query);
   }
 
-  async deleteLFP(id: number) {
-    const lfp = await this.lfpRepository.getSingleQuery(id, 'mini');
-
-    if (!(lfp?.length > 0)) {
-      throw new NotFoundException('LFP not found');
-    }
+  async deleteLFP(id: number, groupId: number) {
+    await this.checkLFPBelongsToGroup(id, groupId);
 
     return this.lfpRepository.deleteLFP(id);
+  }
+
+  // The route guard only proves the caller administers groupId, so the post must belong to that group
+  private async checkLFPBelongsToGroup(id: number, groupId: number) {
+    const lfp = await this.lfpRepository.getSingleQuery(id, 'mini');
+
+    if (!(lfp?.length > 0) || lfp[0].groupId !== groupId) {
+      throw new NotFoundException('LFP not found');
+    }
   }
 }

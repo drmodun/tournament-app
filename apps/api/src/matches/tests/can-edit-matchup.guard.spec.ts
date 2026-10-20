@@ -31,6 +31,22 @@ describe('CanEditMatchupGuard', () => {
   });
 
   describe('canActivate', () => {
+    it('should allow site admins without checking the matchup', async () => {
+      const mockContext = {
+        switchToHttp: jest.fn().mockReturnValue({
+          getRequest: jest.fn().mockReturnValue({
+            params: { matchupId: '1' },
+            user: { id: 5, role: 'admin' },
+          }),
+        }),
+      } as unknown as ExecutionContext;
+
+      const result = await guard.canActivate(mockContext);
+
+      expect(result).toBe(true);
+      expect(matchesService.canUserEditMatchup).not.toHaveBeenCalled();
+    });
+
     it('should allow access when user can edit the matchup', async () => {
       // Arrange
       const matchupId = 1;

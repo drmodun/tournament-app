@@ -27,6 +27,7 @@ describe('GroupMembershipService', () => {
     getSingleQuery: jest.fn(),
     updateEntity: jest.fn(),
     deleteEntity: jest.fn(),
+    getUnpaginatedUsersInfoOnly: jest.fn(),
   };
 
   const mockSseNotificationsService = {
@@ -375,6 +376,29 @@ describe('GroupMembershipService', () => {
         mockRepository.getSingleQuery.mockResolvedValue(mockAdminResponse);
         const result = await service.isOwner(1, 1);
         expect(result).toBe(false);
+      });
+    });
+  });
+
+  describe('getAllAdmins', () => {
+    it('returns the owner together with the admins', async () => {
+      mockRepository.getUnpaginatedUsersInfoOnly.mockImplementation(
+        async ({ role }) =>
+          role === groupRoleEnum.OWNER
+            ? [{ id: 1, username: 'owner', email: 'owner@example.com' }]
+            : [{ id: 2, username: 'admin', email: 'admin@example.com' }],
+      );
+
+      const result = await service.getAllAdmins(5);
+
+      expect(result.map((u) => u.id)).toEqual([1, 2]);
+      expect(mockRepository.getUnpaginatedUsersInfoOnly).toHaveBeenCalledWith({
+        groupId: 5,
+        role: groupRoleEnum.ADMIN,
+      });
+      expect(mockRepository.getUnpaginatedUsersInfoOnly).toHaveBeenCalledWith({
+        groupId: 5,
+        role: groupRoleEnum.OWNER,
       });
     });
   });

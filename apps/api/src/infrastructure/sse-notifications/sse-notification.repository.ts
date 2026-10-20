@@ -104,13 +104,49 @@ export class SseNotificationRepository extends PrimaryRepository<
     });
   }
 
-  async updateToRead(id: number) {
-    await db
+  // Read state is per recipient, so only the caller's copy is touched
+  async updateToRead(id: number, userId: number) {
+    return await db
       .update(notificationToUser)
       .set({
         read: true,
       } as Partial<InferSelectModel<typeof notificationToUser>>)
-      .where(eq(notificationToUser.notificationId, id));
+      .where(
+        and(
+          eq(notificationToUser.notificationId, id),
+          eq(notificationToUser.userId, userId),
+        ),
+      )
+      .returning({ notificationId: notificationToUser.notificationId });
+  }
+
+  // Removes the notification for this user; the notification itself goes once nobody has it any more
+  async deleteForUser(id: number, userId: number) {
+    return await db.transaction(async (tx) => {
+      const removed = await tx
+        .delete(notificationToUser)
+        .where(
+          and(
+            eq(notificationToUser.notificationId, id),
+            eq(notificationToUser.userId, userId),
+          ),
+        )
+        .returning({ notificationId: notificationToUser.notificationId });
+
+      if (removed.length) {
+        const remaining = await tx
+          .select({ notificationId: notificationToUser.notificationId })
+          .from(notificationToUser)
+          .where(eq(notificationToUser.notificationId, id))
+          .limit(1);
+
+        if (!remaining.length) {
+          await tx.delete(notification).where(eq(notification.id, id));
+        }
+      }
+
+      return removed;
+    });
   }
 
   async updateUserToken(userId: number, token: string) {
@@ -146,13 +182,18 @@ export class SseNotificationRepository extends PrimaryRepository<
       .where(eq(notificationToUser.userId, userId));
   }
 
-  async updateBulkToRead(ids: number[]) {
+  async updateBulkToRead(ids: number[], userId: number) {
     await db
       .update(notificationToUser)
       .set({
         read: true,
       } as Partial<InferSelectModel<typeof notificationToUser>>)
-      .where(inArray(notificationToUser.notificationId, ids));
+      .where(
+        and(
+          inArray(notificationToUser.notificationId, ids),
+          eq(notificationToUser.userId, userId),
+        ),
+      );
   }
 
   async getReadTimeSorted(query: NotificationQueryDto): Promise<

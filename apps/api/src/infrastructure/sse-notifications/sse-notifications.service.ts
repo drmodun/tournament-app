@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { NotificationQueryDto } from './dto/requests';
 import { NotificationCreateDto } from '../types';
 import { SseNotificationRepository } from './sse-notification.repository';
@@ -68,20 +72,34 @@ export class SseNotificationsService {
     return await Promise.all(promises);
   }
 
-  async setAsRead(id: number) {
-    await this.sseNotificationRepository.updateToRead(id);
+  async setAsRead(id: number, userId: number) {
+    const updated = await this.sseNotificationRepository.updateToRead(
+      id,
+      userId,
+    );
+
+    if (!updated?.length) {
+      throw new NotFoundException('Notification not found');
+    }
   }
 
   async setAllAsReadForUser(userId: number) {
     await this.sseNotificationRepository.updateAllToReadForUser(userId);
   }
 
-  async setBulkAsRead(ids: number[]) {
-    await this.sseNotificationRepository.updateBulkToRead(ids);
+  async setBulkAsRead(ids: number[], userId: number) {
+    await this.sseNotificationRepository.updateBulkToRead(ids, userId);
   }
 
-  async remove(id: number) {
-    await this.sseNotificationRepository.deleteEntity(id);
+  async remove(id: number, userId: number) {
+    const removed = await this.sseNotificationRepository.deleteForUser(
+      id,
+      userId,
+    );
+
+    if (!removed?.length) {
+      throw new NotFoundException('Notification not found');
+    }
   }
 
   async createNotificationAndLinkToUsers(

@@ -115,9 +115,12 @@ describe('SseNotificationsController', () => {
     it('should call service.setAsRead with notification id', async () => {
       jest.spyOn(service, 'setAsRead').mockResolvedValue(undefined);
 
-      await controller.markAsRead(mockNotificationId);
+      await controller.markAsRead(mockNotificationId, mockUser as any);
 
-      expect(service.setAsRead).toHaveBeenCalledWith(mockNotificationId);
+      expect(service.setAsRead).toHaveBeenCalledWith(
+        mockNotificationId,
+        mockUser.id,
+      );
     });
   });
 
@@ -137,9 +140,12 @@ describe('SseNotificationsController', () => {
 
       jest.spyOn(service, 'setBulkAsRead').mockResolvedValue(undefined);
 
-      await controller.markBulkAsRead(notificationIds);
+      await controller.markBulkAsRead(notificationIds, mockUser as any);
 
-      expect(service.setBulkAsRead).toHaveBeenCalledWith(notificationIds);
+      expect(service.setBulkAsRead).toHaveBeenCalledWith(
+        notificationIds,
+        mockUser.id,
+      );
     });
 
     it('should handle empty array of ids', async () => {
@@ -147,9 +153,12 @@ describe('SseNotificationsController', () => {
 
       jest.spyOn(service, 'setBulkAsRead').mockResolvedValue(undefined);
 
-      await controller.markBulkAsRead(notificationIds);
+      await controller.markBulkAsRead(notificationIds, mockUser as any);
 
-      expect(service.setBulkAsRead).toHaveBeenCalledWith(notificationIds);
+      expect(service.setBulkAsRead).toHaveBeenCalledWith(
+        notificationIds,
+        mockUser.id,
+      );
     });
   });
 
@@ -157,9 +166,12 @@ describe('SseNotificationsController', () => {
     it('should call service.remove with notification id', async () => {
       jest.spyOn(service, 'remove').mockResolvedValue(undefined);
 
-      await controller.remove(mockNotificationId);
+      await controller.remove(mockNotificationId, mockUser as any);
 
-      expect(service.remove).toHaveBeenCalledWith(mockNotificationId);
+      expect(service.remove).toHaveBeenCalledWith(
+        mockNotificationId,
+        mockUser.id,
+      );
     });
   });
 

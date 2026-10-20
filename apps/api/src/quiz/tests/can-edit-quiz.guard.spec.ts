@@ -33,6 +33,21 @@ describe('CanEditQuizGuard', () => {
   });
 
   describe('canActivate', () => {
+    it('should allow site admins without checking authorship', async () => {
+      const checkAuthor = jest.spyOn(quizService, 'checkAuthor');
+      const mockContext = {
+        switchToHttp: () => ({
+          getRequest: () => ({
+            user: { id: 1, role: 'admin' },
+            params: { quizId: '1' },
+          }),
+        }),
+      } as unknown as ExecutionContext;
+
+      await expect(guard.canActivate(mockContext)).resolves.toBe(true);
+      expect(checkAuthor).not.toHaveBeenCalled();
+    });
+
     it('should return true if user is the author of the quiz', async () => {
       // Arrange
       const mockExecutionContext = {

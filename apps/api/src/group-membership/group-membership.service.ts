@@ -253,11 +253,18 @@ export class GroupMembershipService {
     return !!results;
   }
 
+  // Everyone who can act as an admin: the admins and the owner
   async getAllAdmins(groupId: number) {
-    return await this.groupMembershipRepository.getUnpaginatedUsersInfoOnly({
-      groupId,
-      role: groupRoleEnum.ADMIN,
-    });
+    const [admins, owners] = await Promise.all(
+      [groupRoleEnum.ADMIN, groupRoleEnum.OWNER].map((role) =>
+        this.groupMembershipRepository.getUnpaginatedUsersInfoOnly({
+          groupId,
+          role,
+        }),
+      ),
+    );
+
+    return [...owners, ...admins];
   }
 
   async isOwner(groupId: number, userId: number): Promise<boolean> {

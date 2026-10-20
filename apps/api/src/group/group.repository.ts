@@ -155,10 +155,11 @@ export class GroupDrizzleRepository extends PrimaryRepository<
         } as InferInsertModel<typeof group>)
         .returning();
 
+      // The creator owns the group, which is the only role allowed to delete it
       await tx.insert(groupToUser).values({
         userId,
         groupId: createdGroup.id,
-        role: groupRoleEnum.ADMIN,
+        role: groupRoleEnum.OWNER,
       } as InferInsertModel<typeof groupToUser>);
 
       return [{ id: createdGroup.id }];

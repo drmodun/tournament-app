@@ -59,18 +59,19 @@ describe('LFPService', () => {
 
   describe('updateLFP', () => {
     const lfpId = 1;
+    const groupId = 2;
     const updateDto: UpdateLFPDto = {
       message: 'Updated message',
     };
 
-    it('should update an LFP post when it exists', async () => {
-      const existingLFP = [{ id: lfpId, message: 'Old message' }];
+    it('should update an LFP post of the group', async () => {
+      const existingLFP = { id: lfpId, groupId, message: 'Old message' };
       const updatedLFP = { id: lfpId, message: updateDto.message };
 
       mockRepository.getSingleQuery.mockResolvedValue([existingLFP]);
       mockRepository.updateEntity.mockResolvedValue([updatedLFP]);
 
-      const result = await service.updateLFP(lfpId, updateDto);
+      const result = await service.updateLFP(lfpId, groupId, updateDto);
 
       expect(result).toEqual(updatedLFP);
       expect(mockRepository.getSingleQuery).toHaveBeenCalledWith(lfpId, 'mini');
@@ -78,14 +79,25 @@ describe('LFPService', () => {
         lfpId,
         updateDto,
       );
-    }); // TODO: remove console logs
+    });
 
     it('should throw NotFoundException when LFP does not exist', async () => {
       mockRepository.getSingleQuery.mockResolvedValue([]);
 
-      await expect(service.updateLFP(lfpId, updateDto)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.updateLFP(lfpId, groupId, updateDto),
+      ).rejects.toThrow(NotFoundException);
+      expect(mockRepository.updateEntity).not.toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException when the LFP belongs to another group', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { id: lfpId, groupId: 99, message: 'Other group' },
+      ]);
+
+      await expect(
+        service.updateLFP(lfpId, groupId, updateDto),
+      ).rejects.toThrow(NotFoundException);
       expect(mockRepository.updateEntity).not.toHaveBeenCalled();
     });
   });
@@ -130,13 +142,14 @@ describe('LFPService', () => {
 
   describe('deleteLFP', () => {
     const lfpId = 1;
+    const groupId = 2;
 
-    it('should delete an LFP post when it exists', async () => {
-      const existingLFP = { id: lfpId, message: 'Test message' };
+    it('should delete an LFP post of the group', async () => {
+      const existingLFP = { id: lfpId, groupId, message: 'Test message' };
       mockRepository.getSingleQuery.mockResolvedValue([existingLFP]);
       mockRepository.deleteLFP.mockResolvedValue({ success: true });
 
-      const result = await service.deleteLFP(lfpId);
+      const result = await service.deleteLFP(lfpId, groupId);
 
       expect(result).toEqual({ success: true });
       expect(mockRepository.getSingleQuery).toHaveBeenCalledWith(lfpId, 'mini');
@@ -146,7 +159,20 @@ describe('LFPService', () => {
     it('should throw NotFoundException when LFP does not exist', async () => {
       mockRepository.getSingleQuery.mockResolvedValue(null);
 
-      await expect(service.deleteLFP(lfpId)).rejects.toThrow(NotFoundException);
+      await expect(service.deleteLFP(lfpId, groupId)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(mockRepository.deleteLFP).not.toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException when the LFP belongs to another group', async () => {
+      mockRepository.getSingleQuery.mockResolvedValue([
+        { id: lfpId, groupId: 99, message: 'Other group' },
+      ]);
+
+      await expect(service.deleteLFP(lfpId, groupId)).rejects.toThrow(
+        NotFoundException,
+      );
       expect(mockRepository.deleteLFP).not.toHaveBeenCalled();
     });
   });

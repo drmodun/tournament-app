@@ -64,8 +64,11 @@ export class SseNotificationsController {
   @Patch(':id/read')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
-  async markAsRead(@Param('id', ParseIntPipe) id: number) {
-    return this.sseNotificationsService.setAsRead(id);
+  async markAsRead(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return this.sseNotificationsService.setAsRead(id, user.id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -80,15 +83,19 @@ export class SseNotificationsController {
   @ApiBearerAuth()
   async markBulkAsRead(
     @Body('ids', new ParseArrayPipe({ items: Number })) ids: number[],
+    @CurrentUser() user: ValidatedUserDto,
   ) {
-    return await this.sseNotificationsService.setBulkAsRead(ids);
+    return await this.sseNotificationsService.setBulkAsRead(ids, user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiBearerAuth()
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.sseNotificationsService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: ValidatedUserDto,
+  ) {
+    return await this.sseNotificationsService.remove(id, user.id);
   }
 
   @Sse('stream')

@@ -108,10 +108,10 @@ describe('LFPController', () => {
 
       mockService.updateLFP.mockResolvedValue(expectedResult);
 
-      const result = await controller.updateLFP(lfpId, updateDto);
+      const result = await controller.updateLFP(2, lfpId, updateDto);
 
       expect(result).toEqual(expectedResult);
-      expect(mockService.updateLFP).toHaveBeenCalledWith(lfpId, updateDto);
+      expect(mockService.updateLFP).toHaveBeenCalledWith(lfpId, 2, updateDto);
     });
   });
 
@@ -122,10 +122,10 @@ describe('LFPController', () => {
 
       mockService.deleteLFP.mockResolvedValue(expectedResult);
 
-      const result = await controller.deleteLFP(lfpId);
+      const result = await controller.deleteLFP(2, lfpId);
 
       expect(result).toEqual(expectedResult);
-      expect(mockService.deleteLFP).toHaveBeenCalledWith(lfpId);
+      expect(mockService.deleteLFP).toHaveBeenCalledWith(lfpId, 2);
     });
   });
 });

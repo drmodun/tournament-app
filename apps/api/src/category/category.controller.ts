@@ -34,7 +34,6 @@ import { CategoryResponsesEnum, IQueryMetadata } from '@tournament-app/types';
 import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 
 @ApiTags('categories')
@@ -108,7 +107,7 @@ export class CategoryController {
   }
 
   @Patch(':categoryId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates a category',

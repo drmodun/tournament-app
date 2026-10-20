@@ -33,6 +33,7 @@ import {
 import { LocationResponsesEnum, IQueryMetadata } from '@tournament-app/types';
 import { MetadataMaker } from 'src/base/static/makeMetadata';
 import { ActionResponsePrimary } from 'src/base/actions/actionResponses.dto';
+import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('locations')
@@ -101,7 +102,7 @@ export class LocationController {
   }
 
   @Patch(':locationId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Updates a location',
@@ -115,7 +116,7 @@ export class LocationController {
   }
 
   @Delete(':locationId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Deletes a location',

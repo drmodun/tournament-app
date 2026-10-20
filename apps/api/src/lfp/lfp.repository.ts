@@ -143,7 +143,8 @@ export class LFPDrizzleRepository extends PrimaryRepository<
     const userGroupIds = userGroupsResult.map((group) => group.id);
     const forbiddenGroupIds = [...blockedGroupIds, ...userGroupIds];
 
-    const distanceInKm = distance ? distance * 1000 : null;
+    // distance is given in kilometres, ST_DWithin on geography takes metres
+    const distanceInMeters = distance ? distance * 1000 : null;
     // 2. Main Query
     const lfpList = await db
       .select({
@@ -192,13 +193,13 @@ export class LFPDrizzleRepository extends PrimaryRepository<
       .where(
         and(
           notInArray(group.id, forbiddenGroupIds),
-          distanceInKm & lat & lng
+          distanceInMeters && lat && lng
             ? sql`ST_DWithin(
               ${location.coordinates},
               ${LocationHelper.ST_GeographyFromText(
                 LocationHelper.ConvertToWKT(lng, lat),
               )},
-              ${distanceInKm}
+              ${distanceInMeters}
             )`
             : undefined,
         ),

@@ -260,7 +260,7 @@ describe('SseNotificationsService', () => {
   });
 
   describe('setAsRead', () => {
-    it('should mark only the caller\'s copy as read', async () => {
+    it("should mark only the caller's copy as read", async () => {
       jest
         .spyOn(repository, 'updateToRead')
         .mockResolvedValue([{ notificationId: mockNotificationId }]);

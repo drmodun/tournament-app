@@ -3,6 +3,7 @@ import { MatchesService } from '../matches.service';
 import { MatchesDrizzleRepository } from '../matches.repository';
 import { ChallongeService } from '../../challonge/challonge.service';
 import { RosterService } from '../../roster/roster.service';
+import { CareerService } from '../../career/career.service';
 import { IChallongeMatch, IEndMatchupRequest } from '@tournament-app/types';
 import { QueryMatchupRequestDto } from '../dto/requests';
 import { PaginationOnly } from 'src/base/query/baseQuery';
@@ -12,6 +13,7 @@ describe('MatchesService', () => {
   let matchesRepository: jest.Mocked<MatchesDrizzleRepository>;
   let challongeService: jest.Mocked<ChallongeService>;
   let rosterService: jest.Mocked<RosterService>;
+  let careerService: { applyMatchResult: jest.Mock };
 
   beforeEach(async () => {
     const mockMatchesRepository = {
@@ -31,6 +33,11 @@ describe('MatchesService', () => {
       canUserEditMatchup: jest.fn(),
       isMatchupInTournament: jest.fn(),
       getResultsForGroup: jest.fn(),
+      getRostersBySeed: jest.fn(),
+      insertLocalRound: jest.fn(),
+      getRoundWinners: jest.fn(),
+      hasRound: jest.fn(),
+      finishStage: jest.fn(),
     };
 
     const mockChallongeService = {
@@ -40,6 +47,8 @@ describe('MatchesService', () => {
     const mockRosterService = {
       findOne: jest.fn(),
     };
+
+    careerService = { applyMatchResult: jest.fn().mockResolvedValue([]) };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -55,6 +64,10 @@ describe('MatchesService', () => {
         {
           provide: RosterService,
           useValue: mockRosterService,
+        },
+        {
+          provide: CareerService,
+          useValue: careerService,
         },
       ],
     }).compile();
@@ -74,6 +87,45 @@ describe('MatchesService', () => {
   });
 
   describe('createMatchScore', () => {
+    const result: IEndMatchupRequest = {
+      scores: [
+        {
+          roundNumber: 1,
+          scores: [
+            { rosterId: 1, points: 3, isWinner: true },
+            { rosterId: 2, points: 1, isWinner: false },
+          ],
+        },
+      ],
+      results: [
+        { rosterId: 1, isWinner: true },
+        { rosterId: 2, isWinner: false },
+      ],
+    };
+
+    it('should update ratings once the result is saved', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: { id: 1, stageId: 5, challongeMatchupId: null },
+      } as any);
+      matchesRepository.insertMatchScore.mockResolvedValue([] as any);
+
+      await service.createMatchScore(1, result);
+
+      expect(careerService.applyMatchResult).toHaveBeenCalledWith(1);
+    });
+
+    it('should keep the result when updating ratings fails', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: { id: 1, stageId: 5, challongeMatchupId: null },
+      } as any);
+      matchesRepository.insertMatchScore.mockResolvedValue([{ id: 9 }] as any);
+      careerService.applyMatchResult.mockRejectedValueOnce(new Error('db'));
+
+      await expect(service.createMatchScore(1, result)).resolves.toEqual([
+        { id: 9 },
+      ]);
+    });
+
     it('should create match score and update Challonge if the matchup has a Challonge ID', async () => {
       // Arrange
       const matchupId = 1;
@@ -798,6 +850,123 @@ describe('MatchesService', () => {
         query,
       );
       expect(result).toMatchObject(expectedResults);
+    });
+  });
+
+  describe('local brackets', () => {
+    const localMatchup = {
+      matchup: { id: 3, stageId: 5, round: 1, challongeMatchupId: null },
+    } as any;
+
+    const finished = (matchupId: number, winner: number) => ({
+      matchupId,
+      isFinished: true,
+      winners: [winner],
+    });
+
+    it('draws round 1 from the seeded rosters', async () => {
+      matchesRepository.getRostersBySeed.mockResolvedValue([10, 11, 12, 13]);
+      matchesRepository.getRoundWinners.mockResolvedValue([
+        { matchupId: 1, isFinished: false, winners: [] },
+      ]);
+      const startDate = new Date();
+
+      await service.startLocalBracket(5, startDate);
+
+      expect(matchesRepository.insertLocalRound).toHaveBeenCalledWith(
+        5,
+        1,
+        [
+          [10, 13],
+          [11, 12],
+        ],
+        startDate,
+      );
+    });
+
+    it('refuses to start without rosters', async () => {
+      matchesRepository.getRostersBySeed.mockResolvedValue([]);
+
+      await expect(service.startLocalBracket(5, new Date())).rejects.toThrow(
+        'No rosters found',
+      );
+    });
+
+    it('draws the next round once every matchup has a winner', async () => {
+      matchesRepository.getRoundWinners
+        .mockResolvedValueOnce([finished(1, 10), finished(2, 12)])
+        .mockResolvedValueOnce([
+          { matchupId: 3, isFinished: false, winners: [] },
+        ]);
+      matchesRepository.hasRound.mockResolvedValue(false);
+
+      await service.advanceLocalBracket(5, 1);
+
+      expect(matchesRepository.insertLocalRound).toHaveBeenCalledWith(
+        5,
+        2,
+        [[10, 12]],
+        expect.any(Date),
+      );
+    });
+
+    it('waits while a matchup of the round is unfinished', async () => {
+      matchesRepository.getRoundWinners.mockResolvedValue([
+        finished(1, 10),
+        { matchupId: 2, isFinished: false, winners: [] },
+      ]);
+
+      await service.advanceLocalBracket(5, 1);
+
+      expect(matchesRepository.insertLocalRound).not.toHaveBeenCalled();
+    });
+
+    it('finishes the stage after the final', async () => {
+      matchesRepository.getRoundWinners.mockResolvedValue([finished(7, 10)]);
+      matchesRepository.hasRound.mockResolvedValue(false);
+
+      await service.advanceLocalBracket(5, 3);
+
+      expect(matchesRepository.finishStage).toHaveBeenCalledWith(5);
+      expect(matchesRepository.insertLocalRound).not.toHaveBeenCalled();
+    });
+
+    it('does not draw a round twice', async () => {
+      matchesRepository.getRoundWinners.mockResolvedValue([
+        finished(1, 10),
+        finished(2, 12),
+      ]);
+      matchesRepository.hasRound.mockResolvedValue(true);
+
+      await service.advanceLocalBracket(5, 1);
+
+      expect(matchesRepository.insertLocalRound).not.toHaveBeenCalled();
+    });
+
+    it('advances the bracket after a local result is recorded', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue(localMatchup);
+      matchesRepository.insertMatchScore.mockResolvedValue([] as any);
+      matchesRepository.getRoundWinners.mockResolvedValue([
+        { matchupId: 3, isFinished: false, winners: [] },
+      ]);
+
+      await service.createMatchScore(3, { scores: [], results: [] });
+
+      expect(matchesRepository.getRoundWinners).toHaveBeenCalledWith(5, 1);
+    });
+
+    it('freezes a local result once the next round is drawn', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue(localMatchup);
+      matchesRepository.hasRound.mockResolvedValue(true);
+
+      await expect(
+        service.updateMatchScore(3, { scores: [], results: [] }),
+      ).rejects.toThrow('The next round has already been drawn');
+      await expect(service.deleteMatchScore(3)).rejects.toThrow(
+        'The next round has already been drawn',
+      );
+      expect(matchesRepository.updateMatchScore).not.toHaveBeenCalled();
+      expect(matchesRepository.deleteMatchScore).not.toHaveBeenCalled();
     });
   });
 });

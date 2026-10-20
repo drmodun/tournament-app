@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
+  BASE_ELO,
   groupRoleEnum,
   IChallongeMatch,
   IEndMatchupRequest,
@@ -29,6 +30,7 @@ import {
   InferInsertModel,
   inArray,
   or,
+  asc,
   desc,
   aliasedTable,
   count,
@@ -919,5 +921,130 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
       .where(and(eq(matchup.stageId, stageId), eq(matchup.round, round)));
 
     return await query;
+  }
+
+  // Inserts one round of a locally run bracket. A pairing with a single roster is a bye:
+  // it is finished straight away and that roster advances.
+  async insertLocalRound(
+    stageId: number,
+    round: number,
+    pairings: number[][],
+    startDate: Date,
+  ) {
+    return db.transaction(async (tx) => {
+      const created = await tx
+        .insert(matchup)
+        .values(
+          pairings.map((rosterIds) => ({
+            stageId,
+            round,
+            startDate,
+            isFinished: rosterIds.length < 2,
+            endDate: rosterIds.length < 2 ? startDate : null,
+          })) as InferInsertModel<typeof matchup>[],
+        )
+        .returning({ id: matchup.id });
+
+      await tx.insert(rosterToMatchup).values(
+        pairings.flatMap((rosterIds, index) =>
+          rosterIds.map((rosterId) => ({
+            rosterId,
+            matchupId: created[index].id,
+            isWinner: rosterIds.length < 2,
+          })),
+        ),
+      );
+
+      return created;
+    });
+  }
+
+  // Each matchup of a round in bracket order (insertion order), with the rosters that won it
+  async getRoundWinners(stageId: number, round: number) {
+    const rows = await db
+      .select({
+        matchupId: matchup.id,
+        isFinished: matchup.isFinished,
+        rosterId: rosterToMatchup.rosterId,
+        isWinner: rosterToMatchup.isWinner,
+      })
+      .from(matchup)
+      .leftJoin(rosterToMatchup, eq(rosterToMatchup.matchupId, matchup.id))
+      .where(and(eq(matchup.stageId, stageId), eq(matchup.round, round)))
+      .orderBy(asc(matchup.id));
+
+    const byMatchup = new Map<
+      number,
+      { matchupId: number; isFinished: boolean; winners: number[] }
+    >();
+
+    for (const row of rows) {
+      const entry = byMatchup.get(row.matchupId) ?? {
+        matchupId: row.matchupId,
+        isFinished: !!row.isFinished,
+        winners: [],
+      };
+
+      if (row.isWinner && row.rosterId) {
+        entry.winners.push(row.rosterId);
+      }
+
+      byMatchup.set(row.matchupId, entry);
+    }
+
+    return [...byMatchup.values()];
+  }
+
+  async hasRound(stageId: number, round: number) {
+    const result = await db
+      .select({ id: matchup.id })
+      .from(matchup)
+      .where(and(eq(matchup.stageId, stageId), eq(matchup.round, round)))
+      .limit(1);
+
+    return result.length > 0;
+  }
+
+  async finishStage(stageId: number) {
+    await db
+      .update(stage)
+      .set({ stageStatus: 'finished' } as Partial<
+        InferInsertModel<typeof stage>
+      >)
+      .where(eq(stage.id, stageId));
+  }
+
+  // Every roster of a stage, strongest first by its players' average rating in the tournament's category
+  async getRostersBySeed(stageId: number): Promise<number[]> {
+    const rows = await db
+      .select({
+        rosterId: roster.id,
+        averageElo: sql<number>`avg(coalesce(${tables.categoryCareer.elo}, ${BASE_ELO}))`,
+      })
+      .from(roster)
+      .innerJoin(
+        tables.participation,
+        eq(tables.participation.id, roster.participationId),
+      )
+      .innerJoin(
+        tables.tournament,
+        eq(tables.tournament.id, tables.participation.tournamentId),
+      )
+      .leftJoin(userToRoster, eq(userToRoster.rosterId, roster.id))
+      .leftJoin(
+        tables.categoryCareer,
+        and(
+          eq(tables.categoryCareer.userId, userToRoster.userId),
+          eq(tables.categoryCareer.categoryId, tables.tournament.categoryId),
+        ),
+      )
+      .where(eq(roster.stageId, stageId))
+      .groupBy(roster.id)
+      .orderBy(
+        desc(sql`avg(coalesce(${tables.categoryCareer.elo}, ${BASE_ELO}))`),
+        asc(roster.id),
+      );
+
+    return rows.map((row) => row.rosterId);
   }
 }

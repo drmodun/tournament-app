@@ -207,7 +207,10 @@ export class CanRosterBeUsedGuard implements CanActivate {
     ).length;
 
     // An unset limit means substitutes are not restricted
-    if (stage.maxSubstitutes != null && substituteAmount > stage.maxSubstitutes) {
+    if (
+      stage.maxSubstitutes != null &&
+      substituteAmount > stage.maxSubstitutes
+    ) {
       throw new ForbiddenException('Substitute amount is too large');
     }
   }

@@ -47,7 +47,9 @@ export class CanSubmitAnswerGuard implements CanActivate {
       await this.quizAttemptService.checkIfTheAnswerIsFinal(answerId);
 
     if (isFinal) {
-      throw new ForbiddenException('This answer is final and can no longer be changed');
+      throw new ForbiddenException(
+        'This answer is final and can no longer be changed',
+      );
     }
   }
 }

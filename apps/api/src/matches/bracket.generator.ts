@@ -20,7 +20,11 @@ export class BracketGenerator {
   constructor(private readonly rosterRepository: RosterDrizzleRepository) {}
 
   async rostersSortedByElo(stageId: number) {
-    const getAllRosters = await this.rosterRepository.getForStage(stageId);
+    // getForStage pages by default, which would leave rosters out of the bracket
+    const getAllRosters = await this.rosterRepository.getForStage(stageId, {
+      page: 1,
+      pageSize: Number.MAX_SAFE_INTEGER,
+    });
 
     // Get all users with specific elo for the tournament
     const mappedRostersWithElo = getAllRosters.map((roster) => {

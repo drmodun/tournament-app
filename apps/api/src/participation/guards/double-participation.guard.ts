@@ -29,12 +29,13 @@ export class DoubleParticipationGuard implements CanActivate {
     }
 
     // Team entries are matched by group, solo entries by user; mixing both never matches anything
-    const isAlreadyParticipating = await this.participationService.isParticipant(
-      tournament.id,
-      isTeamEntry
-        ? { groupId: request.params.groupId }
-        : { userId: request.params.userId || request.user.id },
-    );
+    const isAlreadyParticipating =
+      await this.participationService.isParticipant(
+        tournament.id,
+        isTeamEntry
+          ? { groupId: request.params.groupId }
+          : { userId: request.params.userId || request.user.id },
+      );
 
     if (isAlreadyParticipating) {
       throw new ForbiddenException(

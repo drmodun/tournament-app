@@ -87,6 +87,7 @@ describe('StageService', () => {
       checkRoundCompletionAndUpdateNextRound: jest.fn(),
       getMatchupsWithResults: jest.fn(),
       importChallongeMatchesToStage: jest.fn(),
+      startLocalBracket: jest.fn(),
     } as unknown as jest.Mocked<MatchesService>;
 
     mockRosterRepository = {
@@ -532,15 +533,47 @@ describe('StageService', () => {
       );
     });
 
-    it('should throw BadRequestException if no challonge tournament ID', async () => {
-      jest.spyOn(service, 'findOne').mockResolvedValueOnce({
+    it('should run the bracket locally when the stage has no Challonge tournament', async () => {
+      const localStage = {
         ...mockStageWithChallonge,
         challongeTournamentId: null,
-      });
+      };
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValueOnce(localStage)
+        .mockResolvedValueOnce(localStage);
 
-      await expect(service.startStage(stageId)).rejects.toThrow(
-        BadRequestException,
+      await service.startStage(stageId);
+
+      expect(mockMatchService.startLocalBracket).toHaveBeenCalledWith(
+        stageId,
+        expect.any(Date),
       );
+      expect(service.update).toHaveBeenCalledWith(stageId, {
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+      expect(
+        mockChallongeServiceImpl.createBulkParticipants,
+      ).not.toHaveBeenCalled();
+      expect(service.sendStageStartNotifications).toHaveBeenCalled();
+    });
+
+    it('should leave a local stage finished when the draw already decided it', async () => {
+      const localStage = {
+        ...mockStageWithChallonge,
+        challongeTournamentId: null,
+      };
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValueOnce(localStage)
+        .mockResolvedValueOnce({
+          ...localStage,
+          stageStatus: stageStatusEnum.FINISHED,
+        });
+
+      await service.startStage(stageId);
+
+      expect(service.update).not.toHaveBeenCalled();
     });
 
     it('should throw BadRequestException if no rosters found', async () => {

@@ -19,7 +19,11 @@ async function bootstrap() {
     new PostgresExceptionFilter(),
     new NoValuesToSetExceptionFilter(),
   );
-  app.enableCors();
+  // CORS_ORIGIN is a comma-separated allow-list; unset allows every origin (local development)
+  const corsOrigins = process.env.CORS_ORIGIN?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  app.enableCors({ origin: corsOrigins?.length ? corsOrigins : true });
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('winning.sh API')

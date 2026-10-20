@@ -162,7 +162,10 @@ export class GroupRequirementsRepository {
     }
 
     const careers = await db
-      .select({ categoryId: categoryCareer.categoryId, elo: categoryCareer.elo })
+      .select({
+        categoryId: categoryCareer.categoryId,
+        elo: categoryCareer.elo,
+      })
       .from(categoryCareer)
       .where(eq(categoryCareer.userId, userId));
 

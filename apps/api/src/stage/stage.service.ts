@@ -114,6 +114,10 @@ export class StageService {
       StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
     );
 
+    if (!stage.challongeTournamentId) {
+      return;
+    }
+
     try {
       await this.challongeService.updateTournament(
         stage.challongeTournamentId,
@@ -255,12 +259,6 @@ export class StageService {
       );
     }
 
-    if (!stage.challongeTournamentId) {
-      throw new BadRequestException(
-        `Stage with ID ${stageId} does not have an associated Challonge tournament`,
-      );
-    }
-
     const rosters =
       await this.rosterRepository.getRostersForChallongeParticipants(stageId);
 
@@ -268,6 +266,11 @@ export class StageService {
       throw new BadRequestException(
         `No rosters found for stage with ID ${stageId}`,
       );
+    }
+
+    // Without Challonge (no credentials, or its API failed when the stage was created) the API runs the bracket
+    if (!stage.challongeTournamentId) {
+      return this.startLocalStage(stageId, stage.name);
     }
 
     const bulkParticipantsRequest: IBulkCreateChallongeParticipantRequest =
@@ -301,6 +304,22 @@ export class StageService {
       stageId,
       stage.challongeTournamentId,
     );
+
+    return updatedStage;
+  }
+
+  private async startLocalStage(stageId: number, stageName: string) {
+    await this.matchesService.startLocalBracket(stageId, new Date());
+
+    // A stage with a single roster is already finished by the draw
+    const drawn: IStageResponse = await this.findOne(stageId);
+
+    const updatedStage =
+      drawn.stageStatus === stageStatusEnum.FINISHED
+        ? drawn
+        : await this.update(stageId, { stageStatus: stageStatusEnum.ONGOING });
+
+    await this.sendStageStartNotifications(stageId, stageName);
 
     return updatedStage;
   }

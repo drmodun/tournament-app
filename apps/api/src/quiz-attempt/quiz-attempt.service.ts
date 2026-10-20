@@ -103,8 +103,7 @@ export class QuizAttemptService {
 
   async findOne<
     TResponseType extends
-      | IQuizAttemptResponse
-      | IQuizAttemptWithAnswersResponse,
+      IQuizAttemptResponse | IQuizAttemptWithAnswersResponse,
   >(
     id: number,
     responseType: QuizAttemptResponseEnumType = QuizAttemptResponsesEnum.BASE,
@@ -213,7 +212,9 @@ export class QuizAttemptService {
     const timing = await this.repository.getAttemptTiming(attemptId);
 
     if (!timing) {
-      throw new NotFoundException(`Quiz attempt with ID ${attemptId} not found`);
+      throw new NotFoundException(
+        `Quiz attempt with ID ${attemptId} not found`,
+      );
     }
 
     const now = Date.now();

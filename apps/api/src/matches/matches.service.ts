@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { MatchesDrizzleRepository } from './matches.repository';
 import { ChallongeService } from '../challonge/challonge.service';
 import {
@@ -10,11 +10,13 @@ import {
 import { QueryMatchupRequestDto } from './dto/requests';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { RosterService } from 'src/roster/roster.service';
+import { CareerService } from 'src/career/career.service';
 import {
   mapMatchupsWithResults,
   mapMatchupWithResultsAndScores,
   RawMatchupWithScores,
 } from './matches.mappers';
+import { firstRoundPairings, nextRoundPairings } from './localBracket';
 
 type Matchup = Awaited<ReturnType<MatchesDrizzleRepository['getMatchupById']>>;
 
@@ -25,10 +27,13 @@ const FALLBACK_CHALLONGE_PARTICIPANT_ID = '1111';
 
 @Injectable()
 export class MatchesService {
+  private readonly logger = new Logger(MatchesService.name);
+
   constructor(
     private readonly matchesRepository: MatchesDrizzleRepository,
     private readonly challongeService: ChallongeService,
     private readonly rosterService: RosterService,
+    private readonly careerService: CareerService,
   ) {}
 
   async createMatchScore(
@@ -42,17 +47,31 @@ export class MatchesService {
       createMatchResult,
     );
 
+    // Ratings change once, when the result is first recorded; corrections do not re-rate
+    try {
+      await this.careerService.applyMatchResult(matchupId);
+    } catch (error) {
+      this.logger.error(
+        `Failed to update ratings for matchup ${matchupId}`,
+        error,
+      );
+    }
+
     await this.syncMatchupToChallonge(matchup, {
       action: 'update',
       advancesRound: true,
       buildScoreData: () => this.buildResultScoreData(createMatchResult),
     });
 
+    await this.advanceLocalBracketAfter(matchup);
+
     return scores;
   }
 
   async deleteMatchScore(matchupId: number) {
     const matchup = await this.matchesRepository.getMatchupById(matchupId);
+
+    await this.checkResultCanChange(matchup);
 
     const result = await this.matchesRepository.deleteMatchScore(matchupId);
 
@@ -71,6 +90,8 @@ export class MatchesService {
   ) {
     const matchup = await this.matchesRepository.getMatchupById(matchupId);
 
+    await this.checkResultCanChange(matchup);
+
     const scores = await this.matchesRepository.updateMatchScore(
       matchupId,
       createMatchResult,
@@ -82,7 +103,103 @@ export class MatchesService {
       buildScoreData: () => this.buildResultScoreData(createMatchResult),
     });
 
+    await this.advanceLocalBracketAfter(matchup);
+
     return scores;
+  }
+
+  // Draws round 1 of a stage that has no Challonge tournament, seeding rosters by rating
+  async startLocalBracket(stageId: number, startDate: Date) {
+    const rosterIdsBySeed =
+      await this.matchesRepository.getRostersBySeed(stageId);
+
+    if (!rosterIdsBySeed.length) {
+      throw new BadRequestException(
+        `No rosters found for stage with ID ${stageId}`,
+      );
+    }
+
+    await this.matchesRepository.insertLocalRound(
+      stageId,
+      1,
+      firstRoundPairings(rosterIdsBySeed),
+      startDate,
+    );
+
+    await this.advanceLocalBracket(stageId, 1);
+  }
+
+  // Once every matchup of a round has a winner, draws the next round, or finishes the stage after the final
+  async advanceLocalBracket(stageId: number, round: number): Promise<void> {
+    const matchups = await this.matchesRepository.getRoundWinners(
+      stageId,
+      round,
+    );
+
+    if (!matchups.length || matchups.some((m) => !m.isFinished)) {
+      return;
+    }
+
+    if (await this.matchesRepository.hasRound(stageId, round + 1)) {
+      return;
+    }
+
+    // Single elimination needs exactly one winner per matchup
+    if (matchups.some((m) => m.winners.length !== 1)) {
+      this.logger.warn(
+        `Round ${round} of stage ${stageId} has a matchup without a single winner; the bracket cannot advance`,
+      );
+      return;
+    }
+
+    const winners = matchups.map((m) => m.winners[0]);
+
+    if (winners.length === 1) {
+      await this.matchesRepository.finishStage(stageId);
+      return;
+    }
+
+    await this.matchesRepository.insertLocalRound(
+      stageId,
+      round + 1,
+      nextRoundPairings(winners),
+      new Date(),
+    );
+
+    await this.advanceLocalBracket(stageId, round + 1);
+  }
+
+  private isLocalMatchup(matchup: Matchup) {
+    return !matchup.matchup.challongeMatchupId && matchup.matchup.round != null;
+  }
+
+  private async advanceLocalBracketAfter(matchup: Matchup) {
+    if (!this.isLocalMatchup(matchup)) {
+      return;
+    }
+
+    await this.advanceLocalBracket(
+      matchup.matchup.stageId,
+      matchup.matchup.round,
+    );
+  }
+
+  // In a local bracket the next round is drawn from these results, so they are frozen once it exists
+  private async checkResultCanChange(matchup: Matchup) {
+    if (!this.isLocalMatchup(matchup)) {
+      return;
+    }
+
+    const isNextRoundDrawn = await this.matchesRepository.hasRound(
+      matchup.matchup.stageId,
+      matchup.matchup.round + 1,
+    );
+
+    if (isNextRoundDrawn) {
+      throw new BadRequestException(
+        'The next round has already been drawn, so this result can no longer change',
+      );
+    }
   }
 
   async checkRoundCompletionAndUpdateNextRound(

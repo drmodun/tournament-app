@@ -121,7 +121,9 @@ describe('UsersService', () => {
     expect(mockUserRepository.createEntity).toHaveBeenCalledWith(
       expect.objectContaining({ isEmailVerified: true }),
     );
-    expect(mockUserRepository.insertEmailConfirmationToken).not.toHaveBeenCalled();
+    expect(
+      mockUserRepository.insertEmailConfirmationToken,
+    ).not.toHaveBeenCalled();
     expect(mockEmailService.generateAndSendEmail).not.toHaveBeenCalled();
   });
 

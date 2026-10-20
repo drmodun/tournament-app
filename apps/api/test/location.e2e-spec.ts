@@ -356,9 +356,14 @@ describe('LocationController (e2e)', () => {
     });
 
     it('should return 403 when changing a location as a non-admin', async () => {
+      // Seeded user 41 is a regular user
+      const nonAdmin = await request(app.getHttpServer())
+        .get('/users/41')
+        .expect(200);
       const loginResponse = await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ email: 'nonadmin@example', password: 'Password123!' });
+        .send({ email: nonAdmin.body.email, password: 'Password123!' })
+        .expect(201);
       const nonAdminToken = loginResponse.body.accessToken;
 
       await request(app.getHttpServer())

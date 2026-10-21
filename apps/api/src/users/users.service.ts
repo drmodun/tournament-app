@@ -35,7 +35,7 @@ export class UsersService {
 
   // isEmailVerified is for sign-ups whose address a provider already verified (Google)
   async create(
-    createUserDto: CreateUserRequest,
+    createUserDto: CreateUserRequest & { isFake?: boolean },
     { isEmailVerified = false }: { isEmailVerified?: boolean } = {},
   ) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);

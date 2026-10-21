@@ -5,8 +5,8 @@ paths:
       operationId: AppController_getHello
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags:
         - App
   /users/fake:
@@ -14,12 +14,12 @@ paths:
       operationId: UsersController_createFake
       parameters: []
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: &a1
@@ -44,14 +44,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       tags: *a1
   /users:
     post:
@@ -59,17 +59,22 @@ paths:
       parameters: []
       requestBody:
         required: true
+        description: As JSON, or as a multipart form whose profilePicture field is a
+          PNG, JPEG, GIF or WebP image of up to 5 MB
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: "#/components/schemas/CreateUserRequest"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: *a1
     patch:
       operationId: UsersController_updateMe
@@ -79,14 +84,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserInfo'
+              $ref: "#/components/schemas/UpdateUserInfo"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a1
@@ -94,12 +99,12 @@ paths:
       operationId: UsersController_deleteMe
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MiniUserResponse'
+                $ref: "#/components/schemas/MiniUserResponse"
       security:
         - bearer: []
       tags: *a1
@@ -191,7 +196,7 @@ paths:
             example: 25
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -225,7 +230,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: &a2 2026-10-20T18:19:38.013Z
+                        updatedAt: &a2 2026-10-21T22:06:01.335Z
                 MiniUserResponse:
                   value:
                     metadata:
@@ -325,22 +330,22 @@ paths:
                         name: John Doe
                         age: 20
                         updatedAt: *a2
-                        createdAt: 2026-10-20T18:19:38.013Z
+                        createdAt: 2026-10-21T22:06:01.335Z
                         following: 0
                         location: New York
-          description: ''
+          description: ""
       tags: *a1
   /users/me:
     get:
       operationId: UsersController_findMe
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExtendedUserResponse'
+                $ref: "#/components/schemas/ExtendedUserResponse"
       security:
         - bearer: []
       tags: *a1
@@ -359,16 +364,16 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/MiniUserResponse'
-                  - $ref: '#/components/schemas/UserResponse'
-                  - $ref: '#/components/schemas/ExtendedUserResponse'
-                  - $ref: '#/components/schemas/MiniUserResponseWithCountry'
-                  - $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  - $ref: "#/components/schemas/MiniUserResponse"
+                  - $ref: "#/components/schemas/UserResponse"
+                  - $ref: "#/components/schemas/ExtendedUserResponse"
+                  - $ref: "#/components/schemas/MiniUserResponseWithCountry"
+                  - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
               examples:
                 UserResponse:
                   value:
@@ -383,7 +388,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: &a3 2026-10-20T18:19:38.013Z
+                    updatedAt: &a3 2026-10-21T22:06:01.335Z
                 MiniUserResponse:
                   value:
                     id: 1
@@ -415,10 +420,10 @@ paths:
                     name: John Doe
                     age: 20
                     updatedAt: *a3
-                    createdAt: 2026-10-20T18:19:38.013Z
+                    createdAt: 2026-10-21T22:06:01.335Z
                     following: 0
                     location: New York
-          description: ''
+          description: ""
       tags: *a1
     patch:
       operationId: UsersController_update
@@ -433,14 +438,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserInfo'
+              $ref: "#/components/schemas/UpdateUserInfo"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a1
@@ -453,12 +458,12 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a1
@@ -482,9 +487,8 @@ paths:
                   type: string
                   format: binary
       responses:
-        '200':
-          description:
-            Stores a PNG, JPEG, GIF or WebP image of up to 5 MB and returns its
+        "200":
+          description: Stores a PNG, JPEG, GIF or WebP image of up to 5 MB and returns its
             URL, to put in a logo, avatar or cover field
           content:
             application/json:
@@ -511,7 +515,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: An uploaded image
       tags: *a4
   /auth/password-reset-request/{email}:
@@ -524,8 +528,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: &a5
         - auth
   /auth/password-reset/{token}:
@@ -542,10 +546,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PasswordResetRequest'
+              $ref: "#/components/schemas/PasswordResetRequest"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a5
   /auth/email-confirmation/{token}:
     post:
@@ -557,16 +561,16 @@ paths:
           schema:
             type: string
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       tags: *a5
   /auth/sse-token:
     get:
       operationId: AuthController_getSseToken
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a5
@@ -579,28 +583,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokensResponse'
+                $ref: "#/components/schemas/TokensResponse"
       tags: *a5
   /auth/refresh:
     get:
       operationId: AuthController_refresh
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokensResponse'
-        '401':
-          description: ''
+                $ref: "#/components/schemas/TokensResponse"
+        "401":
+          description: ""
       security:
         - bearer: []
       tags: *a5
@@ -609,20 +613,20 @@ paths:
       operationId: AuthController_auth
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a5
   /auth/google/callback:
     get:
       operationId: AuthController_authCallback
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokensResponse'
+                $ref: "#/components/schemas/TokensResponse"
       security:
         - bearer: []
       tags: *a5
@@ -646,14 +650,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       tags: &a6
         - groups
   /groups/for-roster/{tournamentId}:
@@ -666,14 +670,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       security:
         - bearer: []
       tags: *a6
@@ -747,7 +751,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -831,7 +835,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2026-10-20T18:19:38.299Z
+                        updatedAt: 2026-10-21T22:06:01.616Z
                         memberCount: 50
                 extended:
                   value:
@@ -856,12 +860,12 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2026-10-20T18:19:38.299Z
+                        updatedAt: 2026-10-21T22:06:01.616Z
                         memberCount: 50
-                        createdAt: 2026-10-20T18:19:38.299Z
+                        createdAt: 2026-10-21T22:06:01.616Z
                         tournamentCount: 10
                         subscriberCount: 100
-          description: ''
+          description: ""
       tags: *a6
     post:
       operationId: GroupController_create
@@ -871,9 +875,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGroupRequest'
+              $ref: "#/components/schemas/CreateGroupRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -885,9 +889,9 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2026-10-20T18:19:38.299Z
+                updatedAt: 2026-10-21T22:06:01.616Z
                 memberCount: 50
-          description: ''
+          description: ""
       security:
         - bearer: []
       tags: *a6
@@ -906,7 +910,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -938,7 +942,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2026-10-20T18:19:38.299Z
+                    updatedAt: 2026-10-21T22:06:01.616Z
                     memberCount: 50
                 extended:
                   value:
@@ -950,19 +954,19 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2026-10-20T18:19:38.299Z
+                    updatedAt: 2026-10-21T22:06:01.616Z
                     memberCount: 50
-                    createdAt: 2026-10-20T18:19:38.299Z
+                    createdAt: 2026-10-21T22:06:01.616Z
                     tournamentCount: 10
                     subscriberCount: 100
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/MiniGroupResponse'
-                  - $ref: '#/components/schemas/MiniGroupResponseWithLogo'
-                  - $ref: '#/components/schemas/MiniGroupResponseWithCountry'
-                  - $ref: '#/components/schemas/GroupResponse'
-                  - $ref: '#/components/schemas/GroupResponseExtended'
-          description: ''
+                  - $ref: "#/components/schemas/MiniGroupResponse"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
+                  - $ref: "#/components/schemas/MiniGroupResponseWithCountry"
+                  - $ref: "#/components/schemas/GroupResponse"
+                  - $ref: "#/components/schemas/GroupResponseExtended"
+          description: ""
       tags: *a6
     patch:
       operationId: GroupController_update
@@ -977,9 +981,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGroupRequest'
+              $ref: "#/components/schemas/UpdateGroupRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -991,9 +995,9 @@ paths:
                 description: A community of chess enthusiasts
                 type: Sports Club
                 focus: Chess
-                updatedAt: 2026-10-20T18:19:38.299Z
+                updatedAt: 2026-10-21T22:06:01.616Z
                 memberCount: 50
-          description: ''
+          description: ""
       security:
         - bearer: []
       tags: *a6
@@ -1006,8 +1010,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a6
@@ -1020,15 +1024,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateFakeGroupRequest'
+              $ref: "#/components/schemas/CreateFakeGroupRequest"
       responses:
-        '201':
+        "201":
           content:
             application/json:
               example:
                 success: true
                 id: 1
-          description: ''
+          description: ""
       security:
         - bearer: []
       tags: *a6
@@ -1042,7 +1046,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -1055,10 +1059,10 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2026-10-20T18:19:38.299Z
+                  updatedAt: 2026-10-21T22:06:01.616Z
                   memberCount: 50
                 members: []
-          description: ''
+          description: ""
       tags: *a6
   /groups/{groupId}/tournaments:
     get:
@@ -1070,7 +1074,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -1083,10 +1087,10 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2026-10-20T18:19:38.299Z
+                  updatedAt: 2026-10-21T22:06:01.616Z
                   memberCount: 50
                 tournaments: []
-          description: ''
+          description: ""
       tags: *a6
   /groups/{groupId}/followers:
     get:
@@ -1098,7 +1102,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               example:
@@ -1111,10 +1115,10 @@ paths:
                   description: A community of chess enthusiasts
                   type: Sports Club
                   focus: Chess
-                  updatedAt: 2026-10-20T18:19:38.299Z
+                  updatedAt: 2026-10-21T22:06:01.616Z
                   memberCount: 50
                 followers: []
-          description: ''
+          description: ""
       tags: *a6
   /group-membership/auto-complete/users/{groupId}/{search}:
     get:
@@ -1141,14 +1145,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       security:
         - bearer: []
       tags: &a7
@@ -1173,14 +1177,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       security:
         - bearer: []
       tags: *a7
@@ -1243,7 +1247,7 @@ paths:
               - member
               - admin
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1303,7 +1307,7 @@ paths:
                           name: Cool Group
                           logo: https://example.com/logo.jpg
                           abbreviation: CG
-                        createdAt: 2026-10-20T18:19:38.307Z
+                        createdAt: 2026-10-21T22:06:01.627Z
                 UserMembershipResponseWithDates:
                   value:
                     metadata:
@@ -1324,7 +1328,7 @@ paths:
                         order: desc
                         responseType: USERMEMBERSHIPRESPONSEWITHDATES
                     results:
-                      - createdAt: 2026-10-20T18:19:38.307Z
+                      - createdAt: 2026-10-21T22:06:01.627Z
                         isFake: false
                         role: member
                         country: country
@@ -1356,7 +1360,7 @@ paths:
                         role: member
                         user: *a8
                         group: *a9
-                        createdAt: 2026-10-20T18:19:38.307Z
+                        createdAt: 2026-10-21T22:06:01.627Z
                         country: country
                         name: name
                         logo: logo
@@ -1384,7 +1388,7 @@ paths:
                     results:
                       - userId: 1
                         groupId: 1
-          description: ''
+          description: ""
       tags: *a7
   /group-membership/{groupId}/transfer-ownership/{userId}:
     post:
@@ -1401,8 +1405,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a7
@@ -1416,8 +1420,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a7
@@ -1441,7 +1445,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1465,10 +1469,10 @@ paths:
                       name: Cool Group
                       logo: https://example.com/logo.jpg
                       abbreviation: CG
-                    createdAt: 2026-10-20T18:19:38.307Z
+                    createdAt: 2026-10-21T22:06:01.627Z
                 UserMembershipResponseWithDates:
                   value:
-                    createdAt: 2026-10-20T18:19:38.307Z
+                    createdAt: 2026-10-21T22:06:01.627Z
                     isFake: false
                     role: member
                     country: country
@@ -1482,7 +1486,7 @@ paths:
                     role: member
                     user: *a10
                     group: *a11
-                    createdAt: 2026-10-20T18:19:38.307Z
+                    createdAt: 2026-10-21T22:06:01.627Z
                     country: country
                     name: name
                     logo: logo
@@ -1494,12 +1498,12 @@ paths:
                     groupId: 1
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/MinimalMembershipResponse'
-                  - $ref: '#/components/schemas/GroupMembershipResponse'
-                  - $ref: '#/components/schemas/UserMembershipResponseWithDates'
-                  - $ref: '#/components/schemas/GroupMembershipResponseWithDates'
-                  - $ref: '#/components/schemas/GroupMembershipKey'
-          description: ''
+                  - $ref: "#/components/schemas/MinimalMembershipResponse"
+                  - $ref: "#/components/schemas/GroupMembershipResponse"
+                  - $ref: "#/components/schemas/UserMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipResponseWithDates"
+                  - $ref: "#/components/schemas/GroupMembershipKey"
+          description: ""
       tags: *a7
     post:
       operationId: GroupMembershipController_create
@@ -1515,8 +1519,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a7
@@ -1534,8 +1538,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a7
@@ -1557,10 +1561,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupMembershipUpdateRequest'
+              $ref: "#/components/schemas/GroupMembershipUpdateRequest"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a7
@@ -1621,14 +1625,14 @@ paths:
             items:
               type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/NotificationsResponse'
+                  $ref: "#/components/schemas/NotificationsResponse"
       security:
         - bearer: []
       tags: &a12
@@ -1638,8 +1642,8 @@ paths:
       operationId: SseNotificationsController_requestNewToken
       parameters: []
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a12
@@ -1653,8 +1657,8 @@ paths:
           schema:
             type: number
       responses:
-        '204':
-          description: ''
+        "204":
+          description: ""
       security:
         - bearer: []
       tags: *a12
@@ -1663,8 +1667,8 @@ paths:
       operationId: SseNotificationsController_markAllAsRead
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a12
@@ -1673,8 +1677,8 @@ paths:
       operationId: SseNotificationsController_markBulkAsRead
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a12
@@ -1688,8 +1692,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a12
@@ -1703,8 +1707,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       tags: *a12
   /followers/auto-complete/followers/{search}:
     get:
@@ -1726,14 +1730,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       security:
         - bearer: []
       tags: &a13
@@ -1758,14 +1762,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       security:
         - bearer: []
       tags: *a13
@@ -1819,7 +1823,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1827,7 +1831,7 @@ paths:
                   value:
                     id: 1
                     username: john_doe
-                    createdAt: 2026-10-20T18:19:38.323Z
+                    createdAt: 2026-10-21T22:06:01.659Z
                     bio: I am a user
                     profilePicture: https://example.com/image.jpg
                     country: USA
@@ -1836,15 +1840,15 @@ paths:
                     followers: 0
                     level: 0
                     isFake: false
-                    updatedAt: 2026-10-20T18:19:38.323Z
+                    updatedAt: 2026-10-21T22:06:01.659Z
                     age: 20
                 mini:
                   value:
-                    createdAt: 2026-10-20T18:19:38.323Z
+                    createdAt: 2026-10-21T22:06:01.659Z
                     id: 1
                     isFake: false
                     username: john_doe
-          description: ''
+          description: ""
       tags: *a13
   /followers/{userId}/{followerId}:
     get:
@@ -1861,12 +1865,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FollowerMiniResponse'
+                $ref: "#/components/schemas/FollowerMiniResponse"
       tags: *a13
   /followers/{userId}:
     post:
@@ -1878,8 +1882,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a13
@@ -1892,8 +1896,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a13
@@ -1952,7 +1956,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -1982,7 +1986,7 @@ paths:
                         level: 0
                         name: John Doe
                         age: 20
-                        updatedAt: 2026-10-20T18:19:38.013Z
+                        updatedAt: 2026-10-21T22:06:01.335Z
                         groupId: 1
                         message: I would like to join this group
                 with-mini-user:
@@ -2004,7 +2008,7 @@ paths:
                         username: john_doe
                         isFake: false
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2026-10-20T18:19:38.339Z
+                        createdAt: 2026-10-21T22:06:01.697Z
                 with-group:
                   value:
                     metadata:
@@ -2028,7 +2032,7 @@ paths:
                         description: A community of chess enthusiasts
                         type: Sports Club
                         focus: Chess
-                        updatedAt: 2026-10-20T18:19:38.299Z
+                        updatedAt: 2026-10-21T22:06:01.616Z
                         memberCount: 50
                         userId: 1
                         message: I would like to join this group
@@ -2051,8 +2055,8 @@ paths:
                         name: Chess Club
                         abbreviation: CC
                         logo: https://example.com/chess-club-logo.jpg
-                        createdAt: 2026-10-20T18:19:38.339Z
-          description: ''
+                        createdAt: 2026-10-21T22:06:01.697Z
+          description: ""
       security: &a16
         - &a14
           bearer: []
@@ -2072,10 +2076,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGroupJoinRequestDto'
+              $ref: "#/components/schemas/CreateGroupJoinRequestDto"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - *a14
         - bearer: []
@@ -2093,10 +2097,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGroupJoinRequestDto'
+              $ref: "#/components/schemas/UpdateGroupJoinRequestDto"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - *a14
         - bearer: []
@@ -2110,8 +2114,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - *a14
         - bearer: []
@@ -2136,7 +2140,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a specific group join request
           content:
             application/json:
@@ -2154,7 +2158,7 @@ paths:
                     level: 0
                     name: John Doe
                     age: 20
-                    updatedAt: 2026-10-20T18:19:38.013Z
+                    updatedAt: 2026-10-21T22:06:01.335Z
                     groupId: 1
                     message: I would like to join this group
                 with-mini-user:
@@ -2163,7 +2167,7 @@ paths:
                     username: john_doe
                     isFake: false
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2026-10-20T18:19:38.339Z
+                    createdAt: 2026-10-21T22:06:01.697Z
                 with-group:
                   value:
                     id: 1
@@ -2174,7 +2178,7 @@ paths:
                     description: A community of chess enthusiasts
                     type: Sports Club
                     focus: Chess
-                    updatedAt: 2026-10-20T18:19:38.299Z
+                    updatedAt: 2026-10-21T22:06:01.616Z
                     memberCount: 50
                     userId: 1
                     message: I would like to join this group
@@ -2184,13 +2188,13 @@ paths:
                     name: Chess Club
                     abbreviation: CC
                     logo: https://example.com/chess-club-logo.jpg
-                    createdAt: 2026-10-20T18:19:38.339Z
+                    createdAt: 2026-10-21T22:06:01.697Z
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/GroupJoinRequestWithUserResponse'
-                  - $ref: '#/components/schemas/GroupJoinRequestWithMiniUserResponse'
-                  - $ref: '#/components/schemas/GroupJoinRequestWithGroupResponse'
-                  - $ref: '#/components/schemas/GroupJoinRequestWithMiniGroupResponse'
+                  - $ref: "#/components/schemas/GroupJoinRequestWithUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniUserResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithGroupResponse"
+                  - $ref: "#/components/schemas/GroupJoinRequestWithMiniGroupResponse"
       security: *a16
       tags: *a15
   /group-join-requests/{groupId}/{userId}/accept:
@@ -2208,8 +2212,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security: *a16
       tags: *a15
   /group-join-requests/{groupId}/{userId}/reject:
@@ -2227,8 +2231,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security: *a16
       tags: *a15
   /group-requirements/{groupId}:
@@ -2245,9 +2249,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGroupRequirementsDto'
+              $ref: "#/components/schemas/CreateGroupRequirementsDto"
       responses:
-        '201':
+        "201":
           description: Requirements created successfully
       security:
         - bearer: []
@@ -2263,7 +2267,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Requirements retrieved successfully
       security:
         - bearer: []
@@ -2282,9 +2286,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGroupRequirementsDto'
+              $ref: "#/components/schemas/UpdateGroupRequirementsDto"
       responses:
-        '200':
+        "200":
           description: Requirements updated successfully
       security:
         - bearer: []
@@ -2299,7 +2303,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Requirements deleted successfully
       security:
         - bearer: []
@@ -2360,7 +2364,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -2391,7 +2395,7 @@ paths:
                         followers: 0
                         isFake: false
                         level: 0
-                        updatedAt: 2026-10-20T18:19:38.354Z
+                        updatedAt: 2026-10-21T22:06:01.726Z
                         message: Would you like to join our group?
                         groupId: 1
                         age: 20
@@ -2415,7 +2419,7 @@ paths:
                       - id: 1
                         username: john_doe
                         profilePicture: https://example.com/image.jpg
-                        createdAt: 2026-10-20T18:19:38.354Z
+                        createdAt: 2026-10-21T22:06:01.726Z
                         isFake: false
                 with-group:
                   value:
@@ -2446,7 +2450,7 @@ paths:
                         focus: Hybrid
                         locationId: 1
                         type: Public
-                        updatedAt: 10/20/2026
+                        updatedAt: 10/22/2026
                 with-mini-group:
                   value:
                     metadata:
@@ -2468,8 +2472,8 @@ paths:
                         name: Example Group
                         abbreviation: EG
                         logo: https://example.com/logo.jpg
-                        createdAt: 2026-10-20T18:19:38.355Z
-          description: ''
+                        createdAt: 2026-10-21T22:06:01.726Z
+          description: ""
       tags: &a18
         - group-invites
   /group-invites/{groupId}/accept:
@@ -2482,8 +2486,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a18
@@ -2497,8 +2501,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a18
@@ -2521,10 +2525,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateGroupInviteDto'
+              $ref: "#/components/schemas/CreateGroupInviteDto"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a18
@@ -2547,7 +2551,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -2563,7 +2567,7 @@ paths:
                     followers: 0
                     isFake: false
                     level: 0
-                    updatedAt: 2026-10-20T18:19:38.354Z
+                    updatedAt: 2026-10-21T22:06:01.726Z
                     message: Would you like to join our group?
                     groupId: 1
                     age: 20
@@ -2572,7 +2576,7 @@ paths:
                     id: 1
                     username: john_doe
                     profilePicture: https://example.com/image.jpg
-                    createdAt: 2026-10-20T18:19:38.354Z
+                    createdAt: 2026-10-21T22:06:01.726Z
                     isFake: false
                 with-group:
                   value:
@@ -2588,15 +2592,15 @@ paths:
                     focus: Hybrid
                     locationId: 1
                     type: Public
-                    updatedAt: 10/20/2026
+                    updatedAt: 10/22/2026
                 with-mini-group:
                   value:
                     id: 1
                     name: Example Group
                     abbreviation: EG
                     logo: https://example.com/logo.jpg
-                    createdAt: 2026-10-20T18:19:38.355Z
-          description: ''
+                    createdAt: 2026-10-21T22:06:01.726Z
+          description: ""
       tags: *a18
     patch:
       operationId: GroupInvitesController_update
@@ -2616,10 +2620,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGroupInviteDto'
+              $ref: "#/components/schemas/UpdateGroupInviteDto"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a18
@@ -2637,8 +2641,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a18
@@ -2662,14 +2666,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+                  $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
       tags: &a19
         - categories
   /categories:
@@ -2722,7 +2726,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -2807,7 +2811,7 @@ paths:
                         activeTournamentCount: 3
                         createdAt: 2024-01-07T14:00:00.000Z
                         updatedAt: 2024-01-07T14:00:00.000Z
-          description: ''
+          description: ""
       tags: *a19
     post:
       operationId: CategoryController_create
@@ -2817,14 +2821,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCategoryRequest'
+              $ref: "#/components/schemas/CreateCategoryRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a19
@@ -2843,7 +2847,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a single category
           content:
             application/json:
@@ -2892,14 +2896,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateCategoryRequest'
+              $ref: "#/components/schemas/UpdateCategoryRequest"
       responses:
-        '200':
+        "200":
           description: Updates a category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a19
@@ -2912,12 +2916,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Deletes a category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a19
@@ -2941,7 +2945,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns a list of tournaments that can be auto-completed
       tags: &a29
         - tournaments
@@ -3123,7 +3127,7 @@ paths:
             example: true
             type: boolean
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -3302,7 +3306,7 @@ paths:
                         isRanked: true
                         maximumMMR: 2500
                         minimumMMR: 1500
-          description: ''
+          description: ""
       tags: *a29
     post:
       operationId: TournamentController_create
@@ -3312,14 +3316,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTournamentRequest'
+              $ref: "#/components/schemas/CreateTournamentRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new tournament
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a29
@@ -3338,8 +3342,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a29
@@ -3358,7 +3362,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a single tournament
           content:
             application/json:
@@ -3456,14 +3460,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTournamentRequest'
+              $ref: "#/components/schemas/UpdateTournamentRequest"
       responses:
-        '200':
+        "200":
           description: Updates a tournament
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a29
@@ -3476,12 +3480,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Deletes a tournament
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a29
@@ -3621,7 +3625,7 @@ paths:
             example: 6
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -3638,8 +3642,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a37 2026-10-20T18:19:38.449Z
-                    endDate: &a38 2026-10-20T18:19:38.449Z
+                    startDate: &a37 2026-10-21T22:06:01.806Z
+                    endDate: &a38 2026-10-21T22:06:01.806Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3745,7 +3749,7 @@ paths:
                         name: Chess
                         logo: https://example.com/chess-category-logo.jpg
                       links: https://chess.com/tournament/123
-          description: ''
+          description: ""
       tags: &a43
         - stages
   /stages/managed:
@@ -3763,8 +3767,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a43
@@ -3778,12 +3782,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a43
@@ -3802,7 +3806,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a single stage
           content:
             application/json:
@@ -3820,8 +3824,8 @@ paths:
                     tournamentId: 1
                     stageStatus: ongoing
                     rostersParticipating: 0
-                    startDate: &a44 2026-10-20T18:19:38.449Z
-                    endDate: &a45 2026-10-20T18:19:38.449Z
+                    startDate: &a44 2026-10-21T22:06:01.806Z
+                    endDate: &a45 2026-10-21T22:06:01.806Z
                     stageType: round_robin
                     description: Initial group stage of the tournament
                     logo: https://example.com/stage-logo.jpg
@@ -3942,14 +3946,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateStageRequest'
+              $ref: "#/components/schemas/CreateStageRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new stage
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a43
@@ -3972,14 +3976,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateStageRequest'
+              $ref: "#/components/schemas/UpdateStageRequest"
       responses:
-        '200':
+        "200":
           description: Updates a stage
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a43
@@ -3992,12 +3996,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Deletes a stage
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a43
@@ -4011,8 +4015,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       summary: Get all managed rosters for a specific user
@@ -4107,7 +4111,7 @@ paths:
             example: 987
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -4217,7 +4221,7 @@ paths:
                         players: *a52
                         createdAt: *a53
                         updatedAt: *a54
-          description: ''
+          description: ""
       summary: Get all rosters with optional filtering
       tags: *a55
   /roster/{id}:
@@ -4235,7 +4239,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a specific roster
           content:
             application/json:
@@ -4309,8 +4313,8 @@ paths:
                     updatedAt: *a60
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/MiniRosterDto'
-                  - $ref: '#/components/schemas/RosterDto'
+                  - $ref: "#/components/schemas/MiniRosterDto"
+                  - $ref: "#/components/schemas/RosterDto"
       summary: Get a specific roster by ID
       tags: *a55
     patch:
@@ -4326,9 +4330,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRosterDto'
+              $ref: "#/components/schemas/CreateRosterDto"
       responses:
-        '200':
+        "200":
           description: The roster has been successfully updated
           content:
             application/json:
@@ -4479,7 +4483,7 @@ paths:
             example: 987
             type: number
       responses:
-        '200':
+        "200":
           description: Returns all rosters for a specific stage
           content:
             application/json:
@@ -4686,7 +4690,7 @@ paths:
             example: 987
             type: number
       responses:
-        '200':
+        "200":
           description: Returns all rosters for a specific participation
           content:
             application/json:
@@ -4893,7 +4897,7 @@ paths:
             example: 987
             type: number
       responses:
-        '200':
+        "200":
           description: Returns all rosters that include a specific user
           content:
             application/json:
@@ -5100,7 +5104,7 @@ paths:
             example: 987
             type: number
       responses:
-        '200':
+        "200":
           description: Returns all rosters for a specific group
           content:
             application/json:
@@ -5232,10 +5236,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRosterDto'
+              $ref: "#/components/schemas/CreateRosterDto"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       summary: Create a new roster
@@ -5304,7 +5308,7 @@ paths:
             example: 789
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -5370,15 +5374,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2026-10-20T18:19:38.493Z
+                          startDate: 2026-10-21T22:06:01.826Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2026-10-20T18:19:38.493Z
-                        updatedAt: 2026-10-20T18:19:38.493Z
+                        createdAt: 2026-10-21T22:06:01.826Z
+                        updatedAt: 2026-10-21T22:06:01.826Z
                 base:
                   value:
                     metadata:
@@ -5397,7 +5401,7 @@ paths:
                         responseType: BASE
                     results:
                       - *a81
-          description: ''
+          description: ""
       tags: &a83
         - participations
   /participations/{participationId}:
@@ -5415,7 +5419,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -5481,15 +5485,15 @@ paths:
                         tournament:
                           id: 1
                           type: league
-                          startDate: 2026-10-20T18:19:38.493Z
+                          startDate: 2026-10-21T22:06:01.826Z
                           name: Chess Championship
                         user:
                           id: 1
                           username: john_doe
                           isFake: false
                           profilePicture: https://example.com/image.jpg
-                        createdAt: 2026-10-20T18:19:38.493Z
-                        updatedAt: 2026-10-20T18:19:38.493Z
+                        createdAt: 2026-10-21T22:06:01.826Z
+                        updatedAt: 2026-10-21T22:06:01.826Z
                 base:
                   value:
                     metadata:
@@ -5508,7 +5512,7 @@ paths:
                         responseType: BASE
                     results:
                       - *a82
-          description: ''
+          description: ""
       tags: *a83
     delete:
       operationId: ParticipationController_remove
@@ -5519,8 +5523,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a83
@@ -5534,12 +5538,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a83
@@ -5553,14 +5557,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniParticipationWithGroup'
+                  $ref: "#/components/schemas/MiniParticipationWithGroup"
       security:
         - bearer: []
       tags: *a83
@@ -5579,12 +5583,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a83
@@ -5603,12 +5607,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a83
@@ -5627,12 +5631,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a83
@@ -5650,10 +5654,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EndMatchupRequestDto'
+              $ref: "#/components/schemas/EndMatchupRequestDto"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: &a84
@@ -5672,10 +5676,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EndMatchupRequestDto'
+              $ref: "#/components/schemas/EndMatchupRequestDto"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a84
@@ -5689,8 +5693,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a84
@@ -5795,7 +5799,7 @@ paths:
           description: The Challonge ID of the matchup to filter by
           schema:
             nullable: true
-            example: '123456789'
+            example: "123456789"
             type: string
         - name: hasChallongeId
           required: false
@@ -5806,14 +5810,14 @@ paths:
             example: true
             type: boolean
       responses:
-        '200':
+        "200":
           description: Returns matchups with results
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MatchupResponseWithResultsDto'
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       tags: *a84
   /matches/stage/{stageId}/standings:
     get:
@@ -5825,14 +5829,13 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description:
-            Standings of a stage run by the API, best first, in the format its
+        "200":
+          description: Standings of a stage run by the API, best first, in the format its
             stage type names
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StageStandingsResponseDto'
+                $ref: "#/components/schemas/StageStandingsResponseDto"
       tags: *a84
   /matches/matchup/{matchupId}/results:
     get:
@@ -5844,12 +5847,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns a matchup with results and scores
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MatchupResponseWithResultsAndScoresDto'
+                $ref: "#/components/schemas/MatchupResponseWithResultsAndScoresDto"
       tags: *a84
   /matches/user/{userId}/results:
     get:
@@ -5871,14 +5874,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns matchups with results for a user
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MatchupResponseWithResultsDto'
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       tags: *a84
   /matches/roster/{rosterId}/results:
     get:
@@ -5901,14 +5904,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns matchups with results for a roster
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MatchupResponseWithResultsDto'
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       tags: *a84
   /matches/managed:
     get:
@@ -6011,7 +6014,7 @@ paths:
           description: The Challonge ID of the matchup to filter by
           schema:
             nullable: true
-            example: '123456789'
+            example: "123456789"
             type: string
         - name: hasChallongeId
           required: false
@@ -6022,14 +6025,14 @@ paths:
             example: true
             type: boolean
       responses:
-        '200':
+        "200":
           description: Returns matchups that a user is managing
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MatchupResponseWithResultsDto'
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       security:
         - bearer: []
       tags: *a84
@@ -6054,14 +6057,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns matchups with results for a group
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MatchupResponseWithResultsDto'
+                  $ref: "#/components/schemas/MatchupResponseWithResultsDto"
       tags: *a84
   /blocked-groups/auto-complete/{search}:
     get:
@@ -6083,14 +6086,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+                  $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       security:
         - bearer: []
       tags: &a85
@@ -6110,8 +6113,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a85
@@ -6125,8 +6128,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a85
@@ -6139,8 +6142,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a85
@@ -6169,14 +6172,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+                  $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       security:
         - bearer: []
       tags: &a86
@@ -6201,8 +6204,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a86
@@ -6221,8 +6224,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a86
@@ -6240,8 +6243,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a86
@@ -6250,14 +6253,14 @@ paths:
       operationId: LfgController_findMyLFG
       parameters: []
       responses:
-        '200':
+        "200":
           description: Returns all LFG posts by the current user
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/LFGResponse'
+                  $ref: "#/components/schemas/LFGResponse"
       security:
         - bearer: []
       summary: Get all LFG posts by the current user
@@ -6272,10 +6275,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateLFGRequest'
+              $ref: "#/components/schemas/CreateLFGRequest"
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a87
@@ -6289,8 +6292,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a87
@@ -6308,10 +6311,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateLFGRequest'
+              $ref: "#/components/schemas/UpdateLFGRequest"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a87
@@ -6324,8 +6327,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a87
@@ -6339,8 +6342,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: &a88
@@ -6354,8 +6357,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a88
@@ -6374,8 +6377,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a88
@@ -6399,8 +6402,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: &a89
@@ -6420,8 +6423,8 @@ paths:
           schema:
             type: number
       responses:
-        '201':
-          description: ''
+        "201":
+          description: ""
       security:
         - bearer: []
       tags: *a89
@@ -6439,8 +6442,8 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - bearer: []
       tags: *a89
@@ -6509,7 +6512,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Groups retrieved successfully
       security:
         - bearer: []
@@ -6530,9 +6533,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateLFPDto'
+              $ref: "#/components/schemas/CreateLFPDto"
       responses:
-        '201':
+        "201":
           description: LFP post created successfully
       security:
         - bearer: []
@@ -6547,7 +6550,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: LFP posts retrieved successfully
       security:
         - bearer: []
@@ -6572,9 +6575,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateLFPDto'
+              $ref: "#/components/schemas/UpdateLFPDto"
       responses:
-        '200':
+        "200":
           description: LFP post updated successfully
       security:
         - bearer: []
@@ -6594,7 +6597,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: LFP post deleted successfully
       security:
         - bearer: []
@@ -6605,12 +6608,12 @@ paths:
       operationId: LocationController_getMap
       parameters: []
       responses:
-        '200':
-          description: 'Returns all locations unpaginated '
+        "200":
+          description: "Returns all locations unpaginated "
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       tags: &a91
         - locations
   /locations:
@@ -6673,7 +6676,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -6734,8 +6737,8 @@ paths:
                         name: New York
                         lat: 40.7128
                         lng: -74.006
-                        createdAt: 2026-10-20T18:19:38.297Z
-          description: ''
+                        createdAt: 2026-10-21T22:06:01.613Z
+          description: ""
       tags: *a91
     post:
       operationId: LocationController_create
@@ -6745,14 +6748,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateLocationDto'
+              $ref: "#/components/schemas/CreateLocationDto"
       responses:
-        '200':
+        "200":
           description: Creates a new location
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a91
@@ -6771,7 +6774,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a single location
           content:
             application/json:
@@ -6795,7 +6798,7 @@ paths:
                       name: New York
                       lat: 40.7128
                       lng: -74.006
-                      createdAt: 2026-10-20T18:19:38.297Z
+                      createdAt: 2026-10-21T22:06:01.613Z
       tags: *a91
     patch:
       operationId: LocationController_update
@@ -6810,14 +6813,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateLocationDto'
+              $ref: "#/components/schemas/UpdateLocationDto"
       responses:
-        '200':
+        "200":
           description: Updates a location
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a91
@@ -6830,12 +6833,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Deletes a location
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a91
@@ -6859,12 +6862,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns a list of quizzes that can be auto-completed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizResponse'
+                $ref: "#/components/schemas/QuizResponse"
       tags: &a92
         - quiz
   /quiz/detailed/{quizId}:
@@ -6877,12 +6880,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns a detailed quiz
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizResponseExtended'
+                $ref: "#/components/schemas/QuizResponseExtended"
       security:
         - bearer: []
       tags: *a92
@@ -6961,7 +6964,7 @@ paths:
             example: false
             type: boolean
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -6992,7 +6995,7 @@ paths:
                       pageSize: 10
                       totalCount: 25
                       totalPages: 3
-          description: ''
+          description: ""
       tags: *a92
     post:
       operationId: QuizController_create
@@ -7002,14 +7005,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateQuizRequest'
+              $ref: "#/components/schemas/CreateQuizRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new quiz
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a92
@@ -7028,12 +7031,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns a list of quizzes authored by the current user
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizResponse'
+                $ref: "#/components/schemas/QuizResponse"
       security:
         - bearer: []
       tags: *a92
@@ -7052,8 +7055,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
@@ -7116,26 +7119,26 @@ paths:
                           image: null
                           isImmediateFeedback: true
                           correctAnswers:
-                            - '4'
+                            - "4"
                           explanation: Tournament rules state that each team must have exactly 4 players.
                           options:
                             - id: 1
-                              text: '2'
+                              text: "2"
                               order: 1
                               count: 10
                               isCorrect: false
                             - id: 2
-                              text: '3'
+                              text: "3"
                               order: 2
                               count: 25
                               isCorrect: false
                             - id: 3
-                              text: '4'
+                              text: "4"
                               order: 3
                               count: 105
                               isCorrect: true
                             - id: 4
-                              text: '5'
+                              text: "5"
                               order: 4
                               count: 10
                               isCorrect: false
@@ -7154,14 +7157,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateQuizRequest'
+              $ref: "#/components/schemas/UpdateQuizRequest"
       responses:
-        '200':
+        "200":
           description: Updates a quiz
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a92
@@ -7174,12 +7177,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a92
@@ -7239,7 +7242,7 @@ paths:
           schema:
             type: boolean
       responses:
-        '200':
+        "200":
           content:
             application/json:
               examples:
@@ -7253,7 +7256,7 @@ paths:
                     score: 80
                     isSubmitted: true
                     createdAt: 2023-05-30T14:30:00Z
-          description: ''
+          description: ""
       security:
         - bearer: []
       tags: &a93
@@ -7273,12 +7276,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Returns a list of quiz attempts made by the current user
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizAttemptResponse'
+                $ref: "#/components/schemas/QuizAttemptResponse"
       security:
         - bearer: []
       tags: *a93
@@ -7297,7 +7300,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Returns a quiz attempt by ID
           content:
             application/json:
@@ -7324,15 +7327,14 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description:
-            'For a quiz shown one question at a time: the question to answer
+        "200":
+          description: "For a quiz shown one question at a time: the question to answer
             now and when its time runs out. `question` is null once every
-            question is done'
+            question is done"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CurrentQuestionResponse'
+                $ref: "#/components/schemas/CurrentQuestionResponse"
       security:
         - bearer: []
       tags: *a93
@@ -7346,12 +7348,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: Creates a new quiz attempt
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a93
@@ -7369,14 +7371,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubmitQuizAttemptRequest'
+              $ref: "#/components/schemas/SubmitQuizAttemptRequest"
       responses:
-        '200':
+        "200":
           description: Submits a quiz attempt
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a93
@@ -7399,14 +7401,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateQuizAnswerRequest'
+              $ref: "#/components/schemas/CreateQuizAnswerRequest"
       responses:
-        '200':
+        "200":
           description: Creates a new answer for a quiz attempt
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a93
@@ -7424,14 +7426,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateQuizAnswerRequest'
+              $ref: "#/components/schemas/UpdateQuizAnswerRequest"
       responses:
-        '200':
+        "200":
           description: Updates an answer
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a93
@@ -7455,14 +7457,13 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description:
-            Returns a leaderboard of users who have completed the quiz, sorted
+        "200":
+          description: Returns a leaderboard of users who have completed the quiz, sorted
             by score and time
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizLeaderboardResponse'
+                $ref: "#/components/schemas/QuizLeaderboardResponse"
       tags: *a93
   /conversion-rules:
     get:
@@ -7488,14 +7489,14 @@ paths:
               - stage_to_tournament
               - tournament_to_tournament
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ConversionRuleResponse'
+                  $ref: "#/components/schemas/ConversionRuleResponse"
       tags: &a94
         - conversion-rules
     post:
@@ -7506,16 +7507,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateConversionRuleDto'
+              $ref: "#/components/schemas/CreateConversionRuleDto"
       responses:
-        '200':
-          description:
-            Creates a rule; the caller must organise both the source and the
+        "200":
+          description: Creates a rule; the caller must organise both the source and the
             destination
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a94
@@ -7529,12 +7529,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConversionRuleResponse'
+                $ref: "#/components/schemas/ConversionRuleResponse"
       tags: *a94
     delete:
       operationId: ConversionRuleController_remove
@@ -7545,12 +7545,12 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ActionResponsePrimary'
+                $ref: "#/components/schemas/ActionResponsePrimary"
       security:
         - bearer: []
       tags: *a94
@@ -7564,17 +7564,42 @@ paths:
           schema:
             type: number
       responses:
-        '200':
-          description:
-            Applies a rule whose source has finished. Stages run by the API
+        "200":
+          description: Applies a rule whose source has finished. Stages run by the API
             apply their rules by themselves when they finish
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConversionRuleResponse'
+                $ref: "#/components/schemas/ConversionRuleResponse"
       security:
         - bearer: []
       tags: *a94
+  /stages/{stageId}/reopen:
+    post:
+      operationId: StageReopenController_reopen
+      parameters:
+        - name: stageId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Puts a finished stage back in play so its results can be corrected.
+            Undoes the conversion rules that ran when it finished, which run
+            again when it finishes again. Refused while a stage or tournament
+            those rules fed has started. For the organisers of the stage and of
+            every destination, and site admins
+          content:
+            application/json:
+              schema:
+                example:
+                  id: 1
+                  stageStatus: ongoing
+      security:
+        - bearer: []
+      tags:
+        - stages
 info:
   title: winning.sh API
   description: The Winning.sh API description
@@ -8005,9 +8030,9 @@ components:
         pagination:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/PaginationInstance'
+            - $ref: "#/components/schemas/PaginationInstance"
         links:
-          $ref: '#/components/schemas/LinksInstance'
+          $ref: "#/components/schemas/LinksInstance"
         query:
           type: object
       required:
@@ -8022,7 +8047,7 @@ components:
         metadata:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/QueryMetadata'
+            - $ref: "#/components/schemas/QueryMetadata"
       required:
         - results
         - metadata
@@ -8059,12 +8084,6 @@ components:
             requirements)
           example: P@ssw0rd123!
           format: password
-        isFake:
-          type: boolean
-          description: Whether this is a fake user account
-          example: false
-          default: false
-          nullable: true
         profilePicture:
           type: string
           description: URL to the user's profile picture
@@ -8291,7 +8310,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -8344,7 +8363,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -8491,11 +8510,11 @@ components:
         user:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
         group:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
         createdAt:
           type: string
           readOnly: true
@@ -8903,7 +8922,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -9127,7 +9146,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -9186,7 +9205,7 @@ components:
         location:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         updatedAt:
           type: string
           readOnly: true
@@ -9519,14 +9538,14 @@ components:
           description: User who created the tournament
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponse'
+            - $ref: "#/components/schemas/MiniUserResponse"
         affiliatedGroup:
           description: Group affiliated with the tournament
           nullable: true
           readOnly: true
           type: object
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponse'
+            - $ref: "#/components/schemas/MiniGroupResponse"
         endDate:
           format: date-time
           type: string
@@ -9552,7 +9571,7 @@ components:
           description: Category this tournament belongs to
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
         links:
           type: string
           description: External links related to the tournament
@@ -9565,7 +9584,7 @@ components:
           readOnly: true
           type: object
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
       required:
         - id
         - name
@@ -9648,14 +9667,14 @@ components:
           description: User who created the tournament
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponse'
+            - $ref: "#/components/schemas/MiniUserResponse"
         affiliatedGroup:
           description: Group affiliated with the tournament
           nullable: true
           readOnly: true
           type: object
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponse'
+            - $ref: "#/components/schemas/MiniGroupResponse"
         endDate:
           format: date-time
           type: string
@@ -9681,7 +9700,7 @@ components:
           description: Category this tournament belongs to
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
         links:
           type: string
           description: External links related to the tournament
@@ -9694,7 +9713,7 @@ components:
           readOnly: true
           type: object
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         createdAt:
           format: date-time
           type: string
@@ -9723,7 +9742,7 @@ components:
           readOnly: true
           type: object
           allOf:
-            - $ref: '#/components/schemas/MiniTournamentResponseWithLogo'
+            - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
         isRanked:
           type: boolean
           description: Whether the tournament is ranked
@@ -10084,7 +10103,7 @@ components:
           description: Location details for the stage
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
       required:
         - id
         - name
@@ -10161,12 +10180,12 @@ components:
           description: Location details for the stage
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         tournament:
           description: Tournament details associated with this stage
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniTournamentResponseWithLogo'
+            - $ref: "#/components/schemas/MiniTournamentResponseWithLogo"
       required:
         - id
         - name
@@ -10244,7 +10263,7 @@ components:
           description: Location details for the stage
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         minPlayersPerTeam:
           type: number
           description: Minimum number of players required per team
@@ -10347,7 +10366,7 @@ components:
           description: Location details for the stage
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/LocationResponse'
+            - $ref: "#/components/schemas/LocationResponse"
         minPlayersPerTeam:
           type: number
           description: Minimum number of players required per team
@@ -10377,7 +10396,7 @@ components:
           description: Full tournament details associated with this stage
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/TournamentResponse'
+            - $ref: "#/components/schemas/TournamentResponse"
       required:
         - id
         - name
@@ -10629,12 +10648,12 @@ components:
           description: Group information associated with this roster
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
         user:
           description: User information associated with this roster
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
       required:
         - id
         - stageId
@@ -10660,7 +10679,7 @@ components:
         category:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/CategoryMiniResponseWithLogo'
+            - $ref: "#/components/schemas/CategoryMiniResponseWithLogo"
       required:
         - userId
         - categoryId
@@ -10674,7 +10693,7 @@ components:
           description: User information for the player
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponseWithCountry'
+            - $ref: "#/components/schemas/MiniUserResponseWithCountry"
         isSubstitute:
           type: boolean
           description: Whether the player is a substitute
@@ -10685,7 +10704,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/CareerCategoryResponse'
+            $ref: "#/components/schemas/CareerCategoryResponse"
       required:
         - user
         - isSubstitute
@@ -10712,18 +10731,18 @@ components:
           description: Group information associated with this roster
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
         user:
           description: User information associated with this roster
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponseWithProfilePicture'
+            - $ref: "#/components/schemas/MiniUserResponseWithProfilePicture"
         players:
           description: List of players in the roster
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/PlayerDto'
+            $ref: "#/components/schemas/PlayerDto"
         createdAt:
           format: date-time
           type: string
@@ -10772,7 +10791,7 @@ components:
               isSubstitute: true
           type: array
           items:
-            $ref: '#/components/schemas/CreateRosterMemberDto'
+            $ref: "#/components/schemas/CreateRosterMemberDto"
       required:
         - members
     MiniParticipationResponse:
@@ -10832,21 +10851,21 @@ components:
           description: Tournament information
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniTournamentResponse'
+            - $ref: "#/components/schemas/MiniTournamentResponse"
         group:
           description: Group information if participating as a group
           readOnly: true
           nullable: true
           type: object
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponse'
+            - $ref: "#/components/schemas/MiniGroupResponse"
         user:
           description: User information if participating as an individual
           readOnly: true
           nullable: true
           type: object
           allOf:
-            - $ref: '#/components/schemas/MiniUserResponse'
+            - $ref: "#/components/schemas/MiniUserResponse"
         createdAt:
           format: date-time
           type: string
@@ -10897,7 +10916,7 @@ components:
           description: Group information with logo
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniGroupResponseWithLogo'
+            - $ref: "#/components/schemas/MiniGroupResponseWithLogo"
       required:
         - id
         - tournamentId
@@ -10929,7 +10948,7 @@ components:
           description: Roster associated with this result
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/MiniRosterDto'
+            - $ref: "#/components/schemas/MiniRosterDto"
       required:
         - id
         - matchupId
@@ -10956,11 +10975,10 @@ components:
           readOnly: true
         bracket:
           type: string
-          description:
-            'Stages run by the API with more than one bracket: winners,
-            losers, last_chance and grand_final for double and triple
-            elimination; east, west, north, south, northeast, northwest,
-            southeast and southwest for compass'
+          description: "Stages run by the API with more than one bracket: winners, losers,
+            last_chance and grand_final for double and triple elimination; east,
+            west, north, south, northeast, northwest, southeast and southwest
+            for compass"
           example: winners
           nullable: true
           readOnly: true
@@ -10985,7 +11003,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/ResultsResponseDto'
+            $ref: "#/components/schemas/ResultsResponseDto"
       required:
         - id
         - stageId
@@ -11042,11 +11060,10 @@ components:
           readOnly: true
         bracket:
           type: string
-          description:
-            'Stages run by the API with more than one bracket: winners,
-            losers, last_chance and grand_final for double and triple
-            elimination; east, west, north, south, northeast, northwest,
-            southeast and southwest for compass'
+          description: "Stages run by the API with more than one bracket: winners, losers,
+            last_chance and grand_final for double and triple elimination; east,
+            west, north, south, northeast, northwest, southeast and southwest
+            for compass"
           example: winners
           nullable: true
           readOnly: true
@@ -11071,13 +11088,13 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/ScoreResponseDto'
+            $ref: "#/components/schemas/ScoreResponseDto"
         rosters:
           description: List of rosters in the matchup
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/RosterDto'
+            $ref: "#/components/schemas/RosterDto"
       required:
         - id
         - stageId
@@ -11107,11 +11124,10 @@ components:
           readOnly: true
         bracket:
           type: string
-          description:
-            'Stages run by the API with more than one bracket: winners,
-            losers, last_chance and grand_final for double and triple
-            elimination; east, west, north, south, northeast, northwest,
-            southeast and southwest for compass'
+          description: "Stages run by the API with more than one bracket: winners, losers,
+            last_chance and grand_final for double and triple elimination; east,
+            west, north, south, northeast, northwest, southeast and southwest
+            for compass"
           example: winners
           nullable: true
           readOnly: true
@@ -11136,7 +11152,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/ResultsResponseWithScoresDto'
+            $ref: "#/components/schemas/ResultsResponseWithScoresDto"
       required:
         - id
         - stageId
@@ -11184,7 +11200,7 @@ components:
               isWinner: false
           type: array
           items:
-            $ref: '#/components/schemas/CreateTeamScoreDto'
+            $ref: "#/components/schemas/CreateTeamScoreDto"
       required:
         - roundNumber
         - scores
@@ -11218,7 +11234,7 @@ components:
                   isWinner: false
           type: array
           items:
-            $ref: '#/components/schemas/CreateScoreRequestDto'
+            $ref: "#/components/schemas/CreateScoreRequestDto"
         results:
           description: The final results for each team in the matchup
           example:
@@ -11228,7 +11244,7 @@ components:
               isWinner: false
           type: array
           items:
-            $ref: '#/components/schemas/SetTeamResultDto'
+            $ref: "#/components/schemas/SetTeamResultDto"
       required:
         - scores
         - results
@@ -11281,8 +11297,7 @@ components:
           readOnly: true
         eliminatedInRound:
           type: number
-          description:
-            "Elimination formats: the round of the roster's last allowed loss,
+          description: "Elimination formats: the round of the roster's last allowed loss,
             null while it is still in"
           example: null
           nullable: true
@@ -11329,7 +11344,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/StageStandingDto'
+            $ref: "#/components/schemas/StageStandingDto"
       required:
         - stageId
         - format
@@ -11362,7 +11377,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/CareerCategoryResponse'
+            $ref: "#/components/schemas/CareerCategoryResponse"
       required:
         - id
         - userId
@@ -11568,7 +11583,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/TagResponse'
+            $ref: "#/components/schemas/TagResponse"
         createdAt:
           type: object
           description: Date when the quiz was created
@@ -11654,7 +11669,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/QuizOptionResponse'
+            $ref: "#/components/schemas/QuizOptionResponse"
         image:
           type: string
           readOnly: true
@@ -11746,7 +11761,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/TagResponse'
+            $ref: "#/components/schemas/TagResponse"
         createdAt:
           type: object
           description: Date when the quiz was created
@@ -11787,7 +11802,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/QuizQuestionResponse'
+            $ref: "#/components/schemas/QuizQuestionResponse"
         isRandomizedQuestions:
           type: boolean
           description: Whether questions are presented in random order
@@ -11962,7 +11977,7 @@ components:
                   isCorrect: false
           type: array
           items:
-            $ref: '#/components/schemas/CreateQuizQuestionDto'
+            $ref: "#/components/schemas/CreateQuizQuestionDto"
       required:
         - name
         - startDate
@@ -11980,6 +11995,12 @@ components:
           type: string
           description: Date and time when the quiz becomes available
           example: 2023-07-01T10:00:00Z
+        endDate:
+          format: date-time
+          type: string
+          description: Date and time when the quiz closes; no attempts or answers after it
+          example: 2023-07-01T18:00:00Z
+          nullable: true
         timeLimitTotal:
           type: number
           description: Total time limit for completing the quiz in seconds
@@ -12047,7 +12068,7 @@ components:
           example: *a101
           type: array
           items:
-            $ref: '#/components/schemas/CreateQuizQuestionDto'
+            $ref: "#/components/schemas/CreateQuizQuestionDto"
     QuizAttemptResponse:
       type: object
       properties:
@@ -12089,7 +12110,7 @@ components:
         quiz:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/QuizResponse'
+            - $ref: "#/components/schemas/QuizResponse"
       required:
         - id
         - userId
@@ -12184,12 +12205,12 @@ components:
         quiz:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/QuizResponse'
+            - $ref: "#/components/schemas/QuizResponse"
         answers:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/QuizAnswerResponse'
+            $ref: "#/components/schemas/QuizAnswerResponse"
       required:
         - id
         - userId
@@ -12248,7 +12269,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/QuizLeaderboardEntry'
+            $ref: "#/components/schemas/QuizLeaderboardEntry"
         metadata:
           type: object
           readOnly: true
@@ -12292,7 +12313,7 @@ components:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/TakerQuizOption'
+            $ref: "#/components/schemas/TakerQuizOption"
       required:
         - id
         - question
@@ -12321,7 +12342,7 @@ components:
         question:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/TakerQuizQuestion'
+            - $ref: "#/components/schemas/TakerQuizQuestion"
       required:
         - index
         - total
@@ -12369,6 +12390,9 @@ components:
         destination:
           type: number
           readOnly: true
+        lastChanceDestination:
+          type: number
+          readOnly: true
         points:
           type: number
           readOnly: true
@@ -12404,6 +12428,7 @@ components:
         - strategy
         - source
         - destination
+        - lastChanceDestination
         - points
         - from
         - to
@@ -12422,8 +12447,8 @@ components:
             - stage_to_stage
             - stage_to_tournament
             - tournament_to_tournament
-          description: 'What source and destination are: stage_to_stage,
-            stage_to_tournament or tournament_to_tournament'
+          description: "What source and destination are: stage_to_stage,
+            stage_to_tournament or tournament_to_tournament"
         strategy:
           type: string
           enum:
@@ -12434,18 +12459,23 @@ components:
             - seed
             - tie_breaker
             - qualification_with_lcq
-          description:
-            'ranking: points by place. qualification: places in range get an
+          description: "ranking: points by place. qualification: places in range get an
             entry in the destination. elimination: qualification that also
             removes the other entries from the destination stage. seed:
             qualification in order of place. hybrid: qualification plus ranking
-            points'
+            points. tie_breaker: entries in range that share their place get an
+            entry in the destination. qualification_with_lcq: qualification, and
+            the places after the range enter lastChanceDestination"
         source:
           type: number
           description: ID of the stage or tournament whose placings are converted
         destination:
           type: number
           description: ID of the stage or tournament that receives them
+        lastChanceDestination:
+          type: number
+          description: "qualification_with_lcq only: the stage (same tournament, not
+            started) that the places after `to` enter"
         points:
           type: number
           description: Points for every place in range, when maxPoints is not set
@@ -12454,7 +12484,7 @@ components:
           description: First place in range (default 1)
         to:
           type: number
-          description: 'Last place in range (default: the last place)'
+          description: "Last place in range (default: the last place)"
         maxPoints:
           type: number
           description: Points for the first place in range

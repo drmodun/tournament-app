@@ -74,17 +74,6 @@ export class CreateUserRequest implements ICreateUserRequest {
   password: string;
 
   @IsOptional()
-  @Type(() => Boolean)
-  @IsBoolean()
-  @ApiPropertyOptional({
-    description: 'Whether this is a fake user account',
-    example: false,
-    default: false,
-    nullable: true,
-  })
-  isFake?: boolean;
-
-  @IsOptional()
   @ApiPropertyOptional({
     description: "URL to the user's profile picture",
     example: 'https://example.com/images/profile.jpg',

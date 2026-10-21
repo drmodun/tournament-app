@@ -10,17 +10,30 @@ import {
 } from '../dto/requests.dto';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { EmailModule } from 'src/infrastructure/email/email.module';
+import { BlobService } from 'src/infrastructure/blob/blob.service';
+
 describe('UsersController', () => {
   let controller: UsersController;
+  const blobService = {
+    uploadImage: jest.fn(),
+    deleteFile: jest.fn(),
+  };
 
   jest.mock('../users.service');
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService, UserDrizzleRepository],
+      providers: [
+        UsersService,
+        UserDrizzleRepository,
+        { provide: BlobService, useValue: blobService },
+      ],
       imports: [EmailModule],
     }).compile();
+
+    blobService.uploadImage.mockReset();
+    blobService.deleteFile.mockReset().mockResolvedValue(undefined);
 
     controller = module.get<UsersController>(UsersController);
   });
@@ -102,9 +115,60 @@ describe('UsersController', () => {
       profilePicture: 'https://example.com/john_doe.jpg',
     };
 
-    const result = await controller.create(request);
+    const result = await controller.create(request, undefined, {} as any);
 
     expect(result).toEqual({ id: 1 });
+    expect(blobService.uploadImage).not.toHaveBeenCalled();
+  });
+
+  describe('signing up with a profile picture', () => {
+    const request = {
+      username: 'john_doe',
+      country: 'US',
+      email: 'john@doe.com',
+      dateOfBirth: new Date(),
+      password: 'password',
+      name: 'John Doe',
+    } as CreateUserRequest;
+    const file = { buffer: Buffer.from('image') };
+    const httpRequest = {} as any;
+
+    beforeEach(() => {
+      blobService.uploadImage.mockResolvedValue({
+        key: 'avatar/1.png',
+        url: 'http://api/files/avatar/1.png',
+      });
+    });
+
+    it('stores the picture and saves its URL', async () => {
+      const create = jest
+        .spyOn(UsersService.prototype, 'create')
+        .mockResolvedValue({ id: 1 });
+
+      await expect(
+        controller.create(request, file, httpRequest),
+      ).resolves.toEqual({ id: 1 });
+      expect(blobService.uploadImage).toHaveBeenCalledWith(
+        file,
+        'avatar',
+        httpRequest,
+      );
+      expect(create).toHaveBeenCalledWith({
+        ...request,
+        profilePicture: 'http://api/files/avatar/1.png',
+      });
+    });
+
+    it('removes the picture again when the user cannot be created', async () => {
+      jest
+        .spyOn(UsersService.prototype, 'create')
+        .mockRejectedValue(new Error('duplicate email'));
+
+      await expect(
+        controller.create(request, file, httpRequest),
+      ).rejects.toThrow('duplicate email');
+      expect(blobService.deleteFile).toHaveBeenCalledWith('avatar/1.png');
+    });
   });
 
   it('should update a user', async () => {

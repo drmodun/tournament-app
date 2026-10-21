@@ -10,8 +10,12 @@ import {
   Query,
   Req,
   ParseIntPipe,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request as ExpressRequest } from 'express';
 import { UsersService } from './users.service';
 import {
   ICreateUserRequest,
@@ -22,6 +26,8 @@ import {
 import { MetadataMaker } from '../base/static/makeMetadata';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiExtraModels,
   ApiOkResponse,
@@ -53,6 +59,9 @@ import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { PaginationOnly } from 'src/base/query/baseQuery';
+import { BlobService } from 'src/infrastructure/blob/blob.service';
+import { MAX_IMAGE_BYTES } from 'src/infrastructure/blob/imageType';
+import { DirectoriesEnum } from 'src/infrastructure/blob/types';
 
 @ApiTags('users')
 @Controller('users')
@@ -60,7 +69,10 @@ import { PaginationOnly } from 'src/base/query/baseQuery';
  * Controller class for managing user-related operations.
  */
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly blobService: BlobService,
+  ) {}
 
   @UseGuards(TournamentManagerGuard)
   @ApiBearerAuth()
@@ -94,10 +106,45 @@ export class UsersController {
     return await this.usersService.userAutoComplete(search, query.pageSize);
   }
 
+  // Uploads need a signed-in user, so a new user's picture can come with the sign-up itself, as a
+  // multipart form with the image in its profilePicture field
   @Post()
+  @UseInterceptors(
+    FileInterceptor('profilePicture', {
+      limits: { fileSize: MAX_IMAGE_BYTES, files: 1 },
+    }),
+  )
+  @ApiConsumes('application/json', 'multipart/form-data')
+  @ApiBody({
+    type: CreateUserRequest,
+    description:
+      'As JSON, or as a multipart form whose profilePicture field is a PNG, JPEG, GIF or WebP image of up to 5 MB',
+  })
   @ApiCreatedResponse({ type: ActionResponsePrimary })
-  async create(@Body() createUserDto: CreateUserRequest) {
-    return await this.usersService.create(createUserDto);
+  async create(
+    @Body() createUserDto: CreateUserRequest,
+    @UploadedFile() profilePicture: { buffer?: Buffer } | undefined,
+    @Req() request: ExpressRequest,
+  ) {
+    if (!profilePicture) {
+      return await this.usersService.create(createUserDto);
+    }
+
+    const image = await this.blobService.uploadImage(
+      profilePicture,
+      DirectoriesEnum.AVATAR,
+      request,
+    );
+
+    try {
+      return await this.usersService.create({
+        ...createUserDto,
+        profilePicture: image.url,
+      });
+    } catch (error) {
+      await this.blobService.deleteFile(image.key).catch(() => undefined);
+      throw error;
+    }
   }
 
   @UseGuards(JwtAuthGuard)

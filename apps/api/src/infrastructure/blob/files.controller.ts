@@ -23,7 +23,7 @@ import { Readable } from 'stream';
 import { Request, Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { BlobService } from './blob.service';
-import { detectImageType, MAX_IMAGE_BYTES } from './imageType';
+import { MAX_IMAGE_BYTES } from './imageType';
 import { DirectoriesEnum, UPLOAD_DIRECTORIES } from './types';
 
 const FILE_NAME = /^[0-9a-f-]{36}\.[a-z0-9]+$/;
@@ -69,25 +69,11 @@ export class FilesController {
       );
     }
 
-    if (!file?.buffer?.length) {
-      throw new BadRequestException('Send the image as the "file" form field');
-    }
-
-    const contentType = detectImageType(file.buffer);
-
-    if (!contentType) {
-      throw new BadRequestException(
-        'Only PNG, JPEG, GIF and WebP images can be uploaded',
-      );
-    }
-
-    const key = await this.blobService.uploadBuffer(
-      file.buffer,
-      contentType,
+    return this.blobService.uploadImage(
+      file,
       directory as DirectoriesEnum,
+      request,
     );
-
-    return { key, url: `${this.publicApiUrl(request)}/files/${key}` };
   }
 
   @Get(':directory/:name')
@@ -114,14 +100,5 @@ export class FilesController {
     });
 
     return new StreamableFile(file.Body as Readable);
-  }
-
-  // Where browsers reach this API: API_PUBLIC_URL behind a proxy that changes the path, otherwise the
-  // address of the request
-  private publicApiUrl(request: Request) {
-    return (
-      process.env.API_PUBLIC_URL?.replace(/\/+$/, '') ||
-      `${request.protocol}://${request.get('host')}`
-    );
   }
 }

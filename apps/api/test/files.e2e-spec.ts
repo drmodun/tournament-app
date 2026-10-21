@@ -6,6 +6,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import request from 'supertest';
+import { sql } from 'drizzle-orm';
+import { db } from '../src/db/db';
 import { createApp, loginAs } from './helpers/tournamentRun';
 
 // Stands in for the S3 server, so uploads need no storage service and leave nothing behind
@@ -281,6 +283,83 @@ describe('Image uploads (e2e)', () => {
       const name = (uploaded.body.key as string).split('/')[1];
 
       await http().get(`/files/quiz/${name}`).expect(404);
+    });
+  });
+
+  describe('signing up with a profile picture', () => {
+    const signUp = (fields: Record<string, string>, picture?: Buffer) => {
+      const req = http().post('/users');
+
+      for (const [name, value] of Object.entries(fields)) {
+        req.field(name, value);
+      }
+
+      return picture
+        ? req.attach('profilePicture', picture, {
+            filename: 'me.png',
+            contentType: 'image/png',
+          })
+        : req;
+    };
+    const fields = () => {
+      const id = crypto.randomUUID().slice(0, 8);
+
+      return {
+        name: 'Picture Person',
+        username: `pic_${id}`,
+        email: `pic_${id}@example.com`,
+        password: 'P@ssw0rd123!',
+        country: 'US',
+        dateOfBirth: '1995-06-15',
+      };
+    };
+
+    // A new user has not confirmed their email yet, so read them from the database
+    const userRow = async (id: number) =>
+      (
+        (await db.execute(sql`
+          select profile_picture as "profilePicture", is_fake as "isFake"
+          from "user" where id = ${id}`)) as unknown as {
+          profilePicture: string | null;
+          isFake: boolean;
+        }[]
+      )[0];
+
+    it('stores the picture without signing in and saves its address on the user', async () => {
+      const before = s3.objects.size;
+      const created = await signUp(fields(), png()).expect(201);
+
+      const user = await userRow(created.body.id);
+      const key = user.profilePicture!.split('/files/')[1];
+
+      expect(key).toMatch(/^avatar\/[0-9a-f-]{36}\.png$/);
+      expect(s3.objects.size).toBe(before + 1);
+      await http().get(`/files/${key}`).expect(200);
+    });
+
+    it('refuses a file that is not an image, and creates no user', async () => {
+      const body = fields();
+
+      await signUp(body, Buffer.from('<svg onload="alert(1)"/>')).expect(400);
+      await signUp(body).expect(201);
+    });
+
+    it('keeps no picture for a sign-up that fails', async () => {
+      const body = fields();
+      await signUp(body).expect(201);
+      const before = s3.objects.size;
+
+      await signUp(body, png()).expect(409);
+      expect(s3.objects.size).toBe(before);
+    });
+
+    it('does not let a sign-up make a fake user', async () => {
+      const created = await http()
+        .post('/users')
+        .send({ ...fields(), isFake: true })
+        .expect(201);
+
+      expect((await userRow(created.body.id)).isFake).toBe(false);
     });
   });
 });

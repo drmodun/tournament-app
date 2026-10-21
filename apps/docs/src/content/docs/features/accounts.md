@@ -7,6 +7,11 @@ description: Registration, email confirmation, login, token refresh, Google sign
 
 `POST /users` with name, username, email, password, country and date of birth.
 
+Uploads need a signed-in user, so a profile picture chosen while registering is sent with the sign-up itself: the same
+fields as a `multipart/form-data` form, with the image (PNG, JPEG, GIF or WebP, up to 5 MB) in a `profilePicture` file
+field. The API stores it like `POST /files/avatar` and saves its URL on the new user, and removes it again if the user
+cannot be created. JSON sign-ups without a picture work as before. `isFake` is not accepted here.
+
 1. The password is hashed with bcrypt (10 rounds).
 2. The user row is created with `isEmailVerified = false`.
 3. A random UUID is stored as `emailConfirmationToken`.

@@ -58,6 +58,7 @@ describe('MatchesService', () => {
 
     const mockChallongeService = {
       updateMatchup: jest.fn(),
+      reopenMatch: jest.fn().mockResolvedValue(undefined),
       getTournamentMatches: jest.fn().mockResolvedValue([]),
     };
 
@@ -249,7 +250,8 @@ describe('MatchesService', () => {
       );
       expect(matchesRepository.getStageById).toHaveBeenCalledWith(5);
       expect(rosterService.findOne).toHaveBeenCalledTimes(2);
-      expect(challongeService.updateMatchup).toHaveBeenCalled();
+      // A first result needs no reopening
+      expect(challongeService.reopenMatch).not.toHaveBeenCalled();
       expect(result).toMatchObject([{ id: 10, matchupId: 1, roundNumber: 1 }]);
     });
 
@@ -865,8 +867,72 @@ describe('MatchesService', () => {
       );
       expect(matchesRepository.getStageById).toHaveBeenCalledWith(5);
       expect(rosterService.findOne).toHaveBeenCalledTimes(2);
-      expect(challongeService.updateMatchup).toHaveBeenCalled();
+      // The match is complete there, so it is reopened before the corrected result goes in
+      expect(challongeService.reopenMatch).toHaveBeenCalledWith('123', '456');
+      expect(
+        challongeService.reopenMatch.mock.invocationCallOrder[0],
+      ).toBeLessThan(
+        challongeService.updateMatchup.mock.invocationCallOrder[0],
+      );
       expect(result).toMatchObject([{ id: 10, matchupId: 1, roundNumber: 1 }]);
+    });
+
+    it('still sends the corrected result when Challonge will not reopen the match', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: { id: 1, stageId: 5, challongeMatchupId: '123' },
+        rosterToMatchup: [],
+      } as any);
+      matchesRepository.getStageById.mockResolvedValue({
+        id: 5,
+        challongeTournamentId: '456',
+        stageType: 'knockout',
+      } as any);
+      matchesRepository.updateMatchScore.mockResolvedValue([] as any);
+      challongeService.reopenMatch.mockRejectedValueOnce(new Error('422'));
+
+      await service.updateMatchScore(1, { scores: [], results: [] });
+
+      expect(challongeService.updateMatchup).toHaveBeenCalled();
+    });
+
+    it('freezes a Challonge result once the next round has been brought in', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: { id: 1, stageId: 5, round: 1, challongeMatchupId: '123' },
+        rosterToMatchup: [],
+      } as any);
+      matchesRepository.getStageById.mockResolvedValue({
+        id: 5,
+        challongeTournamentId: '456',
+        stageType: 'knockout',
+        stageStatus: 'ongoing',
+      } as any);
+      matchesRepository.hasRound.mockResolvedValue(true);
+
+      await expect(
+        service.updateMatchScore(1, { scores: [], results: [] }),
+      ).rejects.toThrow('next round');
+      await expect(service.deleteMatchScore(1)).rejects.toThrow('next round');
+      expect(matchesRepository.hasRound).toHaveBeenCalledWith(5, 2);
+      expect(challongeService.reopenMatch).not.toHaveBeenCalled();
+    });
+
+    it('lets a Challonge round robin result change after later rounds', async () => {
+      matchesRepository.getMatchupById.mockResolvedValue({
+        matchup: { id: 1, stageId: 5, round: 1, challongeMatchupId: '123' },
+        rosterToMatchup: [],
+      } as any);
+      matchesRepository.getStageById.mockResolvedValue({
+        id: 5,
+        challongeTournamentId: '456',
+        stageType: 'round_robin',
+        stageStatus: 'ongoing',
+      } as any);
+      matchesRepository.hasRound.mockResolvedValue(true);
+      matchesRepository.updateMatchScore.mockResolvedValue([] as any);
+
+      await service.updateMatchScore(1, { scores: [], results: [] });
+
+      expect(challongeService.updateMatchup).toHaveBeenCalled();
     });
 
     it('should update match score without updating Challonge if no Challonge ID', async () => {
@@ -969,6 +1035,7 @@ describe('MatchesService', () => {
       // Assert
       expect(matchesRepository.getMatchupById).toHaveBeenCalledWith(matchupId);
       expect(matchesRepository.getStageById).toHaveBeenCalledWith(5);
+      expect(challongeService.reopenMatch).toHaveBeenCalledWith('123', '456');
       expect(challongeService.updateMatchup).toHaveBeenCalled();
     });
 

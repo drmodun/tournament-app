@@ -129,6 +129,7 @@ export class MatchesService {
 
     await this.syncMatchupToChallonge(matchup, {
       action: 'reset',
+      reopensMatch: true,
       advancesRound: false,
       buildScoreData: () => this.buildResetScoreData(matchup),
     });
@@ -153,6 +154,7 @@ export class MatchesService {
 
     await this.syncMatchupToChallonge(matchup, {
       action: 'update',
+      reopensMatch: true,
       advancesRound: true,
       buildScoreData: () => this.buildResultScoreData(createMatchResult),
     });
@@ -438,8 +440,8 @@ export class MatchesService {
     );
   }
 
-  // In a local bracket later rounds are drawn from these results, so they are frozen once the next
-  // round exists (round robin rounds do not depend on each other), and every result is frozen once
+  // Later rounds are drawn (or brought in from Challonge) from these results, so they are frozen once the
+  // next round exists (round robin rounds do not depend on each other), and every result is frozen once
   // the stage is finished and its conversion rules have run
   private async checkResultCanChange(matchup: Matchup) {
     const stage = await this.matchesRepository.getStageById(
@@ -453,11 +455,18 @@ export class MatchesService {
       );
     }
 
-    if (!this.isLocalMatchup(matchup)) {
+    if (matchup.matchup.round == null) {
       return;
     }
 
-    if (bracketFormatFor(stage?.stageType) === LocalBracketFormat.ROUND_ROBIN) {
+    // Challonge brings its rounds in one at a time too, and reopening a match there resets those it fed
+    const format = bracketFormatFor(
+      this.isLocalMatchup(matchup)
+        ? stage?.stageType
+        : challongeBracketType(stage?.stageType),
+    );
+
+    if (format === LocalBracketFormat.ROUND_ROBIN) {
       return;
     }
 
@@ -617,6 +626,8 @@ export class MatchesService {
     matchup: Matchup,
     options: {
       action: 'update' | 'reset';
+      // A result already reported there is corrected or removed
+      reopensMatch?: boolean;
       advancesRound: boolean;
       buildScoreData: () => Promise<RosterScoreData>;
     },
@@ -636,6 +647,13 @@ export class MatchesService {
 
       const rosterScoreData = await options.buildScoreData();
 
+      if (options.reopensMatch) {
+        await this.reopenChallongeMatch(
+          challongeMatchupId.toString(),
+          stage.challongeTournamentId.toString(),
+        );
+      }
+
       await this.challongeService.updateMatchup(
         challongeMatchupId?.toString(),
         stage.challongeTournamentId?.toString(),
@@ -650,6 +668,15 @@ export class MatchesService {
         `Failed to ${options.action} Challonge matchup ${challongeMatchupId}:`,
         error,
       );
+    }
+  }
+
+  // Reopening a match that is not complete there fails; the update that follows still goes through
+  private async reopenChallongeMatch(id: string, tournamentId: string) {
+    try {
+      await this.challongeService.reopenMatch(id, tournamentId);
+    } catch (error) {
+      this.logger.warn(`Could not reopen Challonge match ${id}: ${error}`);
     }
   }
 

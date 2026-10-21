@@ -13,7 +13,8 @@ listed first, each with the place to look.
 - **Formats without their own bracket logic**: quiz and evaluated stages run by the API are played as single
   elimination.
 - **Taking a quiz**: the web app has no screen for it yet; attempts work through the API.
-- **Reopening a Challonge stage** reopens it in the API only; Challonge keeps its tournament finished.
+- **Challonge corrections are untested against Challonge itself**: correcting or deleting a result reopens the match
+  there first. The calls follow Challonge's v2.1 reference and are tested against a mock, not a live tournament.
 
 ### Not built yet
 
@@ -96,4 +97,6 @@ listed first, each with the place to look.
 | A sign-up could set `isFake`                                                            | Ignored; fake users come from `POST /users/fake`                          |
 | Rules that add entries added nobody in solo tournaments (everyone already had a roster) | Stages they feed are left to them                                         |
 | A player entering after the stages existed got rosters with nobody in them              | They are in their rosters                                                 |
+| Corrected Challonge results were sent for matches Challonge had already completed       | The match is reopened there first                                         |
+| Challonge results could change after the next round was brought in from them            | Frozen then, like the API's own brackets                                  |
 | An image picked in a form was dropped unless its scale or rotation was changed          | The form holds the picture from when it loads                             |

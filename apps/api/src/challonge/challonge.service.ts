@@ -10,6 +10,7 @@ import {
   ICreateChallongeParticipantRequest,
   IUpdateParticipantRequest,
   IMatchScoreRequest,
+  IMatchStateRequest,
   stageToCreateTournamentRequest,
   IBulkCreateChallongeParticipantRequest,
   IUpdateChallongeTournamentRequest,
@@ -204,6 +205,27 @@ export class ChallongeService {
   ): Promise<IChallongeMatch> {
     return this.executeFunctionWithRetry(() =>
       this.updateMatchupFunction(id, tournamentId, updateMatchupDto),
+    );
+  }
+
+  // A completed match takes a new result only once reopened; Challonge also resets the matches it fed
+  async reopenMatchFunction(id: string, tournamentId: string) {
+    const request: IMatchStateRequest = {
+      data: { type: 'MatchState', attributes: { state: 'reopen' } },
+    };
+    const response: AxiosResponse<{ data: IChallongeMatch }> =
+      await this.httpService.axiosRef.put(
+        `https://api.challonge.com/v2/application/tournaments/${tournamentId}/matches/${id}/change_state.json`,
+        request,
+        this.injectHeaders(),
+      );
+
+    return response.data.data;
+  }
+
+  async reopenMatch(id: string, tournamentId: string) {
+    return this.executeFunctionWithRetry(() =>
+      this.reopenMatchFunction(id, tournamentId),
     );
   }
 

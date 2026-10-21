@@ -70,7 +70,9 @@ triple-elimination bracket, so those stages never get a Challonge tournament and
 is treated as a mirror of the local data. After the database write:
 
 1. If the matchup has a `challongeMatchupId` and the stage has a Challonge tournament, the API sends the scores and
-   winner to Challonge (identifying rosters by their Challonge participant ids).
+   winner to Challonge (identifying rosters by their Challonge participant ids). A correction or deletion first
+   reopens the match there (`change_state` with `reopen`), since Challonge only takes a new result for a match that is
+   not complete; if reopening fails, the result is still sent.
 2. For create and update, it then checks whether every matchup in that round is finished. If so, it fetches the next
    round's matches from Challonge and imports them as matchups.
 3. Deleting a result resets the match in Challonge and does not advance anything.
@@ -179,7 +181,7 @@ Rosters with equal records share a place.
 ### Changing results
 
 Because later rounds are drawn from earlier results, a result can be changed or deleted only until the next round
-has been drawn; round robin results, which nothing depends on, can change at any time. Once the stage is finished,
+has been drawn (or, on Challonge, brought in); round robin results, which nothing depends on, can change at any time. Once the stage is finished,
 its conversion rules have run, so every result is frozen. In both cases `PUT` and `DELETE` return `400`.
 
 To correct a finished stage, reopen it:

@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import Input from "components/input";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { useFormContext } from "react-hook-form";
 import globals from "styles/globals.module.scss";
@@ -44,8 +44,10 @@ export default function ImagePicker({
     });
   }
 
+  const [isImageReady, setIsImageReady] = useState(false);
+
   const handleChange = () => {
-    if (!editor.current) return;
+    if (!editor.current || !isImageReady) return;
 
     const b64URL = editor.current.getImageScaledToCanvas().toDataURL();
     onChange(b64URL);
@@ -57,6 +59,9 @@ export default function ImagePicker({
         shouldDirty: true,
       });
   };
+
+  // The form holds the picture as shown, from when it loads, so one picked without adjusting it is kept
+  useEffect(handleChange, [isImageReady, scale, rotate, file]);
 
   if (!file) return;
 
@@ -78,6 +83,8 @@ export default function ImagePicker({
         rotate={rotate}
         borderRadius={125}
         className={styles.editor}
+        onImageReady={() => setIsImageReady(true)}
+        onPositionChange={handleChange}
       />
       <div className={styles.sliders}>
         <Input
@@ -90,7 +97,6 @@ export default function ImagePicker({
           label="scale"
           onChange={(e) => {
             setScale(parseFloat(e.target.value));
-            handleChange();
           }}
           variant={textColor(variant)}
         />
@@ -104,7 +110,6 @@ export default function ImagePicker({
           label="rotation"
           onChange={(e) => {
             setRotation(parseInt(e.target.value));
-            handleChange();
           }}
           variant={textColor(variant)}
         />

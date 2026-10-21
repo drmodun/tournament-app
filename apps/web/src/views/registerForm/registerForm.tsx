@@ -5,10 +5,13 @@ import { useRegister } from "api/client/hooks/auth/useRegister";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dropdown from "components/dropdown";
+import ImageDrop from "components/imageDrop";
+import ImagePicker from "components/imagePicker";
 import Input from "components/input";
 import RichEditor from "components/richEditor";
 import { countries } from "country-flag-icons";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
@@ -24,6 +27,7 @@ export default function RegisterForm() {
   const textColorTheme = textColor(theme);
 
   const { mutateAsync } = useRegister();
+  const [file, setFile] = useState<File>();
 
   const methods = useForm<ICreateUserRequest>();
   const onSubmit: SubmitHandler<ICreateUserRequest> = async (data) => {
@@ -318,6 +322,27 @@ export default function RegisterForm() {
                   >
                     this field is required!
                   </p>
+                )}
+              </div>
+
+              <div className={clsx(styles.inputWrapper)}>
+                <p
+                  className={clsx(
+                    globals.label,
+                    globals[`${textColorTheme}Color`],
+                  )}
+                >
+                  profile picture (optional)
+                </p>
+                {file ? (
+                  <ImagePicker
+                    file={file}
+                    name="profilePicture"
+                    isReactFormHook={true}
+                    variant={textColorTheme}
+                  />
+                ) : (
+                  <ImageDrop onFile={setFile} variant={textColorTheme} />
                 )}
               </div>
 

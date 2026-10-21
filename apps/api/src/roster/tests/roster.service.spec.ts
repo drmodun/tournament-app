@@ -391,12 +391,14 @@ describe('RosterService', () => {
       const result = await service.createForSinglePlayer(
         tournamentId,
         participationId,
+        7,
       );
 
       // Assert
       expect(repository.createForSinglePlayer).toHaveBeenCalledWith(
         participationId,
         tournamentId,
+        7,
       );
       expect(result).toEqual([mockRoster]);
     });

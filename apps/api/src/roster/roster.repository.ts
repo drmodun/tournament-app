@@ -311,7 +311,12 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     return transaction;
   }
 
-  createForSinglePlayer(participationId: number, tournamentId: number) {
+  // A player entering alone gets a roster with themselves in every stage of the tournament
+  createForSinglePlayer(
+    participationId: number,
+    tournamentId: number,
+    userId: number,
+  ) {
     const res = db.transaction(async (tx) => {
       const stages = await tx.query.stage.findMany({
         where: eq(stage.tournamentId, tournamentId),
@@ -321,12 +326,20 @@ export class RosterDrizzleRepository extends PrimaryRepository<
         return [];
       }
 
-      const rosterId = await tx
+      const rosterIds = await tx
         .insert(roster)
         .values(stages.map((stage) => ({ participationId, stageId: stage.id })))
         .returning({ id: roster.id });
 
-      return rosterId;
+      await tx.insert(userToRoster).values(
+        rosterIds.map(({ id }) => ({
+          userId,
+          rosterId: id,
+          isSubstitute: false,
+        })) as InferInsertModel<typeof userToRoster>[],
+      );
+
+      return rosterIds;
     });
 
     return res;

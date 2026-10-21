@@ -102,6 +102,28 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
     });
   });
 
+  describe('entering', () => {
+    it('puts a player who enters after the stages exist in a roster of each', async () => {
+      const tournamentId = await run.createTournament(userPool(2));
+      const stages = [
+        await run.createStage(tournamentId, stageTypeEnum.KNOCKOUT),
+        await run.createStage(tournamentId, stageTypeEnum.ROUND_ROBIN),
+      ];
+
+      await run.enter(tournamentId, 12).expect(201);
+
+      for (const stageId of stages) {
+        const players = (await db.execute(sql`
+          select ur.user_id as id from user_roster ur
+          join roster r on r.id = ur.roster_id
+          where r.stage_id = ${stageId}
+          order by ur.user_id`)) as unknown as { id: number }[];
+
+        expect(players.map((row) => row.id)).toEqual([10, 11, 12]);
+      }
+    });
+  });
+
   describe('standings', () => {
     it('are 404 for a stage that does not exist', async () => {
       await request(app.getHttpServer())

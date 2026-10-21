@@ -46,10 +46,15 @@ export class RosterService {
     return { id: roster.rosterId };
   }
 
-  async createForSinglePlayer(tournamentId: number, participationId: number) {
+  async createForSinglePlayer(
+    tournamentId: number,
+    participationId: number,
+    userId: number,
+  ) {
     const roster = await this.repository.createForSinglePlayer(
       participationId,
       tournamentId,
+      userId,
     );
 
     return roster;

@@ -45,6 +45,7 @@ export class ParticipationService {
       await this.rosterService.createForSinglePlayer(
         tournamentId,
         action[0]?.id as number,
+        userId,
       );
     }
 

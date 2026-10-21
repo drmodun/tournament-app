@@ -6,7 +6,6 @@ import { UserCredentialsDto } from 'src/auth/dto/userCredentials.dto';
 import {
   EmailConfirmationTokenDto,
   PasswordResetTokenDto,
-  SseTokenDto,
   ValidatedUserDto,
 } from 'src/auth/dto/validatedUser.dto';
 
@@ -14,15 +13,13 @@ export type DtoType =
   | ValidatedUserDto
   | UserCredentialsDto
   | PasswordResetTokenDto
-  | EmailConfirmationTokenDto
-  | SseTokenDto;
+  | EmailConfirmationTokenDto;
 
 export enum UserDtosEnum {
   VALIDATED = 'auth',
   CREDENTIALS = 'credentials',
   PASSWORD_RESET_TOKEN = 'passwordResetToken',
   EMAIL_CONFIRMATION_TOKEN = 'emailConfirmationToken',
-  SSE_TOKEN = 'sseToken',
 }
 
 export type UserDtosEnumType = (typeof UserDtosEnum)[keyof typeof UserDtosEnum];

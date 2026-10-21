@@ -17,7 +17,3 @@ export interface EmailConfirmationTokenDto {
   emailConfirmationToken: string;
   emailConfirmationTokenExpiresAt: Date;
 }
-
-export interface SseTokenDto {
-  sseToken: string;
-}

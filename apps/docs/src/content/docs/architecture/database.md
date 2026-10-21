@@ -40,9 +40,8 @@ location (PostGIS point) ◀── tournament.location_id, stage.location_id, gr
 ### Users
 
 `user` holds profile fields, the bcrypt `password`, `role` (`user` / `admin`), `isFake`, `isEmailVerified`,
-`emailConfirmationToken`, `passwordResetToken` with its expiry, and `sseToken` (unused since stream tokens became
-short-lived JWTs; formerly a UUID for the notification
-stream). `dateOfBirth` and `country` feed group requirements. Location is deliberately not stored for users (a code
+`emailConfirmationToken` and `passwordResetToken` with its expiry. Notification stream tokens are short-lived JWTs
+and are not stored (the old `sse_token` column was dropped in migration `0049`). `dateOfBirth` and `country` feed group requirements. Location is deliberately not stored for users (a code
 comment cites GDPR); distance searches take coordinates as query parameters instead.
 
 ### Groups

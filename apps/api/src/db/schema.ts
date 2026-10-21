@@ -136,7 +136,6 @@ export const user = pgTable(
       withTimezone: true,
     }),
     emailConfirmationToken: text('email_confirmation_token'),
-    sseToken: text('sse_token').$defaultFn(() => crypto.randomUUID()),
     isFake: boolean('is_fake').default(false),
     isEmailVerified: boolean('is_email_verified').default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

@@ -149,30 +149,6 @@ export class SseNotificationRepository extends PrimaryRepository<
     });
   }
 
-  async updateUserToken(userId: number, token: string) {
-    const updatedUser = await db
-      .update(user)
-      .set({
-        sseToken: token,
-      } as Partial<InferSelectModel<typeof user>>)
-      .where(eq(user.id, userId))
-      .returning({
-        id: user.id,
-        sseToken: user.sseToken,
-      });
-
-    return updatedUser[0];
-  }
-
-  async getUserByToken(token: string) {
-    return await db
-      .select({ id: user.id })
-      .from(user)
-      .where(eq(user.sseToken, token))
-      .limit(1)
-      .$dynamic();
-  }
-
   async updateAllToReadForUser(userId: number) {
     await db
       .update(notificationToUser)

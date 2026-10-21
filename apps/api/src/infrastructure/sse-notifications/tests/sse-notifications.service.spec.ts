@@ -59,8 +59,6 @@ describe('SseNotificationsService', () => {
           useValue: {
             getReadTimeSorted: jest.fn(),
             createWithUsers: jest.fn(),
-            updateUserToken: jest.fn(),
-            getUserByToken: jest.fn(),
             updateToRead: jest.fn(),
             updateAllToReadForUser: jest.fn(),
             updateBulkToRead: jest.fn(),

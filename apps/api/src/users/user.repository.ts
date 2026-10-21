@@ -132,10 +132,6 @@ export class UserDrizzleRepository extends PrimaryRepository<
           email: user.email,
           username: user.username,
         };
-      case UserDtosEnum.SSE_TOKEN:
-        return {
-          sseToken: user.sseToken,
-        };
       default:
         return null;
     }

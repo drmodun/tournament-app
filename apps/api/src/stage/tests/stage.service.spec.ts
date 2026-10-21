@@ -96,6 +96,7 @@ describe('StageService', () => {
       getMatchupsWithResults: jest.fn(),
       importChallongeMatchesToStage: jest.fn(),
       startLocalBracket: jest.fn(),
+      finishStage: jest.fn(),
     } as unknown as jest.Mocked<MatchesService>;
 
     mockRosterRepository = {
@@ -278,6 +279,78 @@ describe('StageService', () => {
       await expect(service.update(1, updateDto)).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('updateByOrganiser', () => {
+    const withStatus = (stageStatus: stageStatusEnum) => {
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValue({ ...mockStage, stageStatus });
+      jest.spyOn(service, 'update').mockResolvedValue({
+        ...mockStage,
+        stageStatus,
+      } as any);
+    };
+
+    it('saves an edit that keeps the status', async () => {
+      withStatus(stageStatusEnum.FINISHED);
+
+      await service.updateByOrganiser(1, {
+        name: 'Renamed',
+        stageStatus: stageStatusEnum.FINISHED,
+      });
+
+      expect(service.update).toHaveBeenCalledWith(1, {
+        name: 'Renamed',
+        stageStatus: stageStatusEnum.FINISHED,
+      });
+    });
+
+    it('finishes a stage marked finished by hand, so its rules apply', async () => {
+      withStatus(stageStatusEnum.ONGOING);
+
+      const result = await service.updateByOrganiser(1, {
+        name: 'Done',
+        stageStatus: stageStatusEnum.FINISHED,
+      });
+
+      expect(service.update).toHaveBeenCalledWith(1, { name: 'Done' });
+      expect(mockMatchService.finishStage).toHaveBeenCalledWith(1);
+      expect(result.stageStatus).toBe(stageStatusEnum.FINISHED);
+    });
+
+    it.each([
+      [stageStatusEnum.FINISHED, stageStatusEnum.ONGOING, 'reopen'],
+      [stageStatusEnum.FINISHED, stageStatusEnum.CANCELLED, 'reopen'],
+      [stageStatusEnum.UPCOMING, stageStatusEnum.ONGOING, 'start'],
+      [stageStatusEnum.ONGOING, stageStatusEnum.UPCOMING, 'cannot go back'],
+    ])('refuses to go from %s to %s by hand', async (from, to, message) => {
+      withStatus(from);
+
+      await expect(
+        service.updateByOrganiser(1, { stageStatus: to }),
+      ).rejects.toThrow(message);
+      expect(service.update).not.toHaveBeenCalled();
+    });
+
+    it('refuses to change the format of a stage that has started', async () => {
+      withStatus(stageStatusEnum.ONGOING);
+
+      await expect(
+        service.updateByOrganiser(1, { stageType: stageTypeEnum.SWISS }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('lets an upcoming stage be cancelled or change format', async () => {
+      withStatus(stageStatusEnum.UPCOMING);
+
+      await service.updateByOrganiser(1, {
+        stageType: stageTypeEnum.SWISS,
+        stageStatus: stageStatusEnum.CANCELLED,
+      });
+
+      expect(service.update).toHaveBeenCalled();
     });
   });
 

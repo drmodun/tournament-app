@@ -180,6 +180,55 @@ export class StageService {
     return stage[0];
   }
 
+  // An organiser's edit. Status changes that would skip a step go through their own endpoints, and a
+  // stage marked finished by hand finishes like any other, so its conversion rules apply.
+  async updateByOrganiser(id: number, updateStageDto: IUpdateStageDto) {
+    const { stageStatus, ...rest } = updateStageDto;
+    const current: IStageResponse = await this.findOne(id);
+    const isChange = stageStatus != null && stageStatus !== current.stageStatus;
+
+    if (isChange && current.stageStatus === stageStatusEnum.FINISHED) {
+      throw new BadRequestException(
+        `The stage is finished; reopen it with POST /stages/${id}/reopen`,
+      );
+    }
+
+    if (isChange && stageStatus === stageStatusEnum.ONGOING) {
+      throw new BadRequestException(
+        `Start the stage with PATCH /stages/start/${id}, which draws its bracket`,
+      );
+    }
+
+    if (
+      isChange &&
+      stageStatus === stageStatusEnum.UPCOMING &&
+      current.stageStatus === stageStatusEnum.ONGOING
+    ) {
+      throw new BadRequestException(
+        'A stage that has started cannot go back to upcoming',
+      );
+    }
+
+    if (
+      rest.stageType != null &&
+      rest.stageType !== current.stageType &&
+      current.stageStatus !== stageStatusEnum.UPCOMING &&
+      current.stageStatus !== stageStatusEnum.CANCELLED
+    ) {
+      throw new BadRequestException(
+        'The format of a stage that has started cannot change',
+      );
+    }
+
+    if (isChange && stageStatus === stageStatusEnum.FINISHED) {
+      const updated = await this.update(id, rest);
+      await this.matchesService.finishStage(id);
+      return { ...updated, stageStatus };
+    }
+
+    return this.update(id, updateStageDto);
+  }
+
   async remove(id: number) {
     await this.deleteChallongeTournament(id);
     const action = await this.repository.deleteEntity(id);

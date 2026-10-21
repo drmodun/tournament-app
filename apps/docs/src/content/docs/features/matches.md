@@ -182,6 +182,27 @@ Because later rounds are drawn from earlier results, a result can be changed or 
 has been drawn; round robin results, which nothing depends on, can change at any time. Once the stage is finished,
 its conversion rules have run, so every result is frozen. In both cases `PUT` and `DELETE` return `400`.
 
+To correct a finished stage, reopen it:
+
+```text
+POST /stages/:stageId/reopen    organisers of the stage and of every destination its rules fed, and site admins
+```
+
+This undoes the conversion rules that ran when it finished, and the `tournament_to_tournament` rules of its
+tournament, which finished with it (each rule records what it changed when it is applied). The stage goes back to
+`ongoing`, its results can be corrected under the usual rules, and when it finishes again its rules apply again with
+the corrected placings. Reopening is refused with `400` while undoing would reach something already in play: a stage
+the rules entered, removed or seeded rosters in has started, a stage or tournament they gave points to has finished,
+or a tournament they entered participants into has started. Rules applied before migration `0050` have no record and
+cannot be undone. Ratings follow corrections as usual.
+
+### Status by hand
+
+`PATCH /stages/:tournamentId/:stageId` can still set `stageStatus`, within limits: `finished` finishes the stage the
+same way a final result does (its conversion rules apply), `ongoing` is refused in favour of
+`PATCH /stages/start/:stageId` (which draws the bracket), a started stage cannot go back to `upcoming`, and a finished
+stage only changes through reopening. `stageType` cannot change once a stage has started.
+
 ## Point conversion rules
 
 A conversion rule turns the final placings of a stage or tournament (the **source**) into points or entries in
@@ -202,16 +223,21 @@ DELETE /conversion-rules/:ruleId         delete (organisers of the source)
 | `stage_to_tournament`      | The stage's standings, by participation         | Participations (the same group or player) in a tournament |
 | `tournament_to_tournament` | Participations by `points` (ties share a place) | Participations in another tournament                      |
 
-| `strategy`      | Effect on the places in range                                                                   |
-| --------------- | ----------------------------------------------------------------------------------------------- |
-| `ranking`       | Adds points to the entry the same group or player already has in the destination                |
-| `qualification` | Gives each one an entry in the destination (a roster with the same players, or a participation) |
-| `elimination`   | Qualification, and removes the other source entries' rosters from the destination stage         |
-| `seed`          | Qualification, with the destination rosters' `seed` set in order of place                       |
-| `hybrid`        | Qualification plus ranking points                                                               |
+| `strategy`               | Effect on the places in range                                                                   |
+| ------------------------ | ----------------------------------------------------------------------------------------------- |
+| `ranking`                | Adds points to the entry the same group or player already has in the destination                |
+| `qualification`          | Gives each one an entry in the destination (a roster with the same players, or a participation) |
+| `elimination`            | Qualification, and removes the other source entries' rosters from the destination stage         |
+| `seed`                   | Qualification, with the destination rosters' `seed` set in order of place                       |
+| `hybrid`                 | Qualification plus ranking points                                                               |
+| `tie_breaker`            | Gives an entry in the destination (a tie-breaker stage) to those that share their place         |
+| `qualification_with_lcq` | Qualification, and the places after `to` enter `lastChanceDestination`                          |
 
-`tie_breaker` and `qualification_with_lcq` are refused with `400`. `elimination` and `seed` need a `stage_to_stage`
-rule, and strategies that add entries need a destination stage that is still `upcoming`.
+`elimination`, `seed` and `qualification_with_lcq` need a `stage_to_stage` rule, and strategies that add entries need a
+destination stage that is still `upcoming`. `qualification_with_lcq` also needs `to` and a `lastChanceDestination`: an
+upcoming stage of the same tournament, other than the source and the destination. A second `qualification` rule from
+the last-chance stage to the destination completes the usual setup. Solo players already have a roster in every stage,
+so rules that add entries matter for team tournaments; for solo ones use `elimination`.
 
 The places in range are `from` to `to` (both included; by default every place). Points start at `maxPoints` (or
 `points`) for place `from` and drop by `pointsPerPlace` per place, never below `minPoints` (default 0). For example

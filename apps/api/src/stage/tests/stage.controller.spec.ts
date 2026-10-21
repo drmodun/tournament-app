@@ -44,6 +44,7 @@ describe('StageController', () => {
       findAll: jest.fn(),
       findOne: jest.fn(),
       update: jest.fn(),
+      updateByOrganiser: jest.fn(),
       remove: jest.fn(),
       generateBracket: jest.fn(),
       startStage: jest.fn(),
@@ -155,12 +156,12 @@ describe('StageController', () => {
 
     it('should update a stage', async () => {
       const updatedStage = { ...mockStage, ...updateDto };
-      service.update.mockResolvedValue(updatedStage);
+      service.updateByOrganiser.mockResolvedValue(updatedStage);
 
       const result = await controller.update(1, 1, updateDto);
 
       expect(result).toEqual(updatedStage);
-      expect(service.update).toHaveBeenCalledWith(1, updateDto);
+      expect(service.updateByOrganiser).toHaveBeenCalledWith(1, updateDto);
     });
   });
 

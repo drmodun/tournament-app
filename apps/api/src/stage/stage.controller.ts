@@ -191,7 +191,7 @@ export class StageController {
     @Param('tournamentId', ParseIntPipe) tournamentId: number,
     @Body() updateStageDto: UpdateStageRequest,
   ) {
-    return await this.stageService.update(id, {
+    return await this.stageService.updateByOrganiser(id, {
       ...updateStageDto,
       tournamentId,
     });

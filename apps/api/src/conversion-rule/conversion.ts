@@ -30,7 +30,41 @@ export interface ConversionOutcome {
   seed: number | null;
   // Elimination strategy: an entry it already has in the destination is removed
   isRemoved: boolean;
+  // Qualification with a last-chance qualifier: a place after the range, which gets an entry in the
+  // last-chance stage
+  toLastChance: boolean;
 }
+
+// What applying a rule changed in its destinations, recorded so that it can be undone
+export interface ConversionEffects {
+  // Rosters it entered into destination stages
+  createdRosters: number[];
+  // Points it added to rosters already there
+  rosterPoints: { rosterId: number; points: number }[];
+  // Seeds it replaced
+  seeds: { rosterId: number; previous: number | null }[];
+  // Rosters it removed from a destination stage, enough to enter them again
+  removedRosters: {
+    stageId: number;
+    participationId: number;
+    points: number | null;
+    seed: number | null;
+    players: { userId: number; isSubstitute: boolean | null }[];
+  }[];
+  // Participations it entered into a destination tournament
+  createdParticipations: number[];
+  // Points it added to participations
+  participationPoints: { participationId: number; points: number }[];
+}
+
+export const noEffects = (): ConversionEffects => ({
+  createdRosters: [],
+  rosterPoints: [],
+  seeds: [],
+  removedRosters: [],
+  createdParticipations: [],
+  participationPoints: [],
+});
 
 export const SUPPORTED_STRATEGIES: string[] = [
   pointConversionStrategyEnum.RANKING,
@@ -38,6 +72,8 @@ export const SUPPORTED_STRATEGIES: string[] = [
   pointConversionStrategyEnum.ELIMINATION,
   pointConversionStrategyEnum.SEED,
   pointConversionStrategyEnum.HYBRID,
+  pointConversionStrategyEnum.TIE_BREAKER,
+  pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
 ];
 
 const AWARDS_POINTS: string[] = [
@@ -50,6 +86,7 @@ const QUALIFIES: string[] = [
   pointConversionStrategyEnum.ELIMINATION,
   pointConversionStrategyEnum.SEED,
   pointConversionStrategyEnum.HYBRID,
+  pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
 ];
 
 /** Whether a place falls in the rule's range of places (`from` to `to`, both included, open-ended when unset). */
@@ -73,17 +110,29 @@ export function pointsForPlace(rule: ConversionSettings, place: number) {
   return Math.max(rule.minPoints ?? 0, value);
 }
 
-/** What the rule gives each placing, best first. */
+/**
+ * What the rule gives each placing, best first. A tie-breaker qualifies the entries in range that share
+ * their place, so a tie-breaker stage can split them.
+ */
 export function planConversion(
   rule: ConversionSettings,
   placings: Placing[],
 ): ConversionOutcome[] {
   const sorted = [...placings].sort((a, b) => a.place - b.place);
+  const entriesAtPlace = new Map<number, number>();
   let seed = 0;
+
+  for (const { place } of sorted) {
+    entriesAtPlace.set(place, (entriesAtPlace.get(place) ?? 0) + 1);
+  }
 
   return sorted.map(({ id, place }) => {
     const inRange = isInRange(rule, place);
-    const qualifies = inRange && QUALIFIES.includes(rule.strategy);
+    const qualifies =
+      inRange &&
+      (QUALIFIES.includes(rule.strategy) ||
+        (rule.strategy === pointConversionStrategyEnum.TIE_BREAKER &&
+          entriesAtPlace.get(place) > 1));
 
     return {
       id,
@@ -98,6 +147,9 @@ export function planConversion(
           : null,
       isRemoved:
         !inRange && rule.strategy === pointConversionStrategyEnum.ELIMINATION,
+      toLastChance:
+        rule.strategy === pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ &&
+        place > (rule.to ?? Infinity),
     };
   });
 }

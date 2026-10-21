@@ -3,11 +3,13 @@ import { groupRoleEnum } from '@tournament-app/types';
 import {
   and,
   asc,
+  desc,
   eq,
   exists,
   inArray,
   InferInsertModel,
   InferSelectModel,
+  isNotNull,
   isNull,
   or,
   sql,
@@ -22,7 +24,7 @@ import {
   tournament,
   userToRoster,
 } from 'src/db/schema';
-import { ConversionOutcome } from './conversion';
+import { ConversionEffects, ConversionOutcome, noEffects } from './conversion';
 import { ConversionRuleQuery } from './dto/requests.dto';
 
 export type ConversionRule = InferSelectModel<typeof pointConversionRule>;
@@ -178,94 +180,128 @@ export class ConversionRuleDrizzleRepository {
       .where(eq(participation.tournamentId, tournamentId));
   }
 
-  // Source rosters (outcome ids) into the destination stage: qualifiers get a roster with the same
-  // players, points are added, seeds set, and eliminated entries removed
-  async applyToStage(
+  // Source rosters (outcome ids) into destination stages: qualifiers get a roster with the same
+  // players, points are added, seeds set, and eliminated entries removed. Records what changed.
+  async applyToStages(
     ruleId: number,
-    destinationStageId: number,
-    outcomes: ConversionOutcome[],
+    targets: { stageId: number; outcomes: ConversionOutcome[] }[],
   ) {
     await db.transaction(async (tx) => {
-      for (const outcome of outcomes) {
-        const [source] = await tx
-          .select({ participationId: roster.participationId })
-          .from(roster)
-          .where(eq(roster.id, outcome.id));
+      const effects = noEffects();
 
-        if (!source) {
-          continue;
-        }
-
-        const [existing] = await tx
-          .select({ id: roster.id })
-          .from(roster)
-          .where(
-            and(
-              eq(roster.participationId, source.participationId),
-              eq(roster.stageId, destinationStageId),
-            ),
-          );
-
-        if (outcome.isRemoved) {
-          if (existing) {
-            await tx.delete(roster).where(eq(roster.id, existing.id));
-          }
-          continue;
-        }
-
-        if (existing) {
-          await tx
-            .update(roster)
-            .set({
-              points: sql`coalesce(${roster.points}, 0) + ${outcome.points}`,
-              ...(outcome.seed != null ? { seed: outcome.seed } : {}),
-            })
-            .where(eq(roster.id, existing.id));
-          continue;
-        }
-
-        if (!outcome.qualifies) {
-          continue;
-        }
-
-        const [created] = await tx
-          .insert(roster)
-          .values({
-            participationId: source.participationId,
-            stageId: destinationStageId,
-            points: outcome.points,
-            seed: outcome.seed,
-          } as InferInsertModel<typeof roster>)
-          .returning({ id: roster.id });
-
-        const players = await tx
-          .select({
-            userId: userToRoster.userId,
-            isSubstitute: userToRoster.isSubstitute,
-          })
-          .from(userToRoster)
-          .where(eq(userToRoster.rosterId, outcome.id));
-
-        if (players.length) {
-          await tx
-            .insert(userToRoster)
-            .values(
-              players.map((player) => ({ ...player, rosterId: created.id })),
-            );
+      for (const { stageId, outcomes } of targets) {
+        for (const outcome of outcomes) {
+          await this.applyOutcomeToStage(tx, stageId, outcome, effects);
         }
       }
 
-      await this.markApplied(ruleId, tx);
+      await this.markApplied(ruleId, effects, tx);
     });
   }
 
+  private async applyOutcomeToStage(
+    tx: Transaction,
+    destinationStageId: number,
+    outcome: ConversionOutcome,
+    effects: ConversionEffects,
+  ) {
+    const [source] = await tx
+      .select({ participationId: roster.participationId })
+      .from(roster)
+      .where(eq(roster.id, outcome.id));
+
+    if (!source) {
+      return;
+    }
+
+    const [existing] = await tx
+      .select({ id: roster.id, points: roster.points, seed: roster.seed })
+      .from(roster)
+      .where(
+        and(
+          eq(roster.participationId, source.participationId),
+          eq(roster.stageId, destinationStageId),
+        ),
+      );
+
+    if (outcome.isRemoved) {
+      if (existing) {
+        effects.removedRosters.push({
+          stageId: destinationStageId,
+          participationId: source.participationId,
+          points: existing.points,
+          seed: existing.seed,
+          players: await this.playersOf(tx, existing.id),
+        });
+        await tx.delete(roster).where(eq(roster.id, existing.id));
+      }
+      return;
+    }
+
+    if (existing) {
+      await tx
+        .update(roster)
+        .set({
+          points: sql`coalesce(${roster.points}, 0) + ${outcome.points}`,
+          ...(outcome.seed != null ? { seed: outcome.seed } : {}),
+        })
+        .where(eq(roster.id, existing.id));
+
+      if (outcome.points) {
+        effects.rosterPoints.push({
+          rosterId: existing.id,
+          points: outcome.points,
+        });
+      }
+      if (outcome.seed != null) {
+        effects.seeds.push({ rosterId: existing.id, previous: existing.seed });
+      }
+      return;
+    }
+
+    if (!outcome.qualifies) {
+      return;
+    }
+
+    const [created] = await tx
+      .insert(roster)
+      .values({
+        participationId: source.participationId,
+        stageId: destinationStageId,
+        points: outcome.points,
+        seed: outcome.seed,
+      } as InferInsertModel<typeof roster>)
+      .returning({ id: roster.id });
+
+    effects.createdRosters.push(created.id);
+
+    const players = await this.playersOf(tx, outcome.id);
+
+    if (players.length) {
+      await tx
+        .insert(userToRoster)
+        .values(players.map((player) => ({ ...player, rosterId: created.id })));
+    }
+  }
+
+  private playersOf(tx: Transaction, rosterId: number) {
+    return tx
+      .select({
+        userId: userToRoster.userId,
+        isSubstitute: userToRoster.isSubstitute,
+      })
+      .from(userToRoster)
+      .where(eq(userToRoster.rosterId, rosterId));
+  }
+
   // Source participations (outcome ids) into the destination tournament: the same group or player
-  // gets its points added. Returns the qualifiers that have no entry there yet.
+  // gets its points added. Returns the qualifiers that have no entry there yet, and the points added.
   async applyToTournament(
     destinationTournamentId: number,
     outcomes: ConversionOutcome[],
   ) {
     const missing: { groupId?: number; userId?: number; points: number }[] = [];
+    const participationPoints: ConversionEffects['participationPoints'] = [];
 
     await db.transaction(async (tx) => {
       for (const outcome of outcomes) {
@@ -300,6 +336,12 @@ export class ConversionRuleDrizzleRepository {
 
         if (existing) {
           await this.addParticipationPoints(existing.id, outcome.points, tx);
+          if (outcome.points) {
+            participationPoints.push({
+              participationId: existing.id,
+              points: outcome.points,
+            });
+          }
         } else if (outcome.qualifies) {
           missing.push(
             source.groupId
@@ -310,7 +352,7 @@ export class ConversionRuleDrizzleRepository {
       }
     });
 
-    return missing;
+    return { missing, participationPoints };
   }
 
   async addParticipationPoints(
@@ -330,12 +372,133 @@ export class ConversionRuleDrizzleRepository {
       .where(eq(participation.id, participationId));
   }
 
-  async markApplied(ruleId: number, tx: Transaction | typeof db = db) {
+  async markApplied(
+    ruleId: number,
+    effects: ConversionEffects,
+    tx: Transaction | typeof db = db,
+  ) {
     await tx
       .update(pointConversionRule)
-      .set({ appliedAt: new Date() } as Partial<
+      .set({ appliedAt: new Date(), effects } as Partial<
         InferInsertModel<typeof pointConversionRule>
       >)
       .where(eq(pointConversionRule.id, ruleId));
+  }
+
+  // Applied rules whose source is one of these stages, or one of these tournaments
+  async findApplied(stageIds: number[], tournamentIds: number[]) {
+    return db
+      .select()
+      .from(pointConversionRule)
+      .where(
+        and(
+          isNotNull(pointConversionRule.appliedAt),
+          or(
+            and(
+              inArray(pointConversionRule.type, [
+                'stage_to_stage',
+                'stage_to_tournament',
+              ]),
+              inArray(
+                pointConversionRule.source,
+                stageIds.length ? stageIds : [-1],
+              ),
+            ),
+            and(
+              eq(pointConversionRule.type, 'tournament_to_tournament'),
+              inArray(
+                pointConversionRule.source,
+                tournamentIds.length ? tournamentIds : [-1],
+              ),
+            ),
+          ),
+        ),
+      )
+      .orderBy(desc(pointConversionRule.id));
+  }
+
+  // Whether any stage of the tournament has started
+  async hasTournamentStarted(tournamentId: number) {
+    const [result] = await db
+      .select({
+        started: sql<number>`count(*) filter (where ${stage.stageStatus} in ('ongoing', 'finished'))::int`,
+      })
+      .from(stage)
+      .where(eq(stage.tournamentId, tournamentId));
+
+    return result.started > 0;
+  }
+
+  // Undoes the rules (newest first) and puts the stage back in play, all or nothing
+  async reopenStage(stageId: number, rules: ConversionRule[]) {
+    await db.transaction(async (tx) => {
+      for (const rule of rules) {
+        await this.undo(tx, rule.effects ?? noEffects());
+        await tx
+          .update(pointConversionRule)
+          .set({ appliedAt: null, effects: null } as Partial<
+            InferInsertModel<typeof pointConversionRule>
+          >)
+          .where(eq(pointConversionRule.id, rule.id));
+      }
+
+      await tx
+        .update(stage)
+        .set({ stageStatus: 'ongoing' } as Partial<
+          InferInsertModel<typeof stage>
+        >)
+        .where(eq(stage.id, stageId));
+    });
+  }
+
+  private async undo(tx: Transaction, effects: ConversionEffects) {
+    if (effects.createdRosters.length) {
+      await tx.delete(roster).where(inArray(roster.id, effects.createdRosters));
+    }
+
+    for (const { rosterId, points } of effects.rosterPoints) {
+      await tx
+        .update(roster)
+        .set({ points: sql`coalesce(${roster.points}, 0) - ${points}` })
+        .where(eq(roster.id, rosterId));
+    }
+
+    for (const { rosterId, previous } of effects.seeds) {
+      await tx
+        .update(roster)
+        .set({ seed: previous })
+        .where(eq(roster.id, rosterId));
+    }
+
+    for (const removed of effects.removedRosters) {
+      const [restored] = await tx
+        .insert(roster)
+        .values({
+          participationId: removed.participationId,
+          stageId: removed.stageId,
+          points: removed.points,
+          seed: removed.seed,
+        } as InferInsertModel<typeof roster>)
+        .returning({ id: roster.id });
+
+      if (removed.players.length) {
+        await tx.insert(userToRoster).values(
+          removed.players.map((player) => ({
+            ...player,
+            rosterId: restored.id,
+          })),
+        );
+      }
+    }
+
+    if (effects.createdParticipations.length) {
+      await tx
+        .delete(participation)
+        .where(inArray(participation.id, effects.createdParticipations));
+    }
+
+    for (const { participationId, points } of effects.participationPoints) {
+      await this.addParticipationPoints(participationId, -points, tx);
+    }
   }
 }

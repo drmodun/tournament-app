@@ -106,6 +106,41 @@ describe('conversion', () => {
       expect(plan[0]).toMatchObject({ id: 10, qualifies: true, points: 7 });
       expect(plan[1]).toMatchObject({ id: 11, qualifies: false, points: 0 });
     });
+
+    it('tie-breaker qualifies only the entries in range that share a place', () => {
+      expect(
+        planConversion({ strategy: 'tie_breaker' }, placings)
+          .filter((o) => o.qualifies)
+          .map((o) => o.id),
+      ).toEqual([12, 13]);
+      expect(
+        planConversion({ strategy: 'tie_breaker', to: 2 }, placings).some(
+          (o) => o.qualifies,
+        ),
+      ).toBe(false);
+    });
+
+    it('qualification with a last-chance qualifier sends the places after the range there', () => {
+      const plan = planConversion(
+        { strategy: 'qualification_with_lcq', to: 2 },
+        placings,
+      );
+
+      expect(plan.filter((o) => o.qualifies).map((o) => o.id)).toEqual([
+        10, 11,
+      ]);
+      expect(plan.filter((o) => o.toLastChance).map((o) => o.id)).toEqual([
+        12, 13, 14,
+      ]);
+    });
+
+    it('sends nobody to a last chance without the other strategies', () => {
+      expect(
+        planConversion({ strategy: 'qualification', to: 2 }, placings).some(
+          (o) => o.toLastChance,
+        ),
+      ).toBe(false);
+    });
   });
 
   describe('placingsByPoints', () => {

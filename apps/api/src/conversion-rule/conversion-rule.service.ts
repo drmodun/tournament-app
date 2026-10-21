@@ -19,6 +19,7 @@ import {
 } from 'src/matches/matches.service';
 import { ParticipationService } from 'src/participation/participation.service';
 import {
+  noEffects,
   Placing,
   placingsByPoints,
   planConversion,
@@ -39,12 +40,15 @@ const QUALIFYING_STRATEGIES: string[] = [
   pointConversionStrategyEnum.ELIMINATION,
   pointConversionStrategyEnum.SEED,
   pointConversionStrategyEnum.HYBRID,
+  pointConversionStrategyEnum.TIE_BREAKER,
+  pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
 ];
 
-// Seeds and removals are about rosters in a stage
+// Seeds, removals and last-chance stages are about rosters in a stage
 const STAGE_ONLY_STRATEGIES: string[] = [
   pointConversionStrategyEnum.ELIMINATION,
   pointConversionStrategyEnum.SEED,
+  pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
 ];
 
 const isStageSource = (type: string) =>
@@ -79,6 +83,21 @@ export class ConversionRuleService {
 
     if (dto.from != null && dto.to != null && dto.from > dto.to) {
       throw new BadRequestException('`from` must not be after `to`');
+    }
+
+    const isLastChance =
+      dto.strategy === pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ;
+
+    if (isLastChance && (dto.lastChanceDestination == null || dto.to == null)) {
+      throw new BadRequestException(
+        'A qualification_with_lcq rule needs `to` and a `lastChanceDestination` stage',
+      );
+    }
+
+    if (!isLastChance && dto.lastChanceDestination != null) {
+      throw new BadRequestException(
+        '`lastChanceDestination` is only for qualification_with_lcq rules',
+      );
     }
 
     const sourceTournamentId = await this.tournamentOf(
@@ -183,14 +202,29 @@ export class ConversionRuleService {
     const outcomes = planConversion(rule, await this.placingsOf(rule));
 
     if (rule.type === pointConversionTypeEnum.STAGE_TO_STAGE) {
-      await this.repository.applyToStage(rule.id, rule.destination, outcomes);
+      const targets = [{ stageId: rule.destination, outcomes }];
+
+      // The places after the range enter the last-chance stage, carrying nothing
+      if (rule.lastChanceDestination != null) {
+        targets.push({
+          stageId: rule.lastChanceDestination,
+          outcomes: outcomes.map((outcome) => ({
+            ...outcome,
+            points: 0,
+            seed: null,
+            isRemoved: false,
+            qualifies: outcome.toLastChance,
+          })),
+        });
+      }
+
+      await this.repository.applyToStages(rule.id, targets);
       return;
     }
 
-    const missing = await this.repository.applyToTournament(
-      rule.destination,
-      outcomes,
-    );
+    const { missing, participationPoints } =
+      await this.repository.applyToTournament(rule.destination, outcomes);
+    const effects = { ...noEffects(), participationPoints };
 
     // Created the usual way, so players entering alone get their rosters
     for (const { points, ...entrant } of missing) {
@@ -198,13 +232,99 @@ export class ConversionRuleService {
         rule.destination,
         entrant,
       );
+      effects.createdParticipations.push(created.id as number);
       await this.repository.addParticipationPoints(
         created.id as number,
         points,
       );
     }
 
-    await this.repository.markApplied(rule.id);
+    await this.repository.markApplied(rule.id, effects);
+  }
+
+  /**
+   * Puts a finished stage back in play so its results can be corrected: undoes the conversion rules
+   * that ran when it finished (and those of its tournament, which finished with it). They run again
+   * when the stage finishes again. Refused while anything those rules fed has started.
+   */
+  async reopenStage(stageId: number, user: ValidatedUserDto) {
+    const stage = await this.repository.getStage(stageId);
+
+    if (!stage) {
+      throw new NotFoundException(`Stage with ID ${stageId} not found`);
+    }
+
+    await this.checkManages(user, stage.tournamentId);
+
+    if (stage.stageStatus !== stageStatusEnum.FINISHED) {
+      throw new BadRequestException('Only a finished stage can be reopened');
+    }
+
+    const rules = await this.repository.findApplied(
+      [stageId],
+      [stage.tournamentId],
+    );
+
+    for (const rule of rules) {
+      await this.checkCanUndo(rule, user);
+    }
+
+    await this.repository.reopenStage(stageId, rules);
+
+    return { id: stageId, stageStatus: stageStatusEnum.ONGOING };
+  }
+
+  private async checkCanUndo(rule: ConversionRule, user: ValidatedUserDto) {
+    if (!rule.effects) {
+      throw new BadRequestException(
+        `Conversion rule ${rule.id} was applied before its changes were recorded, so it cannot be undone`,
+      );
+    }
+
+    await this.checkManages(
+      user,
+      await this.tournamentOf(rule.type, rule.destination, 'destination'),
+    );
+
+    if (rule.type === pointConversionTypeEnum.STAGE_TO_STAGE) {
+      // Points can come back out of a stage in play; entries, seeds and removals only before the draw
+      const changesEntries =
+        rule.effects.createdRosters.length > 0 ||
+        rule.effects.removedRosters.length > 0 ||
+        rule.effects.seeds.length > 0;
+
+      for (const stageId of [rule.destination, rule.lastChanceDestination]) {
+        const destination =
+          stageId != null ? await this.repository.getStage(stageId) : null;
+
+        if (
+          destination &&
+          (destination.stageStatus === stageStatusEnum.FINISHED ||
+            (changesEntries &&
+              destination.stageStatus !== stageStatusEnum.UPCOMING))
+        ) {
+          throw new BadRequestException(
+            `Stage ${stageId}, which conversion rule ${rule.id} fed, has already ${destination.stageStatus === stageStatusEnum.FINISHED ? 'finished' : 'started'}`,
+          );
+        }
+      }
+      return;
+    }
+
+    if (
+      rule.effects.createdParticipations.length &&
+      (await this.repository.hasTournamentStarted(rule.destination))
+    ) {
+      throw new BadRequestException(
+        `Tournament ${rule.destination}, which conversion rule ${rule.id} entered participants into, has already started`,
+      );
+    }
+
+    if (await this.repository.isTournamentFinished(rule.destination)) {
+      throw new BadRequestException(
+        `Tournament ${rule.destination}, which conversion rule ${rule.id} fed, has already finished`,
+      );
+    }
   }
 
   // Stage sources place their rosters (participations for a tournament destination); tournament
@@ -321,7 +441,47 @@ export class ConversionRuleService {
       );
     }
 
+    if (dto.lastChanceDestination != null) {
+      await this.checkLastChanceStage(dto, source.tournamentId);
+    }
+
     return tournamentId;
+  }
+
+  private async checkLastChanceStage(
+    dto: CreateConversionRuleDto,
+    tournamentId: number,
+  ) {
+    const lastChance = await this.repository.getStage(
+      dto.lastChanceDestination,
+    );
+
+    if (!lastChance) {
+      throw new NotFoundException(
+        `The last-chance stage ${dto.lastChanceDestination} was not found`,
+      );
+    }
+
+    if (
+      dto.lastChanceDestination === dto.source ||
+      dto.lastChanceDestination === dto.destination
+    ) {
+      throw new BadRequestException(
+        'The last-chance stage must differ from the source and the destination',
+      );
+    }
+
+    if (lastChance.tournamentId !== tournamentId) {
+      throw new BadRequestException(
+        'The last-chance stage must be in the same tournament',
+      );
+    }
+
+    if (lastChance.stageStatus !== stageStatusEnum.UPCOMING) {
+      throw new BadRequestException(
+        'Entries can only be added to a stage that has not started',
+      );
+    }
   }
 
   private async checkManages(user: ValidatedUserDto, tournamentId: number) {

@@ -267,7 +267,7 @@ export class MatchesService {
     // A round robin is drawn in full and its rounds can be played in any order
     if (format === LocalBracketFormat.ROUND_ROBIN) {
       if (matchups.every((m) => m.isFinished)) {
-        await this.finishLocalStage(stageId);
+        await this.finishStage(stageId);
       }
       return;
     }
@@ -298,7 +298,7 @@ export class MatchesService {
     );
 
     if (!pairings) {
-      await this.finishLocalStage(stageId);
+      await this.finishStage(stageId);
       return;
     }
 
@@ -367,7 +367,8 @@ export class MatchesService {
     }
   }
 
-  private async finishLocalStage(stageId: number) {
+  // Also for a stage an organiser marks finished by hand
+  async finishStage(stageId: number) {
     await this.matchesRepository.finishStage(stageId);
 
     // Conversion rules apply here; their failures are logged and never undo the result
@@ -499,7 +500,7 @@ export class MatchesService {
       stage.stageStatus !== stageStatusEnum.FINISHED &&
       isChallongeBracketOver(matches)
     ) {
-      await this.finishLocalStage(stage.id);
+      await this.finishStage(stage.id);
     }
   }
 

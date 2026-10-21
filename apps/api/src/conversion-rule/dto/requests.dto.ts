@@ -18,7 +18,7 @@ export class CreateConversionRuleDto {
   @ApiProperty({
     enum: pointConversionStrategyEnum,
     description:
-      'ranking: points by place. qualification: places in range get an entry in the destination. elimination: qualification that also removes the other entries from the destination stage. seed: qualification in order of place. hybrid: qualification plus ranking points',
+      'ranking: points by place. qualification: places in range get an entry in the destination. elimination: qualification that also removes the other entries from the destination stage. seed: qualification in order of place. hybrid: qualification plus ranking points. tie_breaker: entries in range that share their place get an entry in the destination. qualification_with_lcq: qualification, and the places after the range enter lastChanceDestination',
   })
   @IsEnum(pointConversionStrategyEnum)
   strategy: pointConversionStrategyEnum;
@@ -34,6 +34,14 @@ export class CreateConversionRuleDto {
   })
   @IsInt()
   destination: number;
+
+  @ApiPropertyOptional({
+    description:
+      'qualification_with_lcq only: the stage (same tournament, not started) that the places after `to` enter',
+  })
+  @IsOptional()
+  @IsInt()
+  lastChanceDestination?: number;
 
   @ApiPropertyOptional({
     description: 'Points for every place in range, when maxPoints is not set',

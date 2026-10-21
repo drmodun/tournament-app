@@ -17,6 +17,9 @@ export class ConversionRuleResponse {
   destination: number;
 
   @ApiResponseProperty()
+  lastChanceDestination?: number;
+
+  @ApiResponseProperty()
   points: number;
 
   @ApiResponseProperty()

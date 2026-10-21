@@ -4,7 +4,9 @@ import {
   pointConversionTypeEnum,
   stageTypeEnum,
 } from '@tournament-app/types';
+import { sql } from 'drizzle-orm';
 import request from 'supertest';
+import { db } from '../src/db/db';
 import {
   createApp,
   loginAs,
@@ -413,15 +415,112 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
       await run.applyRule(created.body.id).expect(400);
     });
 
-    it('is refused for strategies the API does not support', async () => {
-      const { first, second } = await twoStages(stageTypeEnum.KNOCKOUT);
+    // Solo players get a roster in every stage, so a destination is emptied to see who a rule enters
+    const emptyStage = async (stageId: number) => {
+      await db.execute(sql`delete from roster where stage_id = ${stageId}`);
+    };
 
-      for (const strategy of [
-        pointConversionStrategyEnum.TIE_BREAKER,
-        pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
-      ]) {
-        await run.createRule(rule(first, second, { strategy })).expect(400);
-      }
+    const playersIn = async (stageId: number) =>
+      (
+        (await db.execute(sql`
+          select ur.user_id as id from user_roster ur
+          join roster r on r.id = ur.roster_id
+          where r.stage_id = ${stageId}
+          order by ur.user_id`)) as unknown as { id: number }[]
+      ).map((row) => row.id);
+
+    it('tie-breaker enters the rosters that share a place', async () => {
+      const { first, second } = await twoStages(stageTypeEnum.ROUND_ROBIN);
+      await emptyStage(second);
+      await run
+        .createRule(
+          rule(first, second, {
+            strategy: pointConversionStrategyEnum.TIE_BREAKER,
+          }),
+        )
+        .expect(201);
+
+      // The second and third seeds draw and otherwise do the same, so they share second place
+      const [, second2, third] = rosterIdsOf(await run.matchups(first));
+      const groupMatches = await run.play(first, (matchup) =>
+        matchup.results.every((r) => [second2, third].includes(r.id))
+          ? 'draw'
+          : lowestIdWins(matchup),
+      );
+      const { standings } = await run.standings(first);
+
+      expect(standings.filter((row) => row.place === 2)).toHaveLength(2);
+      expect(await playersIn(second)).toEqual(
+        [userOf(groupMatches, second2), userOf(groupMatches, third)].sort(
+          (a, b) => a - b,
+        ),
+      );
+    });
+
+    it('qualification with a last-chance qualifier splits the places between two stages', async () => {
+      const { tournamentId, first, second } = await twoStages(
+        stageTypeEnum.KNOCKOUT,
+      );
+      const lastChance = await run.createStage(
+        tournamentId,
+        stageTypeEnum.KNOCKOUT,
+        'Last chance',
+      );
+      await emptyStage(second);
+      await emptyStage(lastChance);
+
+      await run
+        .createRule(
+          rule(first, second, {
+            strategy: pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
+            to: 2,
+            lastChanceDestination: lastChance,
+          }),
+        )
+        .expect(201);
+      // The winner of the last chance joins the playoffs
+      await run
+        .createRule(
+          rule(lastChance, second, {
+            strategy: pointConversionStrategyEnum.QUALIFICATION,
+            to: 1,
+          }),
+        )
+        .expect(201);
+
+      const groupMatches = await run.play(first, lowestIdWins);
+      const placed = rosterIdsOf(groupMatches).map((id) =>
+        userOf(groupMatches, id),
+      );
+
+      expect(await playersIn(second)).toEqual(
+        placed.slice(0, 2).sort((a, b) => a - b),
+      );
+      expect(await playersIn(lastChance)).toEqual(
+        placed.slice(2).sort((a, b) => a - b),
+      );
+
+      await run.startStage(lastChance).expect(200);
+      await run.play(lastChance, lowestIdWins);
+
+      expect(await playersIn(second)).toEqual(
+        placed.slice(0, 3).sort((a, b) => a - b),
+      );
+    });
+
+    it('refuses a last-chance stage that is not in the tournament', async () => {
+      const { first, second } = await twoStages(stageTypeEnum.KNOCKOUT);
+      const other = await twoStages(stageTypeEnum.KNOCKOUT);
+
+      await run
+        .createRule(
+          rule(first, second, {
+            strategy: pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
+            to: 2,
+            lastChanceDestination: other.second,
+          }),
+        )
+        .expect(400);
     });
 
     it('is refused when it makes no sense', async () => {
@@ -472,6 +571,151 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
       await request(app.getHttpServer())
         .get(`/conversion-rules/${created.body.id}`)
         .expect(404);
+    });
+  });
+
+  describe('reopening a finished stage', () => {
+    async function twoStages(secondType: stageTypeEnum) {
+      const tournamentId = await run.createTournament(userPool(4));
+      const first = await run.createStage(
+        tournamentId,
+        stageTypeEnum.ROUND_ROBIN,
+      );
+      const second = await run.createStage(tournamentId, secondType);
+
+      await run.startStage(first).expect(200);
+
+      return { tournamentId, first, second };
+    }
+
+    const reopen = (stageId: number, token = run.token) =>
+      request(app.getHttpServer())
+        .post(`/stages/${stageId}/reopen`)
+        .set('Authorization', `Bearer ${token}`);
+
+    const carriedPoints = async (stageId: number) =>
+      (await run.standings(stageId)).standings
+        .map((row) => row.carriedPoints)
+        .sort((a, b) => b - a);
+
+    it('undoes its rules, lets results change, and applies them again when it finishes', async () => {
+      const { first, second } = await twoStages(stageTypeEnum.ROUND_ROBIN);
+      const created = await run
+        .createRule({
+          type: pointConversionTypeEnum.STAGE_TO_STAGE,
+          source: first,
+          destination: second,
+          strategy: pointConversionStrategyEnum.RANKING,
+          maxPoints: 10,
+          pointsPerPlace: 3,
+        })
+        .expect(201);
+      const matchups = await run.play(first, lowestIdWins);
+      const last = matchups[matchups.length - 1];
+
+      expect(await carriedPoints(second)).toEqual([10, 7, 4, 1]);
+      await run.updateScore(last, last.results[1].id).expect(400);
+
+      await reopen(first).expect(201);
+
+      expect(await status(first)).toBe('ongoing');
+      expect((await run.rule(created.body.id)).appliedAt).toBeNull();
+      expect(await carriedPoints(second)).toEqual([0, 0, 0, 0]);
+
+      // The corrected result finishes the stage again
+      const loser = last.results.find((r) => r.id !== lowestIdWins(last))!;
+      await run.updateScore(last, loser.id).expect(200);
+
+      expect(await status(first)).toBe('finished');
+      expect((await run.rule(created.body.id)).appliedAt).not.toBeNull();
+      expect(
+        (await carriedPoints(second)).reduce((sum, points) => sum + points),
+      ).toBe(22);
+    });
+
+    it('enters the rosters an elimination rule removed again', async () => {
+      const { first, second } = await twoStages(stageTypeEnum.KNOCKOUT);
+      await run
+        .createRule({
+          type: pointConversionTypeEnum.STAGE_TO_STAGE,
+          source: first,
+          destination: second,
+          strategy: pointConversionStrategyEnum.ELIMINATION,
+          to: 2,
+        })
+        .expect(201);
+      await run.play(first, lowestIdWins);
+
+      expect((await run.stage(second)).rostersParticipating).toBe(2);
+      await reopen(first).expect(201);
+      expect((await run.stage(second)).rostersParticipating).toBe(4);
+    });
+
+    it('is refused once the stage it fed has started', async () => {
+      const { first, second } = await twoStages(stageTypeEnum.KNOCKOUT);
+      await run
+        .createRule({
+          type: pointConversionTypeEnum.STAGE_TO_STAGE,
+          source: first,
+          destination: second,
+          strategy: pointConversionStrategyEnum.ELIMINATION,
+          to: 2,
+        })
+        .expect(201);
+      await run.play(first, lowestIdWins);
+      await run.startStage(second).expect(200);
+
+      await reopen(first).expect(400);
+      expect(await status(first)).toBe('finished');
+    });
+
+    it('is refused for a stage that has not finished, and for outsiders', async () => {
+      const { first } = await twoStages(stageTypeEnum.KNOCKOUT);
+
+      await reopen(first).expect(400);
+      await run.play(first, lowestIdWins);
+      await reopen(first, outsiderToken).expect(403);
+      expect(await status(first)).toBe('finished');
+    });
+  });
+
+  describe('changing the status by hand', () => {
+    const patch = (tournamentId: number, stageId: number, body: object) =>
+      request(app.getHttpServer())
+        .patch(`/stages/${tournamentId}/${stageId}`)
+        .set('Authorization', `Bearer ${run.token}`)
+        .send(body);
+
+    it('finishes the stage, which applies its rules, and cannot undo that', async () => {
+      const tournamentId = await run.createTournament(userPool(4));
+      const first = await run.createStage(
+        tournamentId,
+        stageTypeEnum.ROUND_ROBIN,
+      );
+      const second = await run.createStage(
+        tournamentId,
+        stageTypeEnum.ROUND_ROBIN,
+      );
+      const created = await run
+        .createRule({
+          type: pointConversionTypeEnum.STAGE_TO_STAGE,
+          source: first,
+          destination: second,
+          strategy: pointConversionStrategyEnum.RANKING,
+          points: 1,
+        })
+        .expect(201);
+
+      await patch(tournamentId, first, { stageStatus: 'ongoing' }).expect(400);
+      await run.startStage(first).expect(200);
+      await patch(tournamentId, first, { stageStatus: 'finished' }).expect(200);
+
+      expect(await status(first)).toBe('finished');
+      expect((await run.rule(created.body.id)).appliedAt).not.toBeNull();
+
+      await patch(tournamentId, first, { stageStatus: 'ongoing' }).expect(400);
+      await patch(tournamentId, first, { stageType: 'swiss' }).expect(400);
+      await patch(tournamentId, first, { name: 'Renamed' }).expect(200);
     });
   });
 

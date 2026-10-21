@@ -30,7 +30,9 @@ import {
   primaryKey,
   customType,
   index,
+  jsonb,
 } from 'drizzle-orm/pg-core';
+import type { ConversionEffects } from '../conversion-rule/conversion';
 
 const geography = customType<{
   data: string;
@@ -502,8 +504,12 @@ export const pointConversionRule = pgTable('conversion_rule', {
   minPoints: integer('min_points'),
   maxPoints: integer('max_points'),
   pointsPerPlace: integer('points_per_place'),
+  // qualification_with_lcq: the stage that the places after the range enter
+  lastChanceDestination: integer('last_chance_destination'),
   // Rules apply once, when their source finishes
   appliedAt: timestamp('applied_at', { withTimezone: true }),
+  // What applying it changed, so reopening its source can undo it
+  effects: jsonb('effects').$type<ConversionEffects>(),
   createdBy: integer('created_by').references(() => user.id, {
     onDelete: 'set null',
   }),

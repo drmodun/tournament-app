@@ -46,6 +46,8 @@ export async function teardown() {
       tables.follower,
       tables.lookingForPlayers,
       tables.lookingForGroup,
+      // Its source and destination are stage or tournament ids, with no foreign key to clear it
+      tables.pointConversionRule,
       tables.stage,
 
       // Main entity tables with foreign keys

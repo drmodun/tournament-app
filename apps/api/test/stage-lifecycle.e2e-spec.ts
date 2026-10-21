@@ -628,9 +628,15 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
 
       expect(await status(first)).toBe('finished');
       expect((await run.rule(created.body.id)).appliedAt).not.toBeNull();
-      expect(
-        (await carriedPoints(second)).reduce((sum, points) => sum + points),
-      ).toBe(22);
+      // Carried by the corrected places; rosters that now tie share a place and its points
+      const places = (await run.standings(first)).standings.map(
+        (row) => row.place,
+      );
+      expect(await carriedPoints(second)).toEqual(
+        places
+          .map((place) => Math.max(0, 10 - 3 * (place - 1)))
+          .sort((a, b) => b - a),
+      );
     });
 
     it('enters the rosters an elimination rule removed again', async () => {

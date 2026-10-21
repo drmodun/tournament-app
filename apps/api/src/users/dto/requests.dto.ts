@@ -12,13 +12,12 @@ import {
   IsOptional,
   IsEmail,
   IsStrongPassword,
-  IsBoolean,
   IsDate,
   IsNumber,
 } from 'class-validator';
 import { BaseQuery } from 'src/base/query/baseQuery';
 import { UserReturnTypesEnumType } from '../types';
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 
 export class CreateUserRequest implements ICreateUserRequest {
   @IsString()

@@ -10,7 +10,7 @@ import {
   InferSelectModel,
   SQL,
 } from 'drizzle-orm';
-import { notification, notificationToUser, user } from 'src/db/schema';
+import { notification, notificationToUser } from 'src/db/schema';
 import { PrimaryRepository } from 'src/base/repository/primaryRepository';
 import { NotificationQueryDto } from './dto/requests';
 import {

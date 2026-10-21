@@ -20,7 +20,7 @@ import {
 import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
 import { IStageWithChallongeTournament, StagesWithDates } from './types';
-import { isChallongeEnabled } from 'src/challonge/enabled';
+import { canRunOnChallonge, isChallongeEnabled } from 'src/challonge/enabled';
 import { ChallongeService } from 'src/challonge/challonge.service';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { RosterDrizzleRepository } from 'src/roster/roster.repository';
@@ -55,7 +55,7 @@ export class StageService {
       stage[0].id as number,
     );
 
-    if (isChallongeEnabled()) {
+    if (isChallongeEnabled() && canRunOnChallonge(createStageDto.stageType)) {
       try {
         const stageId = await this.createChallongeTournament(
           stage[0].id as number,
@@ -275,8 +275,13 @@ export class StageService {
       );
     }
 
-    // Without Challonge (disabled, or its API failed when the stage was created) the API runs the bracket
-    if (!isChallongeEnabled() || !stage.challongeTournamentId) {
+    // Without Challonge (disabled, or its API failed when the stage was created) the API runs the bracket,
+    // as it does for formats Challonge does not have
+    if (
+      !isChallongeEnabled() ||
+      !stage.challongeTournamentId ||
+      !canRunOnChallonge(stage.stageType)
+    ) {
       return this.startLocalStage(stageId, stage.name);
     }
 

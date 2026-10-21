@@ -1311,11 +1311,13 @@ describe('MatchesService', () => {
         enabled: boolean;
         matchups: boolean;
         hasChallongeMatchups: boolean;
+        stageType?: string;
       }) => {
-        stageOfType('compass');
+        const stageType = setup.stageType ?? 'compass';
+        stageOfType(stageType);
         matchesRepository.getStageById.mockResolvedValue({
           id: 5,
-          stageType: 'compass',
+          stageType,
           stageStatus: 'ongoing',
           challongeTournamentId: setup.id,
         } as any);
@@ -1355,7 +1357,7 @@ describe('MatchesService', () => {
         }),
       ).toMatchObject({ runsOnChallonge: false, format: 'compass' });
 
-      // Imported from Challonge, which runs compass as double elimination
+      // Imported from Challonge before compass stages ran in the API: run there as double elimination
       expect(
         await standings({
           id: '9',
@@ -1372,8 +1374,19 @@ describe('MatchesService', () => {
           enabled: true,
           matchups: false,
           hasChallongeMatchups: false,
+          stageType: 'knockout',
         }),
       ).toMatchObject({ runsOnChallonge: true });
+
+      // Challonge has no compass bracket, so the API runs it even with Challonge on
+      expect(
+        await standings({
+          id: '9',
+          enabled: true,
+          matchups: false,
+          hasChallongeMatchups: false,
+        }),
+      ).toMatchObject({ runsOnChallonge: false, format: 'compass' });
       expect(
         await standings({
           id: '9',

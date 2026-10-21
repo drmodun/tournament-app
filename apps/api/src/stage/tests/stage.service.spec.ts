@@ -187,6 +187,27 @@ describe('StageService', () => {
       expect(repository.createEntity).toHaveBeenCalledWith(createDto);
     });
 
+    it('should create a Challonge tournament for a format Challonge has', async () => {
+      repository.createEntity.mockResolvedValue([mockStage]);
+
+      await service.create(createDto);
+
+      expect(service.createChallongeTournament).toHaveBeenCalledWith(
+        mockStage.id,
+      );
+    });
+
+    it.each([stageTypeEnum.COMPASS, stageTypeEnum.TRIPLE_ELIMINATION])(
+      'should not create a Challonge tournament for a %s stage',
+      async (stageType) => {
+        repository.createEntity.mockResolvedValue([mockStage]);
+
+        await service.create({ ...createDto, stageType });
+
+        expect(service.createChallongeTournament).not.toHaveBeenCalled();
+      },
+    );
+
     it('should throw UnprocessableEntityException when creation fails', async () => {
       repository.createEntity.mockResolvedValue([]);
 
@@ -584,6 +605,24 @@ describe('StageService', () => {
         mockChallongeServiceImpl.createBulkParticipants,
       ).not.toHaveBeenCalled();
     });
+
+    it.each([stageTypeEnum.COMPASS, stageTypeEnum.TRIPLE_ELIMINATION])(
+      'should run a %s bracket locally even when it has a Challonge tournament',
+      async (stageType) => {
+        const stage = { ...mockStageWithChallonge, stageType };
+        jest
+          .spyOn(service, 'findOne')
+          .mockResolvedValueOnce(stage)
+          .mockResolvedValueOnce(stage);
+
+        await service.startStage(stageId);
+
+        expect(mockMatchService.startLocalBracket).toHaveBeenCalled();
+        expect(
+          mockChallongeServiceImpl.createBulkParticipants,
+        ).not.toHaveBeenCalled();
+      },
+    );
 
     it('should leave a local stage finished when the draw already decided it', async () => {
       const localStage = {

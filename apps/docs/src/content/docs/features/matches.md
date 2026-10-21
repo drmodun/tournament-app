@@ -65,8 +65,9 @@ matchup `isFinished` with `endDate = now`, and set `isWinner` on the winning ros
 ## Syncing with Challonge
 
 Challonge is optional and **off by default**: it is only used when `CHALLONGE_ENABLED=true`. With it off, stages get no
-Challonge tournament, and a stage that already has one is started and run by the API. Challonge is treated as a mirror
-of the local data. After the database write:
+Challonge tournament, and a stage that already has one is started and run by the API. Challonge has no compass or
+triple-elimination bracket, so those stages never get a Challonge tournament and are always run by the API. Challonge
+is treated as a mirror of the local data. After the database write:
 
 1. If the matchup has a `challongeMatchupId` and the stage has a Challonge tournament, the API sends the scores and
    winner to Challonge (identifying rosters by their Challonge participant ids).

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { MatchesDrizzleRepository } from './matches.repository';
-import { isChallongeEnabled } from 'src/challonge/enabled';
+import { canRunOnChallonge, isChallongeEnabled } from 'src/challonge/enabled';
 import { ChallongeService } from '../challonge/challonge.service';
 import {
   IChallongeMatch,
@@ -71,7 +71,7 @@ function isChallongeBracketOver(matches: IChallongeMatch[]) {
   );
 }
 
-// The stage type whose bracket Challonge actually runs
+// The stage type whose bracket Challonge actually ran
 function challongeBracketType(stageType?: string | null) {
   return stageType === stageTypeEnum.COMPASS ||
     stageType === stageTypeEnum.TRIPLE_ELIMINATION
@@ -397,9 +397,13 @@ export class MatchesService {
     // there; one started by the API (Challonge off) keeps its own bracket whatever it holds
     const runsOnChallonge =
       !!stage.challongeTournamentId &&
-      (hasChallongeMatchups || (!matchups.length && isChallongeEnabled()));
+      (hasChallongeMatchups ||
+        (!matchups.length &&
+          isChallongeEnabled() &&
+          canRunOnChallonge(stage.stageType)));
 
-    // Challonge runs compass and triple elimination as double elimination
+    // Compass and triple-elimination stages started on Challonge before they ran in the API were run
+    // there as double elimination
     const format = bracketFormatFor(
       runsOnChallonge ? challongeBracketType(stage.stageType) : stage.stageType,
     );

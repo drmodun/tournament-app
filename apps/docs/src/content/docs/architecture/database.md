@@ -68,7 +68,7 @@ optional `location`, and optionally a `parent_tournament` (for leagues and seaso
 
 `participation` links a tournament to either a user (solo) or a group (team). A `roster` is that participation's
 line-up in one stage; `user_roster` lists its players with `isSubstitute`. A `matchup` belongs to a stage and a round
-and has `isFinished`, plus a `bracket` (`winners`, `losers`, `grand_final`) in double-elimination stages the API
+and has `isFinished`, plus a `bracket` (winners, losers, grand final, or a compass direction) in stages with several brackets that the API
 runs. `roster_matchup` connects rosters to matchups with `isWinner`. Each played round of a matchup is
 a `score` row with per-roster points in `score_to_roster`. Challonge ids are stored on stage, roster, round and
 matchup to keep the mirror in sync.

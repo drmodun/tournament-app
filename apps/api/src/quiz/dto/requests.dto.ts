@@ -37,6 +37,18 @@ export class CreateQuizRequest implements CreateQuizDto {
   startDate: Date;
 
   @ApiPropertyOptional({
+    description:
+      'Date and time when the quiz closes; no attempts or answers after it',
+    example: '2023-07-01T18:00:00Z',
+    type: Date,
+    nullable: true,
+  })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  endDate?: Date | null;
+
+  @ApiPropertyOptional({
     description: 'Total time limit for completing the quiz in seconds',
     example: 1800,
     minimum: 60,

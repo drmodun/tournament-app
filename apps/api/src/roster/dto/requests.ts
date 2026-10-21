@@ -7,6 +7,9 @@ import {
 } from '@tournament-app/types';
 import { Type } from 'class-transformer';
 import {
+  ArrayNotEmpty,
+  ArrayUnique,
+  IsArray,
   IsBoolean,
   IsNumber,
   IsOptional,
@@ -48,6 +51,9 @@ export class CreateRosterDto implements ICreateRosterRequest {
       { userId: 456, isSubstitute: true },
     ],
   })
+  @IsArray()
+  @ArrayNotEmpty()
+  @ArrayUnique((member: CreateRosterMemberDto) => member.userId)
   @Type(() => CreateRosterMemberDto)
   @ValidateNested({ each: true })
   members: CreateRosterMemberDto[];

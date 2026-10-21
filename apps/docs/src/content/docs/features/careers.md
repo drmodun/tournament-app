@@ -61,7 +61,8 @@ When a result is recorded (`POST /matches/:matchupId/score`) in a **ranked** tou
 tournament's category change:
 
 - Only one-on-one matchups (two rosters) are rated. Each player is rated against the opposing roster's average.
-- "Matches played" for the K-factor is the player's number of finished matchups in that category before this one.
+- "Matches played" for the K-factor is the player's number of finished matchups against an opponent in that category
+  before this one. Byes do not count.
 - A matchup where neither or both rosters won counts as a draw.
 - Fake players are left out. A player without a career in the category gets one, starting from 1000.
 - Every change is stored per matchup (`rating_change`). Correcting a result (`PUT`) undoes the stored changes and

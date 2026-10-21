@@ -20,6 +20,15 @@ describe('MatchesService', () => {
     revertMatchResult: jest.Mock;
   };
 
+  // The Challonge paths are what these tests cover
+  beforeAll(() => {
+    process.env.CHALLONGE_ENABLED = 'true';
+  });
+
+  afterAll(() => {
+    delete process.env.CHALLONGE_ENABLED;
+  });
+
   beforeEach(async () => {
     const mockMatchesRepository = {
       getMatchupById: jest.fn(),
@@ -43,11 +52,13 @@ describe('MatchesService', () => {
       getLocalMatchups: jest.fn().mockResolvedValue([]),
       getCarriedPoints: jest.fn().mockResolvedValue(new Map()),
       hasRound: jest.fn(),
+      hasChallongeMatchups: jest.fn().mockResolvedValue(false),
       finishStage: jest.fn(),
     };
 
     const mockChallongeService = {
       updateMatchup: jest.fn(),
+      getTournamentMatches: jest.fn().mockResolvedValue([]),
     };
 
     const mockRosterService = {
@@ -242,6 +253,172 @@ describe('MatchesService', () => {
       expect(result).toMatchObject([{ id: 10, matchupId: 1, roundNumber: 1 }]);
     });
 
+    describe('when the stage runs on Challonge', () => {
+      const result: IEndMatchupRequest = {
+        scores: [],
+        results: [
+          { rosterId: 1, isWinner: true },
+          { rosterId: 2, isWinner: false },
+        ],
+      };
+
+      beforeEach(() => {
+        matchesRepository.getMatchupById.mockResolvedValue({
+          matchup: { id: 1, stageId: 5, round: 1, challongeMatchupId: '123' },
+          rosterToMatchup: [],
+        } as any);
+        matchesRepository.getStageById.mockResolvedValue({
+          id: 5,
+          challongeTournamentId: '456',
+          stageStatus: 'ongoing',
+        } as any);
+        matchesRepository.insertMatchScore.mockResolvedValue([] as any);
+        matchesRepository.getMatchupsByRound = jest.fn().mockResolvedValue([]);
+        rosterService.findOne.mockResolvedValue({ id: 1 } as any);
+        challongeService.updateMatchup.mockResolvedValue(undefined);
+      });
+
+      // A state, or a state with the number of players assigned and the round
+      const withMatches = (
+        ...matches: (
+          string | { state: string; players: number; round?: number }
+        )[]
+      ) =>
+        challongeService.getTournamentMatches.mockResolvedValue(
+          matches.map((match) => {
+            const { state, players, round } =
+              typeof match === 'string'
+                ? { state: match, players: 2, round: 1 }
+                : { round: 1, ...match };
+
+            return {
+              id: `${Math.random()}`,
+              attributes: { state, round },
+              relationships: {
+                player1: { data: players > 0 ? { id: '1' } : null },
+                player2: { data: players > 1 ? { id: '2' } : null },
+              },
+            };
+          }) as any,
+        );
+
+      it('finishes the stage and lets its rules apply once every match is complete', async () => {
+        withMatches('complete', 'complete');
+
+        await service.createMatchScore(1, result);
+
+        expect(matchesRepository.finishStage).toHaveBeenCalledWith(5);
+        expect(eventEmitter.emitAsync).toHaveBeenCalledWith('stage.finished', {
+          stageId: 5,
+        });
+      });
+
+      it('keeps the stage going while a match is still open', async () => {
+        withMatches('complete', 'open');
+
+        await service.createMatchScore(1, result);
+
+        expect(matchesRepository.finishStage).not.toHaveBeenCalled();
+      });
+
+      it('finishes the stage when only an unneeded grand-final reset is left waiting', async () => {
+        withMatches('complete', 'complete', { state: 'pending', players: 0 });
+
+        await service.createMatchScore(1, result);
+
+        expect(matchesRepository.finishStage).toHaveBeenCalledWith(5);
+      });
+
+      it('keeps the stage going while a pending match already has both players', async () => {
+        withMatches('complete', { state: 'pending', players: 2 });
+
+        await service.createMatchScore(1, result);
+
+        expect(matchesRepository.finishStage).not.toHaveBeenCalled();
+      });
+
+      it('keeps the stage going while pending matches wait for a result that is not in yet', async () => {
+        withMatches('complete', { state: 'pending', players: 1 }, 'open');
+
+        await service.createMatchScore(1, result);
+
+        expect(matchesRepository.finishStage).not.toHaveBeenCalled();
+      });
+
+      it('brings in the next round from the same look at Challonge, once the round is done', async () => {
+        matchesRepository.getMatchupsByRound.mockResolvedValue([
+          { isFinished: true },
+        ] as any);
+        withMatches('complete', { state: 'open', players: 2, round: 2 });
+
+        await service.createMatchScore(1, result);
+
+        expect(challongeService.getTournamentMatches).toHaveBeenCalledTimes(1);
+        expect(
+          matchesRepository.importChallongeMatchesToStage,
+        ).toHaveBeenCalledWith(5, [
+          expect.objectContaining({ attributes: { state: 'open', round: 2 } }),
+        ]);
+      });
+
+      it('does not bring in the next round while the current one has unfinished matchups', async () => {
+        matchesRepository.getMatchupsByRound.mockResolvedValue([
+          { isFinished: true },
+          { isFinished: false },
+        ] as any);
+        withMatches('complete', { state: 'open', players: 2, round: 2 });
+
+        await service.createMatchScore(1, result);
+
+        expect(
+          matchesRepository.importChallongeMatchesToStage,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('leaves Challonge alone while the feature is disabled', async () => {
+        withMatches('complete');
+        process.env.CHALLONGE_ENABLED = 'false';
+
+        try {
+          await service.createMatchScore(1, result);
+        } finally {
+          process.env.CHALLONGE_ENABLED = 'true';
+        }
+
+        expect(challongeService.updateMatchup).not.toHaveBeenCalled();
+        expect(matchesRepository.finishStage).not.toHaveBeenCalled();
+      });
+
+      it('freezes the results of a finished Challonge stage, whose rules have already run', async () => {
+        matchesRepository.getStageById.mockResolvedValue({
+          id: 5,
+          challongeTournamentId: '456',
+          stageStatus: 'finished',
+        } as any);
+
+        await expect(service.updateMatchScore(1, result)).rejects.toThrow(
+          'The stage is finished',
+        );
+        await expect(service.deleteMatchScore(1)).rejects.toThrow(
+          'The stage is finished',
+        );
+        expect(challongeService.updateMatchup).not.toHaveBeenCalled();
+      });
+
+      it('does not finish a stage that is already finished', async () => {
+        withMatches('complete');
+        matchesRepository.getStageById.mockResolvedValue({
+          id: 5,
+          challongeTournamentId: '456',
+          stageStatus: 'finished',
+        } as any);
+
+        await service.createMatchScore(1, result);
+
+        expect(matchesRepository.finishStage).not.toHaveBeenCalled();
+      });
+    });
+
     it('should create match score without updating Challonge if no Challonge ID', async () => {
       // Arrange
       const matchupId = 1;
@@ -289,7 +466,6 @@ describe('MatchesService', () => {
         matchupId,
         endMatchupRequest,
       );
-      expect(matchesRepository.getStageById).not.toHaveBeenCalled();
       expect(rosterService.findOne).not.toHaveBeenCalled();
       expect(challongeService.updateMatchup).not.toHaveBeenCalled();
       expect(result).toMatchObject([{ id: 10, matchupId: 1, roundNumber: 1 }]);
@@ -740,7 +916,6 @@ describe('MatchesService', () => {
         matchupId,
         updateMatchupRequest,
       );
-      expect(matchesRepository.getStageById).not.toHaveBeenCalled();
       expect(rosterService.findOne).not.toHaveBeenCalled();
       expect(challongeService.updateMatchup).not.toHaveBeenCalled();
       expect(result).toMatchObject([{ id: 10, matchupId: 1, roundNumber: 1 }]);
@@ -824,7 +999,6 @@ describe('MatchesService', () => {
 
       // Assert
       expect(matchesRepository.getMatchupById).toHaveBeenCalledWith(matchupId);
-      expect(matchesRepository.getStageById).not.toHaveBeenCalled();
       expect(challongeService.updateMatchup).not.toHaveBeenCalled();
     });
   });
@@ -1129,6 +1303,85 @@ describe('MatchesService', () => {
           { rosterId: 10, place: 2, losses: 1, points: 0 },
         ],
       });
+    });
+
+    it('says whether the stage runs on Challonge', async () => {
+      const standings = async (setup: {
+        id: string | null;
+        enabled: boolean;
+        matchups: boolean;
+        hasChallongeMatchups: boolean;
+      }) => {
+        stageOfType('compass');
+        matchesRepository.getStageById.mockResolvedValue({
+          id: 5,
+          stageType: 'compass',
+          stageStatus: 'ongoing',
+          challongeTournamentId: setup.id,
+        } as any);
+        matchesRepository.getRostersBySeed.mockResolvedValue([10, 11]);
+        matchesRepository.getLocalMatchups.mockResolvedValue(
+          setup.matchups ? [played(1, 1, [10, 11], [10], 'east')] : [],
+        );
+        matchesRepository.hasChallongeMatchups.mockResolvedValue(
+          setup.hasChallongeMatchups,
+        );
+        process.env.CHALLONGE_ENABLED = String(setup.enabled);
+
+        try {
+          return await service.getStandings(5);
+        } finally {
+          process.env.CHALLONGE_ENABLED = 'true';
+        }
+      };
+
+      // Never had a Challonge tournament
+      expect(
+        await standings({
+          id: null,
+          enabled: true,
+          matchups: true,
+          hasChallongeMatchups: false,
+        }),
+      ).toMatchObject({ runsOnChallonge: false, format: 'compass' });
+
+      // Has one, but the API started it (Challonge was off): its own bracket, in its own format
+      expect(
+        await standings({
+          id: '9',
+          enabled: false,
+          matchups: true,
+          hasChallongeMatchups: false,
+        }),
+      ).toMatchObject({ runsOnChallonge: false, format: 'compass' });
+
+      // Imported from Challonge, which runs compass as double elimination
+      expect(
+        await standings({
+          id: '9',
+          enabled: true,
+          matchups: true,
+          hasChallongeMatchups: true,
+        }),
+      ).toMatchObject({ runsOnChallonge: true, format: 'double_elimination' });
+
+      // Still to be started, with Challonge on: it will run there; with it off it will not
+      expect(
+        await standings({
+          id: '9',
+          enabled: true,
+          matchups: false,
+          hasChallongeMatchups: false,
+        }),
+      ).toMatchObject({ runsOnChallonge: true });
+      expect(
+        await standings({
+          id: '9',
+          enabled: false,
+          matchups: false,
+          hasChallongeMatchups: false,
+        }),
+      ).toMatchObject({ runsOnChallonge: false });
     });
 
     it('advances the bracket after a local result is recorded', async () => {

@@ -75,7 +75,7 @@ tournament's creator, or an admin of its affiliated group. `GET /stages/managed`
 1. Inserts the stage.
 2. Creates a roster in the new stage for every **solo** participation already in the tournament, with that player
    as its only member. Team participations build their rosters themselves.
-3. Creates a private Challonge tournament for the stage and stores its id. The stage type is mapped to a Challonge
+3. When `CHALLONGE_ENABLED=true`, creates a private Challonge tournament for the stage and stores its id. The stage type is mapped to a Challonge
    type:
 
 | Stage type                                                                     | Challonge type     |
@@ -88,8 +88,8 @@ tournament's creator, or an admin of its affiliated group. `GET /stages/managed`
 If the Challonge call fails (for example with the mock credentials), the stage is still created, just without a
 Challonge id, and the error is logged.
 
-Updating a stage (`PATCH /stages/:tournamentId/:stageId`) also updates the Challonge tournament; deleting it deletes
-the Challonge tournament.
+With Challonge enabled, updating a stage (`PATCH /stages/:tournamentId/:stageId`) also updates the Challonge
+tournament, and deleting it deletes the Challonge tournament.
 
 ### Starting a stage
 
@@ -98,11 +98,12 @@ the Challonge tournament.
 1. Refuses if the stage is already `ongoing` or `finished` (`400`).
 2. Refuses if the stage has no rosters (`400`).
 3. Starts the bracket, in one of two ways:
-   - **With a Challonge tournament**: adds every roster to Challonge as a participant in one bulk call, stores the
+   - **With a Challonge tournament** (only when `CHALLONGE_ENABLED=true`): adds every roster to Challonge as a participant in one bulk call, stores the
      returned participant ids, sets the stage to `ongoing` here and in Challonge (which seeds and starts the
      bracket), and imports Challonge's round 1 matches as matchups.
-   - **Without one** (mock credentials, or the Challonge call failed when the stage was created): the API runs the
-     bracket itself, in the format of the stage type (single or double elimination, round robin or Swiss). See
+   - **Without one** (the default: Challonge is disabled, or its call failed when the stage was created): the API runs
+     the bracket itself, in the format of the stage type (single, double or triple elimination, compass, round robin or
+     Swiss). See
      [Brackets run by the API](/docs/features/matches/#brackets-run-by-the-api).
 4. Sends a `tournament-start` notification, linking to `/stage/<id>`, to every user in a roster of the stage.
 

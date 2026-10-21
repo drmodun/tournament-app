@@ -9,7 +9,10 @@ a single matchup.
 ## Authoring
 
 `POST /quiz` creates a quiz with its questions and options in one request; the caller becomes the author.
-`PUT /quiz/:quizId` replaces it and `DELETE /quiz/:quizId` removes it. Only the **author** may edit, delete or read
+`PUT /quiz/:quizId` changes the fields you send; when you send `questions` they replace all of the quiz's questions
+(leave them out to keep them), which is refused with `400` once anyone has attempted the quiz, because replacing them
+would delete the answers given. `tags` (tag ids) replace the quiz's tags, and are stored when the quiz is created.
+`DELETE /quiz/:quizId` removes it. Only the **author** may edit, delete or read
 the detailed version with answers (`GET /quiz/detailed/:quizId`), along with site admins.
 `GET /quiz/authored` lists your quizzes.
 
@@ -37,7 +40,7 @@ limits (see [Attempts](#attempts)).
 options without the correct answers, but only for a test that has started (`403` before `startDate`, `400` for a quiz
 shown one question at a time, whose questions come one by one from the attempt). `responseType=EXTENDED`, which
 includes the answers and per-option counts, is refused (`400`); the author reads it at `GET /quiz/detailed/:quizId`.
-`GET /quiz` lists quizzes and refuses both of those response types.
+`GET /quiz` lists quizzes and refuses both of those response types (`400`).
 
 ### Question types
 
@@ -66,6 +69,9 @@ GET  /quiz-attempt/leaderboard/:quizId         ranking
 
 ### Starting
 
+- Starting an attempt locks the quiz briefly, so it cannot be edited at the same moment: an edit that replaces the
+  questions either comes first (and the attempt then sees the new questions) or is refused. If the quiz was edited
+  while the attempt was starting, the answer is `409` and the client tries again.
 - Before `startDate` the quiz refuses attempts (`403`, "This quiz has not started yet"), and after `endDate` too
   ("This quiz has ended").
 - If the quiz is not retakeable and the user has already **submitted** an attempt, `403` ("You have already attempted

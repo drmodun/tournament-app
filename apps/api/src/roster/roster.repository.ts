@@ -383,15 +383,18 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     return res;
   }
 
+  // In one transaction, so a failure cannot leave the roster without players
   async updateWithPlayers(id: number, { members }: ICreateRosterRequest) {
-    await db.delete(userToRoster).where(eq(userToRoster.rosterId, id));
+    await db.transaction(async (tx) => {
+      await tx.delete(userToRoster).where(eq(userToRoster.rosterId, id));
 
-    await db.insert(userToRoster).values(
-      members.map((member) => ({
-        ...member,
-        rosterId: id,
-      })),
-    );
+      await tx.insert(userToRoster).values(
+        members.map((member) => ({
+          ...member,
+          rosterId: id,
+        })),
+      );
+    });
   }
   getRosterIdsForPlayer(playerId: number) {
     return db.query.userToRoster.findMany({

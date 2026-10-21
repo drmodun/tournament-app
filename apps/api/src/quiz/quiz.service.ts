@@ -3,7 +3,6 @@ import {
   NotFoundException,
   UnprocessableEntityException,
   ForbiddenException,
-  NotImplementedException,
   BadRequestException,
 } from '@nestjs/common';
 import {
@@ -43,7 +42,7 @@ export class QuizService {
       responseType == QuizResponsesEnum.EXTENDED ||
       responseType == QuizResponsesEnum.FOR_ATTEMPT
     ) {
-      throw new NotImplementedException(
+      throw new BadRequestException(
         `${responseType} response type not allowed from this endpoint`,
       );
     }

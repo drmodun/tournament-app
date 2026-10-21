@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -38,6 +39,7 @@ export default function AddQuestionForm({
   const textColorTheme = textColor(theme);
 
   const { addToast } = useToastContext();
+  const uploadImage = useUploadImage();
 
   const [file, setFile] = useState<File>();
   const [coverImage, setCoverImage] = useState<string>();
@@ -62,7 +64,7 @@ export default function AddQuestionForm({
     }
 
     const data: ICreateQuizQuestionDto = {
-      image: coverImage ?? null,
+      image: (await uploadImage(coverImage, "quiz")) ?? null,
       question: question,
       questionType: questionType,
       ...((!Number.isNaN(hours) ||

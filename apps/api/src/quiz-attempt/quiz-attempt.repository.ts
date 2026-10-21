@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -151,20 +152,45 @@ export class QuizAttemptDrizzleRepository extends PrimaryRepository<
     quizId: number,
     questionOrder: number[],
   ): Promise<{ id: number }> {
-    const result = await db
-      .insert(quizAttempt)
-      .values({
-        userId,
-        quizId,
-        questionOrder,
-        questionStartedAt: new Date(),
-        currentQuestion: 0,
-        score: 0,
-        isSubmitted: false,
-      } as InferInsertModel<typeof quizAttempt>)
-      .returning({ id: quizAttempt.id });
+    return db.transaction(async (tx) => {
+      // Shared lock on the quiz: an edit that replaces its questions waits for this attempt to be
+      // saved (and then refuses), instead of deleting the answers it will receive
+      await tx
+        .select({ id: quiz.id })
+        .from(quiz)
+        .where(eq(quiz.id, quizId))
+        .for('share');
 
-    return result[0];
+      // The order was worked out before the lock; the quiz may have been edited since
+      const current = await tx
+        .select({ id: quizQuestion.id })
+        .from(quizQuestion)
+        .where(eq(quizQuestion.quizId, quizId));
+
+      if (
+        current.length !== questionOrder.length ||
+        current.some((question) => !questionOrder.includes(question.id))
+      ) {
+        throw new ConflictException(
+          'The quiz was edited while the attempt was starting, try again',
+        );
+      }
+
+      const result = await tx
+        .insert(quizAttempt)
+        .values({
+          userId,
+          quizId,
+          questionOrder,
+          questionStartedAt: new Date(),
+          currentQuestion: 0,
+          score: 0,
+          isSubmitted: false,
+        } as InferInsertModel<typeof quizAttempt>)
+        .returning({ id: quizAttempt.id });
+
+      return result[0];
+    });
   }
 
   async submitQuizAttempt(

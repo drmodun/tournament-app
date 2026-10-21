@@ -5,13 +5,10 @@ import { useRegister } from "api/client/hooks/auth/useRegister";
 import { clsx } from "clsx";
 import Button from "components/button";
 import Dropdown from "components/dropdown";
-import ImageDrop from "components/imageDrop";
-import ImagePicker from "components/imagePicker";
 import Input from "components/input";
 import RichEditor from "components/richEditor";
 import { countries } from "country-flag-icons";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
@@ -36,8 +33,6 @@ export default function RegisterForm() {
     data.country = COUNTRY_CODES_TO_NAMES[countryKey] ?? "Unknown";
     await mutateAsync(data);
   };
-
-  const [file, setFile] = useState<File>();
 
   return (
     <div className={styles.wrapper}>
@@ -315,56 +310,6 @@ export default function RegisterForm() {
                 </div>
 
                 {methods.formState.errors.bio?.type === "required" && (
-                  <p
-                    className={clsx(
-                      styles.error,
-                      globals[`${textColorTheme}Color`],
-                    )}
-                  >
-                    this field is required!
-                  </p>
-                )}
-              </div>
-              <div className={clsx(styles.inputWrapper)}>
-                <p
-                  className={clsx(
-                    globals.label,
-                    globals[`${textColorTheme}Color`],
-                  )}
-                >
-                  profile picture
-                </p>
-                <div className={styles.input}>
-                  {file ? (
-                    <ImagePicker
-                      variant={
-                        methods.formState.errors.profilePicture
-                          ? "danger"
-                          : textColorTheme
-                      }
-                      file={file}
-                      name="profilePicture"
-                      isReactFormHook={true}
-                      className={styles.imagePicker}
-                      required={false}
-                    />
-                  ) : (
-                    <ImageDrop
-                      onFile={setFile}
-                      variant={
-                        methods.formState.errors.profilePicture
-                          ? "danger"
-                          : textColorTheme
-                      }
-                      className={styles.imageDrop}
-                      required={false}
-                      name="profilePicture"
-                      isReactFormHook={true}
-                    />
-                  )}
-                </div>
-                {methods.formState.errors.profilePicture?.type ===
-                  "required" && (
                   <p
                     className={clsx(
                       styles.error,

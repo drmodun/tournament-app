@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import { UseMutationResult } from "@tanstack/react-query";
 import { ICreateGroupRequest } from "@tournament-app/types";
 import { useDeleteGroup } from "api/client/hooks/groups/useDeleteGroup";
@@ -21,7 +22,7 @@ import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { COUNTRY_CODES_TO_NAMES } from "utils/mixins/formatting";
-import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
+import { imageUrlToFile } from "utils/mixins/helpers";
 import styles from "styles/forms/editEntityForm.module.scss";
 import { useLocationPicker } from "utils/hooks/useLocationPicker";
 
@@ -37,6 +38,7 @@ export default function EditTeamForm({
   onClose,
 }: EditTeamFormProps) {
   const { theme } = useThemeContext();
+  const uploadImage = useUploadImage();
   const { data, isLoading, isError } = useGetGroup(groupId);
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
@@ -51,6 +53,7 @@ export default function EditTeamForm({
   ) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
+    data.logo = await uploadImage(data.logo, "group-avatar");
     await mutation.mutateAsync(data);
     onClose && onClose();
   };
@@ -60,9 +63,7 @@ export default function EditTeamForm({
     data?.logo &&
       imageUrlToFile(data?.logo).then((file) => {
         setFile(file);
-        toBase64(file).then((file) => {
-          editMethods.setValue("logo", file);
-        });
+        editMethods.setValue("logo", data.logo);
       });
   }, [data]);
 

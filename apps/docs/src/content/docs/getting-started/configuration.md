@@ -59,10 +59,11 @@ The defaults point at the SeaweedFS container; its access key is defined in `doc
 
 ### Third parties (mocked by default)
 
-| Variable                                                          | Without a real value                                                                                                                                                      |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL` | Google sign-in fails. The callback defaults to `http://localhost:3000/auth/google/callback`                                                                               |
-| `CHALLONGE_CLIENT_ID`, `CHALLONGE_CLIENT_SECRET`                  | Stages are created without a Challonge tournament and the API runs their brackets itself (see [Brackets run by the API](/docs/features/matches/#brackets-run-by-the-api)) |
+| Variable                                                          | Without a real value                                                                                                                                                                                                            |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL` | Google sign-in fails. The callback defaults to `http://localhost:3000/auth/google/callback`                                                                                                                                     |
+| `CHALLONGE_ENABLED`                                               | `false` (the default): Challonge is never called and the API runs every bracket itself. `true` turns the Challonge integration on                                                                                               |
+| `CHALLONGE_CLIENT_ID`, `CHALLONGE_CLIENT_SECRET`                  | Only used when `CHALLONGE_ENABLED=true`. Without them stages are created without a Challonge tournament and the API runs their brackets itself (see [Brackets run by the API](/docs/features/matches/#brackets-run-by-the-api)) |
 
 ## Web app
 

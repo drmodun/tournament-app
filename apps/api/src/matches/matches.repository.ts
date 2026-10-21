@@ -1020,6 +1020,22 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return new Map(rows.map((row) => [row.rosterId, row.points ?? 0]));
   }
 
+  // Whether any matchup of the stage was imported from Challonge
+  async hasChallongeMatchups(stageId: number) {
+    const result = await db
+      .select({ id: matchup.id })
+      .from(matchup)
+      .where(
+        and(
+          eq(matchup.stageId, stageId),
+          isNotNull(matchup.challongeMatchupId),
+        ),
+      )
+      .limit(1);
+
+    return result.length > 0;
+  }
+
   async hasRound(stageId: number, round: number) {
     const result = await db
       .select({ id: matchup.id })

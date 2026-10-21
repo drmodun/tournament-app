@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { matchupBracketEnumType } from '@tournament-app/types';
 import { MiniRosterDto, RosterDto } from '../../roster/dto/responses';
 
 export class BracketParticipantDto {
@@ -303,13 +304,13 @@ export class MatchupResponseDto {
 
   @ApiProperty({
     description:
-      'Double-elimination stages run by the API: winners, losers or grand_final',
+      'Stages run by the API with more than one bracket: winners, losers, last_chance and grand_final for double and triple elimination; east, west, north, south, northeast, northwest, southeast and southwest for compass',
     example: 'winners',
     required: false,
     nullable: true,
     readOnly: true,
   })
-  bracket?: 'winners' | 'losers' | 'grand_final' | null;
+  bracket?: matchupBracketEnumType | null;
 
   @ApiProperty({
     description: 'Type of the matchup',
@@ -493,13 +494,34 @@ export class StageStandingsResponseDto {
   stageId: number;
 
   @ApiProperty({
-    enum: ['single_elimination', 'double_elimination', 'round_robin', 'swiss'],
+    enum: [
+      'single_elimination',
+      'double_elimination',
+      'triple_elimination',
+      'compass',
+      'round_robin',
+      'swiss',
+    ],
     readOnly: true,
   })
-  format: 'single_elimination' | 'double_elimination' | 'round_robin' | 'swiss';
+  format:
+    | 'single_elimination'
+    | 'double_elimination'
+    | 'triple_elimination'
+    | 'compass'
+    | 'round_robin'
+    | 'swiss';
 
   @ApiProperty({ example: false, readOnly: true })
   isFinished: boolean;
+
+  @ApiProperty({
+    description:
+      "Whether the stage's matches are Challonge's rather than the API's own",
+    example: false,
+    readOnly: true,
+  })
+  runsOnChallonge: boolean;
 
   @ApiProperty({ type: [StageStandingDto], readOnly: true })
   standings: StageStandingDto[];

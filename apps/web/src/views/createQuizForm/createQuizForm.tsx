@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import CheckIcon from "@mui/icons-material/Check";
 import { UseMutationResult } from "@tanstack/react-query";
 import {
@@ -31,6 +32,7 @@ export default function CreateQuizForm({
   onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
+  const uploadImage = useUploadImage();
   const textColorTheme = textColor(theme);
 
   const createQuizMutation = useCreateQuiz();
@@ -65,7 +67,7 @@ export default function CreateQuizForm({
     data.isRandomizedQuestions = isRandomizedQuestions;
     data.isImmediateFeedback = isImmediateFeedback;
 
-    if (coverImage) data.coverImage = coverImage;
+    if (coverImage) data.coverImage = await uploadImage(coverImage, "quiz");
 
     await createQuizMutation.mutateAsync(data);
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import {
   ICreateStageDto,
   stageTypeEnum,
@@ -31,6 +32,7 @@ export default function AddStageForm({
   onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
+  const uploadImage = useUploadImage();
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
   const { locationId, selectPlace } = useLocationPicker();
@@ -41,6 +43,7 @@ export default function AddStageForm({
   const onAddSubmit: SubmitHandler<ICreateStageDto> = async (data) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
+    data.logo = await uploadImage(data.logo, "tournament-avatar");
     data.locationId = locationId;
     data.tournamentId = tournamentId ?? -1;
     data.minPlayersPerTeam = parseInt(String(data?.minPlayersPerTeam) || "0");

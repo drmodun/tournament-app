@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import { UseMutationResult } from "@tanstack/react-query";
 import { ICreateGroupRequest } from "@tournament-app/types";
 import { clsx } from "clsx";
@@ -29,6 +30,7 @@ export default function CreateTeamForm({
   onClose: () => void;
 }) {
   const { theme } = useThemeContext();
+  const uploadImage = useUploadImage();
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
   const { locationId, selectPlace } = useLocationPicker();
@@ -38,6 +40,7 @@ export default function CreateTeamForm({
   const onAddSubmit: SubmitHandler<ICreateGroupRequest> = async (data) => {
     data.locationId = locationId;
     if (logo) data.logo = logo;
+    data.logo = await uploadImage(data.logo, "group-avatar");
     await mutation.mutateAsync(data);
     onClose && onClose();
   };

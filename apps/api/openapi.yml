@@ -10481,6 +10481,20 @@ components:
           minimum: 1
           maximum: 100
           nullable: true
+        maxChanges:
+          type: number
+          description: Maximum number of roster changes allowed in later stages
+          example: 2
+          minimum: 0
+          maximum: 10
+          nullable: true
+        maxSubstitutes:
+          type: number
+          description: Maximum number of substitutes allowed per roster
+          example: 3
+          minimum: 0
+          maximum: 10
+          nullable: true
       required:
         - tournamentId
         - name
@@ -10943,8 +10957,10 @@ components:
         bracket:
           type: string
           description:
-            'Double-elimination stages run by the API: winners, losers or
-            grand_final'
+            'Stages run by the API with more than one bracket: winners,
+            losers, last_chance and grand_final for double and triple
+            elimination; east, west, north, south, northeast, northwest,
+            southeast and southwest for compass'
           example: winners
           nullable: true
           readOnly: true
@@ -11027,8 +11043,10 @@ components:
         bracket:
           type: string
           description:
-            'Double-elimination stages run by the API: winners, losers or
-            grand_final'
+            'Stages run by the API with more than one bracket: winners,
+            losers, last_chance and grand_final for double and triple
+            elimination; east, west, north, south, northeast, northwest,
+            southeast and southwest for compass'
           example: winners
           nullable: true
           readOnly: true
@@ -11090,8 +11108,10 @@ components:
         bracket:
           type: string
           description:
-            'Double-elimination stages run by the API: winners, losers or
-            grand_final'
+            'Stages run by the API with more than one bracket: winners,
+            losers, last_chance and grand_final for double and triple
+            elimination; east, west, north, south, northeast, northwest,
+            southeast and southwest for compass'
           example: winners
           nullable: true
           readOnly: true
@@ -11291,11 +11311,18 @@ components:
           enum:
             - single_elimination
             - double_elimination
+            - triple_elimination
+            - compass
             - round_robin
             - swiss
           readOnly: true
         isFinished:
           type: boolean
+          example: false
+          readOnly: true
+        runsOnChallonge:
+          type: boolean
+          description: Whether the stage's matches are Challonge's rather than the API's own
           example: false
           readOnly: true
         standings:
@@ -11307,6 +11334,7 @@ components:
         - stageId
         - format
         - isFinished
+        - runsOnChallonge
         - standings
     LFGResponse:
       type: object
@@ -11849,6 +11877,12 @@ components:
           type: string
           description: Date and time when the quiz becomes available
           example: 2023-07-01T10:00:00Z
+        endDate:
+          format: date-time
+          type: string
+          description: Date and time when the quiz closes; no attempts or answers after it
+          example: 2023-07-01T18:00:00Z
+          nullable: true
         timeLimitTotal:
           type: number
           description: Total time limit for completing the quiz in seconds

@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import CheckIcon from "@mui/icons-material/Check";
 import { UseMutationResult } from "@tanstack/react-query";
 import {
@@ -26,6 +27,29 @@ import { UpdateQuizParams, useUpdateQuiz } from "api/client/hooks/quiz";
 import { imageUrlToFile } from "utils/mixins/helpers";
 import { useToastContext } from "utils/hooks/useToastContext";
 
+// A question as the quiz returns it, in the shape a request takes
+const toQuestionRequest = (
+  question: IQuizResponseExtended["questions"][number],
+): ICreateQuizQuestionDto => ({
+  question: question.name,
+  questionType: question.type,
+  points: question.points,
+  timeLimit: question.timeLimit ?? undefined,
+  explanation: question.explanation ?? undefined,
+  image: question.image ?? null,
+  isImmediateFeedback: question.isImmediateFeedback,
+  options: question.options?.map(({ option, isCorrect }) => ({
+    option,
+    isCorrect,
+  })),
+  // The API sends several correct answers as one comma-separated text
+  correctAnswers: Array.isArray(question.correctAnswers)
+    ? question.correctAnswers
+    : question.correctAnswers
+      ? String(question.correctAnswers).split(",")
+      : undefined,
+});
+
 export default function EditQuizForm({
   mutation,
   quiz,
@@ -36,6 +60,7 @@ export default function EditQuizForm({
   onClose?: () => void;
 }) {
   const { theme } = useThemeContext();
+  const uploadImage = useUploadImage();
   const textColorTheme = textColor(theme);
 
   const createQuizMutation = mutation ?? useUpdateQuiz();
@@ -66,11 +91,18 @@ export default function EditQuizForm({
       data.timeLimitTotal = undefined;
     }
 
-    data.questions = questions;
+    // Sending questions replaces all of the quiz's questions, so the ones it already has go along
+    // with the new ones; with nothing added they are left out and the quiz keeps its own
+    if (questions.length) {
+      data.questions = [
+        ...(quiz.questions ?? []).map(toQuestionRequest),
+        ...questions,
+      ];
+    }
     data.isRetakeable = isRetakeable;
     data.isAnonymousAllowed = isAnonymousAllowed;
 
-    if (coverImage) data.coverImage = coverImage;
+    if (coverImage) data.coverImage = await uploadImage(coverImage, "quiz");
 
     await createQuizMutation.mutateAsync({ id: -1, data: data });
 

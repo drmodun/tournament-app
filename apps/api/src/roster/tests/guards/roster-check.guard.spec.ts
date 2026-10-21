@@ -121,22 +121,88 @@ describe('CanRosterBeUsedGuard', () => {
   });
 
   describe('canActivate', () => {
-    it('should return true for admin user regardless of other conditions', async () => {
-      const context = createMockExecutionContext(
-        1,
-        1,
-        1,
-        [{ userId: 1, isSubstitute: false }],
-        undefined,
-        { id: 1, role: userRoleEnum.ADMIN },
-      );
+    it('should skip the checks for an admin user but still put the stage on the request', async () => {
+      const request = {
+        params: { participationId: 1, stageId: 7 },
+        body: { members: [{ userId: 1, isSubstitute: false }] },
+        query: {},
+        user: { id: 1, role: userRoleEnum.ADMIN },
+      } as any;
+      const context = {
+        switchToHttp: () => ({ getRequest: () => request }),
+      } as ExecutionContext;
+      const stage = { id: 7, tournamentId: 3 };
+      stageService.findOne.mockResolvedValue(stage as any);
 
       const result = await guard.canActivate(context);
+
       expect(result).toBe(true);
-      // No service methods should be called for admin users
-      expect(rosterService.findOne).not.toHaveBeenCalled();
+      // The guards after this one read the stage from the request
+      expect(stageService.findOne).toHaveBeenCalledWith(
+        7,
+        StageResponsesEnum.EXTENDED,
+      );
+      expect(request.stage).toBe(stage);
       expect(participationService.findOne).not.toHaveBeenCalled();
-      expect(stageService.findOne).not.toHaveBeenCalled();
+    });
+
+    it("should use the roster's own stage for an admin when a roster is given", async () => {
+      const request = {
+        params: { rosterId: 5 },
+        body: { members: [] },
+        query: {},
+        user: { id: 1, role: userRoleEnum.ADMIN },
+      } as any;
+      const context = {
+        switchToHttp: () => ({ getRequest: () => request }),
+      } as ExecutionContext;
+      rosterService.findOne.mockResolvedValue({ stageId: 9 } as any);
+      stageService.findOne.mockResolvedValue({ id: 9 } as any);
+
+      await guard.canActivate(context);
+
+      expect(stageService.findOne).toHaveBeenCalledWith(
+        9,
+        StageResponsesEnum.EXTENDED,
+      );
+      expect(request.stage).toEqual({ id: 9 });
+    });
+
+    it('should refuse a player listed twice', async () => {
+      const context = createMockExecutionContext(undefined, 1, 1, [
+        { userId: 2, isSubstitute: false },
+        { userId: 2, isSubstitute: true },
+      ]);
+
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(participationService.findOne).not.toHaveBeenCalled();
+    });
+
+    it('should find the roster by the :id of PATCH /roster/:id and pass its stage and participation on', async () => {
+      const request = {
+        params: { id: '5' },
+        body: { members: [{ userId: 1, isSubstitute: false }] },
+        query: {},
+        user: { id: 1, role: userRoleEnum.USER },
+      } as any;
+      const context = {
+        switchToHttp: () => ({ getRequest: () => request }),
+      } as ExecutionContext;
+      rosterService.findOne.mockResolvedValue({
+        participationId: 8,
+        stageId: 9,
+      } as any);
+      participationService.findOne.mockResolvedValue(undefined as any);
+
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        ForbiddenException,
+      );
+
+      expect(rosterService.findOne).toHaveBeenCalledWith(5);
+      expect(participationService.findOne).toHaveBeenCalledWith(8);
+      expect(request.params).toMatchObject({ participationId: 8, stageId: 9 });
     });
 
     it('should throw BadRequestException if rosterId is provided but roster not found', async () => {

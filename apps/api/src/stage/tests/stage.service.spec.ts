@@ -61,6 +61,15 @@ describe('StageService', () => {
     tournamentId: 1,
   };
 
+  // The Challonge paths are what these tests cover
+  beforeAll(() => {
+    process.env.CHALLONGE_ENABLED = 'true';
+  });
+
+  afterAll(() => {
+    delete process.env.CHALLONGE_ENABLED;
+  });
+
   beforeEach(async () => {
     const mockRepository = {
       createEntity: jest.fn(),
@@ -84,7 +93,6 @@ describe('StageService', () => {
     mockMatchService = {
       createMatchScore: jest.fn(),
       canUserEditMatchup: jest.fn(),
-      checkRoundCompletionAndUpdateNextRound: jest.fn(),
       getMatchupsWithResults: jest.fn(),
       importChallongeMatchesToStage: jest.fn(),
       startLocalBracket: jest.fn(),
@@ -556,6 +564,25 @@ describe('StageService', () => {
         mockChallongeServiceImpl.createBulkParticipants,
       ).not.toHaveBeenCalled();
       expect(service.sendStageStartNotifications).toHaveBeenCalled();
+    });
+
+    it('should run the bracket locally while Challonge is disabled, even for a stage with a tournament id', async () => {
+      process.env.CHALLONGE_ENABLED = 'false';
+      jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValueOnce(mockStageWithChallonge)
+        .mockResolvedValueOnce(mockStageWithChallonge);
+
+      try {
+        await service.startStage(stageId);
+      } finally {
+        process.env.CHALLONGE_ENABLED = 'true';
+      }
+
+      expect(mockMatchService.startLocalBracket).toHaveBeenCalled();
+      expect(
+        mockChallongeServiceImpl.createBulkParticipants,
+      ).not.toHaveBeenCalled();
     });
 
     it('should leave a local stage finished when the draw already decided it', async () => {

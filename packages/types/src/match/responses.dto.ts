@@ -1,3 +1,4 @@
+import { matchupBracketEnumType } from "../enums";
 import { IGroupInviteWithUserResponse } from "src/groupInvites";
 import {
   IExtendedRosterResponse,
@@ -11,7 +12,7 @@ export interface IMatchupResponse {
   stageId: number;
   round: number;
   // Set for matchups of a double-elimination stage run by the API
-  bracket?: "winners" | "losers" | "grand_final" | null;
+  bracket?: matchupBracketEnumType | null;
   matchupType: string;
   startDate: Date;
   isFinished: boolean;
@@ -102,7 +103,15 @@ export interface IStageStandingResponse {
 
 export interface IStageStandingsResponse {
   stageId: number;
-  format: "single_elimination" | "double_elimination" | "round_robin" | "swiss";
+  format:
+    | "single_elimination"
+    | "double_elimination"
+    | "triple_elimination"
+    | "compass"
+    | "round_robin"
+    | "swiss";
   isFinished: boolean;
+  // Whether the stage's matches are Challonge's (its bracket page is theirs) rather than the API's own
+  runsOnChallonge: boolean;
   standings: IStageStandingResponse[];
 }

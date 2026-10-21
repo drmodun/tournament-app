@@ -25,14 +25,14 @@ docker compose up --build                      # everything, behind a Caddy reve
 docker compose --profile seed run --rm seed    # optional: fill the database with sample data
 ```
 
-| What | Where |
-| --- | --- |
-| Web app | http://localhost |
-| API | http://localhost/api (Swagger UI at `/api/swagger`) |
-| Documentation | http://localhost/docs/ |
-| Mail inbox (Mailpit) | http://localhost:8025 — every email the API sends lands here |
-| S3 storage (SeaweedFS) | http://localhost:8333, bucket `tournament` |
-| Seeded login | `admin@example.com` / `Password123!` |
+| What                   | Where                                                        |
+| ---------------------- | ------------------------------------------------------------ |
+| Web app                | http://localhost                                             |
+| API                    | http://localhost/api (Swagger UI at `/api/swagger`)          |
+| Documentation          | http://localhost/docs/                                       |
+| Mail inbox (Mailpit)   | http://localhost:8025 — every email the API sends lands here |
+| S3 storage (SeaweedFS) | http://localhost:8333, bucket `tournament`                   |
+| Seeded login           | `admin@example.com` / `Password123!`                         |
 
 The seed empties every table before filling it, which is why it only runs on request.
 
@@ -72,23 +72,23 @@ Put real credentials in untracked override files; they take precedence:
 
 ### Email (any SMTP server)
 
-| Variable | Meaning |
-| --- | --- |
-| `EMAIL_FROM` | Sender, for example `winning.sh <noreply@example.com>` |
-| `SMTP_HOST`, `SMTP_PORT` | Server and port (default 587) |
-| `SMTP_USER`, `SMTP_PASSWORD` | Credentials; leave empty for servers without authentication |
-| `SMTP_SECURE` | `true` for implicit TLS (port 465). Otherwise STARTTLS is used when the server offers it |
+| Variable                     | Meaning                                                                                  |
+| ---------------------------- | ---------------------------------------------------------------------------------------- |
+| `EMAIL_FROM`                 | Sender, for example `winning.sh <noreply@example.com>`                                   |
+| `SMTP_HOST`, `SMTP_PORT`     | Server and port (default 587)                                                            |
+| `SMTP_USER`, `SMTP_PASSWORD` | Credentials; leave empty for servers without authentication                              |
+| `SMTP_SECURE`                | `true` for implicit TLS (port 465). Otherwise STARTTLS is used when the server offers it |
 
 With `SMTP_HOST` empty the API logs each email (with its links) instead of sending it, except in production, where
 it refuses to start. In Docker the API uses the bundled Mailpit inbox unless you set `SMTP_HOST`.
 
 ### File storage (any S3-compatible server)
 
-| Variable | Meaning |
-| --- | --- |
-| `S3_ENDPOINT` | Server URL. Leave empty for AWS S3 |
-| `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_BUCKET` | As usual |
-| `S3_FORCE_PATH_STYLE` | Defaults to `true` when `S3_ENDPOINT` is set, which is what self-hosted servers need |
+| Variable                                                             | Meaning                                                                              |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `S3_ENDPOINT`                                                        | Server URL. Leave empty for AWS S3                                                   |
+| `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_BUCKET` | As usual                                                                             |
+| `S3_FORCE_PATH_STYLE`                                                | Defaults to `true` when `S3_ENDPOINT` is set, which is what self-hosted servers need |
 
 The defaults point at the SeaweedFS container; its access key is defined in `docker/s3/s3.json`.
 The older `AWS_*` names are still read as a fallback.
@@ -101,11 +101,12 @@ geocoder for location search. To use your own servers, set `NEXT_PUBLIC_MAP_STYL
 
 ### Still mocked until you add a real key
 
-| Key | Without a real value |
-| --- | --- |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google sign-in fails |
-| `CHALLONGE_CLIENT_ID`, `CHALLONGE_CLIENT_SECRET` | Brackets are not mirrored to Challonge |
-| `JWT_SECRET`, `JWT_REFRESH_SECRET` | Work as they are, but must be replaced outside local development |
+| Key                                              | Without a real value                                                                                        |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`       | Google sign-in fails                                                                                        |
+| `CHALLONGE_ENABLED`                              | `false`: the API runs every bracket itself and never calls Challonge. Set `true` to run stages on Challonge |
+| `CHALLONGE_CLIENT_ID`, `CHALLONGE_CLIENT_SECRET` | Only read when `CHALLONGE_ENABLED=true`                                                                     |
+| `JWT_SECRET`, `JWT_REFRESH_SECRET`               | Work as they are, but must be replaced outside local development                                            |
 
 ## Local development
 
@@ -135,7 +136,7 @@ Both use `.env.test`, which points at the local `tournament_test` database from 
 - Tournament creation and management
 - Group/team management
 - User registration and authentication
-- LFP and LFG search 
+- LFP and LFG search
 - Bracket generation and visualization (single elim only as of right now)
 - Location-based services (using Google Maps API)
 - Email notifications

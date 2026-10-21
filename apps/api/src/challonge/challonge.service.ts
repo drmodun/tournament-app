@@ -1,3 +1,4 @@
+import { isChallongeEnabled } from './enabled';
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
@@ -25,9 +26,13 @@ export class ChallongeService {
   private token: string;
 
   constructor(private readonly httpService: HttpService) {
-    this.getChallongeToken();
+    if (isChallongeEnabled()) {
+      this.getChallongeToken();
+    }
 
-    this.logger.log('ChallongeService constructor');
+    this.logger.log(
+      `Challonge is ${isChallongeEnabled() ? 'enabled' : 'disabled'}`,
+    );
   }
 
   async getChallongeToken() {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import { IExtendedUserResponse, IUpdateUserInfo } from "@tournament-app/types";
 import { useUpdateUser } from "api/client/hooks/user/useUpdateUser";
 import Button from "components/button";
@@ -34,12 +35,14 @@ export default function userEditForm({
   const [file, setFile] = useState<File | string>();
 
   const { theme } = useThemeContext();
+  const uploadImage = useUploadImage();
   const textColorTheme = textColor(theme);
 
   const methods = useForm<IUpdateUserInfo>();
   const onSubmit: SubmitHandler<IUpdateUserInfo> = async (_data) => {
     if (!data) return;
     _data.country = _data.country?.split(" ")[0];
+    _data.profilePicture = await uploadImage(_data.profilePicture, "avatar");
     await updateUser.mutateAsync(_data);
 
     onClose && onClose();

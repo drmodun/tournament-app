@@ -20,6 +20,7 @@ import {
 import { StageDrizzleRepository } from './stage.repository';
 import { StageQuery } from './dto/requests.dto';
 import { IStageWithChallongeTournament, StagesWithDates } from './types';
+import { isChallongeEnabled } from 'src/challonge/enabled';
 import { ChallongeService } from 'src/challonge/challonge.service';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { RosterDrizzleRepository } from 'src/roster/roster.repository';
@@ -54,19 +55,21 @@ export class StageService {
       stage[0].id as number,
     );
 
-    try {
-      const stageId = await this.createChallongeTournament(
-        stage[0].id as number,
-      );
+    if (isChallongeEnabled()) {
+      try {
+        const stageId = await this.createChallongeTournament(
+          stage[0].id as number,
+        );
 
-      await this.update(stage[0].id as number, {
-        challongeTournamentId: stageId.id,
-      });
-    } catch (error) {
-      console.error(
-        'Failed to create challonge tournament, check api key',
-        error,
-      );
+        await this.update(stage[0].id as number, {
+          challongeTournamentId: stageId.id,
+        });
+      } catch (error) {
+        console.error(
+          'Failed to create challonge tournament, check api key',
+          error,
+        );
+      }
     }
 
     return stage[0];
@@ -114,7 +117,7 @@ export class StageService {
       StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
     );
 
-    if (!stage.challongeTournamentId) {
+    if (!isChallongeEnabled() || !stage.challongeTournamentId) {
       return;
     }
 
@@ -134,10 +137,14 @@ export class StageService {
       StageResponsesEnum.WITH_CHALLONGE_TOURNAMENT,
     );
 
-    try {
-      await this.challongeService.deleteTournament(stage.challongeTournamentId);
-    } catch {
-      console.error('Challonge issue ');
+    if (isChallongeEnabled() && stage.challongeTournamentId) {
+      try {
+        await this.challongeService.deleteTournament(
+          stage.challongeTournamentId,
+        );
+      } catch {
+        console.error('Challonge issue ');
+      }
     }
 
     await this.update(stageId, { challongeTournamentId: null });
@@ -268,8 +275,8 @@ export class StageService {
       );
     }
 
-    // Without Challonge (no credentials, or its API failed when the stage was created) the API runs the bracket
-    if (!stage.challongeTournamentId) {
+    // Without Challonge (disabled, or its API failed when the stage was created) the API runs the bracket
+    if (!isChallongeEnabled() || !stage.challongeTournamentId) {
       return this.startLocalStage(stageId, stage.name);
     }
 

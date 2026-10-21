@@ -3,7 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CanUpdateRosterGuard } from '../../guards/can-update-roster.guard';
 import { StageService } from 'src/stage/stage.service';
 import { RosterService } from '../../roster.service';
-import { ICreateRosterMemberRequest } from '@tournament-app/types';
+import {
+  ICreateRosterMemberRequest,
+  userRoleEnum,
+} from '@tournament-app/types';
 
 describe('CanUpdateRosterGuard', () => {
   let guard: CanUpdateRosterGuard;
@@ -72,6 +75,42 @@ describe('CanUpdateRosterGuard', () => {
         BadRequestException,
       );
       expect(stageService.getStagesSortedByStartDate).not.toHaveBeenCalled();
+    });
+
+    it('should read the roster from the :id of PATCH /roster/:id and the stage from the request', async () => {
+      const context = {
+        switchToHttp: () => ({
+          getRequest: () => ({
+            params: { id: '4' },
+            body: { members: [{ userId: 1, isSubstitute: false }] },
+            stage: { id: 2, tournamentId: 1, maxChanges: 3 },
+          }),
+        }),
+      } as ExecutionContext;
+
+      stageService.getStagesSortedByStartDate.mockResolvedValue([
+        { id: 1, startDate: new Date() },
+        { id: 2, startDate: new Date() },
+      ]);
+      rosterService.getChangeAmount.mockResolvedValue(2);
+
+      expect(await guard.canActivate(context)).toBe(true);
+      expect(rosterService.getChangeAmount).toHaveBeenCalledWith(4, [1]);
+    });
+
+    it('should let site admins ignore the change limit', async () => {
+      const context = {
+        switchToHttp: () => ({
+          getRequest: () => ({
+            params: { id: '4' },
+            body: { members: [] },
+            user: { id: 1, role: userRoleEnum.ADMIN },
+          }),
+        }),
+      } as ExecutionContext;
+
+      expect(await guard.canActivate(context)).toBe(true);
+      expect(rosterService.getChangeAmount).not.toHaveBeenCalled();
     });
 
     it('should throw BadRequestException if rosterId is missing', async () => {

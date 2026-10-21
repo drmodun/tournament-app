@@ -151,6 +151,32 @@ export class CreateStageRequest implements ICreateStageDto {
     nullable: true,
   })
   maxPlayersPerTeam?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  @ApiPropertyOptional({
+    description: 'Maximum number of roster changes allowed in later stages',
+    example: 2,
+    minimum: 0,
+    maximum: 10,
+    nullable: true,
+  })
+  maxChanges?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  @ApiPropertyOptional({
+    description: 'Maximum number of substitutes allowed per roster',
+    example: 3,
+    minimum: 0,
+    maximum: 10,
+    nullable: true,
+  })
+  maxSubstitutes?: number;
 }
 
 export class UpdateStageRequest implements IUpdateStageDto {

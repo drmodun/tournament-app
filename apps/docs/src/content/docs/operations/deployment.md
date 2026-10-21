@@ -92,8 +92,9 @@ Before exposing the stack, replace the development values:
 3. Change the database password and the S3 keys in `docker/s3/s3.json`, or point `S3_*` at a managed bucket.
 4. With `MODE=production` only `FRONTEND_URL` (your `PUBLIC_URL` in Compose) may call the API from a browser; set
    `CORS_ORIGIN` to allow other origins.
-5. Add Google credentials for Google sign-in, and Challonge credentials if you want brackets on Challonge
-   (without them the API runs the brackets itself).
+5. Add Google credentials for Google sign-in. Challonge is off by default and the API runs the brackets itself; to
+   run stages on Challonge instead, set `CHALLONGE_ENABLED=true` with `CHALLONGE_CLIENT_ID` and
+   `CHALLONGE_CLIENT_SECRET`.
 6. Put secrets in an untracked file or your platform's secret store, never in the tracked `.env`.
 
 ## Images

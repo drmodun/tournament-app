@@ -60,8 +60,20 @@ const roundTitle = (round: number, roundCount: number) => {
 const BRACKET_TITLES: Record<string, string> = {
   winners: "Winners bracket",
   losers: "Losers bracket",
+  last_chance: "Last-chance bracket",
   grand_final: "Grand final",
+  east: "East bracket",
+  west: "West bracket",
+  north: "North bracket",
+  south: "South bracket",
+  northeast: "Northeast bracket",
+  northwest: "Northwest bracket",
+  southeast: "Southeast bracket",
+  southwest: "Southwest bracket",
 };
+
+// In the order they are shown: double and triple elimination, then compass
+const BRACKET_ORDER = Object.keys(BRACKET_TITLES);
 
 function MatchupCard({ matchup }: { matchup: IMatchupResponseWithResults }) {
   return (
@@ -173,13 +185,11 @@ function LocalBracket({
     }
   }
 
-  // Double elimination: one row of rounds per bracket
-  const brackets = ["winners", "losers", "grand_final"]
-    .map((bracket) => ({
-      bracket,
-      matchups: matchups.filter((m) => m.bracket === bracket),
-    }))
-    .filter(({ matchups }) => matchups.length);
+  // Double and triple elimination and compass: one row of rounds per bracket
+  const brackets = BRACKET_ORDER.map((bracket) => ({
+    bracket,
+    matchups: matchups.filter((m) => m.bracket === bracket),
+  })).filter(({ matchups }) => matchups.length);
 
   return (
     <div className={styles.local}>
@@ -207,10 +217,13 @@ export default function BracketView({
   stage,
   matchups = [],
   standings,
+  runsOnChallonge = !!stage?.challongeTournamentId,
 }: {
   stage?: IStageResponseWithChallongeTournament;
   matchups?: IMatchupResponseWithResults[];
   standings?: IStageStandingsResponse | null;
+  // Whether the matches are Challonge's; otherwise the bracket is drawn from the matchups
+  runsOnChallonge?: boolean;
 }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
@@ -223,7 +236,7 @@ export default function BracketView({
         globals[`${theme}Color`],
       )}
     >
-      {stage?.challongeTournamentId ? (
+      {runsOnChallonge && stage?.challongeTournamentId ? (
         <iframe
           src={`https://challonge.com/${stage?.challongeTournamentId}/module?theme=8396&show_standings=1&multiplier=1.75`}
           width="100%"

@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { MatchesDrizzleRepository } from './matches.repository';
+import { isChallongeEnabled } from 'src/challonge/enabled';
 import { ChallongeService } from '../challonge/challonge.service';
 import {
   IChallongeMatch,
@@ -14,6 +15,7 @@ import {
   IMiniRosterResponse,
   IStageStandingsResponse,
   stageStatusEnum,
+  stageTypeEnum,
 } from '@tournament-app/types';
 import { QueryMatchupRequestDto } from './dto/requests';
 import { PaginationOnly } from 'src/base/query/baseQuery';
@@ -27,6 +29,8 @@ import {
 import { firstRoundPairings, nextRoundPairings } from './localBracket';
 import {
   bracketFormatFor,
+  compassFirstRound,
+  compassNextRound,
   computeStandings,
   doubleEliminationFirstRound,
   doubleEliminationNextRound,
@@ -38,6 +42,7 @@ import {
   swissFirstRound,
   swissNextRound,
   swissRoundCount,
+  tripleEliminationNextRound,
 } from './bracketFormats';
 
 // Emitted with { stageId } when a stage run by the API is over
@@ -46,6 +51,33 @@ export const STAGE_FINISHED_EVENT = 'stage.finished';
 type Matchup = Awaited<ReturnType<MatchesDrizzleRepository['getMatchupById']>>;
 
 type RosterScoreData = Parameters<typeof matchScoreToChallongeScoreRequest>[0];
+
+// Nothing more can be played on Challonge: every match is complete, or the ones left are waiting for
+// players that will never come, such as the unneeded reset of a double-elimination grand final
+function isChallongeBracketOver(matches: IChallongeMatch[]) {
+  if (!matches.some((match) => match.attributes.state === 'complete')) {
+    return false;
+  }
+
+  const players = (match: IChallongeMatch) =>
+    [match.relationships?.player1, match.relationships?.player2].filter(
+      (player) => player?.data?.id,
+    ).length;
+
+  return matches.every(
+    (match) =>
+      match.attributes.state === 'complete' ||
+      (match.attributes.state === 'pending' && players(match) < 2),
+  );
+}
+
+// The stage type whose bracket Challonge actually runs
+function challongeBracketType(stageType?: string | null) {
+  return stageType === stageTypeEnum.COMPASS ||
+    stageType === stageTypeEnum.TRIPLE_ELIMINATION
+    ? stageTypeEnum.DOUBLE_ELIMINATION
+    : stageType;
+}
 
 // Used when a roster was never registered with Challonge
 const FALLBACK_CHALLONGE_PARTICIPANT_ID = '1111';
@@ -190,10 +222,19 @@ export class MatchesService {
         );
         break;
       case LocalBracketFormat.DOUBLE_ELIMINATION:
+      case LocalBracketFormat.TRIPLE_ELIMINATION:
         await this.matchesRepository.insertLocalRound(
           stageId,
           1,
           doubleEliminationFirstRound(rosterIdsBySeed),
+          startDate,
+        );
+        break;
+      case LocalBracketFormat.COMPASS:
+        await this.matchesRepository.insertLocalRound(
+          stageId,
+          1,
+          compassFirstRound(rosterIdsBySeed),
           startDate,
         );
         break;
@@ -304,6 +345,16 @@ export class MatchesService {
 
         return next.pairings.length ? next.pairings : null;
       }
+      case LocalBracketFormat.TRIPLE_ELIMINATION: {
+        const next = tripleEliminationNextRound(rosterIdsBySeed, matchups);
+
+        return next.pairings.length ? next.pairings : null;
+      }
+      case LocalBracketFormat.COMPASS: {
+        const next = compassNextRound(rosterIdsBySeed, matchups);
+
+        return next.pairings.length ? next.pairings : null;
+      }
       default: {
         const winners = matchups
           .filter((m) => m.round === round)
@@ -334,17 +385,30 @@ export class MatchesService {
       throw new NotFoundException(`Stage with ID ${stageId} not found`);
     }
 
-    const format = bracketFormatFor(stage.stageType);
-    const [rosterIdsBySeed, matchups, carriedPoints] = await Promise.all([
-      this.matchesRepository.getRostersBySeed(stageId),
-      this.matchesRepository.getLocalMatchups(stageId),
-      this.matchesRepository.getCarriedPoints(stageId),
-    ]);
+    const [rosterIdsBySeed, matchups, carriedPoints, hasChallongeMatchups] =
+      await Promise.all([
+        this.matchesRepository.getRostersBySeed(stageId),
+        this.matchesRepository.getLocalMatchups(stageId),
+        this.matchesRepository.getCarriedPoints(stageId),
+        this.matchesRepository.hasChallongeMatchups(stageId),
+      ]);
+
+    // A stage with a Challonge tournament runs on it once started there, or when it will be started
+    // there; one started by the API (Challonge off) keeps its own bracket whatever it holds
+    const runsOnChallonge =
+      !!stage.challongeTournamentId &&
+      (hasChallongeMatchups || (!matchups.length && isChallongeEnabled()));
+
+    // Challonge runs compass and triple elimination as double elimination
+    const format = bracketFormatFor(
+      runsOnChallonge ? challongeBracketType(stage.stageType) : stage.stageType,
+    );
 
     return {
       stageId,
       format,
       isFinished: stage.stageStatus === stageStatusEnum.FINISHED,
+      runsOnChallonge,
       standings: computeStandings(
         format,
         rosterIdsBySeed,
@@ -373,18 +437,19 @@ export class MatchesService {
   // round exists (round robin rounds do not depend on each other), and every result is frozen once
   // the stage is finished and its conversion rules have run
   private async checkResultCanChange(matchup: Matchup) {
-    if (!this.isLocalMatchup(matchup)) {
-      return;
-    }
-
     const stage = await this.matchesRepository.getStageById(
       matchup.matchup.stageId,
     );
 
+    // Its conversion rules have run, whoever drew the bracket
     if (stage?.stageStatus === stageStatusEnum.FINISHED) {
       throw new BadRequestException(
         'The stage is finished, so its results can no longer change',
       );
+    }
+
+    if (!this.isLocalMatchup(matchup)) {
+      return;
     }
 
     if (bracketFormatFor(stage?.stageType) === LocalBracketFormat.ROUND_ROBIN) {
@@ -403,41 +468,64 @@ export class MatchesService {
     }
   }
 
-  async checkRoundCompletionAndUpdateNextRound(
-    stageId: number,
+  // After a result on Challonge: bring in the next round once the current one is done, then finish
+  // the stage if the bracket is over. One look at Challonge's matches serves both.
+  private async followChallongeBracket(
+    stage: NonNullable<
+      Awaited<ReturnType<MatchesDrizzleRepository['getStageById']>>
+    >,
     round: number,
-  ): Promise<void> {
+  ) {
+    const matches = await this.challongeService.getTournamentMatches(
+      stage.challongeTournamentId.toString(),
+    );
+
     try {
-      const matchups = await this.matchesRepository.getMatchupsByRound(
-        stageId,
-        round,
-      );
-
-      if (!matchups.every((matchup) => matchup.isFinished)) {
-        return;
-      }
-
-      console.log(
-        `All matchups in round ${round} for stage ${stageId} are complete. Updating next round...`,
-      );
-
-      const stage = await this.matchesRepository.getStageById(stageId);
-
-      if (!stage?.challongeTournamentId) {
-        return;
-      }
-
-      await this.importNextRoundFromChallonge(
-        stageId,
-        stage.challongeTournamentId.toString(),
-        round + 1,
-      );
+      await this.importNextRoundIfDone(stage.id, round, matches);
     } catch (error) {
       console.error(
         `Error checking round completion and updating next round:`,
         error,
       );
     }
+
+    // Challonge decides when its bracket is over. The stage then finishes the same way a local one
+    // does, so its conversion rules apply without anyone calling for them.
+    if (
+      stage.stageStatus !== stageStatusEnum.FINISHED &&
+      isChallongeBracketOver(matches)
+    ) {
+      await this.finishLocalStage(stage.id);
+    }
+  }
+
+  private async importNextRoundIfDone(
+    stageId: number,
+    round: number,
+    challongeMatches: IChallongeMatch[],
+  ) {
+    const matchups = await this.matchesRepository.getMatchupsByRound(
+      stageId,
+      round,
+    );
+
+    if (!matchups.every((matchup) => matchup.isFinished)) {
+      return;
+    }
+
+    const nextRound = round + 1;
+    const nextRoundMatches = challongeMatches.filter(
+      (match) =>
+        match.attributes.round === nextRound &&
+        match.attributes.state !== 'pending',
+    );
+
+    if (nextRoundMatches.length === 0) {
+      console.log(`No matches found for round ${nextRound} in Challonge yet.`);
+      return;
+    }
+
+    await this.importChallongeMatchesToStage(stageId, nextRoundMatches);
   }
 
   async deleteScore(id: number) {
@@ -530,7 +618,7 @@ export class MatchesService {
   ) {
     const { challongeMatchupId, stageId, round } = matchup.matchup;
 
-    if (!challongeMatchupId) {
+    if (!isChallongeEnabled() || !challongeMatchupId) {
       return;
     }
 
@@ -550,7 +638,7 @@ export class MatchesService {
       );
 
       if (options.advancesRound) {
-        await this.checkRoundCompletionAndUpdateNextRound(stageId, round);
+        await this.followChallongeBracket(stage, round);
       }
     } catch (error) {
       console.error(
@@ -605,35 +693,5 @@ export class MatchesService {
       roster.challongeParticipantId?.toString() ||
         FALLBACK_CHALLONGE_PARTICIPANT_ID,
     );
-  }
-
-  private async importNextRoundFromChallonge(
-    stageId: number,
-    challongeTournamentId: string,
-    nextRound: number,
-  ) {
-    const challongeMatches = await this.challongeService.getMatchesFiltered(
-      challongeTournamentId,
-      nextRound,
-    );
-
-    const nextRoundMatches = challongeMatches.filter(
-      (match) =>
-        match.attributes.round === nextRound &&
-        match.attributes.state !== 'pending',
-    );
-
-    if (nextRoundMatches.length === 0) {
-      console.log(`No matches found for round ${nextRound} in Challonge yet.`);
-      return;
-    }
-
-    console.log(
-      `Found ${nextRoundMatches.length} matches in next round from Challonge. Updating local database...`,
-    );
-
-    await this.importChallongeMatchesToStage(stageId, nextRoundMatches);
-
-    console.log(`Successfully updated matches for round ${nextRound}`);
   }
 }

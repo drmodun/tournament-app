@@ -3,6 +3,7 @@ import { ICreateQuizQuestionDto } from "src/quizQuestion";
 export interface CreateQuizDto {
   name: string;
   startDate: Date | string;
+  endDate?: Date | string | null;
   timeLimitTotal?: number | null; // Time limit (in seconds)
   passingScore?: number | null;
   maxAttempts?: number | null;

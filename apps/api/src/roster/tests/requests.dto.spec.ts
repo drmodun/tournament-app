@@ -98,7 +98,24 @@ describe('Roster DTOs', () => {
       });
 
       const errors = await validate(dto);
-      expect(errors.length).toBe(0); // Empty array is valid for class-validator
+      expect(errors.length).toBeGreaterThan(0);
+    });
+
+    it('should fail without members', async () => {
+      const errors = await validate(plainToInstance(CreateRosterDto, {}));
+      expect(errors.length).toBeGreaterThan(0);
+    });
+
+    it('should fail when a player is listed twice', async () => {
+      const dto = plainToInstance(CreateRosterDto, {
+        members: [
+          { userId: 1, isSubstitute: false },
+          { userId: 1, isSubstitute: true },
+        ],
+      });
+
+      const errors = await validate(dto);
+      expect(errors.length).toBeGreaterThan(0);
     });
 
     it('should fail with invalid members', async () => {

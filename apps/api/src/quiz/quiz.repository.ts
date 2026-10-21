@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   quiz,
   quizQuestion,
   user,
   quizOption,
+  quizAttempt,
   tags,
   quizTags,
 } from '../db/schema';
@@ -230,21 +235,56 @@ export class QuizDrizzleRepository extends PrimaryRepository<
 
   async update(id: number, updateRequest: UpdateQuizRequest) {
     return db.transaction(async (tx) => {
-      const quizToUpdate = await tx.select().from(quiz).where(eq(quiz.id, id));
+      // Locked, so an attempt cannot start between the check below and the questions being replaced
+      const quizToUpdate = await tx
+        .select()
+        .from(quiz)
+        .where(eq(quiz.id, id))
+        .for('update');
 
       if (!quizToUpdate.length || quizToUpdate.length === 0) {
         throw new NotFoundException(`Quiz with ID ${id} not found`);
       }
 
-      await tx.delete(quizQuestion).where(eq(quizQuestion.quizId, id));
+      const { questions, tags: tagIds, ...rest } = updateRequest;
+      // Only what is a column of the quiz
+      const fields = Object.fromEntries(
+        Object.entries(rest).filter(([key]) => key in quiz),
+      );
 
-      for (const question of updateRequest.questions ?? []) {
-        await this.insertQuestion(tx, id, question);
+      // Replacing the questions deletes the answers given to them, so only a quiz nobody has
+      // attempted can have its questions replaced; leaving them out keeps them
+      if (questions) {
+        const [attempted] = await tx
+          .select({ id: quizAttempt.id })
+          .from(quizAttempt)
+          .where(eq(quizAttempt.quizId, id))
+          .limit(1);
+
+        if (attempted) {
+          throw new BadRequestException(
+            'The questions of a quiz that has been attempted cannot be replaced',
+          );
+        }
+
+        await tx.delete(quizQuestion).where(eq(quizQuestion.quizId, id));
+
+        for (const question of questions) {
+          await this.insertQuestion(tx, id, question);
+        }
+      }
+
+      if (tagIds) {
+        await this.setTags(tx, id, tagIds);
+      }
+
+      if (!Object.keys(fields).length) {
+        return { id };
       }
 
       const updatedQuiz = await tx
         .update(quiz)
-        .set(updateRequest)
+        .set(fields)
         .where(eq(quiz.id, id))
         .returning({ id: quiz.id });
 
@@ -265,8 +305,28 @@ export class QuizDrizzleRepository extends PrimaryRepository<
       for (const question of createRequest.questions) {
         await this.insertQuestion(tx, quizToCreate[0].id, question);
       }
+
+      await this.setTags(tx, quizToCreate[0].id, createRequest.tags ?? []);
+
       return quizToCreate[0];
     });
+  }
+
+  // The quiz's tags are exactly these tag ids
+  private async setTags(
+    tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
+    quizId: number,
+    tagIds: number[],
+  ) {
+    await tx.delete(quizTags).where(eq(quizTags.quizId, quizId));
+
+    const unique = [...new Set(tagIds)];
+
+    if (unique.length) {
+      await tx
+        .insert(quizTags)
+        .values(unique.map((tagId) => ({ quizId, tagId })));
+    }
   }
 
   // The request names the type and image questionType and image; questions without options (short

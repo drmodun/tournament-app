@@ -1,5 +1,6 @@
 "use client";
 
+import { useUploadImage } from "api/client/uploadImage";
 import { UseMutationResult } from "@tanstack/react-query";
 import {
   IStageResponseWithTournament,
@@ -22,7 +23,7 @@ import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTimeHTMLInput } from "utils/mixins/formatting";
-import { imageUrlToFile, toBase64 } from "utils/mixins/helpers";
+import { imageUrlToFile } from "utils/mixins/helpers";
 import styles from "styles/forms/editEntityForm.module.scss";
 import { useLocationPicker } from "utils/hooks/useLocationPicker";
 
@@ -48,6 +49,7 @@ export default function EditStageForm({
   onClose,
 }: EditStageFormProps) {
   const { theme } = useThemeContext();
+  const uploadImage = useUploadImage();
   const textColorTheme = textColor(theme);
   const [file, setFile] = useState<File>();
   const { locationId, selectPlace } = useLocationPicker();
@@ -55,6 +57,7 @@ export default function EditStageForm({
   const editMethods = useForm<IUpdateStageDto>();
   const onEditSubmit: SubmitHandler<IUpdateStageDto> = async (data) => {
     data.locationId = locationId;
+    data.logo = await uploadImage(data.logo, "tournament-avatar");
     await mutation.mutateAsync({ data, stageId: stage?.id ?? -1 });
 
     onClose && onClose();
@@ -65,9 +68,7 @@ export default function EditStageForm({
     stage?.logo &&
       imageUrlToFile(stage?.logo).then((file) => {
         setFile(file);
-        toBase64(file).then((file) => {
-          editMethods.setValue("logo", file);
-        });
+        editMethods.setValue("logo", stage.logo);
       });
   }, [stage]);
 

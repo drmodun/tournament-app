@@ -16,6 +16,7 @@ import { CreateRosterDto, QueryRosterDto } from './dto/requests';
 import { StageDrizzleRepository } from 'src/stage/stage.repository';
 import { TournamentService } from 'src/tournament/tournament.service';
 import { CareerService } from '../career/career.service';
+import { isChallongeEnabled } from 'src/challonge/enabled';
 import { ChallongeService } from 'src/challonge/challonge.service';
 @Injectable()
 export class RosterService {
@@ -130,6 +131,8 @@ export class RosterService {
 
   async update(id: number, updateRosterDto: any) {
     await this.repository.updateWithPlayers(id, updateRosterDto);
+
+    return { id };
   }
 
   async isAnyMemberInAnotherRoster(
@@ -164,7 +167,9 @@ export class RosterService {
       throw new NotFoundException(`Roster with ID ${id} not found`);
     }
 
-    await this.challongeService.deleteParticipant(roster.challongeId);
+    if (isChallongeEnabled() && roster.challongeId) {
+      await this.challongeService.deleteParticipant(roster.challongeId);
+    }
   }
 
   async isEachMemberTournamentEligible(

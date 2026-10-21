@@ -33,7 +33,7 @@ The repository is a Yarn 1 workspace driven by Turborepo.
                         │                  │   (server fetches)  └──────────────┘
                         └──────────────────┘
                           │   │   │    │
-          PostGIS ◀───────┘   │   │    └──────▶ Challonge API (bracket mirror)
+          PostGIS ◀───────┘   │   │    └──────▶ Challonge API (optional)
           Mailpit/SMTP ◀──────┘   └───────────▶ S3 (SeaweedFS or any S3)
 ```
 
@@ -42,8 +42,8 @@ The repository is a Yarn 1 workspace driven by Turborepo.
 - The **Next.js server** fetches data for server-rendered pages directly from `api:5500` (`API_INTERNAL_URL`),
   because the browser-facing URL is not reachable from inside the container.
 - The **notification stream** (`/api/notifications/stream`) is server-sent events; Caddy flushes it immediately.
-- **Challonge** is a mirror: brackets are created and advanced there, but the API's own database is the source of
-  truth. Failed syncs are logged, never surfaced as request errors.
+- **Challonge** is optional and off unless `CHALLONGE_ENABLED=true`; by default the API runs every bracket. When
+  enabled it is a mirror: brackets are created and advanced there, but the API's own database is the source of truth. Failed syncs are logged, never surfaced as request errors.
 
 ## Request lifecycle in the API
 

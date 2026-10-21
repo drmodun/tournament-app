@@ -142,6 +142,17 @@ export enum matchupBracketEnum {
   WINNERS = "winners",
   LOSERS = "losers",
   GRAND_FINAL = "grand_final",
+  // Triple elimination: rosters with two losses
+  LAST_CHANCE = "last_chance",
+  // Compass: the main bracket and the brackets losers drop into
+  EAST = "east",
+  WEST = "west",
+  NORTH = "north",
+  SOUTH = "south",
+  NORTHEAST = "northeast",
+  NORTHWEST = "northwest",
+  SOUTHEAST = "southeast",
+  SOUTHWEST = "southwest",
 }
 
 export type matchupBracketEnumType =

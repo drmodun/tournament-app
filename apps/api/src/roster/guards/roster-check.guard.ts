@@ -18,6 +18,17 @@ import { RosterService } from '../roster.service';
 import { GroupMembershipService } from 'src/group-membership/group-membership.service';
 import { StageService } from 'src/stage/stage.service';
 
+// The roster is given as `rosterId` (params, body or query), or as the `:id` of PATCH /roster/:id
+export function rosterIdOf(request): number | null {
+  const id =
+    request.params?.rosterId ||
+    request.params?.id ||
+    request.body?.rosterId ||
+    request.query?.rosterId;
+
+  return id ? Number(id) : null;
+}
+
 @Injectable()
 export class CanRosterBeUsedGuard implements CanActivate {
   constructor(
@@ -32,6 +43,8 @@ export class CanRosterBeUsedGuard implements CanActivate {
     const user: ValidatedUserDto = request.user;
 
     if (user.role === userRoleEnum.ADMIN) {
+      // The guards after this one read the stage from the request, so admins skip the checks, not the stage
+      await this.attachStage(request);
       return true;
     }
 
@@ -46,11 +59,7 @@ export class CanRosterBeUsedGuard implements CanActivate {
       request.query?.stageId ||
       null;
 
-    const rosterId =
-      request.params?.rosterId ||
-      request.body?.rosterId ||
-      request.query?.rosterId ||
-      null;
+    const rosterId = rosterIdOf(request);
 
     if (rosterId) {
       const roster = await this.rosterService.findOne(rosterId);
@@ -58,11 +67,12 @@ export class CanRosterBeUsedGuard implements CanActivate {
         throw new BadRequestException('Roster not found');
       }
 
-      request.params.participationId = participationId;
-      request.params.stageId = stageId;
-
       participationId = roster.participationId;
       stageId = roster.stageId;
+
+      // The guards after this one read them from the request
+      request.params.participationId = participationId;
+      request.params.stageId = stageId;
     }
 
     const members: ICreateRosterMemberRequest[] = request.body?.members;
@@ -75,6 +85,12 @@ export class CanRosterBeUsedGuard implements CanActivate {
 
     if (!members || members?.length === 0) {
       throw new BadRequestException('Members are required');
+    }
+
+    if (
+      new Set(members.map((member) => member.userId)).size !== members.length
+    ) {
+      throw new BadRequestException('A player can only be in a roster once');
     }
 
     const participation: IParticipationResponse =
@@ -140,6 +156,25 @@ export class CanRosterBeUsedGuard implements CanActivate {
     }
 
     return true;
+  }
+
+  // For a roster that is given by id, the stage is the roster's own
+  private async attachStage(request) {
+    const rosterId = rosterIdOf(request);
+    const stageId = rosterId
+      ? (await this.rosterService.findOne(rosterId))?.stageId
+      : request.params?.stageId ||
+        request.body?.stageId ||
+        request.query?.stageId;
+
+    if (!stageId) {
+      return;
+    }
+
+    request.stage = await this.stageService.findOne(
+      stageId,
+      StageResponsesEnum.EXTENDED,
+    );
   }
 
   validateForSolo(userId: number, members: ICreateRosterMemberRequest[]) {

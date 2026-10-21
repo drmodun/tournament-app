@@ -6,8 +6,8 @@ description: Matchups, score entry, round progression through Challonge, and bra
 ## Concepts
 
 - A **matchup** is one match in a stage. It has a `round` number, start and end dates, `isFinished`, a
-  `challongeMatchupId` when it came from Challonge, and a `bracket` (`winners`, `losers` or `grand_final`) in
-  double-elimination stages run by the API.
+  `challongeMatchupId` when it came from Challonge, and a `bracket` in stages run by
+  the API that have more than one (`winners`, `losers`, `last_chance` and `grand_final`, or the compass directions).
 - `roster_matchup` links the competing rosters and records `isWinner`.
 - A matchup's result is a list of **scores**, one per played round (game), each with points per roster.
 
@@ -64,7 +64,9 @@ matchup `isFinished` with `endDate = now`, and set `isWinner` on the winning ros
 
 ## Syncing with Challonge
 
-Challonge is treated as a mirror of the local data. After the database write:
+Challonge is optional and **off by default**: it is only used when `CHALLONGE_ENABLED=true`. With it off, stages get no
+Challonge tournament, and a stage that already has one is started and run by the API. Challonge is treated as a mirror
+of the local data. After the database write:
 
 1. If the matchup has a `challongeMatchupId` and the stage has a Challonge tournament, the API sends the scores and
    winner to Challonge (identifying rosters by their Challonge participant ids).
@@ -82,13 +84,15 @@ The API authenticates to Challonge with the OAuth client-credentials flow (`CHAL
 A stage without a Challonge tournament (no credentials, or Challonge failed when the stage was created) still
 starts. The API then runs the bracket itself, in the format its `stageType` names:
 
-| Stage type                                                       | Format             |
-| ---------------------------------------------------------------- | ------------------ |
-| `knockout`                                                       | Single elimination |
-| `double_elimination`                                             | Double elimination |
-| `round_robin`, `group` (the default), `fixture`                  | Round robin        |
-| `swiss`                                                          | Swiss              |
-| `compass`, `triple_elimination`, `quiz`, `evaluated_competition` | Single elimination |
+| Stage type                                      | Format             |
+| ----------------------------------------------- | ------------------ |
+| `knockout`                                      | Single elimination |
+| `double_elimination`                            | Double elimination |
+| `triple_elimination`                            | Triple elimination |
+| `compass`                                       | Compass            |
+| `round_robin`, `group` (the default), `fixture` | Round robin        |
+| `swiss`                                         | Swiss              |
+| `quiz`, `evaluated_competition`                 | Single elimination |
 
 **Seeding** is the same for every format: rosters with a `seed` (set by a [seeding conversion
 rule](#point-conversion-rules)) come first in seed order, then the rest by their players' average rating in the
@@ -116,6 +120,30 @@ Round 1 is the seeded single-elimination round above, in the winners bracket. Af
 When one roster is left in each bracket they meet in the **grand final**. If the losers-bracket roster wins it, both
 have one loss and the grand final is played again. The last roster standing wins the stage.
 
+### Triple elimination
+
+Double elimination with three losses: rosters play others with the same number of losses, in the **winners**
+(no loss), **losers** (one) and **last-chance** (two) brackets, and a third loss knocks a roster out. When two rosters
+are left they meet in the grand final, replayed while the roster with more losses wins. If every bracket holds a
+single roster, the two with the most losses play each other so the stage never stalls.
+
+### Compass
+
+Round 1 is the seeded single-elimination round, in the **east** bracket. Every bracket then plays single elimination
+among the rosters in it, and the loser of a bracket's n-th round drops into the n-th bracket listed below. Losing the
+last round of a bracket, or a round with no bracket listed, ends a roster's run.
+
+| Bracket     | 1st round loser → | 2nd round loser → | 3rd round loser → |
+| ----------- | ----------------- | ----------------- | ----------------- |
+| `east`      | `west`            | `north`           | `south`           |
+| `west`      | `southwest`       | `northwest`       |                   |
+| `north`     | `northeast`       |                   |                   |
+| `southwest` | `southeast`       |                   |                   |
+
+With 8 rosters this is the usual East, West, North and South; 16 fill all eight. Everyone plays the same number of
+rounds. The stage finishes when no bracket has a matchup left. Places are ranked by how far down the compass a roster
+went (leaving the east later is better), then by how long it lasted there.
+
 ### Round robin
 
 Every round is drawn when the stage starts (circle method): each roster meets every other once, and with an odd
@@ -136,8 +164,8 @@ elimination formats need exactly one winner per matchup and do not advance until
 
 ### Standings
 
-`GET /matches/stage/:stageId/standings` returns the stage's `format`, whether it is `isFinished`, and one row per
-roster, best first: `place`, `played`, `wins`, `draws`, `losses`, `byes`, `carriedPoints`, `points`, `buchholz` and
+`GET /matches/stage/:stageId/standings` returns the stage's `format`, whether it is `isFinished`, whether it
+`runsOnChallonge`, and one row per roster, best first: `place`, `played`, `wins`, `draws`, `losses`, `byes`, `carriedPoints`, `points`, `buchholz` and
 `eliminatedInRound`.
 
 - **Round robin and Swiss** rank by `points` (carried points, plus 3 per win or bye and 1 per draw), then wins, then
@@ -191,8 +219,9 @@ The places in range are `from` to `to` (both included; by default every place). 
 Points given to a roster are its `carriedPoints` in the destination stage's standings; points given to a participation
 add to its `points`, which `tournament_to_tournament` rules rank by.
 
-Stages run on Challonge are not tracked to their end, so their rules are applied with `POST
-/conversion-rules/:ruleId/apply` after the stage is set to `finished`.
+A stage run on Challonge finishes when nothing more can be played there (checked after each result): every match is
+complete, or the ones left are pending with a player missing, such as the unneeded reset of a double-elimination grand
+final. Its rules then apply the same way, and its results are frozen like those of any finished stage. `POST /conversion-rules/:ruleId/apply` stays available for a rule that was missed.
 
 ## Reading results
 
@@ -208,9 +237,11 @@ Stages run on Challonge are not tracked to their end, so their rules are applied
 
 ## Brackets in the web app
 
-`/stage/[id]/bracket` loads the stage (with `responseType=withChallongeTournament`) during server rendering and
-embeds Challonge's own bracket widget in an iframe (`https://challonge.com/<challongeTournamentId>/module`). For a
-stage run by the API it loads every matchup of the stage (`GET /matches/results?stageId=`, 100 per page) and its
+`/stage/[id]/bracket` loads the stage (with `responseType=withChallongeTournament`) and its standings during server
+rendering. `runsOnChallonge` in the standings decides whose bracket it is, because a stage can have a Challonge
+tournament and still have been run by the API (it was created while Challonge was on and started after it was turned
+off). On Challonge it embeds Challonge's own bracket widget in an iframe
+(`https://challonge.com/<challongeTournamentId>/module`). For a stage run by the API it loads every matchup of the stage (`GET /matches/results?stageId=`, 100 per page) and its
 standings, draws the rounds side by side (one row per bracket for double elimination), marks winners and byes, and
 shows the standings table below.
 

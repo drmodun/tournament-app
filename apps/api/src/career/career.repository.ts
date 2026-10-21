@@ -91,7 +91,8 @@ export class CareerDrizzleRepository {
       );
   }
 
-  // Finished matches each player has in tournaments of the category, used to pick the K-factor
+  // Finished matches against an opponent each player has in tournaments of the category, used to pick the
+  // K-factor
   async getFinishedMatchCounts(userIds: number[], categoryId: number) {
     return db
       .select({
@@ -109,6 +110,8 @@ export class CareerDrizzleRepository {
           inArray(userToRoster.userId, userIds),
           eq(tournament.categoryId, categoryId),
           eq(matchup.isFinished, true),
+          // A bye (a matchup with one roster) is not a match played
+          sql`(select count(*) from roster_matchup as entrants where entrants.matchup_id = ${matchup.id}) > 1`,
         ),
       )
       .groupBy(userToRoster.userId);

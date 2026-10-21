@@ -161,15 +161,15 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 
 ## Stages: `/stages`
 
-| Method | Path                             | Auth               | Purpose                                                                   |
-| ------ | -------------------------------- | ------------------ | ------------------------------------------------------------------------- |
-| GET    | `/stages`                        | –                  | List and filter                                                           |
-| GET    | `/stages/:stageId`               | –                  | One (`responseType=withChallongeTournament` adds the Challonge data)      |
-| GET    | `/stages/managed`                | JWT                | Stages you manage                                                         |
-| POST   | `/stages/:tournamentId`          | tournament manager | Create (also creates rosters for solo entries and a Challonge tournament) |
-| PATCH  | `/stages/:tournamentId/:stageId` | stage manager      | Update                                                                    |
-| DELETE | `/stages/:tournamentId/:stageId` | stage manager      | Delete                                                                    |
-| PATCH  | `/stages/start/:stageId`         | stage manager      | Start the stage (Challonge or a bracket run by the API)                   |
+| Method | Path                             | Auth               | Purpose                                                                               |
+| ------ | -------------------------------- | ------------------ | ------------------------------------------------------------------------------------- |
+| GET    | `/stages`                        | –                  | List and filter                                                                       |
+| GET    | `/stages/:stageId`               | –                  | One (`responseType=withChallongeTournament` adds the Challonge data)                  |
+| GET    | `/stages/managed`                | JWT                | Stages you manage                                                                     |
+| POST   | `/stages/:tournamentId`          | tournament manager | Create (also creates rosters for solo entries, and a Challonge tournament if enabled) |
+| PATCH  | `/stages/:tournamentId/:stageId` | stage manager      | Update                                                                                |
+| DELETE | `/stages/:tournamentId/:stageId` | stage manager      | Delete                                                                                |
+| PATCH  | `/stages/start/:stageId`         | stage manager      | Start the stage (a bracket run by the API, or Challonge if enabled)                   |
 
 ## Participations: `/participations`
 

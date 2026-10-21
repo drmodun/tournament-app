@@ -1,16 +1,20 @@
 import {
   bracketFormatFor,
+  compassFirstRound,
+  compassNextRound,
   computeStandings,
   doubleEliminationFirstRound,
   doubleEliminationNextRound,
   LocalBracketFormat,
   LocalMatchup,
+  Pairing,
   matchupOutcomes,
   pairAvoidingRematches,
   roundRobinRounds,
   swissFirstRound,
   swissNextRound,
   swissRoundCount,
+  tripleEliminationNextRound,
 } from '../bracketFormats';
 
 let nextId = 1;
@@ -63,6 +67,36 @@ function playDoubleElimination(
   throw new Error('The bracket stopped without a champion');
 }
 
+// Plays a loss-counting or compass stage to the end; the lower seed always wins
+function playToTheEnd(
+  seeds: number[],
+  first: Pairing[],
+  nextRound: typeof doubleEliminationNextRound,
+) {
+  const history: LocalMatchup[] = [];
+  let pairings = first;
+  let round = 1;
+
+  while (pairings.length) {
+    for (const { rosterIds, bracket } of pairings) {
+      const winner = Math.min(...rosterIds);
+      history.push(played(round, rosterIds, [winner], bracket));
+    }
+
+    round++;
+    pairings = nextRound(seeds, history).pairings;
+
+    if (round > 50) {
+      throw new Error('The bracket did not end');
+    }
+  }
+
+  return history;
+}
+
+const seedsOf = (count: number) =>
+  Array.from({ length: count }, (_, i) => i + 1);
+
 describe('bracketFormats', () => {
   beforeEach(() => {
     nextId = 1;
@@ -85,7 +119,7 @@ describe('bracketFormats', () => {
     });
 
     it('runs formats without their own logic as single elimination', () => {
-      for (const stageType of ['compass', 'triple_elimination', 'quiz', null]) {
+      for (const stageType of ['quiz', 'evaluated_competition', null]) {
         expect(bracketFormatFor(stageType)).toBe(
           LocalBracketFormat.SINGLE_ELIMINATION,
         );
@@ -348,5 +382,132 @@ describe('bracketFormats', () => {
         true,
       );
     });
+  });
+
+  describe('triple elimination', () => {
+    it('maps the stage type', () => {
+      expect(bracketFormatFor('triple_elimination')).toBe(
+        LocalBracketFormat.TRIPLE_ELIMINATION,
+      );
+    });
+
+    it.each([2, 3, 4, 5, 8, 11, 16])(
+      'ends with one champion for %i rosters',
+      (count) => {
+        const seeds = seedsOf(count);
+        const history = playToTheEnd(
+          seeds,
+          doubleEliminationFirstRound(seeds),
+          tripleEliminationNextRound,
+        );
+
+        expect(tripleEliminationNextRound(seeds, history).championId).toBe(1);
+
+        const standings = computeStandings(
+          LocalBracketFormat.TRIPLE_ELIMINATION,
+          seeds,
+          history,
+        );
+
+        expect(standings[0].rosterId).toBe(1);
+        expect(standings.every((row) => row.losses <= 3)).toBe(true);
+        expect(
+          standings.filter((row) => row.eliminatedInRound != null),
+        ).toHaveLength(count - 1);
+      },
+    );
+
+    it('uses a last-chance bracket for rosters with two losses', () => {
+      const seeds = seedsOf(8);
+      const history = playToTheEnd(
+        seeds,
+        doubleEliminationFirstRound(seeds),
+        tripleEliminationNextRound,
+      );
+
+      expect(history.some((m) => m.bracket === 'last_chance')).toBe(true);
+    });
+
+    it('pairs lone rosters of different brackets instead of stalling', () => {
+      // 1 has no loss, 2 has one, 3 has two
+      const history = [
+        played(1, [1, 4], [1], 'winners'),
+        played(1, [2, 5], [2], 'winners'),
+        played(1, [3, 6], [3], 'winners'),
+        played(2, [1, 2], [1], 'winners'),
+        played(2, [3, 4], [3], 'winners'),
+        played(2, [3, 5], [5], 'losers'),
+        played(2, [2, 6], [2], 'losers'),
+      ];
+
+      const next = tripleEliminationNextRound([1, 2, 3, 4, 5, 6], history);
+
+      expect(next.pairings.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('compass', () => {
+    it('maps the stage type', () => {
+      expect(bracketFormatFor('compass')).toBe(LocalBracketFormat.COMPASS);
+    });
+
+    it('plays 8 rosters through east, west, north and south', () => {
+      const seeds = seedsOf(8);
+      const history = playToTheEnd(
+        seeds,
+        compassFirstRound(seeds),
+        compassNextRound,
+      );
+      const matchupsIn = (bracket: string) =>
+        history.filter((m) => m.bracket === bracket).length;
+
+      expect(matchupsIn('east')).toBe(7);
+      expect(matchupsIn('west')).toBe(3);
+      expect(matchupsIn('north')).toBe(1);
+      expect(matchupsIn('southwest')).toBe(1);
+      // Everyone plays three rounds in total
+      expect(history).toHaveLength(12);
+    });
+
+    it('drops the loser of a round into the next bracket', () => {
+      const seeds = seedsOf(8);
+      const history = playToTheEnd(
+        seeds,
+        compassFirstRound(seeds),
+        compassNextRound,
+      );
+      const west = history.filter((m) => m.bracket === 'west' && m.round === 2);
+
+      // 1 v 8, 4 v 5, 2 v 7, 3 v 6: the lower seeds lose and meet in the west in bracket order
+      expect(west.map((m) => [...m.rosterIds].sort())).toEqual([
+        [5, 8],
+        [6, 7],
+      ]);
+    });
+
+    it.each([2, 3, 5, 6, 8, 9, 13, 16])(
+      'ends for %i rosters with every roster placed',
+      (count) => {
+        const seeds = seedsOf(count);
+        const history = playToTheEnd(
+          seeds,
+          compassFirstRound(seeds),
+          compassNextRound,
+        );
+        const standings = computeStandings(
+          LocalBracketFormat.COMPASS,
+          seeds,
+          history,
+        );
+
+        expect(compassNextRound(seeds, history).pairings).toEqual([]);
+        expect(standings[0].rosterId).toBe(1);
+        expect(standings).toHaveLength(count);
+        // The east runner-up is placed above everybody who left the east earlier
+        if (count >= 4) {
+          expect(standings[1].rosterId).toBe(2);
+        }
+      },
+    );
   });
 });

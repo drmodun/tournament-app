@@ -4,7 +4,11 @@ import {
   ExecutionContext,
   Injectable,
 } from '@nestjs/common';
-import { ICreateRosterMemberRequest } from '@tournament-app/types';
+import {
+  ICreateRosterMemberRequest,
+  userRoleEnum,
+} from '@tournament-app/types';
+import { rosterIdOf } from './roster-check.guard';
 import { IExtendedStageResponse } from '@tournament-app/types';
 import { StageService } from 'src/stage/stage.service';
 import { RosterService } from '../roster.service';
@@ -18,8 +22,15 @@ export class CanUpdateRosterGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const stageId = request.params?.stageId || request.body?.stageId;
-    const rosterId = request.params?.rosterId || request.body?.rosterId;
+
+    // Site admins skip the roster rules, like in CanRosterBeUsedGuard
+    if (request.user?.role === userRoleEnum.ADMIN) {
+      return true;
+    }
+
+    const stageId =
+      request.params?.stageId || request.body?.stageId || request.stage?.id;
+    const rosterId = rosterIdOf(request);
     const members: ICreateRosterMemberRequest[] = request.body?.members;
 
     if (!stageId) {

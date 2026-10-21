@@ -34,6 +34,27 @@ followers, categories, locations, LFG, LFP, tournaments, stages and participatio
 every spec: it asserts `MODE=test` (so the suite never runs against the development database) and mocks the email
 service and the Challonge client, so no mail is sent and no external API is called.
 
+Two specs simulate whole tournaments through the API, using `test/helpers/tournamentRun.ts` (create a tournament, enter
+players, add and start stages, post results until the stage ends):
+
+- `brackets.e2e-spec.ts` plays every format to its end for several field sizes (single, double and triple
+  elimination, compass, round robin, Swiss), including byes, draws, grand-final replays, rematch avoidance and the
+  standings.
+- `stage-lifecycle.e2e-spec.ts` covers starting, permissions, correcting and freezing results, and point conversion
+  rules between stages and tournaments.
+- `roster-update.e2e-spec.ts` covers creating and updating rosters as a group owner, as other users and as a site admin:
+  membership, size and substitute limits, started stages, duplicates, and the change limit in later stages.
+- `quiz.e2e-spec.ts` takes quizzes as an author and as players: answers stay hidden, one question at a time with
+  per-question and total time limits (moved in the database instead of waiting), tests, scoring, retakes, the
+  leaderboard and whose attempt is whose.
+- `files.e2e-spec.ts` covers image uploads and serving against an in-memory stand-in for S3: the types accepted by their
+  bytes, size limit, directories, headers and addresses.
+- `elo.e2e-spec.ts` checks ratings against an independent model of the formula: first-match changes, draws, upsets,
+  the K-factor thresholds over 22 matches, byes, team matchups rated against the opposing average, fake players, the
+  floor of 0, unranked tournaments, corrections and deletions, per-category ratings and seeding by rating. It reads ratings straight from the database, because there is no career endpoint.
+
+Challonge is disabled in the tests (`CHALLONGE_ENABLED` is unset), so they exercise the brackets the API runs itself.
+
 ## Smoke test against a running stack
 
 `scripts/smoke-api.sh` exercises a running, seeded API with `curl`: login, registration, reads across the main

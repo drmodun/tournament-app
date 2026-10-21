@@ -82,15 +82,17 @@ member. Solo players never have to build rosters by hand.
 
 ### Updating a roster
 
-`PATCH /roster/:id` with the full new member list runs `CanRosterBeUsedGuard` again (excluding the roster itself from
-the "already in another roster" check) and then `CanUpdateRosterGuard`:
+`PATCH /roster/:id` with the full new member list (`{ "members": [...] }`, at least one player, none listed twice) runs
+`CanRosterBeUsedGuard` again, taking the stage and participation from the roster itself (excluding the roster from the
+"already in another roster" check), and then `CanUpdateRosterGuard`. The new members replace the old ones in one
+transaction, and the response is `{ "id": <roster id> }`:
 
 - In the first stage, any change is allowed.
 - In later stages, the number of changes must not exceed the stage's `maxChanges`. Changes are counted as
   `added + removed + |old size − new size|`.
 
-Both creating and updating a roster also check the stage's limits (site admins skip these, like the rest of this
-guard):
+Both creating and updating a roster also check the stage's limits. Site admins skip these, and the change limit, like
+the rest of the guards:
 
 - the stage must not have started yet;
 - the roster must have between `minPlayersPerTeam` and `maxPlayersPerTeam` players (when set);

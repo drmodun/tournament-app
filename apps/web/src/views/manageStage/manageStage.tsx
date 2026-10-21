@@ -9,6 +9,7 @@ import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
 import { useCheckIfGroupMember } from "api/client/hooks/groups/useCheckIfGroupMember";
 import { useGetManagedForPlayer } from "api/client/hooks/participations/useGetManagedForPlayer";
+import { useReopenStage } from "api/client/hooks/stages/useReopenStage";
 import { useStartStage } from "api/client/hooks/stages/useStartStage";
 import { useUpdateStage } from "api/client/hooks/stages/useUpdateStage";
 import { clsx } from "clsx";
@@ -68,6 +69,7 @@ export default function ManageStages(stage?: {
   const { data: userData } = useAuth();
 
   const startStageMutation = useStartStage();
+  const reopenStageMutation = useReopenStage();
 
   return (
     <div
@@ -168,6 +170,16 @@ export default function ManageStages(stage?: {
                       label="start stage"
                     />
                   )}
+                {stage?.stage?.stageStatus === stageStatusEnum.FINISHED && (
+                  <Button
+                    variant="warning"
+                    onClick={() =>
+                      reopenStageMutation.mutate(stage?.stage?.id ?? -1)
+                    }
+                    className={styles.actionButton}
+                    label="reopen stage"
+                  />
+                )}
                 <Button
                   variant="warning"
                   onClick={() => setEditDialogOpen(true)}

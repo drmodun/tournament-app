@@ -27,6 +27,24 @@ import { imageUrlToFile } from "utils/mixins/helpers";
 import styles from "styles/forms/editEntityForm.module.scss";
 import { useLocationPicker } from "utils/hooks/useLocationPicker";
 
+// Statuses an organiser can set from each one; starting and reopening have their own buttons
+const STATUS_CHOICES: Record<string, stageStatusEnum[]> = {
+  [stageStatusEnum.UPCOMING]: [
+    stageStatusEnum.UPCOMING,
+    stageStatusEnum.CANCELLED,
+  ],
+  [stageStatusEnum.ONGOING]: [
+    stageStatusEnum.ONGOING,
+    stageStatusEnum.FINISHED,
+    stageStatusEnum.CANCELLED,
+  ],
+  [stageStatusEnum.FINISHED]: [stageStatusEnum.FINISHED],
+  [stageStatusEnum.CANCELLED]: [
+    stageStatusEnum.CANCELLED,
+    stageStatusEnum.UPCOMING,
+  ],
+};
+
 type EditStageFormProps = {
   mutation: UseMutationResult<
     {
@@ -162,12 +180,9 @@ export default function EditStageForm({
             status
           </p>
           <SlideButton
-            options={[
-              stageStatusEnum.UPCOMING,
-              stageStatusEnum.FINISHED,
-              stageStatusEnum.ONGOING,
-              stageStatusEnum.CANCELLED,
-            ]}
+            options={
+              STATUS_CHOICES[stage?.stageStatus ?? stageStatusEnum.UPCOMING]
+            }
             isReactFormHook={true}
             name="stageStatus"
             variant={textColorTheme}

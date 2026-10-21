@@ -38,7 +38,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
-import { isFedByRules } from 'src/conversion-rule/fedStages';
+import { isFedByRules } from '../conversion-rule/fedStages';
 import { QueryRosterDto } from './dto/requests';
 import { sql } from 'drizzle-orm';
 

@@ -1,7 +1,7 @@
 import { pointConversionStrategyEnum } from '@tournament-app/types';
 import { and, AnyColumn, eq, exists, inArray, or } from 'drizzle-orm';
-import { db } from 'src/db/db';
-import { pointConversionRule } from 'src/db/schema';
+import { db } from '../db/db';
+import { pointConversionRule } from '../db/schema';
 
 // Strategies that give entries in a destination stage. A stage they feed gets its entrants from its rules,
 // so solo players are not entered into it by themselves.

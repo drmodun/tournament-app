@@ -236,8 +236,13 @@ DELETE /conversion-rules/:ruleId         delete (organisers of the source)
 `elimination`, `seed` and `qualification_with_lcq` need a `stage_to_stage` rule, and strategies that add entries need a
 destination stage that is still `upcoming`. `qualification_with_lcq` also needs `to` and a `lastChanceDestination`: an
 upcoming stage of the same tournament, other than the source and the destination. A second `qualification` rule from
-the last-chance stage to the destination completes the usual setup. Solo players already have a roster in every stage,
-so rules that add entries matter for team tournaments; for solo ones use `elimination`.
+the last-chance stage to the destination completes the usual setup.
+
+Solo players normally get a roster in every stage by themselves. A stage that a `stage_to_stage` rule enters rosters
+into (`qualification`, `seed`, `hybrid`, `tie_breaker`, or either stage of `qualification_with_lcq`) is left to its
+rules instead: creating the rule removes those rosters, and players who enter the tournament later are not put in it.
+Deleting the rule before it applies gives them back their rosters, unless another such rule still feeds the stage.
+`elimination` works the other way round, starting from everyone and removing those out of range.
 
 The places in range are `from` to `to` (both included; by default every place). Points start at `maxPoints` (or
 `points`) for place `from` and drop by `pointsPerPlace` per place, never below `minPoints` (default 0). For example

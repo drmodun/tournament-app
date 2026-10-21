@@ -437,11 +437,6 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
       await run.applyRule(created.body.id).expect(400);
     });
 
-    // Solo players get a roster in every stage, so a destination is emptied to see who a rule enters
-    const emptyStage = async (stageId: number) => {
-      await db.execute(sql`delete from roster where stage_id = ${stageId}`);
-    };
-
     const playersIn = async (stageId: number) =>
       (
         (await db.execute(sql`
@@ -453,7 +448,6 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
 
     it('tie-breaker enters the rosters that share a place', async () => {
       const { first, second } = await twoStages(stageTypeEnum.ROUND_ROBIN);
-      await emptyStage(second);
       await run
         .createRule(
           rule(first, second, {
@@ -488,8 +482,6 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
         stageTypeEnum.KNOCKOUT,
         'Last chance',
       );
-      await emptyStage(second);
-      await emptyStage(lastChance);
 
       await run
         .createRule(
@@ -528,6 +520,35 @@ describe('Stage lifecycle and conversion rules (e2e)', () => {
       expect(await playersIn(second)).toEqual(
         placed.slice(0, 3).sort((a, b) => a - b),
       );
+    });
+
+    it('leaves a stage that rules enter rosters into to them, for solo players too', async () => {
+      const { tournamentId, first, second } = await twoStages(
+        stageTypeEnum.KNOCKOUT,
+      );
+
+      expect(await playersIn(second)).toEqual([10, 11, 12, 13]);
+
+      const created = await run
+        .createRule(
+          rule(first, second, {
+            strategy: pointConversionStrategyEnum.QUALIFICATION,
+            to: 2,
+          }),
+        )
+        .expect(201);
+
+      // Only the rule enters players now, including one who enters the tournament later
+      expect(await playersIn(second)).toEqual([]);
+      await run.enter(tournamentId, 14).expect(201);
+      expect(await playersIn(second)).toEqual([]);
+
+      // Without the rule, every solo player is entered again
+      await request(app.getHttpServer())
+        .delete(`/conversion-rules/${created.body.id}`)
+        .set('Authorization', `Bearer ${run.token}`)
+        .expect(200);
+      expect(await playersIn(second)).toEqual([10, 11, 12, 13, 14]);
     });
 
     it('refuses a last-chance stage that is not in the tournament', async () => {

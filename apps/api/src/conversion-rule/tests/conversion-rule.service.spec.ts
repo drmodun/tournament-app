@@ -32,6 +32,7 @@ describe('ConversionRuleService', () => {
     findApplied: jest.fn(),
     hasTournamentStarted: jest.fn(),
     reopenStage: jest.fn(),
+    restoreSoloRosters: jest.fn(),
   };
   const matchesService = { getStandings: jest.fn() };
   const participationService = { create: jest.fn() };
@@ -87,6 +88,7 @@ describe('ConversionRuleService', () => {
       });
       expect(repository.create).toHaveBeenCalledWith(
         expect.objectContaining({ source: 1, destination: 2, createdBy: 4 }),
+        [2],
       );
       expect(repository.managesTournament).toHaveBeenCalledWith(4, 10);
     });
@@ -148,6 +150,33 @@ describe('ConversionRuleService', () => {
       await expect(
         service.create(stageRule({ lastChanceDestination: 5 }), organiser),
       ).rejects.toThrow('only for qualification_with_lcq');
+    });
+
+    it('names the stages a rule enters rosters into, and none for other rules', async () => {
+      await service.create(
+        stageRule({
+          strategy: pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
+          lastChanceDestination: 5,
+        }),
+        organiser,
+      );
+      await service.create(
+        stageRule({ strategy: pointConversionStrategyEnum.ELIMINATION }),
+        organiser,
+      );
+      await service.create(
+        stageRule({
+          strategy: pointConversionStrategyEnum.RANKING,
+          destination: 4,
+        }),
+        organiser,
+      );
+
+      expect(repository.create.mock.calls.map((call) => call[1])).toEqual([
+        [2, 5],
+        [],
+        [],
+      ]);
     });
 
     it('refuses seeding into a tournament', async () => {
@@ -389,6 +418,33 @@ describe('ConversionRuleService', () => {
       expect(repository.applyToStages).toHaveBeenCalledWith(2, [
         { stageId: 2, outcomes: [] },
       ]);
+    });
+  });
+
+  describe('remove', () => {
+    it('enters solo players into the stages of a rule deleted before it applied', async () => {
+      repository.findOne.mockResolvedValue({
+        id: 5,
+        ...stageRule(),
+        appliedAt: null,
+      });
+
+      await service.remove(5, organiser);
+
+      expect(repository.delete).toHaveBeenCalledWith(5);
+      expect(repository.restoreSoloRosters).toHaveBeenCalledWith([2]);
+    });
+
+    it('leaves the entries of an applied rule', async () => {
+      repository.findOne.mockResolvedValue({
+        id: 5,
+        ...stageRule(),
+        appliedAt: new Date(),
+      });
+
+      await service.remove(5, organiser);
+
+      expect(repository.restoreSoloRosters).not.toHaveBeenCalled();
     });
   });
 

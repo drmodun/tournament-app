@@ -20,6 +20,7 @@ import {
   or,
   isNotNull,
   InferInsertModel,
+  not,
 } from 'drizzle-orm';
 import {
   RosterResponsesEnum,
@@ -37,6 +38,7 @@ import {
   PgSelectJoinFn,
 } from 'drizzle-orm/pg-core';
 import { db } from '../db/db';
+import { isFedByRules } from 'src/conversion-rule/fedStages';
 import { QueryRosterDto } from './dto/requests';
 import { sql } from 'drizzle-orm';
 
@@ -311,16 +313,23 @@ export class RosterDrizzleRepository extends PrimaryRepository<
     return transaction;
   }
 
-  // A player entering alone gets a roster with themselves in every stage of the tournament
+  // A player entering alone gets a roster with themselves in every stage of the tournament, except those
+  // that conversion rules enter rosters into
   createForSinglePlayer(
     participationId: number,
     tournamentId: number,
     userId: number,
   ) {
     const res = db.transaction(async (tx) => {
-      const stages = await tx.query.stage.findMany({
-        where: eq(stage.tournamentId, tournamentId),
-      });
+      const stages = await tx
+        .select({ id: stage.id })
+        .from(stage)
+        .where(
+          and(
+            eq(stage.tournamentId, tournamentId),
+            not(isFedByRules(stage.id)),
+          ),
+        );
       // A tournament without stages yet has no rosters to create
       if (!stages.length) {
         return [];

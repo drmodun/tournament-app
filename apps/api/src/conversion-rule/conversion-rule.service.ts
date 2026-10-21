@@ -33,6 +33,7 @@ import {
   ConversionRuleQuery,
   CreateConversionRuleDto,
 } from './dto/requests.dto';
+import { ENTRY_STRATEGIES } from './fedStages';
 
 // These put entries into the destination, so a destination stage must not have started
 const QUALIFYING_STRATEGIES: string[] = [
@@ -50,6 +51,20 @@ const STAGE_ONLY_STRATEGIES: string[] = [
   pointConversionStrategyEnum.SEED,
   pointConversionStrategyEnum.QUALIFICATION_WITH_LCQ,
 ];
+
+// The stages a rule enters rosters into
+const fedStagesOf = (rule: {
+  type: string;
+  strategy: string;
+  destination: number;
+  lastChanceDestination?: number | null;
+}) =>
+  rule.type === pointConversionTypeEnum.STAGE_TO_STAGE &&
+  ENTRY_STRATEGIES.includes(rule.strategy)
+    ? [rule.destination, rule.lastChanceDestination].filter(
+        (id): id is number => id != null,
+      )
+    : [];
 
 const isStageSource = (type: string) =>
   type === pointConversionTypeEnum.STAGE_TO_STAGE ||
@@ -110,10 +125,13 @@ export class ConversionRuleService {
     await this.checkManages(user, sourceTournamentId);
     await this.checkManages(user, destinationTournamentId);
 
-    return this.repository.create({
-      ...dto,
-      createdBy: user.id,
-    } as Parameters<ConversionRuleDrizzleRepository['create']>[0]);
+    return this.repository.create(
+      {
+        ...dto,
+        createdBy: user.id,
+      } as Parameters<ConversionRuleDrizzleRepository['create']>[0],
+      fedStagesOf(dto),
+    );
   }
 
   async findAll(query: ConversionRuleQuery) {
@@ -138,7 +156,14 @@ export class ConversionRuleService {
       await this.tournamentOf(rule.type, rule.source, 'source'),
     );
 
-    return this.repository.delete(id);
+    const deleted = await this.repository.delete(id);
+
+    // Entries it would have made: solo players are entered by themselves again
+    if (!rule.appliedAt) {
+      await this.repository.restoreSoloRosters(fedStagesOf(rule));
+    }
+
+    return deleted;
   }
 
   // For stages whose status was set by hand, such as those run on Challonge

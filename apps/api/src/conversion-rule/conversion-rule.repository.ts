@@ -11,6 +11,7 @@ import {
   InferSelectModel,
   isNotNull,
   isNull,
+  not,
   or,
   sql,
 } from 'drizzle-orm';
@@ -26,6 +27,7 @@ import {
 } from 'src/db/schema';
 import { ConversionEffects, ConversionOutcome, noEffects } from './conversion';
 import { ConversionRuleQuery } from './dto/requests.dto';
+import { isFedByRules } from './fedStages';
 
 export type ConversionRule = InferSelectModel<typeof pointConversionRule>;
 
@@ -33,13 +35,97 @@ type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 @Injectable()
 export class ConversionRuleDrizzleRepository {
-  async create(values: InferInsertModel<typeof pointConversionRule>) {
-    const [created] = await db
-      .insert(pointConversionRule)
-      .values(values)
-      .returning({ id: pointConversionRule.id });
+  // Stages the rule enters rosters into lose the rosters solo players got by themselves, so that they hold
+  // only who the rules enter
+  async create(
+    values: InferInsertModel<typeof pointConversionRule>,
+    fedStageIds: number[] = [],
+  ) {
+    return db.transaction(async (tx) => {
+      const [created] = await tx
+        .insert(pointConversionRule)
+        .values(values)
+        .returning({ id: pointConversionRule.id });
 
-    return created;
+      if (fedStageIds.length) {
+        await tx
+          .delete(roster)
+          .where(
+            and(
+              inArray(roster.stageId, fedStageIds),
+              inArray(
+                roster.participationId,
+                tx
+                  .select({ id: participation.id })
+                  .from(participation)
+                  .where(isNotNull(participation.userId)),
+              ),
+            ),
+          );
+      }
+
+      return created;
+    });
+  }
+
+  // Gives solo players a roster in each upcoming stage that no rule enters rosters into any more
+  async restoreSoloRosters(stageIds: number[]) {
+    await db.transaction(async (tx) => {
+      for (const stageId of stageIds) {
+        const [target] = await tx
+          .select({ tournamentId: stage.tournamentId })
+          .from(stage)
+          .where(
+            and(
+              eq(stage.id, stageId),
+              eq(stage.stageStatus, 'upcoming'),
+              not(isFedByRules(stage.id)),
+            ),
+          );
+
+        if (!target) {
+          continue;
+        }
+
+        const players = await tx
+          .select({ id: participation.id, userId: participation.userId })
+          .from(participation)
+          .where(
+            and(
+              eq(participation.tournamentId, target.tournamentId),
+              isNotNull(participation.userId),
+              not(
+                exists(
+                  tx
+                    .select({ id: roster.id })
+                    .from(roster)
+                    .where(
+                      and(
+                        eq(roster.participationId, participation.id),
+                        eq(roster.stageId, stageId),
+                      ),
+                    ),
+                ),
+              ),
+            ),
+          );
+
+        for (const player of players) {
+          const [created] = await tx
+            .insert(roster)
+            .values({ participationId: player.id, stageId } as InferInsertModel<
+              typeof roster
+            >)
+            .returning({ id: roster.id });
+
+          await tx.insert(userToRoster).values({
+            userId: player.userId,
+            rosterId: created.id,
+            isSubstitute: false,
+          });
+        }
+      }
+    });
   }
 
   async findMany(query: ConversionRuleQuery): Promise<ConversionRule[]> {

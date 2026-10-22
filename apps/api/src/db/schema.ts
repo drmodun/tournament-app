@@ -34,6 +34,7 @@ import {
   index,
   jsonb,
   date,
+  doublePrecision,
 } from 'drizzle-orm/pg-core';
 import type { ConversionEffects } from '../conversion-rule/conversion';
 
@@ -1205,3 +1206,74 @@ export const quizAnswer = pgTable('quiz_answer', {
   ),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 }); // TODO: implement partial points later (eg for multiple choice with multiple correct answers)
+
+// Vansy (exam platform) integration. Quizzes live in Vansy; these tables keep which stage runs
+// which Vansy quiz, the signed results Vansy sends back, and the webhook events already handled.
+
+export const vansyStageQuiz = pgTable('vansy_stage_quiz', {
+  stageId: integer('stage_id')
+    .primaryKey()
+    .references(() => stage.id, { onDelete: 'cascade' }),
+  vansyQuizId: text('vansy_quiz_id').notNull(),
+  linkedById: integer('linked_by_id').references(() => user.id, {
+    onDelete: 'set null',
+  }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const vansyAttemptResult = pgTable(
+  'vansy_attempt_result',
+  {
+    attemptId: text('attempt_id').primaryKey(),
+    vansyQuizId: text('vansy_quiz_id').notNull(),
+    stageId: integer('stage_id').references(() => stage.id, {
+      onDelete: 'cascade',
+    }),
+    rosterId: integer('roster_id').references(() => roster.id, {
+      onDelete: 'set null',
+    }),
+    userId: integer('user_id').references(() => user.id, {
+      onDelete: 'set null',
+    }),
+    status: text('status').notNull(),
+    score: doublePrecision('score').notNull(),
+    maxScore: doublePrecision('max_score').notNull(),
+    percent: doublePrecision('percent').notNull(),
+    durationMs: integer('duration_ms').notNull(),
+    reviewStatus: text('review_status').notNull(),
+    submittedAt: timestamp('submitted_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (t) => ({
+    stageIndex: index('vansy_attempt_result_stage_index').on(t.stageId),
+  }),
+);
+
+// The final standings from quiz.results_final, per roster; they become the stage's standings
+export const vansyStageStanding = pgTable(
+  'vansy_stage_standing',
+  {
+    stageId: integer('stage_id')
+      .references(() => stage.id, { onDelete: 'cascade' })
+      .notNull(),
+    rosterId: integer('roster_id')
+      .references(() => roster.id, { onDelete: 'cascade' })
+      .notNull(),
+    rank: integer('rank').notNull(),
+    score: doublePrecision('score').notNull(),
+    durationMs: integer('duration_ms').notNull(),
+    reviewStatus: text('review_status').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.stageId, t.rosterId] }),
+  }),
+);
+
+export const vansyWebhookEvent = pgTable('vansy_webhook_event', {
+  eventId: text('event_id').primaryKey(),
+  type: text('type').notNull(),
+  receivedAt: timestamp('received_at', { withTimezone: true }).defaultNow(),
+});

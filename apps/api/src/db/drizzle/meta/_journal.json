@@ -379,6 +379,13 @@
       "when": 1792640781861,
       "tag": "0053_api_tokens",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1792682125907,
+      "tag": "0054_vansy_integration",
+      "breakpoints": true
     }
   ]
 }

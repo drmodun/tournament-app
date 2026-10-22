@@ -8,6 +8,12 @@ export async function teardown() {
   try {
     // Delete tables in order of dependencies (child tables first)
     const tableDeleteOrder = [
+      // Vansy integration
+      tables.vansyWebhookEvent,
+      tables.vansyStageStanding,
+      tables.vansyAttemptResult,
+      tables.vansyStageQuiz,
+
       // Quiz-related tables first
       tables.quizAnswer,
       tables.quizAttempt,

@@ -2,7 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import { stageTypeEnum } from '@tournament-app/types';
 import { createHash, randomUUID } from 'crypto';
 import { exportJWK, generateKeyPair, KeyLike, SignJWT } from 'jose';
+import { and, eq } from 'drizzle-orm';
 import request from 'supertest';
+import { db } from '../src/db/db';
+import { matchup, roster, userToRoster } from '../src/db/schema';
 import { VansyClient } from '../src/vansy/vansy.client';
 import { VANSY_CONFIG } from '../src/vansy/vansy.config';
 import {
@@ -307,5 +310,98 @@ describe('Vansy integration (e2e)', () => {
       .set('Authorization', `Bearer ${run.token}`)
       .send({ quizId: soloQuizId })
       .expect(400);
+  });
+
+  describe('a stage linked before it starts', () => {
+    async function linkedStage(players: number[]) {
+      const tournamentId = await run.createTournament(players, 'Vansy linked');
+      const stageId = await run.createStage(tournamentId, stageTypeEnum.QUIZ);
+      await http()
+        .put(`/vansy/stages/${stageId}/quiz`)
+        .set('Authorization', `Bearer ${run.token}`)
+        .send({ quizId })
+        .expect(200);
+      await run.startStage(stageId).expect(200);
+
+      const rows = await db
+        .select({ rosterId: roster.id, userId: userToRoster.userId })
+        .from(roster)
+        .innerJoin(userToRoster, eq(userToRoster.rosterId, roster.id))
+        .where(eq(roster.stageId, stageId));
+      return {
+        stageId,
+        rosterOf: new Map(rows.map((r) => [r.userId, r.rosterId])),
+      };
+    }
+
+    it('starts without drawing a bracket', async () => {
+      const { stageId } = await linkedStage(userPool(4, 84));
+      expect((await run.stage(stageId)).stageStatus).toBe('ongoing');
+      const drawn = await db
+        .select()
+        .from(matchup)
+        .where(and(eq(matchup.stageId, stageId)));
+      expect(drawn).toHaveLength(0);
+    });
+
+    it('tells the web app who can take and who can manage', async () => {
+      const players = userPool(2, 30);
+      const { stageId } = await linkedStage(players);
+
+      const player = await loginAs(app, players[0]);
+      const asPlayer = await http()
+        .get(`/vansy/stages/${stageId}/me`)
+        .set('Authorization', `Bearer ${player}`)
+        .expect(200);
+      expect(asPlayer.body).toEqual({ canTake: true, canManage: false });
+
+      const asOrganiser = await http()
+        .get(`/vansy/stages/${stageId}/me`)
+        .set('Authorization', `Bearer ${run.token}`)
+        .expect(200);
+      expect(asOrganiser.body).toEqual({ canTake: false, canManage: true });
+    });
+
+    it('finishes the stage when the final standings arrive', async () => {
+      const players = userPool(2, 88);
+      const { stageId, rosterOf } = await linkedStage(players);
+
+      await signedWebhook({
+        eventId: randomUUID(),
+        type: 'quiz.results_final',
+        occurredAt: new Date().toISOString(),
+        tenantId: 'tournaments',
+        quiz: {
+          id: quizId,
+          ownerRef: 'user:1',
+          contexts: [{ type: 'stage', id: String(stageId) }],
+        },
+        standings: [
+          {
+            category: 'TEAM',
+            rows: players.map((userId, i) => ({
+              rank: i + 1,
+              category: 'TEAM',
+              attemptId: randomUUID(),
+              subject: null,
+              team: { externalTeamId: String(rosterOf.get(userId)), name: 'x' },
+              score: 10 - i,
+              maxScore: 10,
+              durationMs: 1000,
+              submittedAt: new Date().toISOString(),
+              reviewStatus: 'NONE',
+            })),
+          },
+        ],
+      }).then((res) => expect(res.status).toBe(200));
+
+      expect((await run.stage(stageId)).stageStatus).toBe('finished');
+      const standings = await run.standings(stageId);
+      expect(standings).toMatchObject({ format: 'quiz', isFinished: true });
+      expect(standings.standings.map((s) => [s.rosterId, s.place])).toEqual([
+        [rosterOf.get(players[0]), 1],
+        [rosterOf.get(players[1]), 2],
+      ]);
+    });
   });
 });

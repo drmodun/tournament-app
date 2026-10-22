@@ -109,7 +109,9 @@ export interface IStageStandingsResponse {
     | "triple_elimination"
     | "compass"
     | "round_robin"
-    | "swiss";
+    | "swiss"
+    // A quiz stage ranked by its Vansy quiz (quiz.results_final)
+    | "quiz";
   isFinished: boolean;
   // Whether the stage's matches are Challonge's (its bracket page is theirs) rather than the API's own
   runsOnChallonge: boolean;

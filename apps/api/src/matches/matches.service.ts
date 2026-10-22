@@ -27,6 +27,7 @@ import {
   RawMatchupWithScores,
 } from './matches.mappers';
 import { firstRoundPairings, nextRoundPairings } from './localBracket';
+import { quizStandings } from 'src/vansy/quizStandings';
 import {
   bracketFormatFor,
   compassFirstRound,
@@ -386,6 +387,27 @@ export class MatchesService {
 
     if (!stage) {
       throw new NotFoundException(`Stage with ID ${stageId} not found`);
+    }
+
+    // A quiz stage with standings from its Vansy quiz is ranked by the quiz, not a bracket
+    if (stage.stageType === stageTypeEnum.QUIZ) {
+      const quizResults =
+        await this.matchesRepository.getQuizStandings(stageId);
+
+      if (quizResults.length) {
+        const [rosterIdsBySeed, carriedPoints] = await Promise.all([
+          this.matchesRepository.getRostersBySeed(stageId),
+          this.matchesRepository.getCarriedPoints(stageId),
+        ]);
+
+        return {
+          stageId,
+          format: 'quiz',
+          isFinished: stage.stageStatus === stageStatusEnum.FINISHED,
+          runsOnChallonge: false,
+          standings: quizStandings(rosterIdsBySeed, quizResults, carriedPoints),
+        };
+      }
     }
 
     const [rosterIdsBySeed, matchups, carriedPoints, hasChallongeMatchups] =

@@ -1035,6 +1035,19 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
     return new Map(rows.map((row) => [row.rosterId, row.points ?? 0]));
   }
 
+  // Final standings a Vansy quiz sent for this stage, best rank first
+  async getQuizStandings(stageId: number) {
+    return db
+      .select({
+        rosterId: tables.vansyStageStanding.rosterId,
+        rank: tables.vansyStageStanding.rank,
+        score: tables.vansyStageStanding.score,
+      })
+      .from(tables.vansyStageStanding)
+      .where(eq(tables.vansyStageStanding.stageId, stageId))
+      .orderBy(asc(tables.vansyStageStanding.rank));
+  }
+
   // Whether any matchup of the stage was imported from Challonge
   async hasChallongeMatchups(stageId: number) {
     const result = await db

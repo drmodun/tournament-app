@@ -229,15 +229,7 @@ export default function ManageStages(stage?: {
           </Link>
         )}
       {stage?.stage?.stageType === stageTypeEnum.QUIZ && stage?.stage?.id && (
-        <VansyStageQuiz
-          stageId={stage.stage.id}
-          isOrganiser={
-            data?.role == groupRoleEnum.ADMIN ||
-            data?.role == groupRoleEnum.OWNER ||
-            tData?.creator.id == userData?.id
-          }
-          isParticipant={!!participationData && participationData.length > 0}
-        />
+        <VansyStageQuiz stageId={stage.stage.id} />
       )}
     </div>
   );

@@ -63,6 +63,19 @@ export class VansyController {
     return this.vansy.stageQuiz(stageId);
   }
 
+  @Get('stages/:stageId/me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Whether the caller can take the stage quiz, and manage it',
+  })
+  me(
+    @CurrentUser() user: ValidatedUserDto,
+    @Param('stageId', ParseIntPipe) stageId: number,
+  ) {
+    return this.vansy.stageRights(user, stageId);
+  }
+
   @Put('stages/:stageId/quiz')
   @UseGuards(JwtAuthGuard, StageAdminGuard)
   @ApiBearerAuth()

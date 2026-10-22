@@ -62,6 +62,20 @@ export const useVansyStageQuiz = (stageId?: number) =>
     retry: false,
   });
 
+/** Whether the signed-in user can take the stage quiz (a roster member) and manage it (organiser) */
+export const useVansyStageRights = (stageId?: number, signedIn = true) =>
+  useQuery({
+    queryKey: ["vansy-stage-rights", stageId],
+    queryFn: () =>
+      clientApi
+        .get<never, AxiosResponse<{ canTake: boolean; canManage: boolean }>>(
+          `/vansy/stages/${stageId}/me`,
+        )
+        .then((res) => res.data),
+    enabled: !!stageId && signedIn,
+    retry: false,
+  });
+
 export const useVansyStageResults = (stageId?: number) =>
   useQuery({
     queryKey: ["vansy-stage-results", stageId],

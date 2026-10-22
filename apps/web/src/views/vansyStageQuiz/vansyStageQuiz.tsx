@@ -7,7 +7,9 @@ import {
   useMyVansyQuizzes,
   useVansyStageQuiz,
   useVansyStageResults,
+  useVansyStageRights,
 } from "api/client/hooks/vansy";
+import { useAuth } from "api/client/hooks/auth/useAuth";
 import { clsx } from "clsx";
 import Button from "components/button";
 import ProgressWheel from "components/progressWheel";
@@ -21,17 +23,14 @@ import styles from "./vansyStageQuiz.module.scss";
  * A quiz stage runs on Vansy: organisers link one of their Vansy quizzes, proctor and review it
  * there, and close it; players take it as their roster. Final standings come back from Vansy.
  */
-export default function VansyStageQuiz({
-  stageId,
-  isOrganiser,
-  isParticipant,
-}: {
-  stageId: number;
-  isOrganiser: boolean;
-  isParticipant: boolean;
-}) {
+export default function VansyStageQuiz({ stageId }: { stageId: number }) {
   const { theme } = useThemeContext();
   const textColorTheme = textColor(theme);
+  // The API decides: a roster member can take the quiz, an organiser can manage it
+  const { data: user } = useAuth();
+  const { data: rights } = useVansyStageRights(stageId, !!user);
+  const isOrganiser = !!rights?.canManage;
+  const isParticipant = !!rights?.canTake;
   const { data, isLoading, error } = useVansyStageQuiz(stageId);
   const { data: results } = useVansyStageResults(stageId);
   const { data: mine } = useMyVansyQuizzes(isOrganiser);

@@ -29,6 +29,7 @@ session for the same roster.
 | `POST /vansy/launch/manage/:quizId` | `JwtAuthGuard`, author or admin | Open one quiz |
 | `GET /vansy/quizzes/mine` | `JwtAuthGuard` | The caller's Vansy quizzes |
 | `GET /vansy/stages/:stageId/quiz` | – | The linked quiz |
+| `GET /vansy/stages/:stageId/me` | `JwtAuthGuard` | `{ canTake, canManage }` for the caller, which the stage page uses |
 | `PUT`, `DELETE /vansy/stages/:stageId/quiz` | `StageAdminGuard` | Link or unlink a quiz (also sets the quiz's context in Vansy) |
 | `POST /vansy/stages/:stageId/launch/take` | `JwtAuthGuard`, roster member | Take the quiz |
 | `POST /vansy/stages/:stageId/launch/proctor`, `/review` | `StageAdminGuard` | Proctor or review |
@@ -53,6 +54,13 @@ has already handled, since Vansy delivers at least once.
 applied) and `points` is the quiz score plus carried points; rosters without an attempt share the
 place after the last ranked one. Finishing the stage then runs the **existing conversion rules**
 on those places, unchanged. A quiz stage without Vansy results keeps running as single elimination.
+
+## Stage lifecycle
+
+Link the quiz **before** starting the stage. A `quiz` stage with a linked Vansy quiz then starts
+without drawing a bracket, and is finished automatically when `quiz.results_final` arrives, which
+runs its conversion rules. A stage linked after it started keeps the bracket it drew; its standings
+still come from the quiz once results arrive, but finishing it is up to the organiser.
 
 ## Configuration
 

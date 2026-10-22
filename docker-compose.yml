@@ -24,6 +24,8 @@ x-api-env: &api-env
   FRONTEND_URL: ${PUBLIC_URL:-http://localhost:${PROXY_HTTP_PORT:-80}}
   # Uploaded images are served by the API under /api/files, behind the proxy
   API_PUBLIC_URL: ${PUBLIC_URL:-http://localhost:${PROXY_HTTP_PORT:-80}}/api
+  # Vansy as the containers reach it (.env's localhost means the container itself); empty turns it off
+  VANSY_URL: ${VANSY_DOCKER_URL:-}
 
 services:
   # Reverse proxy: the single entry point. Configuration in docker/caddy/Caddyfile.

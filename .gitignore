@@ -46,3 +46,6 @@ junit.xml
 
 # storybook build output
 storybook-static
+
+# production settings for deploy/compose.yml
+deploy/.env

@@ -1,0 +1,266 @@
+# Production stack: pre-built images from the container registry, nothing is built on the server.
+# The images come from .github/workflows/images.yml; local development uses ../docker-compose.yml instead.
+#
+#   cp deploy/.env.example deploy/.env           # then fill it in
+#   docker compose -f deploy/compose.yml pull
+#   docker compose -f deploy/compose.yml up -d
+#   docker compose -f deploy/compose.yml --profile seed run --rm seed   # destructive: wipe and fill with sample data
+#   docker compose -f deploy/compose.yml --profile '*' down             # stop everything; a --profile flag replaces
+#                                                                        # COMPOSE_PROFILES, so name them all
+#
+# Compose reads deploy/.env by itself (it sits next to this file), not the development .env in the repository root.
+#
+# Optional parts are profiles, chosen with COMPOSE_PROFILES in deploy/.env. Leave one out to use a server elsewhere:
+#   local-db   PostGIS in this stack        otherwise set DATABASE_URL
+#   local-s3   SeaweedFS in this stack      otherwise set S3_ENDPOINT, S3_BUCKET, S3_REGION and the keys
+#   admin      the admin panel at /admin
+# With no profiles only the proxy, API, web app and docs run. Email always goes to an external SMTP server.
+#
+# Caddy is the stack's single entry point. It listens on 127.0.0.1:${PROXY_HTTP_PORT} for a reverse proxy on the
+# host, and joins the EDGE_NETWORK Docker network as ${EDGE_ALIAS} for a reverse proxy in another container.
+# deploy/nginx.conf.example shows the nginx side. Without a reverse proxy in front, Caddy can serve HTTPS itself:
+# set SITE_ADDRESS to the domain and publish ports 80 and 443 (PROXY_HTTP_PORT=0.0.0.0:80, PROXY_HTTPS_PORT=0.0.0.0:443).
+
+name: tournament-app-prod
+
+# Rotate container logs so they cannot fill the disk
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 10m
+      max-file: "3"
+
+x-api-env: &api-env
+  MODE: production
+  API_PORT: "5500"
+  DATABASE_URL: ${DATABASE_URL:-postgres://postgres:${POSTGRES_PASSWORD:-}@db:5432/tournament}
+  # The address people open: email links, the allowed CORS origin, and the base of uploaded file URLs
+  FRONTEND_URL: ${PUBLIC_URL:?PUBLIC_URL must be set, e.g. https://example.com}
+  API_PUBLIC_URL: ${PUBLIC_URL}/api
+  CORS_ORIGIN: ${CORS_ORIGIN:-}
+  JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+  JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET must be set}
+  SSE_TOKEN_SECRET: ${SSE_TOKEN_SECRET:-}
+  EMAIL_FROM: ${EMAIL_FROM:?EMAIL_FROM must be set, e.g. "winning.sh <noreply@example.com>"}
+  SMTP_HOST: ${SMTP_HOST:?SMTP_HOST must be set; production does not start without email}
+  SMTP_PORT: ${SMTP_PORT:-587}
+  SMTP_USER: ${SMTP_USER:-}
+  SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+  SMTP_SECURE: ${SMTP_SECURE:-}
+  S3_ENDPOINT: ${S3_ENDPOINT:-http://s3:8333}
+  S3_BUCKET: ${S3_BUCKET:-tournament}
+  S3_REGION: ${S3_REGION:-us-east-1}
+  S3_FORCE_PATH_STYLE: ${S3_FORCE_PATH_STYLE:-true}
+  S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:?S3_ACCESS_KEY_ID must be set}
+  S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?S3_SECRET_ACCESS_KEY must be set}
+  # The Google strategy refuses an empty client ID, so the placeholder keeps the API starting without sign-in set up
+  GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-not-configured}
+  GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-not-configured}
+  GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-${PUBLIC_URL}/auth/google/callback}
+  CHALLONGE_ENABLED: ${CHALLONGE_ENABLED:-false}
+  CHALLONGE_CLIENT_ID: ${CHALLONGE_CLIENT_ID:-}
+  CHALLONGE_CLIENT_SECRET: ${CHALLONGE_CLIENT_SECRET:-}
+
+x-api-image: &api-image ${IMAGE_PREFIX:-ghcr.io/drmodun/tournament-app}-api:${IMAGE_TAG:-latest}
+
+services:
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      # On the shared edge network another project may also have a service called api or web,
+      # so Caddy reaches this stack's services by aliases that only exist on its own network
+      API_UPSTREAM: ${EDGE_ALIAS:-tournament-app}-api:5500
+      WEB_UPSTREAM: ${EDGE_ALIAS:-tournament-app}-web:3000
+      DOCS_UPSTREAM: ${EDGE_ALIAS:-tournament-app}-docs:4321
+      ADMIN_UPSTREAM: ${EDGE_ALIAS:-tournament-app}-admin:3001
+    ports:
+      - "${PROXY_HTTP_PORT:-127.0.0.1:8080}:80"
+      - "${PROXY_HTTPS_PORT:-127.0.0.1:8443}:443"
+    volumes:
+      - ../docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      default:
+      edge:
+        aliases:
+          - ${EDGE_ALIAS:-tournament-app}
+    depends_on:
+      - web
+      - api
+      - docs
+    <<: *logging
+
+  db:
+    image: postgis/postgis:16-3.4-alpine
+    profiles: ["local-db"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      # The image refuses to start with an empty password, so forgetting it fails loudly
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+      POSTGRES_DB: tournament
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tournament"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    <<: *logging
+
+  s3:
+    image: chrislusf/seaweedfs:latest
+    profiles: ["local-s3"]
+    restart: unless-stopped
+    command:
+      [
+        "server",
+        "-dir=/data",
+        "-s3",
+        "-s3.port=8333",
+        "-s3.config=/etc/seaweedfs/s3.json",
+        "-volume.max=20",
+        "-master.volumeSizeLimitMB=128",
+      ]
+    configs:
+      - source: s3_identities
+        target: /etc/seaweedfs/s3.json
+    volumes:
+      - s3_data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://127.0.0.1:9333/cluster/status >/dev/null && nc -z 127.0.0.1 8333",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    <<: *logging
+
+  # Creates the bucket the API uploads to
+  s3-init:
+    image: chrislusf/seaweedfs:latest
+    profiles: ["local-s3"]
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        echo 's3.bucket.list' | weed shell -master=s3:9333 | grep -qw '${S3_BUCKET:-tournament}'
+        || echo 's3.bucket.create -name ${S3_BUCKET:-tournament}' | weed shell -master=s3:9333
+    depends_on:
+      s3:
+        condition: service_healthy
+    restart: "no"
+
+  migrate:
+    image: *api-image
+    command: ["yarn", "migrate"]
+    environment: *api-env
+    depends_on:
+      db:
+        condition: service_healthy
+        required: false
+    restart: "no"
+
+  # Destructive: the seed script empties every table first, so it only runs on request
+  seed:
+    image: *api-image
+    profiles: ["seed"]
+    command: ["yarn", "seed"]
+    environment: *api-env
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: "no"
+
+  api:
+    image: *api-image
+    restart: unless-stopped
+    environment: *api-env
+    networks:
+      default:
+        aliases:
+          - ${EDGE_ALIAS:-tournament-app}-api
+    mem_limit: ${API_MEMORY_LIMIT:-512m}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      s3-init:
+        condition: service_completed_successfully
+        required: false
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5500/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    <<: *logging
+
+  # The image is built to call the API at /api on whatever address it is served from,
+  # so the same image works on any domain
+  web:
+    image: ${IMAGE_PREFIX:-ghcr.io/drmodun/tournament-app}-web:${IMAGE_TAG:-latest}
+    networks:
+      default:
+        aliases:
+          - ${EDGE_ALIAS:-tournament-app}-web
+    restart: unless-stopped
+    environment:
+      # Server-side fetches go straight to the api container
+      API_INTERNAL_URL: http://api:5500
+    mem_limit: ${WEB_MEMORY_LIMIT:-512m}
+    depends_on:
+      api:
+        condition: service_healthy
+    <<: *logging
+
+  docs:
+    image: ${IMAGE_PREFIX:-ghcr.io/drmodun/tournament-app}-docs:${IMAGE_TAG:-latest}
+    networks:
+      default:
+        aliases:
+          - ${EDGE_ALIAS:-tournament-app}-docs
+    restart: unless-stopped
+    <<: *logging
+
+  admin:
+    image: ${IMAGE_PREFIX:-ghcr.io/drmodun/tournament-app}-admin:${IMAGE_TAG:-latest}
+    networks:
+      default:
+        aliases:
+          - ${EDGE_ALIAS:-tournament-app}-admin
+    profiles: ["admin"]
+    restart: unless-stopped
+    <<: *logging
+
+configs:
+  # SeaweedFS identities, from the same keys the API uses
+  s3_identities:
+    content: |
+      {
+        "identities": [
+          {
+            "name": "tournament",
+            "credentials": [
+              { "accessKey": "${S3_ACCESS_KEY_ID}", "secretKey": "${S3_SECRET_ACCESS_KEY}" }
+            ],
+            "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+          }
+        ]
+      }
+
+networks:
+  # Shared with a reverse proxy in another Compose project. Set EDGE_NETWORK to that proxy's network;
+  # the default name is created here when nothing else uses it.
+  edge:
+    name: ${EDGE_NETWORK:-tournament-edge}
+
+volumes:
+  db_data:
+  s3_data:
+  caddy_data:
+  caddy_config:

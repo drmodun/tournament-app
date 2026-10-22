@@ -21,7 +21,7 @@ This is a monorepo project with the following structure:
 ## Quick start with Docker
 
 ```bash
-docker compose up --build                      # everything, behind a Caddy reverse proxy
+docker compose up                              # builds and starts everything, behind a Caddy reverse proxy
 docker compose --profile seed run --rm seed    # optional: fill the database with sample data
 ```
 
@@ -30,6 +30,7 @@ docker compose --profile seed run --rm seed    # optional: fill the database wit
 | Web app                | http://localhost                                             |
 | API                    | http://localhost/api (Swagger UI at `/api/swagger`)          |
 | Documentation          | http://localhost/docs/                                       |
+| Admin panel            | http://localhost/admin/                                      |
 | Mail inbox (Mailpit)   | http://localhost:8025 — every email the API sends lands here |
 | S3 storage (SeaweedFS) | http://localhost:8333, bucket `tournament`                   |
 | Seeded login           | `admin@example.com` / `Password123!`                         |
@@ -39,27 +40,26 @@ The seed empties every table before filling it, which is why it only runs on req
 ### Reverse proxy
 
 Caddy is the single entry point; its configuration is `docker/caddy/Caddyfile`. It serves the web app at `/`
-and the API under `/api`. Two variables control the address:
+the API under `/api`, the docs under `/docs` and the admin panel under `/admin`. Two variables control the address:
 
 - `SITE_ADDRESS`: what Caddy listens on. The default `:80` is plain HTTP on any hostname. Set it to a domain and
   Caddy obtains and renews the HTTPS certificate itself.
 - `PUBLIC_URL`: the address people open. The web image is built to call the API at `<PUBLIC_URL>/api`, and links in
   emails use it. Defaults to `http://localhost:<PROXY_HTTP_PORT>`.
 
-```bash
-SITE_ADDRESS=example.com PUBLIC_URL=https://example.com docker compose up --build
-```
+This file is the development stack: it builds every image from your checkout. Servers run the production stack in
+`deploy/compose.yml` with pre-built images instead; see
+[Docker stack and deployment](apps/docs/src/content/docs/operations/deployment.md).
 
 ### Ports
 
 If a port is taken, move it: `PROXY_HTTP_PORT` (80), `PROXY_HTTPS_PORT` (443), `DB_PORT` (5433),
-`API_HOST_PORT` (5500), `WEB_PORT` (3000), `DOCS_PORT` (4321), `MAIL_UI_PORT` (8025), `MAIL_SMTP_PORT` (1025), `S3_PORT` (8333).
+`API_HOST_PORT` (5500), `WEB_PORT` (3000), `DOCS_PORT` (4321), `ADMIN_PORT` (3001), `MAIL_UI_PORT` (8025),
+`MAIL_SMTP_PORT` (1025), `S3_PORT` (8333).
 
 ```bash
-PROXY_HTTP_PORT=8080 PROXY_HTTPS_PORT=8443 docker compose up --build   # then open http://localhost:8080
+PROXY_HTTP_PORT=8080 PROXY_HTTPS_PORT=8443 docker compose up   # then open http://localhost:8080
 ```
-
-The dormant admin app is behind a profile: `docker compose --profile tools up --build`.
 
 ## Environment variables
 

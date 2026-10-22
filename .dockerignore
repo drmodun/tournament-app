@@ -13,3 +13,5 @@
 **/storybook-static
 # Real credentials never go into an image; the tracked .env files hold mocks only
 **/.env*.local
+# Server-side deployment settings, never part of an image
+deploy

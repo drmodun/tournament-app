@@ -6,11 +6,12 @@ description: Start the full stack with one command and find each service.
 The fastest way to see the app is the Compose stack in the repository root. It needs only Docker.
 
 ```bash
-docker compose up --build                      # everything, behind a Caddy reverse proxy
+docker compose up                              # builds and starts everything, behind a Caddy reverse proxy
 docker compose --profile seed run --rm seed    # optional: fill the database with sample data
 ```
 
-The first build takes a few minutes because it builds the API, web and docs images.
+The first build takes a few minutes because it builds the API, web, docs and admin images. Later runs rebuild only
+what changed.
 
 ## Where everything is
 
@@ -19,6 +20,7 @@ The first build takes a few minutes because it builds the API, web and docs imag
 | Web app                | http://localhost                                                              |
 | API                    | http://localhost/api (Swagger UI at `/api/swagger`)                           |
 | These docs             | http://localhost/docs/ (also http://localhost:4321/docs/)                     |
+| Admin panel            | http://localhost/admin/ (also http://localhost:3001/admin/)                   |
 | Mail inbox (Mailpit)   | http://localhost:8025: every email the API sends lands here                   |
 | S3 storage (SeaweedFS) | http://localhost:8333, bucket `tournament`                                    |
 | Database (PostGIS)     | `localhost:5433`, user `postgres`, password `postgres`, database `tournament` |
@@ -41,7 +43,7 @@ before that, login returns `403` ("Confirm your email address before logging in"
 Every host port has a variable. For example, to move the proxy:
 
 ```bash
-PROXY_HTTP_PORT=8080 PROXY_HTTPS_PORT=8443 docker compose up --build   # then open http://localhost:8080
+PROXY_HTTP_PORT=8080 PROXY_HTTPS_PORT=8443 docker compose up   # then open http://localhost:8080
 ```
 
 The full list is in [Docker stack and deployment](/docs/operations/deployment/#ports).

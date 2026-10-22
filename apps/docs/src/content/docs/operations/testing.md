@@ -93,11 +93,12 @@ Actions are pinned by commit SHA and checkouts use `persist-credentials: false`.
 A quick end-to-end check of the containers:
 
 ```bash
-docker compose up --build -d
+docker compose up -d
 docker compose ps                         # api healthy, migrate and s3-init exited 0
 curl -fsS http://localhost/api/           # Hello World!
 curl -fsSI http://localhost/ | head -1     # web app
 curl -fsSI http://localhost/docs/ | head -1  # docs
+curl -fsSI http://localhost/admin/ | head -1 # admin panel
 docker compose --profile seed run --rm seed
 MAILPIT_URL=http://localhost:8025 scripts/smoke-api.sh http://localhost/api
 ```

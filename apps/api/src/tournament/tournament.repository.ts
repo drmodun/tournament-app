@@ -5,6 +5,7 @@ import {
   groupToUser,
   location,
   participation,
+  subcategory,
   tournament,
   user,
 } from '../db/schema';
@@ -61,6 +62,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           .leftJoin(user, eq(tournament.creatorId, user.id))
           .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
           .leftJoin(category, eq(tournament.categoryId, category.id))
+          .leftJoin(subcategory, eq(tournament.subcategoryId, subcategory.id))
           .leftJoin(location, eq(tournament.locationId, location.id));
 
       case TournamentResponsesEnum.EXTENDED:
@@ -69,6 +71,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           .leftJoin(user, eq(tournament.creatorId, user.id))
           .leftJoin(group, eq(tournament.affiliatedGroupId, group.id))
           .leftJoin(category, eq(tournament.categoryId, category.id))
+          .leftJoin(subcategory, eq(tournament.subcategoryId, subcategory.id))
           .leftJoin(location, eq(tournament.locationId, location.id))
           .leftJoin(parent, eq(tournament.id, parent.id));
       default:
@@ -108,7 +111,9 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
             value as boolean,
           );
         case 'categoryId':
-          return eq(tournament, value as number);
+          return eq(tournament.categoryId, value as number);
+        case 'subcategoryId':
+          return eq(tournament.subcategoryId, value as number);
         case 'locationId':
           return eq(tournament.locationId, value as number);
         case 'affiliatedGroupId':
@@ -195,6 +200,10 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
             name: category.name,
             logo: category.image,
           },
+          subcategory: {
+            id: subcategory.id,
+            name: subcategory.name,
+          },
           actualLocation: {
             id: location.id,
             name: location.name,
@@ -230,6 +239,7 @@ export class TournamentDrizzleRepository extends PrimaryRepository<
           id: tournament.id,
           name: tournament.name,
           categoryId: tournament.categoryId,
+          subcategoryId: tournament.subcategoryId,
           affiliatedGroupId: tournament.affiliatedGroupId,
           creatorId: tournament.creatorId,
           parentTournamentId: tournament.parentTournamentId,

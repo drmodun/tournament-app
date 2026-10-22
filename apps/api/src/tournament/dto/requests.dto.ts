@@ -159,6 +159,15 @@ export class CreateTournamentRequest implements ICreateTournamentRequest {
   categoryId: number;
 
   @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value))
+  @ApiPropertyOptional({
+    description: 'ID of a subcategory of the tournament category',
+    example: 12,
+  })
+  subcategoryId?: number;
+
+  @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(10000)
@@ -316,6 +325,16 @@ export class UpdateTournamentRequest implements IUpdateTournamentRequest {
   @Transform(({ value }) => parseInt(value))
   @ApiPropertyOptional()
   categoryId?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => (value === null ? null : parseInt(value)))
+  @ApiPropertyOptional({
+    description:
+      'ID of a subcategory of the tournament category, or null to clear it',
+    nullable: true,
+  })
+  subcategoryId?: number | null;
 
   @IsOptional()
   @IsNumber()
@@ -477,6 +496,15 @@ export class TournamentQuery
   @IsInt()
   @Transform(({ value }) => parseInt(value))
   categoryId?: number;
+
+  @ApiPropertyOptional({
+    description: 'Subcategory ID of the tournament',
+    example: 12,
+  })
+  @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value))
+  subcategoryId?: number;
 
   @ApiPropertyOptional({
     description: 'Affiliated group ID of the tournament',

@@ -44,6 +44,22 @@ Read state is per recipient: marking a notification read or removing it only aff
 notifications you did not receive return `404`. A notification is deleted for good once every recipient has removed
 it.
 
+### Settings
+
+`GET /notifications/settings` returns your `emailNotifications`, `pushNotifications` and `inAppNotifications`, all
+`true` until changed; `PATCH /notifications/settings` changes the ones sent. With `inAppNotifications` off, new
+notifications are neither stored for you nor sent to your stream; everyone else still receives them. The email and
+push flags are stored for when those channels carry notifications: email is only used for account flows, and no push
+notifications are sent yet.
+
+### Push tokens
+
+Devices register their push token (for example an FCM token) with `POST /notifications/push-tokens` `{ token }`.
+A token is stored once: registering it again returns the same row, and registering it from another account moves it
+there, since the device now belongs to whoever signed in last. `GET /notifications/push-tokens` lists yours and
+`DELETE /notifications/push-tokens/:tokenId` removes one (`404` for a token that is not yours). The tokens are kept in
+`user_to_notification_tokens`; nothing sends to them yet.
+
 ### Live stream
 
 ```text

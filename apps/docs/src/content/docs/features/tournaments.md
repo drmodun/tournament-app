@@ -26,6 +26,7 @@ players, and enter scores. `GET /tournaments/managed` lists the tournaments the 
 | -------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
 | `name`, `description`, `logo`, `links` |                      | Display                                                                                    |
 | `categoryId`                           | required             | The game or discipline; also selects which ELO rating is checked                           |
+| `subcategoryId`                        |                      | A [subcategory](#subcategories) of that category; `null` on update clears it               |
 | `startDate`, `endDate`                 | `startDate` required | Entry closes at `startDate`. Participations cannot be cancelled by players after `endDate` |
 | `tournamentType`                       | `league`             | `league`, `competition`, `seasonal`, `contest`, `event` (descriptive)                      |
 | `tournamentTeamType`                   | `team`               | `solo`: only individual entries. `team`: only group entries. `mixed`: both                 |
@@ -42,9 +43,20 @@ players, and enter scores. `GET /tournaments/managed` lists the tournaments the 
 
 ### Reading tournaments
 
-`GET /tournaments` supports the base query parameters and tournament-specific filters (category, type, team type,
-location, dates, creator, affiliated group, ...). `GET /tournaments/:id` takes `responseType`; the `extended`
+`GET /tournaments` supports the base query parameters and tournament-specific filters (category, subcategory, type,
+team type, location, dates, creator, affiliated group, ...). The `base` and `extended` projections include
+`subcategory` (`{ id, name }`, or `null`). `GET /tournaments/:id` takes `responseType`; the `extended`
 projection includes `currentParticipants`. `GET /tournaments/auto-complete/:search` searches by name.
+
+### Subcategories
+
+A subcategory narrows a category, for example a time control within chess. Site admins manage them at
+`/subcategories` (`name`, optional `description` and `image`, `categoryId`); anyone can list them, filtered by
+`categoryId`, `name` or `search`. Responses carry `tournamentCount`; `responseType=extended` adds the category.
+
+A tournament's subcategory must belong to its category (`400` otherwise). Moving a tournament to another category
+without sending a subcategory drops one that does not belong there. A subcategory that tournaments use cannot move to
+another category (`409`); deleting it leaves its tournaments in their category without a subcategory.
 
 ## Stages
 

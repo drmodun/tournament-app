@@ -58,12 +58,12 @@ The group role guards look for the group id in this order: route parameter `grou
 | Uploading an image          | Any signed-in user                                                                 |
 | An LFG post                 | Its author                                                                         |
 | An LFP post                 | The group's `admin`s and `owner`                                                   |
-| Categories                  | Site admins                                                                        |
+| Categories, subcategories   | Site admins                                                                        |
 | Locations                   | Any signed-in user creates them; site admins change and delete them                |
 | Users                       | Themselves; site admins for anyone                                                 |
 
 ## Own data only
 
 Endpoints that act on "your" things are scoped to the caller even when they take an id: notifications can only be
-read or deleted by a recipient (`404` otherwise), LFG posts only by their author, and an LFP post only through its
+read or deleted by a recipient (`404` otherwise), notification settings and push tokens are always the caller's own, LFG posts only by their author, and an LFP post only through its
 own group.

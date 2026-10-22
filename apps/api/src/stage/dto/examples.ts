@@ -87,6 +87,7 @@ const fullTournamentExample: TournamentResponse = {
     name: 'Chess',
     logo: 'https://example.com/chess-category-logo.jpg',
   },
+  subcategory: { id: 1, name: 'Rapid' },
   links: 'https://chess.com/tournament/123',
 };
 

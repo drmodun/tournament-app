@@ -1,4 +1,5 @@
 import type { ICategoryMiniResponseWithLogo } from "src/category";
+import type { ISubcategoryMiniResponse } from "src/subcategory";
 import type {
   tournamentTypeEnum,
   tournamentLocationEnum,
@@ -33,6 +34,7 @@ export interface ITournamentResponse extends IMiniTournamentResponseWithLogo {
   currentParticipants: number;
   isPublic: boolean;
   category: ICategoryMiniResponseWithLogo;
+  subcategory: ISubcategoryMiniResponse | null;
   links: string;
 }
 
@@ -89,6 +91,7 @@ export interface TournamentQueryType {
   maximumMMR?: number;
   isMultipleTeamsPerGroupAllowed?: boolean;
   categoryId?: number;
+  subcategoryId?: number;
   affiliatedGroupId?: number;
   creatorId?: number;
   minParticipants?: number;

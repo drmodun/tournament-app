@@ -7,6 +7,7 @@ export interface ITournamentWithRelations {
   id: number;
   name: string;
   categoryId: number;
+  subcategoryId: number | null;
   affiliatedGroupId: number;
   creatorId: number;
   parentTournamentId: number;

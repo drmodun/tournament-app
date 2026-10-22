@@ -10,3 +10,16 @@ export interface INotificationResponseDto {
   createdAt: Date;
   read: boolean;
 }
+
+export interface INotificationSettingsResponse {
+  userId: number;
+  emailNotifications: boolean;
+  pushNotifications: boolean;
+  inAppNotifications: boolean;
+}
+
+export interface INotificationTokenResponse {
+  id: number;
+  token: string;
+  createdAt: Date;
+}

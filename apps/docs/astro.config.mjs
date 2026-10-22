@@ -3,7 +3,7 @@ import starlight from '@astrojs/starlight';
 
 // Served under /docs, both behind the Caddy proxy and from the docs container itself
 export default defineConfig({
-	base: '/docs',
+	base: process.env.DOCS_BASE ??'/docs',
 	trailingSlash: 'always',
 	integrations: [
 		starlight({

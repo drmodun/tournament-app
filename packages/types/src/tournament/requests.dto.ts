@@ -21,6 +21,7 @@ export interface ICreateTournamentRequest {
   isPublic: boolean;
   isRanked: boolean;
   categoryId: number;
+  subcategoryId?: number;
   maximumMMR?: number;
   minimumMMR?: number;
   creatorId: number;
@@ -45,6 +46,7 @@ export interface IUpdateTournamentRequest {
   isPublic?: boolean;
   isRanked?: boolean;
   categoryId?: number;
+  subcategoryId?: number | null;
   maximumMMR?: number;
   minimumMMR?: number;
   creatorId?: number;

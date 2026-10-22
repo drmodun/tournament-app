@@ -68,6 +68,7 @@ export const tournamentExample: TournamentResponse = {
   currentParticipants: 32,
   isPublic: true,
   category: categoryExample,
+  subcategory: { id: 1, name: 'Rapid' },
   links: 'https://chess.com/tournament/123',
   actualLocation: {
     id: 1,

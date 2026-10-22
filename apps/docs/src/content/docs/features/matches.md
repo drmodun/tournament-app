@@ -268,6 +268,18 @@ final. Its rules then apply the same way, and its results are frozen like those 
 | `GET /matches/roster/:rosterId/results`   | Matchups of a roster                                            |
 | `GET /matches/group/:groupId/results`     | Matchups of a group's rosters                                   |
 | `GET /matches/managed`                    | Matchups the caller can score                                   |
+| `GET /roster-rounds`                      | How each roster did per round (see below)                       |
+
+### Round results
+
+`GET /roster-rounds` returns one row per roster and round it played: `rosterId`, `stageId`, `roundId`,
+`roundNumber`, `score` (the points it scored in that round's matchups) and `isWinner` (it won every matchup it played
+in the round; a bye counts as a win, a draw does not). It needs `stageId` or `rosterId`, can also filter by
+`roundNumber` and `isWinner`, and is sorted by round.
+
+The rows live in `roster_round` and are rebuilt from the stage's finished matchups in the same transaction that
+records, corrects or deletes a result, draws a round, or imports matchups from Challonge, so they always agree with
+the matchups. Nothing writes them directly.
 
 ## Brackets in the web app
 

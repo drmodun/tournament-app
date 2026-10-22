@@ -13,6 +13,7 @@ import {
 import { notificationTypeEnum } from '@tournament-app/types';
 import { of } from 'rxjs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { NotificationSettingsService } from 'src/notification-settings/notification-settings.service';
 
 // Mock the fromEvent function
 jest.mock('rxjs', () => {
@@ -46,10 +47,17 @@ describe('SseNotificationsService', () => {
   const mockNotificationId = 1;
 
   const notificationBus = { publish: jest.fn() };
+  // Everybody keeps in-app notifications on unless a test says otherwise
+  const notificationSettingsService = {
+    filterInAppRecipients: jest.fn(),
+  };
   const jwtService = new JwtService({});
 
   beforeEach(async () => {
     notificationBus.publish.mockReset();
+    notificationSettingsService.filterInAppRecipients
+      .mockReset()
+      .mockImplementation(async (userIds: number[]) => userIds);
     const module: TestingModule = await Test.createTestingModule({
       imports: [EventEmitterModule.forRoot()],
       providers: [
@@ -73,6 +81,10 @@ describe('SseNotificationsService', () => {
         {
           provide: JwtService,
           useValue: jwtService,
+        },
+        {
+          provide: NotificationSettingsService,
+          useValue: notificationSettingsService,
         },
       ],
     }).compile();
@@ -206,6 +218,36 @@ describe('SseNotificationsService', () => {
         service.createWithUsers(mockNotification, mockUserIds),
       ).rejects.toThrow(mockError);
 
+      expect(service.publishManyNotifications).not.toHaveBeenCalled();
+    });
+
+    it('leaves out users who turned in-app notifications off', async () => {
+      notificationSettingsService.filterInAppRecipients.mockResolvedValue([
+        1, 3,
+      ]);
+      jest.spyOn(repository, 'createWithUsers').mockResolvedValue(undefined);
+      jest.spyOn(service, 'publishManyNotifications').mockResolvedValue([]);
+
+      await service.createWithUsers(mockNotification, mockUserIds);
+
+      expect(repository.createWithUsers).toHaveBeenCalledWith(
+        mockNotification,
+        [1, 3],
+      );
+      expect(service.publishManyNotifications).toHaveBeenCalledWith(
+        [1, 3],
+        mockNotification,
+      );
+    });
+
+    it('stores and sends nothing when every user opted out', async () => {
+      notificationSettingsService.filterInAppRecipients.mockResolvedValue([]);
+      jest.spyOn(repository, 'createWithUsers');
+      jest.spyOn(service, 'publishManyNotifications');
+
+      await service.createWithUsers(mockNotification, mockUserIds);
+
+      expect(repository.createWithUsers).not.toHaveBeenCalled();
       expect(service.publishManyNotifications).not.toHaveBeenCalled();
     });
   });

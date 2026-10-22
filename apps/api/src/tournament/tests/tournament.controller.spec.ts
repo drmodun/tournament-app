@@ -35,6 +35,7 @@ describe('TournamentController', () => {
       name: 'Test Category',
       logo: 'https://chess.com/logo.png',
     },
+    subcategory: null,
     links: 'https://chess.com/tournament/123',
     teamType: tournamentTeamTypeEnum.MIXED,
     creator: {

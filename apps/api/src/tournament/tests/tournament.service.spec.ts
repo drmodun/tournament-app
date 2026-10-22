@@ -6,6 +6,8 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreateTournamentRequest } from '../dto/requests.dto';
+import { SubcategoryService } from 'src/subcategory/subcategory.service';
+import { BadRequestException } from '@nestjs/common';
 import {
   tournamentLocationEnum,
   TournamentResponsesEnum,
@@ -16,6 +18,7 @@ import {
 describe('TournamentService', () => {
   let service: TournamentService;
   let repository: jest.Mocked<TournamentDrizzleRepository>;
+  const subcategoryService = { checkBelongsToCategory: jest.fn() };
 
   const mockTournament = {
     id: 1,
@@ -30,6 +33,7 @@ describe('TournamentService', () => {
   };
 
   beforeEach(async () => {
+    subcategoryService.checkBelongsToCategory.mockReset();
     const mockRepository = {
       createEntity: jest.fn(),
       getQuery: jest.fn(),
@@ -44,6 +48,10 @@ describe('TournamentService', () => {
         {
           provide: TournamentDrizzleRepository,
           useValue: mockRepository,
+        },
+        {
+          provide: SubcategoryService,
+          useValue: subcategoryService,
         },
       ],
     }).compile();
@@ -160,6 +168,80 @@ describe('TournamentService', () => {
       await expect(service.update(1, updateDto)).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('subcategories', () => {
+    const current = {
+      id: 1,
+      name: 'Test Tournament',
+      categoryId: 1,
+      subcategoryId: 5,
+    };
+
+    it('checks the subcategory of a new tournament against its category', async () => {
+      subcategoryService.checkBelongsToCategory.mockRejectedValue(
+        new BadRequestException(),
+      );
+
+      await expect(
+        service.create({
+          categoryId: 1,
+          subcategoryId: 7,
+        } as CreateTournamentRequest),
+      ).rejects.toThrow(BadRequestException);
+      expect(repository.createEntity).not.toHaveBeenCalled();
+    });
+
+    it('checks a new subcategory against the category being set', async () => {
+      repository.getSingleQuery.mockResolvedValue([current] as never);
+      repository.updateEntity.mockResolvedValue([{ id: 1 }]);
+
+      await service.update(1, { categoryId: 2, subcategoryId: 9 });
+
+      expect(subcategoryService.checkBelongsToCategory).toHaveBeenCalledWith(
+        9,
+        2,
+      );
+      expect(repository.updateEntity).toHaveBeenCalledWith(1, {
+        categoryId: 2,
+        subcategoryId: 9,
+      });
+    });
+
+    it('checks a new subcategory against the current category', async () => {
+      repository.getSingleQuery.mockResolvedValue([current] as never);
+      repository.updateEntity.mockResolvedValue([{ id: 1 }]);
+
+      await service.update(1, { subcategoryId: 9 });
+
+      expect(subcategoryService.checkBelongsToCategory).toHaveBeenCalledWith(
+        9,
+        1,
+      );
+    });
+
+    it('drops the subcategory when the tournament moves to another category', async () => {
+      repository.getSingleQuery.mockResolvedValue([current] as never);
+      repository.updateEntity.mockResolvedValue([{ id: 1 }]);
+
+      await service.update(1, { categoryId: 2 });
+
+      expect(repository.updateEntity).toHaveBeenCalledWith(1, {
+        categoryId: 2,
+        subcategoryId: null,
+      });
+    });
+
+    it('clears the subcategory when sent null', async () => {
+      repository.updateEntity.mockResolvedValue([{ id: 1 }]);
+
+      await service.update(1, { subcategoryId: null });
+
+      expect(repository.updateEntity).toHaveBeenCalledWith(1, {
+        subcategoryId: null,
+      });
+      expect(subcategoryService.checkBelongsToCategory).not.toHaveBeenCalled();
     });
   });
 

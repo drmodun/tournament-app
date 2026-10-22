@@ -358,6 +358,20 @@
       "when": 1792619621640,
       "tag": "0050_conversion_lcq_and_effects",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1792629130525,
+      "tag": "0051_subcategories_and_notification_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1792631231513,
+      "tag": "0052_result_lookup_indexes",
+      "breakpoints": true
     }
   ]
 }

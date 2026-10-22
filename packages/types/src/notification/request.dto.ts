@@ -5,3 +5,13 @@ export interface INotificationQueryDto {
   userId?: number;
   type?: notificationTypeEnumType;
 }
+
+export interface IUpdateNotificationSettingsRequest {
+  emailNotifications?: boolean;
+  pushNotifications?: boolean;
+  inAppNotifications?: boolean;
+}
+
+export interface IRegisterNotificationTokenRequest {
+  token: string;
+}

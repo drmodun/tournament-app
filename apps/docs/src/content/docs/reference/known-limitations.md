@@ -18,8 +18,8 @@ listed first, each with the place to look.
 
 ### Not built yet
 
-`apps/admin` is a placeholder. `subcategory`, `roster_round`, `user_notification_settings` and
-`user_to_notification_tokens` have no API on top of them.
+`apps/admin` is a placeholder. Push tokens and the email and push notification settings are stored, but nothing
+sends push notifications, and notifications are not sent by email.
 
 ## Fixed
 
@@ -100,3 +100,8 @@ listed first, each with the place to look.
 | Corrected Challonge results were sent for matches Challonge had already completed       | The match is reopened there first                                         |
 | Challonge results could change after the next round was brought in from them            | Frozen then, like the API's own brackets                                  |
 | An image picked in a form was dropped unless its scale or rotation was changed          | The form holds the picture from when it loads                             |
+| `subcategory` had no API                                                                | `/subcategories`, and tournaments can name one (`subcategoryId`)          |
+| `GET /tournaments?categoryId=` failed instead of filtering                              | Filters by category                                                       |
+| `roster_round` was never written                                                        | Derived from results, read with `GET /roster-rounds`                      |
+| `user_notification_settings` had no API                                                 | `/notifications/settings`; turning in-app off stops in-app notifications  |
+| `user_to_notification_tokens` had no API                                                | `/notifications/push-tokens`, one row per device token                    |

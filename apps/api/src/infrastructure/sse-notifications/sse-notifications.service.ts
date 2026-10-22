@@ -13,6 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { signSseToken, verifySseToken } from './sse-token';
 import { Observable, fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { NotificationSettingsService } from 'src/notification-settings/notification-settings.service';
 
 @Injectable()
 export class SseNotificationsService {
@@ -21,19 +22,31 @@ export class SseNotificationsService {
     private readonly eventEmitter: EventEmitter2,
     private readonly notificationBus: NotificationBus,
     private readonly jwtService: JwtService,
+    private readonly notificationSettingsService: NotificationSettingsService,
   ) {}
 
   async findAllForUser(query: NotificationQueryDto) {
     return await this.sseNotificationRepository.getReadTimeSorted(query);
   }
 
+  // Users who turned in-app notifications off neither get the notification stored nor streamed
   async createWithUsers(
     notification: NotificationCreateDto,
     users: number[],
   ): Promise<void> {
-    await this.sseNotificationRepository.createWithUsers(notification, users);
+    const recipients =
+      await this.notificationSettingsService.filterInAppRecipients(users);
 
-    await this.publishManyNotifications(users, notification);
+    if (!recipients.length) {
+      return;
+    }
+
+    await this.sseNotificationRepository.createWithUsers(
+      notification,
+      recipients,
+    );
+
+    await this.publishManyNotifications(recipients, notification);
   }
 
   // A fresh short-lived token for the notification stream
@@ -113,7 +126,17 @@ export class SseNotificationsService {
     notification: NotificationCreateDto,
     userIds: number[],
   ) {
-    await this.sseNotificationRepository.createWithUsers(notification, userIds);
+    const recipients =
+      await this.notificationSettingsService.filterInAppRecipients(userIds);
+
+    if (!recipients.length) {
+      return;
+    }
+
+    await this.sseNotificationRepository.createWithUsers(
+      notification,
+      recipients,
+    );
   }
 
   async getNotificationStream(

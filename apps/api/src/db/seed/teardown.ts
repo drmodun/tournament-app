@@ -22,6 +22,7 @@ export async function teardown() {
       tables.score,
       tables.rosterToMatchup,
       tables.matchup,
+      tables.rosterToRound,
       tables.stageRound,
       tables.categoryToLFP,
       tables.categoryToLFG,
@@ -52,12 +53,15 @@ export async function teardown() {
 
       // Main entity tables with foreign keys
       tables.tournament,
+      tables.subcategory,
       tables.groupRequirements,
       tables.group,
       tables.category,
       tables.location,
 
       // Base tables
+      tables.userNotificationSettings,
+      tables.userToNotificationTokens,
       tables.user,
     ];
 

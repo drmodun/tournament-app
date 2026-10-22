@@ -53,7 +53,8 @@ the LFG post that prompted them, and join requests the LFP post.
 
 ### Tournaments and stages
 
-`tournament` references a `category` (required), its `creator` (required), an optional `affiliated_group`, an
+`tournament` references a `category` (required), optionally a `subcategory` of it (set to null when the subcategory
+is deleted), its `creator` (required), an optional `affiliated_group`, an
 optional `location`, and optionally a `parent_tournament` (for leagues and seasons). Settings include `isPublic`,
 `isRanked`, `isFakePlayersAllowed`, `isMultipleTeamsPerGroupAllowed`, `maxParticipants` (default 32),
 `minimumMMR` / `maximumMMR` (defaults 0 and 999999), `tournamentTeamType` (`solo`, `team`, `mixed`) and
@@ -69,7 +70,9 @@ optional `location`, and optionally a `parent_tournament` (for leagues and seaso
 line-up in one stage; `user_roster` lists its players with `isSubstitute`. A `matchup` belongs to a stage and a round
 and has `isFinished`, plus a `bracket` (winners, losers, grand final, or a compass direction) in stages with several brackets that the API
 runs. `roster_matchup` connects rosters to matchups with `isWinner`. Each played round of a matchup is
-a `score` row with per-roster points in `score_to_roster`. Challonge ids are stored on stage, roster, round and
+a `score` row with per-roster points in `score_to_roster`. `roster_round` sums a roster's results per
+`stage_round` (score, and whether it won the round); it is derived from the matchups, see
+[Round results](/docs/features/matches/#round-results). Challonge ids are stored on stage, roster, round and
 matchup to keep the mirror in sync.
 
 ### Ratings
@@ -89,7 +92,9 @@ shown (`questionStartedAt`), for quizzes shown one question at a time.
 ### Notifications
 
 `notification` stores type, message, link and image; `notification_to_user` fans it out per recipient with a read
-flag.
+flag. `user_notification_settings` (keyed by user, created with every channel on when first read) holds the
+`emailNotifications`, `pushNotifications` and `inAppNotifications` flags, and `user_to_notification_tokens` the
+device push tokens, each token unique.
 
 ### Point conversion
 
@@ -100,9 +105,7 @@ seed it set; `participation.points` holds tournament points. See
 
 ## Tables without features yet
 
-These tables exist in the schema but no module reads or writes them: `group_follower` (read by the group followers
-endpoint, but nothing writes it), `subcategory`, `roster_round`, `user_notification_settings` and
-`user_to_notification_tokens`.
+`group_follower` is read by the group followers endpoint, but nothing writes it.
 
 Migration `0045` dropped the tables of features that were never built: subscriptions, achievements, chat rooms and
 direct messages, bets, sponsors, promotions, reports, tournament and result posts with their images, likes,
@@ -111,7 +114,9 @@ reviews, and the competitive programming tables (problems, test clusters, testca
 ## Indexes
 
 B-tree indexes on `user.username`, `tournament.name`, `group.name`, `category.name` and `tags.name` back the
-autocomplete and search endpoints. `location.coordinates` has a GiST index for `ST_DWithin` distance queries.
+autocomplete and search endpoints. `location.coordinates` has a GiST index for `ST_DWithin` distance queries. Matchup results are looked up through indexes on
+`matchup.stage_id`, `roster_matchup.matchup_id`, `score.matchup_id`, `score_to_roster.score_id` and
+`stage_round (stage_id, round_number)`.
 
 ## Migrations
 

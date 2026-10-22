@@ -10,6 +10,7 @@ import {
   ILocationResponse,
 } from '@tournament-app/types';
 import { CategoryMiniResponseWithLogo } from 'src/category/dto/responses.dto';
+import { SubcategoryMiniResponse } from 'src/subcategory/dto/responses.dto';
 import { LocationResponse } from 'src/location/dto/responses';
 import { MiniGroupResponse } from 'src/group/dto/responses.dto';
 import { MiniUserResponse } from 'src/users/dto/responses.dto';
@@ -150,6 +151,14 @@ export class TournamentResponse
     readOnly: true,
   })
   category: CategoryMiniResponseWithLogo;
+
+  @ApiProperty({
+    description: 'Subcategory of the tournament category, if any',
+    type: () => SubcategoryMiniResponse,
+    nullable: true,
+    readOnly: true,
+  })
+  subcategory: SubcategoryMiniResponse | null;
 
   @ApiProperty({
     description: 'External links related to the tournament',

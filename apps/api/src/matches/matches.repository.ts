@@ -47,6 +47,7 @@ import { QueryMatchupRequestDto } from './dto/requests';
 import { participation } from '../db/schema';
 import { PaginationOnly } from 'src/base/query/baseQuery';
 import { LocalMatchup, Pairing } from './bracketFormats';
+import { syncRosterRounds } from '../roster-round/syncRosterRounds';
 
 @Injectable()
 export class MatchesDrizzleRepository extends PrimaryRepository<
@@ -174,13 +175,14 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
         ),
       );
 
-      await tx
+      const [finished] = await tx
         .update(matchup)
         .set({
           isFinished: true,
           endDate: new Date(),
         } as Partial<InferInsertModel<typeof matchup>>)
-        .where(eq(matchup.id, matchupId));
+        .where(eq(matchup.id, matchupId))
+        .returning({ stageId: matchup.stageId });
 
       const winningRosterIds = createMatchResult.results
         .filter((r) => r.isWinner)
@@ -193,6 +195,8 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
               WHERE matchup_id = ${matchupId} AND roster_id = ${rosterId}`,
         );
       }
+
+      await syncRosterRounds(tx, finished.stageId);
 
       return scores;
     });
@@ -246,6 +250,8 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
             SET is_winner = false 
             WHERE matchup_id = ${matchupId}`,
       );
+
+      await syncRosterRounds(tx, currentMatchup[0].stageId);
 
       return { success: true };
     });
@@ -326,6 +332,8 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
               WHERE matchup_id = ${matchupId} AND roster_id = ${rosterId}`,
         );
       }
+
+      await syncRosterRounds(tx, currentMatchup[0].stageId);
 
       return scores;
     });
@@ -633,6 +641,8 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
             }
           }
         }
+
+        await syncRosterRounds(tx, stageId);
 
         return insertedMatchups;
       } catch (error) {
@@ -963,6 +973,11 @@ export class MatchesDrizzleRepository extends PrimaryRepository<
           })),
         ),
       );
+
+      // Byes are finished as soon as they are drawn
+      if (pairings.some(({ rosterIds }) => rosterIds.length < 2)) {
+        await syncRosterRounds(tx, stageId);
+      }
 
       return created;
     });

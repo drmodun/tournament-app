@@ -136,6 +136,16 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 | PATCH  | `/categories/:categoryId`           | Site admin | Update      |
 | DELETE | `/categories/:categoryId`           | Site admin | Delete      |
 
+## Subcategories: `/subcategories`
+
+| Method | Path                            | Auth       | Purpose                                        |
+| ------ | ------------------------------- | ---------- | ---------------------------------------------- |
+| GET    | `/subcategories`                | –          | List; filter by `categoryId`, `name`, `search` |
+| GET    | `/subcategories/:subcategoryId` | –          | One                                            |
+| POST   | `/subcategories`                | Site admin | Create                                         |
+| PATCH  | `/subcategories/:subcategoryId` | Site admin | Update (`409` moving one tournaments use)      |
+| DELETE | `/subcategories/:subcategoryId` | Site admin | Delete; its tournaments keep their category    |
+
 ## Locations: `/locations`
 
 | Method | Path                     | Auth       | Purpose                                                      |
@@ -200,18 +210,19 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 
 ## Matches: `/matches`
 
-| Method | Path                                  | Auth           | Purpose                                               |
-| ------ | ------------------------------------- | -------------- | ----------------------------------------------------- |
-| GET    | `/matches/results`                    | –              | Matchups with results, filterable                     |
-| GET    | `/matches/matchup/:matchupId/results` | –              | One matchup with scores                               |
-| GET    | `/matches/stage/:stageId/standings`   | –              | Standings of a stage run by the API                   |
-| GET    | `/matches/user/:userId/results`       | –              | A user's matchups                                     |
-| GET    | `/matches/roster/:rosterId/results`   | –              | A roster's matchups                                   |
-| GET    | `/matches/group/:groupId/results`     | –              | A group's matchups                                    |
-| GET    | `/matches/managed`                    | JWT            | Matchups you can score                                |
-| POST   | `/matches/:matchupId/score`           | matchup editor | Record result (updates ratings in ranked tournaments) |
-| PUT    | `/matches/:matchupId/update-score`    | matchup editor | Replace result                                        |
-| DELETE | `/matches/:matchupId/delete-score`    | matchup editor | Remove result                                         |
+| Method | Path                                  | Auth           | Purpose                                                     |
+| ------ | ------------------------------------- | -------------- | ----------------------------------------------------------- |
+| GET    | `/matches/results`                    | –              | Matchups with results, filterable                           |
+| GET    | `/matches/matchup/:matchupId/results` | –              | One matchup with scores                                     |
+| GET    | `/matches/stage/:stageId/standings`   | –              | Standings of a stage run by the API                         |
+| GET    | `/matches/user/:userId/results`       | –              | A user's matchups                                           |
+| GET    | `/matches/roster/:rosterId/results`   | –              | A roster's matchups                                         |
+| GET    | `/matches/group/:groupId/results`     | –              | A group's matchups                                          |
+| GET    | `/matches/managed`                    | JWT            | Matchups you can score                                      |
+| POST   | `/matches/:matchupId/score`           | matchup editor | Record result (updates ratings in ranked tournaments)       |
+| PUT    | `/matches/:matchupId/update-score`    | matchup editor | Replace result                                              |
+| DELETE | `/matches/:matchupId/delete-score`    | matchup editor | Remove result                                               |
+| GET    | `/roster-rounds`                      | –              | Per-round results of rosters; needs `stageId` or `rosterId` |
 
 ## Quizzes: `/quiz` and `/quiz-attempt`
 
@@ -269,15 +280,20 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 
 ## Notifications: `/notifications`
 
-| Method | Path                           | Auth            | Purpose                      |
-| ------ | ------------------------------ | --------------- | ---------------------------- |
-| GET    | `/notifications`               | JWT             | Your notifications           |
-| GET    | `/notifications/stream?token=` | stream token    | Live event stream            |
-| POST   | `/notifications/token`         | JWT             | New 5-minute stream token    |
-| PATCH  | `/notifications/:id/read`      | JWT (recipient) | Mark as read for you         |
-| PATCH  | `/notifications/read/all`      | JWT             | Mark all as read             |
-| PATCH  | `/notifications/read/bulk`     | JWT (recipient) | Mark several as read for you |
-| DELETE | `/notifications/:id`           | JWT (recipient) | Remove it for you            |
+| Method | Path                                  | Auth            | Purpose                      |
+| ------ | ------------------------------------- | --------------- | ---------------------------- |
+| GET    | `/notifications`                      | JWT             | Your notifications           |
+| GET    | `/notifications/stream?token=`        | stream token    | Live event stream            |
+| POST   | `/notifications/token`                | JWT             | New 5-minute stream token    |
+| PATCH  | `/notifications/:id/read`             | JWT (recipient) | Mark as read for you         |
+| PATCH  | `/notifications/read/all`             | JWT             | Mark all as read             |
+| PATCH  | `/notifications/read/bulk`            | JWT (recipient) | Mark several as read for you |
+| DELETE | `/notifications/:id`                  | JWT (recipient) | Remove it for you            |
+| GET    | `/notifications/settings`             | JWT             | Your notification settings   |
+| PATCH  | `/notifications/settings`             | JWT             | Change them                  |
+| GET    | `/notifications/push-tokens`          | JWT             | Your device push tokens      |
+| POST   | `/notifications/push-tokens`          | JWT             | Register a device token      |
+| DELETE | `/notifications/push-tokens/:tokenId` | JWT (owner)     | Remove one of yours          |
 
 ## Misc
 

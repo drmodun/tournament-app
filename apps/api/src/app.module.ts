@@ -11,6 +11,9 @@ import { FollowersModule } from './followers/followers.module';
 import { GroupJoinRequestsModule } from './group-join-requests/group-join-requests.module';
 import { GroupInvitesModule } from './group-invites/group-invites.module';
 import { CategoryModule } from './category/category.module';
+import { SubcategoryModule } from './subcategory/subcategory.module';
+import { RosterRoundModule } from './roster-round/roster-round.module';
+import { NotificationSettingsModule } from './notification-settings/notification-settings.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { StageModule } from './stage/stage.module';
 import { ParticipationModule } from './participation/participation.module';
@@ -43,6 +46,9 @@ import { ConversionRuleModule } from './conversion-rule/conversion-rule.module';
     GroupJoinRequestsModule,
     GroupInvitesModule,
     CategoryModule,
+    SubcategoryModule,
+    RosterRoundModule,
+    NotificationSettingsModule,
     TournamentModule,
     StageModule,
     ParticipationModule,

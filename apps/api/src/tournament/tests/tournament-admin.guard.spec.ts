@@ -18,6 +18,7 @@ describe('TournamentAdminGuard', () => {
     id: 1,
     name: 'Test Tournament',
     categoryId: 1,
+    subcategoryId: null,
     affiliatedGroupId: 1,
     creatorId: 2,
     parentTournamentId: null,

@@ -170,20 +170,25 @@ export const userNotificationSettings = pgTable('user_notification_settings', {
     .references(() => user.id, {
       onDelete: 'cascade',
     })
-    .unique(),
+    .primaryKey(),
   emailNotifications: boolean('email_notifications').default(true),
   pushNotifications: boolean('push_notifications').default(true),
   inAppNotifications: boolean('in_app_notifications').default(true),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
+// Push tokens identify a device, so a token belongs to whoever signed in on it last
 export const userToNotificationTokens = pgTable('user_to_notification_tokens', {
+  id: serial('id').primaryKey(),
   userId: integer('user_id')
     .references(() => user.id, {
       onDelete: 'cascade',
     })
     .notNull(),
-  token: text('token').notNull(),
+  token: text('token').notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
@@ -247,6 +252,9 @@ export const tournament = pgTable(
         onDelete: 'cascade',
       })
       .notNull(),
+    subcategoryId: integer('subcategory_id').references(() => subcategory.id, {
+      onDelete: 'set null',
+    }),
     creatorId: integer('creator_id')
       .references(() => user.id, {
         onDelete: 'cascade',
@@ -603,30 +611,36 @@ export const userToRoster = pgTable(
   }),
 );
 
-export const matchup = pgTable('matchup', {
-  id: serial('id').primaryKey(),
-  stageId: integer('stage_id')
-    .references(() => stage.id, {
+export const matchup = pgTable(
+  'matchup',
+  {
+    id: serial('id').primaryKey(),
+    stageId: integer('stage_id')
+      .references(() => stage.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    roundId: integer('round_id').references(() => stageRound.id, {
       onDelete: 'cascade',
-    })
-    .notNull(),
-  roundId: integer('round_id').references(() => stageRound.id, {
-    onDelete: 'cascade',
+    }),
+    round: integer('round_number'),
+    // Double-elimination stages run by the API: which bracket the matchup is in
+    bracket: matchupBracket('bracket'),
+    matchupType: matchupType('matchup_type').default('one_vs_one'),
+    challongeMatchupId: text('challonge_matchup_id'),
+    startDate: timestamp('start_date', { withTimezone: true }).notNull(),
+    endDate: timestamp('end_date', { withTimezone: true }),
+    parentMatchupId: integer('parent_matchup_id').references(() => matchup.id),
+    isFinished: boolean('is_finished').default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (t) => ({
+    stageIndex: index('matchup_stage_id_index').on(t.stageId),
   }),
-  round: integer('round_number'),
-  // Double-elimination stages run by the API: which bracket the matchup is in
-  bracket: matchupBracket('bracket'),
-  matchupType: matchupType('matchup_type').default('one_vs_one'),
-  challongeMatchupId: text('challonge_matchup_id'),
-  startDate: timestamp('start_date', { withTimezone: true }).notNull(),
-  endDate: timestamp('end_date', { withTimezone: true }),
-  parentMatchupId: integer('parent_matchup_id').references(() => matchup.id),
-  isFinished: boolean('is_finished').default(false),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-});
+);
 
 export const rosterToMatchup = pgTable(
   'roster_matchup',
@@ -646,6 +660,7 @@ export const rosterToMatchup = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.rosterId, t.matchupId] }),
+    matchupIndex: index('roster_matchup_matchup_id_index').on(t.matchupId),
   }),
 );
 
@@ -720,23 +735,35 @@ export const tournamentRelations = relations(tournament, ({ one, many }) => ({
   participation: many(participation),
 }));
 
-export const scoreToRoster = pgTable('score_to_roster', {
-  id: serial('id').primaryKey(),
-  scoreId: integer('score_id').references(() => score.id),
-  rosterId: integer('roster_id').references(() => roster.id, {
-    onDelete: 'cascade',
+export const scoreToRoster = pgTable(
+  'score_to_roster',
+  {
+    id: serial('id').primaryKey(),
+    scoreId: integer('score_id').references(() => score.id),
+    rosterId: integer('roster_id').references(() => roster.id, {
+      onDelete: 'cascade',
+    }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    points: integer('points').default(0),
+    isWinner: boolean('is_winner').default(false),
+  },
+  (t) => ({
+    scoreIndex: index('score_to_roster_score_id_index').on(t.scoreId),
   }),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  points: integer('points').default(0),
-  isWinner: boolean('is_winner').default(false),
-});
+);
 
-export const score = pgTable('score', {
-  id: serial('id').primaryKey(),
-  matchupId: integer('matchup_id'),
-  roundNumber: integer('round_number'),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-});
+export const score = pgTable(
+  'score',
+  {
+    id: serial('id').primaryKey(),
+    matchupId: integer('matchup_id'),
+    roundNumber: integer('round_number'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    matchupIndex: index('score_matchup_id_index').on(t.matchupId),
+  }),
+);
 
 export const scoreRelations = relations(score, ({ one, many }) => ({
   scoreToRoster: many(scoreToRoster),
@@ -757,17 +784,26 @@ export const scoreToRosterRelations = relations(scoreToRoster, ({ one }) => ({
   }),
 }));
 
-export const stageRound = pgTable('stage_round', {
-  id: serial('id').primaryKey(),
-  stageId: integer('stage_id')
-    .references(() => stage.id, {
-      onDelete: 'cascade',
-    })
-    .notNull(),
-  roundNumber: integer('round_number').default(1),
-  challongeRoundId: text('challonge_round_id'),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-});
+export const stageRound = pgTable(
+  'stage_round',
+  {
+    id: serial('id').primaryKey(),
+    stageId: integer('stage_id')
+      .references(() => stage.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    roundNumber: integer('round_number').default(1),
+    challongeRoundId: text('challonge_round_id'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    stageRoundIndex: index('stage_round_stage_id_round_number_index').on(
+      t.stageId,
+      t.roundNumber,
+    ),
+  }),
+);
 
 export const rosterToRound = pgTable(
   'roster_round',

@@ -30,6 +30,8 @@ export default defineConfig({
 		starlight({
 			title: 'winning.sh docs',
 			description: 'How the tournament app works: running it, its architecture, and the rules behind each feature.',
+			logo: { src: './public/favicon.svg', alt: '' },
+			favicon: '/favicon.svg',
 			social: [
 				{
 					icon: 'github',

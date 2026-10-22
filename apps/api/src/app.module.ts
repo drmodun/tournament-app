@@ -31,6 +31,7 @@ import { ChallongeModule } from './challonge/challonge.module';
 import { MatchesModule } from './matches/matches.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { QuizModule } from './quiz/quiz.module';
+import { VansyModule } from './vansy/vansy.module';
 import { QuizAttemptModule } from './quiz-attempt/quiz-attempt.module';
 import { ConversionRuleModule } from './conversion-rule/conversion-rule.module';
 
@@ -65,6 +66,7 @@ import { ConversionRuleModule } from './conversion-rule/conversion-rule.module';
     ChallongeModule,
     MatchesModule,
     QuizModule,
+    VansyModule,
     QuizAttemptModule,
     ConversionRuleModule,
     EventEmitterModule.forRoot(),

@@ -12,7 +12,8 @@ import { getCorsOrigin } from './base/static/corsOrigin';
 process.env.TZ = 'UTC'; // TODO: if this is not set, the date will be off by 2 hours, maybe fix that later with a special lib
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // The raw body is kept for verifying signed webhooks (Vansy)
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

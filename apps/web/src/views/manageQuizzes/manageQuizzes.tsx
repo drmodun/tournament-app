@@ -11,6 +11,7 @@ import styles from "./manageQuizzes.module.scss";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Link from "next/link";
+import VansyQuizzes from "views/vansyQuizzes";
 
 export default function ManageQuizzes() {
   const { theme } = useThemeContext();
@@ -26,6 +27,7 @@ export default function ManageQuizzes() {
           <h2 className={clsx(globals[`${textColorTheme}Color`], styles.title)}>
             manage quizzes
           </h2>
+          <VansyQuizzes />
           {data?.map((quiz: IQuizResponse) => {
             return (
               <Link

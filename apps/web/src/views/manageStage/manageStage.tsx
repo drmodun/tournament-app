@@ -4,6 +4,7 @@ import {
   groupRoleEnum,
   IExtendedStageResponseWithTournament,
   stageStatusEnum,
+  stageTypeEnum,
 } from "@tournament-app/types";
 import { useAuth } from "api/client/hooks/auth/useAuth";
 import { useGetCompetition } from "api/client/hooks/competitions/useGetCompetition";
@@ -26,6 +27,7 @@ import { useThemeContext } from "utils/hooks/useThemeContext";
 import { formatDateTime } from "utils/mixins/formatting";
 import EditStageForm from "views/editStageForm";
 import EditStageRostersModal from "views/editStageRostersModal";
+import VansyStageQuiz from "views/vansyStageQuiz";
 import styles from "./manageStage.module.scss";
 
 export type GroupParticipationType = {
@@ -226,6 +228,17 @@ export default function ManageStages(stage?: {
             />
           </Link>
         )}
+      {stage?.stage?.stageType === stageTypeEnum.QUIZ && stage?.stage?.id && (
+        <VansyStageQuiz
+          stageId={stage.stage.id}
+          isOrganiser={
+            data?.role == groupRoleEnum.ADMIN ||
+            data?.role == groupRoleEnum.OWNER ||
+            tData?.creator.id == userData?.id
+          }
+          isParticipant={!!participationData && participationData.length > 0}
+        />
+      )}
     </div>
   );
 }

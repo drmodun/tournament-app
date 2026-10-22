@@ -1,0 +1,31 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  padding: $padding;
+  border-radius: $borderRadius;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $padding;
+}
+
+.select {
+  padding: 0.5rem;
+  border-radius: $borderRadius;
+  min-width: 14rem;
+}
+
+.standings {
+  border-collapse: collapse;
+
+  td,
+  th {
+    padding: 0.25rem 0.75rem;
+    text-align: left;
+  }
+}

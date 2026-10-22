@@ -52,6 +52,8 @@ export enum notificationTypeEnum {
   TEST = "test-template",
   NEW_FOLLOWER = "new-follower",
   GROUP_OWNERSHIP_TRANSFER = "group-ownership-transfer",
+  API_TOKEN_RATE_LIMIT_WARNING = "api-token-rate-limit-warning",
+  API_TOKEN_RATE_LIMIT_REACHED = "api-token-rate-limit-reached",
 }
 
 export type OrganizerRoleEnumType =
@@ -304,6 +306,15 @@ export enum questionAnswerStateEnum {
 
 export type questionAnswerStateEnumType =
   (typeof questionAnswerStateEnum)[keyof typeof questionAnswerStateEnum];
+
+// Personal access token scopes. READ allows GET and HEAD requests, WRITE every method.
+export enum apiTokenScopeEnum {
+  READ = "read",
+  WRITE = "write",
+}
+
+export type apiTokenScopeEnumType =
+  (typeof apiTokenScopeEnum)[keyof typeof apiTokenScopeEnum];
 
 export const exportEnumValues = (
   enumToExport: object,

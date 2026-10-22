@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import globals from "styles/globals.module.scss";
 import { textColor } from "types/styleTypes";
 import { useThemeContext } from "utils/hooks/useThemeContext";
+import ManageApiTokens from "views/manageApiTokens";
 import ManageSettings from "views/manageSettings";
 import ManageUser from "views/manageUser";
 import Navbar from "views/navbar";
@@ -24,6 +25,7 @@ export default function User() {
   const tabs: { component: React.JSX.Element; name: string }[] = [
     { component: <ManageUser data={data} />, name: "manage user" },
     { component: <ManageSettings />, name: "manage settings" },
+    { component: <ManageApiTokens />, name: "api tokens" },
   ];
 
   useEffect(() => {

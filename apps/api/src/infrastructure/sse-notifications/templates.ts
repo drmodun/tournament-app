@@ -22,6 +22,8 @@ export const templates: Record<TemplatesEnum, string> = {
   [TemplatesEnum.NOTIFICATION_OF_BAN]: `You have been banned for the following reason: {{reason}}`,
   [TemplatesEnum.NEW_FOLLOWER]: `The user {{follower}} has started following you`,
   [TemplatesEnum.GROUP_OWNERSHIP_TRANSFER]: `You are now the owner of the group {{group}}`,
+  [TemplatesEnum.API_TOKEN_RATE_LIMIT_WARNING]: `Your API token {{name}} made {{used}} of its {{limit}} requests a minute`,
+  [TemplatesEnum.API_TOKEN_RATE_LIMIT_REACHED]: `Your API token {{name}} reached its limit of {{limit}} requests a minute and is being refused until the minute is over`,
 };
 
 @Injectable()

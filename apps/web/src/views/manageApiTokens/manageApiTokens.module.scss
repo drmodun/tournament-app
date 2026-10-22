@@ -1,0 +1,86 @@
+@use "../../styles/" as *;
+
+.wrapper {
+  width: 100%;
+  padding: $padding;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $padding;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerActions,
+.options,
+.dialogActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $halfPadding;
+  align-items: center;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+}
+
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $padding;
+  padding: $padding;
+  border-radius: $borderRadius;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inactive {
+  opacity: 0.6;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $halfPadding $padding;
+  font-size: 0.875em;
+}
+
+.prefix,
+.token {
+  font-family: monospace;
+  overflow-wrap: anywhere;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: $padding;
+  max-width: min(36em, 90vw);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $halfPadding;
+}
+
+.token {
+  padding: $halfPadding $padding;
+  border-radius: $borderRadius;
+  user-select: all;
+}

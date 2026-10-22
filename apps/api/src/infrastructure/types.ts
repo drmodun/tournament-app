@@ -26,6 +26,8 @@ export enum TemplatesEnum {
   TEST_TEMPLATE = 'test-template',
   NEW_FOLLOWER = 'new-follower',
   GROUP_OWNERSHIP_TRANSFER = 'group-ownership-transfer',
+  API_TOKEN_RATE_LIMIT_WARNING = 'api-token-rate-limit-warning',
+  API_TOKEN_RATE_LIMIT_REACHED = 'api-token-rate-limit-reached',
 }
 
 class WelcomeInfo {
@@ -97,6 +99,12 @@ class NewFollowerInfo {
   follower: string;
 }
 
+class ApiTokenRateLimitInfo {
+  name: string;
+  used: string;
+  limit: string;
+}
+
 export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   welcome: WelcomeInfo,
   'bet-outcome': BetOutcomeInfo,
@@ -115,6 +123,8 @@ export const emailTemplateBodies: Record<TemplatesEnum, object> = {
   'tournament-start': TournamentStartInfo,
   'email-confirmation': VerifyEmailInfo,
   'new-follower': NewFollowerInfo,
+  'api-token-rate-limit-warning': ApiTokenRateLimitInfo,
+  'api-token-rate-limit-reached': ApiTokenRateLimitInfo,
   'test-template': {},
 };
 

@@ -10,17 +10,18 @@ flows only).
 
 ### What triggers one
 
-| Event                                      | Recipients                           | Type                                             |
-| ------------------------------------------ | ------------------------------------ | ------------------------------------------------ |
-| Someone follows you                        | the followed user                    | `new-follower`                                   |
-| A group invites you                        | the invited user                     | `group-invitation`                               |
-| An invitation is accepted / rejected       | the invited user                     | `group-join-approval` / `group-join-rejection`   |
-| Ownership of a group is transferred to you | the new owner                        | `group-ownership-transfer`                       |
-| A user requests to join a group            | the owner and every admin            | `group-join-request`                             |
-| A join request is accepted / rejected      | the requester                        | `group-join-approval` / `group-join-rejection`   |
-| You are promoted to / demoted from admin   | that member                          | `group-admin-promotion` / `group-admin-demotion` |
-| You are removed from a group               | that member                          | `group-removal`                                  |
-| A stage starts                             | every user in a roster of that stage | `tournament-start`, linking to `/stage/<id>`     |
+| Event                                                                        | Recipients                           | Type                                                                                |
+| ---------------------------------------------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| Someone follows you                                                          | the followed user                    | `new-follower`                                                                      |
+| A group invites you                                                          | the invited user                     | `group-invitation`                                                                  |
+| An invitation is accepted / rejected                                         | the invited user                     | `group-join-approval` / `group-join-rejection`                                      |
+| Ownership of a group is transferred to you                                   | the new owner                        | `group-ownership-transfer`                                                          |
+| A user requests to join a group                                              | the owner and every admin            | `group-join-request`                                                                |
+| A join request is accepted / rejected                                        | the requester                        | `group-join-approval` / `group-join-rejection`                                      |
+| You are promoted to / demoted from admin                                     | that member                          | `group-admin-promotion` / `group-admin-demotion`                                    |
+| You are removed from a group                                                 | that member                          | `group-removal`                                                                     |
+| A stage starts                                                               | every user in a roster of that stage | `tournament-start`, linking to `/stage/<id>`                                        |
+| An API token makes 80% / all of its rate limit in a minute (once a day each) | the token's owner                    | `api-token-rate-limit-warning` / `api-token-rate-limit-reached`, linking to `/user` |
 
 Messages are filled from short templates in `infrastructure/sse-notifications/templates.ts`, for example
 `You have been invited to join the group {{group}}`.

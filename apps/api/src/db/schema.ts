@@ -17,6 +17,8 @@ import {
   stageTypeEnum,
   stageStatusEnum,
   matchupBracketEnum,
+  apiTokenScopeEnum,
+  apiTokenScopeEnumType,
 } from '@tournament-app/types';
 import { relations, sql } from 'drizzle-orm';
 import {
@@ -31,6 +33,7 @@ import {
   customType,
   index,
   jsonb,
+  date,
 } from 'drizzle-orm/pg-core';
 import type { ConversionEffects } from '../conversion-rule/conversion';
 
@@ -191,6 +194,69 @@ export const userToNotificationTokens = pgTable('user_to_notification_tokens', {
   token: text('token').notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
+
+export const apiTokenScope = pgEnum(
+  'api_token_scope',
+  exportEnumValues(apiTokenScopeEnum),
+);
+
+// A personal access token for scripts and integrations. Only a SHA-256 hash of the token is
+// stored; it is shown to its user once, at creation.
+export const apiToken = pgTable(
+  'api_token',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .references(() => user.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    name: text('name').notNull(),
+    tokenHash: text('token_hash').notNull().unique(),
+    // The first characters after `wsh_`, to tell tokens apart in the list
+    prefix: text('prefix').notNull(),
+    scopes: apiTokenScope('scopes')
+      .array()
+      .notNull()
+      .$type<apiTokenScopeEnumType[]>(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    // Null: never expires
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    // Revoked tokens are kept, so the list still shows them and their usage
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    // When the user was last told the token used 80% / all of its rate limit, so they hear
+    // about it at most once a day
+    rateLimitWarnedAt: timestamp('rate_limit_warned_at', {
+      withTimezone: true,
+    }),
+    rateLimitReachedAt: timestamp('rate_limit_reached_at', {
+      withTimezone: true,
+    }),
+  },
+  (t) => ({
+    userIndex: index('api_token_user_index').on(t.userId),
+  }),
+);
+
+// Requests made with a token, one row per token per (UTC) day
+export const apiTokenUsage = pgTable(
+  'api_token_usage',
+  {
+    tokenId: integer('token_id')
+      .references(() => apiToken.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
+    day: date('day', { mode: 'string' }).notNull(),
+    requests: integer('requests').default(0).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.tokenId, t.day] }),
+  }),
+);
 
 export const location = pgTable(
   'location',

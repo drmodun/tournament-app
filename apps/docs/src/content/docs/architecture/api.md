@@ -123,11 +123,12 @@ autocomplete inputs.
 
 Passport strategies live in `src/auth/strategies`:
 
-| Strategy               | Name          | Token source                                                       | Used by                                     |
-| ---------------------- | ------------- | ------------------------------------------------------------------ | ------------------------------------------- |
-| `AccessTokenStrategy`  | `jwt`         | `Authorization: Bearer <access>` signed with `JWT_SECRET`          | `JwtAuthGuard` and everything built on it   |
-| `RefreshTokenStrategy` | `jwt-refresh` | `Authorization: Bearer <refresh>` signed with `JWT_REFRESH_SECRET` | `GET /auth/refresh`                         |
-| `GoogleStrategy`       | `google`      | Google OAuth 2                                                     | `GET /auth/google`, `/auth/google/callback` |
+| Strategy               | Name          | Token source                                                                         | Used by                                     |
+| ---------------------- | ------------- | ------------------------------------------------------------------------------------ | ------------------------------------------- |
+| `AccessTokenStrategy`  | `jwt`         | `Authorization: Bearer <access>` signed with `JWT_SECRET`                            | `JwtAuthGuard` and everything built on it   |
+| `RefreshTokenStrategy` | `jwt-refresh` | `Authorization: Bearer <refresh>` signed with `JWT_REFRESH_SECRET`                   | `GET /auth/refresh`                         |
+| `GoogleStrategy`       | `google`      | Google OAuth 2                                                                       | `GET /auth/google`, `/auth/google/callback` |
+| `ApiTokenStrategy`     | `api-token`   | `Authorization: Bearer wsh_…`, a [personal access token](/docs/features/api-tokens/) | `JwtAuthGuard` and everything built on it   |
 
 The access strategy reloads the user from the database on every request, so role changes and deletions take effect
 immediately even though the token itself carries the role.

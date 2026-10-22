@@ -30,3 +30,4 @@ export * from "./quizAttempt";
 export * from "./quizAttemptAnswer";
 export * from "./quizOption";
 export * from "./quizQuestion";
+export * from "./apiToken";

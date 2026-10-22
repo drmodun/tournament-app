@@ -8,6 +8,13 @@ beforeAll(async () => {
   expect(process.env.MODE).toBe('test');
 });
 
+// Each suite loads its own copy of the database client, so close it once the suite is done;
+// otherwise the connections of every suite stay open until the run ends and exhaust Postgres
+afterAll(async () => {
+  const { pgClient } = await import('src/db/db');
+  await pgClient.end({ timeout: 5 });
+});
+
 jest.mock('src/infrastructure/email/email.service', () => {
   const mockSendMail = jest.fn().mockResolvedValue(null);
   const mockGenerateAndSendEmail = jest.fn().mockResolvedValue(null);

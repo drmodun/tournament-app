@@ -41,6 +41,7 @@ export default defineConfig({
 					label: 'Features',
 					items: [
 						{ label: 'Accounts and authentication', slug: 'features/accounts' },
+						{ label: 'API tokens', slug: 'features/api-tokens' },
 						{ label: 'Groups', slug: 'features/groups' },
 						{ label: 'Tournaments and stages', slug: 'features/tournaments' },
 						{ label: 'Participation and rosters', slug: 'features/participation' },

@@ -56,6 +56,7 @@ import {
 import { BaseQueryResponse } from 'src/base/query/baseResponse';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminAuthGuard } from 'src/auth/guards/admin-auth.guard';
+import { SessionOnly } from 'src/auth/guards/session-only.guard';
 import { CurrentUser } from 'src/base/decorators/currentUser.decorator';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { PaginationOnly } from 'src/base/query/baseQuery';
@@ -158,8 +159,8 @@ export class UsersController {
     return await this.usersService.update(user.id, editedUserBody);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  // A leaked API token must not be able to delete the account
+  @SessionOnly()
   @Delete()
   @ApiOkResponse({ type: MiniUserResponse })
   async deleteMe(@CurrentUser() user: ValidatedUserDto) {

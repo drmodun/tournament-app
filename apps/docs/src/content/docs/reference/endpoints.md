@@ -12,15 +12,20 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 
 ## Auth: `/auth`
 
-| Method | Path                                    | Auth          | Purpose                                      |
-| ------ | --------------------------------------- | ------------- | -------------------------------------------- |
-| POST   | `/auth/login`                           | –             | Email + password → access and refresh tokens |
-| GET    | `/auth/refresh`                         | refresh token | New token pair                               |
-| GET    | `/auth/google`, `/auth/google/callback` | –             | Google OAuth                                 |
-| GET    | `/auth/password-reset-request/:email`   | –             | Email a reset link                           |
-| POST   | `/auth/password-reset/:token`           | –             | Set a new password                           |
-| POST   | `/auth/email-confirmation/:token`       | –             | Confirm an email address                     |
-| GET    | `/auth/sse-token`                       | JWT           | 5-minute token for the notification stream   |
+| Method | Path                                    | Auth          | Purpose                                           |
+| ------ | --------------------------------------- | ------------- | ------------------------------------------------- |
+| POST   | `/auth/login`                           | –             | Email + password → access and refresh tokens      |
+| GET    | `/auth/refresh`                         | refresh token | New token pair                                    |
+| GET    | `/auth/google`, `/auth/google/callback` | –             | Google OAuth                                      |
+| GET    | `/auth/password-reset-request/:email`   | –             | Email a reset link                                |
+| POST   | `/auth/password-reset/:token`           | –             | Set a new password                                |
+| POST   | `/auth/email-confirmation/:token`       | –             | Confirm an email address                          |
+| GET    | `/auth/sse-token`                       | JWT           | 5-minute token for the notification stream        |
+| POST   | `/auth/tokens`                          | login only    | Create an [API token](/docs/features/api-tokens/) |
+| GET    | `/auth/tokens`                          | login only    | Own API tokens                                    |
+| DELETE | `/auth/tokens`                          | login only    | Revoke every active API token                     |
+| DELETE | `/auth/tokens/:id`                      | login only    | Revoke one API token                              |
+| GET    | `/auth/tokens/:id/usage`                | login only    | Requests per day, last 30 days                    |
 
 ## Users: `/users`
 
@@ -33,7 +38,7 @@ mean the caller's role in the group from the path or body. Site admins pass ever
 | GET    | `/users/:id`                   | –                    | One user              |
 | GET    | `/users/auto-complete/:search` | –                    | Username search       |
 | PATCH  | `/users`                       | JWT                  | Update own profile    |
-| DELETE | `/users`                       | JWT                  | Delete own account    |
+| DELETE | `/users`                       | login only           | Delete own account    |
 | PATCH  | `/users/:id`                   | Site admin           | Update any user       |
 | DELETE | `/users/:id`                   | Site admin           | Delete any user       |
 

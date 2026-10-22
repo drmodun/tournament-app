@@ -47,7 +47,10 @@ the only accepted values everywhere.
 `notificationTypeEnum`: `welcome`, `reset-password`, `verify-email`, `notification-of-ban`, `bet-outcome`,
 `tournament-reminder`, `tournament-start`, `tournament-end`, `group-invitation`, `group-join-request`,
 `group-join-approval`, `group-join-rejection`, `group-removal`, `group-admin-promotion`, `group-admin-demotion`,
-`test-template`, `new-follower`.
+`test-template`, `new-follower`, `group-ownership-transfer`, `api-token-rate-limit-warning`,
+`api-token-rate-limit-reached`.
+
+`apiTokenScopeEnum`: `read`, `write` (see [API tokens](/docs/features/api-tokens/)).
 
 The ones actually sent today are listed in [Notifications](/docs/features/notifications/#what-triggers-one).
 

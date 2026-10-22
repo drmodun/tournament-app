@@ -13,6 +13,7 @@ import {
   StageSortingEnum,
   stageToUpdateTournamentRequest,
   stageStatusEnum,
+  stageTypeEnum,
   rosterToBulkCreateParticipantRequest,
   IBulkCreateChallongeParticipantRequest,
   notificationTypeEnum,
@@ -29,6 +30,9 @@ import { NotificationTemplatesFiller } from 'src/infrastructure/sse-notification
 import { TemplatesEnum } from 'src/infrastructure/types';
 import { MatchesService } from 'src/matches/matches.service';
 import { RosterService } from 'src/roster/roster.service';
+import { db } from 'src/db/db';
+import { vansyStageQuiz } from 'src/db/schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class StageService {
@@ -324,6 +328,19 @@ export class StageService {
       );
     }
 
+    // A quiz stage run on Vansy is ranked by the quiz, not a bracket: it starts without a draw and is
+    // finished when Vansy sends the final standings
+    if (
+      stage.stageType === stageTypeEnum.QUIZ &&
+      (await this.hasVansyQuiz(stageId))
+    ) {
+      const started = await this.update(stageId, {
+        stageStatus: stageStatusEnum.ONGOING,
+      });
+      await this.sendStageStartNotifications(stageId, stage.name);
+      return started;
+    }
+
     // Without Challonge (disabled, or its API failed when the stage was created) the API runs the bracket,
     // as it does for formats Challonge does not have
     if (
@@ -367,6 +384,14 @@ export class StageService {
     );
 
     return updatedStage;
+  }
+
+  private async hasVansyQuiz(stageId: number) {
+    const [link] = await db
+      .select({ stageId: vansyStageQuiz.stageId })
+      .from(vansyStageQuiz)
+      .where(eq(vansyStageQuiz.stageId, stageId));
+    return !!link;
   }
 
   private async startLocalStage(stageId: number, stageName: string) {

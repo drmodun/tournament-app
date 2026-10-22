@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GroupMembershipModule } from 'src/group-membership/group-membership.module';
+import { MatchesModule } from 'src/matches/matches.module';
 import { StageAdminGuard } from 'src/stage/guards/stage-admin.guard';
 import { StageModule } from 'src/stage/stage.module';
 import { TournamentModule } from 'src/tournament/tournament.module';
@@ -10,7 +11,12 @@ import { VansyRepository } from './vansy.repository';
 import { VansyService } from './vansy.service';
 
 @Module({
-  imports: [StageModule, TournamentModule, GroupMembershipModule],
+  imports: [
+    StageModule,
+    TournamentModule,
+    GroupMembershipModule,
+    MatchesModule,
+  ],
   controllers: [VansyController, VansyWebhookController],
   providers: [
     { provide: VANSY_CONFIG, useFactory: () => readVansyConfig() },

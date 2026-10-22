@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ExecutionContext,
   ForbiddenException,
   Inject,
   Injectable,
@@ -8,7 +9,15 @@ import {
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { userRoleEnum } from '@tournament-app/types';
+import {
+  IStageResponse,
+  StageResponsesEnum,
+  stageStatusEnum,
+  userRoleEnum,
+} from '@tournament-app/types';
+import { MatchesService } from 'src/matches/matches.service';
+import { StageAdminGuard } from 'src/stage/guards/stage-admin.guard';
+import { StageService } from 'src/stage/stage.service';
 import { JWTVerifyGetKey } from 'jose';
 import { ValidatedUserDto } from 'src/auth/dto/validatedUser.dto';
 import { VansyClient } from './vansy.client';
@@ -40,8 +49,28 @@ export class VansyService {
   constructor(
     private readonly client: VansyClient,
     private readonly repository: VansyRepository,
+    private readonly stages: StageService,
+    private readonly matches: MatchesService,
+    private readonly stageAdmin: StageAdminGuard,
     @Inject(VANSY_CONFIG) private readonly config: VansyConfig | null,
   ) {}
+
+  /** The stage organisers' rule, the same check StageAdminGuard makes on routes */
+  private canManageStage(user: ValidatedUserDto, stageId: number) {
+    const request = { user, params: { stageId }, body: {}, query: {} };
+    return this.stageAdmin.canActivate({
+      switchToHttp: () => ({ getRequest: () => request }),
+    } as unknown as ExecutionContext);
+  }
+
+  /** What the caller may do on a stage's quiz, so the web app shows the right buttons */
+  async stageRights(user: ValidatedUserDto, stageId: number) {
+    const [roster, canManage] = await Promise.all([
+      this.repository.rosterOf(stageId, user.id),
+      this.canManageStage(user, stageId),
+    ]);
+    return { canTake: !!roster, canManage };
+  }
 
   private settings() {
     if (!this.config) {
@@ -297,6 +326,15 @@ export class VansyService {
           this.logger.log(
             `Stage ${stageId}: ${rows.length} quiz standings from Vansy`,
           );
+
+          // The quiz decides the stage: finishing it runs the conversion rules on these standings
+          const stage: IStageResponse = await this.stages.findOne(
+            stageId,
+            StageResponsesEnum.BASE,
+          );
+          if (stage?.stageStatus === stageStatusEnum.ONGOING) {
+            await this.matches.finishStage(stageId);
+          }
         }
         return;
       }

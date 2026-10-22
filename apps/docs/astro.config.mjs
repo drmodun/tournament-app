@@ -70,6 +70,7 @@ export default defineConfig({
 						{ label: 'Participation and rosters', slug: 'features/participation' },
 						{ label: 'Matches and brackets', slug: 'features/matches' },
 						{ label: 'Quizzes', slug: 'features/quizzes' },
+						{ label: 'Quizzes on Vansy', slug: 'features/vansy' },
 						{ label: 'LFG and LFP', slug: 'features/lfg-lfp' },
 						{ label: 'Notifications', slug: 'features/notifications' },
 						{ label: 'Careers and ELO', slug: 'features/careers' },

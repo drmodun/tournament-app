@@ -12,7 +12,8 @@ listed first, each with the place to look.
 
 - **Formats without their own bracket logic**: quiz and evaluated stages run by the API are played as single
   elimination.
-- **Taking a quiz**: the web app has no screen for it yet; attempts work through the API.
+- **Taking a quiz**: the web app's own `/quiz` routes still have no taking screen; quizzes are taken on
+  [Vansy](/docs/features/vansy/) instead, from the quiz stage's page.
 - **Challonge corrections are untested against Challonge itself**: correcting or deleting a result reopens the match
   there first. The calls follow Challonge's v2.1 reference and are tested against a mock, not a live tournament.
 

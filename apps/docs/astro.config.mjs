@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { docsBaseLinks } from './docs-base-links.mjs';
 
 // Where the docs are mounted depends on where they run:
 //   - behind the Caddy proxy or the docs container (local, docker dev, docker prod): /docs
@@ -25,6 +26,7 @@ export default defineConfig({
 	base,
 	trailingSlash: 'always',
 	integrations: [
+		docsBaseLinks({ base }),
 		starlight({
 			title: 'winning.sh docs',
 			description: 'How the tournament app works: running it, its architecture, and the rules behind each feature.',

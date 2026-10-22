@@ -10,4 +10,9 @@ export default defineConfig({
     strictPort: true,
     host: true,
   },
+  // The Docker image serves the build with `vite preview` behind the stack's Caddy, which forwards whatever
+  // domain the site runs on; without this Vite answers 403 to every host but localhost
+  preview: {
+    allowedHosts: true,
+  },
 });

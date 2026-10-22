@@ -1,16 +1,27 @@
-# Front door for the stack: one address for the web app, the API and the docs.
+# Front door for the stack: one address for the web app, the API, the docs and the admin panel.
+# Shared by docker-compose.yml (development) and deploy/compose.yml (production).
+#
+# The *_UPSTREAM variables name the services; production sets them to aliases that stay unique on a shared network.
 #
 # SITE_ADDRESS decides how it listens:
-#   :80           plain HTTP on any hostname (the local default)
+#   :80           plain HTTP on any hostname (the local default, and behind another reverse proxy)
 #   example.com   Caddy obtains and renews an HTTPS certificate for that domain by itself
 #                 (ports 80 and 443 must be reachable from the internet)
+
+{
+	servers {
+		# Behind nginx or a Cloudflare tunnel on a private network, keep the client address and scheme they forward
+		trusted_proxies static private_ranges
+	}
+}
+
 {$SITE_ADDRESS::80} {
 	encode zstd gzip
 
 	# API under /api, with the prefix stripped: REST, Swagger UI at /api/swagger,
 	# and the notification stream (flushed immediately, as it is server-sent events)
 	handle_path /api/* {
-		reverse_proxy api:5500 {
+		reverse_proxy {$API_UPSTREAM:api:5500} {
 			flush_interval -1
 		}
 	}
@@ -18,11 +29,18 @@
 	# Documentation site, built with base path /docs, so the prefix is kept
 	redir /docs /docs/
 	handle /docs/* {
-		reverse_proxy docs:4321
+		reverse_proxy {$DOCS_UPSTREAM:docs:4321}
+	}
+
+	# Admin panel, built with base path /admin, so the prefix is kept as well.
+	# Answers 502 while the admin service is not running (it is optional in production).
+	redir /admin /admin/
+	handle /admin/* {
+		reverse_proxy {$ADMIN_UPSTREAM:admin:3001}
 	}
 
 	# Everything else is the Next.js app
 	handle {
-		reverse_proxy web:3000
+		reverse_proxy {$WEB_UPSTREAM:web:3000}
 	}
 }
